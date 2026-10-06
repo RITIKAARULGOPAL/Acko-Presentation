@@ -192,7 +192,13 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
 .kit{list-style:none; margin:0; padding:0}
 .kr{width:100%; display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:12px; align-items:baseline; background:transparent; border:0; border-top:1px solid var(--rule); padding:6px 4px; text-align:left; cursor:pointer; font-size:13.5px}
 .kr:hover,.kr.on{background:color-mix(in srgb,var(--c) 14%,transparent)}
-.kr .kn{color:var(--ink); display:flex; align-items:center}
+.kr .kn{color:var(--ink); display:flex; align-items:center; flex-wrap:wrap; row-gap:3px}
+.kn em{font-style:normal; font-family:var(--mono); font-size:10.5px; margin-left:7px; padding:1px 7px; border-radius:999px; white-space:nowrap}
+.kn .ks{color:var(--fire); background:color-mix(in srgb,var(--fire) 13%,transparent)}
+.kn .kx{color:var(--ink); background:color-mix(in srgb,var(--c) 24%,transparent)}
+.kn .kz{color:var(--ink-2); background:var(--raise)}
+.kp-zen{fill:var(--brand-2); fill-opacity:.25}
+.kp-zen.on{fill:var(--c); fill-opacity:.75}
 .kr .kc{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)}
 .kr .kv{font-family:var(--mono); font-size:12.5px; color:var(--ink); font-variant-numeric:tabular-nums; text-align:right; min-width:64px}
 .sustain{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:8px; background:color-mix(in srgb,var(--c) 10%,transparent); color:var(--ink)!important; font-size:13.5px!important}
@@ -238,7 +244,7 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
 #sc-concept.on .cpw{animation:cpIn .9s var(--ease) both; animation-delay:var(--d)}
 @keyframes cpIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 .cp{transition:opacity .35s var(--ease)}
-#city.dim .cp:not(.hl){opacity:.12}
+.dim .cp:not(.hl){opacity:.12}
 
 /* ---------- plan scene ---------- */
 .plan-fit{position:absolute; left:50%; top:50%; width:1280px; height:780px; margin:-390px 0 0 -640px; transform:scale(var(--fit,.6))}
@@ -331,8 +337,18 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
 .street{fill:var(--street); transform-box:fill-box; transform-origin:center; transform:scale(0,1); transition:transform 1.2s var(--ease) var(--d,0s)}
 .street.up{transform-origin:50% 100%; transform:scale(1,0)}
 .street.down{transform-origin:50% 0%; transform:scale(1,0)}
+.street.conn{transform:scale(1,0)}
 .f-streets .street{transform:none}
-.cline{stroke:var(--street-line); stroke-width:1.2; stroke-dasharray:10 8}
+.cline{fill:none; stroke:var(--street-line); stroke-width:1.2; stroke-dasharray:10 8}
+/* the loop: one endless corridor, drawn in brand colour while it is the subject */
+.g-loop{opacity:0; transition:opacity .8s var(--ease)}
+.f-loop .g-loop{opacity:1}
+.f-loop-soft .g-loop{opacity:.5}
+.loop-line{fill:none; stroke:var(--brand-2); stroke-width:4; stroke-linejoin:round; stroke-dasharray:1 1; stroke-dashoffset:1; transition:stroke-dashoffset 2.2s var(--ease) .9s}
+.f-loop .loop-line,.f-loop-soft .loop-line{stroke-dashoffset:0}
+.loop-flow{fill:none; stroke:var(--slab); stroke-width:1.6; stroke-dasharray:5 15; animation:loopflow 1.4s linear infinite}
+@keyframes loopflow{to{stroke-dashoffset:-20}}
+.loop-dot{fill:var(--brand-2); stroke:var(--slab); stroke-width:2.5}
 .slabel{font-size:10px; letter-spacing:.34em; fill:var(--ink-3); paint-order:stroke; stroke:var(--street); stroke-width:7px; opacity:0; transition:opacity .6s var(--ease) .8s}
 .f-streets .slabel{opacity:1}
 
@@ -345,6 +361,14 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
 .f-hover .zone:hover{fill-opacity:.32}
 .f-ts-focus [data-nb]:not([data-nb="TS"]){opacity:.14!important}
 .f-ts-focus .zone.ts{fill-opacity:.22}
+.f-zen-focus g[data-nb]:not([data-nb="ZEN"]){opacity:.16}
+.f-zen-focus .ol.zl[data-nb="TS"]{opacity:.15}
+.f-zen-focus .zone:not(.zen){fill-opacity:.07}
+.f-zen-focus .zone.zen{fill-opacity:.45}
+.g-zenlinks{opacity:0; transition:opacity .7s var(--ease) .3s}
+.f-zen-focus .g-zenlinks{opacity:1}
+.zlink{fill:none; stroke:var(--c); stroke-width:2.2; stroke-dasharray:6 5; animation:flow .9s linear infinite reverse}
+.zlink-o{fill:var(--c); stroke:var(--slab); stroke-width:2.5}
 
 /* fit-out */
 .desk{fill:var(--furn-fill); stroke:var(--furn); stroke-width:.8}
@@ -450,6 +474,99 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
 .thanks p{margin:0; font-family:var(--mono); font-size:12.5px; color:var(--ink-3)}
 #sc-numbers.on .tile{animation:capIn .8s var(--ease) both; animation-delay:var(--d)}
 
+/* ---------- the loop ---------- */
+#sc-loop{display:grid; place-items:center; padding:24px}
+#loopsvg{width:min(100%,980px); height:auto; max-height:100%}
+.c-stair{fill:var(--exit); fill-opacity:.22; stroke:var(--exit); stroke-width:1}
+.lp-t{font-family:var(--mono); font-size:8.5px; font-weight:500; letter-spacing:.28em; fill:var(--brand-2); text-anchor:middle}
+.lp-path{fill:none; stroke:var(--brand-2); stroke-width:5; stroke-linejoin:round; opacity:0}
+.lp-flow{fill:none; stroke:var(--bg); stroke-width:1.4; stroke-dasharray:4 9; opacity:0}
+.lp-dot{fill:var(--ink); stroke:var(--brand); stroke-width:2; opacity:0}
+.lp-ring{opacity:0; transform-box:fill-box; transform-origin:center}
+.lp-ring circle{fill:none; stroke:var(--brand-2); stroke-width:5; stroke-dasharray:0 1}
+.lp-two{fill:none; stroke:var(--exit); stroke-width:1.8; stroke-dasharray:5 4; marker-end:url(#ar-exit)}
+.lp-you{fill:var(--exit); stroke:var(--bg); stroke-width:2}
+.lp-yt{font-family:var(--mono); font-size:8px; font-weight:500; letter-spacing:.18em; fill:var(--exit); text-anchor:middle}
+.lp-in{opacity:0}
+#sc-loop.on .lp-ring{animation:lpRing 1.9s var(--ease) both}
+#sc-loop.on .lp-ring circle{animation:lpDraw .7s var(--ease) .1s both}
+#sc-loop.on .lp-path{animation:lpFade .4s var(--ease) 1.45s both}
+#sc-loop.on .lp-flow{animation:lpflow 1.3s linear infinite, lpFade .5s var(--ease) 1.8s both}
+#sc-loop.on .lp-dot{animation:lpFade .5s var(--ease) 1.9s both}
+#sc-loop.on .lp-in{animation:cpIn .8s var(--ease) both; animation-delay:var(--d,1.8s)}
+@keyframes lpRing{0%,42%{opacity:1; transform:none} 78%{opacity:1; transform:scale(6.03,1)} 100%{opacity:0; transform:scale(6.03,1)}}
+@keyframes lpDraw{to{stroke-dasharray:1 0}}
+@keyframes lpFade{from{opacity:0} to{opacity:1}}
+@keyframes lpflow{to{stroke-dashoffset:-13}}
+
+/* ---------- the brief ---------- */
+.rc{display:inline-block; flex:none; font-style:normal; font-family:var(--mono); font-size:11px; line-height:1.45; letter-spacing:.02em; text-transform:none; border-radius:999px; padding:1px 9px; border:1px solid color-mix(in srgb,var(--rc) 60%,transparent); background:color-mix(in srgb,var(--rc) 13%,transparent); color:var(--ink); white-space:nowrap}
+.rc[data-rule="split"]{--rc:var(--brand-2)}
+.rc[data-rule="shared"]{--rc:var(--leaf)}
+.rc[data-rule="square"]{--rc:var(--sun)}
+.legend .rc{min-width:96px; text-align:center}
+#sc-brief{display:grid; place-items:center; padding:clamp(14px,2.6vw,40px); overflow:auto}
+.brief{width:min(100%,1100px); display:flex; flex-direction:column; gap:clamp(14px,2.6vh,30px)}
+.bf-hero{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--rule); padding-bottom:clamp(10px,1.6vh,18px)}
+.bf-hero b{font-family:var(--display); font-stretch:125%; font-weight:850; font-size:clamp(48px,6vw,96px); line-height:.9; color:var(--brand-2)}
+.bf-hero span{font-size:clamp(16px,1.5vw,22px); color:var(--ink-2)}
+.bf-row{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,4fr); gap:clamp(10px,1.4vw,18px)}
+.bf-g header{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px}
+.bf-g h4{margin:0; font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bf-tiles{display:grid; grid-template-columns:repeat(var(--cols,4),minmax(0,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:12px; overflow:hidden}
+.bf-t{background:var(--bg); padding:clamp(10px,1.4vw,18px); display:flex; flex-direction:column; gap:4px; min-width:0}
+.bf-t b{font-family:var(--display); font-stretch:118%; font-weight:800; font-size:clamp(26px,3vw,46px); line-height:1; letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.bf-t span{font-size:13.5px; color:var(--ink-2)}
+#sc-brief.on .bf-hero,#sc-brief.on .bf-t{animation:capIn .7s var(--ease) both; animation-delay:var(--d,0s)}
+
+/* ---------- sharing out the brief ---------- */
+#sc-alloc{display:grid; place-items:center; padding:clamp(10px,2vw,32px)}
+.alloc{width:min(100%,1120px); max-height:100%; overflow:auto}
+.am{width:100%; min-width:700px; border-collapse:collapse; font-size:clamp(12.5px,.92vw,14.5px); font-variant-numeric:tabular-nums; color:var(--ink)}
+.am th,.am td{padding:clamp(3px,.6vh,8px) clamp(4px,.6vw,10px); text-align:center; border-top:1px solid var(--rule); transition:background-color .5s var(--ease), color .5s var(--ease)}
+.am thead th{border-top:0; font-weight:500; vertical-align:bottom}
+.am .am-i{text-align:left; white-space:nowrap; position:sticky; left:0; z-index:1; background:var(--bg)}
+.am-g td{position:sticky; left:0}
+.am-pair th{font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); font-weight:400; padding-bottom:4px}
+.am th.am-nb{border-bottom:3px solid var(--c); padding-bottom:6px}
+.am-nb span{display:block; font-size:12px; line-height:1.2; max-width:96px; margin:0 auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--ink)}
+.am-nb small{display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.am th.am-ts{border-bottom:3px solid var(--brand); font-size:12px; color:var(--ink)}
+.am th.am-b,.am th.am-t,.am th.am-i{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); font-weight:400; border-bottom:3px solid var(--rule)}
+.am td.am-b{font-family:var(--mono); color:var(--ink-2)}
+.am .am-t{text-align:right; white-space:nowrap}
+.am td.am-t{font-family:var(--mono); font-size:.92em}
+.am .ps{border-left:1px solid var(--rule)}
+.am-g td{border-top:0; padding-top:clamp(8px,1.5vh,18px); text-align:left; font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+.am-g .rc{margin-left:8px}
+.am .na{color:var(--ink-3); font-family:var(--mono); font-size:.86em}
+.v-div,.v-ext,.v-ach{display:none}
+.m-div .v-div,.m-ext .v-ext,.m-ach .v-ach{display:inline}
+.alloc.flip td>span,.alloc.flip th>span{animation:lpFade .55s var(--ease) both}
+.bx{font-style:normal; font-family:var(--mono); font-size:.8em; font-weight:600; color:var(--c); margin-left:4px}
+.m-ext td.has-ext{background:color-mix(in srgb,var(--c) 24%,transparent)}
+.m-ach .is-short{background:color-mix(in srgb,var(--fire) 14%,transparent); color:var(--fire)}
+.am small{font-size:.8em; opacity:.8}
+.am .rem{font-weight:500; color:var(--pin)}
+.am .ok{color:var(--exit)}
+.zc{background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 16%,transparent) 50%,color-mix(in srgb,var(--c2) 16%,transparent) 50%)}
+.zc .half{display:inline-block; width:50%}
+
+/* caption lists for the allocation steps */
+.xl{list-style:none; margin:2px 0 0; padding:0}
+.xl li{display:grid; grid-template-columns:11px auto minmax(0,1fr); align-items:center; gap:4px 10px; padding:7px 2px; border-top:1px solid var(--rule); font-size:13.5px}
+.xl b{font-weight:600; color:var(--ink); white-space:nowrap}
+.xl span{color:var(--ink-2); text-align:right}
+.xl li.none span{color:var(--ink-3)}
+.gaps{list-style:none; margin:2px 0 0; padding:0}
+.gaps li{border-top:1px solid var(--rule); padding:9px 2px}
+.gaps div{display:flex; justify-content:space-between; gap:12px; align-items:baseline}
+.gaps b{font-weight:600; color:var(--ink); font-size:14px}
+.gaps div span{font-family:var(--mono); font-size:12.5px; color:var(--fire); white-space:nowrap}
+.cap .gaps p{font-size:13px; color:var(--ink-2); margin-top:3px; line-height:1.45}
+.met{font-size:13px!important; color:var(--ink-3)!important}
+.tsb .sw{display:inline-block; margin-right:5px; vertical-align:-1px}
+
 /* ---------- clickable spaces ---------- */
 .hit{fill:transparent; stroke:none; pointer-events:none}
 .f-spaces .hit,.dive .hit{pointer-events:auto; cursor:zoom-in}
@@ -541,6 +658,9 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
   .rv-nav{width:36px; height:36px; font-size:18px}
   .rv-th{width:104px}
   .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bf-row{grid-template-columns:1fr}
+  .bf-tiles{--cols:2!important}
+  .bf-t span{font-size:12.5px}
   .cover-bg{width:140%; right:-50%; opacity:.3}
 }
 
@@ -556,6 +676,7 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
     <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" class="hatch-l"/></pattern>
     <marker id="ar-fire" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--fire)"/></marker>
     <marker id="ar-brand" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--brand-2)"/></marker>
+    <marker id="ar-exit" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--exit)"/></marker>
     <clipPath id="clip-plate"><rect x="50" y="50" width="1100" height="600"/></clipPath>
   </defs>
 </svg>
@@ -584,6 +705,9 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
     </div>
   </section>
   <section class="scene" id="sc-concept" aria-label="The idea"><svg id="city" class="dsvg" viewBox="0 0 640 390" role="img" aria-label="Diagram of a city with streets, a town square and six neighbourhoods"></svg></section>
+  <section class="scene" id="sc-loop" aria-label="The loop"><svg id="loopsvg" class="dsvg" viewBox="0 0 640 390" role="img" aria-label="Diagram of one endless corridor looping around the Town Square, with six neighbourhoods outside it"></svg></section>
+  <section class="scene" id="sc-brief" aria-label="The brief"><div class="brief" id="bf"></div></section>
+  <section class="scene" id="sc-alloc" aria-label="Sharing out the brief"><div class="alloc" id="am"></div></section>
   <section class="scene" id="sc-plan" aria-label="Floor plan"><div class="plan-fit" id="plan-fit"><div id="plan3d"></div></div><div class="ovl" id="ovl"></div></section>
   <section class="scene" id="sc-overview" aria-label="Six neighbourhoods"><div class="ov-grid" id="ov-grid"></div></section>
   <section class="scene" id="sc-dive" aria-label="Neighbourhood deep dive">
@@ -677,14 +801,31 @@ const NBS=[
   {id:'N5',name:'Basavanagudi',team:'Customer Experience',  variant:'collab',   x:425,y:440,flip:true, c:'--n5',pos:'South-centre'},
   {id:'N6',name:'Whitefield',  team:'Sales & Partnerships', variant:'balanced', x:800,y:440,flip:true, c:'--n6',pos:'South-east'},
 ];
-const VARIANTS={
-  focus:   {label:'Focus kit',         text:'Set up for deep work: six focus pods, two phone booths, one 8-seat room and a compact huddle.'},
-  collab:  {label:'Collaboration kit', text:'Set up for working together: two 6-seat rooms, a larger huddle and four phone booths.'},
-  balanced:{label:'Balanced kit',      text:'An even mix: an 8-seat and a 4-seat room, a huddle, three phone booths and a full pantry point.'},
-};
+/* The client's brief: six neighbourhoods and a total for every space type.
+   rule 'split'  : total ÷ 6 to every neighbourhood; the remainder goes to the neighbourhoods
+                   listed in extra (the ones that had room).
+   rule 'shared' : fewer than six asked for, so one is shared by each pair in PAIRS.
+   rule 'square' : one for everyone, in the Town Square.
+   why           : the reason shown when the plan can't meet the count.            */
+const BRIEF=[
+  {k:'desk',    name:'Workstations',     total:450, rule:'split', why:'Columns, the 6 m daylight band and clear escape aisles fit 72 desks per neighbourhood, three short of the even share.'},
+  {k:'cabin',   name:'Team lead cabins', total:6,   rule:'split'},
+  {k:'meeting', name:'Meeting rooms',    total:10,  rule:'split', extra:{N2:1,N4:1,N5:1,N6:1}},
+  {k:'booth',   name:'Phone booths',     total:20,  rule:'split', extra:{N2:1,N5:1}, why:'In Indiranagar and Jayanagar the two extra focus pods took the room a third phone booth needed.'},
+  {k:'focus',   name:'Focus pods',       total:16,  rule:'split', extra:{N1:2,N3:2}},
+  {k:'huddle',  name:'Team huddles',     total:6,   rule:'split'},
+  {k:'pantry',  name:'Pantry points',    total:6,   rule:'split'},
+  {k:'touch',   name:'Touchdown benches',total:6,   rule:'split'},
+  {k:'zen',     name:'Zen rooms',        total:3,   rule:'shared'},
+  {k:'reception',name:'Reception',       total:1,   rule:'square'},
+  {k:'townhall',name:'Town hall seats',  total:100, rule:'square', unit:'seats', why:'Between the core and the loop the hall fits about 70 seats. The café next door opens up for bigger events.'},
+  {k:'board',   name:'Boardroom',        total:1,   rule:'square'},
+  {k:'cafe',    name:'Café seats',       total:40,  rule:'square', unit:'seats'},
+];
+const PAIRS=[['N1','N4'],['N2','N5'],['N3','N6']]; // neighbours that share a zen room (north + south of the loop)
 const DD=[
-  {p:[150,350], t:'AHU rooms stay', d:'Two existing AHU rooms flank the core. Main ducts run above Main Street, so ceilings inside the neighbourhoods stay high.'},
-  {p:[640,322], t:'Wet risers only at the core', d:'Drainage is available only at the core, so the café sits beside it and pantry points line Main Street.'},
+  {p:[148,350], t:'AHU rooms move into the core', d:'The two AHU rooms at the ends of the core band move into the core shafts. That frees both ends so the corridor can close into a loop.'},
+  {p:[640,322], t:'Wet risers only at the core', d:'Drainage is available only at the core, so the café sits close to it and pantry points line the loop.'},
   {p:[350,118], t:'Deep beam on grid D', d:'A 750 mm downstand beam crosses the north bays. The ceiling steps there and desks run parallel to it.'},
   {p:[950,622], t:'South glazing', d:'Full-height south glass brings heat and glare. Roller blinds and a planter edge protect the desks behind it.'},
   {p:[1112,90], t:'Floor level drop', d:'A 50 mm level difference at the north-east corner. The screed is ramped before flooring.'},
@@ -709,11 +850,16 @@ const STREETS=[
   {x:775,y:50,w:25,h:210,cls:'up',d:.7},
   {x:400,y:440,w:25,h:210,cls:'down',d:.6},
   {x:775,y:440,w:25,h:210,cls:'down',d:.7},
+  {x:130,y:290,w:36,h:120,cls:'conn',d:.35},
+  {x:1034,y:290,w:36,h:120,cls:'conn',d:.35},
 ];
-const TS_ZONES=[{x:170,y:290,w:330,h:120},{x:700,y:290,w:330,h:120}];
+/* centre line of the endless loop corridor (two main corridors joined at both ends) */
+const LOOP='M166 275H1034Q1052 275 1052 293V407Q1052 425 1034 425H166Q148 425 148 407V293Q148 275 166 275Z';
+const TS_ZONES=[{x:236,y:290,w:264,h:120},{x:764,y:290,w:200,h:120}];
+const ZEN=[{x:166,y:290,w:70,h:120,pair:PAIRS[0]},{x:700,y:290,w:64,h:120,pair:PAIRS[1]},{x:964,y:290,w:70,h:120,pair:PAIRS[2]}];
 const CORE={x:500,y:290,w:200,h:120};
 const STAIRS=[{id:'A',x:50,y:290,w:80,h:120},{id:'B',x:1070,y:290,w:80,h:120},{id:'C',x:660,y:290,w:40,h:120}];
-const AHU=[{x:130,y:290,w:40,h:120},{x:1030,y:290,w:40,h:120}];
+const AHU=[];
 const ROUTES=[
   {nb:0, to:'A', pts:[[62,62],[62,275],[90,275],[90,290]]},
   {nb:1, to:'C', pts:[[437,62],[412,62],[412,275],[680,275],[680,290]]},
@@ -741,7 +887,7 @@ const SP=[]; // every clickable space: {i, nb, k, r, seats}
 function builder(nb){
   const ox=nb?nb.x:0, oy=nb?nb.y:0, flip=!!(nb&&nb.flip);
   const b={nb,furn:[],top:[],walls:[],text:[],desks:[],at:{},kit:{},hits:[]};
-  b.sp=(k,r,seats)=>{ const i=SP.length; SP.push({i,nb:nb?nb.id:'TS',k,r,seats:seats||0}); b.hits.push(`<rect x="${r1(r.x)}" y="${r1(r.y)}" width="${r1(r.w)}" height="${r1(r.h)}" class="hit" data-sp="${i}" data-k="${k}"/>`); };
+  b.sp=(k,r,seats,o)=>{ const i=SP.length; SP.push(Object.assign({i,nb:nb?nb.id:'TS',k,r,seats:seats||0},o||{})); b.hits.push(`<rect x="${r1(r.x)}" y="${r1(r.y)}" width="${r1(r.w)}" height="${r1(r.h)}" class="hit" data-sp="${i}" data-k="${k}"/>`); };
   b.r=(x,y,w,h)=>({x:ox+x, y:flip?oy+NB_H-y-h:oy+y, w, h});
   b.p=(x,y)=>({x:ox+x, y:flip?oy+NB_H-y:oy+y});
   b.add=(k,n)=>{b.kit[k]=(b.kit[k]||0)+(n==null?1:n)};
@@ -829,7 +975,7 @@ function touchdown(b){
 const STRIPS={
   balanced(b){ meeting(b,24,140,72,64,8); meeting(b,100,140,50,64,4); huddle(b,166,140,74,64); booth(b,244,140,24,20); booth(b,244,162,24,20); booth(b,244,184,24,20); pantry(b,272,140,70,64); },
   collab(b){ meeting(b,24,140,61,64,6); meeting(b,89,140,61,64,6); huddle(b,166,140,80,64); booth(b,250,140,22,31); booth(b,250,173,22,31); booth(b,276,140,22,31); booth(b,276,173,22,31); pantry(b,302,140,40,64); },
-  focus(b){ meeting(b,24,140,72,64,8); pod(b,100,140,50,31); pod(b,100,173,50,31); huddle(b,166,140,60,64); pod(b,230,140,34,31); pod(b,230,173,34,31); booth(b,268,140,22,31); booth(b,268,173,22,31); pantry(b,294,140,48,64); },
+  focus(b){ meeting(b,24,140,72,64,8); pod(b,100,140,50,31); pod(b,100,173,50,31); huddle(b,166,140,90,64); booth(b,260,140,24,31); booth(b,260,173,24,31); pantry(b,288,140,54,64); },
 };
 function buildNB(nb){
   const b=builder(nb);
@@ -841,38 +987,48 @@ function buildNB(nb){
 }
 function buildTS(){
   const b=builder(null);
-  const th=room(b,170,290,160,120,'townhall','TOWN HALL');
-  b.f(L({x:178,y:306},{x:178,y:398},'board','townhall'));
+  const th=room(b,236,290,140,120,'townhall','TOWN HALL');
+  b.f(L({x:244,y:306},{x:244,y:398},'board','townhall'));
   let n=0;
-  for(let cx=198;cx<=310;cx+=14) for(let cy=316;cy<=400;cy+=12){ if(nearCol(cx,cy,9)) continue; b.f(C({x:cx,y:cy},3,'chair','townhall')); n++; }
+  for(let cx=262;cx<=366;cx+=13) for(let cy=316;cy<=400;cy+=12){ if(nearCol(cx,cy,9)) continue; b.f(C({x:cx,y:cy},3,'chair','townhall')); n++; }
   b.add('townhallSeats',n); b.sp('townhall',th,n);
-  b.sp('board',room(b,330,290,95,120,'board','BOARDROOM'),14);
-  b.f(R({x:365,y:318,w:25,h:74},'table','board',3),true);
-  for(let i=0;i<6;i++){ const yy=318+74*(i+.5)/6; b.f(C({x:360.5,y:yy},3,'chair','board')); b.f(C({x:394.5,y:yy},3,'chair','board')); }
-  b.f(C({x:377.5,y:313.5},3,'chair','board')); b.f(C({x:377.5,y:396.5},3,'chair','board'));
+  b.sp('board',room(b,376,290,60,120,'board','BOARDROOM'),14);
+  b.f(R({x:396,y:318,w:20,h:74},'table','board',3),true);
+  for(let i=0;i<6;i++){ const yy=318+74*(i+.5)/6; b.f(C({x:391.5,y:yy},3,'chair','board')); b.f(C({x:420.5,y:yy},3,'chair','board')); }
+  b.f(C({x:406,y:313.5},3,'chair','board')); b.f(C({x:406,y:396.5},3,'chair','board'));
   b.add('boardSeats',14);
-  const rec={x:425,y:290,w:75,h:120}; b.f(R(rec,'rfloor','reception')); b.mark('reception',rec); b.sp('reception',rec,6);
-  b.f(PA('M436 318Q462 338 488 318L488 326Q462 346 436 326Z','counter','reception'),true);
-  b.f(C({x:462,y:316},3,'chair','reception'));
-  b.f(R({x:434,y:376,w:36,h:9},'sofa','reception',3),true); b.f(R({x:478,y:372,w:11,h:11},'sofa','reception',3),true);
-  b.f(C({x:452,y:396},6,'table','reception'),true);
-  b.f(C({x:434,y:302},4.5,'leaf','reception')); b.f(C({x:491,y:302},4.5,'leaf','reception'));
-  b.text.push(T(462,365,'RECEPTION','rlabel'));
-  b.sp('wellness',room(b,700,290,75,60,'wellness','WELLNESS'),2);
-  b.f(R({x:712,y:308,w:13,h:30},'sofa','wellness',4),true); b.f(R({x:737,y:308,w:13,h:30},'sofa','wellness',4),true);
-  b.sp('wellness',room(b,700,350,75,60,'wellness','FIRST AID'),1);
-  b.f(R({x:710,y:372,w:32,h:14},'sofa','wellness',3),true); b.f(C({x:758,y:384},3,'chair','wellness'));
-  const cafe={x:775,y:290,w:255,h:120}; b.f(R(cafe,'rfloor','cafe')); b.mark('cafe',cafe);
-  b.f(R({x:1000,y:302,w:22,h:100},'counter','cafe',2),true);
+  const rec={x:436,y:290,w:64,h:120}; b.f(R(rec,'rfloor','reception')); b.mark('reception',rec); b.sp('reception',rec,6);
+  b.f(PA('M442 318Q468 338 494 318L494 326Q468 346 442 326Z','counter','reception'),true);
+  b.f(C({x:468,y:316},3,'chair','reception'));
+  b.f(R({x:442,y:376,w:32,h:9},'sofa','reception',3),true); b.f(R({x:480,y:372,w:11,h:11},'sofa','reception',3),true);
+  b.f(C({x:458,y:396},6,'table','reception'),true);
+  b.f(C({x:442,y:302},4.5,'leaf','reception')); b.f(C({x:493,y:302},4.5,'leaf','reception'));
+  b.text.push(T(468,365,'RECEPTION','rlabel'));
+  const cafe={x:764,y:290,w:200,h:120}; b.f(R(cafe,'rfloor','cafe')); b.mark('cafe',cafe);
+  b.f(R({x:924,y:302,w:20,h:100},'counter','cafe',2),true);
   let cs=0;
-  [800,838,876,914,952].forEach(cx=>[322,356,390].forEach(cy=>{
+  [788,826,864,902].forEach(cx=>[322,356,390].forEach(cy=>{
     if(nearCol(cx,cy,20)) return;
     b.f(C({x:cx,y:cy},7,'table','cafe'),true);
     [[11,0],[-11,0],[0,11],[0,-11]].forEach(([dx,dy])=>b.f(C({x:cx+dx,y:cy+dy},2.8,'chair','cafe')));
     cs+=4;
   }));
   b.add('cafeSeats',cs); b.sp('cafe',cafe,cs);
-  b.text.push(T(888,302,'CAFÉ','rlabel'));
+  b.text.push(T(846,302,'CAFÉ','rlabel'));
+  return b;
+}
+/* zen rooms sit on the loop between two neighbours, one room per pair */
+function buildZen(){
+  const b=builder(null);
+  ZEN.forEach(z=>{
+    const r=room(b,z.x,z.y,z.w,z.h,'zen','ZEN');
+    b.sp('zen',r,4,{nb:z.pair[0],pair:z.pair});
+    const cx=z.x+z.w/2;
+    b.f(R({x:z.x+8,y:z.y+24,w:z.w-16,h:72},'rug','zen',8));
+    [[-14,44],[14,44],[-14,76],[14,76]].forEach(([dx,dy])=>b.f(C({x:cx+dx,y:z.y+dy},5,'sofa','zen'),true));
+    b.f(C({x:cx,y:z.y+60},5.5,'table','zen'),true);
+    b.f(C({x:z.x+10,y:z.y+108},5,'leaf','zen')); b.f(C({x:z.x+z.w-10,y:z.y+108},5,'leaf','zen'));
+  });
   return b;
 }
 function buildShell(){
@@ -907,13 +1063,14 @@ function buildShell(){
 /* ---------- build everything once ---------- */
 const SHELL=buildShell();
 const TSB=buildTS();
+const ZENB=buildZen();
 const NBB=NBS.map(buildNB);
 
 /* ---------- derived figures (all computed from the drawing) ---------- */
 const sum=(f)=>NBB.reduce((a,b)=>a+(f(b)||0),0);
 const facadeDist=d=>Math.min(d.x-PLATE.x,PLATE.x+PLATE.w-d.x,d.y-PLATE.y,PLATE.y+PLATE.h-d.y);
 const allDesks=NBB.flatMap(b=>b.desks);
-const streetU=STREETS.reduce((a,s)=>a+s.w*s.h,0), tsU=TS_ZONES.reduce((a,z)=>a+z.w*z.h,0), nbU=6*NB_W*NB_H, plateU=PLATE.w*PLATE.h;
+const streetU=STREETS.reduce((a,s)=>a+s.w*s.h,0), tsU=TS_ZONES.reduce((a,z)=>a+z.w*z.h,0), zenU=ZEN.reduce((a,z)=>a+z.w*z.h,0), nbU=6*NB_W*NB_H, plateU=PLATE.w*PLATE.h;
 const TOT={
   desks:sum(b=>b.kit.desk), meeting:sum(b=>b.kit.meeting)+1, booths:sum(b=>b.kit.booth), pods:sum(b=>b.kit.focus),
   daylight:Math.round(100*allDesks.filter(d=>facadeDist(d)<=80).length/allDesks.length),
@@ -921,21 +1078,57 @@ const TOT={
 };
 const AREA=[
   {label:'Neighbourhoods',u:nbU,c:null},
+  {label:'Shared zen rooms',u:zenU,c:'var(--brand-2)'},
   {label:'Town Square',u:tsU,c:'var(--brand)'},
-  {label:'Main Street and lanes',u:streetU,c:'var(--street-line)'},
-  {label:'Core, stairs and services',u:plateU-nbU-tsU-streetU,c:'var(--ink-3)'},
+  {label:'Loop corridor and lanes',u:streetU,c:'var(--street-line)'},
+  {label:'Core, stairs and services',u:plateU-nbU-zenU-tsU-streetU,c:'var(--ink-3)'},
 ];
+/* ---------- brief vs plan ---------- */
+const NB_IDS=NBS.map(n=>n.id);
+const nbIndex=id=>NB_IDS.indexOf(id);
+const nbName=id=>NBS[nbIndex(id)].name;
+const pairOf=id=>PAIRS.find(p=>p.includes(id));
+function planned(item,id){
+  if(item.rule==='split') return Math.floor(item.total/6)+((item.extra||{})[id]||0);
+  if(item.rule==='shared') return .5;
+  return 0;
+}
+function achieved(item,id){
+  if(item.rule==='split'){ const k=NBB[nbIndex(id)].kit; return k[item.k]||0; }
+  if(item.rule==='shared') return SP.some(x=>x.k===item.k&&x.pair&&x.pair.includes(id))?.5:0;
+  return 0;
+}
+function squareAchieved(item){ const k=TSB.kit; return {townhall:k.townhallSeats, cafe:k.cafeSeats, board:SP.some(x=>x.k==='board')?1:0, reception:SP.some(x=>x.k==='reception')?1:0}[item.k]||0; }
+function itemTotalAchieved(item){
+  if(item.rule==='split') return NB_IDS.reduce((a,id)=>a+achieved(item,id),0);
+  if(item.rule==='shared') return SP.filter(x=>x.k===item.k).length;
+  return squareAchieved(item);
+}
+const GAPS=BRIEF.filter(it=>itemTotalAchieved(it)<it.total);
+const lc=s=>s.toLowerCase(), sing=s=>lc(s).replace(/ches$/,'ch').replace(/s$/,'');
+const countOf=(n,name)=>`${n} ${n===1?sing(name):lc(name)}`;
+const extrasFor=id=>BRIEF.filter(it=>it.rule==='split'&&it.extra&&it.extra[id]).map(it=>`+${countOf(it.extra[id],it.name)}`);
+const shortFor=id=>BRIEF.filter(it=>it.rule==='split'&&achieved(it,id)<planned(it,id)).map(it=>`${lc(it.name)} ${achieved(it,id)} of ${planned(it,id)}`);
+const shareLine=id=>{ const ex=extrasFor(id); return ex.length?`Equal share + ${ex.map(e=>e.slice(1)).join(', ')}`:'Equal share of the brief'; };
+const BR=Object.fromEntries(BRIEF.map(it=>[it.k,it]));
+const listJoin=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+const partnerOf=id=>pairOf(id).find(x=>x!==id);
+const RULE={split:['÷ 6','Split evenly across the six'],shared:['1 per 2','Fewer than six: two neighbours share one'],square:['Town Square','One for everyone, in the Town Square']};
+const ruleChip=r=>`<i class="rc" data-rule="${r}">${RULE[r][0]}</i>`;
+const LOOP_LEN=toM(2*((1034-166)+(407-293))+2*Math.PI*18);
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 function reach(b){
   let worst=0;
   b.desks.forEach(d=>{ let w=0; ['meeting','booth','pantry'].forEach(k=>{ w=Math.max(w,Math.min(...b.at[k].map(p=>dist(p,d)))); }); worst=Math.max(worst,w); });
   return toM(worst);
 }
+/* furthest desk from its shared zen room, in metres */
+const ZEN_REACH=toM(Math.max(...ZEN.map(z=>{ const c={x:z.x+z.w/2,y:z.y+z.h/2}; return Math.max(...z.pair.flatMap(id=>NBB[nbIndex(id)].desks.map(d=>dist(d,c)))); })));
 
 /* ---------- plan layers ---------- */
 const svgWrap=inner=>`<svg class="dsvg" viewBox="${VB}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${inner}</svg>`;
 const lyr=(cls,z,inner,style)=>`<div class="lyr ${cls}" style="--z:${z}px;${style||''}">${svgWrap(inner)}</div>`;
-const byNB=(fn)=>NBB.map((b,i)=>`<g data-nb="${NBS[i].id}">${fn(b)}</g>`).join('')+`<g data-nb="TS">${fn(TSB)}</g>`;
+const byNB=(fn)=>NBB.map((b,i)=>`<g data-nb="${NBS[i].id}">${fn(b)}</g>`).join('')+`<g data-nb="TS">${fn(TSB)}</g><g data-nb="ZEN">${fn(ZENB)}</g>`;
 
 function sunIcon(p){
   let s=C(p,6.5,'sun');
@@ -988,27 +1181,32 @@ function siteSVG(){
 }
 function streetsSVG(){
   let s=STREETS.map(st=>R(st,'street '+st.cls).replace('/>',` style="--d:${st.d}s"/>`)).join('');
-  s+=L({x:58,y:275},{x:1142,y:275},'cline')+L({x:58,y:425},{x:1142,y:425},'cline');
+  s+=PA(LOOP,'cline');
+  [[275,58,166],[275,1034,1142],[425,58,166],[425,1034,1142]].forEach(([y,a,b2])=>{ s+=L({x:a,y},{x:b2,y},'cline'); });
   [[412.5,58,252],[787.5,58,252],[412.5,448,642],[787.5,448,642]].forEach(([x,a,b2])=>{ s+=L({x,y:a},{x,y:b2},'cline'); });
+  s+=`<g class="g-loop">${PA(LOOP,'loop-line',null,' pathLength="1"')}${PA(LOOP,'loop-flow')}${[0,1,2].map(j=>`<circle r="6" class="loop-dot"><animateMotion dur="18s" begin="${-j*6}s" repeatCount="indefinite" path="${LOOP}"/></circle>`).join('')}</g>`;
   return s;
 }
 function zonesSVG(){
   let s=NBS.map((nb,i)=>`<rect x="${nb.x}" y="${nb.y}" width="${NB_W}" height="${NB_H}" class="zone" data-nb="${nb.id}" style="--c:var(${nb.c});--d:${i*.12}s"/>`).join('');
   s+=TS_ZONES.map(z=>`<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" class="zone ts" data-nb="TS" style="--d:.8s"/>`).join('');
+  // a zen room is half of each neighbour's: top half in the north colour, bottom half in the south
+  s+=ZEN.map((z,j)=>z.pair.map((id,h)=>`<rect x="${z.x}" y="${z.y+h*z.h/2}" width="${z.w}" height="${z.h/2}" class="zone zen" data-nb="ZEN-${j}" style="--c:var(${NBS[nbIndex(id)].c});--d:.9s"/>`).join('')).join('');
   return s;
 }
 function textSVG(){
   let s='';
-  [[240,279],[960,279],[240,429],[960,429]].forEach(([x,y])=>{ s+=T(x,y,'MAIN STREET','slabel',' text-anchor="middle"'); });
+  [[300,270.5],[900,270.5],[300,437.5],[900,437.5]].forEach(([x,y])=>{ s+=T(x,y,'THE LOOP','slabel',' text-anchor="middle"'); });
   [[412.5,155],[787.5,155],[412.5,545],[787.5,545]].forEach(([x,y])=>{ s+=T(x,y,'LANE','slabel',` text-anchor="middle" transform="rotate(-90 ${x} ${y})" dy="3.5"`); });
-  s+=`<g data-nb="TS">${TSB.text.join('')}</g>`;
+  s+=`<g data-nb="TS">${TSB.text.join('')}</g><g data-nb="ZEN">${ZENB.text.join('')}</g>`;
+  s+=`<g class="g-zenlinks">${ZEN.map(z=>z.pair.map(id=>{ const nb=NBS[nbIndex(id)], a={x:z.x+z.w/2,y:z.y+z.h/2}, e={x:nb.x+NB_W/2,y:nb.flip?nb.y+46:nb.y+NB_H-46}; return `<g style="--c:var(${nb.c})">${PA(`M${a.x} ${a.y}L${e.x} ${e.y}`,'zlink')}${C(e,5,'zlink-o')}</g>`; }).join('')).join('')}</g>`;
   return s;
 }
 const LABELS=[];
 function labelSet(){
   NBS.forEach((nb,i)=>LABELS.push({key:nb.id,x:nb.x+NB_W/2,y:nb.y+NB_H/2+16,h:56,g:'g-zones',kind:'zl',nb:nb.id,c:`var(${nb.c})`,d:.3+i*.12,html:`<div class="ol-n">${nb.name}</div><div class="ol-s">${nb.team}</div>`}));
-  LABELS.push({key:'TS',x:902,y:366,h:56,g:'g-zones',kind:'zl',nb:'TS',c:'var(--brand)',d:1,html:'<div class="ol-n">Town Square</div><div class="ol-s">shared by everyone</div>'});
-  [['Fit-out','g-fit'],['Neighbourhoods','g-zones'],['Streets','g-streets'],['Shell and core','g-shell']].forEach(([t,g])=>LABELS.push({key:'L-'+g,x:46,y:50,h:0,g,kind:'ll',html:t}));
+  LABELS.push({key:'TS',x:864,y:366,h:56,g:'g-zones',kind:'zl',nb:'TS',c:'var(--brand)',d:1,html:'<div class="ol-n">Town Square</div><div class="ol-s">shared by everyone</div>'});
+  [['Fit-out','g-fit'],['Neighbourhoods','g-zones'],['Loop and lanes','g-streets'],['Shell and core','g-shell']].forEach(([t,g])=>LABELS.push({key:'L-'+g,x:46,y:50,h:0,g,kind:'ll',html:t}));
 }
 const anchor=(key,p,x,y,h,cls)=>`<i class="anc ${cls||''}" data-a="${key}" data-p="${p}" style="left:${r1(x)}px;top:${r1(y)}px;--h:${h}px"></i>`;
 function anchorsHTML(){ return LABELS.map(l=>anchor(l.key,'lift',l.x+40,l.y+40,l.h,l.g)+(l.kind==='zl'?anchor(l.key,'foot',l.x+40,l.y+40,2,l.g):'')).join(''); }
@@ -1037,7 +1235,7 @@ function buildPlan(){
   out.push(lyr('g-streets streets',1,streetsSVG()));
   out.push(lyr('g-zones zones',1.5,zonesSVG()));
   out.push(lyr('g-fit furn',2,byNB(b=>b.furn.join(''))));
-  out.push(lyr('g-fit hits',2.2,NBB.map((b,i)=>`<g data-nb="${NBS[i].id}" style="--c:var(${NBS[i].c})">${b.hits.join('')}</g>`).join('')+`<g data-nb="TS" style="--c:var(--brand)">${TSB.hits.join('')}</g>`));
+  out.push(lyr('g-fit hits',2.2,NBB.map((b,i)=>`<g data-nb="${NBS[i].id}" style="--c:var(${NBS[i].c})">${b.hits.join('')}</g>`).join('')+`<g data-nb="TS" style="--c:var(--brand)">${TSB.hits.join('')}</g><g data-nb="ZEN" style="--c:var(--brand-2)">${ZENB.hits.join('')}</g>`));
   out.push(lyr('g-fit ftop',7,byNB(b=>b.top.join(''))));
   for(let i=0;i<N;i++) out.push(lyr('g-fit wc'+(i===N-1?' top':''),2.5,byNB(b=>b.walls.join('')),`--i:${i}`));
   out.push(lyr('g-fit text',4,textSVG()));
@@ -1059,25 +1257,77 @@ function buildCity(){
   const S=v=>v*.5+20, sr=r=>({x:S(r.x),y:S(r.y),w:r.w*.5,h:r.h*.5});
   const house=(cx,cy)=>`M${cx-6} ${cy+5}V${cy-1}L${cx} ${cy-7}L${cx+6} ${cy-1}V${cy+5}Z`;
   let s=`<g class="cpw" style="--d:.1s"><g class="cp" data-part="city">${R(sr(PLATE),'c-city',null,10)}</g></g>`;
-  s+=`<g class="cpw" style="--d:.5s"><g class="cp" data-part="street">${STREETS.map(st=>R(sr(st),'c-street')).join('')}${T(60,160.5,'MAIN STREET','c-t')}</g></g>`;
-  s+=`<g class="cpw" style="--d:.9s"><g class="cp" data-part="square">${TS_ZONES.map(z=>R(sr(z),'c-square',null,4)).join('')}${R(sr(CORE),'c-core',null,3)}${T(320,198.5,'TOWN SQUARE','c-t2',' text-anchor="middle"')}</g></g>`;
+  s+=`<g class="cpw" style="--d:.5s"><g class="cp" data-part="street">${STREETS.map(st=>R(sr(st),'c-street')).join('')}${T(60,160.5,'THE LOOP','c-t')}</g></g>`;
+  s+=`<g class="cpw" style="--d:.9s"><g class="cp" data-part="square">${TS_ZONES.map(z=>R(sr(z),'c-square',null,4)).join('')}${R(sr(CORE),'c-core',null,3)}${T(204,198.5,'TOWN SQUARE','c-t2',' text-anchor="middle"')}</g></g>`;
   NBS.forEach((nb,i)=>{ s+=`<g class="cpw" style="--d:${1.25+i*.1}s"><g class="cp" data-part="nb" style="--c:var(${nb.c})">${R(sr({x:nb.x,y:nb.y,w:NB_W,h:NB_H}),'c-nb',null,6)}</g></g>`; });
   let h='';
   NBS.forEach(nb=>{ const o=sr({x:nb.x,y:nb.y,w:NB_W,h:NB_H}); [0,1,2,3].forEach(c=>[0,1].forEach(r=>{ h+=`<path d="${house(o.x+30+c*38,o.y+(nb.flip?32+r*36:28+r*36))}" class="c-home" style="--c:var(${nb.c})"/>`; })); });
   s+=`<g class="cpw" style="--d:2s"><g class="cp" data-part="home">${h}</g></g>`;
   $('#city').innerHTML=s;
 }
+/* the loop: a ring stretches into the corridor, then the plan grows around it */
+function buildLoop(){
+  const S=v=>v*.5+20, sr=r=>({x:S(r.x),y:S(r.y),w:r.w*.5,h:r.h*.5});
+  const LP=LOOP.replace(/\d+(\.\d+)?/g,n=>String(r1(+n*.5+20)));
+  const lanes=STREETS.filter(st=>st.cls==='up'||st.cls==='down'), mains=STREETS.filter(st=>st.cls==='main'||st.cls==='conn');
+  let s=`<g class="cp" data-part="base">${R(sr(PLATE),'c-city',null,10)}${R(sr(CORE),'c-core',null,3)}</g>`;
+  s+=`<g class="cp" data-part="nb">${NBS.map((nb,i)=>`<g class="lp-in" style="--c:var(${nb.c});--d:${1.9+i*.07}s">${R(sr({x:nb.x,y:nb.y,w:NB_W,h:NB_H}),'c-nb',null,6)}</g>`).join('')}<g class="lp-in" style="--d:1.85s">${lanes.map(st=>R(sr(st),'c-street')).join('')}</g></g>`;
+  s+=`<g class="cp" data-part="square"><g class="lp-in" style="--d:2.1s">${TS_ZONES.map(z=>R(sr(z),'c-square',null,4)).join('')}${T(204,198.5,'TOWN SQUARE','c-t2',' text-anchor="middle"')}</g></g>`;
+  s+=`<g class="cp" data-part="exits">${STAIRS.map(st=>R(sr(st),'c-stair',null,2)).join('')}<g class="lp-in" style="--d:2.4s"><path class="lp-two" d="M494 237H68"/><path class="lp-two" d="M506 237H572"/>${C({x:500,y:237},4.5,'lp-you')}${T(500,255,'TWO WAYS OUT','lp-yt')}</g></g>`;
+  s+=`<g class="lp-ring"><circle cx="320" cy="195" r="37.5" pathLength="1" vector-effect="non-scaling-stroke"/></g>`;
+  s+=`<g class="cp" data-part="loop"><g class="lp-in" style="--d:1.4s">${mains.map(st=>R(sr(st),'c-street')).join('')}</g><path class="lp-path" d="${LP}"/><path class="lp-flow" d="${LP}"/>${[0,1,2].map(j=>`<circle r="3.6" class="lp-dot"><animateMotion dur="12s" begin="${-j*4}s" repeatCount="indefinite" path="${LP}"/></circle>`).join('')}<g class="lp-in" style="--d:2s">${T(320,145,'THE LOOP · NO DEAD ENDS','lp-t')}</g></g>`;
+  $('#loopsvg').innerHTML=s;
+}
+/* the brief as Acko gave it: floor-wide totals, grouped by how we shared them out */
+function buildBrief(){
+  let d=.12;
+  const grp=(rule,title,cols)=>{ const items=BRIEF.filter(it=>it.rule===rule); return `<section class="bf-g"><header><h4>${title}</h4>${ruleChip(rule)}</header><div class="bf-tiles" style="--cols:${cols}">${items.map(it=>`<div class="bf-t" style="--d:${(d+=.05).toFixed(2)}s"><b>${fmt(it.total)}</b><span>${it.name}</span></div>`).join('')}</div></section>`; };
+  $('#bf').innerHTML=`<div class="bf-hero"><b>${NBS.length}</b><span>neighbourhoods, and one total for each space across the floor</span></div>`
+    +grp('split','In every neighbourhood',4)
+    +`<div class="bf-row">${grp('shared','Shared',1)}${grp('square','For everyone',4)}</div>`;
+}
+/* brief → share per neighbourhood → what the plan achieved, one table in three modes */
+function buildAlloc(){
+  const cols=PAIRS.flat(), first=id=>PAIRS.some(p=>p[0]===id), nbc=id=>`var(${NBS[nbIndex(id)].c})`;
+  const v=(a,b,c)=>`<span class="v-div">${a}</span><span class="v-ext">${b}</span><span class="v-ach">${c}</span>`;
+  const ok=n=>`${fmt(n)} <span class="ok">✓</span>`, unit=it=>it.unit?` <small>${it.unit}</small>`:'';
+  let body='';
+  [['split','In every neighbourhood'],['shared','Shared by two neighbours'],['square','In the Town Square']].forEach(([rule,title])=>{
+    body+=`<tr class="am-g"><td colspan="${cols.length+4}">${title}${ruleChip(rule)}</td></tr>`;
+    BRIEF.filter(it=>it.rule===rule).forEach(it=>{
+      const tot=itemTotalAchieved(it), short=tot<it.total, tcls=`am-t${short?' is-short':''}`;
+      let row=`<td class="am-i">${it.name}</td><td class="am-b">${fmt(it.total)}</td>`;
+      if(rule==='split'){
+        const base=Math.floor(it.total/6), rem=it.total%6;
+        row+=cols.map(id=>{ const ex=(it.extra||{})[id]||0, pl=planned(it,id), ac=achieved(it,id);
+          return `<td class="${first(id)?'ps ':''}${ex?'has-ext ':''}${ac<pl?'is-short':''}" style="--c:${nbc(id)}">${v(base,`${pl}${ex?`<i class="bx">+${ex}</i>`:''}`,ac<pl?`${ac}<small>/${pl}</small>`:ac)}</td>`; }).join('');
+        row+=`<td class="am-ts na ps">–</td><td class="${tcls}">${v(rem?`<b class="rem">${rem} left over</b>`:'none left','all placed <span class="ok">✓</span>',short?`${fmt(tot)} of ${fmt(it.total)}`:ok(tot))}</td>`;
+      } else if(rule==='shared'){
+        row+=PAIRS.map(p=>`<td colspan="2" class="zc ps" style="--c1:${nbc(p[0])};--c2:${nbc(p[1])}">${v('<span class="half">½</span><span class="half">½</span>','1 shared','1 shared')}</td>`).join('');
+        row+=`<td class="am-ts na ps">–</td><td class="${tcls}">${v(`${it.total} for ${NBS.length}`,'1 per pair <span class="ok">✓</span>',ok(tot))}</td>`;
+      } else {
+        const sa=squareAchieved(it);
+        row+=`<td colspan="6" class="na ps">one for everyone</td><td class="am-ts ps${short?' is-short':''}">${v(fmt(it.total)+unit(it),fmt(it.total)+unit(it),fmt(sa)+unit(it))}</td><td class="${tcls}">${v('–','placed <span class="ok">✓</span>',short?`${fmt(tot)} of ${fmt(it.total)}`:ok(tot))}</td>`;
+      }
+      body+=`<tr data-row="${it.k}">${row}</tr>`;
+    });
+  });
+  const head=`<tr class="am-pair"><th colspan="2"></th>${['West','Centre','East'].map(t=>`<th colspan="2" class="ps">${t}</th>`).join('')}<th colspan="2"></th></tr>`
+    +`<tr><th class="am-i">Space</th><th class="am-b">Brief</th>${cols.map(id=>`<th class="am-nb${first(id)?' ps':''}" style="--c:${nbc(id)}"><span>${nbName(id)}</span><small>${NBS[nbIndex(id)].flip?'south':'north'}</small></th>`).join('')}<th class="am-ts ps">Town Square</th><th class="am-t">${v('Remainder','Placed','Achieved')}</th></tr>`;
+  $('#am').innerHTML=`<table class="am"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+}
+function allocMode(m){ const a=$('#am'); a.className='alloc m-'+m; void a.offsetWidth; a.classList.add('flip'); }
 function nbMini(i,extra){
   const nb=NBS[i], b=NBB[i];
   const v=[nb.x-16,nb.y-16,NB_W+32,NB_H+32], vb=v.join(' ');
   return `<svg class="dsvg" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" style="--c:var(${nb.c});--hl:var(${nb.c})"><svg x="${v[0]}" y="${v[1]}" width="${v[2]}" height="${v[3]}" viewBox="${vb}" overflow="hidden">${R(PLATE,'slab')}${STREETS.map(s=>R(s,'street-s')).join('')}${R({x:nb.x,y:nb.y,w:NB_W,h:NB_H},'zone-mini')}${extra&&extra.under||''}${b.furn.join('')}${b.walls.join('')}${extra&&extra.over||''}</svg></svg>`;
 }
 function buildOverview(){
-  $('#ov-grid').innerHTML=NBS.map((nb,i)=>{ const k=NBB[i].kit; return `<button class="ov-card" type="button" data-go-nb="${i}" style="--c:var(${nb.c});--d:${i*.08}s"><div class="ov-h"><span class="ov-n">${nb.name}</span><span class="ov-id">${nb.id}</span></div>${nbMini(i)}<div class="ov-t">${nb.team} · ${VARIANTS[nb.variant].label}</div><div class="ov-k">${k.desk} desks · ${k.meeting} MR · ${k.booth} booths · ${k.focus} pods</div></button>`; }).join('');
+  $('#ov-grid').innerHTML=NBS.map((nb,i)=>{ const k=NBB[i].kit; return `<button class="ov-card" type="button" data-go-nb="${i}" style="--c:var(${nb.c});--d:${i*.08}s"><div class="ov-h"><span class="ov-n">${nb.name}</span><span class="ov-id">${nb.id}</span></div>${nbMini(i)}<div class="ov-t">${nb.team} · ${shareLine(nb.id)}</div><div class="ov-k">${k.desk} desks · ${k.meeting} MR · ${k.booth} booths · ${k.focus} pods</div></button>`; }).join('');
 }
 function buildNumbers(){
   const tiles=[
-    [TOT.desks,'','Workstations'],[6,'','Self-sustaining neighbourhoods'],[TOT.meeting,'','Meeting rooms, incl. boardroom'],
+    [TOT.desks,'',`Workstations, against ${BR.desk.total} in the brief`],[6,'','Self-sustaining neighbourhoods'],[TOT.meeting,'','Meeting rooms, incl. boardroom'],
     [TOT.booths+TOT.pods,'','Phone booths and focus pods'],[TOT.daylight,'%','Desks within 6 m of a façade'],[Math.round(TOT.plateSqft),'sq ft','Floor plate'],
   ];
   $('#nums').innerHTML=`<div class="tiles">${tiles.map(([v,u,l],i)=>`<div class="tile" style="--d:${i*.08}s"><b><span data-count="${v}">${fmt(v)}</span>${u?`<small>${u}</small>`:''}</b><span>${l}</span></div>`).join('')}</div>${areaBar()}<div class="thanks"><h3>Thank you</h3><p>Officebanao × Acko · Draft for discussion</p></div>`;
@@ -1103,7 +1353,15 @@ const KIT=[
   {k:'pantry',n:'Pantry point',c:'Recharge',v:k=>k.pantry},
   {k:'utility',n:'Lockers and print',c:'Store',v:k=>`${k.desk} lockers`},
   {k:'green',n:'Planter',c:'Breathe',v:k=>k.green},
+  {k:'zen',n:'Zen room',c:'Breathe',v:()=>'½ shared'},
 ];
+/* how a kit item compares with the neighbourhood's share of the brief */
+function kitNote(key,id){
+  if(key==='zen') return `<em class="kz">with ${nbName(partnerOf(id))}</em>`;
+  const it=BR[key]; if(!it||it.rule!=='split') return '';
+  const pl=planned(it,id), ac=achieved(it,id), ex=(it.extra||{})[id];
+  return ac<pl?`<em class="ks">${ac} of ${pl}</em>`:ex?`<em class="kx">+${ex} extra</em>`:'';
+}
 const CATS=['Work','Focus','Meet','Collaborate','Recharge','Store','Breathe'];
 function kitPoints(b){
   const pts={};
@@ -1116,7 +1374,7 @@ let DIVE_NB=null;
 function renderDive(i){
   const nb=NBS[i], b=NBB[i], pts=kitPoints(b);
   const flip=nb.flip, cx=nb.x+NB_W/2;
-  const edges=T(cx,flip?nb.y+NB_H+11:nb.y-6,'FAÇADE','edge-t')+T(cx,flip?nb.y-4:nb.y+NB_H+12,'MAIN STREET','edge-t');
+  const edges=T(cx,flip?nb.y+NB_H+11:nb.y-6,'FAÇADE','edge-t')+T(cx,flip?nb.y-4:nb.y+NB_H+12,'THE LOOP','edge-t');
   const marks=KIT.map((it,n)=>pts[it.k]?`<g class="km" data-k="${it.k}" transform="translate(${r1(pts[it.k].x)} ${r1(pts[it.k].y)})"><circle r="7.5"/><text y="2.9">${n+1}</text></g>`:'').join('');
   DIVE_NB=nb.id;
   $('#dv-plan-svg').innerHTML=nbMini(i,{over:b.hits.join('')+edges+marks});
@@ -1148,9 +1406,9 @@ const RENDERS={
   // meeting:{light:'renders/meeting-light.jpg', dark:'renders/meeting-dark.jpg'},
   // 'N1:huddle':{light:'renders/n1-huddle-light.jpg', dark:'renders/n1-huddle-dark.jpg'},
 };
-const NB_KINDS=['desk','cabin','touch','focus','booth','meeting','huddle','pantry'];
-const TS_KINDS=['reception','townhall','board','cafe','wellness'];
-const SPACE_NAMES={desk:'Workstations',cabin:'Team lead cabin',touch:'Touchdown bench',focus:'Focus pod',booth:'Phone booth',meeting:'Meeting room',huddle:'Team huddle',pantry:'Pantry point',reception:'Reception',townhall:'Town hall',board:'Boardroom',cafe:'Café',wellness:'Wellness room'};
+const NB_KINDS=['desk','cabin','touch','focus','booth','meeting','huddle','pantry','zen'];
+const TS_KINDS=['reception','townhall','board','cafe'];
+const SPACE_NAMES={desk:'Workstations',cabin:'Team lead cabin',touch:'Touchdown bench',focus:'Focus pod',booth:'Phone booth',meeting:'Meeting room',huddle:'Team huddle',pantry:'Pantry point',zen:'Zen room',reception:'Reception',townhall:'Town hall',board:'Boardroom',cafe:'Café'};
 const ACCENT={N1:'#ff7a59',N2:'#f0b43a',N3:'#2ec4b6',N4:'#58a9ff',N5:'#ef72b2',N6:'#a3d977',TS:'#7c5cff'};
 const canRender=k=>NB_KINDS.includes(k)||TS_KINDS.includes(k);
 
@@ -1221,7 +1479,7 @@ function sampleRender(k,mode,accent,label){
     cafe(){ box(-2.2,.6,0,1.05,4.35,5,TBL); backRect(-2.2,.6,1.2,2.3,ac,Lt?.35:.5); [[-1.35,1.9],[.35,1.6],[1.55,2.6],[-.9,3.2],[.45,3.4]].forEach(([x,z])=>{ table(x-.32,x+.32,z-.32,z+.32,.74); chair(x-.55,z,'e'); chair(x+.55,z,'w'); pend.push([x,z]); }); plant(2.0,4.5); plant(-2.1,.7); },
     reception(){ backRect(-1.8,1.8,0,3,ac,Lt?.5:.55); backRect(-.9,.9,1.6,2.0,Lt?'#ffffff':'#f0ebe2',.9); box(-1.4,1.4,0,1.05,2.9,3.4,{top:C.t,front:Lt?'#f1ede6':'#3a342e',side:C.td}); chair(0,3.85,'s'); sofa(-2.25,-1.55,1.0,2.6,'left'); table(-1.35,-.85,1.5,2.1,.4); plant(-2.05,4.5,1.1); plant(2.05,4.5,1.1); pend.push([-.7,3.15],[0,3.15],[.7,3.15]); },
     townhall(){ backRect(-1.9,1.9,.85,2.45,C.dk); box(-2.4,2.4,0,.18,4.0,5,TBL); [2.95,2.3,1.65,1.0].forEach(z=>{ for(let x=-1.95;x<=1.97;x+=.56) chair(x,z,'n'); }); plant(-2.1,4.6,.9); },
-    wellness(){ rug(-1.8,1.8,1.6,4.2); backRect(-1.2,1.2,1.0,2.2,ac,Lt?.3:.4); sofa(-1.6,-.6,2.4,3.9,'far'); sofa(.6,1.6,2.4,3.9,'far'); table(-.25,.25,3.0,3.5,.45); plant(-2.05,1.0,1.2); plant(2.05,1.2,1.1); plant(0,4.6); pend.push([0,3.2]); },
+    zen(){ rug(-1.7,1.7,1.6,4.2); backRect(-1.4,1.4,.7,2.1,ac,Lt?.3:.38); box(-1.9,1.9,0,.14,4.35,5,TBL); [[-.85,2.2],[.85,2.2],[-.85,3.5],[.85,3.5]].forEach(([x,z])=>{ shadow(x-.3,x+.3,z-.3,z+.3); box(x-.3,x+.3,0,.16,z-.3,z+.3,UPH,z); }); table(-.35,.35,2.55,3.15,.3); plant(-2.1,1.5,.9); plant(2.1,1.7,.9); plant(-1.55,4.6,.8); plant(1.55,4.6,.8); pend.push([0,2.85]); },
   };
   (SCENE[k]||SCENE.meeting)();
   // shell
@@ -1258,7 +1516,7 @@ function renderSrc(ctx,k,mode){ const r=RENDERS[ctx+':'+k]||RENDERS[k]; return r
 /* =====================================================================
    STEPS
    ===================================================================== */
-const CH=['Introduction','The idea','Bare shell','Site understanding','Due diligence','Fire and egress','Deriving the plan','The layout','Town Square','Axonometric','Neighbourhoods','By the numbers'];
+const CH=['Introduction','The idea','The brief','Bare shell','Site understanding','Due diligence','Fire and egress','Deriving the plan','Sharing out the brief','The layout','Brief vs plan','Town Square','Axonometric','Neighbourhoods','By the numbers'];
 const pad=n=>String(n).padStart(2,'0');
 const eyebrow=s=>`<p class="eyebrow">${pad(s.ch)} · ${CH[s.ch]}${s.sub?` · ${s.sub}`:''}</p>`;
 const nbSw=i=>`style="--c:var(${NBS[i].c})"`;
@@ -1270,84 +1528,111 @@ const STEPS=[
     <p>Large floors feel anonymous. Cities stay human through neighbourhoods: places small enough to know your neighbours, with daily needs close by, linked by streets to a shared square. We planned Acko's floor the same way.</p>
     <ul class="analogy">${[
       ['city','The city','The floor',`One floor plate for ${TOT.desks} people`],
-      ['street','Main Street','Circulation','Clear routes that double as fire escape'],
+      ['street','The loop','Circulation','One endless corridor that is also the escape route'],
       ['square','Town Square','Shared amenities','Arrival, café, town hall, boardroom'],
       ['nb','Neighbourhood','A team zone','About 70 people with daily needs close by'],
       ['home','Home','Your desk','In daylight, a few steps from your team'],
     ].map(([p,a,b2,c])=>`<li><button type="button" class="an" data-part="${p}"><span class="an-c">${a}</span><span class="an-ar">→</span><span class="an-o">${b2}<small>${c}</small></span></button></li>`).join('')}</ul>`,
     wire:wireIdea},
-  {id:'shell',ch:2,scene:'plan',flags:'shell',cap:s=>`${eyebrow(s)}<h2>A bare floor plate</h2>
+  {id:'loop',ch:1,sub:'The loop',scene:'loop',cap:s=>`${eyebrow(s)}<h2>And a loop that never ends</h2>
+    <p>Acko's logo is drawn as a loop. We took it literally: the main corridor runs as one endless loop around the core, with no dead ends. Everything shared sits inside it, and the six neighbourhoods open off it.</p>
+    <ul class="analogy">${[
+      ['loop','The loop','The main corridor','One continuous path around the core'],
+      ['exits','Endless','No dead ends','From any point, two ways to a stair'],
+      ['square','Inside','Town Square','Everything shared, in the middle'],
+      ['nb','Outside','Neighbourhoods','Six parcels, each opening onto the loop'],
+    ].map(([p,a,b2,c])=>`<li><button type="button" class="an" data-part="${p}"><span class="an-c">${a}</span><span class="an-ar">→</span><span class="an-o">${b2}<small>${c}</small></span></button></li>`).join('')}</ul>`,
+    wire:()=>wireParts('#loopsvg')},
+  {id:'brief',ch:2,scene:'brief',cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods and a count for everything</h2>
+    <p>Acko's brief asked for six neighbourhoods and gave one total for each type of space across the whole floor: ${fmt(BR.desk.total)} workstations, ${BR.meeting.total} meeting rooms, ${BR.booth.total} phone booths and so on. It didn't say which team gets what, so sharing it out became a design decision of its own.</p>
+    <ul class="legend">${['split','shared','square'].map(r=>`<li>${ruleChip(r)}${RULE[r][1]}</li>`).join('')}</ul>`},
+  {id:'shell',ch:3,scene:'plan',flags:'shell',cap:s=>`${eyebrow(s)}<h2>A bare floor plate</h2>
     <p>The starting point: an ${toM(PLATE.w).toFixed(1)} × ${toM(PLATE.h).toFixed(0)} m warm-shell floor with a central core, three fire stairs and a regular column grid. Everything else was open.</p>
     <dl class="facts"><dt>Floor plate</dt><dd>${fmt(TOT.plateSqft)} sq ft</dd><dt>Column bays</dt><dd>7.5 m east–west</dd><dt>Core</dt><dd>8 lifts, toilets, Stair C</dd><dt>Fire stairs</dt><dd>3 (A, B, C)</dd><dt>Floor to floor</dt><dd>${PROJECT.f2f} · ${PROJECT.clear}</dd></dl>`},
-  {id:'light',ch:3,sub:'Light',scene:'plan',flags:'shell light north',cap:s=>`${eyebrow(s)}<h2>Reading the light</h2>
+  {id:'light',ch:4,sub:'Light',scene:'plan',flags:'shell light north',cap:s=>`${eyebrow(s)}<h2>Reading the light</h2>
     <p>North light is soft and steady through the day, so long-hour desks belong there. South and west glass takes direct sun and glare and needs shading. We set out to keep most desks inside the 6 m daylight band.</p>
     <ul class="legend"><li><i class="lg lg-sun"></i>6 m daylight zone along every façade</li><li><i class="lg lg-path"></i>Sun path, east to west over the south</li></ul>`},
-  {id:'context',ch:3,sub:'Context',scene:'plan',flags:'shell grid context north',cap:s=>`${eyebrow(s)}<h2>Views, noise and arrival</h2>
+  {id:'context',ch:4,sub:'Context',scene:'plan',flags:'shell grid context north',cap:s=>`${eyebrow(s)}<h2>Views, noise and arrival</h2>
     <p>Everyone arrives at the central lift lobby. The north-east looks onto green, and the south faces a busy road. The column grid sets the rhythm for everything placed later.</p>
     <ul class="legend"><li><i class="lg lg-dot"></i>Arrival at the lift lobby</li><li><i class="lg lg-brand"></i>Views worth keeping open</li><li><i class="lg lg-fire"></i>Road noise on the south edge</li><li><i class="lg lg-grid"></i>Structural grid A–L, 1–7</li></ul>`},
-  {id:'diligence',ch:4,scene:'plan',flags:'shell dd',cap:s=>`${eyebrow(s)}<h2>What the building already decided</h2>
+  {id:'diligence',ch:5,scene:'plan',flags:'shell dd',cap:s=>`${eyebrow(s)}<h2>What the building already decided</h2>
     <p>Before planning we surveyed what can't move: services, structure, levels and façade. Each finding shaped a decision.</p>
     <ul class="obs">${DD.map((o,i)=>`<li><button type="button" class="ob" data-pin="${i}"><span class="ob-n">${i+1}</span><span><span class="ob-t">${o.t}</span><span class="ob-d">${o.d}</span></span></button></li>`).join('')}</ul>`,
     wire:wireDD},
-  {id:'exits',ch:5,sub:'Exits',scene:'plan',flags:'shell exits rings',cap:s=>`${eyebrow(s)}<h2>Three ways out</h2>
+  {id:'exits',ch:6,sub:'Exits',scene:'plan',flags:'shell exits rings',cap:s=>`${eyebrow(s)}<h2>Three ways out</h2>
     <p>Stairs A and B sit at the ends of the floor and Stair C in the core. The rings mark 15, 30 and 45 m from each stair, and together they cover the whole floor.</p>
     <ul class="legend"><li><i class="lg lg-exit"></i>Fire exit stair</li><li><i class="lg lg-ring"></i>Distance from the stair</li></ul>
     <p class="note">The ${PROJECT.travelLimit} m limit assumes a sprinklered business floor. To be confirmed with the fire consultant.</p>`},
-  {id:'routes',ch:5,sub:'Routes',scene:'plan',flags:'shell exits routes',cap:s=>`${eyebrow(s)}<h2>Tracing every escape route</h2>
+  {id:'routes',ch:6,sub:'Routes',scene:'plan',flags:'shell exits routes',cap:s=>`${eyebrow(s)}<h2>Tracing every escape route</h2>
     <p>From the far corner of each zone we traced the shortest clear route to a stair. The longest is ${TOT.longest.toFixed(1)} m, inside the ${PROJECT.travelLimit} m limit.</p>
     <table class="rt"><tbody>${ROUTES.map(r=>`<tr${r.m===TOT.longest?' class="max"':''}><td>${NBS[r.nb].pos} zone</td><td>Stair ${r.to}</td><td>${r.m.toFixed(1)} m<span class="ok">✓</span></td></tr>`).join('')}</tbody></table>`},
-  {id:'streets',ch:6,sub:'Streets',scene:'plan',flags:'shell exits routes routes-fade streets',cap:s=>`${eyebrow(s)}<h2>Escape routes become Main Street</h2>
-    <p>The escape routes became the backbone of the plan: two Main Streets along the core and four lanes out to the façade. People walk the same path every day that they would take in an emergency, so it stays clear.</p>
-    <dl class="facts"><dt>Main Street</dt><dd>${toM(30).toFixed(2)} m wide, ${toM(1100).toFixed(1)} m long</dd><dt>Lanes</dt><dd>${toM(25).toFixed(2)} m wide, out to the façade</dd></dl>`},
-  {id:'parcels',ch:6,sub:'Neighbourhoods',scene:'plan',flags:'shell streets zones labels',cap:s=>`${eyebrow(s)}<h2>What's left becomes six neighbourhoods</h2>
-    <p>The streets cut the floor into six equal parcels of about ${fmt(TOT.nbSqft)} sq ft, each with its own façade and daylight. The band around the core becomes the Town Square, the one place everyone shares.</p>
+  {id:'streets',ch:7,sub:'The loop',scene:'plan',flags:'shell exits routes routes-fade streets loop',cap:s=>`${eyebrow(s)}<h2>The escape routes close into a loop</h2>
+    <p>The escape routes became the backbone of the plan. We joined the two corridors along the core at both ends, so the main corridor runs as one endless loop. From anywhere on it there are two ways to a stair, and no corridor ends in a wall. Four lanes run from the loop out to the façade.</p>
+    <dl class="facts"><dt>The loop</dt><dd>${LOOP_LEN.toFixed(0)} m around, ${toM(30).toFixed(2)} m wide</dd><dt>Lanes</dt><dd>${toM(25).toFixed(2)} m wide, out to the façade</dd><dt>Dead ends</dt><dd>None</dd></dl>`},
+  {id:'parcels',ch:7,sub:'Neighbourhoods',scene:'plan',flags:'shell streets zones labels loop-soft',cap:s=>`${eyebrow(s)}<h2>What's left becomes six neighbourhoods</h2>
+    <p>The loop and its lanes cut the floor into six equal parcels of about ${fmt(TOT.nbSqft)} sq ft, three on each side, each with its own façade and daylight. Inside the loop, around the core, is the Town Square: the one place everyone shares.</p>
     <ul class="nbl">${NBS.map((nb,i)=>`<li ${nbSw(i)}><i class="sw"></i><span style="display:flex;flex-direction:column;min-width:0"><b>${nb.name}</b><span>${nb.team}</span></span></li>`).join('')}</ul>`},
-  {id:'layout',ch:7,scene:'plan',flags:'shell streets streets-soft furn rlabels spaces',cap:s=>`${eyebrow(s)}<h2>The detailed layout</h2>
-    <p>Inside the parcels: ${TOT.desks} workstations, ${TOT.meeting-1} meeting rooms, ${TOT.booths} phone booths, ${TOT.pods} focus pods, six huddles and six pantry points. The shared rooms sit in the Town Square.</p>
+  {id:'divide',ch:8,sub:'Divide by six',scene:'alloc',enter:()=>allocMode('div'),cap:s=>{ const rem=BRIEF.filter(it=>it.rule==='split'&&it.total%6); return `${eyebrow(s)}<h2>First, divide everything by six</h2>
+    <p>Each space type in the brief was divided by six, so every neighbourhood starts from the same share: ${listJoin(BRIEF.filter(it=>it.rule==='split').map(it=>countOf(Math.floor(it.total/6),it.name)))}.</p>
+    <p>Some totals don't divide evenly. The leftovers were set aside for the next step: ${listJoin(rem.map(it=>countOf(it.total%6,it.name)))}.</p>
+    <p class="note">The ${BR.zen.total} zen rooms can't be split six ways: that comes out at half a room each. More on that next.</p>`; }},
+  {id:'extras',ch:8,sub:'The remainder',scene:'alloc',enter:()=>allocMode('ext'),cap:s=>`${eyebrow(s)}<h2>Then give the remainder where there's room</h2>
+    <p>The leftover rooms went to the neighbourhoods whose parcels could take them. The zen rooms became one per pair: each is shared by two neighbourhoods that face each other across the loop.</p>
+    <ul class="xl">${NBS.map((nb,i)=>{ const ex=extrasFor(nb.id); return `<li ${nbSw(i)}${ex.length?'':' class="none"'}><i class="sw"></i><b>${nb.name}</b><span>${ex.length?listJoin(ex):'equal share'}</span></li>`; }).join('')}</ul>`},
+  {id:'layout',ch:9,scene:'plan',flags:'shell streets streets-soft furn rlabels spaces',cap:s=>`${eyebrow(s)}<h2>The detailed layout</h2>
+    <p>Inside the parcels: ${TOT.desks} workstations, ${TOT.meeting-1} meeting rooms, ${TOT.booths} phone booths, ${TOT.pods} focus pods, six huddles and six pantry points. The Town Square and three shared zen rooms sit inside the loop.</p>
     <dl class="facts"><dt>Desks in daylight</dt><dd>${TOT.daylight}% within 6 m of a façade</dd><dt>Density</dt><dd>${fmt(TOT.plateSqft/TOT.desks)} sq ft per desk</dd></dl>${RHINT('Click any room or area to see its light and dark renders.')}`},
-  {id:'carved',ch:7,sub:'Neighbourhoods',scene:'plan',flags:'shell streets streets-soft furn zones labels hover spaces',cap:s=>`${eyebrow(s)}<h2>Carved into neighbourhoods</h2>
+  {id:'carved',ch:9,sub:'Neighbourhoods',scene:'plan',flags:'shell streets streets-soft furn zones labels hover spaces',cap:s=>`${eyebrow(s)}<h2>Carved into neighbourhoods</h2>
     <p>Each colour is one team's neighbourhood. Hover a neighbourhood to see who works there. Click a room for its renders, or the open floor to open the neighbourhood.</p>${areaBar()}${RHINT('Every room opens to a light and a dark render.')}`},
-  {id:'town-square',ch:8,scene:'plan',flags:'shell streets streets-soft furn zones labels rlabels ts-focus hover spaces',cap:s=>`${eyebrow(s)}<h2>One square everyone shares</h2>
+  {id:'shared',ch:9,sub:'Zen rooms',scene:'plan',flags:'shell streets streets-soft furn zones labels rlabels hover spaces zen-focus',cap:s=>`${eyebrow(s)}<h2>Three zen rooms, one for every two neighbourhoods</h2>
+    <p>The brief asks for ${BR.zen.total} zen rooms, not six. Each one sits on the loop between two neighbourhoods that face each other across it, and the pair shares it. No desk is more than about ${Math.ceil(ZEN_REACH)} m from its zen room.</p>
+    <ul class="tsl">${PAIRS.map((p,j)=>`<li><button type="button" class="tsb" data-zen="${j}"><span>${p.map(id=>`<i class="sw" style="--c:${`var(${NBS[nbIndex(id)].c})`}"></i>`).join('')} ${p.map(nbName).join(' + ')}</span><span>${['West','Centre','East'][j]}</span></button></li>`).join('')}</ul>${RHINT('Click a zen room, or a row above, for its renders.')}`,
+    wire:wireShared},
+  {id:'reality',ch:10,scene:'alloc',enter:()=>allocMode('ach'),cap:s=>`${eyebrow(s)}<h2>Where the plan falls short</h2>
+    <p>With every room drawn in, ${BRIEF.length-GAPS.length} of the ${BRIEF.length} items in the brief are met in full. ${GAPS.length} are not, and we would rather show the gap than squeeze rooms in.</p>
+    <ul class="gaps">${GAPS.map(it=>`<li><div><b>${it.name}</b><span>${fmt(itemTotalAchieved(it))} of ${fmt(it.total)}</span></div><p>${it.why||''}</p></li>`).join('')}</ul>`},
+  {id:'town-square',ch:11,scene:'plan',flags:'shell streets streets-soft furn zones labels rlabels ts-focus hover spaces',cap:s=>`${eyebrow(s)}<h2>One square everyone shares</h2>
     <p>The neighbourhoods cover daily needs. The Town Square holds what works better together, right by the lifts where everyone passes.</p>
-    <ul class="tsl">${[['reception','Reception and waiting','arrival'],['townhall','Town hall',`${TSB.kit.townhallSeats} seats`],['board','Boardroom',`${TSB.kit.boardSeats} seats`],['cafe','Café',`${TSB.kit.cafeSeats} seats`],['wellness','Wellness and first aid','2 rooms']].map(([k,n,v])=>`<li><button type="button" class="tsb" data-k="${k}"><span>${n}</span><span>${v}</span></button></li>`).join('')}</ul>${RHINT('Click a room, or a row above, for its renders.')}`,
+    <ul class="tsl">${[['reception','Reception and waiting','arrival'],['townhall','Town hall',`${TSB.kit.townhallSeats} seats · brief ${BR.townhall.total}`],['board','Boardroom',`${TSB.kit.boardSeats} seats`],['cafe','Café',`${TSB.kit.cafeSeats} seats`]].map(([k,n,v])=>`<li><button type="button" class="tsb" data-k="${k}"><span>${n}</span><span>${v}</span></button></li>`).join('')}</ul>${RHINT('Click a room, or a row above, for its renders.')}`,
     wire:wireTS},
-  {id:'axo',ch:9,scene:'plan',flags:'shell streets streets-soft furn zones labels axo hover spaces',cap:s=>`${eyebrow(s)}<h2>The same plan in three dimensions</h2>
+  {id:'axo',ch:12,scene:'plan',flags:'shell streets streets-soft furn zones labels axo hover spaces',cap:s=>`${eyebrow(s)}<h2>The same plan in three dimensions</h2>
     <p>The colours carry through, so each neighbourhood reads the same in plan and in 3D. Hover a neighbourhood for its details. Click a room for its renders.</p>
     <p class="note">This model is generated from the plan. Rendered axonometric views will sit alongside it.</p>`},
-  {id:'exploded',ch:9,sub:'Exploded',scene:'plan',flags:'shell streets furn zones labels axo explode spaces',cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
-    <p>Shell and core at the base, then the streets, then the neighbourhood parcels, then the fit-out. Each layer follows from the one below it.</p>`},
-  {id:'neighbourhoods',ch:10,scene:'overview',cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods, each complete</h2>
-    <p>Every neighbourhood carries the same base kit: desks, a lead cabin, meeting rooms, phone booths, focus pods, a huddle, a pantry point, lockers and green. The mix shifts with how each team works.</p>
+  {id:'exploded',ch:12,sub:'Exploded',scene:'plan',flags:'shell streets furn zones labels axo explode spaces',cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
+    <p>Shell and core at the base, then the loop and its lanes, then the neighbourhood parcels, then the fit-out. Each layer follows from the one below it.</p>`},
+  {id:'neighbourhoods',ch:13,scene:'overview',cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods, each complete</h2>
+    <p>Every neighbourhood starts from the same sixth of the brief: desks, a lead cabin, meeting rooms, phone booths, focus pods, a huddle, a pantry point, lockers and green, plus half a zen room shared with its neighbour. The extras went where a parcel had room.</p>
     <p class="hint">Select a neighbourhood, or press → to walk through all six.</p>`},
-  ...NBS.map((nb,i)=>({id:nb.id.toLowerCase(),ch:10,sub:`${i+1} of 6`,scene:'dive',cap:s=>capDive(s,i),wire:()=>wireDive(i),enter:()=>renderDive(i)})),
-  {id:'numbers',ch:11,scene:'numbers',cap:s=>`${eyebrow(s)}<h2>One floor, six neighbourhoods, one square</h2>
+  ...NBS.map((nb,i)=>({id:nb.id.toLowerCase(),ch:13,sub:`${i+1} of 6`,scene:'dive',cap:s=>capDive(s,i),wire:()=>wireDive(i),enter:()=>renderDive(i)})),
+  {id:'numbers',ch:14,scene:'numbers',cap:s=>`${eyebrow(s)}<h2>One floor, six neighbourhoods, one square</h2>
     <p>Every number here comes from the plan. The final figures will follow the approved layout.</p>`,enter:countUp},
 ];
 
 function capDive(s,i){
-  const nb=NBS[i], b=NBB[i], k=b.kit, v=VARIANTS[nb.variant];
-  const kp=`<svg class="kp" viewBox="40 40 1120 620" aria-label="Key plan">${R(PLATE,'kp-plate')}${TS_ZONES.map(z=>R(z,'kp-ts')).join('')}${NBS.map((n,j)=>`<rect x="${n.x}" y="${n.y}" width="${NB_W}" height="${NB_H}" class="kp-nb${j===i?' on':''}" style="--c:var(${n.c})" data-go-nb="${j}" tabindex="0" role="button" aria-label="Open ${n.name}"><title>${n.name}</title></rect>`).join('')}</svg>`;
+  const nb=NBS[i], b=NBB[i], k=b.kit, id=nb.id;
+  const ex=extrasFor(id).map(e=>e.slice(1)), sh=shortFor(id);
+  const kp=`<svg class="kp" viewBox="40 40 1120 620" aria-label="Key plan">${R(PLATE,'kp-plate')}${TS_ZONES.map(z=>R(z,'kp-ts')).join('')}${ZEN.map(z=>`<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" class="kp-zen${z.pair.includes(id)?' on':''}"/>`).join('')}${NBS.map((n,j)=>`<rect x="${n.x}" y="${n.y}" width="${NB_W}" height="${NB_H}" class="kp-nb${j===i?' on':''}" style="--c:var(${n.c})" data-go-nb="${j}" tabindex="0" role="button" aria-label="Open ${n.name}"><title>${n.name}</title></rect>`).join('')}</svg>`;
   const collab=k.meetingSeats+k.huddleSeats+k.touchSeats;
   return `<div style="--c:var(${nb.c});display:contents">${eyebrow(s)}${kp}
     <h2 class="dv-title" style="--c:var(${nb.c})">${nb.name}</h2>
-    <p class="team">${nb.team} · ${v.label}</p>
-    <p>${v.text}</p>
-    <dl class="stats" style="--c:var(${nb.c})"><div><dt>Desks</dt><dd>${k.desk}</dd></div><div><dt>Area</dt><dd>${fmt(TOT.nbSqft)}<small>sq ft</small></dd></div><div><dt>Collab seats</dt><dd>${collab}</dd></div></dl>
+    <p class="team">${nb.team} · ${shareLine(id)}</p>
+    <p>An equal sixth of the brief${ex.length?`, plus ${listJoin(ex)} because the parcel had the room`:''}. It shares a zen room on the loop with ${nbName(partnerOf(id))}.</p>${sh.length?`<p class="note">Short of its share: ${listJoin(sh)}.</p>`:''}
+    <dl class="stats" style="--c:var(${nb.c})"><div><dt>Desks</dt><dd>${k.desk}<small>of ${planned(BR.desk,id)}</small></dd></div><div><dt>Area</dt><dd>${fmt(TOT.nbSqft)}<small>sq ft</small></dd></div><div><dt>Collab seats</dt><dd>${collab}</dd></div></dl>
     <div class="chips" style="--c:var(${nb.c})" aria-label="Self-sustaining checklist">${CATS.map(c=>`<button type="button" class="chip" data-cat="${c}"><i>✓</i>${c}</button>`).join('')}</div>
-    <ul class="kit" style="--c:var(${nb.c})">${KIT.map((it,n)=>`<li><button type="button" class="kr" data-k="${it.k}" data-cat="${it.c}"><span class="kn"><i class="kb">${n+1}</i>${it.n}${canRender(it.k)?'<svg class="cam" viewBox="0 0 16 16" aria-label="has renders"><rect x="1.5" y="4" width="13" height="9" rx="2"/><circle cx="8" cy="8.5" r="2.4"/><path d="M5.5 4l1-1.6h3L10.5 4"/></svg>':''}</span><span class="kc">${it.c}</span><span class="kv">${it.v(k)}</span></button></li>`).join('')}</ul>
+    <ul class="kit" style="--c:var(${nb.c})">${KIT.map((it,n)=>`<li><button type="button" class="kr" data-k="${it.k}" data-cat="${it.c}"><span class="kn"><i class="kb">${it.k==='zen'?'½':n+1}</i>${it.n}${canRender(it.k)?'<svg class="cam" viewBox="0 0 16 16" aria-label="has renders"><rect x="1.5" y="4" width="13" height="9" rx="2"/><circle cx="8" cy="8.5" r="2.4"/><path d="M5.5 4l1-1.6h3L10.5 4"/></svg>':''}${kitNote(it.k,id)}</span><span class="kc">${it.c}</span><span class="kv">${it.v(k)}</span></button></li>`).join('')}</ul>
     <p class="sustain" style="--c:var(${nb.c})"><span>From any desk, a meeting room, a phone booth and the pantry are all within <b>${reach(b).toFixed(0)} m</b>, about a ${Math.ceil(reach(b)/1.2/5)*5}-second walk. Daily needs never leave the neighbourhood.</span></p>${RHINT('Click a space, a number or a row with a camera to see its renders.')}</div>`;
 }
 
 /* =====================================================================
    ENGINE
    ===================================================================== */
-const SCENES={cover:$('#sc-cover'),concept:$('#sc-concept'),plan:$('#sc-plan'),overview:$('#sc-overview'),dive:$('#sc-dive'),numbers:$('#sc-numbers')};
+const SCENES={cover:$('#sc-cover'),concept:$('#sc-concept'),loop:$('#sc-loop'),brief:$('#sc-brief'),alloc:$('#sc-alloc'),plan:$('#sc-plan'),overview:$('#sc-overview'),dive:$('#sc-dive'),numbers:$('#sc-numbers')};
 const capIn=$('#cap-in'), track=$('#track'), tip=$('#tip');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let cur=-1, lock=0;
 
 function setup(){
-  buildPlan(); buildCover(); buildCity(); buildOverview(); buildNumbers();
+  buildPlan(); buildCover(); buildCity(); buildLoop(); buildBrief(); buildAlloc(); buildOverview(); buildNumbers();
   track.innerHTML=STEPS.map(s=>`<div class="snap" id="${s.id}"></div>`).join('');
   const prog=$('#prog'); let html='', ch=-1, group=[];
   const flush=()=>{ if(group.length) html+=`<div class="pch" style="--n:${group.length}">${group.join('')}</div>`; group=[]; };
@@ -1369,6 +1654,7 @@ function activate(i){
   if(s.wire) s.wire();
   if(s.enter) s.enter();
   if(s.scene==='plan') follow(2600);
+  loopMotion(s);
   $('#chap').textContent=s.ch?`${pad(s.ch)} · ${CH[s.ch]}${s.sub?' · '+s.sub:''}`:'';
   $('#count').textContent=`${i+1} / ${STEPS.length}`;
   $$('.pseg').forEach((b,j)=>{ b.classList.toggle('cur',j===i); b.classList.toggle('done',j<i); b.setAttribute('aria-current',j===i?'step':'false'); });
@@ -1403,6 +1689,12 @@ function fit(){
 new ResizeObserver(fit).observe($('#stage'));
 addEventListener('resize',()=>{ fit(); if(cur>=0){ lock=performance.now()+400; window.scrollTo({top:track.children[cur].offsetTop,behavior:'auto'}); } });
 
+/* the dots running round the loop only move while the loop is on screen */
+function loopMotion(s){
+  const run={plan:s.scene==='plan'&&/\bloop/.test(s.flags||''), loop:s.scene==='loop'};
+  [['plan',$('#plan3d .g-loop')],['loop',$('#loopsvg')]].forEach(([k,el])=>{ const svg=el&&(el.ownerSVGElement||el); if(!svg||!svg.pauseAnimations) return; if(run[k]&&!reduce) svg.unpauseAnimations(); else svg.pauseAnimations(); });
+}
+
 /* ---------- highlighting ---------- */
 function clearHL(scope){ if(!scope) return; scope.classList.remove('dimmed'); $$('.hl',scope).forEach(e=>e.classList.remove('hl')); }
 function hl(scopes,keys){
@@ -1410,9 +1702,10 @@ function hl(scopes,keys){
 }
 
 /* ---------- step wiring ---------- */
-function wireIdea(){
-  const city=$('#city');
-  const on=p=>{ city.classList.toggle('dim',!!p); $$('.cp',city).forEach(g=>g.classList.toggle('hl',g.dataset.part===p)); $$('.an').forEach(a=>a.classList.toggle('on',a.dataset.part===p)); };
+function wireIdea(){ wireParts('#city'); }
+function wireParts(sel){
+  const svg=$(sel);
+  const on=p=>{ svg.classList.toggle('dim',!!p); $$('.cp',svg).forEach(g=>g.classList.toggle('hl',g.dataset.part===p)); $$('.an').forEach(a=>a.classList.toggle('on',a.dataset.part===p)); };
   $$('.an').forEach(a=>{ a.addEventListener('pointerenter',()=>on(a.dataset.part)); a.addEventListener('focus',()=>on(a.dataset.part)); a.addEventListener('pointerleave',()=>on(null)); a.addEventListener('blur',()=>on(null)); });
   on(null);
 }
@@ -1424,6 +1717,13 @@ function wireDD(){
 function wireTS(){
   const p=$('#plan3d'); p.style.setProperty('--hl','var(--brand)');
   $$('.tsb').forEach(b=>{ const k=b.dataset.k; b.addEventListener('pointerenter',()=>{ hl([p],[k]); b.classList.add('on'); }); b.addEventListener('focus',()=>{ hl([p],[k]); b.classList.add('on'); }); const off=()=>{ hl([p],null); b.classList.remove('on'); }; b.addEventListener('pointerleave',off); b.addEventListener('blur',off); b.addEventListener('click',()=>openKind('TS',k)); });
+}
+function wireShared(){
+  const p=$('#plan3d'); p.style.setProperty('--hl','var(--brand-2)');
+  $$('.tsb[data-zen]').forEach(b=>{ const z=ZEN[+b.dataset.zen], sp=SP.find(x=>x.k==='zen'&&x.pair===z.pair);
+    const on=()=>{ hl([p],['zen']); b.classList.add('on'); }, off=()=>{ hl([p],null); b.classList.remove('on'); };
+    b.addEventListener('pointerenter',on); b.addEventListener('focus',on); b.addEventListener('pointerleave',off); b.addEventListener('blur',off);
+    b.addEventListener('click',()=>{ if(sp) rvOpen(sp.i); }); });
 }
 function wireDive(i){
   const scopes=()=>[$('#dv-plan-svg svg'),$('#axo3d'),$('#dv-ovl')];
@@ -1447,17 +1747,18 @@ function countUp(){
 /* ---------- hover cards on the plan ---------- */
 function ctxInfo(ctx){ if(ctx==='TS') return {name:'Town Square',sub:'Shared by everyone',c:'var(--brand)'}; const nb=NBS.find(n=>n.id===ctx); return {name:nb.name,sub:nb.team,c:`var(${nb.c})`}; }
 function tipHTML(id){
-  if(id.startsWith('sp')){ const sp=SP[+id.slice(2)], info=ctxInfo(sp.nb); return `<div class="tip-h" style="--c:${info.c}"><i class="sw"></i>${SPACE_NAMES[sp.k]}</div><div class="tip-s">${info.name}${sp.seats?` · ${sp.seats} ${sp.seats===1?'seat':'seats'}`:''}</div><div class="tip-f">Click to view light and dark renders →</div>`; }
+  if(id.startsWith('sp')){ const sp=SP[+id.slice(2)], info=ctxInfo(sp.nb), where=sp.pair?`Shared by ${sp.pair.map(nbName).join(' and ')}`:info.name; return `<div class="tip-h" style="--c:${sp.pair?'var(--brand-2)':info.c}"><i class="sw"></i>${SPACE_NAMES[sp.k]}</div><div class="tip-s">${where}${sp.seats?` · ${sp.seats} ${sp.seats===1?'seat':'seats'}`:''}</div><div class="tip-f">Click to view light and dark renders →</div>`; }
+  if(id.startsWith('ZEN-')){ const z=ZEN[+id.slice(4)]; return `<div class="tip-h" style="--c:var(--brand-2)"><i class="sw"></i>Zen room</div><div class="tip-s">Shared by ${z.pair.map(nbName).join(' and ')}</div><dl class="tip-g"><dt>Area</dt><dd>${fmt(toSqft(z.w*z.h))} sq ft</dd><dt>Rule</dt><dd>1 per 2 neighbourhoods</dd></dl>`; }
   if(id==='TS') return `<div class="tip-h" style="--c:var(--brand)"><i class="sw"></i>Town Square</div><div class="tip-s">Shared by all six neighbourhoods</div><dl class="tip-g"><dt>Town hall</dt><dd>${TSB.kit.townhallSeats} seats</dd><dt>Café</dt><dd>${TSB.kit.cafeSeats} seats</dd><dt>Boardroom</dt><dd>${TSB.kit.boardSeats} seats</dd><dt>Area</dt><dd>${fmt(toSqft(tsU))} sq ft</dd></dl>`;
   const i=NBS.findIndex(n=>n.id===id), nb=NBS[i], k=NBB[i].kit;
-  return `<div class="tip-h" style="--c:var(${nb.c})"><i class="sw"></i>${nb.name}</div><div class="tip-s">${nb.team} · ${VARIANTS[nb.variant].label}</div><dl class="tip-g"><dt>Desks</dt><dd>${k.desk}</dd><dt>Area</dt><dd>${fmt(TOT.nbSqft)} sq ft</dd><dt>Meeting rooms</dt><dd>${k.meeting}</dd><dt>Booths and pods</dt><dd>${k.booth+k.focus}</dd></dl><div class="tip-f">Click to open →</div>`;
+  return `<div class="tip-h" style="--c:var(${nb.c})"><i class="sw"></i>${nb.name}</div><div class="tip-s">${nb.team} · ${shareLine(nb.id)}</div><dl class="tip-g"><dt>Desks</dt><dd>${k.desk}</dd><dt>Area</dt><dd>${fmt(TOT.nbSqft)} sq ft</dd><dt>Meeting rooms</dt><dd>${k.meeting}</dd><dt>Booths and pods</dt><dd>${k.booth+k.focus}</dd></dl><div class="tip-f">Click to open →</div>`;
 }
 function showTip(id,x,y){ if(tip.dataset.id!==id){ tip.innerHTML=tipHTML(id); tip.dataset.id=id; } tip.hidden=false; const w=tip.offsetWidth, h=tip.offsetHeight; tip.style.left=Math.min(innerWidth-w-12,x+16)+'px'; tip.style.top=Math.max(12,Math.min(innerHeight-h-12,y+16))+'px'; }
 function hideTip(){ tip.hidden=true; tip.dataset.id=''; }
 const plan3d=$('#plan3d');
 plan3d.addEventListener('pointermove',e=>{ const h=e.target.closest('.hit'); if(h&&e.pointerType==='mouse'&&SCENES.plan.classList.contains('f-spaces')){ showTip('sp'+h.dataset.sp,e.clientX,e.clientY); return; } const z=e.target.closest('.zone'); if(z&&SCENES.plan.classList.contains('f-hover')&&e.pointerType==='mouse') showTip(z.dataset.nb,e.clientX,e.clientY); else hideTip(); });
 plan3d.addEventListener('pointerleave',hideTip);
-plan3d.addEventListener('click',e=>{ const h=e.target.closest('.hit'); if(h&&SCENES.plan.classList.contains('f-spaces')){ rvOpen(+h.dataset.sp); return; } const z=e.target.closest('.zone'); if(!z||!SCENES.plan.classList.contains('f-hover')||z.dataset.nb==='TS') return; const j=NBS.findIndex(n=>n.id===z.dataset.nb); go(STEPS.findIndex(s=>s.id===NBS[j].id.toLowerCase())); });
+plan3d.addEventListener('click',e=>{ const h=e.target.closest('.hit'); if(h&&SCENES.plan.classList.contains('f-spaces')){ rvOpen(+h.dataset.sp); return; } const z=e.target.closest('.zone'); if(!z||!SCENES.plan.classList.contains('f-hover')||z.dataset.nb==='TS'||z.dataset.nb.startsWith('ZEN')) return; const j=NBS.findIndex(n=>n.id===z.dataset.nb); go(STEPS.findIndex(s=>s.id===NBS[j].id.toLowerCase())); });
 plan3d.addEventListener('pointerover',e=>{ const p=e.target.closest('.pin'); if(p&&SCENES.plan.classList.contains('f-dd')){ $$('.pin').forEach(x=>x.classList.toggle('on',x===p)); $$('.ob').forEach(o=>o.classList.toggle('on',o.dataset.pin===p.dataset.pin)); } });
 plan3d.addEventListener('click',e=>{ const p=e.target.closest('.pin'); if(p){ const o=$(`.ob[data-pin="${p.dataset.pin}"]`); if(o) o.scrollIntoView({block:'nearest',behavior:'smooth'}); } });
 
@@ -1468,9 +1769,11 @@ document.addEventListener('keydown',e=>{ const t=e.target.closest&&e.target.clos
 /* ---------- render viewer ---------- */
 const rv=$('#rv'), rvFrame=$('#rv-frame');
 const RV={ctx:null,list:[],idx:0,v:50,ar:1.6,back:null};
-function openKind(ctx,k){ const sp=SP.find(x=>x.nb===ctx&&x.k===k); if(sp) rvOpen(sp.i); }
+const inCtx=(x,ctx)=>x.nb===ctx||!!(x.pair&&x.pair.includes(ctx));
+function openKind(ctx,k){ const sp=SP.find(x=>inCtx(x,ctx)&&x.k===k); if(sp) rvOpen(sp.i,ctx); }
 function spaceMeta(ctx,k){
-  const inst=SP.filter(x=>x.nb===ctx&&x.k===k); if(!inst.length) return '';
+  const inst=SP.filter(x=>inCtx(x,ctx)&&x.k===k); if(!inst.length) return '';
+  if(inst[0].pair){ const r=inst[0].r; return `Shared by ${inst[0].pair.map(nbName).join(' and ')} · ${inst[0].seats} seats · ${toM(r.w).toFixed(1)} × ${toM(r.h).toFixed(1)} m`; }
   if(k==='desk') return `${inst.reduce((a,x)=>a+x.seats,0)} desks in ${inst.length} benches`;
   const r=inst[0].r, dims=`${toM(r.w).toFixed(1)} × ${toM(r.h).toFixed(1)} m`, n=inst[0].seats;
   return [inst.length>1?`${inst.length} in this ${ctx==='TS'?'square':'neighbourhood'}`:'', n?`${n} ${n===1?'seat':'seats'}${inst.length>1?' each':''}`:'', dims].filter(Boolean).join(' · ');
@@ -1502,9 +1805,9 @@ function rvShow(){
   $('#rv-strip').innerHTML=RV.list.map((kk,j)=>`<button type="button" class="rv-th" data-j="${j}" aria-current="${j===RV.idx}"><img alt="" src="${renderSrc(ctx,kk,thumbMode)}"><span>${SPACE_NAMES[kk]}</span></button>`).join('');
   const curTh=$('.rv-th[aria-current="true"]'); if(curTh) curTh.scrollIntoView({block:'nearest',inline:'center'});
 }
-function rvOpen(i){
+function rvOpen(i,ctx){
   const sp=SP[i]; if(!sp||!canRender(sp.k)) return;
-  RV.ctx=sp.nb; RV.list=(sp.nb==='TS'?TS_KINDS:NB_KINDS).filter(k=>SP.some(x=>x.nb===sp.nb&&x.k===k));
+  RV.ctx=ctx||sp.nb; RV.list=(RV.ctx==='TS'?TS_KINDS:NB_KINDS).filter(k=>SP.some(x=>inCtx(x,RV.ctx)&&x.k===k));
   RV.idx=Math.max(0,RV.list.indexOf(sp.k)); RV.back=document.activeElement;
   hideTip(); rv.hidden=false; root.classList.add('rv-open');
   rvSet(50,true); rvShow(); rvFit();

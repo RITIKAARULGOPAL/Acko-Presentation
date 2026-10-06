@@ -118,8 +118,8 @@ p{max-width:168mm}
   <p class="lede">This guide explains in simple words what we're making, why the drawings need a little extra preparation, and exactly what to click. Read it first. Then use the <b>Drawing and model handover spec</b> as your checklist.</p>
   <dl class="meta">
     <div><dt>For</dt><dd>Junior designers, CAD and 3D team</dd></div>
-    <div><dt>Goes with</dt><dd>Handover spec v1.0</dd></div>
-    <div><dt>Version</dt><dd>1.0 · 6 October 2026</dd></div>
+    <div><dt>Goes with</dt><dd>Handover spec v1.1</dd></div>
+    <div><dt>Version</dt><dd>1.1 · 6 October 2026</dd></div>
     <div><dt>Reading time</dt><dd>About 20 minutes</dd></div>
   </dl>
   <ol class="toc">
@@ -166,7 +166,7 @@ p{max-width:168mm}
 <tr><td><b>CAD (AutoCAD)</b></td><td>The final layout as a DXF file, with a few extra layers</td><td>The plan, plus labelled shapes that say "this is a neighbourhood", "this is a fire route" and so on</td></tr>
 <tr><td><b>3D (SketchUp)</b></td><td>A set of PNG pictures of the model, all from one fixed camera</td><td>Photos of the 3D model, taken from exactly the same spot, with different parts switched on</td></tr>
 <tr><td><b>Renders</b></td><td>A light and a dark JPG render of each type of space</td><td>Two versions of each room, from the same camera, so a slider can blend between them</td></tr>
-<tr><td><b>Project lead</b></td><td>Names, teams, colours, notes, brand files</td><td>The words and branding</td></tr>
+<tr><td><b>Project lead</b></td><td>Names, teams, colours, the brief sheet, notes, brand files</td><td>The words and branding</td></tr>
 </tbody></table>
 
 <h3>Why it's worth the effort</h3>
@@ -212,7 +212,7 @@ p{max-width:168mm}
 <div class="row chk"><b>Check</b><div>The title bar shows the new file name.</div></div></div>
 
 <div class="step"><span class="n">2</span><h4>Create the PRES layers</h4>
-<div class="row do"><b>Do</b><div>Type <code>LAYER</code> and press Enter. In the Layer Properties Manager, click <i>New Layer</i> and type each name exactly:<br><code>PRES-PLATE</code> <code>PRES-CORE</code> <code>PRES-STAIR</code> <code>PRES-FIRE-EXIT</code> <code>PRES-FIRE-ROUTE</code> <code>PRES-STREET</code> <code>PRES-NBHD</code> <code>PRES-TS</code> <code>PRES-ROOM</code> <code>PRES-REF</code>, plus <code>PRES-DD</code> and <code>PRES-SITE</code> if asked. Give them any bright colours so you can see them.</div></div>
+<div class="row do"><b>Do</b><div>Type <code>LAYER</code> and press Enter. In the Layer Properties Manager, click <i>New Layer</i> and type each name exactly:<br><code>PRES-PLATE</code> <code>PRES-CORE</code> <code>PRES-STAIR</code> <code>PRES-FIRE-EXIT</code> <code>PRES-FIRE-ROUTE</code> <code>PRES-STREET</code> <code>PRES-LOOP</code> <code>PRES-NBHD</code> <code>PRES-TS</code> <code>PRES-ROOM</code> <code>PRES-REF</code>, plus <code>PRES-DD</code> and <code>PRES-SITE</code> if asked. Give them any bright colours so you can see them.</div></div>
 <div class="row why"><b>Why</b><div>The computer finds things by layer name, the way a postman finds a house by its address. One wrong letter and it won't find it.</div></div>
 <div class="row chk"><b>Check</b><div>Every name is in capitals, starts with <code>PRES-</code> and uses hyphens, not spaces or underscores.</div></div></div>
 
@@ -236,10 +236,10 @@ p{max-width:168mm}
 <div class="row why"><b>Why</b><div>These are the fixed parts of the building that everything else is planned around.</div></div>
 <div class="row chk"><b>Check</b><div>Every label sits inside its own shape.</div></div></div>
 
-<div class="step"><span class="n">6</span><h4>Main walkways <code>PRES-STREET</code></h4>
-<div class="row do"><b>Do</b><div>Draw closed shapes for Main Street and each lane (the main walkways). Label them <code>MAIN STREET</code> or <code>LANE</code>.</div></div>
-<div class="row why"><b>Why</b><div>In the story, the fire escape routes become the main walkways. These shapes are those walkways.</div></div>
-<div class="row chk"><b>Check</b><div>Streets touch the neighbourhood shapes along their edges but don't overlap them.</div></div></div>
+<div class="step"><span class="n">6</span><h4>The loop and lanes <code>PRES-STREET</code> <code>PRES-LOOP</code></h4>
+<div class="row do"><b>Do</b><div>On <code>PRES-STREET</code>, draw closed shapes for the loop corridor and each lane (the main walkways). Label them <code>LOOP</code> or <code>LANE</code>. Then on <code>PRES-LOOP</code>, draw <b>one</b> closed polyline along the middle of the loop corridor, all the way round.</div></div>
+<div class="row why"><b>Why</b><div>Acko's logo is a loop, so the main corridor is one endless loop with no dead ends. In the story, the fire escape routes close into this loop. The centre line is the path the animated dots run along.</div></div>
+<div class="row chk"><b>Check</b><div>Walkways touch the neighbourhood shapes along their edges but don't overlap them. The loop centre line says <i>Closed: Yes</i>.</div></div></div>
 
 <div class="step"><span class="n">7</span><h4>Neighbourhoods <code>PRES-NBHD</code></h4>
 <div class="row do"><b>Do</b><div>Draw one closed shape for each neighbourhood. Run its edge along the <b>edge</b> of the street, not the middle of the street. Put a label inside with the ID and the name: <code>N1 INDIRANAGAR</code>.</div></div>
@@ -248,12 +248,12 @@ p{max-width:168mm}
 <div class="think"><b>Think of it like</b>A plot of land with a fence round it and a name board inside. The fence is the closed shape, the name board is the label.</div>
 
 <div class="step"><span class="n">8</span><h4>Town Square <code>PRES-TS</code></h4>
-<div class="row do"><b>Do</b><div>Draw closed shape(s) around the shared areas (reception, café, town hall, boardroom, wellness) and label them <code>TOWN SQUARE</code>.</div></div>
+<div class="row do"><b>Do</b><div>Draw closed shape(s) around the shared areas (reception, café, town hall, boardroom) and label them <code>TOWN SQUARE</code>.</div></div>
 <div class="row why"><b>Why</b><div>It's highlighted as the one place every team shares.</div></div>
 <div class="row chk"><b>Check</b><div>It doesn't overlap the neighbourhoods or the core.</div></div></div>
 
 <div class="step"><span class="n">9</span><h4>Rooms you can click <code>PRES-ROOM</code></h4>
-<div class="row do"><b>Do</b><div>Draw a closed shape for every room or space that should open a render, with a keyword label inside. Use only these keywords, spelled exactly:<br><code>WORKSTATIONS</code> <code>CABIN</code> <code>TOUCHDOWN</code> <code>FOCUS</code> <code>BOOTH</code> <code>MEETING</code> <code>HUDDLE</code> <code>PANTRY</code> <code>RECEPTION</code> <code>TOWNHALL</code> <code>BOARDROOM</code> <code>CAFE</code> <code>WELLNESS</code>.<br>Add the seat count after meeting rooms: <code>MEETING 8</code>.</div></div>
+<div class="row do"><b>Do</b><div>Draw a closed shape for every room or space that should open a render, with a keyword label inside. Use only these keywords, spelled exactly:<br><code>WORKSTATIONS</code> <code>CABIN</code> <code>TOUCHDOWN</code> <code>FOCUS</code> <code>BOOTH</code> <code>MEETING</code> <code>HUDDLE</code> <code>PANTRY</code> <code>RECEPTION</code> <code>TOWNHALL</code> <code>BOARDROOM</code> <code>CAFE</code> <code>ZEN</code>.<br>Add the seat count after meeting rooms: <code>MEETING 8</code>. A zen room is shared by two neighbourhoods, so add both IDs: <code>ZEN N1 N4</code>.</div></div>
 <div class="row why"><b>Why</b><div>When someone clicks this shape in the presentation, it opens the renders for that keyword.</div></div>
 <div class="row chk"><b>Check</b><div>Keywords spelled exactly (<code>CAFE</code> without the accent). For desks, one <code>WORKSTATIONS</code> shape per desk cluster is enough.</div></div></div>
 <div class="note check"><b>Tip</b>Make <code>PRES-ROOM</code> the current layer, type <code>BO</code>, then click once inside each room. One click per room gives you a perfect closed shape.</div>
@@ -390,7 +390,7 @@ p{max-width:168mm}
 <li><b>Same size for every render,</b> for example 3000 × 1688 px (16:9) for all of them.</li>
 <li><b>JPG, high quality</b> (85–90), with no text, logos or watermarks on the image.</li>
 <li><b>One pair per type of space is enough.</b> All meeting rooms can share one pair. If one neighbourhood's room looks different, give it its own pair with the ID in front: <code>n1-meeting-light.jpg</code>.</li>
-<li><b>Name the files exactly</b>, in lower case: <code>desk</code>, <code>cabin</code>, <code>touch</code>, <code>focus</code>, <code>booth</code>, <code>meeting</code>, <code>huddle</code>, <code>pantry</code>, <code>reception</code>, <code>townhall</code>, <code>board</code>, <code>cafe</code>, <code>wellness</code>, each followed by <code>-light.jpg</code> and <code>-dark.jpg</code>. For example: <code>huddle-light.jpg</code> and <code>huddle-dark.jpg</code>.</li>
+<li><b>Name the files exactly</b>, in lower case: <code>desk</code>, <code>cabin</code>, <code>touch</code>, <code>focus</code>, <code>booth</code>, <code>meeting</code>, <code>huddle</code>, <code>pantry</code>, <code>reception</code>, <code>townhall</code>, <code>board</code>, <code>cafe</code>, <code>zen</code>, each followed by <code>-light.jpg</code> and <code>-dark.jpg</code>. For example: <code>huddle-light.jpg</code> and <code>huddle-dark.jpg</code>.</li>
 </ol>
 <p>Until real renders arrive, the presentation shows a simple sample picture for each space. As soon as a correctly named file is added, it replaces the sample.</p>
 
@@ -421,13 +421,14 @@ p{max-width:168mm}
 <div><dt>Do the colours and line weights on the PRES layers matter?</dt><dd>No. We restyle everything. Pick bright colours that help you see what you've drawn.</dd></div>
 <div><dt>Can I send a DWG instead of a DXF?</dt><dd>Please don't. DWG is a closed format we can't open. A DXF holds exactly the same drawing.</dd></div>
 <div><dt>My AutoCAD doesn't list "AutoCAD 2018 DXF".</dt><dd>Use AutoCAD 2013 DXF instead. Avoid the very old "R12" option.</dd></div>
-<div><dt>The neighbourhood edges aren't decided yet. What do I draw?</dt><dd>Draw the streets, core, stairs and Town Square only. We'll propose the neighbourhood shapes from what's left and send them back for approval.</dd></div>
+<div><dt>The neighbourhood edges aren't decided yet. What do I draw?</dt><dd>Draw the loop and lanes, core, stairs and Town Square only. We'll propose the neighbourhood shapes from what's left and send them back for approval.</dd></div>
 <div><dt>Do I need a shape around every desk?</dt><dd>No. One <code>WORKSTATIONS</code> shape per desk cluster, or one around the whole desk area, is enough. Desks are counted from the blocks.</dd></div>
 <div><dt>How do I know which desk is the "farthest" for a fire route?</dt><dd>Pick the desk that would take longest to walk from to any exit, following the aisles. If you're not sure between two, draw both; the presentation shows the longest. The fire consultant's plan helps too.</dd></div>
 <div><dt>Where does the travel-distance limit come from?</dt><dd>From the fire code (NBC) and the fire consultant. Ask the project lead, and note it in <code>notes.xlsx</code>.</dd></div>
 <div><dt>I moved the SketchUp camera after exporting a few pictures. Now what?</dt><dd>Click the <code>PRES-AXO</code> tab, then re-export <b>all</b> the pictures, not just the remaining ones, so every picture matches.</dd></div>
 <div><dt>The PNG files are huge.</dt><dd>That's expected at 6000 px. Share them through a drive link rather than email.</dd></div>
 <div><dt>Can I just send the SketchUp model instead of pictures?</dt><dd>The pictures are what we need; we can't open SketchUp files outside SketchUp. A 3D export (.dae or .glb) is a nice extra if there's time.</dd></div>
+<div><dt>What's the brief sheet? Do I fill it in?</dt><dd>The project lead fills it in: every space Acko asked for, the total, how it was shared between the six neighbourhoods, and why any count couldn't be met. Your part is getting the room labels and furniture blocks right, because the presentation counts what was achieved from your drawing.</dd></div>
 <div><dt>Who do I ask when I'm stuck?</dt><dd>The project lead. Send a screenshot of what you see. It's usually a quick fix from the table in section 06.</dd></div>
 </dl>
 
@@ -467,7 +468,7 @@ p{max-width:168mm}
 ├─ 01-cad/        <span class="c">acko-layout.dxf, acko-layout.pdf, layer-sheet.xlsx, block-map.xlsx</span>
 ├─ 02-sketchup/   <span class="c">all the axo-*.png pictures</span>
 ├─ 03-renders/    <span class="c">all the *-light.jpg and *-dark.jpg renders</span>
-└─ 04-content/    <span class="c">names, notes, photos, brand files (project lead)</span></pre>
+└─ 04-content/    <span class="c">names, brief sheet, notes, photos, brand (project lead)</span></pre>
 <div class="note check"><b>What happens next</b>Once the files arrive, we send back an "alignment check": one page showing your CAD plan laid exactly on your 3D pictures, with a short list of anything to fix. You'll see your work in place before the final build. Thank you!</div>
 
 <script>
@@ -531,7 +532,7 @@ const person=(x,y,c)=>Cc(x,y-11,4,{f:c})+`<path d="M${x} ${y-6}v9M${x-5} ${y-2}h
   g+=R(4,4,692,212,{f:'#fff',st:C.rule,rx:9});
   g+=R(24,24,470,140,{f:C.n[0],fo:.06,st:C.n[0],sw:1.4})+T(486,40,'N1 neighbourhood',{s:8,c:C.n[0],a:'end',w:600});
   for(let r=0;r<3;r++) for(let c=0;c<3;c++) g+=R(70+c*130,46+r*36,104,14,{f:'#f1eff7',st:'#cfc9e2',sw:.7});
-  g+=R(24,164,600,30,{f:'#ebe7f6'})+T(330,183,'MAIN STREET',{s:7.5,c:C.ink3,a:'middle',ls:2.5});
+  g+=R(24,164,600,30,{f:'#ebe7f6'})+T(330,183,'THE LOOP',{s:7.5,c:C.ink3,a:'middle',ls:2.5});
   g+=R(510,84,70,80,{f:'#fff',st:C.exit,sw:1.6})+T(545,128,'STAIR A',{s:8,c:C.exit,a:'middle',w:600});
   g+=R(530,160,30,6,{f:C.exit})+T(545,76,'EXIT A',{s:8,c:C.exit,a:'middle',w:600});
   const pts=[[48,40],[48,178],[545,178],[545,164]];

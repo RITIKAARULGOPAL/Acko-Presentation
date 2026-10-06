@@ -94,7 +94,7 @@ pre .c{color:var(--ink-3)}
   <dl class="meta">
     <div><dt>Prepared by</dt><dd>Officebanao design team</dd></div>
     <div><dt>For</dt><dd>CAD, 3D and visualisation team</dd></div>
-    <div><dt>Version</dt><dd>1.0 · 6 October 2026</dd></div>
+    <div><dt>Version</dt><dd>1.1 · 6 October 2026</dd></div>
     <div><dt>Status</dt><dd>For action</dd></div>
   </dl>
   <ol class="toc">
@@ -124,7 +124,7 @@ pre .c{color:var(--ink-3)}
 
 <h3><span class="no">1.1</span>Delivery folder</h3>
 <p>Share one folder (zip or drive link) laid out like this. Use these file names exactly: lower case, no spaces. Skip anything marked optional that you don't have.</p>
-<pre>Acko-Presentation-Inputs/
+<pre style="line-height:1.4">Acko-Presentation-Inputs/
 ├─ 01-cad/
 │  ├─ acko-layout.dxf             <span class="c">final layout + PRES layers (section 02)</span>
 │  ├─ acko-layout.pdf             <span class="c">vector plot of the same layout</span>
@@ -142,6 +142,7 @@ pre .c{color:var(--ink-3)}
 │  └─ n1-huddle-light.jpg, …      <span class="c">optional per-neighbourhood versions</span>
 └─ 04-content/
    ├─ neighbourhoods.xlsx         <span class="c">IDs, names, teams, colours (05)</span>
+   ├─ brief.xlsx                  <span class="c">brief totals and how they were shared out (05)</span>
    ├─ notes.xlsx                  <span class="c">due diligence, site, fire</span>
    ├─ photos/                     <span class="c">site photos for due-diligence pins</span>
    └─ brand/                      <span class="c">palette, fonts, logos</span></pre>
@@ -191,7 +192,8 @@ pre .c{color:var(--ink-3)}
 <tr><td><code>PRES-STAIR</code></td><td>1 closed polyline per fire stair</td><td><code>STAIR A</code>, <code>STAIR B</code>…</td><td>Exits, distance rings</td><td><span class="req y">Required</span></td></tr>
 <tr><td><code>PRES-FIRE-EXIT</code></td><td>Text with its insertion point at the centre of each exit door</td><td><code>EXIT A</code>, <code>EXIT B</code>…</td><td>Exit tags, route end points</td><td><span class="req y">Required</span></td></tr>
 <tr><td><code>PRES-FIRE-ROUTE</code></td><td>1 open polyline per escape route, from the far point to the exit door (see 2.6)</td><td>Optional zone name near the start</td><td>Animated arrows, measured lengths</td><td><span class="req y">Required</span></td></tr>
-<tr><td><code>PRES-STREET</code></td><td>Closed polylines for Main Street and each lane</td><td><code>MAIN STREET</code>, <code>LANE</code></td><td>"Routes become streets" step, circulation area</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-STREET</code></td><td>Closed polylines for the loop corridor and each lane</td><td><code>LOOP</code>, <code>LANE</code></td><td>"Routes close into a loop" step, circulation area</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-LOOP</code></td><td>1 closed polyline along the centre line of the loop corridor (see 2.6)</td><td>–</td><td>The animated loop</td><td><span class="req y">Required</span></td></tr>
 <tr><td><code>PRES-NBHD</code></td><td>1 closed polyline per neighbourhood</td><td>ID and name: <code>N1 INDIRANAGAR</code></td><td>Colour zones, labels, areas, counts</td><td><span class="req y">Required</span></td></tr>
 <tr><td><code>PRES-TS</code></td><td>Closed polyline(s) for the Town Square</td><td><code>TOWN SQUARE</code></td><td>Town Square highlight and area</td><td><span class="req y">Required</span></td></tr>
 <tr><td><code>PRES-ROOM</code></td><td>1 closed polyline per room or space (see 2.8 for keywords)</td><td>Keyword + seats: <code>MEETING 8</code></td><td>Click areas for renders, kit lists</td><td><span class="req y">Required</span></td></tr>
@@ -219,7 +221,7 @@ pre .c{color:var(--ink-3)}
 <li>Polygons may share edges. They must not overlap.</li>
 <li>Small gaps such as wall thicknesses are fine. We report what's left as "walls and other".</li>
 </ul>
-<p>From these polygons the presentation calculates each neighbourhood's area in sq ft, the area split (neighbourhoods, Town Square, streets, core), and which furniture and rooms belong to which neighbourhood.</p>
+<p>From these polygons the presentation calculates each neighbourhood's area in sq ft, the area split (neighbourhoods, shared zen rooms, Town Square, loop and lanes, core), and which furniture and rooms belong to which neighbourhood.</p>
 <div class="note"><b>If the boundaries aren't final yet</b>Draw only <code>PRES-STREET</code>, <code>PRES-CORE</code>, <code>PRES-STAIR</code> and <code>PRES-TS</code>. We derive the neighbourhoods as the parcels left between them, which is the story the presentation tells, and send you a marked-up plan to confirm names and edges.</div>
 
 <h3><span class="no">2.6</span>Fire escape routes</h3>
@@ -228,12 +230,13 @@ pre .c{color:var(--ink-3)}
 <figcaption><b>Fig 4</b>The drawing order sets the arrow direction. Left: correct. Right: three mistakes to avoid.</figcaption></figure>
 <ol>
 <li><b>Draw from the far point to the exit.</b> The first vertex is the farthest occupied point of the zone. The last vertex sits exactly on the exit door, at the same point as the <code>EXIT</code> text.</li>
-<li><b>Follow the real clear path</b> along aisles, lanes and Main Street. Put a vertex at every turn. No diagonal short-cuts through furniture or walls.</li>
+<li><b>Follow the real clear path</b> along aisles, lanes and the loop. Put a vertex at every turn. No diagonal short-cuts through furniture or walls.</li>
 <li><b>At least one route per zone:</b> the longest route for each neighbourhood and for the Town Square. Add more if the fire plan shows them.</li>
 <li><b>Straight segments only.</b></li>
 <li><b>Tell us the limit:</b> the permitted travel distance and its basis (for example NBC 2016 Part 4, and whether the floor is sprinklered). Each route is checked against it.</li>
 </ol>
 <div class="note"><b>Also send</b>The fire consultant's egress plan as a PDF, if one exists. We cross-check the routes against it.</div>
+<p><b>The loop.</b> The main corridor is one endless loop: the corridors on both sides of the core join at each end. Draw its centre line on <code>PRES-LOOP</code> as one closed polyline that runs round the whole loop, with arcs or a short chamfer at the corners. The presentation draws it in and runs dots round it. Its length is shown in metres.</p>
 
 <h3><span class="no">2.7</span>Furniture blocks and counts</h3>
 <p><b>Keep furniture as blocks. Don't explode them.</b> The presentation counts block insertions inside each neighbourhood polygon, so the kit lists ("72 workstations, 6 focus pods…") and the totals come straight from the drawing. Send <code>block-map.xlsx</code> listing every furniture block:</p>
@@ -266,9 +269,9 @@ pre .c{color:var(--ink-3)}
 <tr><td><code>TOWNHALL</code></td><td>Town hall or multi-purpose</td><td class="k"><code>townhall</code></td></tr>
 <tr><td><code>BOARDROOM</code></td><td>Boardroom</td><td class="k"><code>board</code></td></tr>
 <tr><td><code>CAFE</code></td><td>Café</td><td class="k"><code>cafe</code></td></tr>
-<tr><td><code>WELLNESS</code></td><td>Wellness, first aid or parents' room</td><td class="k"><code>wellness</code></td></tr>
+<tr><td><code>ZEN</code></td><td>Zen room shared by two neighbourhoods. Add both IDs: <code>ZEN N1 N4</code></td><td class="k"><code>zen</code></td></tr>
 </tbody></table>
-<p style="color:var(--ink-3); font-size:8.4pt">Other names (STORE, SERVER, IT) are allowed. They show on the plan but have no renders unless you send some.</p>
+<p style="color:var(--ink-3); font-size:8.4pt">Other names (WELLNESS, STORE, SERVER, IT) are allowed. They show on the plan but have no renders unless you send some.</p>
 
 <h3><span class="no">2.9</span>CAD checklist</h3>
 <ul class="checks">
@@ -280,6 +283,8 @@ pre .c{color:var(--ink-3)}
 <li>One label inside every neighbourhood, Town Square and room polygon</li>
 <li>Neighbourhood IDs N1–N6 match the names sheet</li>
 <li>Fire routes run from the far point to the exit door</li>
+<li>Loop centre line on PRES-LOOP, one closed polyline</li>
+<li>Each ZEN label names both neighbourhoods that share it</li>
 <li>Travel-distance limit and basis noted</li>
 <li>REF-1 to REF-4 placed, identical to SketchUp</li>
 <li>Furniture still in blocks; block map filled in</li>
@@ -420,7 +425,7 @@ pre .c{color:var(--ink-3)}
 <tr><td><code>townhall</code></td><td>Town hall</td><td><code>townhall-light.jpg</code> · <code>townhall-dark.jpg</code></td><td>Town Square</td></tr>
 <tr><td><code>board</code></td><td>Boardroom</td><td><code>board-light.jpg</code> · <code>board-dark.jpg</code></td><td>Town Square</td></tr>
 <tr><td><code>cafe</code></td><td>Café</td><td><code>cafe-light.jpg</code> · <code>cafe-dark.jpg</code></td><td>Town Square</td></tr>
-<tr><td><code>wellness</code></td><td>Wellness room</td><td><code>wellness-light.jpg</code> · <code>wellness-dark.jpg</code></td><td>Town Square</td></tr>
+<tr><td><code>zen</code></td><td>Zen room</td><td><code>zen-light.jpg</code> · <code>zen-dark.jpg</code></td><td>Shared by a pair</td></tr>
 </tbody></table>
 <p style="color:var(--ink-3); font-size:8.4pt">Per-neighbourhood versions use the neighbourhood ID as a prefix: <code>n3-huddle-dark.jpg</code>. Spaces without renders show a sample image until real ones arrive.</p>
 
@@ -431,6 +436,7 @@ pre .c{color:var(--ink-3)}
 <thead><tr><th style="width:20%">Item</th><th style="width:38%">Contents</th><th>Notes</th></tr></thead>
 <tbody>
 <tr><td><b>Neighbourhoods sheet</b></td><td>ID, name, team, headcount, colour (hex)</td><td>IDs N1–N6 must match the <code>PRES-NBHD</code> labels. Colours from the Acko palette.</td></tr>
+<tr><td><b>Brief sheet</b></td><td>Every space type in Acko's brief: total asked for, how it was shared out, extras, and the reason for any shortfall</td><td>Drives the "Sharing out the brief" and "Brief vs plan" steps. Columns in Appendix B. Achieved counts come from the DXF.</td></tr>
 <tr><td><b>Area statement</b></td><td>Areas per neighbourhood and common area</td><td>We calculate areas from the DXF; yours lets us reconcile the two.</td></tr>
 <tr><td><b>Due-diligence notes</b></td><td>Number, title, one or two lines, photo file name</td><td>Numbers match <code>PRES-DD</code>. Photos in <code>04-content/photos/</code>.</td></tr>
 <tr><td><b>Site notes</b></td><td>North, views, noise, arrival, floor-to-floor and clear height</td><td>Or draw them on <code>PRES-SITE</code>.</td></tr>
@@ -446,9 +452,10 @@ pre .c{color:var(--ink-3)}
 
 <h3><span class="no">6.1</span>Plan, neighbourhoods and numbers</h3>
 <p>The DXF is converted into clean vector layers in the presentation's own line weights and colours, readable in both light and dark themes. The PRES polygons become the coloured neighbourhoods, the Town Square and the streets. Areas, the area split, desk and room counts, and each neighbourhood's kit list are calculated from the polygons and the furniture blocks.</p>
+<p>The brief sheet sets each neighbourhood's share: the total divided by six, plus any extras you list. The counts from the drawing are compared with that share, cell by cell, and every shortfall is shown with the reason from the sheet. Zen rooms are matched to their pair from the two IDs in their label.</p>
 
 <h3><span class="no">6.2</span>Fire escape routes</h3>
-<p>Each route polyline draws itself in from its first vertex and then keeps flowing towards its last, ending in an arrowhead at the exit door. Its length is measured along the polyline in metres and checked against the travel-distance limit. In the next step, the routes widen into the Main Street and lane polygons to show the escape routes becoming the plan's circulation.</p>
+<p>Each route polyline draws itself in from its first vertex and then keeps flowing towards its last, ending in an arrowhead at the exit door. Its length is measured along the polyline in metres and checked against the travel-distance limit. In the next step, the routes widen into the loop and lane polygons, and the loop closes into one endless corridor, to show the escape routes becoming the plan's circulation.</p>
 
 <h3><span class="no">6.3</span>Plan to axo, and the exploded view</h3>
 <figure><svg id="d-story" viewBox="0 0 700 205" aria-label="Animation storyboard"></svg>
@@ -513,12 +520,13 @@ pre .c{color:var(--ink-3)}
 </div>
 
 <h3><span class="no">B</span>Sheet templates</h3>
-<p>Column headers for the three spreadsheets. One row per item.</p>
+<p>Column headers for the spreadsheets. One row per item.</p>
 <table>
 <thead><tr><th style="width:24%">Sheet</th><th>Columns</th></tr></thead>
 <tbody>
 <tr><td><code>layer-sheet.xlsx</code></td><td>Layer name · Contents · Category (walls, glazing, doors, columns, furniture, ceiling, finishes, text, hide)</td></tr>
 <tr><td><code>block-map.xlsx</code></td><td>Block name · Item · Count it? (Yes/No) · Items per block (default 1)</td></tr>
+<tr><td><code>brief.xlsx</code></td><td>Space type · Brief total · Unit (rooms or seats) · Rule (split ÷ 6, shared 1 per 2, or Town Square) · Extras (for example N2 +1, N4 +1) · Reason if short</td></tr>
 <tr><td><code>neighbourhoods.xlsx</code></td><td>ID (N1–N6, TS) · Name · Team · Headcount · Colour hex · One-line description</td></tr>
 <tr><td><code>notes.xlsx</code> · due diligence</td><td>Number · Title · Note (one or two lines) · Photo file name</td></tr>
 <tr><td><code>notes.xlsx</code> · site and fire</td><td>Topic · Note · Value (for example: Travel distance limit · NBC 2016 Part 4, sprinklered · 45 m)</td></tr>
@@ -545,8 +553,9 @@ const tick=(x,y,ok)=>ok?`<circle cx="${x}" cy="${y}" r="7" fill="${C.ok}"/><path
 
 /* sample floor geometry (same as the presentation), in drawing units */
 const NB=[[50,50],[425,50],[800,50],[50,440],[425,440],[800,440]], NBW=350, NBH=210;
-const STREETS=[[50,260,1100,30],[50,410,1100,30],[400,50,25,210],[775,50,25,210],[400,440,25,210],[775,440,25,210]];
-const TS=[[170,290,330,120],[700,290,330,120]], CORE=[500,290,200,120];
+const STREETS=[[50,260,1100,30],[50,410,1100,30],[400,50,25,210],[775,50,25,210],[400,440,25,210],[775,440,25,210],[130,290,36,120],[1034,290,36,120]];
+const TS=[[236,290,264,120],[764,290,200,120]], CORE=[500,290,200,120];
+const ZEN=[[166,290,70,120,'ZEN N1 N4'],[700,290,64,120,'ZEN N2 N5'],[964,290,70,120,'ZEN N3 N6']];
 const STAIRS=[['A',50,290,80,120],['B',1070,290,80,120],['C',660,290,40,120]];
 const NAMES=['N1 INDIRANAGAR','N2 KORAMANGALA','N3 JAYANAGAR','N4 MALLESHWARAM','N5 BASAVANAGUDI','N6 WHITEFIELD'];
 
@@ -600,7 +609,9 @@ const NAMES=['N1 INDIRANAGAR','N2 KORAMANGALA','N3 JAYANAGAR','N4 MALLESHWARAM',
   STREETS.forEach(st=>g+=rect(...st,{f:'#d9d4ea',st:'#9b93bf',sw:.8}));
   NB.forEach(([x,y],i)=>{ g+=rect(x,y,NBW,NBH,{f:C.n[i],fo:.08,st:C.n[i],sw:1.6}); const [a,b]=M(x+30,y+28); g+=T(a,b,NAMES[i],{s:7.5,c:C.n[i],w:600}); });
   TS.forEach(t=>g+=rect(...t,{f:'url(#hatchTS)',st:C.brand,sw:1.2}));
-  { const [a,b]=M(1010,360); g+=T(a,b,'TOWN SQUARE',{s:7.5,c:C.brand,w:600,a:'end'}); const [c,d]=M(185,360); g+=T(c,d,'TOWN SQUARE',{s:7.5,c:C.brand,w:600}); }
+  { const [a,b]=M(950,360); g+=T(a,b,'TOWN SQUARE',{s:7.5,c:C.brand,w:600,a:'end'}); const [c,d]=M(250,360); g+=T(c,d,'TOWN SQUARE',{s:7.5,c:C.brand,w:600}); }
+  ZEN.forEach(([x,y,w,h,t])=>{ g+=rect(x,y,w,h,{st:C.ink,sw:.8,da:'3 2'}); const [a,b]=M(x+w/2,y+h/2+2); g+=T(a,b,t,{s:4.6,c:C.ink,w:500,a:'middle'}); });
+  { const P=[[166,275],[1034,275],[1052,293],[1052,407],[1034,425],[166,425],[148,407],[148,293]].map(p=>M(p[0],p[1])); g+=`<polygon points="${P.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${C.brand}" stroke-width="1.6" stroke-dasharray="6 3" stroke-linejoin="round"/>`; }
   g+=rect(...CORE,{f:C.ink2,fo:.85}); { const [a,b]=M(600,354); g+=T(a,b,'CORE',{s:7.5,c:'#fff',a:'middle',w:600}); }
   STAIRS.forEach(([n,x,y,w,h])=>{ g+=rect(x,y,w,h,{f:'#fff',st:C.exit,sw:1.4}); const [a,b]=M(x+w/2,y+h/2+4); g+=T(a,b,w<60?n:'STAIR '+n,{s:6.5,c:C.exit,a:'middle',w:600}); });
   // exits
@@ -617,8 +628,8 @@ const NAMES=['N1 INDIRANAGAR','N2 KORAMANGALA','N3 JAYANAGAR','N4 MALLESHWARAM',
   // plate outline on top
   g+=rect(50,50,1100,600,{st:C.ink,sw:2.2});
   // callouts
-  const calls=[['PRES-PLATE',[1150,120]],['PRES-ROOM',[1032,120]],['PRES-NBHD',[1150,215]],['PRES-STREET',[1120,275]],['PRES-TS',[1000,330]],['PRES-STAIR',[1150,380]],['PRES-FIRE-EXIT',[1110,410]],['PRES-CORE',[700,400]],['PRES-FIRE-ROUTE',[1038,600]],['PRES-REF',[850,560]]];
-  calls.forEach(([t,[x,y]],i)=>{ const ly=24+i*30, lx=604; const [a,b]=M(x,y); g+=`<path d="M${lx-4} ${ly-3}H${lx-14}L${a} ${b}" fill="none" stroke="${C.ink3}" stroke-width=".6"/>`+Cc(a,b,1.6,{f:C.ink3}); g+=T(lx,ly,t,{s:7.6,c:C.ink,w:600}); });
+  const calls=[['PRES-PLATE',[1150,120]],['PRES-ROOM',[1032,120]],['PRES-NBHD',[1150,215]],['PRES-STREET',[1120,265]],['PRES-LOOP',[1052,350]],['PRES-TS',[930,330]],['PRES-STAIR',[1150,380]],['PRES-FIRE-EXIT',[1110,410]],['PRES-CORE',[700,400]],['PRES-FIRE-ROUTE',[1038,600]],['PRES-REF',[850,560]]];
+  calls.forEach(([t,[x,y]],i)=>{ const ly=20+i*28, lx=604; const [a,b]=M(x,y); g+=`<path d="M${lx-4} ${ly-3}H${lx-14}L${a} ${b}" fill="none" stroke="${C.ink3}" stroke-width=".6"/>`+Cc(a,b,1.6,{f:C.ink3}); g+=T(lx,ly,t,{s:7.6,c:C.ink,w:600}); });
   document.getElementById('d-pres').innerHTML=g;
 })();
 
@@ -639,7 +650,7 @@ const NAMES=['N1 INDIRANAGAR','N2 KORAMANGALA','N3 JAYANAGAR','N4 MALLESHWARAM',
   const base=(x0,lab)=>{ let o=R(x0,4,336,236,{f:'#fff',st:C.rule,rx:8});
     o+=R(x0+16,24,250,128,{f:C.n[0],fo:.07,st:C.n[0],sw:1.2})+T(x0+258,144,'N1 neighbourhood',{s:7.5,c:C.n[0],w:600,a:'end'});
     for(let r=0;r<3;r++) for(let c=0;c<2;c++) o+=R(x0+52+c*96,56+r*30,80,12,{f:'#f1eff7',st:'#cfc9e2',sw:.6});
-    o+=R(x0+16,152,304,26,{f:'#e9e5f4'})+T(x0+150,169,'MAIN STREET',{s:6.5,c:C.ink3,ls:2});
+    o+=R(x0+16,152,304,26,{f:'#e9e5f4'})+T(x0+150,169,'THE LOOP',{s:6.5,c:C.ink3,ls:2});
     o+=R(x0+272,92,48,60,{f:'#fff',st:C.exit,sw:1.4})+T(x0+296,124,'STAIR A',{s:6.5,c:C.exit,a:'middle',w:600});
     o+=R(x0+286,149,20,5,{f:C.exit})+T(x0+296,86,'EXIT A at door',{s:6.5,c:C.exit,a:'middle',w:600});
     o+=T(x0+16,222,lab,{s:7.8,c:C.ink,w:600}); return o; };
