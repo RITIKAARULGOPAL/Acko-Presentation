@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Acko Handover Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Print spec sheet: A4, single light theme. Purple is the placeholder Acko accent used in the presentation. */
+:root{
+  --ink:#1b1826; --ink-2:#4f4a64; --ink-3:#8b86a1; --rule:#e1ddec; --soft:#f4f2fa;
+  --brand:#5a33e6; --brand-soft:#efebfd; --fire:#e2412f; --exit:#119a62; --ok:#119a62; --bad:#d23a2a; --ref:#ff0000;
+  --n1:#e65a36; --n2:#cf8d0c; --n3:#109a8d; --n4:#2a7fd8; --n5:#d2468e; --n6:#5ca23a;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+}
+@page{ size:A4; margin:17mm 17mm 19mm 17mm; }
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+body{margin:0; background:#fff; color:var(--ink); font-family:var(--body); font-size:9.4pt; line-height:1.52}
+p{margin:0 0 7pt; max-width:165mm}
+h2{font-family:var(--display); font-stretch:112%; font-weight:750; font-size:19pt; line-height:1.1; margin:0 0 4pt; letter-spacing:-.01em; break-before:page; break-after:avoid}
+h2 .no{color:var(--brand); margin-right:8pt}
+.sec-lede{font-size:10.4pt; color:var(--ink-2); margin:0 0 12pt}
+h3{font-family:var(--display); font-stretch:105%; font-weight:700; font-size:11.6pt; margin:16pt 0 5pt; break-after:avoid}
+h3 .no{color:var(--ink-3); font-family:var(--mono); font-weight:500; font-size:9pt; margin-right:6pt; letter-spacing:.02em}
+code,.m{font-family:var(--mono); font-size:.88em}
+code{background:var(--soft); border:.5pt solid var(--rule); border-radius:3px; padding:0 3px; white-space:nowrap}
+strong{font-weight:600}
+ul,ol{margin:0 0 8pt; padding-left:15pt}
+li{margin:0 0 3pt}
+li::marker{color:var(--ink-3)}
+table{width:100%; border-collapse:collapse; margin:4pt 0 10pt; font-size:8.5pt; line-height:1.4}
+thead{display:table-header-group}
+tr{break-inside:avoid}
+th{text-align:left; font-family:var(--mono); font-weight:500; font-size:7pt; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); border-bottom:1pt solid var(--ink); padding:0 8pt 4pt 0; vertical-align:bottom}
+td{border-bottom:.5pt solid var(--rule); padding:5pt 8pt 5pt 0; vertical-align:top}
+td:first-child code,td.k code{background:none; border:0; padding:0; font-weight:600; color:var(--ink)}
+.req{font-family:var(--mono); font-size:7pt; letter-spacing:.06em; text-transform:uppercase; border-radius:3px; padding:1pt 4pt; white-space:nowrap}
+.req.y{background:var(--brand-soft); color:var(--brand)}
+.req.o{background:var(--soft); color:var(--ink-3)}
+.note{display:block; break-inside:avoid; background:var(--brand-soft); border-left:2.5pt solid var(--brand); border-radius:0 6px 6px 0; padding:7pt 10pt; margin:6pt 0 10pt; font-size:8.8pt}
+.note b{display:block; font-family:var(--mono); font-weight:600; font-size:7pt; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); margin-bottom:2pt}
+.note.check{background:#ecf7f1; border-left-color:var(--ok)}
+.note.check b{color:var(--ok)}
+.note.warn{background:#fdf0ee; border-left-color:var(--bad)}
+.note.warn b{color:var(--bad)}
+figure{margin:6pt 0 12pt; break-inside:avoid}
+figure svg{display:block; width:100%; height:auto}
+figcaption{font-size:8pt; color:var(--ink-3); margin-top:4pt}
+figcaption b{font-family:var(--mono); font-weight:500; color:var(--ink-2); margin-right:5pt}
+pre{font-family:var(--mono); font-size:8pt; line-height:1.55; background:var(--soft); border:.5pt solid var(--rule); border-radius:6px; padding:8pt 10pt; margin:4pt 0 10pt; white-space:pre; break-inside:avoid; color:var(--ink)}
+pre .c{color:var(--ink-3)}
+.checks{list-style:none; padding:0; margin:4pt 0 10pt; columns:2; column-gap:14pt; break-inside:avoid}
+.checks li{position:relative; padding-left:15pt; break-inside:avoid; margin-bottom:5pt; font-size:8.8pt}
+.checks li::before{content:''; position:absolute; left:0; top:2pt; width:8.5pt; height:8.5pt; border:1pt solid var(--ink-2); border-radius:2pt}
+.mx td,.mx th{text-align:center; padding-right:4pt; padding-left:4pt}
+.mx td:first-child,.mx th:first-child{text-align:left; padding-left:0}
+.mx td:last-child,.mx th:last-child{text-align:left}
+.dot{display:inline-block; width:7pt; height:7pt; border-radius:50%; background:var(--ink)}
+.dot.s{background:var(--brand)}
+.mx .dash{color:var(--rule)}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:14pt}
+.keep{break-inside:avoid}
+
+/* cover */
+.cover{height:255mm; display:flex; flex-direction:column; break-after:page}
+.cover .eyebrow{font-family:var(--mono); font-size:9pt; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); margin:6mm 0 6mm}
+.cover h1{font-family:var(--display); font-stretch:125%; font-weight:850; font-size:33pt; line-height:1; letter-spacing:-.02em; margin:0 0 7mm; max-width:176mm}
+.cover .lede{font-size:12pt; color:var(--ink-2); max-width:150mm; line-height:1.5; margin-bottom:7mm}
+.meta{display:grid; grid-template-columns:repeat(4,auto); justify-content:start; gap:4pt 22pt; font-size:8.6pt; margin-bottom:10mm; border-top:1pt solid var(--ink); padding-top:8pt}
+.meta dt{font-family:var(--mono); font-size:6.8pt; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.meta dd{margin:0}
+.glance{display:grid; grid-template-columns:repeat(3,1fr); gap:10pt; margin-top:auto}
+.glance div{background:var(--soft); border-radius:8px; padding:10pt 11pt}
+.glance h4{margin:0 0 5pt; font-family:var(--display); font-stretch:110%; font-size:11pt}
+.glance h4 span{display:block; font-family:var(--mono); font-weight:400; font-stretch:100%; font-size:7pt; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); margin-bottom:2pt}
+.glance ul{padding-left:11pt; font-size:8.4pt; margin:0}
+.cover-art{margin:2mm 0 8mm}
+.toc{list-style:none; padding:0; margin:0 0 8mm; columns:2; column-gap:16pt; font-size:9pt}
+.toc li{display:flex; gap:7pt; break-inside:avoid; margin-bottom:3pt}
+.toc li span{font-family:var(--mono); color:var(--brand); min-width:14pt}
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="cover">
+  <p class="eyebrow">Acko · A city of neighbourhoods</p>
+  <h1>Drawing and model handover spec</h1>
+  <p class="lede">What the CAD and SketchUp team prepares so the interactive presentation can be built from the real drawings: file formats, layer and tag set-up, export settings, file names and checks.</p>
+  <dl class="meta">
+    <div><dt>Prepared by</dt><dd>Officebanao design team</dd></div>
+    <div><dt>For</dt><dd>CAD, 3D and visualisation team</dd></div>
+    <div><dt>Version</dt><dd>1.0 · 6 October 2026</dd></div>
+    <div><dt>Status</dt><dd>For action</dd></div>
+  </dl>
+  <ol class="toc">
+    <li><span>01</span>How your files are used</li>
+    <li><span>02</span>CAD layout (AutoCAD → DXF)</li>
+    <li><span>03</span>SketchUp axo exports</li>
+    <li><span>04</span>Renders for the click-to-view viewer</li>
+    <li><span>05</span>Content and brand</li>
+    <li><span>06</span>How the files become the presentation</li>
+    <li><span>07</span>Handover and next steps</li>
+    <li><span>A–B</span>Command reference and templates</li>
+  </ol>
+  <figure class="cover-art"><svg id="d-cover" viewBox="0 0 700 236" aria-hidden="true"></svg></figure>
+  <div class="glance">
+    <div><h4><span>AutoCAD</span>CAD layout</h4><ul><li>Final layout as <b>DXF</b> (AutoCAD 2018), mm</li><li>New <b>PRES-*</b> layers drawn on it</li><li>PDF plot of the same layout</li><li>Layer sheet and block map</li></ul></div>
+    <div><h4><span>SketchUp</span>Axo image set</h4><ul><li>One <b>parallel-projection</b> camera</li><li>Hero, layer and zone PNGs</li><li>6000 px wide, transparent background</li><li>Reference-marker PNG</li></ul></div>
+    <div><h4><span>Renders and content</span>Everything else</h4><ul><li><b>Light + dark</b> JPG per space type</li><li>Names, teams and colours sheet</li><li>Due-diligence and fire notes</li><li>Acko palette, fonts and logos</li></ul></div>
+  </div>
+</section>
+
+<!-- ============================ 01 ============================ -->
+<h2><span class="no">01</span>How your files are used</h2>
+<p class="sec-lede">The presentation is a single interactive HTML page, presented live with a clicker or browsed by the client on their own. It does not paste in screenshots of drawings. It reads your drawing data and builds every view from it.</p>
+<figure><svg id="d-pipeline" viewBox="0 0 700 236" aria-label="Files to presentation pipeline"></svg>
+<figcaption><b>Fig 1</b>Each input feeds specific parts of the presentation.</figcaption></figure>
+<p>Because everything is read from the files, the numbers in the presentation (areas, desk counts, route lengths, seats) always match the drawings. A design change later only needs fresh exports with the same names. The trade-off is that the files need some preparation, which is what this document sets out.</p>
+
+<h3><span class="no">1.1</span>Delivery folder</h3>
+<p>Share one folder (zip or drive link) laid out like this. Use these file names exactly: lower case, no spaces. Skip anything marked optional that you don't have.</p>
+<pre>Acko-Presentation-Inputs/
+├─ 01-cad/
+│  ├─ acko-layout.dxf             <span class="c">final layout + PRES layers (section 02)</span>
+│  ├─ acko-layout.pdf             <span class="c">vector plot of the same layout</span>
+│  ├─ layer-sheet.xlsx            <span class="c">what each existing layer holds (2.2)</span>
+│  └─ block-map.xlsx              <span class="c">furniture block names → items (2.7)</span>
+├─ 02-sketchup/
+│  ├─ axo-full.png                <span class="c">hero axo (section 03)</span>
+│  ├─ axo-1-shell.png … axo-5-ceiling.png
+│  ├─ axo-zone-n1.png … axo-zone-n6.png, axo-zone-ts.png
+│  ├─ axo-ref.png                 <span class="c">reference markers only</span>
+│  ├─ top-ref.png                 <span class="c">optional check view</span>
+│  └─ model.glb or model.dae      <span class="c">optional 3D export</span>
+├─ 03-renders/
+│  ├─ meeting-light.jpg, meeting-dark.jpg, …   <span class="c">section 04</span>
+│  └─ n1-huddle-light.jpg, …      <span class="c">optional per-neighbourhood versions</span>
+└─ 04-content/
+   ├─ neighbourhoods.xlsx         <span class="c">IDs, names, teams, colours (05)</span>
+   ├─ notes.xlsx                  <span class="c">due diligence, site, fire</span>
+   ├─ photos/                     <span class="c">site photos for due-diligence pins</span>
+   └─ brand/                      <span class="c">palette, fonts, logos</span></pre>
+<div class="note"><b>Who does what</b>The CAD team owns section 02, the SketchUp team owns section 03, the visualisation team owns section 04 and the project lead owns section 05. Sections 06 and 07 are background for everyone.</div>
+
+<!-- ============================ 02 ============================ -->
+<h2><span class="no">02</span>CAD layout (AutoCAD → DXF)</h2>
+<p class="sec-lede">The plan, the neighbourhood boundaries, the fire escape routes, every area and every furniture count come from one DXF file. You keep your drawing as it is and add a few presentation layers on top.</p>
+
+<h3><span class="no">2.1</span>File format and export</h3>
+<table>
+<thead><tr><th style="width:22%">Setting</th><th style="width:43%">What to do</th><th>In AutoCAD</th></tr></thead>
+<tbody>
+<tr><td><b>Format</b></td><td>DXF, AutoCAD 2018 version</td><td><code>SAVEAS</code> → Files of type: <i>AutoCAD 2018 DXF (*.dxf)</i></td></tr>
+<tr><td><b>Content</b></td><td>Model space only, holding just the floor being presented. Paper-space layouts are ignored.</td><td>Move other floors or sheets out of model space</td></tr>
+<tr><td><b>Units</b></td><td>Millimetres</td><td><code>UNITS</code> → Insertion scale: Millimeters</td></tr>
+<tr><td><b>Elevation</b></td><td>Everything flat at Z = 0</td><td><code>FLATTEN</code> (Express Tools), select all</td></tr>
+<tr><td><b>Xrefs</b></td><td>Bound into the file. Nothing attached.</td><td><code>XREF</code> palette → right-click → Bind</td></tr>
+<tr><td><b>Clean-up</b></td><td>Purge unused items, fix errors, remove duplicate lines</td><td><code>PURGE</code> (all, nested) · <code>AUDIT</code> (fix: Yes) · <code>OVERKILL</code></td></tr>
+<tr><td><b>Reference plot</b></td><td>Vector PDF of the same layout, for checking</td><td><code>PLOT</code> → DWG To PDF.pc3, A1 or A0</td></tr>
+</tbody></table>
+<div class="note"><b>Why DXF and not DWG</b>We read the drawing with an open DXF reader. DWG is a closed format that we can't open directly. A DXF carries the same geometry, layers and blocks.</div>
+
+<h3><span class="no">2.2</span>Your existing layers</h3>
+<p>Keep your working layers exactly as they are. We restyle the drawing layer by layer so it matches the presentation's look in both its light and dark themes, so we need to know what each layer holds. Fill in <code>layer-sheet.xlsx</code> for every layer that has geometry on it:</p>
+<table>
+<thead><tr><th style="width:24%">Layer name</th><th style="width:40%">Contents</th><th>Category <span style="text-transform:none; letter-spacing:0">(walls · glazing · doors · columns · furniture · ceiling · finishes · text · hide)</span></th></tr></thead>
+<tbody>
+<tr><td><code>A-WALL-FULL</code></td><td>Full-height walls</td><td>walls</td></tr>
+<tr><td><code>A-GLAZ-PART</code></td><td>Glass partitions</td><td>glazing</td></tr>
+<tr><td><code>I-FURN-WS</code></td><td>Workstation blocks</td><td>furniture</td></tr>
+<tr><td><code>S-COLS</code></td><td>Structural columns</td><td>columns</td></tr>
+<tr><td><code>A-DIMS</code></td><td>Dimensions</td><td>hide</td></tr>
+</tbody></table>
+<p style="color:var(--ink-3); font-size:8.4pt">Example rows only; use your own layer names. Dimensions, hatches, grids and title blocks can stay in the file. Mark them <i>hide</i>.</p>
+
+<h3><span class="no">2.3</span>New presentation layers (PRES-*)</h3>
+<p>Add these layers on top of the layout. They hold simple closed polylines and text that tell the presentation where things are. Colour, line type and line weight don't matter; we restyle everything.</p>
+<figure><svg id="d-pres" viewBox="0 0 700 330" aria-label="Example of PRES layers on a floor plate"></svg>
+<figcaption><b>Fig 2</b>What the PRES layers look like on a floor plate (sample geometry). Each colour here is a separate layer.</figcaption></figure>
+
+<table>
+<thead><tr><th style="width:17%">Layer</th><th style="width:31%">Draw</th><th style="width:20%">Text inside</th><th style="width:22%">Used for</th><th></th></tr></thead>
+<tbody>
+<tr><td><code>PRES-PLATE</code></td><td>1 closed polyline: usable floor edge (inside face of façade)</td><td>–</td><td>Plate outline, total area</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-CORE</code></td><td>Closed polylines: core, lift banks, toilets, shafts, AHU rooms</td><td><code>CORE</code> <code>LIFTS</code> <code>WC</code> <code>SHAFT</code> <code>AHU</code></td><td>Shell drawing, core area</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-STAIR</code></td><td>1 closed polyline per fire stair</td><td><code>STAIR A</code>, <code>STAIR B</code>…</td><td>Exits, distance rings</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-FIRE-EXIT</code></td><td>Text with its insertion point at the centre of each exit door</td><td><code>EXIT A</code>, <code>EXIT B</code>…</td><td>Exit tags, route end points</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-FIRE-ROUTE</code></td><td>1 open polyline per escape route, from the far point to the exit door (see 2.6)</td><td>Optional zone name near the start</td><td>Animated arrows, measured lengths</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-STREET</code></td><td>Closed polylines for Main Street and each lane</td><td><code>MAIN STREET</code>, <code>LANE</code></td><td>"Routes become streets" step, circulation area</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-NBHD</code></td><td>1 closed polyline per neighbourhood</td><td>ID and name: <code>N1 INDIRANAGAR</code></td><td>Colour zones, labels, areas, counts</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-TS</code></td><td>Closed polyline(s) for the Town Square</td><td><code>TOWN SQUARE</code></td><td>Town Square highlight and area</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-ROOM</code></td><td>1 closed polyline per room or space (see 2.8 for keywords)</td><td>Keyword + seats: <code>MEETING 8</code></td><td>Click areas for renders, kit lists</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-REF</code></td><td>4 small circles at the reference points (see 3.5)</td><td><code>REF-1</code> … <code>REF-4</code></td><td>Locking the plan onto the axo</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-DD</code></td><td>Text number at each due-diligence finding</td><td><code>1</code>, <code>2</code>, <code>3</code>…</td><td>Numbered pins on the plan</td><td><span class="req o">Optional</span></td></tr>
+<tr><td><code>PRES-SITE</code></td><td>A north line (drawn from south to north) and short notes at views, noise, arrival</td><td><code>NORTH</code>, <code>VIEW</code>, <code>ROAD</code>, <code>ARRIVAL</code></td><td>Site-understanding overlays</td><td><span class="req o">Optional</span></td></tr>
+</tbody></table>
+
+<h3><span class="no">2.4</span>Drawing rules for every PRES layer</h3>
+<ol>
+<li><b>Closed means closed.</b> Draw with <code>PLINE</code> and finish with <b>C</b> (Close), or set <i>Closed = Yes</i> in Properties. A polyline whose last point only touches its first point is not closed. Check with <code>LIST</code>; it must say "Closed".</li>
+<li><b>Polylines only</b> (LWPOLYLINE). No splines, regions, hatches or lines joined by eye. Arcs inside boundary polylines are fine; fire routes use straight segments only.</li>
+<li><b>One label per shape, inside the shape.</b> The text's insertion point must sit inside its polyline. We match each label to the polygon that contains it.</li>
+<li><b>No blocks.</b> Draw PRES geometry loose in model space, never inside blocks or groups.</li>
+<li><b>No overlaps</b> between shapes on the same layer.</li>
+<li><b>Fastest way to trace:</b> <code>BOUNDARY</code> (<code>BO</code>) with Object type = Polyline creates a closed polyline when you click inside an enclosed area. Then move the result to the PRES layer.</li>
+</ol>
+<figure><svg id="d-rules" viewBox="0 0 700 150" aria-label="Polygon do and don't examples"></svg>
+<figcaption><b>Fig 3</b>The four most common problems. Only the first will be read correctly.</figcaption></figure>
+
+<h3><span class="no">2.5</span>Neighbourhood boundaries and areas</h3>
+<p>The neighbourhood, Town Square, street, core and stair polygons together tile the floor plate. Draw them so every part of the plate is covered once:</p>
+<ul>
+<li>Neighbourhood edges run along the <b>edge</b> of a street, not its centre line. Streets are polygons of their own.</li>
+<li>Polygons may share edges. They must not overlap.</li>
+<li>Small gaps such as wall thicknesses are fine. We report what's left as "walls and other".</li>
+</ul>
+<p>From these polygons the presentation calculates each neighbourhood's area in sq ft, the area split (neighbourhoods, Town Square, streets, core), and which furniture and rooms belong to which neighbourhood.</p>
+<div class="note"><b>If the boundaries aren't final yet</b>Draw only <code>PRES-STREET</code>, <code>PRES-CORE</code>, <code>PRES-STAIR</code> and <code>PRES-TS</code>. We derive the neighbourhoods as the parcels left between them, which is the story the presentation tells, and send you a marked-up plan to confirm names and edges.</div>
+
+<h3><span class="no">2.6</span>Fire escape routes</h3>
+<p>Each polyline on <code>PRES-FIRE-ROUTE</code> becomes an animated escape route. The line draws itself from its start, keeps flowing towards the exit, and ends in an arrowhead at the door. Its length is measured from the drawing and shown in metres at the start point, with a check against the permitted travel distance.</p>
+<figure><svg id="d-fire" viewBox="0 0 700 250" aria-label="Fire route drawing do and don't"></svg>
+<figcaption><b>Fig 4</b>The drawing order sets the arrow direction. Left: correct. Right: three mistakes to avoid.</figcaption></figure>
+<ol>
+<li><b>Draw from the far point to the exit.</b> The first vertex is the farthest occupied point of the zone. The last vertex sits exactly on the exit door, at the same point as the <code>EXIT</code> text.</li>
+<li><b>Follow the real clear path</b> along aisles, lanes and Main Street. Put a vertex at every turn. No diagonal short-cuts through furniture or walls.</li>
+<li><b>At least one route per zone:</b> the longest route for each neighbourhood and for the Town Square. Add more if the fire plan shows them.</li>
+<li><b>Straight segments only.</b></li>
+<li><b>Tell us the limit:</b> the permitted travel distance and its basis (for example NBC 2016 Part 4, and whether the floor is sprinklered). Each route is checked against it.</li>
+</ol>
+<div class="note"><b>Also send</b>The fire consultant's egress plan as a PDF, if one exists. We cross-check the routes against it.</div>
+
+<h3><span class="no">2.7</span>Furniture blocks and counts</h3>
+<p><b>Keep furniture as blocks. Don't explode them.</b> The presentation counts block insertions inside each neighbourhood polygon, so the kit lists ("72 workstations, 6 focus pods…") and the totals come straight from the drawing. Send <code>block-map.xlsx</code> listing every furniture block:</p>
+<table>
+<thead><tr><th style="width:28%">Block name</th><th style="width:46%">Item</th><th>Count it?</th></tr></thead>
+<tbody>
+<tr><td><code>WS-1200x600</code></td><td>Workstation</td><td>Yes</td></tr>
+<tr><td><code>CAB-DESK-1800</code></td><td>Team lead desk</td><td>Yes</td></tr>
+<tr><td><code>PB-1P</code></td><td>Phone booth</td><td>Yes</td></tr>
+<tr><td><code>POD-FOCUS</code></td><td>Focus pod</td><td>Yes</td></tr>
+<tr><td><code>LKR-6</code></td><td>Locker column, 6 lockers</td><td>Yes (counts as 6)</td></tr>
+<tr><td><code>CH-TASK</code></td><td>Task chair</td><td>No</td></tr>
+</tbody></table>
+<p style="color:var(--ink-3); font-size:8.4pt">Example rows only. Dynamic blocks are fine; we read their base name. If one block represents several items (a 6-locker column), say how many.</p>
+
+<h3><span class="no">2.8</span>Room keywords for PRES-ROOM</h3>
+<p>Start each room label with one of these keywords. Add the seat count after it where it applies (<code>MEETING 8</code>). The keyword decides which render opens when the room is clicked.</p>
+<table>
+<thead><tr><th style="width:22%">Keyword</th><th style="width:48%">Space</th><th>Render key (section 04)</th></tr></thead>
+<tbody>
+<tr><td><code>WORKSTATIONS</code></td><td>Desk benches: one polygon per cluster, or one around the whole desk area</td><td class="k"><code>desk</code></td></tr>
+<tr><td><code>CABIN</code></td><td>Team lead cabin</td><td class="k"><code>cabin</code></td></tr>
+<tr><td><code>TOUCHDOWN</code></td><td>Touchdown or high bench</td><td class="k"><code>touch</code></td></tr>
+<tr><td><code>FOCUS</code></td><td>Focus pod or quiet room</td><td class="k"><code>focus</code></td></tr>
+<tr><td><code>BOOTH</code></td><td>Phone booth</td><td class="k"><code>booth</code></td></tr>
+<tr><td><code>MEETING</code></td><td>Meeting room (add seats)</td><td class="k"><code>meeting</code></td></tr>
+<tr><td><code>HUDDLE</code></td><td>Team huddle or lounge</td><td class="k"><code>huddle</code></td></tr>
+<tr><td><code>PANTRY</code></td><td>Pantry point</td><td class="k"><code>pantry</code></td></tr>
+<tr><td><code>RECEPTION</code></td><td>Reception and waiting</td><td class="k"><code>reception</code></td></tr>
+<tr><td><code>TOWNHALL</code></td><td>Town hall or multi-purpose</td><td class="k"><code>townhall</code></td></tr>
+<tr><td><code>BOARDROOM</code></td><td>Boardroom</td><td class="k"><code>board</code></td></tr>
+<tr><td><code>CAFE</code></td><td>Café</td><td class="k"><code>cafe</code></td></tr>
+<tr><td><code>WELLNESS</code></td><td>Wellness, first aid or parents' room</td><td class="k"><code>wellness</code></td></tr>
+</tbody></table>
+<p style="color:var(--ink-3); font-size:8.4pt">Other names (STORE, SERVER, IT) are allowed. They show on the plan but have no renders unless you send some.</p>
+
+<h3><span class="no">2.9</span>CAD checklist</h3>
+<ul class="checks">
+<li>Saved as AutoCAD 2018 DXF, units millimetres</li>
+<li>Model space holds only this floor, all at Z = 0</li>
+<li>Xrefs bound; PURGE, AUDIT and OVERKILL run</li>
+<li>All required PRES layers present</li>
+<li>Every PRES shape closed (LIST shows "Closed")</li>
+<li>One label inside every neighbourhood, Town Square and room polygon</li>
+<li>Neighbourhood IDs N1–N6 match the names sheet</li>
+<li>Fire routes run from the far point to the exit door</li>
+<li>Travel-distance limit and basis noted</li>
+<li>REF-1 to REF-4 placed, identical to SketchUp</li>
+<li>Furniture still in blocks; block map filled in</li>
+<li>Layer sheet filled in; PDF plot included</li>
+</ul>
+
+<!-- ============================ 03 ============================ -->
+<h2><span class="no">03</span>SketchUp axo exports</h2>
+<p class="sec-lede">The axo is shown as a set of images from one fixed camera. Each export has different tags switched on. Because every image lines up exactly, the presentation can stack them, build the axo up layer by layer, pull the layers apart for the exploded view, and highlight one neighbourhood at a time.</p>
+<div class="note"><b>Why images and not the .skp file</b>SketchUp files can't be opened outside SketchUp. Images from a fixed camera look exactly like your model, stay light enough for a laptop, and line up perfectly with each other. A 3D export is an optional extra (3.7).</div>
+
+<h3><span class="no">3.1</span>Model set-up and tags</h3>
+<p>If the model was built on the imported CAD at the same origin and scale, keep it that way; it makes the alignment exact. Organise the model as groups with <b>two kinds of tags</b>: a <b>zone tag</b> on each zone group, and a <b>category tag</b> on the groups inside it.</p>
+<pre>Model
+├─ Shell                    <span class="c">group · tag SHELL       slab, columns, core, façade</span>
+├─ N1 Indiranagar           <span class="c">group · tag NB-N1</span>
+│  ├─ floor finishes        <span class="c">group · tag FLOOR       carpet, rugs, raised areas (optional)</span>
+│  ├─ partitions and glass  <span class="c">group · tag WALLS       walls, glass, doors, booths' shells</span>
+│  ├─ furniture             <span class="c">group · tag FURNITURE   all loose and fixed furniture, planters</span>
+│  └─ ceiling               <span class="c">group · tag CEILING     rafts, baffles, lights (optional)</span>
+├─ N2 … N6                  <span class="c">same pattern · tags NB-N2 … NB-N6</span>
+├─ Town Square              <span class="c">group · tag TS          same four sub-groups</span>
+├─ Streets                  <span class="c">group · tag STREET      circulation floor finish (optional)</span>
+└─ Reference markers        <span class="c">group · tag REF         4 red markers at floor level (3.5)</span></pre>
+<ul>
+<li>Tag groups and components. Keep raw edges and faces <b>Untagged</b>.</li>
+<li>Nothing loose inside a zone group: every item sits in its FLOOR, WALLS, FURNITURE or CEILING sub-group.</li>
+<li>SketchUp hides an object when its own tag <b>or any parent's tag</b> is hidden. That is what lets one model give every export in 3.4 just by switching tags.</li>
+</ul>
+
+<h3><span class="no">3.2</span>Camera and style</h3>
+<table>
+<thead><tr><th style="width:18%">Setting</th><th style="width:44%">Value</th><th>Where in SketchUp</th></tr></thead>
+<tbody>
+<tr><td><b>Projection</b></td><td><b>Parallel Projection.</b> Mandatory.</td><td>Camera → Parallel Projection</td></tr>
+<tr><td><b>View</b></td><td>Your chosen axo angle. Vertical edges stay vertical (orbit only, no roll).</td><td>Camera → Standard Views → Iso, then Orbit</td></tr>
+<tr><td><b>Scene</b></td><td>Save the view as scene <code>PRES-AXO</code>. After this, never orbit, pan or zoom.</td><td>Window → Scenes → Add scene</td></tr>
+<tr><td><b>Window</b></td><td>Keep the SketchUp window and trays the same size for every export</td><td>Don't open, close or resize trays between exports</td></tr>
+<tr><td><b>Background</b></td><td>Sky and ground off</td><td>Styles → Edit → Background settings</td></tr>
+<tr><td><b>Fog</b></td><td>Off</td><td>View → Fog</td></tr>
+<tr><td><b>Shadows</b></td><td>On for <code>axo-full.png</code> only. Off for every other export.</td><td>Window → Shadows</td></tr>
+<tr><td><b>Section cut</b></td><td>If the axo is a cutaway, keep the same section plane active in every export</td><td>View → Section Planes / Section Cuts</td></tr>
+<tr><td><b>Style</b></td><td>The same style for every export</td><td>Window → Styles</td></tr>
+</tbody></table>
+<div class="note"><b>Why parallel projection</b>A perspective camera distorts each part of the image differently, so separate layer images and CAD overlays could never line up. Parallel projection keeps every floor point in a fixed spot and keeps verticals vertical. That makes the stacking, the plan-to-axo move and the exploded view exact.</div>
+<div class="note warn"><b>The most common mistake</b>The export height follows the window's shape. Opening a tray or resizing the window between exports changes the framing, and the images no longer line up. Check that every PNG has exactly the same pixel size.</div>
+
+<h3><span class="no">3.3</span>PNG export settings</h3>
+<div class="two">
+<table>
+<thead><tr><th>File → Export → 2D Graphic → Options</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>File type</td><td><b>PNG</b></td></tr>
+<tr><td>Use view size</td><td><b>Off</b></td></tr>
+<tr><td>Width</td><td><b>6000 px</b> (height follows)</td></tr>
+<tr><td>Anti-alias</td><td><b>On</b></td></tr>
+<tr><td>Transparent background</td><td><b>On</b></td></tr>
+</tbody></table>
+<div class="note check" style="margin-top:4pt"><b>Tip: one scene per export</b>Create scenes <code>PRES-AXO-SHELL</code>, <code>PRES-AXO-WALLS</code> and so on from <code>PRES-AXO</code>, changing only the visible tags. Re-exporting after a design change then takes a few clicks. In each scene's properties, keep <i>Camera Location</i> and <i>Visible Tags</i> ticked.</div>
+</div>
+
+<h3><span class="no">3.4</span>Export list</h3>
+<p>All exports use scene <code>PRES-AXO</code>'s camera. ● means the tag is visible. Zone tags are NB-N1 to NB-N6 and TS.</p>
+<table class="mx">
+<thead><tr><th style="width:19%">File</th><th style="width:6%">SHELL</th><th style="width:6%">FLOOR</th><th style="width:6%">WALLS</th><th style="width:6%">FURN.</th><th style="width:5.5%">CEIL.</th><th style="width:7%">STREET</th><th style="width:12%">Zone tags</th><th style="width:4.5%">REF</th><th style="width:7%">Shad.</th><th>Used for</th></tr></thead>
+<tbody>
+<tr><td><code>axo-full.png</code></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td>opt.</td><td><i class="dot"></i></td><td>all</td><td class="dash">–</td><td><i class="dot s"></i></td><td>Hero view, end of build-up</td></tr>
+<tr><td><code>axo-1-shell.png</code></td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td>all</td><td class="dash">–</td><td class="dash">–</td><td>Base layer</td></tr>
+<tr><td><code>axo-2-floor.png</code></td><td class="dash">–</td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td><i class="dot"></i></td><td>all</td><td class="dash">–</td><td class="dash">–</td><td>Finishes layer (optional)</td></tr>
+<tr><td><code>axo-3-walls.png</code></td><td class="dash">–</td><td class="dash">–</td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td>all</td><td class="dash">–</td><td class="dash">–</td><td>Walls rising</td></tr>
+<tr><td><code>axo-4-furniture.png</code></td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td>all</td><td class="dash">–</td><td class="dash">–</td><td>Fit-out layer</td></tr>
+<tr><td><code>axo-5-ceiling.png</code></td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td><i class="dot"></i></td><td class="dash">–</td><td>all</td><td class="dash">–</td><td class="dash">–</td><td>Ceiling layer (optional)</td></tr>
+<tr><td><code>axo-zone-n1.png</code></td><td class="dash">–</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td>NB-N1 only</td><td class="dash">–</td><td class="dash">–</td><td>Highlight + deep dive</td></tr>
+<tr><td><code>axo-zone-n2 … n6</code></td><td class="dash">–</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td>that zone only</td><td class="dash">–</td><td class="dash">–</td><td>Highlight + deep dive</td></tr>
+<tr><td><code>axo-zone-ts.png</code></td><td class="dash">–</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td>TS only</td><td class="dash">–</td><td class="dash">–</td><td>Town Square highlight</td></tr>
+<tr><td><code>axo-ref.png</code></td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td>none</td><td><i class="dot"></i></td><td class="dash">–</td><td>Alignment (3.5)</td></tr>
+<tr><td><code>top-ref.png</code></td><td><i class="dot"></i></td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td class="dash">–</td><td>none</td><td><i class="dot"></i></td><td class="dash">–</td><td>Optional check, Top view</td></tr>
+</tbody></table>
+<p style="color:var(--ink-3); font-size:8.4pt"><code>top-ref.png</code> is the only export with a different camera: Camera → Standard Views → Top, still in parallel projection, same width.</p>
+
+<h3><span class="no">3.5</span>Reference markers (alignment)</h3>
+<p>For the plan-to-axo animation, the CAD plan has to land exactly on the axo floor, carrying the neighbourhood colours, fire routes, room click areas and labels with it. Four markers make that exact.</p>
+<ol>
+<li>In CAD, place <code>REF-1</code> to <code>REF-4</code> on <code>PRES-REF</code>: three at outer corners of the floor plate and one at a column far from them. The four must not lie on one line.</li>
+<li>In SketchUp, at the same four points, place a small marker (a 300 mm disc or cube, pure red <code>#FF0000</code>, at floor level) on tag <code>REF</code>. If the model sits on the CAD at the same origin, snap to the same points.</li>
+<li>Export <code>axo-ref.png</code> with only <code>REF</code> visible, shadows off.</li>
+</ol>
+<figure style="max-width:150mm; margin-left:auto; margin-right:auto"><svg id="d-ref" viewBox="0 0 700 215" aria-label="Reference points in CAD and in the axo"></svg>
+<figcaption><b>Fig 5</b>The same four points in the CAD plan and in the axo export.</figcaption></figure>
+<div class="note"><b>Why four points</b>In a parallel projection, the floor plan and its image in the axo are related by one fixed stretch, skew and shift. Three known points pin that relationship down; the fourth confirms it. With it, anything drawn on the CAD plan lands in the right place in the axo.</div>
+
+<h3><span class="no">3.6</span>Neighbourhood close-ups for the deep dives</h3>
+<p>Each deep dive shows a neighbourhood's plan next to its axo. We crop the <code>axo-zone-*</code> images, which is why the exports are 6000 px wide: a single neighbourhood cropped out still stays sharp on a large screen. If you prefer a closer camera per neighbourhood, export each from its own scene with its own reference image, following the same rules: <code>axo-n1-close.png</code> and <code>axo-n1-close-ref.png</code>, and so on.</p>
+
+<h3><span class="no">3.7</span>Optional: 3D model</h3>
+<p>For a version the client can orbit, also export the model as COLLADA (<code>.dae</code>) through File → Export → 3D Model, or as <code>.glb</code> through a glTF exporter extension. Keep the same tags, embed textures and aim for under 50 MB. This is an add-on; the image set above is the main deliverable.</p>
+
+<h3 style="break-before:page"><span class="no">3.8</span>SketchUp checklist</h3>
+<ul class="checks">
+<li>Camera set to Parallel Projection</li>
+<li>Scene PRES-AXO saved; camera never moved after</li>
+<li>Tags: SHELL, FLOOR, WALLS, FURNITURE, CEILING, STREET, NB-N1…N6, TS, REF</li>
+<li>Nothing loose inside zone groups</li>
+<li>Sky, ground and fog off; same style throughout</li>
+<li>Shadows on for axo-full only</li>
+<li>All PNGs 6000 px wide, same height, transparent</li>
+<li>REF markers at the same points as in CAD</li>
+<li>File names exactly as in 3.4</li>
+<li>Window and trays unchanged between exports</li>
+</ul>
+
+<!-- ============================ 04 ============================ -->
+<h2><span class="no">04</span>Renders for the click-to-view viewer</h2>
+<p class="sec-lede">Clicking a room in the plan, the axo or a deep dive opens its renders. Each space has a light and a dark version, with a toggle and a slider that wipes from one to the other. The two versions have to line up exactly for the slider to work.</p>
+
+<h3><span class="no">4.1</span>Render rules</h3>
+<ol>
+<li><b>Same camera for light and dark:</b> same position, lens and crop. Only materials and lighting change. Save the camera as a view in your render tool (Enscape, V-Ray, D5 or Lumion) and render both versions from it.</li>
+<li><b>Same size for every render:</b> 2400 to 3000 px wide, all in one aspect ratio (16:9 or 16:10).</li>
+<li><b>JPG</b>, quality 85–90, sRGB colour profile.</li>
+<li><b>No text, logos or watermarks</b> baked into the images.</li>
+<li><b>Shared or per neighbourhood:</b> <code>meeting-light.jpg</code> is used by every neighbourhood. To show a different meeting room in one neighbourhood only, add <code>n1-meeting-light.jpg</code> and <code>n1-meeting-dark.jpg</code>.</li>
+</ol>
+
+<h3><span class="no">4.2</span>Render list and file names</h3>
+<table>
+<thead><tr><th style="width:15%">Key</th><th style="width:28%">Space</th><th style="width:37%">Files</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td><code>desk</code></td><td>Workstations</td><td><code>desk-light.jpg</code> · <code>desk-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>cabin</code></td><td>Team lead cabin</td><td><code>cabin-light.jpg</code> · <code>cabin-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>touch</code></td><td>Touchdown bench</td><td><code>touch-light.jpg</code> · <code>touch-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>focus</code></td><td>Focus pod</td><td><code>focus-light.jpg</code> · <code>focus-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>booth</code></td><td>Phone booth</td><td><code>booth-light.jpg</code> · <code>booth-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>meeting</code></td><td>Meeting room</td><td><code>meeting-light.jpg</code> · <code>meeting-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>huddle</code></td><td>Team huddle</td><td><code>huddle-light.jpg</code> · <code>huddle-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>pantry</code></td><td>Pantry point</td><td><code>pantry-light.jpg</code> · <code>pantry-dark.jpg</code></td><td>Neighbourhoods</td></tr>
+<tr><td><code>reception</code></td><td>Reception</td><td><code>reception-light.jpg</code> · <code>reception-dark.jpg</code></td><td>Town Square</td></tr>
+<tr><td><code>townhall</code></td><td>Town hall</td><td><code>townhall-light.jpg</code> · <code>townhall-dark.jpg</code></td><td>Town Square</td></tr>
+<tr><td><code>board</code></td><td>Boardroom</td><td><code>board-light.jpg</code> · <code>board-dark.jpg</code></td><td>Town Square</td></tr>
+<tr><td><code>cafe</code></td><td>Café</td><td><code>cafe-light.jpg</code> · <code>cafe-dark.jpg</code></td><td>Town Square</td></tr>
+<tr><td><code>wellness</code></td><td>Wellness room</td><td><code>wellness-light.jpg</code> · <code>wellness-dark.jpg</code></td><td>Town Square</td></tr>
+</tbody></table>
+<p style="color:var(--ink-3); font-size:8.4pt">Per-neighbourhood versions use the neighbourhood ID as a prefix: <code>n3-huddle-dark.jpg</code>. Spaces without renders show a sample image until real ones arrive.</p>
+
+<!-- ============================ 05 ============================ -->
+<h2><span class="no">05</span>Content and brand</h2>
+<p class="sec-lede">The words, names and brand the presentation needs alongside the drawings. Spreadsheets can be XLSX or CSV.</p>
+<table>
+<thead><tr><th style="width:20%">Item</th><th style="width:38%">Contents</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td><b>Neighbourhoods sheet</b></td><td>ID, name, team, headcount, colour (hex)</td><td>IDs N1–N6 must match the <code>PRES-NBHD</code> labels. Colours from the Acko palette.</td></tr>
+<tr><td><b>Area statement</b></td><td>Areas per neighbourhood and common area</td><td>We calculate areas from the DXF; yours lets us reconcile the two.</td></tr>
+<tr><td><b>Due-diligence notes</b></td><td>Number, title, one or two lines, photo file name</td><td>Numbers match <code>PRES-DD</code>. Photos in <code>04-content/photos/</code>.</td></tr>
+<tr><td><b>Site notes</b></td><td>North, views, noise, arrival, floor-to-floor and clear height</td><td>Or draw them on <code>PRES-SITE</code>.</td></tr>
+<tr><td><b>Fire notes</b></td><td>Travel-distance limit and basis, exits, sprinkler status</td><td>Plus the consultant's egress plan if available.</td></tr>
+<tr><td><b>Concept note</b></td><td>Three to five sentences in your words</td><td>Opens the story.</td></tr>
+<tr><td><b>Acko brand</b></td><td>Palette (hex), typefaces, logo</td><td>Fonts as WOFF2 or OTF with a licence that allows web embedding. Logo as SVG.</td></tr>
+<tr><td><b>Officebanao brand</b></td><td>Logo</td><td>SVG.</td></tr>
+</tbody></table>
+
+<!-- ============================ 06 ============================ -->
+<h2><span class="no">06</span>How the files become the presentation</h2>
+<p class="sec-lede">Background for the whole team: what happens to each file, so it's clear why the set-up rules matter.</p>
+
+<h3><span class="no">6.1</span>Plan, neighbourhoods and numbers</h3>
+<p>The DXF is converted into clean vector layers in the presentation's own line weights and colours, readable in both light and dark themes. The PRES polygons become the coloured neighbourhoods, the Town Square and the streets. Areas, the area split, desk and room counts, and each neighbourhood's kit list are calculated from the polygons and the furniture blocks.</p>
+
+<h3><span class="no">6.2</span>Fire escape routes</h3>
+<p>Each route polyline draws itself in from its first vertex and then keeps flowing towards its last, ending in an arrowhead at the exit door. Its length is measured along the polyline in metres and checked against the travel-distance limit. In the next step, the routes widen into the Main Street and lane polygons to show the escape routes becoming the plan's circulation.</p>
+
+<h3><span class="no">6.3</span>Plan to axo, and the exploded view</h3>
+<figure><svg id="d-story" viewBox="0 0 700 205" aria-label="Animation storyboard"></svg>
+<figcaption><b>Fig 6</b>The four stages of the 3D sequence.</figcaption></figure>
+<ol>
+<li><b>Plan.</b> The CAD plan with its coloured neighbourhoods, as in the earlier steps.</li>
+<li><b>Onto the axo floor.</b> Using the four reference points, the plan stretches, skews and slides until it sits exactly on the axo's floor. Colours, routes and labels move with it.</li>
+<li><b>Build-up.</b> The SketchUp layers appear in order (shell, floor, walls, furniture) and the hero image <code>axo-full.png</code> settles in.</li>
+<li><b>Exploded.</b> In a parallel projection, lifting a layer in 3D is the same as sliding its image straight up the screen. The layer images separate vertically, with the neighbourhood colours on their own level and a label beside each layer.</li>
+</ol>
+<p>Hovering a neighbourhood in the axo dims the others, using its <code>axo-zone-*</code> image. Clicking it opens that neighbourhood's deep dive.</p>
+
+<h3><span class="no">6.4</span>Deep dives and renders</h3>
+<p>Each deep dive shows the neighbourhood's plan beside its cropped <code>axo-zone</code> image. Numbered markers for each kit item are placed on both from the CAD positions, through the same alignment. Clicking a room (from its <code>PRES-ROOM</code> polygon) or a marker opens the light and dark renders for that room's keyword.</p>
+
+<!-- ============================ 07 ============================ -->
+<h2><span class="no">07</span>Handover and next steps</h2>
+<p class="sec-lede">What happens after the files are shared.</p>
+<ol>
+<li><b>Share</b> the folder laid out as in 1.1, as a zip or a drive link.</li>
+<li><b>Automatic checks.</b> We test the DXF (closed shapes, labels inside shapes, overlaps, route end points on exit doors, units) and the PNGs (identical sizes, transparency, reference markers found).</li>
+<li><b>Alignment check.</b> We send back one page showing your CAD plan, with neighbourhoods and routes, laid over your axo, plus a short list of anything missing or unclear.</li>
+<li><b>Build.</b> Once you confirm, the real drawings replace the sample data in the presentation.</li>
+<li><b>Changes later.</b> Re-export with the same file names and settings, and the presentation picks up the changes.</li>
+</ol>
+<div class="note check"><b>Quick self-check before sending</b>Open <code>acko-layout.dxf</code> in DWG TrueView or AutoCAD and confirm the PRES layers show. Open any two PNG exports side by side and confirm they have the same pixel size and that a column sits on exactly the same pixel in both.</div>
+
+<h2><span class="no">A–B</span>Appendix</h2>
+<p class="sec-lede">Command reference and sheet templates.</p>
+<h3><span class="no">A</span>Command reference</h3>
+<div class="two">
+<table>
+<thead><tr><th>AutoCAD</th><th>Use</th></tr></thead>
+<tbody>
+<tr><td><code>SAVEAS</code></td><td>Save as AutoCAD 2018 DXF</td></tr>
+<tr><td><code>UNITS</code></td><td>Insertion scale: Millimeters</td></tr>
+<tr><td><code>FLATTEN</code></td><td>Set everything to Z = 0</td></tr>
+<tr><td><code>XREF</code> → Bind</td><td>Bind external references</td></tr>
+<tr><td><code>PURGE</code> · <code>AUDIT</code></td><td>Remove unused items, fix errors</td></tr>
+<tr><td><code>OVERKILL</code></td><td>Delete duplicate and overlapping lines</td></tr>
+<tr><td><code>LAYER</code></td><td>Create the PRES-* layers</td></tr>
+<tr><td><code>PLINE</code> … <b>C</b></td><td>Draw a closed polyline</td></tr>
+<tr><td><code>BOUNDARY</code> (<code>BO</code>)</td><td>Closed polyline from an enclosed area</td></tr>
+<tr><td><code>PEDIT</code> → Close</td><td>Close an existing polyline</td></tr>
+<tr><td><code>LIST</code></td><td>Check a polyline says "Closed"</td></tr>
+<tr><td><code>QSELECT</code></td><td>Select by layer to check counts</td></tr>
+</tbody></table>
+<table>
+<thead><tr><th>SketchUp</th><th>Use</th></tr></thead>
+<tbody>
+<tr><td>Camera → Parallel Projection</td><td>Required projection</td></tr>
+<tr><td>Camera → Standard Views</td><td>Iso for the axo, Top for top-ref</td></tr>
+<tr><td>Window → Scenes</td><td>Save PRES-AXO and export scenes</td></tr>
+<tr><td>Window → Tags</td><td>Create tags, switch visibility</td></tr>
+<tr><td>Entity Info → Tag</td><td>Assign a tag to a group</td></tr>
+<tr><td>Window → Styles</td><td>Background, sky, ground, edges</td></tr>
+<tr><td>Window → Shadows</td><td>On for axo-full only</td></tr>
+<tr><td>View → Fog</td><td>Off</td></tr>
+<tr><td>File → Export → 2D Graphic</td><td>PNG, 6000 px, transparent</td></tr>
+<tr><td>File → Export → 3D Model</td><td>Optional .dae</td></tr>
+</tbody></table>
+</div>
+
+<h3><span class="no">B</span>Sheet templates</h3>
+<p>Column headers for the three spreadsheets. One row per item.</p>
+<table>
+<thead><tr><th style="width:24%">Sheet</th><th>Columns</th></tr></thead>
+<tbody>
+<tr><td><code>layer-sheet.xlsx</code></td><td>Layer name · Contents · Category (walls, glazing, doors, columns, furniture, ceiling, finishes, text, hide)</td></tr>
+<tr><td><code>block-map.xlsx</code></td><td>Block name · Item · Count it? (Yes/No) · Items per block (default 1)</td></tr>
+<tr><td><code>neighbourhoods.xlsx</code></td><td>ID (N1–N6, TS) · Name · Team · Headcount · Colour hex · One-line description</td></tr>
+<tr><td><code>notes.xlsx</code> · due diligence</td><td>Number · Title · Note (one or two lines) · Photo file name</td></tr>
+<tr><td><code>notes.xlsx</code> · site and fire</td><td>Topic · Note · Value (for example: Travel distance limit · NBC 2016 Part 4, sprinklered · 45 m)</td></tr>
+</tbody></table>
+
+<script>
+(function(){
+const C={ink:'#1b1826',ink2:'#4f4a64',ink3:'#8b86a1',rule:'#e1ddec',soft:'#f4f2fa',brand:'#5a33e6',fire:'#e2412f',exit:'#119a62',ok:'#119a62',bad:'#d23a2a',ref:'#ff0000',street:'#e9e5f4',
+  n:['#e65a36','#cf8d0c','#109a8d','#2a7fd8','#d2468e','#5ca23a']};
+const MONO="font-family:'IBM Plex Mono',Menlo,monospace";
+const T=(x,y,t,o)=>{o=o||{}; return `<text x="${x}" y="${y}" style="${MONO};font-size:${o.s||8}px;fill:${o.c||C.ink2};font-weight:${o.w||400};letter-spacing:${o.ls||0}px" text-anchor="${o.a||'start'}"${o.extra||''}>${t}</text>`;};
+const R=(x,y,w,h,o)=>{o=o||{}; return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.rx||0}" fill="${o.f||'none'}" stroke="${o.st||'none'}" stroke-width="${o.sw||1}"${o.da?` stroke-dasharray="${o.da}"`:''}${o.fo!=null?` fill-opacity="${o.fo}"`:''}/>`;};
+const Lk=(pts,o)=>{o=o||{}; return `<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${o.st||C.ink}" stroke-width="${o.sw||1}"${o.da?` stroke-dasharray="${o.da}"`:''}${o.me?` marker-end="url(#${o.me})"`:''} stroke-linejoin="round" stroke-linecap="round"/>`;};
+const Poly=(pts,o)=>{o=o||{}; return `<polygon points="${pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="${o.f||'none'}" stroke="${o.st||'none'}" stroke-width="${o.sw||1}"${o.fo!=null?` fill-opacity="${o.fo}"`:''}${o.da?` stroke-dasharray="${o.da}"`:''} stroke-linejoin="round"/>`;};
+const Cc=(x,y,r,o)=>{o=o||{}; return `<circle cx="${x}" cy="${y}" r="${r}" fill="${o.f||'none'}" stroke="${o.st||'none'}" stroke-width="${o.sw||1}"/>`;};
+const defs=`<defs>
+ <marker id="arF" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${C.fire}"/></marker>
+ <marker id="arK" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${C.ink2}"/></marker>
+ <marker id="arB" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${C.brand}"/></marker>
+ <pattern id="hatchTS" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="${C.brand}" stroke-width="1.2" stroke-opacity=".35"/></pattern>
+</defs>`;
+const tick=(x,y,ok)=>ok?`<circle cx="${x}" cy="${y}" r="7" fill="${C.ok}"/><path d="M${x-3.4} ${y}l2.4 2.6 4.6-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`
+                       :`<circle cx="${x}" cy="${y}" r="7" fill="${C.bad}"/><path d="M${x-3} ${y-3}l6 6M${x+3} ${y-3}l-6 6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>`;
+
+/* sample floor geometry (same as the presentation), in drawing units */
+const NB=[[50,50],[425,50],[800,50],[50,440],[425,440],[800,440]], NBW=350, NBH=210;
+const STREETS=[[50,260,1100,30],[50,410,1100,30],[400,50,25,210],[775,50,25,210],[400,440,25,210],[775,440,25,210]];
+const TS=[[170,290,330,120],[700,290,330,120]], CORE=[500,290,200,120];
+const STAIRS=[['A',50,290,80,120],['B',1070,290,80,120],['C',660,290,40,120]];
+const NAMES=['N1 INDIRANAGAR','N2 KORAMANGALA','N3 JAYANAGAR','N4 MALLESHWARAM','N5 BASAVANAGUDI','N6 WHITEFIELD'];
+
+/* ---------- cover ---------- */
+(function(){
+  const s=.3, ox=8, oy=14, M=(x,y)=>[ox+(x-50)*s, oy+(y-50)*s];
+  let g=defs;
+  const rect=(x,y,w,h,o)=>{ const [a,b]=M(x,y); return R(a,b,w*s,h*s,o); };
+  g+=rect(50,50,1100,600,{f:'#fff',st:C.ink,sw:1.4});
+  STREETS.forEach(st=>g+=rect(...st,{f:C.street}));
+  NB.forEach(([x,y],i)=>g+=rect(x,y,NBW,NBH,{f:C.n[i],fo:.18,st:C.n[i],sw:1.2}));
+  TS.forEach(t=>g+=rect(...t,{f:C.brand,fo:.16,st:C.brand,sw:1}));
+  g+=rect(...CORE,{f:C.ink2,fo:.85});
+  STAIRS.forEach(([n,x,y,w,h])=>g+=rect(x,y,w,h,{f:C.exit,fo:.25,st:C.exit,sw:1}));
+  // axo on the right, built from the same geometry
+  const A=(x,y,z)=>{ const u=(x-50)/1100, v=(y-50)/600; return [520+u*175-v*90, 36+u*58+v*112-(z||0)]; };
+  const pr=(x,y,w,h,z,o)=>Poly([A(x,y,z),A(x+w,y,z),A(x+w,y+h,z),A(x,y+h,z)],o);
+  g+=pr(50,50,1100,600,0,{f:'#fff',st:C.ink,sw:1.2});
+  [[0,'#cfc9e2'],[1,null]].forEach(()=>{});
+  NB.forEach(([x,y],i)=>g+=pr(x,y,NBW,NBH,0,{f:C.n[i],fo:.22,st:C.n[i],sw:1}));
+  TS.forEach(t=>g+=pr(...t,0,{f:C.brand,fo:.18,st:C.brand,sw:.8}));
+  // a few extruded walls
+  const wallsAt=[[80,140,300,0],[455,140,300,0],[830,140,300,0],[80,560,300,0],[455,560,300,0],[830,560,300,0]];
+  wallsAt.forEach(([x,y,len])=>{ for(let k=0;k<4;k++){ const xx=x+k*70; g+=Poly([A(xx,y,0),A(xx+50,y,0),A(xx+50,y,14),A(xx,y,14)],{f:'#fff',st:C.ink2,sw:.7}); } });
+  g+=pr(...CORE,0,{f:C.ink2,fo:.9}); g+=Poly([A(500,290,0),A(700,290,0),A(700,290,26),A(500,290,26)],{f:C.ink2,fo:.7}); g+=pr(500,290,200,120,26,{f:C.ink,fo:.85});
+  g+=`<path d="M${ox+1100*s+16} 104H${404}" stroke="${C.ink3}" stroke-width="1.2" marker-end="url(#arK)" fill="none"/>`;
+  g+=T(ox,oy+600*s+18,'CAD LAYOUT · DXF',{s:7.5,ls:1.2,c:C.ink3})+T(430,228,'SKETCHUP AXO · PNG SET',{s:7.5,ls:1.2,c:C.ink3});
+  document.getElementById('d-cover').innerHTML=g;
+})();
+
+/* ---------- pipeline ---------- */
+(function(){
+  let g=defs;
+  const box=(x,y,w,h,t1,t2,acc)=>R(x,y,w,h,{f:acc?C.soft:'#fff',st:acc||C.rule,sw:acc?1.4:1,rx:8})+`<text x="${x+12}" y="${y+22}" style="font-family:'Archivo',Arial;font-stretch:110%;font-weight:700;font-size:12px;fill:${C.ink}">${t1}</text>`+T(x+12,y+38,t2,{s:8,c:C.ink3});
+  const ins=[['AutoCAD → .dxf','layout + PRES layers'],['SketchUp → .png set','one camera, many exports'],['Renders → .jpg pairs','light + dark per space']];
+  const outs=[['Plan · neighbourhoods','fire routes · areas · counts'],['Axo · plan-to-axo','exploded view · deep-dive close-ups'],['Click a room','light / dark render viewer']];
+  ins.forEach((t,i)=>{ const y=10+i*76; g+=box(8,y,190,56,t[0],t[1],C.brand); g+=`<path d="M200 ${y+28}H${246}" stroke="${C.ink3}" stroke-width="1.2" marker-end="url(#arK)"/>`; g+=box(252,y,210,56,outs[i][0],outs[i][1]); g+=`<path d="M464 ${y+28}H${512}" stroke="${C.ink3}" stroke-width="1.2" marker-end="url(#arK)"/>`; });
+  g+=R(518,10,174,208,{f:C.ink,rx:10});
+  g+=`<text x="534" y="44" style="font-family:'Archivo',Arial;font-stretch:118%;font-weight:800;font-size:15px;fill:#fff">Interactive</text><text x="534" y="62" style="font-family:'Archivo',Arial;font-stretch:118%;font-weight:800;font-size:15px;fill:#fff">presentation</text>`;
+  g+=T(534,82,'index.html',{s:8.5,c:'#b9a8ff'});
+  ['Presented live with a','clicker, or browsed by','the client on their own.','','Numbers always match','the drawings.'].forEach((l,i)=>g+=T(534,110+i*14,l,{s:8,c:'#d9d4ea'}));
+  document.getElementById('d-pipeline').innerHTML=g;
+})();
+
+/* ---------- PRES layers ---------- */
+(function(){
+  const s=.5, ox=14, oy=14, M=(x,y)=>[ox+(x-50)*s, oy+(y-50)*s];
+  const rect=(x,y,w,h,o)=>{ const [a,b]=M(x,y); return R(a,b,w*s,h*s,o); };
+  let g=defs;
+  g+=rect(50,50,1100,600,{f:'#fff'});
+  STREETS.forEach(st=>g+=rect(...st,{f:'#d9d4ea',st:'#9b93bf',sw:.8}));
+  NB.forEach(([x,y],i)=>{ g+=rect(x,y,NBW,NBH,{f:C.n[i],fo:.08,st:C.n[i],sw:1.6}); const [a,b]=M(x+30,y+28); g+=T(a,b,NAMES[i],{s:7.5,c:C.n[i],w:600}); });
+  TS.forEach(t=>g+=rect(...t,{f:'url(#hatchTS)',st:C.brand,sw:1.2}));
+  { const [a,b]=M(1010,360); g+=T(a,b,'TOWN SQUARE',{s:7.5,c:C.brand,w:600,a:'end'}); const [c,d]=M(185,360); g+=T(c,d,'TOWN SQUARE',{s:7.5,c:C.brand,w:600}); }
+  g+=rect(...CORE,{f:C.ink2,fo:.85}); { const [a,b]=M(600,354); g+=T(a,b,'CORE',{s:7.5,c:'#fff',a:'middle',w:600}); }
+  STAIRS.forEach(([n,x,y,w,h])=>{ g+=rect(x,y,w,h,{f:'#fff',st:C.exit,sw:1.4}); const [a,b]=M(x+w/2,y+h/2+4); g+=T(a,b,w<60?n:'STAIR '+n,{s:6.5,c:C.exit,a:'middle',w:600}); });
+  // exits
+  [['EXIT A',90,290,1],['EXIT B',1110,410,-1],['EXIT C',680,290,1]].forEach(([t,x,y,d])=>{ const [a,b]=M(x,y); g+=Cc(a,b,2.4,{f:C.exit}); g+=T(a+d*5,d>0?b-3:b+9,t,{s:6.5,c:C.exit,w:600,a:d>0?'start':'end'}); });
+  // rooms in N3
+  [[824,190,72,64,'MEETING 8'],[900,190,50,31,'FOCUS'],[966,190,60,64,'HUDDLE'],[1068,190,22,31,'BOOTH'],[1094,190,48,64,'PANTRY'],[824,58,208,118,'WORKSTATIONS']].forEach(([x,y,w,h,t])=>{ g+=rect(x,y,w,h,{st:C.ink,sw:.8,da:'3 2'}); const [a,b]=M(x+3,y+h-5); g+=T(a,b,t,{s:5.2,c:C.ink,w:500}); });
+  // routes
+  const route=(pts)=>{ const P=pts.map(p=>M(p[0],p[1])); return `<polyline points="${P.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${C.fire}" stroke-width="1.6" marker-end="url(#arF)" stroke-linejoin="round"/>`+Cc(P[0][0],P[0][1],2.6,{f:C.fire}); };
+  g+=route([[62,96],[62,275],[90,275],[90,292]]);
+  g+=route([[437,96],[412,96],[412,275],[680,275],[680,292]]);
+  g+=route([[1038,638],[1038,520],[958,520],[958,425],[1110,425],[1110,408]]);
+  // refs
+  [['REF-1',50,50],['REF-2',1150,50],['REF-3',50,650],['REF-4',850,560]].forEach(([t,x,y])=>{ const [a,b]=M(x,y); g+=Cc(a,b,4.5,{st:C.ref,sw:1.4})+`<path d="M${a-7} ${b}h14M${a} ${b-7}v14" stroke="${C.ref}" stroke-width="1"/>`; g+=T(a+(x>600?-7:7),b+(y>300?12:-6),t,{s:6.5,c:C.ref,w:600,a:x>600?'end':'start'}); });
+  // plate outline on top
+  g+=rect(50,50,1100,600,{st:C.ink,sw:2.2});
+  // callouts
+  const calls=[['PRES-PLATE',[1150,120]],['PRES-ROOM',[1032,120]],['PRES-NBHD',[1150,215]],['PRES-STREET',[1120,275]],['PRES-TS',[1000,330]],['PRES-STAIR',[1150,380]],['PRES-FIRE-EXIT',[1110,410]],['PRES-CORE',[700,400]],['PRES-FIRE-ROUTE',[1038,600]],['PRES-REF',[850,560]]];
+  calls.forEach(([t,[x,y]],i)=>{ const ly=24+i*30, lx=604; const [a,b]=M(x,y); g+=`<path d="M${lx-4} ${ly-3}H${lx-14}L${a} ${b}" fill="none" stroke="${C.ink3}" stroke-width=".6"/>`+Cc(a,b,1.6,{f:C.ink3}); g+=T(lx,ly,t,{s:7.6,c:C.ink,w:600}); });
+  document.getElementById('d-pres').innerHTML=g;
+})();
+
+/* ---------- polygon rules ---------- */
+(function(){
+  let g=defs;
+  const panel=(i,ok,cap,body)=>{ const x=6+i*174; g+=R(x,4,166,140,{f:'#fff',st:C.rule,rx:8}); g+=body(x); g+=tick(x+16,128,ok); g+=T(x+30,131,cap,{s:7.6,c:ok?C.ok:C.bad,w:600}); };
+  panel(0,true,'Closed, label inside',x=>R(x+22,24,122,76,{f:C.n[0],fo:.1,st:C.n[0],sw:1.6})+T(x+34,64,'N1 INDIRANAGAR',{s:7.2,c:C.n[0],w:600})+Cc(x+34,64,1.8,{f:C.ink}));
+  panel(1,false,'Gap: not closed',x=>Lk([[x+34,24],[x+144,24],[x+144,100],[x+22,100],[x+22,36]],{st:C.n[1],sw:1.6})+Cc(x+28,30,9,{st:C.bad,sw:1})+T(x+34,64,'N2 KORAMANGALA',{s:7.2,c:C.n[1],w:600}));
+  panel(2,false,'Label outside the shape',x=>R(x+22,24,122,62,{f:C.n[2],fo:.1,st:C.n[2],sw:1.6})+T(x+30,104,'N3 JAYANAGAR',{s:7.2,c:C.n[2],w:600})+Cc(x+30,104,1.8,{f:C.ink}));
+  panel(3,false,'Shapes overlap',x=>R(x+18,24,86,76,{f:C.n[3],fo:.12,st:C.n[3],sw:1.6})+R(x+80,34,70,72,{f:C.n[4],fo:.12,st:C.n[4],sw:1.6})+R(x+80,34,24,66,{f:C.bad,fo:.25})+T(x+24,40,'N4',{s:7.2,c:C.n[3],w:600})+T(x+128,52,'N5',{s:7.2,c:C.n[4],w:600}));
+  document.getElementById('d-rules').innerHTML=g;
+})();
+
+/* ---------- fire routes ---------- */
+(function(){
+  let g=defs;
+  const base=(x0,lab)=>{ let o=R(x0,4,336,236,{f:'#fff',st:C.rule,rx:8});
+    o+=R(x0+16,24,250,128,{f:C.n[0],fo:.07,st:C.n[0],sw:1.2})+T(x0+258,144,'N1 neighbourhood',{s:7.5,c:C.n[0],w:600,a:'end'});
+    for(let r=0;r<3;r++) for(let c=0;c<2;c++) o+=R(x0+52+c*96,56+r*30,80,12,{f:'#f1eff7',st:'#cfc9e2',sw:.6});
+    o+=R(x0+16,152,304,26,{f:'#e9e5f4'})+T(x0+150,169,'MAIN STREET',{s:6.5,c:C.ink3,ls:2});
+    o+=R(x0+272,92,48,60,{f:'#fff',st:C.exit,sw:1.4})+T(x0+296,124,'STAIR A',{s:6.5,c:C.exit,a:'middle',w:600});
+    o+=R(x0+286,149,20,5,{f:C.exit})+T(x0+296,86,'EXIT A at door',{s:6.5,c:C.exit,a:'middle',w:600});
+    o+=T(x0+16,222,lab,{s:7.8,c:C.ink,w:600}); return o; };
+  // correct
+  g+=base(4,'');
+  const P=[[30,38],[30,165],[296,165],[296,152]];
+  g+=`<polyline points="${P.map(p=>[p[0]+4,p[1]].join(',')).join(' ')}" fill="none" stroke="${C.fire}" stroke-width="2.2" marker-end="url(#arF)" stroke-linejoin="round"/>`;
+  P.forEach((p,i)=>{ g+=Cc(p[0]+4,p[1],6.5,{f:'#fff',st:C.fire,sw:1.2})+T(p[0]+4,p[1]+2.8,String(i+1),{s:7,c:C.fire,a:'middle',w:600}); });
+  g+=T(48,32,'1 · start: farthest occupied point',{s:7,c:C.fire,w:500});
+  g+=T(306,200,'4 · end exactly on the exit door',{s:7,c:C.fire,w:500,a:'end'});
+  g+=tick(24,219,true)+T(36,222,'Far point → exit, a vertex at every turn',{s:7.8,c:C.ok,w:600});
+  // wrong
+  const x0=360; g+=base(x0,'');
+  g+=`<polyline points="${[[x0+300,150],[x0+300,165],[x0+34,165],[x0+34,40]].map(p=>p.join(',')).join(' ')}" fill="none" stroke="${C.fire}" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arF)"/>`;
+  g+=`<polyline points="${[[x0+196,58],[x0+282,140]].map(p=>p.join(',')).join(' ')}" fill="none" stroke="${C.fire}" stroke-width="2" marker-end="url(#arF)"/>`+Cc(x0+196,58,3,{f:C.fire});
+  g+=Cc(x0+34,40,10,{st:C.bad,sw:1})+T(x0+48,36,'a',{s:8,c:C.bad,w:700});
+  g+=Cc(x0+239,99,10,{st:C.bad,sw:1})+T(x0+222,103,'b',{s:8,c:C.bad,w:700,a:'end'});
+  g+=Cc(x0+288,146,8,{st:C.bad,sw:1})+T(x0+276,142,'c',{s:8,c:C.bad,w:700,a:'end'});
+  g+=tick(x0+20,198,false)+T(x0+32,201,'a  Drawn backwards: arrows would point away from the exit',{s:6.8,c:C.bad,w:500});
+  g+=T(x0+32,213,'b  Diagonal short-cut through furniture',{s:6.8,c:C.bad,w:500});
+  g+=T(x0+32,225,'c  Stops short of the exit door',{s:6.8,c:C.bad,w:500});
+  document.getElementById('d-fire').innerHTML=g;
+})();
+
+/* ---------- reference points ---------- */
+(function(){
+  let g=defs;
+  const P={tl:[40,34],tr:[262,34],bl:[40,170],br:[262,170]};
+  g+=R(40,34,222,136,{f:'#fff',st:C.ink,sw:1.6});
+  for(let i=0;i<=6;i++) for(let j=0;j<=4;j++){ g+=R(40+i*37-2,34+j*34-2,4,4,{f:C.ink3}); }
+  const refs=[['REF-1',40,34],['REF-2',262,34],['REF-3',40,170],['REF-4',188,136]];
+  const mk=(t,x,y,dx,dy)=>Cc(x,y,6,{st:C.ref,sw:1.6})+`<path d="M${x-9} ${y}h18M${x} ${y-9}v18" stroke="${C.ref}" stroke-width="1"/>`+T(x+dx,y+dy,t,{s:7.5,c:C.ref,w:600,a:dx<0?'end':'start'});
+  g+=mk(...refs[0],-10,-8)+mk(...refs[1],10,-8)+mk(...refs[2],-10,14)+mk(...refs[3],10,16);
+  g+=T(40,198,'CAD PLAN · PRES-REF',{s:7.5,c:C.ink3,ls:1.2});
+  // axo parallelogram
+  const O=[420,44], E1=[200,56], E2=[-78,104];
+  const A=(u,v)=>[O[0]+u*E1[0]+v*E2[0], O[1]+u*E1[1]+v*E2[1]];
+  g+=Poly([A(0,0),A(1,0),A(1,1),A(0,1)],{f:'#fff',st:C.ink,sw:1.6});
+  g+=Poly([A(0,1),A(1,1),[A(1,1)[0],A(1,1)[1]+8],[A(0,1)[0],A(0,1)[1]+8]],{f:'#ddd8ec'});
+  g+=Poly([A(1,0),A(1,1),[A(1,1)[0],A(1,1)[1]+8],[A(1,0)[0],A(1,0)[1]+8]],{f:'#cfc9e2'});
+  for(let i=0;i<=6;i++) for(let j=0;j<=4;j++){ const [x,y]=A(i/6,j/4); g+=`<path d="M${x} ${y}v-12" stroke="${C.ink3}" stroke-width="2.4"/>`; }
+  const ar=[[0,0,-10,-8],[1,0,10,-8],[0,1,-10,14],[(188-40)/222,(136-34)/136,10,16]];
+  ar.forEach(([u,v,dx,dy],i)=>{ const [x,y]=A(u,v); g+=mk(refs[i][0],x,y,dx,dy); });
+  g+=T(360,208,'AXO-REF.PNG · same four points',{s:7.5,c:C.ink3,ls:1.2});
+  g+=`<path d="M282 102C320 102 330 102 352 102" stroke="${C.brand}" stroke-width="1.6" fill="none" marker-end="url(#arB)"/>`+T(318,92,'aligned',{s:7.5,c:C.brand,a:'middle',w:600});
+  document.getElementById('d-ref').innerHTML=g;
+})();
+
+/* ---------- storyboard ---------- */
+(function(){
+  let g=defs;
+  const W=160, frames=4;
+  const zones=(map,fo)=>{ let o=''; NB.forEach(([x,y],i)=>{ const u0=(x-50)/1100,v0=(y-50)/600,u1=u0+NBW/1100,v1=v0+NBH/600; o+=Poly([map(u0,v0),map(u1,v0),map(u1,v1),map(u0,v1)],{f:C.n[i],fo:fo,st:C.n[i],sw:.9}); }); TS.forEach(([x,y,w,h])=>{ const u0=(x-50)/1100,v0=(y-50)/600,u1=u0+w/1100,v1=v0+h/600; o+=Poly([map(u0,v0),map(u1,v0),map(u1,v1),map(u0,v1)],{f:C.brand,fo:fo*.9,st:C.brand,sw:.6}); }); return o; };
+  const iso=(fx,fy,z)=>(u,v)=>[fx+u*104-v*46, fy+u*30+v*58-(z||0)];
+  const caps=['1 · Plan from CAD','2 · Plan slides onto the axo floor','3 · SketchUp layers build up','4 · Layers separate (exploded)'];
+  for(let f=0;f<frames;f++){ const x=4+f*174; g+=R(x,4,166,170,{f:'#fff',st:C.rule,rx:8}); g+=T(x+10,190,caps[f],{s:7.2,c:C.ink,w:600}); }
+  // 1 plan
+  { const map=(u,v)=>[18+u*138,50+v*76]; g+=Poly([map(0,0),map(1,0),map(1,1),map(0,1)],{f:'#fff',st:C.ink,sw:1.2})+zones(map,.25); }
+  // 2 morph
+  { const flat=(u,v)=>[192+u*138,50+v*76]; g+=Poly([flat(0,0),flat(1,0),flat(1,1),flat(0,1)],{st:C.ink3,sw:.8,da:'3 3'}); const m=iso(214,40); g+=Poly([m(0,0),m(1,0),m(1,1),m(0,1)],{f:'#fff',st:C.ink,sw:1.2})+zones(m,.3); g+=`<path d="M262 132Q270 118 262 104" stroke="${C.brand}" stroke-width="1.2" fill="none" marker-end="url(#arB)"/>`; }
+  // 3 build-up
+  { const m=iso(388,52); g+=Poly([m(0,0),m(1,0),m(1,1),m(0,1)],{f:'#fff',st:C.ink,sw:1.2})+zones(m,.28);
+    for(let i=0;i<=6;i++) for(let j=0;j<=3;j++){ const [x,y]=m(i/6,j/3); g+=`<path d="M${x} ${y}v-9" stroke="${C.ink2}" stroke-width="1.6"/>`; }
+    [[.06,.12],[.4,.12],[.74,.12],[.06,.78],[.4,.78],[.74,.78]].forEach(([u,v])=>{ const a=m(u,v),b=m(u+.2,v); g+=Poly([a,b,[b[0],b[1]-10],[a[0],a[1]-10]],{f:'#fff',st:C.ink2,sw:.7}); });
+    const c0=m(.41,.4), c1=m(.59,.4), c2=m(.59,.6), c3=m(.41,.6); g+=Poly([c0,c1,c2,c3],{f:C.ink2})+Poly([c3,c2,[c2[0],c2[1]-16],[c3[0],c3[1]-16]],{f:C.ink2,fo:.8})+Poly([[c0[0],c0[1]-16],[c1[0],c1[1]-16],[c2[0],c2[1]-16],[c3[0],c3[1]-16]],{f:C.ink});
+    g+=`<path d="M${m(1,0)[0]+10} ${m(1,0)[1]+24}v-16" stroke="${C.brand}" stroke-width="1.2" marker-end="url(#arB)"/>`; }
+  // 4 exploded
+  { const lv=[[0,'#e9e5f4',C.ink3,'SHELL'],[24,null,null,'ZONES'],[46,'#fff',C.ink2,'WALLS'],[68,'#fff',C.ink2,'FURNITURE']];
+    const iso4=(fx,fy,z)=>(u,v)=>[fx+u*90-v*40, fy+u*26+v*50-(z||0)]; let labs='';
+    lv.forEach(([z,fill,st,lab],k)=>{ const m=iso4(586,86,z-6); const pts=[m(0,0),m(1,0),m(1,1),m(0,1)];
+      if(k===1){ g+=Poly(pts,{st:C.ink3,sw:.6,da:'2 2'})+zones(m,.4); } else { g+=Poly(pts,{f:fill,fo:k===0?1:.9,st:st,sw:.9}); if(k>=2){ for(let i=0;i<5;i++){ const a=m(.1+i*.18,.25), b=m(.1+i*.18+.1,.25); g+=`<path d="M${a[0]} ${a[1]}L${b[0]} ${b[1]}" stroke="${C.ink2}" stroke-width="${k===2?2:3.2}"/>`; const c=m(.1+i*.18,.75), d=m(.1+i*.18+.1,.75); g+=`<path d="M${c[0]} ${c[1]}L${d[0]} ${d[1]}" stroke="${C.ink2}" stroke-width="${k===2?2:3.2}"/>`; } } }
+      const [lx,ly]=m(0,.5); labs+=T(lx-4,ly+2,lab,{s:5.8,c:C.ink3,a:'end',ls:.6}); });
+    g+=labs;
+    const a=iso4(586,86,-6)(1,1), b=iso4(586,86,62)(1,1); g+=`<path d="M${a[0]+6} ${a[1]}L${b[0]+6} ${b[1]}" stroke="${C.brand}" stroke-width="1" stroke-dasharray="3 2"/>`; }
+  document.getElementById('d-story').innerHTML=g;
+})();
+})();
+</script>
+</body>
+</html>
