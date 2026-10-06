@@ -1,0 +1,74 @@
+
+/* =====================================================================
+   TEST FIT: the plan is the real drawing (1 unit = 50 mm), so line
+   weights and text sizes are set in those units
+   ===================================================================== */
+.stage{transition:left .6s var(--ease), bottom .6s var(--ease)}
+.rf-furn{fill:none; stroke:var(--furn); stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+.rf-green{fill:none; stroke:var(--leaf); stroke-width:1.7; opacity:.75}
+.rf-part{fill:none; stroke:var(--wall); stroke-width:3.2; stroke-linecap:round}
+.wc:not(.top) .rf-part,.dwc:not(.top) .rf-part{stroke:var(--wall-side); stroke-width:4.2}
+.rf-core{fill:none; stroke:var(--line); stroke-width:3.6; stroke-linecap:round}
+.rf-core.mini{stroke:var(--line-2); stroke-width:2.6}
+.rf-cored{fill:none; stroke:var(--line-3); stroke-width:1.6}
+.rf-stair{fill:none; stroke:var(--line-2); stroke-width:1.6}
+.corefade{opacity:0; transition:opacity .9s var(--ease) .6s}
+.f-shell .corefade{opacity:1}
+.void{fill:url(#hatch); stroke:var(--line-2); stroke-width:2.4}
+.void-x{fill:none; stroke:var(--line-3); stroke-width:2.4}
+.plate-o{fill:none; stroke:var(--line-2); stroke-width:4}
+.s-plate{stroke-width:7}
+.col.on{opacity:1}
+.xw{stroke-width:4.6}
+.sc.top .xw{stroke-width:3.6}
+.lbl-shell{font-size:42px; letter-spacing:.12em}
+.ann{font-size:46px; stroke-width:13px}
+.exit-r{stroke-width:5}
+.exit-t{font-size:38px; stroke-width:12px}
+.route{stroke-width:7; stroke-dasharray:22 16; animation:flowB 1s linear infinite}
+@keyframes flowB{to{stroke-dashoffset:-38}}
+.route-t{font-size:44px; stroke-width:12px}
+.ring{stroke-width:3.4; stroke-dasharray:9 16}
+.dimline{stroke-width:2.6}
+.zone{stroke-width:6}
+.rlabel{font-size:40px; stroke-width:10px}
+.f-spaces .hit:hover,.dive .hit:hover{stroke-width:4}
+.f-spaces .hit.big:hover{fill-opacity:.07}
+.dimmed .hit.hl{fill:var(--hl); fill-opacity:.38; stroke:var(--hl); stroke-width:4}
+.km circle{stroke-width:4}
+.km text{font-size:18px}
+.kp{max-width:100%}
+.kp-plate{stroke-width:14}
+.kp-nb{stroke-width:12}
+.chip.off{opacity:.38; cursor:default}
+.ol.sm .ol-pill{padding:2px 9px 3px}
+.ol.sm .ol-n{font-size:clamp(10px,.75vw,13px)}
+.ol.sm .ol-s{display:none}
+.f-axo #plan3d{--rx:58deg; --rz:-16deg; --sc:1; --ty:-10px}
+.f-explode #plan3d{--rx:60deg; --rz:-16deg; --sc:.8; --ty:80px}
+.f-explode .g-zones{--ez:120px}
+.f-explode .g-fit{--ez:240px}
+/* sharing-out matrix */
+.am.tf .cell{display:inline-block; min-width:2.2em; padding:2px 6px; border-radius:6px; background:color-mix(in srgb,var(--c) calc(var(--f,0) * 32%),transparent)}
+.am.tf td.zero{color:var(--ink-3)}
+.am.tf th small{display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; color:var(--ink-3); font-weight:400}
+.am.tf td.am-t small{display:block; font-size:10px; color:var(--ink-3)}
+/* wide layout: the floor is ~7:1, so on larger screens the story sits under the drawing */
+@media (min-width:861px){
+  :root{--cap-h:clamp(200px,31vh,330px)}
+  .wide .stage{left:0; bottom:calc(var(--bot-h) + var(--cap-h))}
+  .wide .cap{top:auto; left:0; right:0; width:auto; height:var(--cap-h); border-right:0; border-top:1px solid var(--rule); padding:20px 32px 16px}
+  .wide .cap-in{margin-block:0; display:block; columns:3 280px; column-gap:44px; column-fill:auto; height:100%}
+  .wide .cap-in > *{break-inside:avoid; margin:0 0 12px}
+  .wide .cap h2{font-size:clamp(24px,2vw,34px)}
+}
+
+.f-axo .ol.sm{opacity:0!important}
+.kr{grid-template-columns:minmax(0,1fr) auto}
+.kr .kc{display:none}
+.kr .kn{flex-wrap:nowrap; white-space:nowrap}
+.am.tf td.am-b{white-space:nowrap}
+#sc-cover .cover-bg{top:auto; bottom:8%; right:-5%; width:min(98%,1560px); transform:none; opacity:.6; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%); mask-image:linear-gradient(90deg,transparent 0,#000 28%)}
+.lbl-shell{paint-order:stroke; stroke:var(--slab); stroke-width:12px; stroke-linejoin:round}
+@media (max-width:860px){ .ol.sm{display:none} }
+@media (min-width:861px){ #sc-cover .cover-bg{bottom:3%; width:min(94%,1500px)} #sc-cover .cover{margin-top:-14vh} }
