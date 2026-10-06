@@ -20,6 +20,14 @@ Double-click `index.html`. It runs in any modern browser (Chrome or Edge recomme
 | `B` | Blank the screen (any key returns) |
 | `?` | Shortcuts |
 
+**In the render viewer**
+
+| Key | Action |
+|---|---|
+| `→` `←` (or the clicker) | Next / previous space. Stepping past the last space closes the viewer |
+| `L` `C` `D` | Light, compare, dark |
+| `Esc` | Close |
+
 Presentation clickers work, since they send `PgUp` / `PgDn`. For self-browsing, the client can scroll or swipe through the same steps or jump with the progress bar. Each step has its own link (for example `index.html#town-square`).
 
 ## The story (11 chapters, 23 steps)
@@ -38,6 +46,30 @@ Presentation clickers work, since they send `PgUp` / `PgDn`. For self-browsing, 
 
 All counts, areas, daylight percentages and route lengths are computed from the drawing, so they stay consistent when the layout changes.
 
+## Renders on click
+
+Click any space to open its renders. This works in the layout steps, the Town Square step, both 3D views, and every neighbourhood deep dive (plan, axo, numbered markers and kit rows with a camera icon). Each space has two renders, **light** and **dark**:
+
+- **Light / Compare / Dark** toggle at the top right
+- **Slider**: drag across the image, or use the bar below it, to wipe between the two versions
+- **Filmstrip** of the other spaces in the same neighbourhood (or the Town Square), with ‹ › arrows on the image
+
+Until the real renders arrive, every space shows a generated sample interior in the neighbourhood's colour, marked "Sample visual".
+
+**Adding the real renders.** Put the images in a `renders/` folder next to `index.html` and list them in `RENDERS` at the top of the RENDERS section of the script:
+
+```js
+const RENDERS={
+  meeting:{light:'renders/meeting-light.jpg', dark:'renders/meeting-dark.jpg'},
+  huddle:{light:'renders/huddle-light.jpg', dark:'renders/huddle-dark.jpg'},
+  'N1:huddle':{light:'renders/n1-huddle-light.jpg', dark:'renders/n1-huddle-dark.jpg'}, // only Indiranagar
+};
+```
+
+A shared entry (`meeting`) is used by every neighbourhood. A neighbourhood-specific entry (`N1:meeting`) wins over it. Space keys: `desk` (workstations), `cabin`, `touch` (touchdown bench), `focus`, `booth`, `meeting`, `huddle`, `pantry`, plus the Town Square's `reception`, `townhall`, `board`, `cafe` and `wellness`.
+
+Render both versions of a space **from the same camera, at the same size**, so the slider lines up. JPG about 2400 px wide works well, in 16:10 or 16:9.
+
 ## What we need to replace the sample data
 
 **Drawings.** Export everything from the same CAD file at the same scale, crop and sheet size. Vector (PDF or SVG) is best; otherwise PNG at least 3000 px wide.
@@ -50,6 +82,7 @@ All counts, areas, daylight percentages and route lengths are computed from the 
 - [ ] Axo close-up of **each of the six neighbourhoods** (isolated or exploded is ideal)
 - [ ] Site understanding and due-diligence mark-ups, or just bullet points
 - [ ] Site photos for the due-diligence pins (optional)
+- [ ] **Light and dark render of each space type**, same camera for both: workstations, lead cabin, touchdown, focus pod, phone booth, meeting room, huddle, pantry, reception, town hall, boardroom, café, wellness. Add per-neighbourhood versions wherever a neighbourhood looks different
 
 **Content.**
 
