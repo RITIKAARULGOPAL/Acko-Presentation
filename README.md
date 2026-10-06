@@ -6,7 +6,9 @@ An interactive, single-file presentation of the Acko workplace concept. It tells
 
 ## Open it
 
-Double-click `index.html`. It runs in any modern browser (Chrome or Edge recommended for presenting) with no install and no server. It also works offline. Without internet the web fonts fall back to system fonts, and the final version will embed the fonts.
+Double-click `index.html`. The earlier version of the story (23 steps: escape routes become Main Street, without the brief, the loop or the shared zen rooms) is kept as `index-v1.html` and works the same way.
+
+Both run in any modern browser (Chrome or Edge recommended for presenting) with no install and no server, and work offline. Without internet the web fonts fall back to system fonts, and the final version will embed the fonts.
 
 ## Present it
 
