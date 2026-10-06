@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Acko Junior Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Print spec sheet: A4, single light theme. Purple is the placeholder Acko accent used in the presentation. */
+:root{
+  --ink:#1b1826; --ink-2:#4f4a64; --ink-3:#8b86a1; --rule:#e1ddec; --soft:#f4f2fa;
+  --brand:#5a33e6; --brand-soft:#efebfd; --fire:#e2412f; --exit:#119a62; --ok:#119a62; --bad:#d23a2a; --ref:#ff0000;
+  --n1:#e65a36; --n2:#cf8d0c; --n3:#109a8d; --n4:#2a7fd8; --n5:#d2468e; --n6:#5ca23a;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+}
+@page{ size:A4; margin:17mm 17mm 19mm 17mm; }
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+body{margin:0; background:#fff; color:var(--ink); font-family:var(--body); font-size:9.4pt; line-height:1.52}
+p{margin:0 0 7pt; max-width:165mm}
+h2{font-family:var(--display); font-stretch:112%; font-weight:750; font-size:19pt; line-height:1.1; margin:0 0 4pt; letter-spacing:-.01em; break-before:page; break-after:avoid}
+h2 .no{color:var(--brand); margin-right:8pt}
+.sec-lede{font-size:10.4pt; color:var(--ink-2); margin:0 0 12pt}
+h3{font-family:var(--display); font-stretch:105%; font-weight:700; font-size:11.6pt; margin:16pt 0 5pt; break-after:avoid}
+h3 .no{color:var(--ink-3); font-family:var(--mono); font-weight:500; font-size:9pt; margin-right:6pt; letter-spacing:.02em}
+code,.m{font-family:var(--mono); font-size:.88em}
+code{background:var(--soft); border:.5pt solid var(--rule); border-radius:3px; padding:0 3px; white-space:nowrap}
+strong{font-weight:600}
+ul,ol{margin:0 0 8pt; padding-left:15pt}
+li{margin:0 0 3pt}
+li::marker{color:var(--ink-3)}
+table{width:100%; border-collapse:collapse; margin:4pt 0 10pt; font-size:8.5pt; line-height:1.4}
+thead{display:table-header-group}
+tr{break-inside:avoid}
+th{text-align:left; font-family:var(--mono); font-weight:500; font-size:7pt; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); border-bottom:1pt solid var(--ink); padding:0 8pt 4pt 0; vertical-align:bottom}
+td{border-bottom:.5pt solid var(--rule); padding:5pt 8pt 5pt 0; vertical-align:top}
+td:first-child code,td.k code{background:none; border:0; padding:0; font-weight:600; color:var(--ink)}
+.req{font-family:var(--mono); font-size:7pt; letter-spacing:.06em; text-transform:uppercase; border-radius:3px; padding:1pt 4pt; white-space:nowrap}
+.req.y{background:var(--brand-soft); color:var(--brand)}
+.req.o{background:var(--soft); color:var(--ink-3)}
+.note{display:block; break-inside:avoid; background:var(--brand-soft); border-left:2.5pt solid var(--brand); border-radius:0 6px 6px 0; padding:7pt 10pt; margin:6pt 0 10pt; font-size:8.8pt}
+.note b{display:block; font-family:var(--mono); font-weight:600; font-size:7pt; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); margin-bottom:2pt}
+.note.check{background:#ecf7f1; border-left-color:var(--ok)}
+.note.check b{color:var(--ok)}
+.note.warn{background:#fdf0ee; border-left-color:var(--bad)}
+.note.warn b{color:var(--bad)}
+figure{margin:6pt 0 12pt; break-inside:avoid}
+figure svg{display:block; width:100%; height:auto}
+figcaption{font-size:8pt; color:var(--ink-3); margin-top:4pt}
+figcaption b{font-family:var(--mono); font-weight:500; color:var(--ink-2); margin-right:5pt}
+pre{font-family:var(--mono); font-size:8pt; line-height:1.55; background:var(--soft); border:.5pt solid var(--rule); border-radius:6px; padding:8pt 10pt; margin:4pt 0 10pt; white-space:pre; break-inside:avoid; color:var(--ink)}
+pre .c{color:var(--ink-3)}
+.checks{list-style:none; padding:0; margin:4pt 0 10pt; columns:2; column-gap:14pt; break-inside:avoid}
+.checks li{position:relative; padding-left:15pt; break-inside:avoid; margin-bottom:5pt; font-size:8.8pt}
+.checks li::before{content:''; position:absolute; left:0; top:2pt; width:8.5pt; height:8.5pt; border:1pt solid var(--ink-2); border-radius:2pt}
+.mx td,.mx th{text-align:center; padding-right:4pt; padding-left:4pt}
+.mx td:first-child,.mx th:first-child{text-align:left; padding-left:0}
+.mx td:last-child,.mx th:last-child{text-align:left}
+.dot{display:inline-block; width:7pt; height:7pt; border-radius:50%; background:var(--ink)}
+.dot.s{background:var(--brand)}
+.mx .dash{color:var(--rule)}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:14pt}
+.keep{break-inside:avoid}
+
+/* cover */
+.cover{height:255mm; display:flex; flex-direction:column; break-after:page}
+.cover .eyebrow{font-family:var(--mono); font-size:9pt; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); margin:6mm 0 6mm}
+.cover h1{font-family:var(--display); font-stretch:125%; font-weight:850; font-size:33pt; line-height:1; letter-spacing:-.02em; margin:0 0 7mm; max-width:176mm}
+.cover .lede{font-size:12pt; color:var(--ink-2); max-width:150mm; line-height:1.5; margin-bottom:7mm}
+.meta{display:grid; grid-template-columns:repeat(4,auto); justify-content:start; gap:4pt 22pt; font-size:8.6pt; margin-bottom:10mm; border-top:1pt solid var(--ink); padding-top:8pt}
+.meta dt{font-family:var(--mono); font-size:6.8pt; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.meta dd{margin:0}
+.glance{display:grid; grid-template-columns:repeat(3,1fr); gap:10pt; margin-top:auto}
+.glance div{background:var(--soft); border-radius:8px; padding:10pt 11pt}
+.glance h4{margin:0 0 5pt; font-family:var(--display); font-stretch:110%; font-size:11pt}
+.glance h4 span{display:block; font-family:var(--mono); font-weight:400; font-stretch:100%; font-size:7pt; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); margin-bottom:2pt}
+.glance ul{padding-left:11pt; font-size:8.4pt; margin:0}
+.cover-art{margin:2mm 0 8mm}
+.toc{list-style:none; padding:0; margin:0 0 8mm; columns:2; column-gap:16pt; font-size:9pt}
+.toc li{display:flex; gap:7pt; break-inside:avoid; margin-bottom:3pt}
+.toc li span{font-family:var(--mono); color:var(--brand); min-width:14pt}
+/* junior guide additions: step cards, comparison boxes, glossary */
+body{font-size:9.8pt; line-height:1.56}
+p{max-width:168mm}
+.think{display:block; break-inside:avoid; background:#fff6e6; border-left:2.5pt solid #e39a12; border-radius:0 6px 6px 0; padding:8pt 11pt; margin:6pt 0 11pt; font-size:9.4pt}
+.think b{display:block; font-family:var(--mono); font-weight:600; font-size:7pt; letter-spacing:.1em; text-transform:uppercase; color:#b06f00; margin-bottom:2pt}
+.step{break-inside:avoid; border:1pt solid var(--rule); border-radius:9px; padding:10pt 12pt 9pt; margin:0 0 9pt; display:grid; grid-template-columns:24pt minmax(0,1fr); column-gap:11pt}
+.step .n{grid-row:1 / span 6; width:24pt; height:24pt; border-radius:50%; background:var(--brand); color:#fff; font-family:var(--display); font-stretch:110%; font-weight:800; font-size:11pt; display:grid; place-items:center}
+.step h4{margin:2pt 0 6pt; font-family:var(--display); font-stretch:108%; font-weight:750; font-size:11.2pt; line-height:1.2}
+.step h4 code{font-size:.78em; font-weight:500}
+.row{display:grid; grid-template-columns:40pt minmax(0,1fr); column-gap:8pt; font-size:9pt; margin-bottom:5pt}
+.row > b{font-family:var(--mono); font-weight:600; font-size:6.8pt; letter-spacing:.1em; text-transform:uppercase; padding-top:2.2pt}
+.row.do > b{color:var(--brand)} .row.why > b{color:#b06f00} .row.chk > b{color:var(--ok)}
+.row ol,.row ul{margin:0; padding-left:13pt}
+.row p{margin:0 0 4pt}
+.gloss{display:grid; grid-template-columns:1fr 1fr; gap:0 18pt; margin:4pt 0 0}
+.gloss div{break-inside:avoid; border-top:.5pt solid var(--rule); padding:4.5pt 0 5pt}
+.gloss dt{font-family:var(--display); font-stretch:105%; font-weight:700; font-size:10pt; margin-bottom:1pt}
+.gloss dd{margin:0; font-size:8.6pt; color:var(--ink-2); line-height:1.42}
+.faq{margin:0}
+.faq div{break-inside:avoid; border-top:.5pt solid var(--rule); padding:7pt 0}
+.faq dt{font-weight:600; font-size:9.8pt; margin-bottom:2pt}
+.faq dd{margin:0; color:var(--ink-2); font-size:9.2pt}
+.big{font-size:10.6pt; color:var(--ink)}
+.cover h1{font-size:38pt}
+.cover h1 small{display:block; font-family:var(--body); font-stretch:100%; font-weight:500; font-size:15pt; letter-spacing:0; color:var(--brand); margin-top:6pt}
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="cover">
+  <p class="eyebrow">Acko · A city of neighbourhoods</p>
+  <h1>Getting the drawings ready<small>A plain-language guide for juniors</small></h1>
+  <p class="lede">This guide explains in simple words what we're making, why the drawings need a little extra preparation, and exactly what to click. Read it first. Then use the <b>Drawing and model handover spec</b> as your checklist.</p>
+  <dl class="meta">
+    <div><dt>For</dt><dd>Junior designers, CAD and 3D team</dd></div>
+    <div><dt>Goes with</dt><dd>Handover spec v1.0</dd></div>
+    <div><dt>Version</dt><dd>1.0 · 6 October 2026</dd></div>
+    <div><dt>Reading time</dt><dd>About 20 minutes</dd></div>
+  </dl>
+  <ol class="toc">
+    <li><span>01</span>The big picture</li>
+    <li><span>02</span>Words you'll hear</li>
+    <li><span>03</span>Your CAD job, step by step</li>
+    <li><span>04</span>Your SketchUp job, step by step</li>
+    <li><span>05</span>Renders: light and dark</li>
+    <li><span>06</span>Common mistakes and quick fixes</li>
+    <li><span>07</span>Questions juniors usually ask</li>
+    <li><span>08</span>Before you send: final check</li>
+  </ol>
+  <figure class="cover-art"><svg id="j-flow" viewBox="0 0 700 170" aria-label="You prepare, we build, the client sees"></svg></figure>
+  <div class="glance">
+    <div><h4><span>If you work in AutoCAD</span>Read 01, 02, 03</h4><ul><li>Add labelled shapes on new layers</li><li>Draw the fire escape routes</li><li>Save as DXF</li></ul></div>
+    <div><h4><span>If you work in SketchUp</span>Read 01, 02, 04</h4><ul><li>Organise groups and tags</li><li>Fix one camera</li><li>Export a set of pictures</li></ul></div>
+    <div><h4><span>If you make renders</span>Read 01, 05</h4><ul><li>A light and a dark render per space</li><li>Same camera for both</li><li>Name the files exactly</li></ul></div>
+  </div>
+</section>
+
+<!-- ============================ 01 ============================ -->
+<h2><span class="no">01</span>The big picture</h2>
+<p class="sec-lede">What we're making, why it needs your help, and what each team hands over.</p>
+
+<h3>What are we making?</h3>
+<p>We're making an <b>interactive presentation</b> for Acko's new office. It opens in a web browser like a website but works like a slideshow. Each time the presenter presses the arrow key, something happens on screen:</p>
+<ul>
+<li>the empty floor draws itself, line by line;</li>
+<li>red arrows show how people would escape in a fire;</li>
+<li>the floor divides into six coloured <b>neighbourhoods</b> (one per team) around a shared <b>Town Square</b>;</li>
+<li>the flat plan tilts up into a 3D view, then the 3D view separates into floating layers;</li>
+<li>clicking any room opens its render, in a light and a dark version.</li>
+</ul>
+
+<h3>Why does this need your help?</h3>
+<p>A person looks at a drawing and understands it straight away. A computer can't "see" a drawing like that. It reads the information inside the file: which layer a line sits on, whether a shape is closed, what text sits inside it.</p>
+<p>So if you draw a closed shape on a layer called <code>PRES-NBHD</code> and write <code>N1 INDIRANAGAR</code> inside it, the computer understands: <i>this area is the Indiranagar neighbourhood</i>. Now it can colour it, show its name, measure its area and count the desks inside it, all by itself.</p>
+<div class="think"><b>Think of it like</b>Labelling boxes before moving house. The movers don't open each box to guess what's inside. They read the label and carry the box to the right room. Your job is to put clear labels on the drawing, so the computer puts everything in the right place.</div>
+
+<h3>What each team hands over</h3>
+<table>
+<thead><tr><th style="width:22%">Team</th><th style="width:48%">Hands over</th><th>In plain words</th></tr></thead>
+<tbody>
+<tr><td><b>CAD (AutoCAD)</b></td><td>The final layout as a DXF file, with a few extra layers</td><td>The plan, plus labelled shapes that say "this is a neighbourhood", "this is a fire route" and so on</td></tr>
+<tr><td><b>3D (SketchUp)</b></td><td>A set of PNG pictures of the model, all from one fixed camera</td><td>Photos of the 3D model, taken from exactly the same spot, with different parts switched on</td></tr>
+<tr><td><b>Renders</b></td><td>A light and a dark JPG render of each type of space</td><td>Two versions of each room, from the same camera, so a slider can blend between them</td></tr>
+<tr><td><b>Project lead</b></td><td>Names, teams, colours, notes, brand files</td><td>The words and branding</td></tr>
+</tbody></table>
+
+<h3>Why it's worth the effort</h3>
+<p>Once the files are set up this way, every number in the presentation (areas, desk counts, escape distances) comes straight from your drawing, so it is always right. If the design changes, we simply re-export with the same names and the presentation updates. Nobody retypes numbers by hand.</p>
+
+<!-- ============================ 02 ============================ -->
+<h2><span class="no">02</span>Words you'll hear</h2>
+<p class="sec-lede">The handful of terms used in this guide and the spec, in everyday language.</p>
+<dl class="gloss">
+<div><dt>DXF</dt><dd>A file type AutoCAD can save to. It holds the same lines, layers and blocks as a DWG, but other programs can read it. We can't open DWG files, so we ask for DXF.</dd></div>
+<div><dt>Layer</dt><dd>Like a sheet of tracing paper inside the drawing. Every line sits on one layer. We use layer names to know what a line is.</dd></div>
+<div><dt>PRES layer</dt><dd>A new layer you add only for the presentation. Their names all start with <code>PRES-</code>.</dd></div>
+<div><dt>Polyline</dt><dd>A line made of several connected pieces, drawn with the <code>PLINE</code> command. AutoCAD treats it as one object.</dd></div>
+<div><dt>Closed polyline</dt><dd>A polyline whose end joins its start <b>and</b> which AutoCAD has marked as "closed". Only closed shapes can be coloured and measured.</dd></div>
+<div><dt>Label</dt><dd>A piece of text placed inside a shape to say what it is, such as <code>MEETING 8</code>.</dd></div>
+<div><dt>Block</dt><dd>A saved bundle of lines that acts as one object, like a desk or a chair. We count blocks to count furniture.</dd></div>
+<div><dt>Model space</dt><dd>The main drawing area in AutoCAD, as opposed to the printable sheet layouts.</dd></div>
+<div><dt>Z = 0</dt><dd>Everything lying flat at floor level. Lines sometimes get a height by accident; the <code>FLATTEN</code> command fixes that.</dd></div>
+<div><dt>Xref</dt><dd>Another drawing linked into yours. "Binding" it copies it into your file permanently, so nothing goes missing.</dd></div>
+<div><dt>Axo (axonometric)</dt><dd>A 3D view looking down at an angle, where things don't get smaller in the distance.</dd></div>
+<div><dt>Perspective vs parallel</dt><dd>Perspective is how our eyes see: far things look smaller. Parallel projection keeps sizes the same everywhere. We need <b>parallel</b>.</dd></div>
+<div><dt>Group (SketchUp)</dt><dd>A bundle of objects that moves and hides together, like a folder.</dd></div>
+<div><dt>Tag (SketchUp)</dt><dd>SketchUp's version of a layer. Switching a tag off hides everything carrying that tag.</dd></div>
+<div><dt>Scene (SketchUp)</dt><dd>A saved camera view and set-up, shown as a tab along the top of the screen.</dd></div>
+<div><dt>Export</dt><dd>Saving a picture or file out of SketchUp or AutoCAD.</dd></div>
+<div><dt>PNG and JPG</dt><dd>Picture file types. A PNG can have a see-through background; a JPG can't.</dd></div>
+<div><dt>Transparent background</dt><dd>The empty part of the picture is see-through, so pictures can be stacked on top of each other.</dd></div>
+<div><dt>Pixels (px)</dt><dd>The size of a picture. 6000 px wide means very large and sharp.</dd></div>
+<div><dt>Render</dt><dd>A realistic image of a space, made in Enscape, V-Ray, D5 or Lumion.</dd></div>
+<div><dt>Reference marker</dt><dd>A small red dot placed at the same four spots in CAD and SketchUp so the two can be lined up.</dd></div>
+<div><dt>Exploded view</dt><dd>The 3D view pulled apart into layers floating above each other.</dd></div>
+<div><dt>Escape route (egress)</dt><dd>The path people take to get out of the building in a fire.</dd></div>
+<div><dt>Travel distance</dt><dd>The longest distance anyone should have to walk to reach a fire exit. The fire code sets the limit.</dd></div>
+</dl>
+
+<!-- ============================ 03 ============================ -->
+<h2><span class="no">03</span>Your CAD job, step by step</h2>
+<p class="sec-lede">You'll add the PRES layers to a copy of the final layout, draw simple labelled shapes on them, check them and save a DXF. Work through the steps in order. Each one says what to do, why it matters and how to check it.</p>
+
+<div class="step"><span class="n">1</span><h4>Make a working copy</h4>
+<div class="row do"><b>Do</b><div>Open the final layout and use <code>SAVEAS</code> to save it as <code>acko-layout-PRES.dwg</code>. Work only in this copy.</div></div>
+<div class="row why"><b>Why</b><div>You're adding things just for the presentation. The real drawing stays untouched.</div></div>
+<div class="row chk"><b>Check</b><div>The title bar shows the new file name.</div></div></div>
+
+<div class="step"><span class="n">2</span><h4>Create the PRES layers</h4>
+<div class="row do"><b>Do</b><div>Type <code>LAYER</code> and press Enter. In the Layer Properties Manager, click <i>New Layer</i> and type each name exactly:<br><code>PRES-PLATE</code> <code>PRES-CORE</code> <code>PRES-STAIR</code> <code>PRES-FIRE-EXIT</code> <code>PRES-FIRE-ROUTE</code> <code>PRES-STREET</code> <code>PRES-NBHD</code> <code>PRES-TS</code> <code>PRES-ROOM</code> <code>PRES-REF</code>, plus <code>PRES-DD</code> and <code>PRES-SITE</code> if asked. Give them any bright colours so you can see them.</div></div>
+<div class="row why"><b>Why</b><div>The computer finds things by layer name, the way a postman finds a house by its address. One wrong letter and it won't find it.</div></div>
+<div class="row chk"><b>Check</b><div>Every name is in capitals, starts with <code>PRES-</code> and uses hyphens, not spaces or underscores.</div></div></div>
+
+<div class="step"><span class="n">3</span><h4>Learn the one skill you'll use most: closed shapes</h4>
+<div class="row do"><b>Do</b><div><p>First make the right PRES layer current (pick it in the Layer drop-down on the Home tab). Then draw the shape in one of two ways:</p>
+<ol><li><b>By hand:</b> type <code>PLINE</code>, click round the shape, then type <b>C</b> and press Enter. C means Close.</li>
+<li><b>Faster:</b> type <code>BO</code> (BOUNDARY). Set <i>Object type</i> to <i>Polyline</i>, click <i>Pick Points</i>, click inside the area, press Enter. AutoCAD traces the edges for you on the current layer.</li></ol></div></div>
+<div class="row why"><b>Why</b><div>Only closed shapes can be filled with colour and measured.</div></div>
+<div class="row chk"><b>Check</b><div>Select the shape and press <b>Ctrl+1</b>. The Properties palette must say <i>Closed: Yes</i>.</div></div></div>
+<figure><svg id="j-fence" viewBox="0 0 700 160" aria-label="A closed shape versus a shape with a gap"></svg>
+<figcaption><b>Fig 1</b>A closed shape with its label inside can be coloured and measured. A shape with a gap can't.</figcaption></figure>
+<div class="think"><b>Think of it like</b>A fence around a field. If the fence has even a tiny gap, the colour "leaks out" and the computer can't tell how big the field is. Ends that only touch still count as a gap; the shape must be marked closed.</div>
+
+<div class="step"><span class="n">4</span><h4>Floor outline <code>PRES-PLATE</code></h4>
+<div class="row do"><b>Do</b><div>Draw one closed shape around the usable floor, along the inside face of the outer wall or glass.</div></div>
+<div class="row why"><b>Why</b><div>This is the edge of the "city". It gives the total floor area and is the outline that draws itself at the start of the presentation.</div></div>
+<div class="row chk"><b>Check</b><div>Only one shape on this layer. Closed.</div></div></div>
+
+<div class="step"><span class="n">5</span><h4>Core and fire stairs <code>PRES-CORE</code> <code>PRES-STAIR</code></h4>
+<div class="row do"><b>Do</b><div>On <code>PRES-CORE</code>, draw closed shapes round the core, lifts, toilets, shafts and AHU rooms, each with a label inside: <code>CORE</code>, <code>LIFTS</code>, <code>WC</code>, <code>SHAFT</code>, <code>AHU</code>. On <code>PRES-STAIR</code>, draw one closed shape round each fire stair with a label: <code>STAIR A</code>, <code>STAIR B</code> and so on.</div></div>
+<div class="row why"><b>Why</b><div>These are the fixed parts of the building that everything else is planned around.</div></div>
+<div class="row chk"><b>Check</b><div>Every label sits inside its own shape.</div></div></div>
+
+<div class="step"><span class="n">6</span><h4>Main walkways <code>PRES-STREET</code></h4>
+<div class="row do"><b>Do</b><div>Draw closed shapes for Main Street and each lane (the main walkways). Label them <code>MAIN STREET</code> or <code>LANE</code>.</div></div>
+<div class="row why"><b>Why</b><div>In the story, the fire escape routes become the main walkways. These shapes are those walkways.</div></div>
+<div class="row chk"><b>Check</b><div>Streets touch the neighbourhood shapes along their edges but don't overlap them.</div></div></div>
+
+<div class="step"><span class="n">7</span><h4>Neighbourhoods <code>PRES-NBHD</code></h4>
+<div class="row do"><b>Do</b><div>Draw one closed shape for each neighbourhood. Run its edge along the <b>edge</b> of the street, not the middle of the street. Put a label inside with the ID and the name: <code>N1 INDIRANAGAR</code>.</div></div>
+<div class="row why"><b>Why</b><div>This is the heart of the concept. From these shapes the presentation colours each neighbourhood, shows its name, works out its area and counts what's inside it.</div></div>
+<div class="row chk"><b>Check</b><div>Six shapes, no overlaps, one label inside each. IDs N1 to N6 match the names list from the project lead.</div></div></div>
+<div class="think"><b>Think of it like</b>A plot of land with a fence round it and a name board inside. The fence is the closed shape, the name board is the label.</div>
+
+<div class="step"><span class="n">8</span><h4>Town Square <code>PRES-TS</code></h4>
+<div class="row do"><b>Do</b><div>Draw closed shape(s) around the shared areas (reception, café, town hall, boardroom, wellness) and label them <code>TOWN SQUARE</code>.</div></div>
+<div class="row why"><b>Why</b><div>It's highlighted as the one place every team shares.</div></div>
+<div class="row chk"><b>Check</b><div>It doesn't overlap the neighbourhoods or the core.</div></div></div>
+
+<div class="step"><span class="n">9</span><h4>Rooms you can click <code>PRES-ROOM</code></h4>
+<div class="row do"><b>Do</b><div>Draw a closed shape for every room or space that should open a render, with a keyword label inside. Use only these keywords, spelled exactly:<br><code>WORKSTATIONS</code> <code>CABIN</code> <code>TOUCHDOWN</code> <code>FOCUS</code> <code>BOOTH</code> <code>MEETING</code> <code>HUDDLE</code> <code>PANTRY</code> <code>RECEPTION</code> <code>TOWNHALL</code> <code>BOARDROOM</code> <code>CAFE</code> <code>WELLNESS</code>.<br>Add the seat count after meeting rooms: <code>MEETING 8</code>.</div></div>
+<div class="row why"><b>Why</b><div>When someone clicks this shape in the presentation, it opens the renders for that keyword.</div></div>
+<div class="row chk"><b>Check</b><div>Keywords spelled exactly (<code>CAFE</code> without the accent). For desks, one <code>WORKSTATIONS</code> shape per desk cluster is enough.</div></div></div>
+<div class="note check"><b>Tip</b>Make <code>PRES-ROOM</code> the current layer, type <code>BO</code>, then click once inside each room. One click per room gives you a perfect closed shape.</div>
+
+<div class="step"><span class="n">10</span><h4>Fire exits and escape routes <code>PRES-FIRE-EXIT</code> <code>PRES-FIRE-ROUTE</code></h4>
+<div class="row do"><b>Do</b><div><p><b>First the exits:</b> on <code>PRES-FIRE-EXIT</code>, place a text <code>EXIT A</code>, <code>EXIT B</code>… with its insertion point in the middle of each exit door.</p>
+<p><b>Then the routes:</b> on <code>PRES-FIRE-ROUTE</code>, use <code>PLINE</code> and draw each route the way a person would walk out in a fire. Start clicking at the farthest desk in the zone, click at every turn, and make your last click exactly on the exit door. Don't close it.</p></div></div>
+<div class="row why"><b>Why</b><div>The order you click is the direction the animated arrows flow. Start at the exit by mistake and the arrows run backwards. The length is measured automatically and checked against the fire-code limit.</div></div>
+<div class="row chk"><b>Check</b><div>Straight lines only, no cutting through furniture or walls. The last point sits on the exit door. At least one route per neighbourhood and one for the Town Square.</div></div></div>
+<figure><svg id="j-walk" viewBox="0 0 700 220" aria-label="Drawing an escape route in walking order"></svg>
+<figcaption><b>Fig 2</b>Click in the same order a person would walk out: farthest desk first, exit door last.</figcaption></figure>
+
+<div class="step"><span class="n">11</span><h4>Four reference points <code>PRES-REF</code></h4>
+<div class="row do"><b>Do</b><div>Place four small circles: three at outer corners of the floor plate and one on a column far away from them. Label them <code>REF-1</code> to <code>REF-4</code>. Write down which point is which and give the list to the SketchUp team.</div></div>
+<div class="row why"><b>Why</b><div>The SketchUp team puts red markers at the same four spots. Matching the four pairs lets us lay your CAD plan exactly on top of the 3D view.</div></div>
+<div class="row chk"><b>Check</b><div>The four points are not all on one straight line.</div></div></div>
+<div class="think"><b>Think of it like</b>Pinning a printed map onto a wall map. Once the pins at a few known places match, the whole map lines up.</div>
+
+<div class="step"><span class="n">12</span><h4>Keep furniture as blocks and fill in the block map</h4>
+<div class="row do"><b>Do</b><div>Don't explode furniture blocks. In <code>block-map.xlsx</code>, list each furniture block name and what it is (for example <code>WS-1200x600</code> = workstation). Write "Yes" for things to count and "No" for things like chairs.</div></div>
+<div class="row why"><b>Why</b><div>The presentation counts the blocks inside each neighbourhood to write lists like "72 workstations, 6 focus pods".</div></div>
+<div class="row chk"><b>Check</b><div>Click a desk and press Ctrl+1. Properties should say <i>Block Reference</i>, not <i>Line</i>.</div></div></div>
+
+<div class="step"><span class="n">13</span><h4>Fill in the layer sheet</h4>
+<div class="row do"><b>Do</b><div>In <code>layer-sheet.xlsx</code>, list each of your existing layers and what is on it (walls, glass, doors, columns, furniture, ceiling, text). Mark dimensions, hatches and title blocks as "hide".</div></div>
+<div class="row why"><b>Why</b><div>We restyle the drawing layer by layer, so it looks clean and consistent in the presentation.</div></div>
+<div class="row chk"><b>Check</b><div>Every layer that has lines on it appears in the sheet.</div></div></div>
+
+<div class="step"><span class="n">14</span><h4>Clean up and save as DXF</h4>
+<div class="row do"><b>Do</b><div><ol>
+<li><code>FLATTEN</code> → type <code>ALL</code>, Enter → answer <i>No</i> to "remove hidden lines".</li>
+<li><code>XREF</code> → right-click each reference → <i>Bind</i> → <i>Insert</i>.</li>
+<li><code>UNITS</code> → Insertion scale: <i>Millimeters</i>.</li>
+<li><code>PURGE</code> → <i>Purge All</i>, with <i>Purge nested items</i> ticked.</li>
+<li><code>AUDIT</code> → <i>Yes</i> to fix errors.</li>
+<li><code>OVERKILL</code> → select everything → OK. This removes duplicate lines.</li>
+<li><code>SAVEAS</code> → Save as type: <i>AutoCAD 2018 DXF (*.dxf)</i> → name it <code>acko-layout.dxf</code>.</li>
+<li>Also <code>PLOT</code> a PDF of the same layout (DWG To PDF.pc3) named <code>acko-layout.pdf</code>.</li>
+</ol></div></div>
+<div class="row why"><b>Why</b><div>This makes the file flat, clean, complete and readable outside AutoCAD.</div></div>
+<div class="row chk"><b>Check</b><div>Close and re-open the DXF. The PRES layers and shapes are all still there.</div></div></div>
+
+<!-- ============================ 04 ============================ -->
+<h2><span class="no">04</span>Your SketchUp job, step by step</h2>
+<p class="sec-lede">We don't need the SketchUp file itself. We need a set of pictures of the model, all taken from exactly the same camera, each with different parts switched on.</p>
+<div class="think"><b>Think of it like</b>A photographer with a camera fixed on a tripod, photographing a stage set. Between shots, the crew takes some props away: one photo of only the floor, one with the walls, one with the furniture. Because the tripod never moves, the photos line up perfectly and can be stacked like sheets of tracing paper. That's exactly what we need from SketchUp.</div>
+<figure><svg id="j-tripod" viewBox="0 0 700 200" aria-label="One fixed camera, photos that stack"></svg>
+<figcaption><b>Fig 3</b>One camera that never moves gives pictures that stack perfectly.</figcaption></figure>
+<p>The presentation uses that stacking for two effects. It <b>builds the 3D view up</b> layer by layer, and it <b>pulls the layers apart</b> for the exploded view. If even one picture is a few pixels off, the layers visibly jump, so the rules below are strict about the camera.</p>
+<figure><svg id="j-persp" viewBox="0 0 700 170" aria-label="Perspective versus parallel projection"></svg>
+<figcaption><b>Fig 4</b>Turn on Parallel Projection. In perspective, layers and the CAD plan can never line up exactly.</figcaption></figure>
+
+<div class="step"><span class="n">1</span><h4>Make a working copy</h4>
+<div class="row do"><b>Do</b><div>File → Save As → <code>acko-axo-PRES.skp</code>. Work only in this copy.</div></div>
+<div class="row why"><b>Why</b><div>You'll reorganise groups and tags. The design model stays safe.</div></div>
+<div class="row chk"><b>Check</b><div>The new name shows in the title bar.</div></div></div>
+
+<div class="step"><span class="n">2</span><h4>Organise the model into groups ("folders inside folders")</h4>
+<div class="row do"><b>Do</b><div><p>Make one group for each neighbourhood, one for the Town Square and one for the building shell (slab, columns, core, façade). Inside each neighbourhood and the Town Square, make smaller groups for floor finishes, walls and glass, furniture, and ceiling. To make a group: select the objects → right-click → <i>Make Group</i>. Double-click a group to open it and make groups inside it.</p></div></div>
+<div class="row why"><b>Why</b><div>So we can switch whole neighbourhoods, or all the walls, on and off.</div></div>
+<div class="row chk"><b>Check</b><div>Nothing is left loose inside a neighbourhood group; everything sits in one of its four smaller groups.</div></div></div>
+<pre>Model
+├─ Shell                        <span class="c">tag SHELL</span>
+├─ N1 Indiranagar               <span class="c">tag NB-N1</span>
+│  ├─ Floor finishes            <span class="c">tag FLOOR</span>
+│  ├─ Walls and glass           <span class="c">tag WALLS</span>
+│  ├─ Furniture                 <span class="c">tag FURNITURE</span>
+│  └─ Ceiling                   <span class="c">tag CEILING   (if you have one)</span>
+├─ N2 … N6                      <span class="c">same pattern, tags NB-N2 … NB-N6</span>
+├─ Town Square                  <span class="c">tag TS, same four groups inside</span>
+├─ Streets                      <span class="c">tag STREET    (walkway floor finish, if any)</span>
+└─ Reference markers            <span class="c">tag REF       (step 4)</span></pre>
+
+<div class="step"><span class="n">3</span><h4>Create the tags and give each group its tag</h4>
+<div class="row do"><b>Do</b><div>Open the Tags panel (Window → Default Tray → Tags). Click <b>+</b> to add: <code>SHELL</code> <code>FLOOR</code> <code>WALLS</code> <code>FURNITURE</code> <code>CEILING</code> <code>STREET</code> <code>NB-N1</code> … <code>NB-N6</code> <code>TS</code> <code>REF</code>. Then select a group, open Entity Info, and pick its tag. Big outer groups get the neighbourhood tag; the smaller groups inside get FLOOR, WALLS, FURNITURE or CEILING. Leave loose lines and faces <i>Untagged</i>.</div></div>
+<div class="row why"><b>Why</b><div>SketchUp hides something if its own tag <b>or</b> its outer group's tag is switched off. That lets us show, say, "only the walls" or "only Indiranagar" just by clicking eye icons.</div></div>
+<div class="row chk"><b>Check</b><div>Click the eye next to <code>NB-N1</code>: all of Indiranagar disappears. Click the eye next to <code>WALLS</code>: the walls disappear everywhere.</div></div></div>
+
+<div class="step"><span class="n">4</span><h4>Add the four red reference markers</h4>
+<div class="row do"><b>Do</b><div>Using the CAD team's list, draw a small red disc or cube (about 300 mm) at each of REF-1 to REF-4, at floor level. Paint them pure red. Group them and tag the group <code>REF</code>.</div></div>
+<div class="row why"><b>Why</b><div>These are the "pins" that let us line up the CAD plan with your 3D pictures.</div></div>
+<div class="row chk"><b>Check</b><div>The markers sit exactly on the same corners and column as in the CAD.</div></div></div>
+
+<div class="step"><span class="n">5</span><h4>Set the camera, then don't touch it</h4>
+<div class="row do"><b>Do</b><div><ol><li>Camera → <b>Parallel Projection</b> (it must show a tick).</li>
+<li>Camera → Standard Views → Iso, then use Orbit to reach the angle the design lead approves.</li>
+<li>Open the Scenes panel (Window → Default Tray → Scenes), click <b>+</b>, and rename the scene <code>PRES-AXO</code>.</li></ol>
+<p style="margin-top:4pt">From now on, <b>don't orbit, pan or scroll-zoom</b>.</p></div></div>
+<div class="row why"><b>Why</b><div>Every picture must come from exactly the same camera position.</div></div>
+<div class="row chk"><b>Check</b><div>If you move the camera by accident, click the <code>PRES-AXO</code> tab to snap back. Scrolling the mouse wheel even once moves the camera.</div></div></div>
+
+<div class="step"><span class="n">6</span><h4>Set the look</h4>
+<div class="row do"><b>Do</b><div>In Styles → Edit → Background settings, untick <i>Sky</i> and <i>Ground</i>. Turn fog off (Fog panel: untick <i>Display Fog</i>). Turn shadows off (Shadows panel), except for the hero picture. Use the same style for every picture.</div></div>
+<div class="row why"><b>Why</b><div>A clean, see-through background lets the pictures stack. Shadows change between pictures and would look messy when layered.</div></div>
+<div class="row chk"><b>Check</b><div>The background behind the model is plain white in SketchUp. The export makes it see-through in step 8.</div></div></div>
+
+<div class="step"><span class="n">7</span><h4>Make one scene per picture</h4>
+<div class="row do"><b>Do</b><div>Click the <code>PRES-AXO</code> tab. Switch tags on or off as in the table below, click <b>+</b> to add a scene, and rename it after the picture. Repeat for each picture. In each scene's details, keep <i>Camera Location</i> and <i>Visible Tags</i> ticked.</div></div>
+<div class="row why"><b>Why</b><div>Re-exporting after a design change then takes a few clicks instead of an afternoon.</div></div>
+<div class="row chk"><b>Check</b><div>Clicking between your scene tabs never moves the model on screen; only parts appear and disappear.</div></div></div>
+<p style="color:var(--ink-3); font-size:8.6pt">"Only" means: all the neighbourhood and Town Square tags stay on (except in the zone pictures), plus the one part listed; every other part is off.</p>
+<table>
+<thead><tr><th style="width:27%">Picture (file name)</th><th style="width:44%">What's switched on</th><th>In plain words</th></tr></thead>
+<tbody>
+<tr><td><code>axo-full.png</code></td><td>Everything, shadows on</td><td>The beauty shot</td></tr>
+<tr><td><code>axo-1-shell.png</code></td><td>SHELL only</td><td>The empty building</td></tr>
+<tr><td><code>axo-2-floor.png</code></td><td>FLOOR and STREET only (if you have finishes)</td><td>Just the floor finishes</td></tr>
+<tr><td><code>axo-3-walls.png</code></td><td>WALLS only</td><td>Just the walls and glass</td></tr>
+<tr><td><code>axo-4-furniture.png</code></td><td>FURNITURE only</td><td>Just the furniture</td></tr>
+<tr><td><code>axo-5-ceiling.png</code></td><td>CEILING only (if you have one)</td><td>Just the ceiling</td></tr>
+<tr><td><code>axo-zone-n1.png</code> … <code>n6</code>, <code>axo-zone-ts.png</code></td><td>One zone tag only, with FLOOR, WALLS and FURNITURE on</td><td>One neighbourhood on its own</td></tr>
+<tr><td><code>axo-ref.png</code></td><td>REF only</td><td>Just the four red dots</td></tr>
+</tbody></table>
+
+<div class="step"><span class="n">8</span><h4>Export the pictures</h4>
+<div class="row do"><b>Do</b><div>File → Export → 2D Graphic → choose <b>PNG</b> → click <i>Options</i>: untick <i>Use view size</i>, set width to <b>6000</b>, tick <i>Anti-alias</i>, tick <i>Transparent background</i>. Then click each scene tab in turn, export, and name the file exactly as in the table.</div></div>
+<div class="row why"><b>Why</b><div>6000 px stays sharp even when we zoom into one neighbourhood on a big screen.</div></div>
+<div class="row chk"><b>Check</b><div>Don't open, close or resize panels or the SketchUp window while exporting. The picture's height follows the window's shape, so a resized window gives a different height.</div></div></div>
+
+<div class="step"><span class="n">9</span><h4>Check the pictures</h4>
+<div class="row do"><b>Do</b><div>Check that every picture has exactly the same size in pixels. On Windows: right-click → Properties → Details. On Mac: Get Info → More Info. For a final check, open two pictures as layers in Photoshop and switch the top one on and off: a column should not move at all.</div></div>
+<div class="row why"><b>Why</b><div>Same size and no movement means the stacking will be perfect.</div></div>
+<div class="row chk"><b>Check</b><div>The see-through areas show as a checkerboard in Photoshop.</div></div></div>
+
+<!-- ============================ 05 ============================ -->
+<h2><span class="no">05</span>Renders: light and dark</h2>
+<p class="sec-lede">When someone clicks a room in the presentation, a viewer opens with that room's two renders and a slider in the middle. Drag the slider and the light version blends into the dark one.</p>
+<figure><svg id="j-slider" viewBox="0 0 700 190" aria-label="Light and dark render with a slider"></svg>
+<figcaption><b>Fig 5</b>The viewer wipes between the light and dark render. It only works if both are taken from the same spot.</figcaption></figure>
+<div class="think"><b>Think of it like</b>Before-and-after photos of a renovation. If the photographer stands somewhere else for the "after" shot, the slider jumps instead of blending smoothly.</div>
+<h3>The rules, simply</h3>
+<ol>
+<li><b>Same camera for both versions.</b> Save the view in your render tool (an Enscape view, a SketchUp scene for V-Ray, a D5 view or a Lumion photo). Render the light version and the dark version from that saved view. Change only materials and lighting.</li>
+<li><b>Same size for every render,</b> for example 3000 × 1688 px (16:9) for all of them.</li>
+<li><b>JPG, high quality</b> (85–90), with no text, logos or watermarks on the image.</li>
+<li><b>One pair per type of space is enough.</b> All meeting rooms can share one pair. If one neighbourhood's room looks different, give it its own pair with the ID in front: <code>n1-meeting-light.jpg</code>.</li>
+<li><b>Name the files exactly</b>, in lower case: <code>desk</code>, <code>cabin</code>, <code>touch</code>, <code>focus</code>, <code>booth</code>, <code>meeting</code>, <code>huddle</code>, <code>pantry</code>, <code>reception</code>, <code>townhall</code>, <code>board</code>, <code>cafe</code>, <code>wellness</code>, each followed by <code>-light.jpg</code> and <code>-dark.jpg</code>. For example: <code>huddle-light.jpg</code> and <code>huddle-dark.jpg</code>.</li>
+</ol>
+<p>Until real renders arrive, the presentation shows a simple sample picture for each space. As soon as a correctly named file is added, it replaces the sample.</p>
+
+<!-- ============================ 06 ============================ -->
+<h2><span class="no">06</span>Common mistakes and quick fixes</h2>
+<p class="sec-lede">Almost every problem we see is one of these. Each has a quick fix.</p>
+<table>
+<thead><tr><th style="width:27%">Mistake</th><th style="width:31%">What goes wrong</th><th>Quick fix</th></tr></thead>
+<tbody>
+<tr><td><b>Shape not closed</b> (ends only touch)</td><td>The area can't be coloured or measured</td><td>Select it → Ctrl+1 → set <i>Closed</i> to <i>Yes</i>, or <code>PEDIT</code> → Close</td></tr>
+<tr><td><b>Label outside its shape</b></td><td>The neighbourhood or room has no name</td><td>Move the text so its insertion point sits inside the shape</td></tr>
+<tr><td><b>Layer name typo</b> (<code>PRES_NBHD</code>, <code>Pres-Nbhd</code>)</td><td>The whole layer is ignored</td><td>Rename it exactly: <code>PRES-NBHD</code></td></tr>
+<tr><td><b>Fire route drawn from the exit</b></td><td>Arrows flow away from the exit</td><td>Select the route → <code>REVERSE</code> command</td></tr>
+<tr><td><b>Route stops before the door</b></td><td>Wrong distance; the arrow floats in space</td><td>Drag the last grip onto the door point with object snap on</td></tr>
+<tr><td><b>Furniture exploded into lines</b></td><td>Nothing gets counted</td><td>Re-insert the blocks from the master drawing</td></tr>
+<tr><td><b>Saved as DWG, not DXF</b></td><td>We can't open the file</td><td><code>SAVEAS</code> → AutoCAD 2018 DXF</td></tr>
+<tr><td><b>SketchUp in perspective</b></td><td>Layers and plan don't line up</td><td>Camera → Parallel Projection, update the scenes, re-export all pictures</td></tr>
+<tr><td><b>Camera moved between exports</b></td><td>Pictures don't line up</td><td>Click <code>PRES-AXO</code>, then re-export <b>all</b> pictures</td></tr>
+<tr><td><b>Window or panel resized</b></td><td>Pictures have different heights</td><td>Restore the window, re-export all pictures</td></tr>
+<tr><td><b>White background in the PNG</b></td><td>Pictures can't be stacked</td><td>Tick <i>Transparent background</i>; turn off Sky and Ground</td></tr>
+<tr><td><b>Light and dark renders from slightly different views</b></td><td>The slider jumps instead of blending</td><td>Render both from the same saved view</td></tr>
+<tr><td><b>File names changed</b> (<code>Meeting Light.JPG</code>)</td><td>The file isn't picked up</td><td>Rename exactly: lower case, hyphens, no spaces</td></tr>
+</tbody></table>
+
+<!-- ============================ 07 ============================ -->
+<h2><span class="no">07</span>Questions juniors usually ask</h2>
+<dl class="faq">
+<div><dt>Do the colours and line weights on the PRES layers matter?</dt><dd>No. We restyle everything. Pick bright colours that help you see what you've drawn.</dd></div>
+<div><dt>Can I send a DWG instead of a DXF?</dt><dd>Please don't. DWG is a closed format we can't open. A DXF holds exactly the same drawing.</dd></div>
+<div><dt>My AutoCAD doesn't list "AutoCAD 2018 DXF".</dt><dd>Use AutoCAD 2013 DXF instead. Avoid the very old "R12" option.</dd></div>
+<div><dt>The neighbourhood edges aren't decided yet. What do I draw?</dt><dd>Draw the streets, core, stairs and Town Square only. We'll propose the neighbourhood shapes from what's left and send them back for approval.</dd></div>
+<div><dt>Do I need a shape around every desk?</dt><dd>No. One <code>WORKSTATIONS</code> shape per desk cluster, or one around the whole desk area, is enough. Desks are counted from the blocks.</dd></div>
+<div><dt>How do I know which desk is the "farthest" for a fire route?</dt><dd>Pick the desk that would take longest to walk from to any exit, following the aisles. If you're not sure between two, draw both; the presentation shows the longest. The fire consultant's plan helps too.</dd></div>
+<div><dt>Where does the travel-distance limit come from?</dt><dd>From the fire code (NBC) and the fire consultant. Ask the project lead, and note it in <code>notes.xlsx</code>.</dd></div>
+<div><dt>I moved the SketchUp camera after exporting a few pictures. Now what?</dt><dd>Click the <code>PRES-AXO</code> tab, then re-export <b>all</b> the pictures, not just the remaining ones, so every picture matches.</dd></div>
+<div><dt>The PNG files are huge.</dt><dd>That's expected at 6000 px. Share them through a drive link rather than email.</dd></div>
+<div><dt>Can I just send the SketchUp model instead of pictures?</dt><dd>The pictures are what we need; we can't open SketchUp files outside SketchUp. A 3D export (.dae or .glb) is a nice extra if there's time.</dd></div>
+<div><dt>Who do I ask when I'm stuck?</dt><dd>The project lead. Send a screenshot of what you see. It's usually a quick fix from the table in section 06.</dd></div>
+</dl>
+
+<!-- ============================ 08 ============================ -->
+<h2><span class="no">08</span>Before you send: final check</h2>
+<p class="sec-lede">Tick these off before handing over. The full lists are in sections 2.9 and 3.8 of the handover spec.</p>
+<h3>CAD</h3>
+<ul class="checks">
+<li>File is <code>acko-layout.dxf</code>, saved as AutoCAD 2018 DXF</li>
+<li>Units in millimetres, everything flat</li>
+<li>All PRES layers present, names spelled exactly</li>
+<li>Every shape closed (Ctrl+1 shows <i>Closed: Yes</i>)</li>
+<li>One label inside every neighbourhood, Town Square and room</li>
+<li>Fire routes start at the far desk and end on the exit door</li>
+<li>REF-1 to REF-4 placed, list given to SketchUp team</li>
+<li>Furniture still in blocks; block map and layer sheet filled</li>
+<li>PDF plot of the same layout included</li>
+</ul>
+<h3>SketchUp</h3>
+<ul class="checks">
+<li>Camera → Parallel Projection is ticked</li>
+<li>Scene <code>PRES-AXO</code> saved; camera never moved after</li>
+<li>Groups and tags organised as in step 2</li>
+<li>Red REF markers at the same points as in CAD</li>
+<li>Sky, ground and fog off; shadows only on the hero picture</li>
+<li>All PNGs 6000 px wide, same height, see-through background</li>
+<li>File names exactly as in the step 7 table</li>
+</ul>
+<h3>Renders</h3>
+<ul class="checks">
+<li>Light and dark from the same saved view</li>
+<li>All renders the same size, JPG, no text</li>
+<li>Names like <code>meeting-light.jpg</code>, lower case</li>
+</ul>
+<h3>Where to put it</h3>
+<pre>Acko-Presentation-Inputs/
+├─ 01-cad/        <span class="c">acko-layout.dxf, acko-layout.pdf, layer-sheet.xlsx, block-map.xlsx</span>
+├─ 02-sketchup/   <span class="c">all the axo-*.png pictures</span>
+├─ 03-renders/    <span class="c">all the *-light.jpg and *-dark.jpg renders</span>
+└─ 04-content/    <span class="c">names, notes, photos, brand files (project lead)</span></pre>
+<div class="note check"><b>What happens next</b>Once the files arrive, we send back an "alignment check": one page showing your CAD plan laid exactly on your 3D pictures, with a short list of anything to fix. You'll see your work in place before the final build. Thank you!</div>
+
+<script>
+(function(){
+const C={ink:'#1b1826',ink2:'#4f4a64',ink3:'#8b86a1',rule:'#e1ddec',soft:'#f4f2fa',brand:'#5a33e6',fire:'#e2412f',exit:'#119a62',ok:'#119a62',bad:'#d23a2a',amber:'#e39a12',
+  n:['#e65a36','#cf8d0c','#109a8d','#2a7fd8','#d2468e','#5ca23a']};
+const MONO="font-family:'IBM Plex Mono',Menlo,monospace";
+const DISP="font-family:'Archivo',Arial;font-stretch:110%;font-weight:700";
+const T=(x,y,t,o)=>{o=o||{}; return `<text x="${x}" y="${y}" style="${o.d?DISP:MONO};font-size:${o.s||8}px;fill:${o.c||C.ink2};${o.d?'':`font-weight:${o.w||400};`}letter-spacing:${o.ls||0}px" text-anchor="${o.a||'start'}">${t}</text>`;};
+const R=(x,y,w,h,o)=>{o=o||{}; return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.rx||0}" fill="${o.f||'none'}" stroke="${o.st||'none'}" stroke-width="${o.sw||1}"${o.da?` stroke-dasharray="${o.da}"`:''}${o.fo!=null?` fill-opacity="${o.fo}"`:''}/>`;};
+const P=(pts,o)=>{o=o||{}; return `<polygon points="${pts.map(p=>p.map(v=>(+v).toFixed(1)).join(',')).join(' ')}" fill="${o.f||'none'}" stroke="${o.st||'none'}" stroke-width="${o.sw||1}"${o.fo!=null?` fill-opacity="${o.fo}"`:''}${o.da?` stroke-dasharray="${o.da}"`:''} stroke-linejoin="round"/>`;};
+const PL=(pts,o)=>{o=o||{}; return `<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${o.st||C.ink}" stroke-width="${o.sw||1}"${o.da?` stroke-dasharray="${o.da}"`:''}${o.me?` marker-end="url(#${o.me})"`:''} stroke-linejoin="round" stroke-linecap="round"/>`;};
+const Cc=(x,y,r,o)=>{o=o||{}; return `<circle cx="${x}" cy="${y}" r="${r}" fill="${o.f||'none'}" stroke="${o.st||'none'}" stroke-width="${o.sw||1}"${o.fo!=null?` fill-opacity="${o.fo}"`:''}/>`;};
+const defs=`<defs>
+ <marker id="aF" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${C.fire}"/></marker>
+ <marker id="aK" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${C.ink3}"/></marker>
+ <linearGradient id="lightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f2ea"/><stop offset="1" stop-color="#e3d2b4"/></linearGradient>
+ <linearGradient id="darkG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1a22"/><stop offset="1" stop-color="#2c241d"/></linearGradient>
+ <radialGradient id="glow"><stop offset="0" stop-color="#ffd59a" stop-opacity=".9"/><stop offset="1" stop-color="#ffd59a" stop-opacity="0"/></radialGradient>
+</defs>`;
+const tick=(x,y,ok)=>ok?`<circle cx="${x}" cy="${y}" r="7.5" fill="${C.ok}"/><path d="M${x-3.6} ${y}l2.6 2.8 4.8-5.2" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>`
+  :`<circle cx="${x}" cy="${y}" r="7.5" fill="${C.bad}"/><path d="M${x-3.2} ${y-3.2}l6.4 6.4M${x+3.2} ${y-3.2}l-6.4 6.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/>`;
+const person=(x,y,c)=>Cc(x,y-11,4,{f:c})+`<path d="M${x} ${y-6}v9M${x-5} ${y-2}h10M${x} ${y+3}l-4 7M${x} ${y+3}l4 7" stroke="${c}" stroke-width="2" stroke-linecap="round"/>`;
+
+/* flow: you prepare → we build → client sees */
+(function(){
+  let g=defs;
+  const card=(x,title,lines,icon,dark)=>{ let o=R(x,14,196,142,{f:dark?C.ink:C.soft,rx:12}); o+=icon(x); o+=`<text x="${x+18}" y="100" style="${DISP};font-size:15px;fill:${dark?'#fff':C.ink}">${title}</text>`; lines.forEach((l,i)=>o+=T(x+18,118+i*13,l,{s:8.2,c:dark?'#d9d4ea':C.ink2})); return o; };
+  const icPrep=x=>R(x+18,30,30,38,{f:'#fff',st:C.ink3,rx:3})+`<path d="M${x+24} ${42}h18M${x+24} 50h18M${x+24} 58h12" stroke="${C.ink3}" stroke-width="1.2"/>`+P([[x+62,40],[x+80,32],[x+98,40],[x+98,62],[x+80,70],[x+62,62]],{f:'#fff',st:C.ink3})+`<path d="M${x+62} 40l18 8 18-8M${x+80} 48v22" stroke="${C.ink3}" stroke-width="1.2" fill="none"/>`+R(x+112,32,38,32,{f:'#fff',st:C.ink3,rx:3})+P([[x+116,60],[x+128,46],[x+136,54],[x+142,48],[x+148,60]],{f:C.n[2],fo:.5});
+  const icBuild=x=>R(x+18,30,62,42,{f:'#fff',st:C.brand,rx:6})+T(x+49,57,'&lt;/&gt;',{s:14,c:C.brand,a:'middle',w:600})+Cc(x+108,51,15,{st:C.brand,sw:3})+Cc(x+108,51,5,{f:C.brand});
+  const icSee=x=>R(x+18,28,96,56,{f:'#2b2740',st:'#5b5488',rx:5})+P([[x+58,42],[x+58,70],[x+80,56]],{f:'#b9a8ff'})+`<path d="M${x+66} 84v8M${x+50} 92h32" stroke="#5b5488" stroke-width="2"/>`;
+  g+=card(6,'You prepare',['CAD: labelled shapes, DXF','SketchUp: fixed-camera pictures','Renders: light + dark pairs'],icPrep);
+  g+=`<path d="M206 85h36" stroke="${C.ink3}" stroke-width="1.6" marker-end="url(#aK)"/>`;
+  g+=card(250,'We build',['The computer reads your files','and builds every view and','number automatically'],icBuild);
+  g+=`<path d="M450 85h36" stroke="${C.ink3}" stroke-width="1.6" marker-end="url(#aK)"/>`;
+  g+=card(494,'The client sees',['An animated, clickable story','of the office, presented live','or browsed on their own'],icSee,true);
+  document.getElementById('j-flow').innerHTML=g;
+})();
+
+/* fence: closed vs gap */
+(function(){
+  let g=defs;
+  const shape=(dx)=>[[dx+40,30],[dx+220,24],[dx+260,74],[dx+226,120],[dx+60,124],[dx+28,82]];
+  g+=R(4,4,336,152,{f:'#fff',st:C.rule,rx:9})+R(360,4,336,152,{f:'#fff',st:C.rule,rx:9});
+  const A=shape(20); g+=P(A,{f:C.n[0],fo:.22,st:C.n[0],sw:2.2}); g+=R(102,62,112,22,{f:'#fff',st:C.n[0],rx:4})+T(158,77,'N1 INDIRANAGAR',{s:8,c:C.n[0],a:'middle',w:600});
+  g+=T(150,102,'area: 4,450 sq ft',{s:7.5,c:C.ink2,a:'middle'});
+  g+=tick(24,140,true)+T(38,143,'Closed fence, name board inside',{s:8,c:C.ok,w:600});
+  const B=shape(376);
+  g+=`<path d="M${B[1][0]} ${B[1][1]}L${B[2][0]} ${B[2][1]}L${B[3][0]} ${B[3][1]}L${B[4][0]} ${B[4][1]}L${B[5][0]} ${B[5][1]}L${B[0][0]} ${B[0][1]}L${B[0][0]+150} ${B[0][1]-2.5}" fill="none" stroke="${C.n[0]}" stroke-width="2.2" stroke-linecap="round"/>`;
+  g+=`<path d="M${B[0][0]+156} 28 C 610 0, 680 6, 668 40 C 660 60, 620 40, 600 52 C 580 66, 560 40, ${B[0][0]+160} 34Z" fill="${C.n[0]}" fill-opacity=".18"/>`;
+  g+=Cc(B[0][0]+170,28,12,{st:C.bad,sw:1.2})+T(B[0][0]+170,12,'gap',{s:7.5,c:C.bad,a:'middle',w:600});
+  g+=R(458,62,112,22,{f:'#fff',st:C.n[0],rx:4})+T(514,77,'N1 INDIRANAGAR',{s:8,c:C.n[0],a:'middle',w:600});
+  g+=T(514,102,'area: ?',{s:7.5,c:C.bad,a:'middle'});
+  g+=tick(380,140,false)+T(394,143,'Gap in the fence: colour leaks, area unknown',{s:8,c:C.bad,w:600});
+  document.getElementById('j-fence').innerHTML=g;
+})();
+
+/* walking route */
+(function(){
+  let g=defs;
+  g+=R(4,4,692,212,{f:'#fff',st:C.rule,rx:9});
+  g+=R(24,24,470,140,{f:C.n[0],fo:.06,st:C.n[0],sw:1.4})+T(486,40,'N1 neighbourhood',{s:8,c:C.n[0],a:'end',w:600});
+  for(let r=0;r<3;r++) for(let c=0;c<3;c++) g+=R(70+c*130,46+r*36,104,14,{f:'#f1eff7',st:'#cfc9e2',sw:.7});
+  g+=R(24,164,600,30,{f:'#ebe7f6'})+T(330,183,'MAIN STREET',{s:7.5,c:C.ink3,a:'middle',ls:2.5});
+  g+=R(510,84,70,80,{f:'#fff',st:C.exit,sw:1.6})+T(545,128,'STAIR A',{s:8,c:C.exit,a:'middle',w:600});
+  g+=R(530,160,30,6,{f:C.exit})+T(545,76,'EXIT A',{s:8,c:C.exit,a:'middle',w:600});
+  const pts=[[48,40],[48,178],[545,178],[545,164]];
+  g+=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${C.fire}" stroke-width="2.6" stroke-dasharray="9 5" marker-end="url(#aF)" stroke-linejoin="round"/>`;
+  g+=person(64,50,C.ink);
+  pts.forEach((p,i)=>{ g+=Cc(p[0],p[1],8,{f:'#fff',st:C.fire,sw:1.4})+T(p[0],p[1]+3,String(i+1),{s:8.5,c:C.fire,a:'middle',w:700}); });
+  g+=T(82,30,'Click 1 · the farthest desk',{s:8,c:C.fire,w:600});
+  g+=T(62,206,'Click 2 · at the turn',{s:8,c:C.fire,w:600});
+  g+=T(586,206,'Click 3 · at the turn',{s:8,c:C.fire,w:600,a:'end'});
+  g+=T(590,150,'Click 4 · on the door',{s:8,c:C.fire,w:600});
+  g+=T(590,162,'then press Enter',{s:7.5,c:C.ink3});
+  g+=T(590,182,'(don’t close it)',{s:7.5,c:C.ink3});
+  document.getElementById('j-walk').innerHTML=g;
+})();
+
+/* tripod and stacked pictures */
+(function(){
+  let g=defs;
+  g+=R(4,4,692,192,{f:'#fff',st:C.rule,rx:9});
+  // tripod + camera
+  g+=`<path d="M92 112L66 176M92 112L118 176M92 112V176" stroke="${C.ink2}" stroke-width="2.4" stroke-linecap="round"/>`;
+  g+=R(64,84,58,32,{f:C.ink,rx:5})+Cc(122,100,11,{f:C.ink2,st:C.ink,sw:2})+R(74,78,18,7,{f:C.ink,rx:2});
+  g+=T(92,190,'fixed on a tripod',{s:7.5,c:C.ink3,a:'middle'});
+  g+=`<path d="M134 96L230 56M134 104L230 156" stroke="${C.ink3}" stroke-width="1" stroke-dasharray="4 4"/>`;
+  // stacked sheets
+  const sheet=(y,lab,c,inner)=>{ const pts=[[250,y+30],[390,y],[520,y+28],[380,y+58]]; let o=`<g transform="translate(-80 0)">`; o=P(pts,{f:'#fff',fo:.92,st:c,sw:1.4}); o+=`<g transform="translate(-80 0)">${inner(y)}</g>`; o+=T(532,y+32,lab,{s:8,c:C.ink,w:600}); return o; };
+  g+=sheet(118,'Picture 1 · empty building',C.ink3,y=>P([[350,y+30],[470,y+4],[580,y+28],[460,y+54]],{f:'#e9e5f4'})+`<path d="M372 ${y+33}v-8M420 ${y+22}v-8M470 ${y+11}v-8M520 ${y+21}v-8M556 ${y+30}v-8" stroke="${C.ink2}" stroke-width="3"/>`);
+  g+=sheet(72,'Picture 2 · walls',C.ink2,y=>`<path d="M360 ${y+31}l60 -13M430 ${y+16}l40 -9M470 ${y+20}l60 13M420 ${y+40}l60 13" stroke="${C.ink2}" stroke-width="3" stroke-linecap="round"/>`);
+  g+=sheet(26,'Picture 3 · furniture',C.n[0],y=>{ let o=''; for(let i=0;i<5;i++) o+=R(380+i*36,y+18+(i%2)*10,22,8,{f:C.n[0],fo:.55}); return o; });
+  g+=T(385,190,'same spot · they stack perfectly',{s:7.5,c:C.ink3,a:'middle'});
+  document.getElementById('j-tripod').innerHTML=g;
+})();
+
+/* perspective vs parallel */
+(function(){
+  let g=defs;
+  g+=R(4,4,336,162,{f:'#fff',st:C.rule,rx:9})+R(360,4,336,162,{f:'#fff',st:C.rule,rx:9});
+  // perspective: two-point
+  const VL=[24,70], VR=[318,70], top=[170,46], bot=[170,120];
+  const along=(a,b,t)=>[a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t];
+  const lt=along(top,VL,.38), lb=along(bot,VL,.38), rt=along(top,VR,.38), rb=along(bot,VR,.38);
+  g+=`<path d="M${top[0]} ${top[1]}L${VL[0]} ${VL[1]}M${bot[0]} ${bot[1]}L${VL[0]} ${VL[1]}M${top[0]} ${top[1]}L${VR[0]} ${VR[1]}M${bot[0]} ${bot[1]}L${VR[0]} ${VR[1]}" stroke="${C.bad}" stroke-width=".7" stroke-dasharray="3 3"/>`;
+  g+=P([top,bot,lb,lt],{f:'#ebe7f6',st:C.ink,sw:1.4})+P([top,bot,rb,rt],{f:'#ddd8ec',st:C.ink,sw:1.4});
+  g+=Cc(VL[0],VL[1],2.5,{f:C.bad})+Cc(VR[0],VR[1],2.5,{f:C.bad});
+  g+=tick(24,148,false)+T(38,151,'Perspective: lines meet, far things shrink',{s:8,c:C.bad,w:600});
+  // parallel: iso
+  const O=[528,92], ex=[52,-26], ey=[-52,-26], ez=[0,-58];
+  const pt=(a,b,c)=>[O[0]+a*ex[0]+b*ey[0]+c*ez[0], O[1]+a*ex[1]+b*ey[1]+c*ez[1]+30];
+  g+=P([pt(0,0,0),pt(1,0,0),pt(1,0,1),pt(0,0,1)],{f:'#ddd8ec',st:C.ink,sw:1.4})+P([pt(0,0,0),pt(0,1,0),pt(0,1,1),pt(0,0,1)],{f:'#ebe7f6',st:C.ink,sw:1.4})+P([pt(0,0,1),pt(1,0,1),pt(1,1,1),pt(0,1,1)],{f:'#f6f4fb',st:C.ink,sw:1.4});
+  g+=`<path d="M${pt(1,0,0)[0]+8} ${pt(1,0,0)[1]}l30 -15M${pt(0,1,0)[0]-8} ${pt(0,1,0)[1]}l-30 -15" stroke="${C.ok}" stroke-width=".8" stroke-dasharray="3 3"/>`;
+  g+=tick(380,148,true)+T(394,151,'Parallel: lines stay parallel  ← use this',{s:8,c:C.ok,w:600});
+  document.getElementById('j-persp').innerHTML=g;
+})();
+
+/* light/dark slider */
+(function(){
+  let g=defs;
+  const x0=150, y0=8, w=400, h=160, mid=x0+w*.52;
+  const room=(fill,wall,floorFill,lamp)=>{ let o=R(x0,y0,w,h,{f:fill});
+    o+=P([[x0,y0],[x0+w,y0],[x0+w*.66,y0+h*.3],[x0+w*.34,y0+h*.3]],{f:wall,fo:.6});
+    o+=P([[x0,y0+h],[x0+w,y0+h],[x0+w*.66,y0+h*.68],[x0+w*.34,y0+h*.68]],{f:floorFill});
+    o+=R(x0+w*.34,y0+h*.3,w*.32,h*.38,{f:wall});
+    o+=R(x0+w*.4,y0+h*.6,w*.2,h*.06,{f:lamp?'#3d3731':'#f7f4ee'})+R(x0+w*.43,y0+h*.66,w*.02,h*.14,{f:lamp?'#2a2520':'#d6cfc4'})+R(x0+w*.55,y0+h*.66,w*.02,h*.14,{f:lamp?'#2a2520':'#d6cfc4'});
+    return o; };
+  g+=`<clipPath id="cl"><rect x="${x0}" y="${y0}" width="${mid-x0}" height="${h}"/></clipPath><clipPath id="cr"><rect x="${mid}" y="${y0}" width="${x0+w-mid}" height="${h}"/></clipPath>`;
+  g+=`<g clip-path="url(#cl)">${room('url(#lightG)','#ffffff','#d9c19a',false)}${R(x0+w*.2,y0+4,6,40,{f:'#fff'})}</g>`;
+  g+=`<g clip-path="url(#cr)">${room('url(#darkG)','#2a2731','#1f1915',true)}${Cc(x0+w*.5,y0+h*.4,48,{f:'url(#glow)'})}${Cc(x0+w*.75,y0+h*.35,30,{f:'url(#glow)'})}</g>`;
+  g+=R(x0,y0,w,h,{st:C.rule,rx:6});
+  g+=`<path d="M${mid} ${y0}V${y0+h}" stroke="#fff" stroke-width="2.4"/>`+Cc(mid,y0+h/2,15,{f:'#fff',st:C.ink3})+`<path d="M${mid-5} ${y0+h/2-5}l-5 5 5 5M${mid+5} ${y0+h/2-5}l5 5-5 5" stroke="${C.ink}" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  g+=R(x0+10,y0+10,44,16,{f:'#000',fo:.45,rx:8})+T(x0+32,y0+21,'LIGHT',{s:7.5,c:'#fff',a:'middle',ls:1.2});
+  g+=R(x0+w-54,y0+10,44,16,{f:'#000',fo:.45,rx:8})+T(x0+w-32,y0+21,'DARK',{s:7.5,c:'#fff',a:'middle',ls:1.2});
+  g+=T(mid,y0+h+16,'drag to blend',{s:7.5,c:C.ink3,a:'middle'});
+  g+=`<path d="M${mid-70} ${y0+h+12}h-30M${mid+70} ${y0+h+12}h30" stroke="${C.ink3}" stroke-width="1" marker-end="url(#aK)"/>`;
+  document.getElementById('j-slider').innerHTML=g;
+})();
+})();
+</script>
+</body>
+</html>
