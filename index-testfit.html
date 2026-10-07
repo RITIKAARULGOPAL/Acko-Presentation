@@ -897,6 +897,28 @@ kbd{font-family:var(--mono); font-size:.8em; border:1px solid var(--rule); borde
 .obs.dd .ob-t{font-weight:500; font-size:13.5px; line-height:1.35}
 .sn + .sn{margin-left:2px}
 @media (max-width:860px){ :root{--mf:2.1} #sc-climate{--mf:1.6} .m-attr{font-size:9px; max-width:90%} #sitesvg,#climsvg{left:6px; top:6px; width:calc(100% - 12px); height:calc(100% - 12px)} }
+
+/* render viewer: full-bleed image, controls in frosted glass on top of it */
+.rv{padding:0; gap:0; background:#000; backdrop-filter:none}
+.rv-foot{display:none}
+.rv-main{position:absolute; inset:0; display:block}
+.rv-frame{width:100%!important; height:100%!important; border-radius:0; box-shadow:none; background:#000}
+.rv-head{position:absolute; z-index:3; top:clamp(10px,1.6vw,22px); left:clamp(10px,1.6vw,22px); right:clamp(10px,1.6vw,22px); align-items:flex-start; pointer-events:none}
+.rv-head > *{pointer-events:auto}
+.rv-head > div:first-child,.rv-head .seg,.rv-x,.rv-nav,.rv-tag{background:rgba(18,16,28,.26); border:1px solid rgba(255,255,255,.24); -webkit-backdrop-filter:blur(16px) saturate(150%); backdrop-filter:blur(16px) saturate(150%); box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.rv-head > div:first-child{padding:12px 18px 13px; border-radius:16px; width:fit-content; max-width:min(560px,70vw)}
+.rv-head .eyebrow{color:rgba(255,255,255,.82)}
+.rv-head h3{color:#fff}
+.rv-head h3 small,.rv-meta{color:rgba(255,255,255,.75)}
+.rv-head .seg button{color:rgba(255,255,255,.85)}
+.rv-head .seg button[aria-checked="true"]{background:rgba(255,255,255,.9); color:#17141f}
+.rv-x{color:#fff}
+.rv-x:hover{background:rgba(255,255,255,.22); color:#fff; border-color:rgba(255,255,255,.4)}
+.rv-nav{color:#fff; width:50px; height:50px}
+.rv-nav:hover{background:rgba(255,255,255,.22)}
+.rv-tag{top:auto; bottom:18px; color:#fff}
+.rv-tag.l{left:18px} .rv-tag.d{right:18px}
+@media (max-width:860px){ .rv-head > div:first-child{max-width:100%} }
 </style>
 </head>
 <body class="full">
@@ -1805,15 +1827,6 @@ const STEPS=[
     <ul class="legend"><li><i class="lg lg-sunp"></i>Direct sun on the floor: the stronger the colour, the more heat and glare</li></ul>
     <p class="note">${SUN.model}.</p>`,
     wire:wireSun},
-  {id:'wind',ch:4,sub:'Wind and rain',scene:'climate',enter:()=>setClimate('wind'),cap:s=>{ const ws=SITE.wind.seasons, m=ws.find(x=>x.id==='monsoon'), d=SITE.wind.dirs, C=SITE.climate, hot=C.months.reduce((b,x,i)=>x.tmax>C.months[b].tmax?i:b,0), mn=['January','February','March','April','May','June','July','August','September','October','November','December'];
-    return `${eyebrow(s)}<h2>Monsoon from the south-west</h2>
-    <p>From June to September the wind blows steadily from the south-west and west (${Math.round(m.pct[d.indexOf('SW')])}% and ${Math.round(m.pct[d.indexOf('W')])}% of the time), straight at the terraces and the SW end. In winter it swings round to the ${ws.find(x=>x.id==='winter').top.map(x=>({E:'east',NE:'north-east',ENE:'east-north-east'})[x]||x).join(' and ')}.</p>
-    <div class="tog" role="group" aria-label="Season for the wind rose">${ws.map(x=>`<button type="button" data-wind="${x.id}" aria-pressed="${x.id===CLIM.wind}">${x.label}</button>`).join('')}</div>
-    ${climateSVG()}
-    <p>About ${fmt(C.rainYear)} mm of rain falls in a year, most of it from May to October. ${mn[hot]} is the hottest month, at ${C.months[hot].tmax.toFixed(0)}°C on an average afternoon.</p>
-    <p class="take">The south-facing terraces take the monsoon wind and rain, so they need covered edges and good drainage. In the dry months the same south-west breeze can cool them.</p>
-    <p class="note">Wind: ${SITE.wind.station}, ${SITE.wind.years.join('–')}, ${SITE.wind.source}. Rain and temperature: ${C.station}, ${C.years.join('–')} averages.</p>`; },
-    wire:wireWind},
   {id:'light',ch:5,scene:'plan',flags:'shell light north',wide:true,cap:s=>`${eyebrow(s)}<h2>Most of the floor is far from glass</h2>
 
     <p>Daylight reaches about 6 m in from a façade. On a ${RF.depth.toFixed(0)} m deep floor with cores along one side, that band is precious, so desks were pulled towards it and rooms pushed into the middle.</p>

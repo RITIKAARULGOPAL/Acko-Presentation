@@ -122,7 +122,7 @@ Everything is in `index.html`:
 
 ## Test fit
 
-`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 28 steps:
+`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 27 steps:
 
 1. **The idea**: the city analogy and the loop (schematic)
 2. **The site**: a map of Regalium on Hosur Road, with landmarks, walking distances and the metro. It then zooms to the block and turns until the floor lines up with the drawing. The floor sits 11.5° east of true north (see below)
@@ -130,7 +130,6 @@ Everything is in `index.html`:
 4. **Sun and climate**:
    - the sun path over the floor, with hours of sun on each façade
    - **morning to evening on the layout**, an animated day (21 Mar/Sep, 21 Jun, 21 Dec) showing the sun patches on the furniture plan, with what it means for each neighbourhood
-   - the wind rose by season, plus monthly rain and temperature
 5. **Daylight**: the 6 m band along the façade, including the glass facing the terraces (56% of workstations sit in it)
 6. **Fire and egress**: five stairs with 15 / 30 / 45 m rings, then the eight egress routes from the drawing, measured (43 to 61 m)
 7. **Carving the floor**: Neighbourhood 01 to 06 plus the shared spaces (café and dining, two receptions, lobby)

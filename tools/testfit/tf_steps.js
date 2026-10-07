@@ -64,15 +64,6 @@ const STEPS=[
     <ul class="legend"><li><i class="lg lg-sunp"></i>Direct sun on the floor: the stronger the colour, the more heat and glare</li></ul>
     <p class="note">${SUN.model}.</p>`,
     wire:wireSun},
-  {id:'wind',ch:4,sub:'Wind and rain',scene:'climate',enter:()=>setClimate('wind'),cap:s=>{ const ws=SITE.wind.seasons, m=ws.find(x=>x.id==='monsoon'), d=SITE.wind.dirs, C=SITE.climate, hot=C.months.reduce((b,x,i)=>x.tmax>C.months[b].tmax?i:b,0), mn=['January','February','March','April','May','June','July','August','September','October','November','December'];
-    return `${eyebrow(s)}<h2>Monsoon from the south-west</h2>
-    <p>From June to September the wind blows steadily from the south-west and west (${Math.round(m.pct[d.indexOf('SW')])}% and ${Math.round(m.pct[d.indexOf('W')])}% of the time), straight at the terraces and the SW end. In winter it swings round to the ${ws.find(x=>x.id==='winter').top.map(x=>({E:'east',NE:'north-east',ENE:'east-north-east'})[x]||x).join(' and ')}.</p>
-    <div class="tog" role="group" aria-label="Season for the wind rose">${ws.map(x=>`<button type="button" data-wind="${x.id}" aria-pressed="${x.id===CLIM.wind}">${x.label}</button>`).join('')}</div>
-    ${climateSVG()}
-    <p>About ${fmt(C.rainYear)} mm of rain falls in a year, most of it from May to October. ${mn[hot]} is the hottest month, at ${C.months[hot].tmax.toFixed(0)}°C on an average afternoon.</p>
-    <p class="take">The south-facing terraces take the monsoon wind and rain, so they need covered edges and good drainage. In the dry months the same south-west breeze can cool them.</p>
-    <p class="note">Wind: ${SITE.wind.station}, ${SITE.wind.years.join('–')}, ${SITE.wind.source}. Rain and temperature: ${C.station}, ${C.years.join('–')} averages.</p>`; },
-    wire:wireWind},
   {id:'light',ch:5,scene:'plan',flags:'shell light north',wide:true,cap:s=>`${eyebrow(s)}<h2>Most of the floor is far from glass</h2>
 
     <p>Daylight reaches about 6 m in from a façade. On a ${RF.depth.toFixed(0)} m deep floor with cores along one side, that band is precious, so desks were pulled towards it and rooms pushed into the middle.</p>

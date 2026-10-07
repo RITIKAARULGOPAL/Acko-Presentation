@@ -228,3 +228,25 @@
 .obs.dd .ob-t{font-weight:500; font-size:13.5px; line-height:1.35}
 .sn + .sn{margin-left:2px}
 @media (max-width:860px){ :root{--mf:2.1} #sc-climate{--mf:1.6} .m-attr{font-size:9px; max-width:90%} #sitesvg,#climsvg{left:6px; top:6px; width:calc(100% - 12px); height:calc(100% - 12px)} }
+
+/* render viewer: full-bleed image, controls in frosted glass on top of it */
+.rv{padding:0; gap:0; background:#000; backdrop-filter:none}
+.rv-foot{display:none}
+.rv-main{position:absolute; inset:0; display:block}
+.rv-frame{width:100%!important; height:100%!important; border-radius:0; box-shadow:none; background:#000}
+.rv-head{position:absolute; z-index:3; top:clamp(10px,1.6vw,22px); left:clamp(10px,1.6vw,22px); right:clamp(10px,1.6vw,22px); align-items:flex-start; pointer-events:none}
+.rv-head > *{pointer-events:auto}
+.rv-head > div:first-child,.rv-head .seg,.rv-x,.rv-nav,.rv-tag{background:rgba(18,16,28,.26); border:1px solid rgba(255,255,255,.24); -webkit-backdrop-filter:blur(16px) saturate(150%); backdrop-filter:blur(16px) saturate(150%); box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.rv-head > div:first-child{padding:12px 18px 13px; border-radius:16px; width:fit-content; max-width:min(560px,70vw)}
+.rv-head .eyebrow{color:rgba(255,255,255,.82)}
+.rv-head h3{color:#fff}
+.rv-head h3 small,.rv-meta{color:rgba(255,255,255,.75)}
+.rv-head .seg button{color:rgba(255,255,255,.85)}
+.rv-head .seg button[aria-checked="true"]{background:rgba(255,255,255,.9); color:#17141f}
+.rv-x{color:#fff}
+.rv-x:hover{background:rgba(255,255,255,.22); color:#fff; border-color:rgba(255,255,255,.4)}
+.rv-nav{color:#fff; width:50px; height:50px}
+.rv-nav:hover{background:rgba(255,255,255,.22)}
+.rv-tag{top:auto; bottom:18px; color:#fff}
+.rv-tag.l{left:18px} .rv-tag.d{right:18px}
+@media (max-width:860px){ .rv-head > div:first-child{max-width:100%} }
