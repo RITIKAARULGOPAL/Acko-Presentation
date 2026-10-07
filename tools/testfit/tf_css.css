@@ -72,3 +72,8 @@
 .lbl-shell{paint-order:stroke; stroke:var(--slab); stroke-width:12px; stroke-linejoin:round}
 @media (max-width:860px){ .ol.sm{display:none} }
 @media (min-width:861px){ #sc-cover .cover-bg{bottom:3%; width:min(94%,1500px)} #sc-cover .cover{margin-top:-14vh} }
+.terrace{fill:var(--leaf); fill-opacity:.1; stroke:var(--line-2); stroke-width:2.4; stroke-dasharray:14 10}
+.am.tf .am-nb span{white-space:normal; max-width:none}
+.ol-n{font-size:clamp(11px,.9vw,15px)}
+.ov-n{white-space:nowrap; font-size:clamp(15px,1.25vw,20px)}
+.ov-id{white-space:nowrap}

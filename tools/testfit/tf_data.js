@@ -7,19 +7,19 @@
 const RF=/*REALFIT*/null;
 const PROJECT={ floor:'Test fit 02', site:'Bengaluru', source:'ACKO_Testfit_02_5.10.26.dxf' };
 const NBS=[
-  {id:'N1',name:'Indiranagar', team:'Engineering',          c:'--n1',pos:'West end, by Stair 1'},
-  {id:'N2',name:'Koramangala', team:'Product & Design',     c:'--n2',pos:'West-centre'},
-  {id:'N3',name:'Jayanagar',   team:'Data & Analytics',     c:'--n3',pos:'Centre, by the atrium'},
-  {id:'N4',name:'Malleshwaram',team:'Claims',               c:'--n4',pos:'East-centre, by Stair 4'},
-  {id:'N5',name:'Basavanagudi',team:'Customer Experience',  c:'--n5',pos:'East, around Stair 5'},
-  {id:'N6',name:'Whitefield',  team:'Sales & Partnerships', c:'--n6',pos:'East end'},
+  {id:'N01',name:'Neighbourhood 01',team:'Engineering',          c:'--n1',pos:'West end, by Stair 1'},
+  {id:'N02',name:'Neighbourhood 02',team:'Product & Design',     c:'--n2',pos:'West-centre'},
+  {id:'N03',name:'Neighbourhood 03',team:'Data & Analytics',     c:'--n3',pos:'Centre, by the lifts'},
+  {id:'N04',name:'Neighbourhood 04',team:'Claims',               c:'--n4',pos:'East-centre, by Stair 4'},
+  {id:'N05',name:'Neighbourhood 05',team:'Customer Experience',  c:'--n5',pos:'East, around Stair 5'},
+  {id:'N06',name:'Neighbourhood 06',team:'Sales & Partnerships', c:'--n6',pos:'East end'},
 ];
-/* shared areas that together make the Town Square */
+/* the shared spaces everyone uses */
 const SHARED=[
   {id:'TW',name:'Café and dining',            short:'Café',       sub:'West, beside Stair 1 and Stair 2'},
-  {id:'R1',name:'Reception and visitor hub',  short:'Reception',  sub:'West reception, over the west atrium'},
-  {id:'TC',name:'Lobby and atrium',           short:'Lobby',      sub:'Centre, around the atrium cut-out'},
-  {id:'R2',name:'Reception and waiting lounge',short:'Reception', sub:'East reception, over the east atrium'},
+  {id:'R1',name:'Reception and visitor hub',  short:'Reception',  sub:'West reception, beside the west terrace'},
+  {id:'TC',name:'Lobby',                      short:'Lobby',      sub:'Centre, by the lifts'},
+  {id:'R2',name:'Reception and waiting lounge',short:'Reception', sub:'East reception, beside the east terrace'},
 ];
 
 /* =====================================================================
@@ -34,14 +34,15 @@ const PADX=150, PADY=170;
 const VBX=Math.floor(PB.x0-PADX), VBY=Math.floor(PB.y0-PADY), VBW=Math.ceil(PB.x1-PB.x0+2*PADX), VBH=Math.ceil(PB.y1-PB.y0+2*PADY);
 const VB=`${VBX} ${VBY} ${VBW} ${VBH}`;
 const PW=1600, PH=Math.round(PW*VBH/VBW), PS=PW/VBW;   // plan box in px, px per unit
-const AREA_IDS=['N1','N2','N3','N4','N5','N6','R1','R2','TW','TC'];
-const isNB=a=>/^N\d$/.test(a), isTS=a=>a==='TW'||a==='TC'||a==='R1'||a==='R2';
-const ctxOf=a=>isNB(a)?a:isTS(a)?'TS':null;   // neighbourhood id, 'TS' for the Town Square, null elsewhere
+const AREA_IDS=['N01','N02','N03','N04','N05','N06','R1','R2','TW','TC'];
+const isNB=a=>/^N\d\d$/.test(a), isTS=a=>a==='TW'||a==='TC'||a==='R1'||a==='R2';
+const ctxOf=a=>isNB(a)?a:isTS(a)?'TS':null;   // neighbourhood id, 'TS' for the shared spaces, null elsewhere
 const PD=pts=>'M'+pts.map(p=>p[0]+' '+p[1]).join('L')+'Z';
 const centroid=pts=>{ let a=0,cx=0,cy=0; pts.forEach((p,i)=>{ const q=pts[(i+1)%pts.length], f=p[0]*q[1]-q[0]*p[1]; a+=f; cx+=(p[0]+q[0])*f; cy+=(p[1]+q[1])*f; }); a/=2; return {x:cx/(6*a),y:cy/(6*a)}; };
 const ROUTES=RF.routes.map(r=>Object.assign({},r,{nb:isNB(r.a)?r.a:nearestNB(r.pts[0])}));
 function nearestNB(p){ let best=null,bd=1e9; NBS.forEach(nb=>{ const l=RF.lab[nb.id], d=Math.hypot(l[0]-p[0],l[1]-p[1]); if(d<bd){bd=d;best=nb.id;} }); return best; }
 const STAIRS=RF.stairs;
+const polyM2=p=>Math.abs(p.reduce((a,q,i)=>{ const r=p[(i+1)%p.length]; return a+q[0]*r[1]-r[0]*q[1]; },0)/2)*U*U;
 
 /* ---------- svg string helpers ---------- */
 const r1=n=>Math.round(n*10)/10;
@@ -79,7 +80,7 @@ const M2=RF.areaM2, nbM2=NB_IDS.reduce((s,a)=>s+M2[a],0), tsM2=M2.TW+M2.TC+M2.R1
 const AREA=[
   {label:'Neighbourhoods',m2:nbM2,c:null},
   {label:'Receptions',m2:M2.R1+M2.R2,c:'var(--brand-2)'},
-  {label:'Café, lobby and atrium',m2:M2.TW+M2.TC,c:'var(--brand)'},
+  {label:'Café and lobby',m2:M2.TW+M2.TC,c:'var(--brand)'},
   {label:'Cores, corridors and other',m2:RF.plateM2-nbM2-tsM2,c:'var(--ink-3)'},
 ];
 

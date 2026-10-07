@@ -20,20 +20,21 @@ head_css=rep(head_css,'<title>Acko Neighbourhood Office</title>','<title>Acko Te
 head_css+=css_add
 # ---------- body ----------
 body=rep(body,'<p class="eyebrow">Acko · Workplace design narrative</p>','<p class="eyebrow">Acko · Test fit 02 · Workplace design narrative</p>')
-body=rep(body,'<p class="lede">How a bare floor plate became six self-sustaining neighbourhoods around one shared Town Square.</p>','<p class="lede">How a long, narrow floor became six self-sustaining neighbourhoods linked by one shared Town Square.</p>')
+body=rep(body,'<p class="lede">How a bare floor plate became six self-sustaining neighbourhoods around one shared Town Square.</p>','<p class="lede">How a long, narrow floor became six self-sustaining neighbourhoods linked by shared spaces.</p>')
 body=rep(body,'<span class="draft" title="Floor plate, names and numbers are sample data">Draft · sample data</span>','<span class="draft" title="Plan from the test-fit drawing; names and teams are placeholders">Draft · test fit 02</span>')
 body=re.sub(r'  <section class="scene" id="sc-brief".*?</section>\n','',body)
+body=rep(body,'looping around the Town Square','looping around the shared spaces')
 # ---------- script ----------
-concept="const {buildCity,buildLoop}=(function(){\n"+open('tf_concept_consts.js').read()+city+loopf+"  return {buildCity,buildLoop};\n})();\n"
+concept="const {buildCity,buildLoop}=(function(){\n"+open('tf_concept_consts.js').read()+(city+loopf).replace("'TOWN SQUARE'","'SHARED SPACES'")+"  return {buildCity,buildLoop};\n})();\n"
 data=open('tf_data.js').read().replace('/*REALFIT*/null',open('realfit.json').read())
 plan=open('tf_plan.js').read().replace('/*CONCEPT*/',concept)
 steps=open('tf_steps.js').read()
 # renders: real kinds
 renders=rep(renders,renders[renders.index('const NB_KINDS='):renders.index('const canRender=')],
-"""const SPACE_NAMES={desk:'Workstations',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Pantry point',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby and atrium',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
+"""const SPACE_NAMES={desk:'Workstations',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Pantry point',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
 /* which sample interior stands in for each space until the real renders arrive */
 const SCENE_OF={sprint:'meeting',dept:'board',hatchery:'huddle',duo:'focus',prayer:'zen',mother:'zen',lobby:'reception',visitor:'meeting',studio:'meeting'};
-const ACCENT={N1:'#ff7a59',N2:'#f0b43a',N3:'#2ec4b6',N4:'#58a9ff',N5:'#ef72b2',N6:'#a3d977',TS:'#7c5cff'};
+const ACCENT={N01:'#ff7a59',N02:'#f0b43a',N03:'#2ec4b6',N04:'#58a9ff',N05:'#ef72b2',N06:'#a3d977',TS:'#7c5cff'};
 """)
 renders=rep(renders,"const canRender=k=>NB_KINDS.includes(k)||TS_KINDS.includes(k);","const canRender=k=>!!SPACE_NAMES[k];")
 renders=rep(renders,"(SCENE[k]||SCENE.meeting)();","(SCENE[SCENE_OF[k]||k]||SCENE.meeting)();")
@@ -58,8 +59,8 @@ e=rep(e,sm_old,"""function spaceMeta(ctx,k){
   const inst=SP.filter(x=>inCtx(x,ctx)&&x.k===k); if(!inst.length) return '';
   if(k==='desk') return `${inst.reduce((a,x)=>a+x.seats,0)} workstations in ${inst.length} clusters`;
   if(inst.every(x=>x.big)){ const side=inst.map(x=>({R1:'west',R2:'east'})[x.area]).filter(Boolean); return [side.length>1?side.join(' and ').replace(/^./,c=>c.toUpperCase()):'', `${fmt(inst.reduce((a,x)=>a+m2ft(M2[x.area]),0))} sq ft`].filter(Boolean).join(' · '); }
-  const where=ctx==='TS'?'Town Square':'neighbourhood', seats=inst.map(x=>x.seats).filter(Boolean), lo=Math.min(...seats), hi=Math.max(...seats);
-  return [inst.length>1?`${inst.length} in this ${where}`:'', seats.length?(lo===hi?`${lo} ${lo===1?'seat':'seats'}${inst.length>1?' each':''}`:`${lo} to ${hi} seats`):''].filter(Boolean).join(' · ');
+  const where=ctx==='TS'?'the shared spaces':'this neighbourhood', seats=inst.map(x=>x.seats).filter(Boolean), lo=Math.min(...seats), hi=Math.max(...seats);
+  return [inst.length>1?`${inst.length} in ${where}`:'', seats.length?(lo===hi?`${lo} ${lo===1?'seat':'seats'}${inst.length>1?' each':''}`:`${lo} to ${hi} seats`):''].filter(Boolean).join(' · ');
 }
 """)
 e=rep(e,"RV.ctx=ctx||sp.nb; RV.list=(RV.ctx==='TS'?TS_KINDS:NB_KINDS).filter(k=>SP.some(x=>inCtx(x,RV.ctx)&&x.k===k));",

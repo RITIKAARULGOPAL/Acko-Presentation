@@ -1,7 +1,7 @@
 /* =====================================================================
    STEPS
    ===================================================================== */
-const CH=['Introduction','The idea','The floor','Daylight','Fire and egress','Carving the floor','The layout','Town Square','Sharing out','Axonometric','Neighbourhoods','By the numbers'];
+const CH=['Introduction','The idea','The floor','Daylight','Fire and egress','Carving the floor','The layout','Shared spaces','Sharing out','Axonometric','Neighbourhoods','By the numbers'];
 const pad=n=>String(n).padStart(2,'0');
 const eyebrow=s=>`<p class="eyebrow">${pad(s.ch)} · ${CH[s.ch]}${s.sub?` · ${s.sub}`:''}</p>`;
 const nbSw=i=>`style="--c:var(${NBS[i].c})"`;
@@ -17,7 +17,7 @@ const STEPS=[
     <ul class="analogy">${[
       ['city','The city','The floor',`One ${RF.len.toFixed(0)} m floor for ${TOT.desks} people`],
       ['street','The loop','Circulation','Corridors that are also the escape routes'],
-      ['square','Town Square','Shared amenities','Café, receptions, lobby and atrium'],
+      ['square','The square','Shared spaces','Café, receptions and lobby'],
       ['nb','Neighbourhood','A team zone','Daily needs within a short walk'],
       ['home','Home','Your desk','Near daylight, a few steps from your team'],
     ].map(([p,a,b2,c])=>`<li><button type="button" class="an" data-part="${p}"><span class="an-c">${a}</span><span class="an-ar">→</span><span class="an-o">${b2}<small>${c}</small></span></button></li>`).join('')}</ul>`,
@@ -27,13 +27,13 @@ const STEPS=[
     <ul class="analogy">${[
       ['loop','The loop','The main corridor','One continuous path, no dead ends'],
       ['exits','Endless','Two ways out','From any point, two ways to a stair'],
-      ['square','Along it','Town Square','Café, receptions and lobby'],
+      ['square','Along it','Shared spaces','Café, receptions and lobby'],
       ['nb','Off it','Neighbourhoods','Six team zones, each opening onto it'],
     ].map(([p,a,b2,c])=>`<li><button type="button" class="an" data-part="${p}"><span class="an-c">${a}</span><span class="an-ar">→</span><span class="an-o">${b2}<small>${c}</small></span></button></li>`).join('')}</ul>`,
     wire:()=>wireParts('#loopsvg')},
   {id:'shell',ch:2,scene:'plan',flags:'shell grid',wide:true,cap:s=>`${eyebrow(s)}<h2>A long, narrow floor</h2>
-    <p>The floor runs ${RF.len.toFixed(0)} m from end to end and only ${RF.depth.toFixed(0)} m deep, with a slanted west end. Cores with lifts, toilets and stairs line the north façade, and two double-height atria cut into the south.</p>
-    <dl class="facts"><dt>Floor plate</dt><dd>${fmt(m2ft(RF.plateM2))} sq ft (${fmt(RF.plateM2)} m²)</dd><dt>Size</dt><dd>${RF.len.toFixed(1)} × ${RF.depth.toFixed(1)} m</dd><dt>Fire stairs</dt><dd>${STAIRS.length} (Stair 1 to Stair ${STAIRS.length})</dd><dt>Atria</dt><dd>2 on the south façade</dd></dl>`},
+    <p>The floor runs ${RF.len.toFixed(0)} m from end to end and only ${RF.depth.toFixed(0)} m deep, with a slanted west end. Cores with lifts, toilets and stairs line the north façade, and two terraces cut into the south.</p>
+    <dl class="facts"><dt>Floor plate</dt><dd>${fmt(m2ft(RF.plateM2))} sq ft (${fmt(RF.plateM2)} m²)</dd><dt>Size</dt><dd>${RF.len.toFixed(1)} × ${RF.depth.toFixed(1)} m</dd><dt>Fire stairs</dt><dd>${STAIRS.length} (Stair 1 to Stair ${STAIRS.length})</dd><dt>Terraces</dt><dd>2 on the south façade, about ${fmt(m2ft(TERRACES[0].m2))} sq ft each</dd></dl>`},
   {id:'light',ch:3,scene:'plan',flags:'shell light',wide:true,cap:s=>`${eyebrow(s)}<h2>Most of the floor is far from glass</h2>
     <p>Daylight reaches about 6 m in from a façade. On a ${RF.depth.toFixed(0)} m deep floor with cores along one side, that band is precious, so desks were pulled towards it and rooms pushed into the middle.</p>
     <ul class="legend"><li><i class="lg lg-sun"></i>6 m daylight band along the façade</li></ul>
@@ -45,17 +45,17 @@ const STEPS=[
     <p>The ${ROUTES.length} egress routes from the test fit, measured along the drawn path from the far point to the stair. They run from ${TOT.shortest.toFixed(0)} m to ${TOT.longest.toFixed(0)} m.</p>
     <table class="rt"><tbody>${ROUTE_ROWS().map(r=>`<tr${r.m===TOT.longest?' class="max"':''}><td>${nbName(r.nb)}</td><td>Stair ${r.to}</td><td>${r.m.toFixed(1)} m</td></tr>`).join('')}</tbody></table>
     <p class="note">Travel distances still to be checked against NBC with the fire consultant.</p>`},
-  {id:'parcels',ch:5,scene:'plan',flags:'shell zones labels',wide:true,cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods and a Town Square</h2>
-    <p>The floor is carved into six team neighbourhoods, from the slanted west end to the east. Between them sits what everyone shares: the café, two receptions above the atria, and the lobby around the central cut-out.</p>
+  {id:'parcels',ch:5,scene:'plan',flags:'shell zones labels',wide:true,cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods and the shared spaces</h2>
+    <p>The floor is carved into six team neighbourhoods, from the slanted west end to the east. Between them sit the spaces everyone shares: the café, a reception beside each terrace, and the lobby by the lifts.</p>
     <ul class="nbl">${NBS.map((nb,i)=>`<li ${nbSw(i)}><i class="sw"></i><span style="display:flex;flex-direction:column;min-width:0"><b>${nb.name}</b><span>${fmt(m2ft(M2[nb.id]))} sq ft · ${KITS[nb.id].desk} desks</span></span></li>`).join('')}</ul>`},
   {id:'layout',ch:6,scene:'plan',flags:'shell furn rlabels spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>The test-fit layout</h2>
     <p>${TOT.desks} workstations, ${TOT.sprint} quick sprint rooms, ${TOT.huddle} collaboration huddles, ${TOT.dept} departmental rooms, ${TOT.booth} phone booths, ${TOT.duo} two-person rooms and ${TOT.zen} zen rooms, all read from the drawing.</p>
     <dl class="facts"><dt>Density</dt><dd>${fmt(m2ft(RF.plateM2)/TOT.desks)} sq ft per workstation</dd><dt>In daylight</dt><dd>${TOT.daylight}% within 6 m of the façade</dd></dl>${RHINT('Click any room or desk cluster to see its light and dark renders.')}`},
   {id:'carved',ch:6,sub:'Neighbourhoods',scene:'plan',flags:'shell furn zones labels hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>Carved into neighbourhoods</h2>
     <p>Each colour is one team's neighbourhood. Hover a neighbourhood to see who works there. Click a room for its renders, or the open floor to open the neighbourhood.</p>${areaBar()}`},
-  {id:'town-square',ch:7,scene:'plan',flags:'shell furn zones labels rlabels ts-focus hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>One square, spread along the floor</h2>
-    <p>On a floor this long, the Town Square can't be one room. It is a chain of shared places along the middle: the café at the west, a reception over each atrium, and the lobby around the central cut-out.</p>
-    <ul class="tsl">${[['cafe','Café and dining',`${fmt(m2ft(M2.TW))} sq ft`],['visitor','West reception',`${KITS.R1.visitor||0} visitor hubs`],['reception','East reception',`waiting lounge · ${KITS.R2.sprint||0} quick sprints`],['lobby','Lobby and atrium',`${fmt(m2ft(M2.TC))} sq ft`]].map(([k,n,v])=>`<li><button type="button" class="tsb" data-k="${k}"><span>${n}</span><span>${v}</span></button></li>`).join('')}</ul>${RHINT('Click a space, or a row above, for its renders.')}`,
+  {id:'shared',ch:7,scene:'plan',flags:'shell furn zones labels rlabels ts-focus hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>Shared spaces along the floor</h2>
+    <p>On a floor this long, the shared spaces can't be one room. They form a chain along the middle: the café at the west, a reception beside each terrace, and the lobby by the lifts.</p>
+    <ul class="tsl">${[['cafe','Café and dining',`${fmt(m2ft(M2.TW))} sq ft`],['visitor','West reception',`${KITS.R1.visitor||0} visitor hubs`],['reception','East reception',`waiting lounge · ${KITS.R2.sprint||0} quick sprints`],['lobby','Lobby',`${fmt(m2ft(M2.TC))} sq ft`]].map(([k,n,v])=>`<li><button type="button" class="tsb" data-k="${k}"><span>${n}</span><span>${v}</span></button></li>`).join('')}</ul>${RHINT('Click a space, or a row above, for its renders.')}`,
     wire:wireTS},
   {id:'sharing',ch:8,scene:'alloc',cap:s=>`${eyebrow(s)}<h2>What each neighbourhood got</h2>
     <p>Every space in the test fit, counted from the drawing and split by neighbourhood. Each one has its own desks, meeting rooms, phone booths and a pantry, so daily needs stay inside it.</p>
@@ -64,12 +64,12 @@ const STEPS=[
     <p>The colours carry through, so each neighbourhood reads the same in plan and in 3D. Hover a neighbourhood for its details. Click a room for its renders.</p>
     <p class="note">This model is generated from the test-fit drawing. Rendered axonometric views will sit alongside it.</p>`},
   {id:'exploded',ch:9,sub:'Exploded',scene:'plan',flags:'shell furn zones labels axo explode spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
-    <p>Shell and core at the base, then the neighbourhoods and the Town Square, then the fit-out. Each layer follows from the one below it.</p>`},
+    <p>Shell and core at the base, then the neighbourhoods and shared spaces, then the fit-out. Each layer follows from the one below it.</p>`},
   {id:'neighbourhoods',ch:10,scene:'overview',cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods, each complete</h2>
     <p>Every neighbourhood has its own workstations, quick sprint rooms, collaboration huddles, phone booths and a pantry point. They differ in size and mix, from ${Math.min(...NB_IDS.map(a=>KITS[a].desk))} to ${Math.max(...NB_IDS.map(a=>KITS[a].desk))} desks.</p>
     <p class="hint">Select a neighbourhood, or press → to walk through all six.</p>`},
   ...NBS.map((nb,i)=>({id:nb.id.toLowerCase(),ch:10,sub:`${i+1} of 6`,scene:'dive',cap:s=>capDive(s,i),wire:()=>wireDive(i),enter:()=>renderDive(i)})),
-  {id:'numbers',ch:11,scene:'numbers',cap:s=>`${eyebrow(s)}<h2>One floor, six neighbourhoods, one square</h2>
+  {id:'numbers',ch:11,scene:'numbers',cap:s=>`${eyebrow(s)}<h2>One floor, six neighbourhoods</h2>
     <p>Every number here is read from the test-fit drawing. The final figures will follow the approved layout.</p>`,enter:countUp},
 ];
 

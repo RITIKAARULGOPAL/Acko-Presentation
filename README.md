@@ -122,22 +122,22 @@ Everything is in `index.html`:
 
 ## Test fit
 
-`index-testfit.html` tells the story on the real floor from test fit 02: a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two atria on the south façade. It has 22 steps:
+`index-testfit.html` tells the story on the real floor from test fit 02: a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 22 steps:
 
 1. **The idea**: the city analogy and the loop (schematic)
-2. **The floor**: outline, cores, columns, stairs and atria, with overall dimensions
-3. **Daylight**: the 6 m band along the façade (53% of workstations sit in it)
+2. **The floor**: outline, cores, columns, stairs and terraces, with overall dimensions
+3. **Daylight**: the 6 m band along the façade, including the glass facing the terraces (56% of workstations sit in it)
 4. **Fire and egress**: five stairs with 15 / 30 / 45 m rings, then the eight egress routes from the drawing, measured (43 to 61 m)
-5. **Carving the floor**: six neighbourhoods plus the Town Square (café and dining, two receptions, lobby and atrium)
+5. **Carving the floor**: Neighbourhood 01 to 06 plus the shared spaces (café and dining, two receptions, lobby)
 6. **The layout**: the full fit-out, then carved into neighbourhoods (hover for details, click to open)
-7. **Town Square**: the shared spaces, highlighted
+7. **Shared spaces**: café and dining, both receptions and the lobby, highlighted
 8. **Sharing out**: every space type counted per neighbourhood, with a Brief column waiting for Acko's numbers
 9. **Axonometric**: the drawing in 3D, then exploded
 10. **Neighbourhoods**: an overview and six deep dives with plan, axo, numbered kit and walking distances
 11. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
 
-Click any desk cluster, room, pantry or shared area for its light and dark renders. They use the same `RENDERS` setup as above, with these keys: `desk`, `sprint`, `dept`, `huddle`, `hatchery`, `duo`, `booth`, `pantry`, `zen`, `cabin`, `board`, `studio`, `prayer`, `mother`, `cafe`, `reception`, `lobby`, `visitor`.
+Click any desk cluster, room, pantry or shared area for its light and dark renders. They use the same `RENDERS` setup as above, with these keys: `desk`, `sprint`, `dept`, `huddle`, `hatchery`, `duo`, `booth`, `pantry`, `zen`, `cabin`, `board`, `studio`, `prayer`, `mother`, `cafe`, `reception`, `lobby`, `visitor`. A render for one neighbourhood only uses its two-digit id: `'N03:huddle':{light:'renders/n03-huddle-light.jpg', dark:'renders/n03-huddle-dark.jpg'}`.
 
-**Still placeholders in the test fit:** neighbourhood names, teams and colours; the brief numbers; the loop (the drawing has no loop line yet); site orientation and due-diligence notes. The fire travel distances still need checking against NBC with the fire consultant.
+**Still placeholders in the test fit:** teams and colours; the brief numbers; the loop (the drawing has no loop line yet); site orientation and due-diligence notes. The fire travel distances still need checking against NBC with the fire consultant.
 
 To rebuild after the drawing changes, run `tools/testfit/run.sh` on the new DXF (see `tools/testfit/README.md`).

@@ -17,7 +17,7 @@ TSW=PLATE_P.intersection(box(-137400,-409100,-108202,-391300)).difference(z4).di
 TSW=max((TSW.geoms if hasattr(TSW,'geoms') else [TSW]), key=lambda g:g.area)
 TSC=box(-49516,-391100,-33600,-384950).difference(unary_union(ZP))
 TSC=max((TSC.geoms if hasattr(TSC,'geoms') else [TSC]), key=lambda g:g.area)
-AREAS=[('N%d'%(i+1),ZP[z]) for i,z in enumerate(NB_ORDER)]+[('R1',ZP[4]),('R2',ZP[5]),('TW',TSW),('TC',TSC)]
+AREAS=[('N%02d'%(i+1),ZP[z]) for i,z in enumerate(NB_ORDER)]+[('R1',ZP[4]),('R2',ZP[5]),('TW',TSW),('TC',TSC)]
 PREP=[(k,prep(g)) for k,g in AREAS]
 def area_of(x,y):
     p=Point(x,y)
@@ -177,7 +177,7 @@ print('routes',[(r['a'],r['to'],r['m']) for r in routes])
 # ---------- polygons ----------
 def poly(g): return [[round(a,1),round(b,1)] for a,b in (T(x,y) for x,y in list(g.exterior.coords)[:-1])]
 out={'unit':UNIT/1000,'plate':poly(PLATE_P),
-     'atria':[poly(box(-108202,-409079,-82552,-399528)),poly(box(-27327,-409079,-1602,-399528))],
+     'terraces':[poly(box(-108202,-409079,-82552,-399528)),poly(box(-27327,-409079,-1602,-399528))],
      'cutout':poly(box(-45300,-390500,-37300,-385600)),
      'areas':{k:poly(g) for k,g in AREAS},'areaM2':{k:round(g.area/1e6,1) for k,g in AREAS},'plateM2':round(PLATE_P.area/1e6,1),
      'g':G,'cols':cols,'stairs':stairs,'rooms':rooms,'desks':desks,'pantries':pantries,'routes':routes,
@@ -195,8 +195,8 @@ inner=PLATE_P.buffer(-6000, join_style=2)
 ig=max((inner.geoms if hasattr(inner,'geoms') else [inner]), key=lambda g:g.area)
 out['plateIn']=poly(ig)
 ext=PLATE_P.exterior
-# façade = plate edge minus the atrium notch walls (light from atria is not counted)
-fac=ext.difference(unary_union([box(-108202,-409200,-82552,-399400).buffer(50),box(-27327,-409200,-1602,-399400).buffer(50)]))
+# façade = the whole plate edge, including the glass facing the two terraces
+fac=PLATE_P.exterior
 day=tot=0
 for d in desks:
     x=d[0]*UNIT+XO; y=YO-d[1]*UNIT; tot+=d[2]

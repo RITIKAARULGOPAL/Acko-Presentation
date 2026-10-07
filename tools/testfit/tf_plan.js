@@ -4,17 +4,17 @@ const svgWrap=inner=>`<svg class="dsvg" viewBox="${VB}" preserveAspectRatio="xMi
 const lyr=(cls,z,inner,style)=>`<div class="lyr ${cls}" style="--z:${z}px;${style||''}">${svgWrap(inner)}</div>`;
 const nbAttr=a=>{ const ctx=ctxOf(a)||'X'; return `data-nb="${ctx}" data-area="${a}"`; };
 const byArea=fn=>ALL_IDS.map(a=>{ const s=fn(a); return s?`<g ${nbAttr(a)}>${s}</g>`:''; }).join('');
-const ATRIA=RF.atria.map(p=>({pts:p,c:centroid(p)}));
+const TERRACES=RF.terraces.map(p=>({pts:p,c:centroid(p),m2:polyM2(p)}));
 function xPath(p){ const b=bounds(p); return `M${b.x0} ${b.y0}L${b.x1} ${b.y1}M${b.x1} ${b.y0}L${b.x0} ${b.y1}`; }
 function shellSVG(){
   let s=PA(PD(RF.plate),'slab');
-  ATRIA.forEach(a=>{ s+=PA(PD(a.pts),'void')+PA(xPath(a.pts),'void-x'); });
+  TERRACES.forEach(a=>{ s+=PA(PD(a.pts),'terrace'); });
   s+=PA(PD(RF.cutout),'void')+PA(xPath(RF.cutout),'void-x');
   s+=`<g class="corefade">${PA(G('cored','S'),'rf-cored')}${PA(G('stair','S'),'rf-stair')}${PA(G('core','S'),'rf-core')}</g>`;
   s+=RF.cols.map(c=>R({x:c[0],y:c[1],w:c[2],h:c[3]},'col')).join('');
   s+=DRAW(PD(RF.plate),'s-plate',0);
   let lb=STAIRS.map(st=>T(st.x+st.w/2,st.y+st.h+34,'STAIR '+st.id,'lbl-shell')).join('');
-  ATRIA.forEach((a,i)=>{ lb+=T(a.c.x,a.c.y+10,'ATRIUM','lbl-shell'); });
+  TERRACES.forEach(a=>{ lb+=T(a.c.x,a.c.y+10,'TERRACE','lbl-shell'); });
   return s+`<g class="lbls">${lb}</g>`;
 }
 const SHELL_COPY=PA(G('core','S'),'xw');
@@ -43,14 +43,15 @@ function zonesSVG(){
 }
 function textSVG(){
   const rl=(a,t,dy)=>T(RF.lab[a][0],RF.lab[a][1]+(dy||0),t,'rlabel');
-  let s=`<g data-nb="TS">${rl('TW','CAFÉ AND DINING',-60)}${rl('TC','LOBBY',-40)}${rl('R1','RECEPTION',-50)}${rl('R2','RECEPTION',-50)}${ATRIA.map(a=>T(a.c.x,a.c.y+10,'ATRIUM','rlabel')).join('')}</g>`;
+  let s=`<g data-nb="TS">${rl('TW','CAFÉ AND DINING',-60)}${rl('TC','LOBBY',-40)}${rl('R1','RECEPTION',-50)}${rl('R2','RECEPTION',-50)}${TERRACES.map(a=>T(a.c.x,a.c.y+10,'TERRACE','rlabel')).join('')}</g>`;
   return s;
 }
 const LABELS=[];
+const LABEL_NUDGE={N02:[-120,0],N03:[190,0]};   // keep neighbouring pills apart (drawing units)
 function labelSet(){
-  NBS.forEach((nb,i)=>{ const l=RF.lab[nb.id]; LABELS.push({key:nb.id,x:l[0],y:l[1],h:60,g:'g-zones',kind:'zl',nb:nb.id,c:`var(${nb.c})`,d:.3+i*.12,html:`<div class="ol-n">${nb.name}</div><div class="ol-s">${nb.team}</div>`}); });
-  LABELS.push({key:'TS',x:RF.lab.TW[0],y:RF.lab.TW[1]+30,h:60,g:'g-zones',kind:'zl',nb:'TS',c:'var(--brand)',d:1,html:'<div class="ol-n">Town Square</div><div class="ol-s">café and dining</div>'});
-  [['R1','Reception','visitor hub'],['R2','Reception','waiting lounge'],['TC','Lobby','atrium']].forEach(([a,n,sub],j)=>{ const l=RF.lab[a]; LABELS.push({key:a,x:l[0],y:l[1],h:44,g:'g-zones',kind:'zl sm',nb:'TS',c:'var(--brand)',d:1.1+j*.1,html:`<div class="ol-n">${n}</div><div class="ol-s">${sub}</div>`}); });
+  NBS.forEach((nb,i)=>{ const l=RF.lab[nb.id], n=LABEL_NUDGE[nb.id]||[0,0]; LABELS.push({key:nb.id,x:l[0]+n[0],y:l[1]+n[1],h:60,g:'g-zones',kind:'zl',nb:nb.id,c:`var(${nb.c})`,d:.3+i*.12,html:`<div class="ol-n">${nb.name}</div><div class="ol-s">${nb.team}</div>`}); });
+  LABELS.push({key:'TS',x:RF.lab.TW[0],y:RF.lab.TW[1]+30,h:60,g:'g-zones',kind:'zl',nb:'TS',c:'var(--brand)',d:1,html:'<div class="ol-n">Shared spaces</div><div class="ol-s">café and dining</div>'});
+  [['R1','Reception','visitor hub'],['R2','Reception','waiting lounge'],['TC','Lobby','by the lifts']].forEach(([a,n,sub],j)=>{ const l=RF.lab[a]; LABELS.push({key:a,x:l[0],y:l[1],h:44,g:'g-zones',kind:'zl sm',nb:'TS',c:'var(--brand)',d:1.1+j*.1,html:`<div class="ol-n">${n}</div><div class="ol-s">${sub}</div>`}); });
   [['Fit-out','g-fit'],['Neighbourhoods','g-zones'],['Shell and core','g-shell']].forEach(([t,g])=>LABELS.push({key:'L-'+g,x:PB.x0+40,y:PB.y0+40,h:0,g,kind:'ll',html:t}));
 }
 const anchor=(key,p,x,y,h,cls)=>`<i class="anc ${cls||''}" data-a="${key}" data-p="${p}" style="left:${r1(x)}px;top:${r1(y)}px;--h:${h}px"></i>`;
@@ -107,7 +108,7 @@ function nbMini(i,extra){
 }
 function kitLine(k){ const meet=(k.sprint||0)+(k.dept||0); return [`${k.desk} desks`, meet?`${meet} meeting`:'', k.huddle?`${k.huddle} huddle${k.huddle>1?'s':''}`:'', k.booth?`${k.booth} booths`:''].filter(Boolean).join(' · '); }
 function buildOverview(){
-  $('#ov-grid').innerHTML=NBS.map((nb,i)=>{ const k=KITS[nb.id]; return `<button class="ov-card" type="button" data-go-nb="${i}" style="--c:var(${nb.c});--d:${i*.08}s"><div class="ov-h"><span class="ov-n">${nb.name}</span><span class="ov-id">${nb.id} · ${fmt(m2ft(M2[nb.id]))} sq ft</span></div>${nbMini(i)}<div class="ov-t">${nb.team} · ${nb.pos}</div><div class="ov-k">${kitLine(k)}</div></button>`; }).join('');
+  $('#ov-grid').innerHTML=NBS.map((nb,i)=>{ const k=KITS[nb.id]; return `<button class="ov-card" type="button" data-go-nb="${i}" style="--c:var(${nb.c});--d:${i*.08}s"><div class="ov-h"><span class="ov-n">${nb.name}</span><span class="ov-id">${fmt(m2ft(M2[nb.id]))} sq ft</span></div>${nbMini(i)}<div class="ov-t">${nb.team} · ${nb.pos}</div><div class="ov-k">${kitLine(k)}</div></button>`; }).join('');
 }
 function buildNumbers(){
   const tiles=[
@@ -132,7 +133,7 @@ const MATRIX=[
 ];
 function buildAlloc(){
   const tsIds=['TW','TC','R1','R2'];
-  const head=`<tr><th class="am-i">Space</th><th class="am-b">Brief</th>${NBS.map((nb,i)=>`<th class="am-nb${i?'':' ps'}" style="--c:var(${nb.c})"><span>${nb.name}</span><small>${nb.id} · ${fmt(m2ft(M2[nb.id]))} sq ft</small></th>`).join('')}<th class="am-ts ps">Town Square<small>café, lobby, receptions</small></th><th class="am-t">Total</th></tr>`;
+  const head=`<tr><th class="am-i">Space</th><th class="am-b">Brief</th>${NBS.map((nb,i)=>`<th class="am-nb${i?'':' ps'}" style="--c:var(${nb.c})"><span>${nb.name}</span><small>${nb.id} · ${fmt(m2ft(M2[nb.id]))} sq ft</small></th>`).join('')}<th class="am-ts ps">Shared spaces<small>café, lobby, receptions</small></th><th class="am-t">Total</th></tr>`;
   const body=MATRIX.map(([k,name])=>{
     const vals=NB_IDS.map(a=>KITS[a][k]||0), ts=sumK(tsIds,k), x=KITS.X[k]||0, tot=vals.reduce((s,v)=>s+v,0)+ts+x;
     const max=Math.max(...vals), b=BRIEF[k];
