@@ -34,7 +34,7 @@ function siteSVG(){
     const up=o[1]<(PB.y0+PB.y1)/2;
     routes+=`<path class="route" d="${d}"/>`+C({x:o[0],y:o[1]},11,'route-o')+T(o[0]+18,up?o[1]+50:o[1]-26,`${r.m.toFixed(1)} m`,'route-t');
   });
-  return `<g class="gx g-light">${light}</g><g class="gx g-grid">${grid}</g><g class="gx g-rings">${rings}</g><g class="gx g-exits">${exits}</g><g class="gx g-routes">${routes}</g>`;
+  return `<g class="gx g-sun"><g id="sun-p" clip-path="url(#clip-rf)"></g><g id="sun-d"></g></g><g class="gx g-light">${light}</g><g class="gx g-grid">${grid}</g><g class="gx g-north">${northSVG()}</g><g class="gx g-rings">${rings}</g><g class="gx g-exits">${exits}</g><g class="gx g-routes">${routes}</g><g class="gx g-dd">${ddSVG()}</g>`;
 }
 function zonesSVG(){
   let s=NBS.map((nb,i)=>`<path d="${PD(RF.areas[nb.id])}" class="zone" data-nb="${nb.id}" style="--c:var(${nb.c});--d:${i*.12}s"/>`).join('');

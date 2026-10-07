@@ -202,6 +202,22 @@ for d in desks:
     x=d[0]*UNIT+XO; y=YO-d[1]*UNIT; tot+=d[2]
     if fac.distance(Point(x,y))<=6000: day+=d[2]
 out['daylight']=round(100*day/tot); print('daylight desks %d of %d'%(day,tot))
+# ---------- lift lobbies: two facing rows of passenger lifts with the lobby between them ----------
+doors=[(x,y) for nm,ps in POS.items() if nm.startswith('Lift Door') for x,y,r in ps]
+pas=sorted((x,y) for nm,ps in POS.items() if 'Passenger' in nm for x,y,r in ps)
+cols=[]
+for x,y in pas:
+    if cols and abs(cols[-1]['x']-x)<1000: cols[-1]['ys'].append(y)
+    else: cols.append({'x':x,'ys':[y]})
+lifts=[]
+for c0,c1 in zip(cols,cols[1:]):
+    if not 4000<c1['x']-c0['x']<9000: continue
+    ys=c0['ys']+c1['ys']; dx=[x for x,y in doors if c0['x']<x<c1['x'] and min(ys)-2000<y<max(ys)+2000]
+    if not dx: continue
+    (u0,v0),(u1,v1)=T(min(dx),max(ys)+1500),T(max(dx),min(ys)-1500)
+    lifts.append({'x':round((u0+u1)/2,1),'y':round((v0+v1)/2,1),'w':round(u1-u0,1),'h':round(v1-v0,1),'n':len(ys),'a':area_of((min(dx)+max(dx))/2,sum(ys)/len(ys))})
+lifts.sort(key=lambda l:l['x'])
+out['lifts']=lifts; print('lift lobbies',lifts)
 out['len']=round((PLATE_P.bounds[2]-PLATE_P.bounds[0])/1000,1); out['depth']=round((PLATE_P.bounds[3]-PLATE_P.bounds[1])/1000,1)
 json.dump(out,open('realfit.json','w'),separators=(',',':'))
 print('labels',lab,'daylight %',out['daylight'],'size',out['len'],out['depth'])

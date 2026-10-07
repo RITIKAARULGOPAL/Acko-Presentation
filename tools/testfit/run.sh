@@ -2,6 +2,7 @@
 # Rebuild index-testfit.html from a test-fit DXF.
 # Usage: tools/testfit/run.sh path/to/ACKO_Testfit.dxf
 # Needs: python3 with ezdxf and shapely (pip install ezdxf shapely). Takes a few minutes for a 160 MB DXF.
+# The site data (tools/site/context.json) is committed; tools/site/fetch.py + site.py prep refresh it.
 set -euo pipefail
 DXF=$(cd "$(dirname "$1")" && pwd)/$(basename "$1")
 HERE=$(cd "$(dirname "$0")" && pwd); ROOT=$(cd "$HERE/../.." && pwd)
@@ -13,5 +14,6 @@ python3 dxf_blocks.py "$DXF" dxf_pos.json                 # every block insert w
 python3 dxf_blk.py "$DXF" dxf_blk.pkl                     # zone and egress panels
 python3 panels.py
 python3 extract.py                                        # → realfit.json
+python3 "$HERE/../site/site.py" build realfit.json site.json   # the plan on the site, the sun on the layout → site.json
 python3 build_tf.py "$ROOT/index.html" "$ROOT/index-testfit.html"
 echo "Built $ROOT/index-testfit.html (work files in $WORK)"

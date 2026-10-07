@@ -1,2 +1,4 @@
 *.dxf
 *.dwg
+tools/site/raw/
+__pycache__/

@@ -122,22 +122,39 @@ Everything is in `index.html`:
 
 ## Test fit
 
-`index-testfit.html` tells the story on the real floor from test fit 02: a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 22 steps:
+`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 28 steps:
 
 1. **The idea**: the city analogy and the loop (schematic)
-2. **The floor**: outline, cores, columns, stairs and terraces, with overall dimensions
-3. **Daylight**: the 6 m band along the façade, including the glass facing the terraces (56% of workstations sit in it)
-4. **Fire and egress**: five stairs with 15 / 30 / 45 m rings, then the eight egress routes from the drawing, measured (43 to 61 m)
-5. **Carving the floor**: Neighbourhood 01 to 06 plus the shared spaces (café and dining, two receptions, lobby)
-6. **The layout**: the full fit-out, then carved into neighbourhoods (hover for details, click to open)
-7. **Shared spaces**: café and dining, both receptions and the lobby, highlighted
-8. **Sharing out**: every space type counted per neighbourhood, with a Brief column waiting for Acko's numbers
-9. **Axonometric**: the drawing in 3D, then exploded
-10. **Neighbourhoods**: an overview and six deep dives with plan, axo, numbered kit and walking distances
-11. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
+2. **The site**: a map of Regalium on Hosur Road, with landmarks, walking distances and the metro. It then zooms to the block and turns until the floor lines up with the drawing. The floor sits 11.5° east of true north (see below)
+3. **The floor**: outline, cores, columns, stairs and terraces, with dimensions and the real façade orientations. Then the **due diligence** from the site visit: lift lobbies and entrances, slab and beam heights (with a section), glazing, screed, structure, the five exits, and super built-up, carpet and headcount
+4. **Sun and climate**:
+   - the sun path over the floor, with hours of sun on each façade
+   - **morning to evening on the layout**, an animated day (21 Mar/Sep, 21 Jun, 21 Dec) showing the sun patches on the furniture plan, with what it means for each neighbourhood
+   - the wind rose by season, plus monthly rain and temperature
+5. **Daylight**: the 6 m band along the façade, including the glass facing the terraces (56% of workstations sit in it)
+6. **Fire and egress**: five stairs with 15 / 30 / 45 m rings, then the eight egress routes from the drawing, measured (43 to 61 m)
+7. **Carving the floor**: Neighbourhood 01 to 06 plus the shared spaces (café and dining, two receptions, lobby)
+8. **The layout**: the full fit-out, then carved into neighbourhoods (hover for details, click to open)
+9. **Shared spaces**: café and dining, both receptions and the lobby, highlighted
+10. **Sharing out**: every space type counted per neighbourhood, with a Brief column waiting for Acko's numbers
+11. **Axonometric**: the drawing in 3D, then exploded
+12. **Neighbourhoods**: an overview and six deep dives with plan, axo, numbered kit and walking distances
+13. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
 
 Click any desk cluster, room, pantry or shared area for its light and dark renders. They use the same `RENDERS` setup as above, with these keys: `desk`, `sprint`, `dept`, `huddle`, `hatchery`, `duo`, `booth`, `pantry`, `zen`, `cabin`, `board`, `studio`, `prayer`, `mother`, `cafe`, `reception`, `lobby`, `visitor`. A render for one neighbourhood only uses its two-digit id: `'N03:huddle':{light:'renders/n03-huddle-light.jpg', dark:'renders/n03-huddle-dark.jpg'}`.
 
-**Still placeholders in the test fit:** teams and colours; the brief numbers; the loop (the drawing has no loop line yet); site orientation and due-diligence notes. The fire travel distances still need checking against NBC with the fire consultant.
+**Still placeholders in the test fit:** teams and colours; the brief numbers; the loop (the drawing has no loop line yet). The fire travel distances still need checking against NBC with the fire consultant.
+
+### Site analysis: sources and assumptions
+
+- **Location:** plus code 7J4VWJJ7+CQW (12.9311° N, 77.6145° E).
+- **North:** the drawing has no north point, so the floor plate is fitted into Regalium's footprint (Wings A–C in OpenStreetMap). Of the two ways round, only one puts the plate's slanted end beside Hosur Road. That gives a plan-up bearing of 11.5°: the cores face north and the terraces face south. Worth checking with a compass on site.
+- **Map:** buildings, roads, landmarks and bus stops come from Overture Maps (release 2026-09-23.1, OpenStreetMap data, ODbL). Walking distances follow the road network from the site gate.
+- **Sun:** NOAA solar-position formulas and the ASHRAE clear-sky model. Glazing is full height to 3.25 m (the beam bottom from the due diligence). The floor's own recesses and cores cast shade; neighbours and fins are not modelled.
+- **Wind:** NOAA ISD 3-hourly observations at IMD Bangalore (WMO 43295), 2014–2025.
+- **Rain and temperature:** NOAA GHCN-daily, Bangalore, 1991–2020 averages.
+- **Due diligence:** typed into `tools/site/facts.json` from the site-visit report: heights, glazing, screed, structure, exits, entrance, super built-up 91,000 sq ft, carpet 56,650 sq ft, about 640 headcount. Edit that file and rebuild if anything changes.
+
+To refresh the open data, run `python3 tools/site/fetch.py && python3 tools/site/site.py prep`. Download the raw data first; it is about 25 MB and is not committed. Then rebuild as usual.
 
 To rebuild after the drawing changes, run `tools/testfit/run.sh` on the new DXF (see `tools/testfit/README.md`).

@@ -20,6 +20,7 @@ It takes a few minutes for the 160 MB file. The DXF itself is not stored in the 
 | `OB-I-ANNO-TEXT` labels | Rooms: quick sprints, huddles, departmental rooms, 2-pax rooms, booths (PB), zen rooms, cabins and more |
 | Blocks `rytu` (3 desks), `WS 1500x750mm`, `rhrt`, `4PAX WITH PLANTER` (4 seats) | Workstations: 651, matching the counts written on the drawing |
 | Microwave tags | Pantry points |
+| Lift shaft and lift door blocks inside `base` | The two lift lobbies (7 passenger lifts each), the arrival points |
 
 ## Assumptions to revisit when the drawing changes
 
@@ -31,3 +32,11 @@ These are set for test fit 02 and live in the scripts:
 - **Plate outline and terraces** in `geo.py` (`PLATE`) and `extract.py` (`terraces`).
 - **Teams and colours** are placeholders in `tf_data.js` (`NBS`). Neighbourhood names are numbers (Neighbourhood 01 to 06).
 - **Brief numbers** go in `BRIEF` in `tf_plan.js`. They show in the "Sharing out" table.
+
+## Site analysis
+
+`run.sh` also runs `tools/site/site.py build`. That step takes the committed site data in `tools/site/context.json` (map, wind, climate) and `tools/site/facts.json` (due diligence and areas). It places the plan on the site and works out the sun on the layout, writing `site.json`. `build_tf.py` then splices `site.json` and `tf_site.js` into the page.
+
+- **North** is found again on every build. The plate is fitted into the footprint both ways round, and the way that puts the slanted end beside Hosur Road wins. `run.sh` prints the result.
+- **Sun patches**: for 3 dates × 24 half-hours, each façade is sampled every 0.5 m. Glass shaded by the floor's own recesses is skipped. The light is traced inwards to 3.25 m ÷ tan(sun altitude), stopping at core walls.
+- **Refreshing the open data**: `python3 tools/site/fetch.py` (needs `pip install pyarrow` and network access to the Overture and NOAA S3 buckets), then `python3 tools/site/site.py prep`.

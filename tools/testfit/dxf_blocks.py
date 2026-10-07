@@ -20,6 +20,10 @@ for e in msp.query('INSERT'):
     if YMIN<p.y<YMAX: pos[e.dxf.name].append((round(p.x),round(p.y),round(e.dxf.rotation or 0)))
     lay[e.dxf.name][e.dxf.layer]+=1
     if e.dxf.name!='base': rec(e,1)
+    else:   # the base building: only its lift shafts and lift doors (they place the lift lobbies)
+        for v in e.virtual_entities():
+            if v.dxftype()=='INSERT' and any(s in v.dxf.name for s in ('LiftShaft','Lift Door')):
+                p=v.dxf.insert; pos[v.dxf.name].append((round(p.x),round(p.y),round(v.dxf.rotation or 0)))
 sizes={}
 for name in pos:
     blk=doc.blocks.get(name)

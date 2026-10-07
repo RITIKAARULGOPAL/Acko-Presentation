@@ -1,0 +1,32 @@
+{
+  "building": "Regalium",
+  "developer": "Machani Group",
+  "address": "Regalium Building, Koramangala Industrial Layout, Koramangala, Bengaluru, Karnataka 560095",
+  "plus": "WJJ7+CQW, Bengaluru",
+  "plusFull": "7J4VWJJ7+CQW",
+  "floor": "3rd floor",
+  "sbaSft": 91000,
+  "carpetSft": 56650,
+  "headcount": 640,
+  "headcountNote": "approx.",
+  "dd": [
+    {"k": "structure", "item": "Structural system", "finding": "RCC slab (PT slab)", "remark": ""},
+    {"k": "slab", "item": "True slab height (floor to slab bottom)", "finding": "3700 mm", "remark": "Good ceiling height for fit-out", "mm": 3700},
+    {"k": "ismb", "item": "Floor to ISMB beam bottom", "finding": "3250 mm", "remark": "Good ceiling height for fit-out", "mm": 3250},
+    {"k": "beam", "item": "Lowest concrete beam bottom", "finding": "3250 mm", "remark": "Good ceiling height for fit-out", "mm": 3250},
+    {"k": "glazing", "item": "Glazing", "finding": "Full-height glazing from floor", "remark": "Glazing from FFL"},
+    {"k": "screed", "item": "Screed condition", "finding": "Screeding to be done", "remark": "Screeding to be done"},
+    {"k": "columns", "item": "Column sizes", "finding": "As per DWG", "remark": "As per DWG"},
+    {"k": "facade", "item": "Façade", "finding": "External glazing under construction", "remark": "Under construction"}
+  ],
+  "notes": [
+    "Five emergency exit doors were observed on site; their locations and access are to be considered during planning.",
+    "The main entrance opens directly from the office lift lobby, giving a wide, welcoming arrival.",
+    "Full-height external glazing is under construction.",
+    "A typical capital slab on beams; the detailed beam layout is to come from the base builder."
+  ],
+  "sources": {
+    "dd": "Officebanao site due diligence",
+    "project": "Machani Group (public sources)"
+  }
+}

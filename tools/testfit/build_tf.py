@@ -24,9 +24,13 @@ body=rep(body,'<p class="lede">How a bare floor plate became six self-sustaining
 body=rep(body,'<span class="draft" title="Floor plate, names and numbers are sample data">Draft · sample data</span>','<span class="draft" title="Plan from the test-fit drawing; names and teams are placeholders">Draft · test fit 02</span>')
 body=re.sub(r'  <section class="scene" id="sc-brief".*?</section>\n','',body)
 body=rep(body,'looping around the Town Square','looping around the shared spaces')
+body=rep(body,'  <section class="scene" id="sc-alloc"','''  <section class="scene" id="sc-site" aria-label="The site: Regalium, Koramangala"><svg id="sitesvg" class="dsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of the site and the streets around it"></svg><p class="m-attr" id="m-attr"></p></section>
+  <section class="scene" id="sc-climate" aria-label="Sun path and wind"><svg id="climsvg" class="dsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Sun path and wind rose over the floor plate"></svg></section>
+  <section class="scene" id="sc-alloc"''')
 # ---------- script ----------
 concept="const {buildCity,buildLoop}=(function(){\n"+open('tf_concept_consts.js').read()+(city+loopf).replace("'TOWN SQUARE'","'SHARED SPACES'")+"  return {buildCity,buildLoop};\n})();\n"
 data=open('tf_data.js').read().replace('/*REALFIT*/null',open('realfit.json').read())
+data+=open('tf_site.js').read().replace('/*SITE*/null',open('site.json').read())
 plan=open('tf_plan.js').read().replace('/*CONCEPT*/',concept)
 steps=open('tf_steps.js').read()
 # renders: real kinds
@@ -40,11 +44,11 @@ renders=rep(renders,"const canRender=k=>NB_KINDS.includes(k)||TS_KINDS.includes(
 renders=rep(renders,"(SCENE[k]||SCENE.meeting)();","(SCENE[SCENE_OF[k]||k]||SCENE.meeting)();")
 # engine edits
 e=engine
-e=rep(e,"loop:$('#sc-loop'),brief:$('#sc-brief'),alloc:$('#sc-alloc')","loop:$('#sc-loop'),alloc:$('#sc-alloc')")
+e=rep(e,"loop:$('#sc-loop'),brief:$('#sc-brief'),alloc:$('#sc-alloc')","loop:$('#sc-loop'),site:$('#sc-site'),climate:$('#sc-climate'),alloc:$('#sc-alloc')")
 e=rep(e,"  buildPlan(); buildCover(); buildCity(); buildLoop(); buildBrief(); buildAlloc(); buildOverview(); buildNumbers();",
 """  $('svg defs').insertAdjacentHTML('beforeend',`<clipPath id="clip-rf"><path d="${PD(RF.plate)}"/></clipPath>`);
-  buildPlan(); buildCover(); buildCity(); buildLoop(); buildAlloc(); buildOverview(); buildNumbers();""")
-e=rep(e,"  document.body.classList.toggle('full',!!s.full);","  document.body.classList.toggle('full',!!s.full);\n  document.body.classList.toggle('wide',!!s.wide);")
+  buildPlan(); buildCover(); buildCity(); buildLoop(); buildSite(); buildClimate(); buildAlloc(); buildOverview(); buildNumbers();""")
+e=rep(e,"  document.body.classList.toggle('full',!!s.full);","  document.body.classList.toggle('full',!!s.full);\n  document.body.classList.toggle('wide',!!s.wide);\n  document.body.classList.toggle('tall',!!s.tall);")
 e=rep(e,"  if(st.width) $('#plan-fit').style.setProperty('--fit',Math.min(st.width/1280,st.height/780)*.97);\n  const ax=$('#dv-axo').getBoundingClientRect();\n  if(ax.width) $('#axo-fit').style.setProperty('--fit',Math.min((ax.width-24)/470,(ax.height-60)/290));",
 "  if(st.width) $('#plan-fit').style.setProperty('--fit',Math.min(st.width/PW,st.height/PH)*.97);\n  const ax=$('#dv-axo').getBoundingClientRect();\n  if(ax.width) $('#axo-fit').style.setProperty('--fit',Math.min((ax.width-24)/(AX.w*.95),(ax.height-60)/(AX.h*1.15)));")
 e=re.sub(r"function wireDD\(\)\{.*?\n\}\n","",e,flags=re.S)
