@@ -56,7 +56,7 @@ const DRAW=(d,c,delay)=>`<path d="${d}" pathLength="1" class="${c} draw" style="
 const G=(grp,area)=>(RF.g[grp]||{})[area]||'';
 
 /* ---------- kit per area, counted from the drawing ---------- */
-const KIND_ORDER=['desk','cabin','sprint','dept','huddle','hatchery','duo','booth','pantry','zen','prayer','mother','cafe','reception','lobby','visitor','board','studio'];
+const KIND_ORDER=['desk','garden','cabin','sprint','dept','huddle','hatchery','duo','booth','pantry','zen','prayer','mother','cafe','reception','lobby','visitor','board','studio'];
 function kitOf(a){
   const k={desk:0,deskSeats:0,table4:0,green:0};
   RF.desks.forEach(d=>{ if(d[3]===a){ k.desk+=d[2]; if(d[4]) k.table4++; } });
@@ -64,7 +64,13 @@ function kitOf(a){
   RF.pantries.forEach(p=>{ if(p.a===a) k.pantry=(k.pantry||0)+1; });
   return k;
 }
+/* named places the drawing doesn't label, placed from the design team's renders (drawing units) */
+const PLACES=[
+  // Acker Garden · Work Arena: the curved north-west corner of Neighbourhood 01, by its coffee point (the key plan in the renders)
+  {k:'garden',area:'N01',x:330,y:190,pts:[[171.6,45.6],[520,45.6],[520,330],[300,330],[125.7,145.7],[111,128],[102,111],[98,96],[101,83],[109,71],[124,61],[144,52]]},
+];
 const KITS={}; AREA_IDS.concat(['X']).forEach(a=>KITS[a]=kitOf(a));
+PLACES.forEach(p=>{ KITS[p.area][p.k]=(KITS[p.area][p.k]||0)+1; });
 const sumK=(ids,key)=>ids.reduce((s,a)=>s+(KITS[a][key]||0),0);
 const NB_IDS=NBS.map(n=>n.id), ALL_IDS=AREA_IDS.concat(['X']);
 const nbIndex=id=>NB_IDS.indexOf(id);
@@ -91,6 +97,7 @@ function addSP(o){ o.i=SP.length; SP.push(o); return o; }
 const rectPts=(x,y,w,h)=>[[x-w/2,y-h/2],[x+w/2,y-h/2],[x+w/2,y+h/2],[x-w/2,y+h/2]];
 /* whole-area hits first, so the rooms inside sit on top of them */
 [['TW','cafe'],['TC','lobby'],['R1','reception'],['R2','reception']].forEach(([a,k])=>addSP({k,nb:'TS',area:a,seats:0,pts:RF.areas[a],big:true}));
+PLACES.forEach(p=>addSP({k:p.k,nb:ctxOf(p.area),area:p.area,seats:0,pts:p.pts,big:true,x:p.x,y:p.y,m2:polyM2(p.pts)}));
 RF.desks.forEach(d=>{ const ctx=ctxOf(d[3]); if(ctx) addSP({k:'desk',nb:ctx,area:d[3],seats:d[2],pts:rectPts(d[0],d[1],d[4]?50:48,d[4]?50:48),x:d[0],y:d[1]}); });
 RF.pantries.forEach(p=>{ const ctx=ctxOf(p.a); if(ctx) addSP({k:'pantry',nb:ctx,area:p.a,seats:0,pts:rectPts(p.x,p.y,90,64),x:p.x,y:p.y}); });
 RF.rooms.forEach(r=>{ const ctx=ctxOf(r.a); if(!ctx||!ROOM_SIZE[r.k]) return; const sz=ROOM_SIZE[r.k]; addSP({k:r.k,nb:ctx,area:r.a,seats:r.s,t:r.t,pts:r.poly||rectPts(r.x,r.y,sz[0],sz[1]),x:r.x,y:r.y,m2:r.m2}); });

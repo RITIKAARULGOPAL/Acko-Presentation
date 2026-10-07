@@ -146,6 +146,7 @@ function buildAlloc(){
 /* ---------- deep dive ---------- */
 const KIT=[
   {k:'desk',n:'Workstations',one:'workstation',c:'Work',v:k=>k.desk},
+  {k:'garden',n:'Acker Garden · Work Arena',one:'Acker Garden',c:'Work',v:()=>'north-west corner'},
   {k:'cabin',n:'Executive cabins',one:'executive cabin',c:'Work',v:k=>k.cabin},
   {k:'sprint',n:'Quick sprint rooms',one:'quick sprint room',c:'Meet',v:k=>`${k.sprint} · ${k.sprintSeats} seats`},
   {k:'dept',n:'Departmental rooms',one:'departmental room',c:'Meet',v:k=>`${k.dept} · ${k.deptSeats} seats`},

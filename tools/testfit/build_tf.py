@@ -35,9 +35,9 @@ plan=open('tf_plan.js').read().replace('/*CONCEPT*/',concept)
 steps=open('tf_steps.js').read()
 # renders: real kinds
 renders=rep(renders,renders[renders.index('const NB_KINDS='):renders.index('const canRender=')],
-"""const SPACE_NAMES={desk:'Workstations',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Pantry point',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
+"""const SPACE_NAMES={desk:'Workstations',garden:'Acker Garden · Work Arena',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Pantry point',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
 /* which sample interior stands in for each space until the real renders arrive */
-const SCENE_OF={sprint:'meeting',dept:'board',hatchery:'huddle',duo:'focus',prayer:'zen',mother:'zen',lobby:'reception',visitor:'meeting',studio:'meeting'};
+const SCENE_OF={garden:'huddle',sprint:'meeting',dept:'board',hatchery:'huddle',duo:'focus',prayer:'zen',mother:'zen',lobby:'reception',visitor:'meeting',studio:'meeting'};
 const ACCENT={N01:'#ff7a59',N02:'#f0b43a',N03:'#2ec4b6',N04:'#58a9ff',N05:'#ef72b2',N06:'#a3d977',TS:'#7c5cff'};
 """)
 renders=rep(renders,"const canRender=k=>NB_KINDS.includes(k)||TS_KINDS.includes(k);","const canRender=k=>!!SPACE_NAMES[k];")
@@ -74,7 +74,7 @@ sm_old=e[e.index("function spaceMeta(ctx,k){"):e.index("function setImg(")]
 e=rep(e,sm_old,"""function spaceMeta(ctx,k){
   const inst=SP.filter(x=>inCtx(x,ctx)&&x.k===k); if(!inst.length) return '';
   if(k==='desk') return `${inst.reduce((a,x)=>a+x.seats,0)} workstations in ${inst.length} clusters`;
-  if(inst.every(x=>x.big)){ const side=inst.map(x=>({R1:'west',R2:'east'})[x.area]).filter(Boolean); return [side.length>1?side.join(' and ').replace(/^./,c=>c.toUpperCase()):'', `${fmt(inst.reduce((a,x)=>a+m2ft(M2[x.area]),0))} sq ft`].filter(Boolean).join(' · '); }
+  if(inst.every(x=>x.big)){ const side=inst.map(x=>({R1:'west',R2:'east'})[x.area]).filter(Boolean); return [side.length>1?side.join(' and ').replace(/^./,c=>c.toUpperCase()):'', `${fmt(inst.reduce((a,x)=>a+m2ft(x.m2||M2[x.area]),0))} sq ft`].filter(Boolean).join(' · '); }
   const where=ctx==='TS'?'the shared spaces':'this neighbourhood', seats=inst.map(x=>x.seats).filter(Boolean), lo=Math.min(...seats), hi=Math.max(...seats);
   return [inst.length>1?`${inst.length} in ${where}`:'', seats.length?(lo===hi?`${lo} ${lo===1?'seat':'seats'}${inst.length>1?' each':''}`:`${lo} to ${hi} seats`):''].filter(Boolean).join(' · ');
 }
