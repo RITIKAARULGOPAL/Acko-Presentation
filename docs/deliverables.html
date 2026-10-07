@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Acko Deliverables and Naming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Print spec sheet: A4, single light theme. Purple is the placeholder Acko accent used in the presentation. */
+:root{
+  --ink:#1b1826; --ink-2:#4f4a64; --ink-3:#8b86a1; --rule:#e1ddec; --soft:#f4f2fa;
+  --brand:#5a33e6; --brand-soft:#efebfd; --fire:#e2412f; --exit:#119a62; --ok:#119a62; --bad:#d23a2a; --ref:#ff0000;
+  --n1:#e65a36; --n2:#cf8d0c; --n3:#109a8d; --n4:#2a7fd8; --n5:#d2468e; --n6:#5ca23a;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+}
+@page{ size:A4; margin:17mm 17mm 19mm 17mm; }
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+body{margin:0; background:#fff; color:var(--ink); font-family:var(--body); font-size:9.4pt; line-height:1.52}
+p{margin:0 0 7pt; max-width:165mm}
+h2{font-family:var(--display); font-stretch:112%; font-weight:750; font-size:19pt; line-height:1.1; margin:0 0 4pt; letter-spacing:-.01em; break-before:page; break-after:avoid}
+h2 .no{color:var(--brand); margin-right:8pt}
+.sec-lede{font-size:10.4pt; color:var(--ink-2); margin:0 0 12pt}
+h3{font-family:var(--display); font-stretch:105%; font-weight:700; font-size:11.6pt; margin:16pt 0 5pt; break-after:avoid}
+h3 .no{color:var(--ink-3); font-family:var(--mono); font-weight:500; font-size:9pt; margin-right:6pt; letter-spacing:.02em}
+code,.m{font-family:var(--mono); font-size:.88em}
+code{background:var(--soft); border:.5pt solid var(--rule); border-radius:3px; padding:0 3px; white-space:nowrap}
+strong{font-weight:600}
+ul,ol{margin:0 0 8pt; padding-left:15pt}
+li{margin:0 0 3pt}
+li::marker{color:var(--ink-3)}
+table{width:100%; border-collapse:collapse; margin:4pt 0 10pt; font-size:8.5pt; line-height:1.4}
+thead{display:table-header-group}
+tr{break-inside:avoid}
+th{text-align:left; font-family:var(--mono); font-weight:500; font-size:7pt; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2); border-bottom:1pt solid var(--ink); padding:0 8pt 4pt 0; vertical-align:bottom}
+td{border-bottom:.5pt solid var(--rule); padding:5pt 8pt 5pt 0; vertical-align:top}
+td:first-child code,td.k code{background:none; border:0; padding:0; font-weight:600; color:var(--ink)}
+.req{font-family:var(--mono); font-size:7pt; letter-spacing:.06em; text-transform:uppercase; border-radius:3px; padding:1pt 4pt; white-space:nowrap}
+.req.y{background:var(--brand-soft); color:var(--brand)}
+.req.o{background:var(--soft); color:var(--ink-3)}
+.note{display:block; break-inside:avoid; background:var(--brand-soft); border-left:2.5pt solid var(--brand); border-radius:0 6px 6px 0; padding:7pt 10pt; margin:6pt 0 10pt; font-size:8.8pt}
+.note b{display:block; font-family:var(--mono); font-weight:600; font-size:7pt; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); margin-bottom:2pt}
+.note.check{background:#ecf7f1; border-left-color:var(--ok)}
+.note.check b{color:var(--ok)}
+.note.warn{background:#fdf0ee; border-left-color:var(--bad)}
+.note.warn b{color:var(--bad)}
+figure{margin:6pt 0 12pt; break-inside:avoid}
+figure svg{display:block; width:100%; height:auto}
+figcaption{font-size:8pt; color:var(--ink-3); margin-top:4pt}
+figcaption b{font-family:var(--mono); font-weight:500; color:var(--ink-2); margin-right:5pt}
+pre{font-family:var(--mono); font-size:8pt; line-height:1.55; background:var(--soft); border:.5pt solid var(--rule); border-radius:6px; padding:8pt 10pt; margin:4pt 0 10pt; white-space:pre; break-inside:avoid; color:var(--ink)}
+pre .c{color:var(--ink-3)}
+.checks{list-style:none; padding:0; margin:4pt 0 10pt; columns:2; column-gap:14pt; break-inside:avoid}
+.checks li{position:relative; padding-left:15pt; break-inside:avoid; margin-bottom:5pt; font-size:8.8pt}
+.checks li::before{content:''; position:absolute; left:0; top:2pt; width:8.5pt; height:8.5pt; border:1pt solid var(--ink-2); border-radius:2pt}
+.mx td,.mx th{text-align:center; padding-right:4pt; padding-left:4pt}
+.mx td:first-child,.mx th:first-child{text-align:left; padding-left:0}
+.mx td:last-child,.mx th:last-child{text-align:left}
+.dot{display:inline-block; width:7pt; height:7pt; border-radius:50%; background:var(--ink)}
+.dot.s{background:var(--brand)}
+.mx .dash{color:var(--rule)}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:14pt}
+.keep{break-inside:avoid}
+
+/* cover */
+.cover{height:255mm; display:flex; flex-direction:column; break-after:page}
+.cover .eyebrow{font-family:var(--mono); font-size:9pt; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); margin:6mm 0 6mm}
+.cover h1{font-family:var(--display); font-stretch:125%; font-weight:850; font-size:33pt; line-height:1; letter-spacing:-.02em; margin:0 0 7mm; max-width:176mm}
+.cover .lede{font-size:12pt; color:var(--ink-2); max-width:150mm; line-height:1.5; margin-bottom:7mm}
+.meta{display:grid; grid-template-columns:repeat(4,auto); justify-content:start; gap:4pt 22pt; font-size:8.6pt; margin-bottom:10mm; border-top:1pt solid var(--ink); padding-top:8pt}
+.meta dt{font-family:var(--mono); font-size:6.8pt; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+.meta dd{margin:0}
+.glance{display:grid; grid-template-columns:repeat(3,1fr); gap:10pt; margin-top:auto}
+.glance div{background:var(--soft); border-radius:8px; padding:10pt 11pt}
+.glance h4{margin:0 0 5pt; font-family:var(--display); font-stretch:110%; font-size:11pt}
+.glance h4 span{display:block; font-family:var(--mono); font-weight:400; font-stretch:100%; font-size:7pt; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); margin-bottom:2pt}
+.glance ul{padding-left:11pt; font-size:8.4pt; margin:0}
+.cover-art{margin:2mm 0 8mm}
+.toc{list-style:none; padding:0; margin:0 0 8mm; columns:2; column-gap:16pt; font-size:9pt}
+.toc li{display:flex; gap:7pt; break-inside:avoid; margin-bottom:3pt}
+.toc li span{font-family:var(--mono); color:var(--brand); min-width:14pt}
+
+h2.cont{break-before:auto; margin-top:20pt}
+.cover{height:auto; min-height:0}
+.idt td:first-child{white-space:nowrap}
+.tree{font-size:7.6pt; line-height:1.42}
+.sw{display:inline-block; width:8pt; height:8pt; border-radius:2pt; vertical-align:-1pt; margin-right:5pt}
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="cover">
+  <p class="eyebrow">Acko · Test fit actuals</p>
+  <h1>Deliverables and naming convention</h1>
+  <p class="lede">What to send for the presentation built on the real test fit: the DXF, the SketchUp images, the renders and the content, with the exact file names and IDs to use.</p>
+  <dl class="meta">
+    <div><dt>Prepared by</dt><dd>Officebanao design team</dd></div>
+    <div><dt>For</dt><dd>CAD, SketchUp, visualisation and project lead</dd></div>
+    <div><dt>Version</dt><dd>1.0 · 7 October 2026</dd></div>
+    <div><dt>Status</dt><dd>For action</dd></div>
+  </dl>
+  <ol class="toc">
+    <li><span>01</span>Naming rules and IDs</li>
+    <li><span>02</span>CAD: the DXF</li>
+    <li><span>03</span>SketchUp images</li>
+    <li><span>04</span>Renders</li>
+    <li><span>05</span>Content and brand</li>
+    <li><span>06</span>To confirm, and the final check</li>
+  </ol>
+  <figure><div class="keyplan"><svg viewBox="38.3 -54.4 4923.7 826.0" aria-label="Key plan of test fit 02 with the IDs to use"><defs><pattern id="hs" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="26" stroke="#5a33e6" stroke-width="5" stroke-opacity=".35"/></pattern></defs><path d="M170 46L4902 46L4902 712L3508 712L3508 521L2994 521L2994 712L1889 712L1889 521L1376 521L1376 712L653 712L126 146L111 128L102 111L98 96L101 83L109 71L124 61L144 52Z" fill="#fff" stroke="#1b1826" stroke-width="9"/><path d="M1016 465L832 465L832 584L624 584L576 630L126 146L172 46L1014 46Z" fill="#e65a36" fill-opacity=".16" stroke="#e65a36" stroke-width="7"/><path d="M2549 242L2550 352L2526 352L2526 712L1891 712L1891 460L2021 460L2021 353L2069 353L2069 242Z" fill="#cf8d0c" fill-opacity=".16" stroke="#cf8d0c" stroke-width="7"/><path d="M3229 343L3229 521L2994 521L2994 712L2528 712L2528 352L2551 352L2551 242L2610 242L2610 343Z" fill="#109a8d" fill-opacity=".16" stroke="#109a8d" stroke-width="7"/><path d="M3802 344L3846 344L3876 381L3920 435L3955 407L4089 571L4072 606L4072 710L3510 710L3510 521L3418 519L3418 343L3782 343Z" fill="#2a7fd8" fill-opacity=".16" stroke="#2a7fd8" stroke-width="7"/><path d="M3782 343L3782 110L3802 110L3801 46L4130 46L4130 219L4200 219L4200 348L4350 348L4372 374L4366 382L4365 465L4489 362L4568 456L4489 523L4490 709L4072 712L4072 606L4089 572L4056 531L3955 407L3920 435L3876 381L3846 344L3802 344Z" fill="#d2468e" fill-opacity=".16" stroke="#d2468e" stroke-width="7"/><path d="M4902 46L4904 712L4490 712L4489 523L4568 456L4489 362L4365 465L4366 382L4372 374L4350 348L4350 188L4341 188L4341 46Z" fill="#5ca23a" fill-opacity=".16" stroke="#5ca23a" stroke-width="7"/><path d="M792 584L832 584L832 465L1016 465L1015 356L1376 356L1376 470L1353 470L1353 519L1376 519L1376 521L1376 712L792 712Z" fill="url(#hs)" stroke="#5a33e6" stroke-width="6"/><path d="M2550 352L2550 229L2868 229L2868 343L2610 343L2610 242L2551 242L2551 352Z" fill="url(#hs)" stroke="#5a33e6" stroke-width="6"/><path d="M1395 470L1395 343L1893 343L1896 241L2021 242L2021 460L1890 460L1890 519L1353 519L1353 470Z" fill="url(#hs)" stroke="#5a33e6" stroke-width="6"/><path d="M3372 374L3372 398L3418 398L3418 520L3234 518L3234 342L3372 343Z" fill="url(#hs)" stroke="#5a33e6" stroke-width="6"/><path d="M1889 712L1889 521L1376 521L1376 712Z" fill="#3e9a4b" fill-opacity=".12" stroke="#3e9a4b" stroke-width="6" stroke-dasharray="22 14"/><path d="M3508 712L3508 521L2994 521L2994 712Z" fill="#3e9a4b" fill-opacity=".12" stroke="#3e9a4b" stroke-width="6" stroke-dasharray="22 14"/><rect x="1038" y="85" width="162" height="108" fill="#119a62" fill-opacity=".18" stroke="#119a62" stroke-width="6"/><rect x="1657" y="85" width="162" height="108" fill="#119a62" fill-opacity=".18" stroke="#119a62" stroke-width="6"/><rect x="2859" y="85" width="162" height="108" fill="#119a62" fill-opacity=".18" stroke="#119a62" stroke-width="6"/><rect x="3620" y="85" width="162" height="108" fill="#119a62" fill-opacity=".18" stroke="#119a62" stroke-width="6"/><rect x="4160" y="85" width="162" height="108" fill="#119a62" fill-opacity=".18" stroke="#119a62" stroke-width="6"/><text x="628" y="329" font-family="IBM Plex Mono,Menlo,monospace" font-size="96" font-weight="700" fill="#e65a36" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">n01</text><text x="2144" y="503" font-family="IBM Plex Mono,Menlo,monospace" font-size="96" font-weight="700" fill="#cf8d0c" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">n02</text><text x="2910" y="550" font-family="IBM Plex Mono,Menlo,monospace" font-size="96" font-weight="700" fill="#109a8d" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">n03</text><text x="3754" y="550" font-family="IBM Plex Mono,Menlo,monospace" font-size="96" font-weight="700" fill="#2a7fd8" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">n04</text><text x="3957" y="240" font-family="IBM Plex Mono,Menlo,monospace" font-size="96" font-weight="700" fill="#d2468e" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">n05</text><text x="4687" y="286" font-family="IBM Plex Mono,Menlo,monospace" font-size="96" font-weight="700" fill="#5ca23a" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">n06</text><text x="1178" y="566" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#5a33e6" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">ss-cafe</text><text x="2704" y="306" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#5a33e6" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">ss-lobby</text><text x="1656" y="402" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#5a33e6" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">ss-reception-w</text><text x="3309" y="407" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#5a33e6" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">ss-reception-e</text><text x="1632" y="636" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#3e9a4b" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">terrace-1</text><text x="3251" y="636" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#3e9a4b" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">terrace-2</text><text x="1119" y="63" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#119a62" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">st1</text><text x="1738" y="63" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#119a62" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">st2</text><text x="2940" y="63" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#119a62" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">st3</text><text x="3701" y="63" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#119a62" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">st4</text><text x="4241" y="63" font-family="IBM Plex Mono,Menlo,monospace" font-size="58" font-weight="600" fill="#119a62" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="16" stroke-linejoin="round">st5</text></svg></div>
+  <figcaption><b>Key plan</b>Test fit 02 with the IDs used in every file name and drawing label: neighbourhoods <code>n01</code>–<code>n06</code> west to east, shared spaces <code>ss-*</code>, terraces and stairs.</figcaption></figure>
+  <div class="glance" style="grid-template-columns:repeat(4,1fr); margin-top:6mm">
+    <div><h4><span>CAD team</span>The DXF</h4><ul><li>Layout as DXF 2018, mm</li><li>PRES layers drawn over the plan</li><li>PDF plot and block map</li></ul></div>
+    <div><h4><span>SketchUp team</span>Axo images</h4><ul><li>One parallel camera</li><li>Hero, layer, zone and close-up PNGs</li><li>8000 px, transparent</li></ul></div>
+    <div><h4><span>Visualisation</span>Renders</h4><ul><li>Light + dark JPG per space</li><li>Same camera for both</li><li>18 space keys</li></ul></div>
+    <div><h4><span>Project lead</span>Content</h4><ul><li>Neighbourhoods and brief sheets</li><li>Site, due-diligence and fire notes</li><li>Acko brand files</li></ul></div>
+  </div>
+</section>
+
+<!-- ============================ 01 ============================ -->
+<h2><span class="no">01</span>Naming rules and IDs</h2>
+<p class="sec-lede">One set of names for the drawing, the images, the renders and the sheets, so every file lands in the right place without anyone renaming it.</p>
+<h3><span class="no">1.1</span>Rules</h3>
+<ol>
+<li><b>Lowercase, hyphens, no spaces.</b> Plain letters only: <code>cafe</code>, not <code>café</code>. No <code>(1)</code> or <code>copy</code> in names.</li>
+<li><b>File names never change between issues.</b> A re-export replaces the file of the same name, and the presentation picks it up with no code changes.</li>
+<li><b>The revision and date go on the folder,</b> not the files: <code>acko-inputs-tf03-2026-10-12</code>.</li>
+<li><b>Dates as YYYY-MM-DD.</b> "5.10.26" can be read as 5 October or 10 May.</li>
+<li><b>One <code>readme.txt</code> per issue:</b> revision, date, what changed since the last issue, who exported.</li>
+</ol>
+<div class="note"><b>Where this differs from the handover spec v1.1</b>These names replace the older ones: neighbourhoods are <code>n01</code>–<code>n06</code> (not N1–N6), the Town Square is now the shared spaces (<code>PRES-SHARED</code>, <code>axo-zone-shared.png</code>), the south cut-outs are terraces, and SketchUp exports are 8000 px wide.</div>
+<h3><span class="no">1.2</span>IDs</h3>
+<table class="idt">
+<thead><tr><th style="width:26%">Thing</th><th style="width:30%">ID in file names</th><th>Label in the drawing</th></tr></thead>
+<tbody>
+<tr><td>Neighbourhoods, west to east</td><td><code>n01</code> … <code>n06</code></td><td><code>NEIGHBOURHOOD 01</code> … <code>NEIGHBOURHOOD 06</code></td></tr>
+<tr><td>Shared spaces</td><td><code>ss-cafe</code> · <code>ss-lobby</code> · <code>ss-reception-w</code> · <code>ss-reception-e</code></td><td><code>SHARED CAFE</code> · <code>SHARED LOBBY</code> · <code>SHARED RECEPTION W</code> · <code>SHARED RECEPTION E</code></td></tr>
+<tr><td>Terraces</td><td><code>terrace-1</code> · <code>terrace-2</code></td><td><code>TERRACE 1</code> · <code>TERRACE 2</code></td></tr>
+<tr><td>Fire stairs</td><td><code>st1</code> … <code>st5</code></td><td><code>ST1</code> … <code>ST5</code>, exits <code>EXIT ST1</code> …</td></tr>
+<tr><td>Openings</td><td><code>cutout-1</code> …</td><td><code>CUTOUT 1</code> …</td></tr>
+</tbody></table>
+<h3><span class="no">1.3</span>Delivery folder</h3>
+<pre class="tree">acko-inputs-tf03-2026-10-12/
+├─ readme.txt                         <span class="c">revision, date, what changed, who exported</span>
+├─ 01-cad/
+│  ├─ acko-layout.zip                 <span class="c">acko-layout.dxf inside (a 160 MB DXF zips to about 12 MB)</span>
+│  ├─ acko-layout.pdf                 <span class="c">vector plot of the same layout</span>
+│  └─ block-map.xlsx
+├─ 02-sketchup/
+│  ├─ axo-full.png
+│  ├─ axo-1-shell.png … axo-5-ceiling.png
+│  ├─ axo-zone-n01.png … axo-zone-n06.png, axo-zone-shared.png
+│  ├─ axo-n01-close.png … axo-n06-close.png
+│  ├─ axo-n01-close-ref.png … axo-n06-close-ref.png
+│  └─ axo-ref.png
+├─ 03-renders/
+│  ├─ sprint-light.jpg, sprint-dark.jpg …   <span class="c">one pair per space key (section 04)</span>
+│  └─ n03-huddle-light.jpg …                <span class="c">only where one neighbourhood looks different</span>
+└─ 04-content/
+   ├─ neighbourhoods.xlsx, brief.xlsx, notes.xlsx, concept.txt
+   ├─ photos/dd-01.jpg …
+   └─ brand/  acko-logo.svg, officebanao-logo.svg, palette.xlsx, fonts/</pre>
+
+<!-- ============================ 02 ============================ -->
+<h2><span class="no">02</span>CAD: the DXF</h2>
+<p class="sec-lede">Your working layers stay exactly as they are. The presentation reads the plan, rooms and furniture from them, and a few <code>PRES</code> layers drawn on top tell it where the zones, routes and terraces are.</p>
+<div class="note warn"><b>Lesson from test fit 02</b>The zones and egress routes came as copies in separate panels above and below the plan, so they had to be shifted back by measured distances. For the actuals, draw them on the PRES layers <strong>directly over the plan</strong>, in the same position, and keep only this floor in model space.</div>
+<h3><span class="no">2.1</span>PRES layers</h3>
+<table>
+<thead><tr><th style="width:18%">Layer</th><th style="width:38%">Draw</th><th style="width:30%">Label inside</th><th></th></tr></thead>
+<tbody>
+<tr><td><code>PRES-PLATE</code></td><td>1 closed polyline: the floor edge, with the terraces cut out</td><td>–</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-NBHD</code></td><td>1 closed polyline per neighbourhood</td><td><code>NEIGHBOURHOOD 01</code> …</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-SHARED</code></td><td>1 closed polyline per shared space: café, lobby, west and east receptions</td><td><code>SHARED CAFE</code> …</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-TERRACE</code></td><td>1 closed polyline per terrace</td><td><code>TERRACE 1</code>, <code>TERRACE 2</code></td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-VOID</code></td><td>Real openings only, such as the cut-out by the lifts</td><td><code>CUTOUT 1</code></td><td><span class="req o">If any</span></td></tr>
+<tr><td><code>PRES-LOOP</code></td><td>1 closed polyline along the centre line of the loop corridor</td><td>–</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-FIRE-ROUTE</code></td><td>1 polyline per egress route, drawn <b>from the far point to the stair door</b></td><td>–</td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-FIRE-EXIT</code></td><td>Text with its insertion point on each stair door</td><td><code>EXIT ST1</code> … <code>EXIT ST5</code></td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-REF</code></td><td>4 small markers, identical to the ones in SketchUp</td><td><code>REF-1</code> … <code>REF-4</code></td><td><span class="req y">Required</span></td></tr>
+<tr><td><code>PRES-DD</code></td><td>Numbers at the due-diligence findings</td><td><code>1</code>, <code>2</code> …</td><td><span class="req o">Optional</span></td></tr>
+<tr><td><code>PRES-SITE</code></td><td>A north line (south to north) and short notes at views, noise and arrival</td><td><code>NORTH</code>, <code>VIEW</code> …</td><td><span class="req o">Optional</span></td></tr>
+</tbody></table>
+<p>Every PRES shape is a <b>closed polyline</b> (<code>LIST</code> must say "Closed"), with its label's insertion point inside it. No shapes inside blocks, and no overlaps on the same layer.</p>
+<h3><span class="no">2.2</span>Room labels</h3>
+<p>Keep the room labels exactly as in test fit 02, on <code>OB-I-ANNO-TEXT</code>, one inside each room. They decide what each room is counted as and which render it opens. If you add a new kind of room, send its label.</p>
+<table>
+<thead><tr><th style="width:40%">Label</th><th style="width:30%">Counted as</th><th>Render key</th></tr></thead>
+<tbody>
+<tr><td><code>QUICK SPRINT 4 PAX - 01</code></td><td>Quick sprint room, 4 seats</td><td class="k"><code>sprint</code></td></tr>
+<tr><td><code>COLLABORATION HUDDLE 10 PAX - 01</code></td><td>Collaboration huddle</td><td class="k"><code>huddle</code></td></tr>
+<tr><td><code>DEPARTMENTAL ROOMS 18 PAX - 01</code></td><td>Departmental room</td><td class="k"><code>dept</code></td></tr>
+<tr><td><code>BOARDROOM 35 PAX</code></td><td>Boardroom</td><td class="k"><code>board</code></td></tr>
+<tr><td><code>THE HATCHERY 08 PAX - 01</code></td><td>The Hatchery</td><td class="k"><code>hatchery</code></td></tr>
+<tr><td><code>VISITOR HUB 4 PAX - 01</code></td><td>Visitor hub</td><td class="k"><code>visitor</code></td></tr>
+<tr><td><code>2 PAX - 01</code></td><td>Two-person room</td><td class="k"><code>duo</code></td></tr>
+<tr><td><code>PB 01</code></td><td>Phone booth</td><td class="k"><code>booth</code></td></tr>
+<tr><td><code>ZEN ROOM 01</code></td><td>Zen room</td><td class="k"><code>zen</code></td></tr>
+<tr><td><code>EXECUTIVE CORNER CABIN 01</code></td><td>Executive cabin</td><td class="k"><code>cabin</code></td></tr>
+<tr><td><code>PRAYER ROOM</code> · <code>MOTHER'S ROOM</code> · <code>STUDIO</code></td><td>As named</td><td class="k"><code>prayer</code> · <code>mother</code> · <code>studio</code></td></tr>
+<tr><td><code>RECEPTION &amp; WAITING LOUNGE</code></td><td>Reception</td><td class="k"><code>reception</code></td></tr>
+<tr><td><code>SERVER ROOM</code>, <code>UPS &amp; ELECTRICAL ROOM</code>, <code>HUB ROOM</code>, <code>STORE ROOM</code>, <code>MAIL ROOM</code></td><td>Support room, shown on the plan</td><td>no render</td></tr>
+</tbody></table>
+<h3><span class="no">2.3</span>Furniture blocks and the block map</h3>
+<p>Keep furniture as <b>blocks</b>; don't explode them. Workstations and pantries are counted from block inserts. Fill in <code>block-map.xlsx</code> for every furniture block, with how many seats each insert stands for:</p>
+<table>
+<thead><tr><th style="width:34%">Block name</th><th style="width:40%">Item</th><th>Seats per insert</th></tr></thead>
+<tbody>
+<tr><td><code>rytu</code></td><td>3-desk workstation cluster</td><td>3</td></tr>
+<tr><td><code>WS 1500x750mm</code></td><td>Single workstation</td><td>1</td></tr>
+<tr><td><code>4PAX WITH PLANTER</code></td><td>4-seat collaboration table (counted as workstations)</td><td>4</td></tr>
+<tr><td><code>EQ_PA_MO_0635X0535_01</code></td><td>Pantry microwave: marks a pantry point</td><td>–</td></tr>
+</tbody></table>
+<p style="color:var(--ink-3); font-size:8.4pt">Rows from test fit 02. Renaming anonymous blocks (<code>rytu</code>, <code>dfvfg</code>) to readable names helps, as long as the block map matches.</p>
+<h3><span class="no">2.4</span>Export</h3>
+<ul class="checks">
+<li>AutoCAD 2018 DXF, units millimetres</li>
+<li>Model space holds only this floor, at Z = 0</li>
+<li>Xrefs bound; PURGE, AUDIT and OVERKILL run</li>
+<li>Saved as <code>acko-layout.dxf</code>, then zipped</li>
+<li>Vector PDF plot as <code>acko-layout.pdf</code></li>
+<li>Block map filled in</li>
+</ul>
+
+<!-- ============================ 03 ============================ -->
+<h2><span class="no">03</span>SketchUp images</h2>
+<p class="sec-lede">The 3D views are built from images taken from one fixed camera, each with different tags switched on. Because every image lines up exactly, they can be stacked, pulled apart for the exploded view and highlighted one zone at a time.</p>
+<h3><span class="no">3.1</span>Tags</h3>
+<p><code>SHELL</code> · <code>FLOOR</code> · <code>WALLS</code> · <code>FURNITURE</code> · <code>CEILING</code> · <code>NB-N01</code> … <code>NB-N06</code> · <code>SHARED</code> · <code>TERRACE</code> · <code>REF</code>. Each zone group carries its zone tag; the groups inside it carry the category tags.</p>
+<h3><span class="no">3.2</span>Image list</h3>
+<table>
+<thead><tr><th style="width:34%">File</th><th style="width:36%">Tags on</th><th>Used for</th></tr></thead>
+<tbody>
+<tr><td><code>axo-full.png</code></td><td>Everything, shadows on</td><td>Hero axo</td></tr>
+<tr><td><code>axo-1-shell.png</code></td><td>SHELL</td><td>Build-up and exploded view</td></tr>
+<tr><td><code>axo-2-floor.png</code></td><td>FLOOR, TERRACE</td><td>Build-up (if you have finishes)</td></tr>
+<tr><td><code>axo-3-walls.png</code></td><td>WALLS</td><td>Build-up and exploded view</td></tr>
+<tr><td><code>axo-4-furniture.png</code></td><td>FURNITURE</td><td>Build-up and exploded view</td></tr>
+<tr><td><code>axo-5-ceiling.png</code></td><td>CEILING</td><td>Optional</td></tr>
+<tr><td><code>axo-zone-n01.png</code> … <code>n06</code></td><td>One neighbourhood tag only</td><td>Highlighting one neighbourhood</td></tr>
+<tr><td><code>axo-zone-shared.png</code></td><td>SHARED only</td><td>Highlighting the shared spaces</td></tr>
+<tr><td><code>axo-n01-close.png</code> … <code>n06</code></td><td>A close camera on that neighbourhood, everything on</td><td>The deep dives</td></tr>
+<tr><td><code>axo-n01-close-ref.png</code> …</td><td>REF only, same close camera</td><td>Lining the close-up up with the plan</td></tr>
+<tr><td><code>axo-ref.png</code></td><td>REF only</td><td>Lining the axo up with the plan</td></tr>
+</tbody></table>
+<h3><span class="no">3.3</span>Settings</h3>
+<ul class="checks">
+<li>One saved scene, <code>PRES-AXO</code>, for every full-floor image</li>
+<li>Camera → Parallel Projection (never perspective)</li>
+<li>PNG, 8000 px wide (the floor is about 7:1)</li>
+<li>Transparent background; sky and ground off</li>
+<li>All full-floor images exactly the same pixel size</li>
+<li>Shadows only on <code>axo-full.png</code></li>
+<li>Same 4 REF markers as in the DXF</li>
+<li>Optional: <code>acko-model.glb</code> or <code>.dae</code></li>
+</ul>
+
+<!-- ============================ 04 ============================ -->
+<h2><span class="no">04</span>Renders</h2>
+<p class="sec-lede">Clicking a space opens its light and dark renders, with a slider that wipes from one to the other. The two have to line up exactly for the slider to work.</p>
+<ul class="checks">
+<li>Light and dark from the <b>same saved camera</b></li>
+<li>JPG, quality 85–90, sRGB</li>
+<li>2400–3000 px wide, all 16:9</li>
+<li>No text, logos or watermarks</li>
+</ul>
+<p>Name each pair <code>&lt;key&gt;-light.jpg</code> and <code>&lt;key&gt;-dark.jpg</code>. One pair per key is enough. To show a different version in one neighbourhood, prefix its ID: <code>n03-huddle-light.jpg</code>.</p>
+<table>
+<thead><tr><th style="width:14%">Key</th><th style="width:30%">Space</th><th style="width:20%">Where</th><th style="width:14%">Key</th><th>Space</th></tr></thead>
+<tbody>
+<tr><td><code>desk</code></td><td>Workstations</td><td>Neighbourhoods</td><td><code>booth</code></td><td>Phone booth</td></tr>
+<tr><td><code>cabin</code></td><td>Executive cabin</td><td>Neighbourhoods</td><td><code>pantry</code></td><td>Pantry point</td></tr>
+<tr><td><code>sprint</code></td><td>Quick sprint room</td><td>Neighbourhoods</td><td><code>zen</code></td><td>Zen room</td></tr>
+<tr><td><code>dept</code></td><td>Departmental room</td><td>Neighbourhoods</td><td><code>prayer</code></td><td>Prayer room</td></tr>
+<tr><td><code>board</code></td><td>Boardroom</td><td>Neighbourhoods</td><td><code>mother</code></td><td>Mother's room</td></tr>
+<tr><td><code>huddle</code></td><td>Collaboration huddle</td><td>Neighbourhoods</td><td><code>cafe</code></td><td>Café and dining (shared)</td></tr>
+<tr><td><code>hatchery</code></td><td>The Hatchery</td><td>Neighbourhoods</td><td><code>reception</code></td><td>Reception (shared)</td></tr>
+<tr><td><code>studio</code></td><td>Studio</td><td>Neighbourhoods</td><td><code>lobby</code></td><td>Lobby (shared)</td></tr>
+<tr><td><code>duo</code></td><td>Two-person room</td><td>Neighbourhoods</td><td><code>visitor</code></td><td>Visitor hub (shared)</td></tr>
+</tbody></table>
+<p style="color:var(--ink-3); font-size:8.4pt">Until a render arrives, the presentation shows a sample picture for that space.</p>
+
+<!-- ============================ 05 ============================ -->
+<h2 class="cont"><span class="no">05</span>Content and brand</h2>
+<p class="sec-lede">The words, numbers and brand that go alongside the drawings. Sheets can be XLSX or CSV, one row per item.</p>
+<table>
+<thead><tr><th style="width:24%">File</th><th>Columns or contents</th></tr></thead>
+<tbody>
+<tr><td><code>neighbourhoods.xlsx</code></td><td>ID (<code>n01</code>–<code>n06</code>) · team · headcount · colour hex · one-line description</td></tr>
+<tr><td><code>brief.xlsx</code></td><td>Space type · brief total · unit (rooms or seats) · rule (<code>split</code> ÷ 6, <code>shared</code>, or shared spaces) · extras (e.g. <code>n02 +1</code>) · reason if short</td></tr>
+<tr><td><code>notes.xlsx</code> · site</td><td>North direction · views · noise · arrival · floor-to-floor and clear height</td></tr>
+<tr><td><code>notes.xlsx</code> · due diligence</td><td>Number · title · note (one or two lines) · photo file name</td></tr>
+<tr><td><code>notes.xlsx</code> · fire</td><td>Travel-distance limit · basis (NBC 2016 Part 4, sprinklered or not) · consultant's egress plan as PDF if any</td></tr>
+<tr><td><code>concept.txt</code></td><td>The neighbourhood and loop concept in your words, three to five sentences</td></tr>
+<tr><td><code>photos/</code></td><td>Due-diligence photos named <code>dd-01.jpg</code>, <code>dd-02.jpg</code> … to match the numbers</td></tr>
+<tr><td><code>brand/</code></td><td><code>acko-logo.svg</code> · <code>officebanao-logo.svg</code> · <code>palette.xlsx</code> (name, hex, use) · <code>fonts/</code> as WOFF2 with a web licence</td></tr>
+</tbody></table>
+
+<!-- ============================ 06 ============================ -->
+<h2><span class="no">06</span>To confirm, and the final check</h2>
+<p class="sec-lede">Decisions taken while building on test fit 02. Tick them, or note what should change, in <code>readme.txt</code>.</p>
+<h3><span class="no">6.1</span>To confirm</h3>
+<ul class="checks" style="columns:1">
+<li>Neighbourhoods are numbered 01 to 06 from west to east (zones 4, 8, 7, 3, 2 and 1 in test fit 02)</li>
+<li>Shared spaces are the café and dining area, the lobby by the lifts, and the west and east receptions. Are the terraces shared spaces too?</li>
+<li>The 35-seat boardroom stays with Neighbourhood 02</li>
+<li>The twelve 4-seat planter tables count as workstations (651 in total)</li>
+<li>Which neighbourhood gets the rooms outside every zone: the west executive cabin, one huddle, two phone booths and the server room</li>
+<li>The square by the lifts marked "Cutout above": an opening, or something else?</li>
+<li>Teams under each neighbourhood: the real teams, or none</li>
+<li>The brief numbers for the sharing-out table</li>
+</ul>
+<h3><span class="no">6.2</span>Before you send</h3>
+<ul class="checks">
+<li>Folder named <code>acko-inputs-tfNN-YYYY-MM-DD</code>, with <code>readme.txt</code></li>
+<li>File names exactly as listed: lowercase, hyphens, no spaces, no <code>(1)</code></li>
+<li>DXF 2018 in mm, only this floor in model space</li>
+<li>PRES layers drawn over the plan, not in separate panels</li>
+<li>Every PRES shape closed, one label inside each</li>
+<li>Egress routes run from the far point to the stair door</li>
+<li><code>REF-1</code> to <code>REF-4</code> identical in CAD and SketchUp</li>
+<li>All full-floor PNGs the same pixel size, transparent</li>
+<li>Light and dark renders from the same camera</li>
+<li>Sheets filled in, using IDs <code>n01</code>–<code>n06</code></li>
+</ul>
+<div class="note check"><b>What happens next</b>We run the DXF through the pipeline, check the zones, routes and counts against your drawing, and send back the updated presentation with a short list of anything missing or unclear.</div>
+</body>
+</html>
