@@ -141,7 +141,7 @@ Everything is in `index.html`:
 12. **Neighbourhoods**: an overview and six deep dives with plan, axo, numbered kit and walking distances
 13. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
 
-Click any desk cluster, room, pantry or shared area for its light and dark renders. They use the same `RENDERS` setup as above, with these keys: `desk`, `sprint`, `dept`, `huddle`, `hatchery`, `duo`, `booth`, `pantry`, `zen`, `cabin`, `board`, `studio`, `prayer`, `mother`, `cafe`, `reception`, `lobby`, `visitor`. A render for one neighbourhood only uses its two-digit id: `'N03:huddle':{light:'renders/n03-huddle-light.jpg', dark:'renders/n03-huddle-dark.jpg'}`.
+Click any desk cluster, room, pantry or shared area for its light and dark renders. For the test fit, drop the images into `renders/` named `<key>-light` and `<key>-dark` (`.jpg`, `.png` or `.webp`). The build embeds them in `index-testfit.html`, so it stays one self-contained file. The reception has its real renders now (`renders/reception-light.webp`, `renders/reception-dark.webp`). The keys are: `desk`, `sprint`, `dept`, `huddle`, `hatchery`, `duo`, `booth`, `pantry`, `zen`, `cabin`, `board`, `studio`, `prayer`, `mother`, `cafe`, `reception`, `lobby`, `visitor`. A render for one neighbourhood only uses its two-digit id: `'N03:huddle':{light:'renders/n03-huddle-light.jpg', dark:'renders/n03-huddle-dark.jpg'}`.
 
 **Still placeholders in the test fit:** teams and colours; the brief numbers; the loop (the drawing has no loop line yet). The fire travel distances still need checking against NBC with the fire consultant.
 

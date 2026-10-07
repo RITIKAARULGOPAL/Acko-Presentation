@@ -41,6 +41,18 @@ const SCENE_OF={sprint:'meeting',dept:'board',hatchery:'huddle',duo:'focus',pray
 const ACCENT={N01:'#ff7a59',N02:'#f0b43a',N03:'#2ec4b6',N04:'#58a9ff',N05:'#ef72b2',N06:'#a3d977',TS:'#7c5cff'};
 """)
 renders=rep(renders,"const canRender=k=>NB_KINDS.includes(k)||TS_KINDS.includes(k);","const canRender=k=>!!SPACE_NAMES[k];")
+# real renders: <repo>/renders/<key>-<light|dark>.<ext>, or n03-<key>-… for one neighbourhood, embedded so the file stays self-contained
+import os, base64
+RD=os.path.join(os.path.dirname(os.path.abspath(SRC)),'renders'); REN={}
+for f in sorted(os.listdir(RD)) if os.path.isdir(RD) else []:
+    m=re.match(r'^(?:(n\d\d)-)?([a-z]+)-(light|dark)\.(jpe?g|png|webp)$',f)
+    if not m: continue
+    key=(m.group(1).upper()+':' if m.group(1) else '')+m.group(2)
+    mime={'jpg':'jpeg','jpeg':'jpeg','png':'png','webp':'webp'}[m.group(4)]
+    REN.setdefault(key,{})[m.group(3)]='data:image/%s;base64,%s'%(mime,base64.b64encode(open(os.path.join(RD,f),'rb').read()).decode())
+ren_old=renders[renders.index('const RENDERS={'):renders.index('};',renders.index('const RENDERS={'))+3]
+renders=rep(renders,ren_old,'const RENDERS='+json.dumps(REN,sort_keys=True)+';\n')
+print('renders',{k:sorted(v) for k,v in REN.items()})
 renders=rep(renders,"(SCENE[k]||SCENE.meeting)();","(SCENE[SCENE_OF[k]||k]||SCENE.meeting)();")
 # engine edits
 e=engine
