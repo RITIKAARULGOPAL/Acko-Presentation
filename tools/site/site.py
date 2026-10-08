@@ -384,7 +384,7 @@ def sun_block():
                      'dayLen': r((b - a) / 60, 2)})
     # dates when the noon sun stands north of the zenith (declination > latitude)
     north = [d for d in range(1, 366) if solar(d, solar_noon(d))[2] > LAT]
-    fmtd = lambda doy: (datetime.date(2026, 1, 1) + datetime.timedelta(doy - 1)).strftime('%-d %b')
+    fmtd = lambda doy: (lambda d: f"{d.day} {d.strftime('%b')}")(datetime.date(2026, 1, 1) + datetime.timedelta(doy - 1))
     return {'lat': LAT, 'lng': LNG, 'tz': 'IST (UTC+5:30)', 'arcs': arcs, 'northFrom': fmtd(north[0]), 'northTo': fmtd(north[-1]),
             'northDays': len(north)}
 

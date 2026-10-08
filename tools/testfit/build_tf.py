@@ -16,18 +16,24 @@ renders=between('/* ============================================================
 engine=script[script.index('/* =====================================================================\n   ENGINE'):]
 # ---------- CSS ----------
 css_add=open('tf_css.css').read()
-head_css=rep(head_css,'<title>Acko Neighbourhood Office</title>','<title>Acko Test Fit 02</title>')
+head_css=rep(head_css,'<title>Acko Neighbourhood Office</title>','<title>Acko Test Fit 03</title>')
 head_css+=css_add
 # ---------- body ----------
-body=rep(body,'<p class="eyebrow">Acko · Workplace design narrative</p>','<p class="eyebrow">Acko · Test fit 02 · Workplace design narrative</p>')
+body=rep(body,'<p class="eyebrow">Acko · Workplace design narrative</p>','<p class="eyebrow">Acko · Test fit 03 · Workplace design narrative</p>')
 body=rep(body,'<p class="lede">How a bare floor plate became six self-sustaining neighbourhoods around one shared Town Square.</p>','<p class="lede">How a long, narrow floor became six self-sustaining neighbourhoods linked by shared spaces.</p>')
-body=rep(body,'<span class="draft" title="Floor plate, names and numbers are sample data">Draft · sample data</span>','<span class="draft" title="Plan from the test-fit drawing; names and teams are placeholders">Draft · test fit 02</span>')
+body=rep(body,'<span class="draft" title="Floor plate, names and numbers are sample data">Draft · sample data</span>','<span class="draft" title="Plan from the test-fit drawing; names and teams are placeholders">Draft · test fit 03</span>')
 body=re.sub(r'  <section class="scene" id="sc-brief".*?</section>\n','',body)
 body=rep(body,'looping around the Town Square','looping around the shared spaces')
 body=rep(body,'  <section class="scene" id="sc-alloc"','''  <section class="scene" id="sc-site" aria-label="The site: Regalium, Koramangala"><svg id="sitesvg" class="dsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of the site and the streets around it"></svg><p class="m-attr" id="m-attr"></p></section>
   <section class="scene" id="sc-climate" aria-label="Sun path and wind"><svg id="climsvg" class="dsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Sun path and wind rose over the floor plate"></svg></section>
   <section class="scene" id="sc-green" aria-label="Green zone analysis"></section>
   <section class="scene" id="sc-alloc"''')
+# the conceptual axo (tools/axo): a scene for the stills and the live model, and the three.js bundle before the main script
+body=rep(body,'  <section class="scene" id="sc-overview"','''  <section class="scene" id="sc-axo3" data-mode="still" aria-label="Conceptual axonometric, test fit 03"><div class="ax3-stage"><span class="ax3-tag">Test fit 03</span><img id="ax3-img" alt="" decoding="async"><canvas id="ax3-cv" aria-label="Interactive 3D model of the floor"></canvas><div class="ax3-ovl" id="ax3-ovl" aria-hidden="true"></div></div><div class="ax3-bar"><div class="seg" id="ax3-view" role="radiogroup" aria-label="View"></div><div class="seg" id="ax3-style" role="radiogroup" aria-label="Colours"></div><button type="button" class="ax3-reset" id="ax3-reset">Reset view</button></div></section>
+  <section class="scene" id="sc-overview"''')
+import os, base64
+AXD=os.path.join(os.path.dirname(os.path.abspath(SRC)),'tools','axo')
+body+='<script>'+open(os.path.join(AXD,'axo.bundle.js')).read().strip()+'</script>\n'
 # ---------- script ----------
 concept="const {buildCity,buildLoop}=(function(){\n"+open('tf_concept_consts.js').read()+(city+loopf).replace("'TOWN SQUARE'","'SHARED SPACES'")+"  return {buildCity,buildLoop};\n})();\n"
 data=open('tf_data.js').read().replace('/*REALFIT*/null',open('realfit.json').read())
@@ -35,6 +41,15 @@ data+=open('tf_site.js').read().replace('/*SITE*/null',open('site.json').read())
 plan=open('tf_plan.js').read().replace('/*CONCEPT*/',concept)
 steps=open('tf_steps.js').read()
 green=open('tf_green.js').read()
+# axo stills: <repo>/renders/axo-<view>-<style>.webp, and the model data, embedded
+AXI={}
+for f in sorted(os.listdir(os.path.join(os.path.dirname(os.path.abspath(SRC)),'renders'))):
+    m=re.match(r'^axo-([a-z]+)-([a-z]+)\.webp$',f)
+    if m: AXI[m.group(1)+'-'+m.group(2)]='data:image/webp;base64,'+base64.b64encode(open(os.path.join(os.path.dirname(os.path.abspath(SRC)),'renders',f),'rb').read()).decode()
+print('axo stills',sorted(AXI))
+axo=open('tf_axo.js').read().replace('/*AXO_IMG*/null',json.dumps(AXI,sort_keys=True)).replace('/*AXO_DATA*/null',open(os.path.join(AXD,'axo.json')).read().strip())
+LAB=os.path.join(os.path.dirname(os.path.abspath(SRC)),'renders','axo-exploded-layers.json')
+axo=axo.replace('/*AXO_LAB*/null',open(LAB).read().strip() if os.path.exists(LAB) else 'null')
 # renders: real kinds
 renders=rep(renders,renders[renders.index('const NB_KINDS='):renders.index('const canRender=')],
 """const SPACE_NAMES={desk:'Workstations',garden:'Acker Garden · Work Arena',training:'Training room',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Coffee corner',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
@@ -44,7 +59,6 @@ const ACCENT={N01:'#ff7a59',N02:'#f0b43a',N03:'#2ec4b6',N04:'#58a9ff',N05:'#ef72
 """)
 renders=rep(renders,"const canRender=k=>NB_KINDS.includes(k)||TS_KINDS.includes(k);","const canRender=k=>!!SPACE_NAMES[k];")
 # real renders: <repo>/renders/<key>-<light|dark>.<ext>, or n03-<key>-… for one neighbourhood, embedded so the file stays self-contained
-import os, base64
 RD=os.path.join(os.path.dirname(os.path.abspath(SRC)),'renders'); REN={}
 for f in sorted(os.listdir(RD)) if os.path.isdir(RD) else []:
     m=re.match(r'^(?:(n\d\d)-)?([a-z]+)-(light|dark)\.(jpe?g|png|webp)$',f)
@@ -59,6 +73,7 @@ renders=rep(renders,"(SCENE[k]||SCENE.meeting)();","(SCENE[SCENE_OF[k]||k]||SCEN
 # engine edits
 e=engine
 e=rep(e,"loop:$('#sc-loop'),brief:$('#sc-brief'),alloc:$('#sc-alloc')","loop:$('#sc-loop'),site:$('#sc-site'),climate:$('#sc-climate'),green:$('#sc-green'),alloc:$('#sc-alloc')")
+e=rep(e,"plan:$('#sc-plan'),","plan:$('#sc-plan'),axo3:$('#sc-axo3'),")
 e=rep(e,"  buildPlan(); buildCover(); buildCity(); buildLoop(); buildBrief(); buildAlloc(); buildOverview(); buildNumbers();",
 """  $('svg defs').insertAdjacentHTML('beforeend',`<clipPath id="clip-rf"><path d="${PD(RF.plate)}"/></clipPath>`);
   buildPlan(); buildCover(); buildCity(); buildLoop(); buildSite(); buildClimate(); buildGreen(); buildAlloc(); buildOverview(); buildNumbers();""")
@@ -87,6 +102,6 @@ e=rep(e,sm_old,"""function spaceMeta(ctx,k){
 """)
 e=rep(e,"RV.ctx=ctx||sp.nb; RV.list=(RV.ctx==='TS'?TS_KINDS:NB_KINDS).filter(k=>SP.some(x=>inCtx(x,RV.ctx)&&x.k===k));",
         "RV.ctx=ctx||sp.nb; RV.list=KIND_ORDER.filter(k=>canRender(k)&&SP.some(x=>inCtx(x,RV.ctx)&&x.k===k));")
-out=head_css+body+prelude+data+plan+renders+green+steps+e
+out=head_css+body+prelude+data+plan+renders+axo+green+steps+e
 open(OUT,'w').write(out)
 print('written',len(out))

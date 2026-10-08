@@ -122,7 +122,7 @@ Everything is in `index.html`:
 
 ## Test fit
 
-`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 28 steps:
+`index-testfit.html` tells the story on the real floor from test fit 03 (`acko-layout-tf03.dxf`): the 3rd floor of Regalium, Koramangala, a 245 × 34 m plate (7,606 m²) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 40 steps:
 
 1. **The idea**: the city analogy and the loop (schematic)
 2. **The site**: a map of Regalium on Hosur Road, with landmarks, walking distances and the metro. It then zooms to the block and turns until the floor lines up with the drawing. The floor sits 11.5° east of true north (see below)
@@ -130,13 +130,13 @@ Everything is in `index.html`:
 4. **Sun and climate**:
    - the sun path over the floor, with hours of sun on each façade
    - **morning to evening on the layout**, an animated day (21 Mar/Sep, 21 Jun, 21 Dec) showing the sun patches on the furniture plan, with what it means for each neighbourhood
-5. **Daylight**: the 6 m band along the façade, including the glass facing the terraces (56% of workstations sit in it)
+5. **Daylight**: the 6 m band along the façade, including the glass facing the terraces (45% of workstations sit in it)
 6. **Fire and egress**: five stairs with 15 / 30 / 45 m rings, then the eight egress routes from the drawing, measured (43 to 61 m)
 7. **Carving the floor**: Neighbourhood 01 to 06 plus the shared spaces (café and dining, two receptions, lobby)
 8. **The layout**: the full fit-out; the **space plan**, with every space from the drawing's `AC_` layers coloured by type and measured; then carved into neighbourhoods (hover for details, click to open)
 9. **Shared spaces**: café and dining, both receptions and the lobby, highlighted
 10. **Sharing out**: every space type counted per neighbourhood, with a Brief column waiting for Acko's numbers
-11. **Axonometric**: the drawing in 3D, then exploded
+11. **Axonometric**: the drawing in 3D. Then the **conceptual axo**: exploded into shell and core, neighbourhoods with the loop, and fit-out; rendered stills (whole floor, west, middle, east; reference colours or neighbourhood colours), then the same model live in 3D to orbit, zoom and hover
 12. **Neighbourhoods**: an overview and six deep dives with plan, axo, numbered kit and walking distances
 13. **Green zones**: a carbon-responsive green zone analyzer on the real layout (10 steps, see [Green zones](#green-zones) below)
 14. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
@@ -165,6 +165,8 @@ The toolbar switches layers at any step (Spaces · Footfall · Dwell · Carbon i
 **From the drawing:** space outlines and types, 651 workstations and 544 room and café seats, 228 existing plants, doors, partitions (glass counts as see-through for visibility), escape routes, cores, columns, and the drawing's "1500MM WIDE CORRIDOR" note, which sets the clear width. **Estimates, labelled `est.`:** visits, utilisation, dwell and activity factors, and the users of coffee corners, receptions, lobbies and the corridor (from the headcount). Nothing is presented as a measured occupancy or carbon figure.
 
 **Nothing is planted** on furniture and its 0.6 m use zone, 1.2 m in front of doors, escape routes ± 1.0 m, corridor width below 1.5 m clear + 0.6 m planter, junction sight lines (1.5 m), lifts, stairs and entrances (1.5 m), columns, cores, or support rooms. That leaves 358 m² of the 5,434 m² usable floor, cut into 164 candidate spots. The selection then **maximises impact, not plant count**. It ranks spots by their space's priority, visibility, daylight and footfall, keeps zones apart (3 m, 6 m within one space), and puts the work-arena remainder on desks. The **biophilic workplace score** is 40% priority spaces served, 30% desks within 8 m of greenery, 15% zone visibility and 15% plants in daylight, minus clearance conflicts. So a few well-placed plants outscore many scattered ones.
+
+**Conceptual axo (test fit 03).** The exploded step and the two axo steps after it come from `acko-layout-tf03.dxf`, like the rest of the deck, through their own pipeline in `tools/axo/`. Rooms, cores, corridors and zones come from its `AC_*` outline layers, and desks, chairs, tables and plants from the fit-out blocks. The stills are `renders/axo-<view>-<style>.webp` and `renders/axo-exploded-layers.webp`, whose label positions are in `renders/axo-exploded-layers.json`. To rebuild them or the model, see `tools/axo/README.md`.
 
 **Still placeholders in the test fit:** teams and colours; the brief numbers; the loop (the drawing has no loop line yet). The fire travel distances still need checking against NBC with the fire consultant.
 

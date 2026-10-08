@@ -97,9 +97,17 @@ const STEPS=[
     <p class="note">The brief column fills in once Acko's numbers are added. Then each row can show the brief against the plan.</p>`},
   {id:'axo',ch:11,scene:'plan',flags:'shell furn zones labels axo hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>The same plan in three dimensions</h2>
     <p>The colours carry through, so each neighbourhood reads the same in plan and in 3D. Hover a neighbourhood for its details. Click a room for its renders.</p>
-    <p class="note">This model is generated from the test-fit drawing. Rendered axonometric views will sit alongside it.</p>`},
-  {id:'exploded',ch:11,sub:'Exploded',scene:'plan',flags:'shell furn zones labels axo explode spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
-    <p>Shell and core at the base, then the neighbourhoods and shared spaces, then the fit-out. Each layer follows from the one below it.</p>`},
+    <p class="note">This model is drawn from the test fit. The next steps show it exploded, rendered and as a live 3D model.</p>`},
+  {id:'exploded',ch:11,sub:'Exploded',scene:'axo3',wide:true,enter:()=>ax3Enter('exploded'),cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
+    <p>Shell and core at the base, then the neighbourhoods and shared spaces with the loop running through them, then the fit-out. Each layer follows from the one below it.</p>
+    <p class="note">Built from test fit 03, like the rendered views that follow.</p>`},
+  {id:'axo-render',ch:11,sub:'Rendered',scene:'axo3',wide:true,enter:()=>ax3Enter('still'),cap:s=>`${eyebrow(s)}<h2>The floor, rendered</h2>
+    <p>A conceptual axonometric of the latest test fit. Every room, core, desk, plant and pane of glass is placed from the drawing: ${fmt(AXO_DATA.counts.seats)} workstations, ${AXO_DATA.counts.rooms.booth} phone booths, ${AXO_DATA.counts.rooms.sprint} quick sprint rooms and the loop that links them.</p>
+    <p>Switch between the whole floor and the three close-ups, and between the reference look and the neighbourhood colours.</p>
+    <p class="note">Built from test fit 03, like the rest of the deck.</p>`},
+  {id:'axo-model',ch:11,sub:'Model',scene:'axo3',wide:true,enter:()=>ax3Enter('live'),cap:s=>`${eyebrow(s)}<h2>Walk around the model</h2>
+    <p>The same model, live. Drag to turn it, right-drag to move it, and scroll or pinch to zoom. Hover a space to see what it is.</p>
+    <p class="hint">The view buttons jump back to the four set views. Use the arrow keys to move on.</p>`},
   {id:'neighbourhoods',ch:12,scene:'overview',cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods, each complete</h2>
     <p>Every neighbourhood has its own workstations, quick sprint rooms, collaboration huddles, phone booths and coffee corners. They differ in size and mix, from ${Math.min(...NB_IDS.map(a=>KITS[a].desk))} to ${Math.max(...NB_IDS.map(a=>KITS[a].desk))} desks.</p>
     <p class="hint">Select a neighbourhood, or press → to walk through all six.</p>`},

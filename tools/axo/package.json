@@ -1,0 +1,14 @@
+{
+  "name": "acko-axo",
+  "private": true,
+  "description": "Conceptual axo of the Acko test fit: three.js scene, stills and the deck bundle",
+  "type": "module",
+  "scripts": {
+    "bundle": "esbuild axo-entry.js --bundle --minify --format=iife --global-name=AckoAxo --outfile=axo.bundle.js",
+    "render": "node render.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.2",
+    "three": "0.170.0"
+  }
+}
