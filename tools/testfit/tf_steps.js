@@ -1,7 +1,7 @@
 /* =====================================================================
    STEPS
    ===================================================================== */
-const CH=['Introduction','The idea','The site','The floor','Sun and climate','Daylight','Fire and egress','Carving the floor','The layout','Shared spaces','Sharing out','Axonometric','Neighbourhoods','By the numbers'];
+const CH=['Introduction','The idea','The site','The floor','Sun and climate','Daylight','Fire and egress','Carving the floor','The layout','Shared spaces','Sharing out','Axonometric','Neighbourhoods','Green zones','By the numbers'];
 const pad=n=>String(n).padStart(2,'0');
 const eyebrow=s=>`<p class="eyebrow">${pad(s.ch)} · ${CH[s.ch]}${s.sub?` · ${s.sub}`:''}</p>`;
 const nbSw=i=>`style="--c:var(${NBS[i].c})"`;
@@ -104,7 +104,54 @@ const STEPS=[
     <p>Every neighbourhood has its own workstations, quick sprint rooms, collaboration huddles, phone booths and coffee corners. They differ in size and mix, from ${Math.min(...NB_IDS.map(a=>KITS[a].desk))} to ${Math.max(...NB_IDS.map(a=>KITS[a].desk))} desks.</p>
     <p class="hint">Select a neighbourhood, or press → to walk through all six.</p>`},
   ...NBS.map((nb,i)=>({id:nb.id.toLowerCase(),ch:12,sub:`${i+1} of 6`,scene:'dive',cap:s=>capDive(s,i),wire:()=>wireDive(i),enter:()=>renderDive(i)})),
-  {id:'numbers',ch:13,scene:'numbers',cap:s=>`${eyebrow(s)}<h2>One floor, six neighbourhoods</h2>
+  {id:'green',ch:13,scene:'green',wide:true,enter:gzEnter('prop'),cap:s=>`${eyebrow(s)}<h2>Planting is not decoration</h2>
+    <p class="gz-quote">It is spatial infrastructure, responding to how people use the workplace.</p>
+    <p>So the plants are not spread evenly, one every so many square metres. This analysis reads the test fit: who uses each space, how often, for how long, in what light and in whose view. Planting goes where it does the most, and stays out of the way of circulation.</p>
+    <p class="take-h">The workflow</p>${gzFlow()}
+    <p class="note">${GZ.zones.length} green zones and ${fmt(GZ.placed+GZ.desk)} plants on ${fmt(GZD.usableM2)} m² of usable floor. Values not in the drawing are labelled as estimates. The carbon figure is a relative design index, not a measurement of emissions.</p>`},
+  {id:'green-spaces',ch:13,sub:'Spaces',scene:'green',wide:true,enter:gzEnter('class'),cap:s=>{ const c={}; GZ.rows.forEach(r=>c[r.s.c]=(c[r.s.c]||0)+1); const seats=GZ.rows.filter(r=>r.src==='drawing'&&r.d.occ==='seats').reduce((a,r)=>a+r.occ,0);
+    return `${eyebrow(s)}<h2>First, every space classified</h2>
+    <p>The drawing's own space layers give ${GZ.rows.length} spaces, each with an outline and an area. Each one gets a type, a category and a record: occupancy, dwell, visits, footfall, daylight, circulation, privacy and existing planting.</p>
+    <ul class="gz-cl">${GZ_CAT_ORDER.map(k=>`<li><i class="sw" style="background:var(--gzc-${k})"></i><b>${GZ_CATS[k]}</b><span>${c[k]||0} space${c[k]===1?'':'s'} · ${fmt(GZ.rows.filter(r=>r.s.c===k).reduce((a,r)=>a+r.s.m2,0))} m²</span></li>`).join('')}</ul>
+    <p class="note">Occupancy comes from the drawing where it can: ${fmt(GZD.headcount)} workstations and ${fmt(seats)} seats in rooms, the café and the collaboration spaces. Coffee corners, receptions, lobbies and the corridor have no seats, so their users are estimated from the headcount and labelled as estimates. Click any space to see or override its record.</p>`; }},
+  {id:'green-footfall',ch:13,sub:'Footfall',scene:'green',wide:true,enter:gzEnter('foot'),cap:s=>`${eyebrow(s)}<h2>Where people move</h2>
+    <p class="gz-f">Daily footfall = occupancy × visits per person per day × utilisation</p>
+    <p>Each space type has its own pattern. A reception sees everyone once or twice a day, a coffee corner a few visits per person, a workstation one or two arrivals. The plan is shaded by footfall per m², so a small, busy space reads against a large, quiet one.</p>
+    <ol class="gz-top">${gzTop('nF',5).map(r=>`<li><b>${gzEsc(r.s.n)}</b><span>${fmt(r.foot)} a day · ${(r.foot/r.s.m2).toFixed(1)}/m²</span></li>`).join('')}</ol>
+    <p class="note">Visits, utilisation and dwell are planning estimates by space type, editable in the Assumptions step.</p>`},
+  {id:'green-dwell',ch:13,sub:'Dwell',scene:'green',wide:true,enter:gzEnter('dwell'),cap:s=>{ const f=k=>GZ.rows.filter(r=>r.s.k===k), sum=(a,k)=>a.reduce((x,r)=>x+r[k],0), rec=f('reception'), cafe=f('cafe'), work=f('open');
+    const row=(n,a)=>a.length?`<li><b>${n}</b><span>${fmt(sum(a,'foot'))} visits · ${(()=>{ const m=sum(a,'hrs')*60/(sum(a,'foot')||1); return m<2?m.toFixed(1):Math.round(m); })()} min each · ${fmt(sum(a,'hrs'))} person-hours</span></li>`:'';
+    return `${eyebrow(s)}<h2>Where people stay</h2>
+    <p class="gz-f">Daily occupancy hours = daily footfall × average dwell per visit</p>
+    <p>Footfall alone would plant the corridors. Dwell separates three kinds of space, and each needs a different planting strategy:</p>
+    <ul class="gz-q">${row('High footfall, short dwell · reception',rec)}${row('High footfall and real dwell · café',cafe)}${row('Little movement, very long dwell · work arenas',work)}</ul>
+    <p class="note">Shaded by person-hours per m² a day. Arrival spaces get statement planting seen in passing. Social spaces get islands to sit beside. Work arenas get planting at eye level from the desk.</p>`; }},
+  {id:'green-carbon',ch:13,sub:'Carbon index',scene:'green',wide:true,enter:gzEnter('carbon'),cap:s=>`${eyebrow(s)}<h2>A relative carbon impact index</h2>
+    <p class="gz-f">Relative Carbon Impact Index = footfall × dwell × activity factor × services intensity, per m², scaled 0–100 across this floor</p>
+    <p>The index is highest where people gather and stay, and where equipment, cooking and air-conditioning work hardest. Those are the spaces where planting is most noticed and where the indoor environment is under the most load. Here, ${listJoin(gzTop('cii',3).map(r=>gzEsc(r.s.n)))} lead.</p>
+    <p class="gz-warnp"><b>This is a design-planning comparison, not a carbon calculation.</b> It does not measure the occupants' emissions and is not a carbon-offset figure. Plants indoors do not offset an office's carbon footprint.</p>`},
+  {id:'green-priority',ch:13,sub:'Priority',scene:'green',wide:true,enter:gzEnter('prio'),cap:s=>{ const g=GZ.g; return `${eyebrow(s)}<h2>Biophilic priority</h2>
+    <p>Six factors, each normalised across the floor, combine into one score per space, scaled 0–100:</p>
+    <ul class="gz-w">${[['Footfall',g.wF],['Dwell time',g.wD],['Carbon index',g.wC],['Daylight potential',g.wL],['Social importance',g.wS],['Visibility',g.wV]].map(([n,w])=>`<li><span>${n}</span><i style="--w:${w}"></i><b>${w}%</b></li>`).join('')}</ul>
+    <ol class="gz-top">${gzTop('prio',4).map(r=>`<li><b>${gzEsc(r.s.n)}</b><span>${Math.round(r.prio)} · ${r.cls[1]}</span></li>`).join('')}</ol>
+    <p class="note">Very low 0–25 · Low 26–40 · Moderate 41–60 · High 61–80 · Very high 81–100. The class sets how many plants a space gets: ${g.mL}× (low) to ${g.mVH}× (very high) of one plant per ${g.density} m².</p>`; }},
+  {id:'green-zones',ch:13,sub:'Green zones',scene:'green',wide:true,enter:gzEnter('prop'),cap:s=>{ const n={}; GZ.zones.forEach(z=>n[z.t]=(n[z.t]||0)+1);
+    return `${eyebrow(s)}<h2>Where the green zones go</h2>
+    <p>Each spot is cut from the floor that circulation leaves free: ${GZD.clear.toFixed(1)} m clear corridors (from the drawing's note), escape routes, door swings, junction sight lines, furniture use zones, lifts, stairs and services are all kept clear. The best spots are chosen by the priority of their space, how visible they are, daylight and footfall, and are kept apart so they don't crowd.</p>
+    <ul class="gz-ty">${GZ_TYPE_ORDER.map(t=>`<li><svg viewBox="-12 -12 24 24" aria-hidden="true">${gzGlyph(t)}</svg><b>${GZ_TYPES[t].n}</b><span>${n[t]||0} · ${GZ_TYPES[t].d.toLowerCase()}</span></li>`).join('')}</ul>
+    ${RHINT('Click a zone for its numbers. Drag to move it, use + Add zone to place one, or delete, retype and resize it from its card. Edits are checked against the clearances.')}`; }},
+  {id:'green-dashboard',ch:13,sub:'Dashboard',scene:'green',enter:gzEnter('dash'),cap:s=>`${eyebrow(s)}<h2>The green strategy in numbers</h2>
+    <p>The <b>biophilic workplace score</b> rewards impact, not plant count. It weighs how well the high-priority spaces are served (40%), how many desks see greenery within ${GZ.g.reach} m (30%), how visible the zones are (15%) and how many plants have daylight (15%). Spots that block circulation lose points.</p>
+    <dl class="stats gz-st"><div><dt>Score</dt><dd>${Math.round(GZ.score)}<small>/100</small></dd></div><div><dt>Plants</dt><dd>${fmt(GZ.placed+GZ.desk)}</dd></div><div><dt>Coverage</dt><dd>${GZ.cov.toFixed(1)}<small>%</small></dd></div></dl>
+    <p class="note">So ten plants in the right place score higher than thirty spread evenly. The tables update as you edit zones or assumptions.</p>`},
+  {id:'green-database',ch:13,sub:'Space database',scene:'green',enter:gzEnter('db'),cap:s=>`${eyebrow(s)}<h2>The spatial database</h2>
+    <p>Every space with its classification, occupancy, dwell, footfall, daylight, circulation intensity, privacy, existing planting and recommended planting intensity, from the highest priority down.</p>
+    <p class="note">Occupancy marked "dwg" is counted in the drawing. Everything marked "est." is an estimate, never a measurement.</p>`},
+  {id:'green-assumptions',ch:13,sub:'Assumptions',scene:'green',enter:gzEnter('assume'),cap:s=>`${eyebrow(s)}<h2>Every assumption, open to the designer</h2>
+    <p>Change how often a space is visited, how long people stay, the activity factors, the priority weights, the planting density or the plant spacing, and the whole analysis recomputes: scores, zones, quantities and recommendations.</p>
+    <p>Edits stay in this browser. Export them as JSON to share, and import them on another machine. Zone edits (moved, added, deleted, retyped) are kept the same way.</p>
+    <p class="note">Overridden values are highlighted. Reset brings back the defaults.</p>`},
+  {id:'numbers',ch:14,scene:'numbers',cap:s=>`${eyebrow(s)}<h2>One floor, six neighbourhoods</h2>
     <p>Every number here is read from the test-fit drawing. The final figures will follow the approved layout.</p>`,enter:countUp},
 ];
 

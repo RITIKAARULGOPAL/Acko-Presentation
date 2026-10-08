@@ -56,3 +56,18 @@ When the drawing has the `AC_` layers, they take over from the guesses above:
 | `AC_CAFETERIA`, `AC_LIFT_LOBBY` (east) | The café and the lobby among the shared spaces. |
 | `AC_WORKHALL`, `AC_CORRIDOR`, `AC_RECEPTION`, `AC_OUT_OF_SCOPE`, … | The space plan: area per category, each m² counted once. |
 | `AC_LIFT_LOBBY` 1, `AC_WASHROOM` 2, `AC_FIRE_EXIT_STAIRCASE` 3, `AC_AHU` 4, `AC_STRENGTHEN_SLAB` 5 (numbered marker circles), `AC_ENTRY`, `AC_OUT_OF_SCOPE`, `AC_FIRE_COMPARTMENTALISATION` | The due-diligence step, numbered as on the drawing. |
+
+## Green zones (`gz_extract.py`, `tf_green.js`)
+
+`run.sh` runs `gz_extract.py` after `extract.py`. It adds a `gz` block to `realfit.json`:
+
+| Key | What |
+|---|---|
+| `spaces` | One record per `AC_` space (each m² once: rooms first, the work arenas last): type, category, outline, m², desks and seats inside it, existing plants, daylight share (within 6 m of the glass), distance to the façade, visibility, keep-clear and free m² |
+| `keep` | The circulation keep-clear mask: furniture + 0.6 m, doors + 1.2 m, escape routes ± 1.0 m, corridors narrower than clear width + planter, junction sight lines, lifts, stairs, entries, columns, cores, support rooms |
+| `free` | Usable floor minus the mask, with slivers under 0.6 m removed |
+| `cands` | Candidate spots: the free floor cut into pieces (5 m tiles for large areas), each with its host space, neighbours, inscribed radius, long axis, façade distance, nearest node (corridor junction, café / reception / lobby mouth) and weighted sightlines from reception, lifts, café, circulation, meeting rooms and desks (opaque walls block, glass doesn't) |
+
+The clear width is read from the drawing's "NNNNMM WIDE CORRIDOR" note (1500 mm in tf03). The other clearances are constants at the top of `gz_extract.py`. The script asserts that no candidate sits in the mask.
+
+Everything else runs in the page (`tf_green.js`), so the designer can override it: the defaults per space type (`GZ_DEF0`), the floor settings and weights (`GZ_G0`), the typology rules (`gzTypeOf`), the selection (`gzRun`) and the scores (`gzTotals`). Overrides and zone edits are kept in `localStorage` (`acko-gz-v1`) and travel as JSON.
