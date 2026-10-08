@@ -35,9 +35,9 @@ plan=open('tf_plan.js').read().replace('/*CONCEPT*/',concept)
 steps=open('tf_steps.js').read()
 # renders: real kinds
 renders=rep(renders,renders[renders.index('const NB_KINDS='):renders.index('const canRender=')],
-"""const SPACE_NAMES={desk:'Workstations',garden:'Acker Garden · Work Arena',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Pantry point',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
+"""const SPACE_NAMES={desk:'Workstations',garden:'Acker Garden · Work Arena',training:'Training room',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Coffee corner',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
 /* which sample interior stands in for each space until the real renders arrive */
-const SCENE_OF={garden:'huddle',sprint:'meeting',dept:'board',hatchery:'huddle',duo:'focus',prayer:'zen',mother:'zen',lobby:'reception',visitor:'meeting',studio:'meeting'};
+const SCENE_OF={garden:'huddle',training:'board',sprint:'meeting',dept:'board',hatchery:'huddle',duo:'focus',prayer:'zen',mother:'zen',lobby:'reception',visitor:'meeting',studio:'meeting'};
 const ACCENT={N01:'#ff7a59',N02:'#f0b43a',N03:'#2ec4b6',N04:'#58a9ff',N05:'#ef72b2',N06:'#a3d977',TS:'#7c5cff'};
 """)
 renders=rep(renders,"const canRender=k=>NB_KINDS.includes(k)||TS_KINDS.includes(k);","const canRender=k=>!!SPACE_NAMES[k];")

@@ -11,8 +11,7 @@ cp "$HERE"/*.py "$HERE"/tf_* "$WORK"/
 cd "$WORK"
 python3 dxf_flat.py "$DXF" dxf_mid.json -418000 -368000   # layout panel only (y range in mm)
 python3 dxf_blocks.py "$DXF" dxf_pos.json                 # every block insert with its position
-python3 dxf_blk.py "$DXF" dxf_blk.pkl                     # zone and egress panels
-python3 panels.py
+python3 ac_panels.py "$DXF" || { python3 dxf_blk.py "$DXF" dxf_blk.pkl && python3 panels.py; }   # zones and egress routes (AC_ layers, else the old panel blocks)
 python3 extract.py                                        # → realfit.json
 python3 "$HERE/../site/site.py" build realfit.json site.json   # the plan on the site, the sun on the layout → site.json
 python3 build_tf.py "$ROOT/index.html" "$ROOT/index-testfit.html"

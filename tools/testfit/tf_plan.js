@@ -34,7 +34,7 @@ function siteSVG(){
     const up=o[1]<(PB.y0+PB.y1)/2;
     routes+=`<path class="route" d="${d}"/>`+C({x:o[0],y:o[1]},11,'route-o')+T(o[0]+18,up?o[1]+50:o[1]-26,`${r.m.toFixed(1)} m`,'route-t');
   });
-  return `<g class="gx g-sun"><g id="sun-p" clip-path="url(#clip-rf)"></g><g id="sun-d"></g></g><g class="gx g-light">${light}</g><g class="gx g-grid">${grid}</g><g class="gx g-north">${northSVG()}</g><g class="gx g-rings">${rings}</g><g class="gx g-exits">${exits}</g><g class="gx g-routes">${routes}</g><g class="gx g-dd">${ddSVG()}</g>`;
+  return `<g class="gx g-splan">${spacePlanSVG()}</g><g class="gx g-sun"><g id="sun-p" clip-path="url(#clip-rf)"></g><g id="sun-d"></g></g><g class="gx g-light">${light}</g><g class="gx g-grid">${grid}</g><g class="gx g-north">${northSVG()}</g><g class="gx g-rings">${rings}</g><g class="gx g-exits">${exits}</g><g class="gx g-routes">${routes}</g><g class="gx g-dd">${ddSVG()}</g><g class="gx g-comp">${compSVG()}</g>`;
 }
 function zonesSVG(){
   let s=NBS.map((nb,i)=>`<path d="${PD(RF.areas[nb.id])}" class="zone" data-nb="${nb.id}" style="--c:var(${nb.c});--d:${i*.12}s"/>`).join('');
@@ -129,7 +129,7 @@ function areaBar(){
 const BRIEF={desk:null,sprint:null,dept:null,huddle:null,duo:null,booth:null,pantry:null,zen:null,cabin:null};
 const MATRIX=[
   ['desk','Workstations'],['sprint','Quick sprint rooms'],['dept','Departmental rooms'],['huddle','Collaboration huddles'],
-  ['duo','2-pax rooms'],['booth','Phone booths'],['pantry','Pantry points'],['zen','Zen rooms'],['cabin','Executive cabins'],
+  ['duo','2-pax rooms'],['booth','Phone booths'],['pantry','Coffee corners'],['zen','Zen rooms'],['cabin','Executive cabins'],
 ];
 function buildAlloc(){
   const tsIds=['TW','TC','R1','R2'];
@@ -146,7 +146,8 @@ function buildAlloc(){
 /* ---------- deep dive ---------- */
 const KIT=[
   {k:'desk',n:'Workstations',one:'workstation',c:'Work',v:k=>k.desk},
-  {k:'garden',n:'Acker Garden · Work Arena',one:'Acker Garden',c:'Work',v:()=>'north-west corner'},
+  {k:'garden',n:'Acker Garden · Work Arena',one:'Acker Garden',c:'Collaborate',v:k=>k.garden},
+  {k:'training',n:'Training room',one:'training room',c:'Meet',v:k=>`${k.trainingSeats||''}`||k.training},
   {k:'cabin',n:'Executive cabins',one:'executive cabin',c:'Work',v:k=>k.cabin},
   {k:'sprint',n:'Quick sprint rooms',one:'quick sprint room',c:'Meet',v:k=>`${k.sprint} · ${k.sprintSeats} seats`},
   {k:'dept',n:'Departmental rooms',one:'departmental room',c:'Meet',v:k=>`${k.dept} · ${k.deptSeats} seats`},
@@ -156,7 +157,7 @@ const KIT=[
   {k:'studio',n:'Studio',one:'studio',c:'Collaborate',v:k=>k.studio},
   {k:'duo',n:'Two-person rooms',one:'two-person room',c:'Focus',v:k=>k.duo},
   {k:'booth',n:'Phone booths',one:'phone booth',c:'Focus',v:k=>k.booth},
-  {k:'pantry',n:'Pantry points',one:'pantry point',c:'Recharge',v:k=>k.pantry},
+  {k:'pantry',n:'Coffee corners',one:'coffee corner',c:'Recharge',v:k=>k.pantry},
   {k:'zen',n:'Zen rooms',one:'zen room',c:'Recharge',v:k=>k.zen},
   {k:'mother',n:"Mother's room",one:"mother's room",c:'Recharge',v:k=>k.mother},
   {k:'prayer',n:'Prayer room',one:'prayer room',c:'Recharge',v:k=>k.prayer},

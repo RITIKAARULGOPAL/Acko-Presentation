@@ -46,9 +46,9 @@ const STEPS=[
   {id:'shell',ch:3,scene:'plan',flags:'shell grid north',wide:true,cap:s=>`${eyebrow(s)}<h2>A long, narrow floor</h2>
     <p>The floor runs ${RF.len.toFixed(0)} m from end to end and only ${RF.depth.toFixed(0)} m deep, with a slanted south-west end facing Hosur Road. Cores with lifts, toilets and stairs line the north façade, and two terraces cut into the south.</p>
     <dl class="facts"><dt>Super built-up</dt><dd>${fmt(FX.sbaSft)} sq ft</dd><dt>Carpet</dt><dd>${fmt(FX.carpetSft)} sq ft</dd><dt>Floor plate</dt><dd>${fmt(m2ft(RF.plateM2))} sq ft inside the glass (${fmt(RF.plateM2)} m²)</dd><dt>Size</dt><dd>${RF.len.toFixed(1)} × ${RF.depth.toFixed(1)} m</dd><dt>Fire stairs</dt><dd>${STAIRS.length} (Stair 1 to Stair ${STAIRS.length})</dd><dt>Terraces</dt><dd>2 on the south façade, about ${fmt(m2ft(TERRACES[0].m2))} sq ft each</dd></dl>`},
-  {id:'diligence',ch:3,sub:'Due diligence',scene:'plan',flags:'shell dd exits',wide:true,tall:true,cap:s=>`${eyebrow(s)}<h2>What the building already decided</h2>
-    <p>From the site visit: five emergency exit doors, one at each of the drawing's five stairs, and an arrival that opens straight from the lift lobby.</p>
-    <ul class="obs dd">${ddPins().map((p,i)=>`<li><button type="button" class="ob" data-pin="${i}"><span class="ob-n">${i+1}</span><span class="ob-t">${p.t}</span></button></li>`).join('')}</ul>
+  {id:'diligence',ch:3,sub:'Due diligence',scene:'plan',flags:'shell dd comp',wide:true,tall:true,cap:s=>`${eyebrow(s)}<h2>What the building already decided</h2>
+    <p>The items marked on the drawing, numbered as on the plan. The hatched cores are out of scope, and the dashed line splits the floor into two fire compartments.</p>
+    <ul class="obs dd">${ddPins().map((p,i)=>`<li><button type="button" class="ob" data-pin="${i}"><span class="ob-n">${p.n}</span><span class="ob-t">${p.t}<small>${p.d}</small></span></button></li>`).join('')}</ul>
     <dl class="facts"><dt>Super built-up</dt><dd>${fmt(FX.sbaSft)} sq ft</dd><dt>Carpet</dt><dd>${fmt(FX.carpetSft)} sq ft · ${NUM.efficiency}% of super built-up</dd><dt>Headcount</dt><dd>about ${FX.headcount} · ${NUM.carpetPerHead} sq ft of carpet each</dd><dt>Test fit</dt><dd>${NUM.desks} workstations · ${NUM.spare>=0?`${NUM.spare} more than`:`${-NUM.spare} fewer than`} the headcount</dd></dl>
     ${sectionSVG()}`,
     wire:wireSiteDD},
@@ -69,7 +69,7 @@ const STEPS=[
     <p>Daylight reaches about 6 m in from a façade. On a ${RF.depth.toFixed(0)} m deep floor with cores along one side, that band is precious, so desks were pulled towards it and rooms pushed into the middle.</p>
     <ul class="legend"><li><i class="lg lg-sun"></i>6 m daylight band along the façade</li></ul>
     <p class="note">${TOT.daylight}% of workstations in the test fit sit inside the band.</p>`},
-  {id:'exits',ch:6,sub:'Exits',scene:'plan',flags:'shell exits rings',wide:true,cap:s=>`${eyebrow(s)}<h2>${['No','One','Two','Three','Four','Five','Six','Seven'][STAIRS.length]||STAIRS.length} ways out</h2>
+  {id:'exits',ch:6,sub:'Exits',scene:'plan',flags:'shell exits rings comp',wide:true,cap:s=>`${eyebrow(s)}<h2>${['No','One','Two','Three','Four','Five','Six','Seven'][STAIRS.length]||STAIRS.length} ways out</h2>
     <p>Five fire stairs sit in the cores along the north façade, from Stair 1 at the west to Stair 5 at the east. The rings mark 15, 30 and 45 m from each stair.</p>
     <ul class="legend"><li><i class="lg lg-exit"></i>Fire exit stair</li><li><i class="lg lg-ring"></i>Distance from the stair</li></ul>`},
   {id:'routes',ch:6,sub:'Egress routes',scene:'plan',flags:'shell exits routes',wide:true,cap:s=>`${eyebrow(s)}<h2>Tracing the escape routes</h2>
@@ -82,6 +82,10 @@ const STEPS=[
   {id:'layout',ch:8,scene:'plan',flags:'shell furn rlabels spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>The test-fit layout</h2>
     <p>${TOT.desks} workstations, ${TOT.sprint} quick sprint rooms, ${TOT.huddle} collaboration huddles, ${TOT.dept} departmental rooms, ${TOT.booth} phone booths, ${TOT.duo} two-person rooms and ${TOT.zen} zen rooms, all read from the drawing.</p>
     <dl class="facts"><dt>Density</dt><dd>${fmt(m2ft(RF.plateM2)/TOT.desks)} sq ft per workstation</dd><dt>In daylight</dt><dd>${TOT.daylight}% within 6 m of the façade</dd></dl>${RHINT('Click any room or desk cluster to see its light and dark renders.')}`},
+  {id:'spaceplan',ch:8,sub:'Space plan',scene:'plan',flags:'shell splan',wide:true,cap:s=>`${eyebrow(s)}<h2>Every space, by what it is for</h2>
+    <p>Each space drawn on the layout, coloured by type. Open work arenas take the largest share. Meeting rooms, focus rooms and coffee corners are spread along the floor, and the cores and washrooms belong to the base building.</p>
+    ${spaceLegend()}
+    <p class="note">Areas measured from the space outlines in the drawing, each square foot counted once. The rest of the ${fmt(m2ft(RF.plateM2))} sq ft plate is walls, shafts and spaces left unmarked.</p>`},
   {id:'carved',ch:8,sub:'Neighbourhoods',scene:'plan',flags:'shell furn zones labels hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>Carved into neighbourhoods</h2>
     <p>Each colour is one team's neighbourhood. Hover a neighbourhood to see who works there. Click a room for its renders, or the open floor to open the neighbourhood.</p>${areaBar()}`},
   {id:'shared',ch:9,scene:'plan',flags:'shell furn zones labels rlabels ts-focus hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>Shared spaces along the floor</h2>
@@ -89,7 +93,7 @@ const STEPS=[
     <ul class="tsl">${[['cafe','Café and dining',`${fmt(m2ft(M2.TW))} sq ft`],['visitor','West reception',`${KITS.R1.visitor||0} visitor hubs`],['reception','East reception',`waiting lounge · ${KITS.R2.sprint||0} quick sprints`],['lobby','Lobby',`${fmt(m2ft(M2.TC))} sq ft`]].map(([k,n,v])=>`<li><button type="button" class="tsb" data-k="${k}"><span>${n}</span><span>${v}</span></button></li>`).join('')}</ul>${RHINT('Click a space, or a row above, for its renders.')}`,
     wire:wireTS},
   {id:'sharing',ch:10,scene:'alloc',cap:s=>`${eyebrow(s)}<h2>What each neighbourhood got</h2>
-    <p>Every space in the test fit, counted from the drawing and split by neighbourhood. Each one has its own desks, meeting rooms, phone booths and a pantry, so daily needs stay inside it.</p>
+    <p>Every space in the test fit, counted from the drawing and split by neighbourhood. Each one has its own desks, meeting rooms, phone booths and a coffee corner, so daily needs stay inside it.</p>
     <p class="note">The brief column fills in once Acko's numbers are added. Then each row can show the brief against the plan.</p>`},
   {id:'axo',ch:11,scene:'plan',flags:'shell furn zones labels axo hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>The same plan in three dimensions</h2>
     <p>The colours carry through, so each neighbourhood reads the same in plan and in 3D. Hover a neighbourhood for its details. Click a room for its renders.</p>
@@ -97,7 +101,7 @@ const STEPS=[
   {id:'exploded',ch:11,sub:'Exploded',scene:'plan',flags:'shell furn zones labels axo explode spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
     <p>Shell and core at the base, then the neighbourhoods and shared spaces, then the fit-out. Each layer follows from the one below it.</p>`},
   {id:'neighbourhoods',ch:12,scene:'overview',cap:s=>`${eyebrow(s)}<h2>Six neighbourhoods, each complete</h2>
-    <p>Every neighbourhood has its own workstations, quick sprint rooms, collaboration huddles, phone booths and a pantry point. They differ in size and mix, from ${Math.min(...NB_IDS.map(a=>KITS[a].desk))} to ${Math.max(...NB_IDS.map(a=>KITS[a].desk))} desks.</p>
+    <p>Every neighbourhood has its own workstations, quick sprint rooms, collaboration huddles, phone booths and coffee corners. They differ in size and mix, from ${Math.min(...NB_IDS.map(a=>KITS[a].desk))} to ${Math.max(...NB_IDS.map(a=>KITS[a].desk))} desks.</p>
     <p class="hint">Select a neighbourhood, or press → to walk through all six.</p>`},
   ...NBS.map((nb,i)=>({id:nb.id.toLowerCase(),ch:12,sub:`${i+1} of 6`,scene:'dive',cap:s=>capDive(s,i),wire:()=>wireDive(i),enter:()=>renderDive(i)})),
   {id:'numbers',ch:13,scene:'numbers',cap:s=>`${eyebrow(s)}<h2>One floor, six neighbourhoods</h2>
@@ -116,5 +120,5 @@ function capDive(s,i){
     <dl class="stats" style="--c:var(${nb.c})"><div><dt>Desks</dt><dd>${k.desk}</dd></div><div><dt>Area</dt><dd>${fmt(m2ft(M2[id]))}<small>sq ft</small></dd></div><div><dt>Meeting seats</dt><dd>${meetSeats}</dd></div></dl>
     <div class="chips" style="--c:var(${nb.c})" aria-label="Self-sustaining checklist">${CATS.map(c=>`<button type="button" class="chip${cats.has(c)?'':' off'}" data-cat="${c}"><i>${cats.has(c)?'✓':'·'}</i>${c}</button>`).join('')}</div>
     <ul class="kit" style="--c:var(${nb.c})">${kit.map((it,n)=>`<li><button type="button" class="kr" data-k="${it.k}" data-cat="${it.c}"><span class="kn"><i class="kb">${n+1}</i>${it.n}${canRender(it.k)?'<svg class="cam" viewBox="0 0 16 16" aria-label="has renders"><rect x="1.5" y="4" width="13" height="9" rx="2"/><circle cx="8" cy="8.5" r="2.4"/><path d="M5.5 4l1-1.6h3L10.5 4"/></svg>':''}</span><span class="kc">${it.c}</span><span class="kv">${it.v(k)}</span></button></li>`).join('')}</ul>
-    ${r?`<p class="sustain" style="--c:var(${nb.c})"><span>From any desk, a meeting room, a phone booth and the pantry are all within <b>${r.toFixed(0)} m</b> in a straight line. Daily needs stay inside the neighbourhood.</span></p>`:''}${RHINT('Click a space, a number or a row with a camera to see its renders.')}</div>`;
+    ${r?`<p class="sustain" style="--c:var(${nb.c})"><span>From any desk, a meeting room, a phone booth and a coffee corner are all within <b>${r.toFixed(0)} m</b> in a straight line. Daily needs stay inside the neighbourhood.</span></p>`:''}${RHINT('Click a space, a number or a row with a camera to see its renders.')}</div>`;
 }

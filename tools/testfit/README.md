@@ -40,3 +40,19 @@ These are set for test fit 02 and live in the scripts:
 - **North** is found again on every build. The plate is fitted into the footprint both ways round, and the way that puts the slanted end beside Hosur Road wins. `run.sh` prints the result.
 - **Sun patches**: for 3 dates × 24 half-hours, each façade is sampled every 0.5 m. Glass shaded by the floor's own recesses is skipped. The light is traced inwards to 3.25 m ÷ tan(sun altitude), stopping at core walls.
 - **Refreshing the open data**: `python3 tools/site/fetch.py` (needs `pip install pyarrow` and network access to the Overture and NOAA S3 buckets), then `python3 tools/site/site.py prep`.
+
+## AC_ layers (layout tf03 onwards)
+
+When the drawing has the `AC_` layers, they take over from the guesses above:
+
+| Layer | Used for |
+|---|---|
+| `AC_GLAZING` | The floor plate. The terraces are its notches on the south side. |
+| `AC_NEIGH` (top panel), `AC_FIRE_EXIT` (bottom panel) | The 8 zones (Neighbourhood 01–06, 2 receptions) and the egress routes. Read by `ac_panels.py`. |
+| `AC_WS_TYPE01`–`04` | Workstation blocks. They are still counted by block name, which gives 651 seats. |
+| `AC_QUICK_SPIRIT`, `AC_COLLAB_HUDDLE`, `AC_DEPARTMENTAL_ROOMS`, `AC_BOARD_ROOM`, `AC_THE_HATCHERY`, `AC_VISITOR_HUB`, `AC_TRAINING_ROOM`, `AC_THE_STUDIO_ROOM`, `AC_EXECUTIVE_CORNER_CABIN`, `AC_PHONE_BOOTH`, `AC_ZEN_ROOM`, `AC_PRAYER_ROOM`, `AC_MOTHER'S_ROOM`, `AC_HUB_ROOM`, `AC_UPS_SERVER_BATTERY_BMS_ROOM` | Rooms with exact outlines. Name and seats come from the room label inside each. |
+| `AC_COLLAB` | The Acker Garden · Work Arena spaces (renders `garden`). |
+| `AC_COFFEE_CORNER` | Coffee corners. They replace the microwave-based pantry points. |
+| `AC_CAFETERIA`, `AC_LIFT_LOBBY` (east) | The café and the lobby among the shared spaces. |
+| `AC_WORKHALL`, `AC_CORRIDOR`, `AC_RECEPTION`, `AC_OUT_OF_SCOPE`, … | The space plan: area per category, each m² counted once. |
+| `AC_LIFT_LOBBY` 1, `AC_WASHROOM` 2, `AC_FIRE_EXIT_STAIRCASE` 3, `AC_AHU` 4, `AC_STRENGTHEN_SLAB` 5 (numbered marker circles), `AC_ENTRY`, `AC_OUT_OF_SCOPE`, `AC_FIRE_COMPARTMENTALISATION` | The due-diligence step, numbered as on the drawing. |

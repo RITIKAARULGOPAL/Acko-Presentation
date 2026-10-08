@@ -122,7 +122,7 @@ Everything is in `index.html`:
 
 ## Test fit
 
-`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 27 steps:
+`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 28 steps:
 
 1. **The idea**: the city analogy and the loop (schematic)
 2. **The site**: a map of Regalium on Hosur Road, with landmarks, walking distances and the metro. It then zooms to the block and turns until the floor lines up with the drawing. The floor sits 11.5° east of true north (see below)
@@ -133,7 +133,7 @@ Everything is in `index.html`:
 5. **Daylight**: the 6 m band along the façade, including the glass facing the terraces (56% of workstations sit in it)
 6. **Fire and egress**: five stairs with 15 / 30 / 45 m rings, then the eight egress routes from the drawing, measured (43 to 61 m)
 7. **Carving the floor**: Neighbourhood 01 to 06 plus the shared spaces (café and dining, two receptions, lobby)
-8. **The layout**: the full fit-out, then carved into neighbourhoods (hover for details, click to open)
+8. **The layout**: the full fit-out; the **space plan**, with every space from the drawing's `AC_` layers coloured by type and measured; then carved into neighbourhoods (hover for details, click to open)
 9. **Shared spaces**: café and dining, both receptions and the lobby, highlighted
 10. **Sharing out**: every space type counted per neighbourhood, with a Brief column waiting for Acko's numbers
 11. **Axonometric**: the drawing in 3D, then exploded

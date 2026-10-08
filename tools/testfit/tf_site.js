@@ -199,29 +199,45 @@ function wireSun(){
 }
 const beatsHTML=()=>sunBeats(SUNS.k).map(([h,t])=>`<p class="beat"><b>${h}.</b> ${t}</p>`).join('');
 
-/* due diligence: numbered pins on the plan, the same numbers in the caption */
+/* due diligence: the items marked 1–5 on the AC_ layers of the drawing, with the same numbers in the caption */
+const DD_TXT={
+  lobby:d=>[`Lift lobbies and entrances`,`${d.count} lift lobbies. The main entrances open straight from them into the receptions.`],
+  wash:d=>[`Washrooms`,`${d.count} washroom blocks in the cores, ${fmt(m2ft(d.m2))} sq ft. Base building.`],
+  stair:d=>[`Fire exit staircases`,`${d.count} staircases along the north cores: the five exit doors seen on site.`],
+  ahu:d=>[`AHU rooms`,`${d.count} AHU rooms, ${fmt(m2ft(d.m2))} sq ft, at the core ends.`],
+  slab:d=>[`Slab to be strengthened`,`${d.count} zones, ${fmt(m2ft(d.m2))} sq ft, under the heavy rooms: server, UPS and battery rooms and the large meeting rooms.`],
+};
 function ddPins(){
-  const L=RF.lifts||[], col=(x,y)=>RF.cols.reduce((b,c)=>Math.hypot(c[0]+c[2]/2-x,c[1]+c[3]/2-y)<Math.hypot(b[0]+b[2]/2-x,b[1]+b[3]/2-y)?c:b,RF.cols[0]);
-  const c1=col(2300,400), c2=col(3950,420);
-  const pins=[];
-  const rec=l=>['R1','R2'].reduce((b,a)=>Math.hypot(RF.lab[a][0]-l.x,RF.lab[a][1]-l.y)<Math.hypot(RF.lab[b][0]-l.x,RF.lab[b][1]-l.y)?a:b);
-  L.forEach((l,i)=>pins.push({x:l.x,y:l.y+l.h/2+40,t:`${L.length>1?(i?'East':'West'):'The'} lift lobby: ${l.n} lifts, straight into ${placeName(rec(l))}`}));
-  pins.push({x:c1[0]+c1[2]/2,y:c1[1]+c1[3]/2,t:`${fmt(NUM.slab)} mm to the slab, ${fmt(NUM.clearUnderBeam)} mm to the beams`});
-  pins.push({x:(PB.x0+PB.x1)*.5,y:PB.y1-8,t:'Full-height glazing from the floor, still being built'});
-  pins.push({x:1150,y:420,t:`Screed still to be laid: it comes off the ${fmt(NUM.clearUnderBeam)} mm`});
-  pins.push({x:c2[0]+c2[2]/2,y:c2[1]+c2[3]/2,t:'PT slab on beams; the beam layout comes from the base builder'});
-  return pins;
+  if(!RF.dd) return [];
+  return RF.dd.items.map(d=>{ const [t,dd]=(DD_TXT[d.k]||(()=>[d.k,'']))(d); return {n:d.n,t,d:dd,marks:d.marks,polys:d.polys,k:d.k}; });
 }
 function ddSVG(){
-  return ddPins().map((p,i)=>`<g class="pin" data-pin="${i}" transform="translate(${r1(p.x)} ${r1(p.y)})" style="--d:${.15+i*.12}s"><g><circle r="34" class="pin-p"/><circle r="34" class="pin-c"/><text y="13" class="pin-t">${i+1}</text></g></g>`).join('')
-    +(RF.lifts||[]).map(l=>`<path class="dd-arr" d="M${r1(l.x)} ${r1(l.y+l.h/2+90)}l0 120"/>`).join('');
+  if(!RF.dd) return '';
+  const pins=ddPins(); let s='';
+  s+=RF.dd.oos.map(p=>`<path d="${PD(p)}" class="dd-oos"/>`).join('');
+  pins.forEach((p,i)=>{ s+=p.polys.map(q=>`<path d="${PD(q)}" class="dd-p dd-${p.k}" data-pin="${i}"/>`).join(''); });
+  s+=RF.dd.entries.map(t=>`<path d="M${t.map(q=>q.join(' ')).join('L')}Z" class="dd-ent"/>`).join('');
+  pins.forEach((p,i)=>{ p.marks.forEach((m,j)=>{ s+=`<g class="pin" data-pin="${i}" transform="translate(${r1(m[0])} ${r1(m[1])})" style="--d:${(.15+i*.12+j*.04).toFixed(2)}s"><g><circle r="34" class="pin-p"/><circle r="34" class="pin-c"/><text y="13" class="pin-t">${p.n}</text></g></g>`; }); });
+  return s;
+}
+function compSVG(){
+  if(!RF.dd||!RF.dd.comp.length) return '';
+  const c=RF.dd.comp[0], top=c.reduce((b,q)=>q[1]<b[1]?q:b);
+  return c.length?`<path d="M${c.map(q=>q.join(' ')).join('L')}" class="dd-comp"/>`+T(top[0]+18,PB.y0-30,'FIRE COMPARTMENT LINE','ann firec'):'';
 }
 function wireSiteDD(){
-  const set=i=>{ $$('.pin').forEach(p=>p.classList.toggle('on',String(i)===p.dataset.pin)); $$('.ob').forEach(o=>o.classList.toggle('on',String(i)===o.dataset.pin)); };
+  const set=i=>{ $$('.pin,.dd-p').forEach(p=>p.classList.toggle('on',String(i)===p.dataset.pin)); $$('.ob').forEach(o=>o.classList.toggle('on',String(i)===o.dataset.pin)); };
   $$('.ob').forEach(o=>{ o.addEventListener('pointerenter',()=>set(o.dataset.pin)); o.addEventListener('focus',()=>set(o.dataset.pin)); o.addEventListener('pointerleave',()=>set(null)); });
   set(null);
 }
-/* a small section through the floor: what the heights leave for the ceiling */
+/* the space plan: every AC_ polygon in the drawing, coloured by what it is for */
+const SPACE_CAT={work:['Work arena','--n4'],meet:['Meeting and training','--n2'],focus:['Focus and wellbeing','--n5'],collab:['Acker Garden and collab','--n6'],
+  recharge:['Café and coffee corners','--n1'],arrival:['Receptions and lift lobbies','--brand'],move:['Corridors','--ink-3'],base:['Base building and support','--line-2']};
+function spacePlanSVG(){ return (RF.spaces||[]).map(s=>`<path d="${s.d}" class="sp-c sp-${s.c}" style="--c:var(${(SPACE_CAT[s.c]||['', '--ink-3'])[1]})"/>`).join(''); }
+function spaceLegend(){
+  const S=(RF.spaces||[]).slice().sort((a,b)=>b.m2-a.m2), tot=RF.plateM2;
+  return `<ul class="spl">${S.map(s=>`<li style="--c:var(${SPACE_CAT[s.c][1]})"><i></i><span>${SPACE_CAT[s.c][0]}</span><b>${fmt(m2ft(s.m2))} sq ft</b><em>${(100*s.m2/tot).toFixed(0)}%</em></li>`).join('')}</ul>`;
+}
 function sectionSVG(){
   const sl=NUM.slab, bm=NUM.clearUnderBeam, k=.034, H=sl*k, y=v=>H-v*k+18;
   return `<svg class="sect" viewBox="0 0 300 ${H+44}" role="img" aria-label="Section: ${sl} mm floor to slab, ${bm} mm floor to beam bottom">

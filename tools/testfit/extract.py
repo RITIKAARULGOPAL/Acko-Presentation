@@ -17,8 +17,19 @@ TSW=PLATE_P.intersection(box(-137400,-409100,-108202,-391300)).difference(z4).di
 TSW=max((TSW.geoms if hasattr(TSW,'geoms') else [TSW]), key=lambda g:g.area)
 TSC=box(-49516,-391100,-33600,-384950).difference(unary_union(ZP))
 TSC=max((TSC.geoms if hasattr(TSC,'geoms') else [TSC]), key=lambda g:g.area)
-AREAS=[('N%02d'%(i+1),ZP[z]) for i,z in enumerate(NB_ORDER)]+[('R1',ZP[4]),('R2',ZP[5]),('TW',TSW),('TC',TSC)]
-PREP=[(k,prep(g)) for k,g in AREAS]
+# AC_ layers (the space plan drawn over the layout) override the boxes above when present
+def acp(l,minm2=0.3):
+    out,seen=[],set()
+    for g in (Polygon(p).buffer(0) for p in paths(l) if len(p)>=3):
+        k=tuple(round(v/100) for v in g.bounds)
+        if g.area>minm2*1e6 and k not in seen: seen.add(k); out.append(g)
+    return out
+if acp('AC_CAFETERIA'): TSW=max(acp('AC_CAFETERIA'),key=lambda g:g.area)
+if acp('AC_LIFT_LOBBY',20): TSC=max(acp('AC_LIFT_LOBBY',20),key=lambda g:g.centroid.x)
+def biggest(g): return max((g.geoms if hasattr(g,'geoms') else [g]),key=lambda h:h.area)
+def nbz(z): return biggest(ZP[z].difference(TSW).difference(TSC))
+AREAS=[('N%02d'%(i+1),nbz(z)) for i,z in enumerate(NB_ORDER)]+[('R1',nbz(4)),('R2',nbz(5)),('TW',TSW),('TC',TSC)]
+PREP=[(k,prep(g)) for k,g in AREAS[-2:]+AREAS[:-2]]
 def area_of(x,y):
     p=Point(x,y)
     for k,g in PREP:
@@ -36,7 +47,7 @@ groups=collections.defaultdict(lambda: collections.defaultdict(list))
 seen=set()
 stats=collections.Counter()
 for lay,ds in D['layers'].items():
-    if lay in SKIP or lay.startswith('I_FUR_') and any(s in lay for s in ('LENGTH','WIDTH','POSITION')): continue
+    if lay in SKIP or lay.startswith('AC_') or lay.startswith('I_FUR_') and any(s in lay for s in ('LENGTH','WIDTH','POSITION')): continue
     if lay in PART: g='part'
     elif lay in GREEN: g='green'
     elif lay in CORE: g='core'
@@ -136,6 +147,28 @@ for r in rooms:
         r['poly']=[[round(a,1),round(b,1)] for a,b in (T(*q) for q in list(mr.exterior.coords)[:-1])]
         r['m2']=round(best.area/1e6,1)
 print('rooms with footprint',sum(1 for r in rooms if 'poly' in r),'of',len(rooms))
+# rooms drawn on AC_ layers: exact outlines; name and seats from the label inside
+ACROOM={'AC_QUICK_SPIRIT':'sprint','AC_COLLAB_HUDDLE':'huddle','AC_DEPARTMENTAL_ROOMS':'dept','AC_BOARD_ROOM':'board','AC_THE_HATCHERY':'hatchery',
+        'AC_VISITOR_HUB':'visitor','AC_TRAINING_ROOM':'training','AC_THE_STUDIO_ROOM':'studio','AC_EXECUTIVE_CORNER_CABIN':'cabin','AC_PHONE_BOOTH':'booth',
+        'AC_ZEN_ROOM':'zen','AC_PRAYER_ROOM':'prayer',"AC_MOTHER'S_ROOM":'mother','AC_COLLAB':'garden','AC_HUB_ROOM':'support','AC_UPS_SERVER_BATTERY_BMS_ROOM':'support'}
+DEFSEATS={'booth':1,'cabin':4,'zen':4,'prayer':6,'mother':2,'studio':4}
+NICE={'training':'Training Room','garden':'Acker Garden','support':'Support Room'}
+ANNO=[(x,y,t) for lay,x,y,t in TX if lay=='OB-I-ANNO-TEXT']
+def plan_poly(g,tol=60):
+    g=g.simplify(tol); return [[round(a,1),round(b,1)] for a,b in (T(*q) for q in list(biggest(g).exterior.coords)[:-1])]
+if any(paths(l) for l in ACROOM):
+    rooms=[]
+    for lay,k in ACROOM.items():
+        for g in acp(lay,0.2):
+            c=g.representative_point(); inside=[(math.dist((x,y),(c.x,c.y)),t) for x,y,t in ANNO if g.contains(Point(x,y))]
+            pax=sorted((d,t) for d,t in inside if re.search(r'(\d+) PAX',t))
+            own=[t for d,t in sorted(inside) if any(re.search(p,t) for p,kk in KINDS if kk==k)]
+            lab=(own or [t for d,t in pax] or [''])[0]
+            m=re.search(r'(\d+) PAX',lab)
+            name=string.capwords(lab.lower()).replace('Pax','pax') if lab else NICE.get(k,k.title())
+            u,v=T(c.x,c.y)
+            rooms.append({'k':k,'t':name,'x':round(u,1),'y':round(v,1),'s':int(m.group(1)) if m else DEFSEATS.get(k,0),'a':area_of(c.x,c.y),'poly':plan_poly(g),'m2':round(g.area/1e6,1),'ac':lay})
+    print('AC rooms',collections.Counter(r['k'] for r in rooms))
 # ---------- desks ----------
 DESK={'rytu':3,'WS 1500x750mm':1,'WS 1500x750mm 2':1,'rhrt':1,'4PAX WITH PLANTER':4}
 desks=[]
@@ -152,6 +185,10 @@ for x,y in mw:
         if math.dist(c['p'],(x,y))<6000: c['n']+=1; break
     else: pant.append({'p':(x,y),'n':1})
 pantries=[{'x':round(T(*c['p'])[0],1),'y':round(T(*c['p'])[1],1),'a':area_of(*c['p']),'n':c['n']} for c in pant]
+if acp('AC_COFFEE_CORNER',0.2):   # coffee corners drawn on the AC layer replace the microwave clusters
+    pantries=[]
+    for g in acp('AC_COFFEE_CORNER',0.2):
+        c=g.representative_point(); u,v=T(c.x,c.y); pantries.append({'x':round(u,1),'y':round(v,1),'a':area_of(c.x,c.y),'n':1,'poly':plan_poly(g),'m2':round(g.area/1e6,1)})
 print('pantry points',len(pantries),collections.Counter(p['a'] for p in pantries))
 # training / town-hall seating, café seats
 def cnt(names):
@@ -175,9 +212,15 @@ for P in Z['loop']:
     routes.append({'pts':[[round(x,1),round(y,1)] for x,y in Q],'m':round(L,1),'to':st['id'],'a':area_of(*P[0])})
 print('routes',[(r['a'],r['to'],r['m']) for r in routes])
 # ---------- polygons ----------
+def terraces():
+    # the notches cut into the south side of the plate (from the glazing line when the drawing has one)
+    if not paths('AC_GLAZING'): return [box(-108202,-409079,-82552,-399528),box(-27327,-409079,-1602,-399528)]
+    x0,y0,x1,y1=PLATE_P.bounds; cut=box(x0,y0,x1,y1).difference(PLATE_P)
+    out=[g for g in (cut.geoms if hasattr(cut,'geoms') else [cut]) if g.bounds[1]<=y0+1 and g.bounds[0]>x0+30000 and g.bounds[2]<x1-1000 and g.area>20e6]
+    return sorted(out,key=lambda g:g.bounds[0])
 def poly(g): return [[round(a,1),round(b,1)] for a,b in (T(x,y) for x,y in list(g.exterior.coords)[:-1])]
 out={'unit':UNIT/1000,'plate':poly(PLATE_P),
-     'terraces':[poly(box(-108202,-409079,-82552,-399528)),poly(box(-27327,-409079,-1602,-399528))],
+     'terraces':[poly(g) for g in terraces()],
      'cutout':poly(box(-45300,-390500,-37300,-385600)),
      'areas':{k:poly(g) for k,g in AREAS},'areaM2':{k:round(g.area/1e6,1) for k,g in AREAS},'plateM2':round(PLATE_P.area/1e6,1),
      'g':G,'cols':cols,'stairs':stairs,'rooms':rooms,'desks':desks,'pantries':pantries,'routes':routes,
@@ -218,6 +261,30 @@ for c0,c1 in zip(cols,cols[1:]):
     lifts.append({'x':round((u0+u1)/2,1),'y':round((v0+v1)/2,1),'w':round(u1-u0,1),'h':round(v1-v0,1),'n':len(ys),'a':area_of((min(dx)+max(dx))/2,sum(ys)/len(ys))})
 lifts.sort(key=lambda l:l['x'])
 out['lifts']=lifts; print('lift lobbies',lifts)
+# ---------- the space plan and the due-diligence marks, from the AC_ layers ----------
+CAT=[('meet',['AC_QUICK_SPIRIT','AC_COLLAB_HUDDLE','AC_DEPARTMENTAL_ROOMS','AC_BOARD_ROOM','AC_THE_HATCHERY','AC_VISITOR_HUB','AC_TRAINING_ROOM','AC_THE_STUDIO_ROOM']),
+     ('focus',['AC_PHONE_BOOTH','AC_ZEN_ROOM','AC_PRAYER_ROOM',"AC_MOTHER'S_ROOM",'AC_EXECUTIVE_CORNER_CABIN']),
+     ('collab',['AC_COLLAB']),('recharge',['AC_COFFEE_CORNER','AC_CAFETERIA']),('arrival',['AC_RECEPTION','AC_LIFT_LOBBY']),
+     ('base',['AC_WASHROOM','AC_FIRE_EXIT_STAIRCASE','AC_AHU','AC_OUT_OF_SCOPE','AC_HUB_ROOM','AC_UPS_SERVER_BATTERY_BMS_ROOM']),
+     ('work',['AC_WORKHALL']),('move',['AC_CORRIDOR'])]
+MARKED={'AC_LIFT_LOBBY','AC_WASHROOM','AC_FIRE_EXIT_STAIRCASE','AC_AHU','AC_STRENGTHEN_SLAB'}   # layers carrying a numbered marker circle
+if any(paths(l) for c,ls in CAT for l in ls):
+    spaces=[]; taken=Polygon()
+    for c,ls in CAT:
+        gs=[g.intersection(PLATE_P) for l in ls for g in acp(l,5 if l in MARKED else 0.2)]
+        u=unary_union(gs); m2=u.difference(taken).area/1e6; taken=taken.union(u)   # each m² counted once, in priority order
+        spaces.append({'c':c,'m2':round(m2,1),'n':len(gs),'d':enc([[T(*q) for q in biggest(g).exterior.coords] for g in gs if not g.is_empty])})
+    out['spaces']=spaces; print('space plan',[(s['c'],s['n'],s['m2']) for s in spaces])
+    DDL=[(1,'lobby','AC_LIFT_LOBBY'),(2,'wash','AC_WASHROOM'),(3,'stair','AC_FIRE_EXIT_STAIRCASE'),(4,'ahu','AC_AHU'),(5,'slab','AC_STRENGTHEN_SLAB')]
+    dd=[]
+    for n,k,l in DDL:
+        gs=acp(l,5)    # the numbered marker circles sit on the same layers
+        marks=[[round(v,1) for v in T(x,y)] for lay,x,y,t in TX if lay==l and t.strip()==str(n)]
+        dd.append({'n':n,'k':k,'count':len(gs),'m2':round(sum(g.area for g in gs)/1e6,1),'polys':[plan_poly(g,30) for g in gs],'marks':marks})
+    out['dd']={'items':dd,'entries':[[[round(v,1) for v in T(*q)] for q in p[:3]] for p in paths('AC_ENTRY') if len(p)>=3],
+               'oos':[plan_poly(g,30) for g in acp('AC_OUT_OF_SCOPE',1)],
+               'comp':[[[round(v,1) for v in T(*q)] for q in p] for p in paths('AC_FIRE_COMPARTMENTALISATION') if len(p)>=2]}
+    print('due diligence',[(d['n'],d['k'],d['count'],d['m2'],len(d['marks'])) for d in dd],'entries',len(out['dd']['entries']),'compartment',len(out['dd']['comp']))
 out['len']=round((PLATE_P.bounds[2]-PLATE_P.bounds[0])/1000,1); out['depth']=round((PLATE_P.bounds[3]-PLATE_P.bounds[1])/1000,1)
 json.dump(out,open('realfit.json','w'),separators=(',',':'))
 print('labels',lab,'daylight %',out['daylight'],'size',out['len'],out['depth'])
