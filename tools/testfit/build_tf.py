@@ -26,6 +26,7 @@ body=re.sub(r'  <section class="scene" id="sc-brief".*?</section>\n','',body)
 body=rep(body,'looping around the Town Square','looping around the shared spaces')
 body=rep(body,'  <section class="scene" id="sc-alloc"','''  <section class="scene" id="sc-site" aria-label="The site: Regalium, Koramangala"><svg id="sitesvg" class="dsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of the site and the streets around it"></svg><p class="m-attr" id="m-attr"></p></section>
   <section class="scene" id="sc-climate" aria-label="Sun path and wind"><svg id="climsvg" class="dsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Sun path and wind rose over the floor plate"></svg></section>
+  <section class="scene" id="sc-green" aria-label="Green zone analysis"></section>
   <section class="scene" id="sc-alloc"''')
 # ---------- script ----------
 concept="const {buildCity,buildLoop}=(function(){\n"+open('tf_concept_consts.js').read()+(city+loopf).replace("'TOWN SQUARE'","'SHARED SPACES'")+"  return {buildCity,buildLoop};\n})();\n"
@@ -33,6 +34,7 @@ data=open('tf_data.js').read().replace('/*REALFIT*/null',open('realfit.json').re
 data+=open('tf_site.js').read().replace('/*SITE*/null',open('site.json').read())
 plan=open('tf_plan.js').read().replace('/*CONCEPT*/',concept)
 steps=open('tf_steps.js').read()
+green=open('tf_green.js').read()
 # renders: real kinds
 renders=rep(renders,renders[renders.index('const NB_KINDS='):renders.index('const canRender=')],
 """const SPACE_NAMES={desk:'Workstations',garden:'Acker Garden · Work Arena',training:'Training room',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Coffee corner',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
@@ -56,15 +58,19 @@ print('renders',{k:sorted(v) for k,v in REN.items()})
 renders=rep(renders,"(SCENE[k]||SCENE.meeting)();","(SCENE[SCENE_OF[k]||k]||SCENE.meeting)();")
 # engine edits
 e=engine
-e=rep(e,"loop:$('#sc-loop'),brief:$('#sc-brief'),alloc:$('#sc-alloc')","loop:$('#sc-loop'),site:$('#sc-site'),climate:$('#sc-climate'),alloc:$('#sc-alloc')")
+e=rep(e,"loop:$('#sc-loop'),brief:$('#sc-brief'),alloc:$('#sc-alloc')","loop:$('#sc-loop'),site:$('#sc-site'),climate:$('#sc-climate'),green:$('#sc-green'),alloc:$('#sc-alloc')")
 e=rep(e,"  buildPlan(); buildCover(); buildCity(); buildLoop(); buildBrief(); buildAlloc(); buildOverview(); buildNumbers();",
 """  $('svg defs').insertAdjacentHTML('beforeend',`<clipPath id="clip-rf"><path d="${PD(RF.plate)}"/></clipPath>`);
-  buildPlan(); buildCover(); buildCity(); buildLoop(); buildSite(); buildClimate(); buildAlloc(); buildOverview(); buildNumbers();""")
+  buildPlan(); buildCover(); buildCity(); buildLoop(); buildSite(); buildClimate(); buildGreen(); buildAlloc(); buildOverview(); buildNumbers();""")
 e=rep(e,"  document.body.classList.toggle('full',!!s.full);","  document.body.classList.toggle('full',!!s.full);\n  document.body.classList.toggle('wide',!!s.wide);\n  document.body.classList.toggle('tall',!!s.tall);")
 e=rep(e,"  if(st.width) $('#plan-fit').style.setProperty('--fit',Math.min(st.width/1280,st.height/780)*.97);\n  const ax=$('#dv-axo').getBoundingClientRect();\n  if(ax.width) $('#axo-fit').style.setProperty('--fit',Math.min((ax.width-24)/470,(ax.height-60)/290));",
 "  if(st.width) $('#plan-fit').style.setProperty('--fit',Math.min(st.width/PW,st.height/PH)*.97);\n  const ax=$('#dv-axo').getBoundingClientRect();\n  if(ax.width) $('#axo-fit').style.setProperty('--fit',Math.min((ax.width-24)/(AX.w*.95),(ax.height-60)/(AX.h*1.15)));")
 e=re.sub(r"function wireDD\(\)\{.*?\n\}\n","",e,flags=re.S)
 e=re.sub(r"function wireShared\(\)\{.*?\n\}\n","",e,flags=re.S)
+# typing in a field (the green zone assumptions) must not change the step
+e=rep(e,"""  const k=e.key, onBtn=e.target.closest&&e.target.closest('button,a,input,textarea,select,[role="button"]');""",
+"""  const k=e.key, onBtn=e.target.closest&&e.target.closest('button,a,input,textarea,select,[role="button"]');
+  if(e.target.closest&&e.target.closest('input,textarea,select')&&k!=='Escape') return;""")
 tip_old=e[e.index("function ctxInfo(ctx){"):e.index("function showTip(")]
 e=rep(e,tip_old,open('tf_tips.js').read())
 e=rep(e,"const z=e.target.closest('.zone'); if(z&&SCENES.plan.classList.contains('f-hover')&&e.pointerType==='mouse') showTip(z.dataset.nb,e.clientX,e.clientY); else hideTip(); });",
@@ -81,6 +87,6 @@ e=rep(e,sm_old,"""function spaceMeta(ctx,k){
 """)
 e=rep(e,"RV.ctx=ctx||sp.nb; RV.list=(RV.ctx==='TS'?TS_KINDS:NB_KINDS).filter(k=>SP.some(x=>inCtx(x,RV.ctx)&&x.k===k));",
         "RV.ctx=ctx||sp.nb; RV.list=KIND_ORDER.filter(k=>canRender(k)&&SP.some(x=>inCtx(x,RV.ctx)&&x.k===k));")
-out=head_css+body+prelude+data+plan+renders+steps+e
+out=head_css+body+prelude+data+plan+renders+green+steps+e
 open(OUT,'w').write(out)
 print('written',len(out))

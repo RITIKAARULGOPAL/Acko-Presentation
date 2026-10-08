@@ -138,9 +138,33 @@ Everything is in `index.html`:
 10. **Sharing out**: every space type counted per neighbourhood, with a Brief column waiting for Acko's numbers
 11. **Axonometric**: the drawing in 3D, then exploded
 12. **Neighbourhoods**: an overview and six deep dives with plan, axo, numbered kit and walking distances
-13. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
+13. **Green zones**: a carbon-responsive green zone analyzer on the real layout (10 steps, see [Green zones](#green-zones) below)
+14. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
 
 Click any desk cluster, room, pantry or shared area for its light and dark renders. For the test fit, drop the images into `renders/` named `<key>-light` and `<key>-dark` (`.jpg`, `.png` or `.webp`). The build embeds them in `index-testfit.html`, so it stays one self-contained file. Real renders so far: the reception (`renders/reception-*.webp`) and the Acker Garden · Work Arena (`renders/garden-*.webp`). The garden isn't labelled in the drawing; it is placed at the curved north-west corner of Neighbourhood 01, by its coffee point, in `PLACES` in `tools/testfit/tf_data.js`. The keys are: `garden`, `desk`, `sprint`, `dept`, `huddle`, `hatchery`, `duo`, `booth`, `pantry`, `zen`, `cabin`, `board`, `studio`, `prayer`, `mother`, `cafe`, `reception`, `lobby`, `visitor`. A render for one neighbourhood only uses its two-digit id: `'N03:huddle':{light:'renders/n03-huddle-light.jpg', dark:'renders/n03-huddle-dark.jpg'}`.
+
+### Green zones
+
+The Green zones chapter works out **where planting should go and why**, from how each space is used. It does not spread plants evenly by area. *Planting is not decoration: it is spatial infrastructure responding to how people use the workplace.*
+
+Layout → space classification → occupancy → footfall → dwell time → relative carbon impact → biophilic priority → green zone identification → plant quantity → plant type → placement → green score.
+
+1. **The idea**: the philosophy and the workflow, over the final proposal
+2. **Spaces**: the 167 spaces from the drawing's `AC_` layers, each a record (type, category, area, occupancy, dwell, visits, footfall, daylight, circulation, privacy, existing planting). Click one to see it or override its numbers
+3. **Footfall**: occupancy × visits per person per day × utilisation
+4. **Dwell**: footfall × average dwell gives occupancy hours. This separates high-footfall/short-dwell (reception), high/high (café) and low-movement/long-dwell (work arenas)
+5. **Carbon index**: footfall × dwell × activity factor × services intensity, scaled 0–100 across the floor. **It is a relative design-planning index, not measured emissions or a carbon offset**, and every surface that shows it says so
+6. **Priority**: 25% footfall, 25% dwell, 20% carbon index, 15% daylight, 10% social importance, 5% visibility, scaled 0–100 and classed Very Low to Very High
+7. **Green zones**: the proposal on the plan, as Green Node, Island, Edge, Threshold, Pocket and Feature. Click a zone for its card (footfall, dwell, carbon index, priority, type, plants, mix, planter length, height, density, light, maintenance and the reason). Drag to move, **+ Add zone** to place one, and delete, retype or resize from the card. A zone moved into the keep-clear zone is flagged and costs score
+8. **Dashboard**: floor summary, the green zone table, plant mix and 5–10 generated design recommendations, with CSV and JSON export
+9. **Space database**: the full table, highest priority first
+10. **Assumptions**: every default by space type (visits, utilisation, dwell, activity, services intensity, social importance), the priority weights, density (1 plant per 12.5 m²), class multipliers (0.75 / 1.0 / 1.2 / 1.4, and 0.5 for very low) and plant spacing. Edits recompute everything, stay in the browser, and export or import as JSON
+
+The toolbar switches layers at any step (Spaces · Footfall · Dwell · Carbon index · Priority · Green zones) and overlays the keep-clear zone, the free floor, the escape routes and the existing plants.
+
+**From the drawing:** space outlines and types, 651 workstations and 544 room and café seats, 228 existing plants, doors, partitions (glass counts as see-through for visibility), escape routes, cores, columns, and the drawing's "1500MM WIDE CORRIDOR" note, which sets the clear width. **Estimates, labelled `est.`:** visits, utilisation, dwell and activity factors, and the users of coffee corners, receptions, lobbies and the corridor (from the headcount). Nothing is presented as a measured occupancy or carbon figure.
+
+**Nothing is planted** on furniture and its 0.6 m use zone, 1.2 m in front of doors, escape routes ± 1.0 m, corridor width below 1.5 m clear + 0.6 m planter, junction sight lines (1.5 m), lifts, stairs and entrances (1.5 m), columns, cores, or support rooms. That leaves 358 m² of the 5,434 m² usable floor, cut into 164 candidate spots. The selection then **maximises impact, not plant count**. It ranks spots by their space's priority, visibility, daylight and footfall, keeps zones apart (3 m, 6 m within one space), and puts the work-arena remainder on desks. The **biophilic workplace score** is 40% priority spaces served, 30% desks within 8 m of greenery, 15% zone visibility and 15% plants in daylight, minus clearance conflicts. So a few well-placed plants outscore many scattered ones.
 
 **Still placeholders in the test fit:** teams and colours; the brief numbers; the loop (the drawing has no loop line yet). The fire travel distances still need checking against NBC with the fire consultant.
 
