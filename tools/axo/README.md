@@ -1,6 +1,8 @@
 # Conceptual axo
 
-Builds the 3D axonometric of the test fit from the DXF. The deck uses it twice, after the "Exploded" step:
+Builds the 3D axonometric of the test fit from the DXF. The deck uses it three times:
+
+- **How the layers stack** (`#exploded`): `renders/axo-exploded-layers.webp`. Shell and core at the base, the neighbourhood plates with the loop 15 m above, the fit-out 30 m above, seen from a flatter angle. `render.mjs` also writes `axo-exploded-layers.json`, which holds where each layer and neighbourhood label sits on the image. The deck draws the labels from it.
 
 - **The floor, rendered** (`#axo-render`): eight stills in `renders/axo-<view>-<style>.webp`. There are four views (`floor`, `west`, `middle`, `east`) in two styles: `ref`, the reference look (grey floor, dark loop, purple glass rooms, wood desks), and `nb`, tinted in the neighbourhood colours.
 - **Walk around the model** (`#axo-model`): the same scene live in three.js. Drag to orbit, right-drag to pan, scroll or pinch to zoom, and hover for the space's name.
@@ -15,7 +17,7 @@ cd tools/axo
 python3 dxf_dump.py ~/Downloads/acko-layout-tf03.dxf /tmp/dump.pkl   # ~2 min: flattens every block to world lines
 python3 extract_axo.py /tmp/dump.pkl axo.json                        # ~20 s: prints counts to check against the drawing
 npm install && npm run bundle                                         # three.js scene → axo.bundle.js
-node render.mjs                                                       # → ../../renders/axo-*.webp (needs Playwright)
+node render.mjs                                                       # → ../../renders/axo-*.webp and the exploded labels (needs Playwright)
 ```
 
 Then rebuild the deck with `tools/testfit/build_tf.py`. It embeds `axo.bundle.js`, `axo.json` and the stills into `index-testfit.html`, so the file stays self-contained and works offline.

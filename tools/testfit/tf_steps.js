@@ -93,9 +93,10 @@ const STEPS=[
     <p class="note">The brief column fills in once Acko's numbers are added. Then each row can show the brief against the plan.</p>`},
   {id:'axo',ch:11,scene:'plan',flags:'shell furn zones labels axo hover spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>The same plan in three dimensions</h2>
     <p>The colours carry through, so each neighbourhood reads the same in plan and in 3D. Hover a neighbourhood for its details. Click a room for its renders.</p>
-    <p class="note">This model is drawn from test fit 02. The next two steps show the latest test fit as a rendered axo and as a live 3D model.</p>`},
-  {id:'exploded',ch:11,sub:'Exploded',scene:'plan',flags:'shell furn zones labels axo explode spaces',wide:true,cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
-    <p>Shell and core at the base, then the neighbourhoods and shared spaces, then the fit-out. Each layer follows from the one below it.</p>`},
+    <p class="note">This model is drawn from test fit 02. The next steps show the latest test fit, test fit 03: exploded, rendered and as a live 3D model.</p>`},
+  {id:'exploded',ch:11,sub:'Exploded',scene:'axo3',wide:true,enter:()=>ax3Enter('exploded'),cap:s=>`${eyebrow(s)}<h2>How the layers stack</h2>
+    <p>Shell and core at the base, then the neighbourhoods and shared spaces with the loop running through them, then the fit-out. Each layer follows from the one below it.</p>
+    <p class="note">Built from test fit 03, like the rendered views that follow.</p>`},
   {id:'axo-render',ch:11,sub:'Rendered',scene:'axo3',wide:true,enter:()=>ax3Enter('still'),cap:s=>`${eyebrow(s)}<h2>The floor, rendered</h2>
     <p>A conceptual axonometric of the latest test fit. Every room, core, desk, plant and pane of glass is placed from the drawing: ${fmt(AXO_DATA.counts.seats)} workstations, ${AXO_DATA.counts.rooms.booth} phone booths, ${AXO_DATA.counts.rooms.sprint} quick sprint rooms and the loop that links them.</p>
     <p>Switch between the whole floor and the three close-ups, and between the reference look and the neighbourhood colours.</p>

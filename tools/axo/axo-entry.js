@@ -86,7 +86,7 @@ function inside(pt, ring) {
 const centroid = r => { let x = 0, y = 0; for (const p of r) { x += p[0]; y += p[1]; } return [x / r.length, y / r.length]; };
 
 // ---------- the model ----------
-function buildShared(A) {
+function buildShell(A) {     // slab, terraces, façade, cores, columns
   const g = new THREE.Group();
   const add = o => o && g.add(o);
   // slab and terraces
@@ -119,6 +119,12 @@ function buildShared(A) {
   add(mesh(cores, mat(C.core, { transparent: true, opacity: 0.9 })));
   add(lines(cores, C.coreEdge, 0.8));
   add(mesh(merge(A.columns.map(r => prism(r, 0, H.core))), mat(C.column)));
+  return g;
+}
+
+function buildFit(A) {       // partitions, furniture, plants
+  const g = new THREE.Group();
+  const add = o => o && g.add(o);
   // solid partitions read like the reference: a denser, frosted version of the room glass
   const walls = merge(A.walls.solid.map(r => prism(r, 0, H.wall)));
   add(mesh(walls, new THREE.MeshLambertMaterial({ color: C.wall, transparent: true, opacity: 0.62 }), { receive: false }));
@@ -152,14 +158,32 @@ function buildShared(A) {
 
 function nbOf(A, pt) { for (const [k, r] of Object.entries(A.neigh)) if (inside(pt, r)) return k; return null; }
 
-function buildStyle(A, style) {
+// the neighbourhoods as thin coloured plates, with the loop on top: the middle layer of the exploded view
+function buildNbLayer(A) {
+  const g = new THREE.Group();
+  const add = o => o && g.add(o);
+  for (const [k, r] of Object.entries(A.neigh)) {
+    const geo = prism(r, 0, 0.12);
+    add(mesh(geo, mat(new THREE.Color(NB_COLOR[k]).lerp(new THREE.Color('#ffffff'), 0.25), { transparent: true, opacity: 0.85 }), { shadow: false }));
+    add(lines(geo, new THREE.Color(NB_COLOR[k]).multiplyScalar(0.7), 0.9));
+  }
+  add(mesh(merge(A.spaces.filter(s => s.k === 'corridor').map(s => prism(s.p, 0.12, 0.2))), mat(C.corridor), { shadow: false }));
+  g.add(outline(A, '#8a8c93'));
+  return g;
+}
+function outline(A, color) {     // the floor's edge as a line, so a floating layer still reads as the floor
+  const ring = asRings(A.slab)[0].map(([x, y]) => new THREE.Vector3(x, 0, y));
+  return new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(ring), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.7 }));
+}
+
+function buildStyle(A, style, { zones = true } = {}) {
   const g = new THREE.Group();
   const add = o => o && g.add(o);
   const nbTint = style === 'nb';
   const zoneY = { work: 0.004, collab: 0.008, coffee: 0.008, cafe: 0.008, reception: 0.008, entry: 0.02, corridor: 0.012 };
   const byColor = new Map();
   const put = (c, geo) => { if (!byColor.has(c)) byColor.set(c, []); byColor.get(c).push(geo); };
-  for (const s of A.spaces) if (s.g === 'zone') put(C[s.k] || C.work, flat(s.p, zoneY[s.k] || 0.006));
+  if (zones) for (const s of A.spaces) if (s.g === 'zone') put(C[s.k] || C.work, flat(s.p, zoneY[s.k] || 0.006));
   if (nbTint) for (const [k, r] of Object.entries(A.neigh)) put('nb:' + k, flat(r, 0.009));
   // rooms: lavender floor and purple glass walls on the outline (neighbourhood colour in the colour view)
   const glassBy = new Map();
@@ -198,15 +222,24 @@ export function createAxo(canvas, A, opts = {}) {
   sun.castShadow = true; sun.shadow.mapSize.set(opts.shadowMap || 4096, opts.shadowMap || 4096);
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
   scene.add(sun, sun.target);
-  scene.add(buildShared(A));
+  // exploded: shell and core at the base, the neighbourhoods above, the fit-out on top
+  const EX = opts.exploded ? { shell: 0, nb: 15, fit: 30 } : null;
+  const TOP = EX ? EX.fit + H.core : H.core;
+  if (EX) {
+    scene.add(buildShell(A));
+    const nb = buildNbLayer(A); nb.position.y = EX.nb; scene.add(nb);
+    const fit = new THREE.Group(); fit.add(buildFit(A), buildStyle(A, 'ref', { zones: false }), outline(A, '#8a8c93')); fit.position.y = EX.fit; scene.add(fit);
+    for (const layer of [nb, fit]) layer.traverse(o => { o.castShadow = false; });   // no shadows thrown across the gaps
+  } else scene.add(buildShell(A), buildFit(A));
   const styles = {}; let style = null;
   function setStyle(s) {
+    if (EX) { style = s; return; }
     if (!styles[s]) { styles[s] = buildStyle(A, s); scene.add(styles[s]); }
     for (const k in styles) styles[k].visible = k === s;
     style = s; render();
   }
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 2000);
-  const AZ = THREE.MathUtils.degToRad(opts.azimuth ?? 45), EL = THREE.MathUtils.degToRad(opts.elevation ?? 35.264);
+  const AZ = THREE.MathUtils.degToRad(opts.azimuth ?? (EX ? 16 : 45)), EL = THREE.MathUtils.degToRad(opts.elevation ?? (EX ? 26 : 35.264));   // exploded: more frontal, so the layers separate
   const DIR = new THREE.Vector3(-Math.sin(AZ) * Math.cos(EL), Math.sin(EL), Math.cos(AZ) * Math.cos(EL));
   let controls = null;
   if (opts.interactive) {
@@ -232,7 +265,7 @@ export function createAxo(canvas, A, opts = {}) {
     // fit the box's corners (floor to core height) in view space
     const inv = camera.matrixWorldInverse, P = new THREE.Vector3();
     let a = Infinity, b = -Infinity, d = Infinity, e = -Infinity;
-    for (const x of [x0, x1]) for (const z of [y0, y1]) for (const y of [0, H.core]) {
+    for (const x of [x0, x1]) for (const z of [y0, y1]) for (const y of [0, TOP]) {
       P.set(x, y, z).applyMatrix4(inv); a = Math.min(a, P.x); b = Math.max(b, P.x); d = Math.min(d, P.y); e = Math.max(e, P.y);
     }
     const m = opts.margin ?? 1.04;
@@ -272,6 +305,16 @@ export function createAxo(canvas, A, opts = {}) {
     const nb = nbOf(A, pt);
     return nb ? { kind: 'work', name: NAMES.work, nb: NB_NAME[nb] } : null;
   }
+  // where the exploded view's labels go, in canvas pixels: each layer at the floor's west tip, each neighbourhood at its centre
+  function anchors() {
+    if (!EX) return [];
+    const [w, h] = size(), P = new THREE.Vector3();
+    const px = (x, y, z) => { P.set(x, y, z).project(camera); return [(P.x + 1) / 2 * w, (1 - P.y) / 2 * h]; };
+    const tip = asRings(A.slab)[0].reduce((m, p) => (px(p[0], 0, p[1])[0] < px(m[0], 0, m[1])[0] ? p : m));
+    const out = [['fit', 'Fit-out'], ['nb', 'Neighbourhoods'], ['shell', 'Shell and core']].map(([k, t]) => ({ k, t, at: px(tip[0], EX[k], tip[1]) }));
+    for (const [k, r] of Object.entries(A.neigh)) { const c = centroid(r); out.push({ k: 'nb:' + k, t: NB_NAME[k], at: px(c[0], EX.nb + 0.2, c[1]) }); }
+    return out;
+  }
   resize(); setStyle(opts.style || 'ref'); setView(opts.view || 'floor');
-  return { setStyle, setView, resize, render, renderNow, pick, scene, camera, renderer, sun, get style() { return style; }, dispose: () => { controls && controls.dispose(); renderer.dispose(); } };
+  return { setStyle, setView, resize, render, renderNow, pick, anchors, scene, camera, renderer, sun, get style() { return style; }, dispose: () => { controls && controls.dispose(); renderer.dispose(); } };
 }

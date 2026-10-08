@@ -28,7 +28,7 @@ body=rep(body,'  <section class="scene" id="sc-alloc"','''  <section class="scen
   <section class="scene" id="sc-climate" aria-label="Sun path and wind"><svg id="climsvg" class="dsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Sun path and wind rose over the floor plate"></svg></section>
   <section class="scene" id="sc-alloc"''')
 # the conceptual axo (tools/axo): a scene for the stills and the live model, and the three.js bundle before the main script
-body=rep(body,'  <section class="scene" id="sc-overview"','''  <section class="scene" id="sc-axo3" data-mode="still" aria-label="Conceptual axonometric, test fit 03"><div class="ax3-stage"><span class="ax3-tag">Test fit 03</span><img id="ax3-img" alt="" decoding="async"><canvas id="ax3-cv" aria-label="Interactive 3D model of the floor"></canvas></div><div class="ax3-bar"><div class="seg" id="ax3-view" role="radiogroup" aria-label="View"></div><div class="seg" id="ax3-style" role="radiogroup" aria-label="Colours"></div><button type="button" class="ax3-reset" id="ax3-reset">Reset view</button></div></section>
+body=rep(body,'  <section class="scene" id="sc-overview"','''  <section class="scene" id="sc-axo3" data-mode="still" aria-label="Conceptual axonometric, test fit 03"><div class="ax3-stage"><span class="ax3-tag">Test fit 03</span><img id="ax3-img" alt="" decoding="async"><canvas id="ax3-cv" aria-label="Interactive 3D model of the floor"></canvas><div class="ax3-ovl" id="ax3-ovl" aria-hidden="true"></div></div><div class="ax3-bar"><div class="seg" id="ax3-view" role="radiogroup" aria-label="View"></div><div class="seg" id="ax3-style" role="radiogroup" aria-label="Colours"></div><button type="button" class="ax3-reset" id="ax3-reset">Reset view</button></div></section>
   <section class="scene" id="sc-overview"''')
 import os, base64
 AXD=os.path.join(os.path.dirname(os.path.abspath(SRC)),'tools','axo')
@@ -46,6 +46,8 @@ for f in sorted(os.listdir(os.path.join(os.path.dirname(os.path.abspath(SRC)),'r
     if m: AXI[m.group(1)+'-'+m.group(2)]='data:image/webp;base64,'+base64.b64encode(open(os.path.join(os.path.dirname(os.path.abspath(SRC)),'renders',f),'rb').read()).decode()
 print('axo stills',sorted(AXI))
 axo=open('tf_axo.js').read().replace('/*AXO_IMG*/null',json.dumps(AXI,sort_keys=True)).replace('/*AXO_DATA*/null',open(os.path.join(AXD,'axo.json')).read().strip())
+LAB=os.path.join(os.path.dirname(os.path.abspath(SRC)),'renders','axo-exploded-layers.json')
+axo=axo.replace('/*AXO_LAB*/null',open(LAB).read().strip() if os.path.exists(LAB) else 'null')
 # renders: real kinds
 renders=rep(renders,renders[renders.index('const NB_KINDS='):renders.index('const canRender=')],
 """const SPACE_NAMES={desk:'Workstations',garden:'Acker Garden · Work Arena',cabin:'Executive cabin',sprint:'Quick sprint room',dept:'Departmental room',huddle:'Collaboration huddle',hatchery:'The Hatchery',duo:'Two-person room',booth:'Phone booth',pantry:'Pantry point',zen:'Zen room',prayer:'Prayer room',mother:"Mother's room",cafe:'Café and dining',reception:'Reception',lobby:'Lobby',visitor:'Visitor hub',board:'Boardroom',studio:'Studio'};
