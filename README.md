@@ -122,7 +122,7 @@ Everything is in `index.html`:
 
 ## Test fit
 
-`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 27 steps:
+`index-testfit.html` tells the story on the real floor from test fit 02: the 3rd floor of Regalium, Koramangala, a 240 × 33 m plate (76,345 sq ft) with five fire stairs along the north cores and two terraces on the south façade. Neighbourhoods are numbered Neighbourhood 01 to 06 from west to east, and what everyone uses is called the shared spaces. It has 29 steps:
 
 1. **The idea**: the city analogy and the loop (schematic)
 2. **The site**: a map of Regalium on Hosur Road, with landmarks, walking distances and the metro. It then zooms to the block and turns until the floor lines up with the drawing. The floor sits 11.5° east of true north (see below)
@@ -136,11 +136,13 @@ Everything is in `index.html`:
 8. **The layout**: the full fit-out, then carved into neighbourhoods (hover for details, click to open)
 9. **Shared spaces**: café and dining, both receptions and the lobby, highlighted
 10. **Sharing out**: every space type counted per neighbourhood, with a Brief column waiting for Acko's numbers
-11. **Axonometric**: the drawing in 3D, then exploded
+11. **Axonometric**: the drawing in 3D, then exploded. Then the **conceptual axo** from test fit 03: rendered stills (whole floor, west, middle, east; reference colours or neighbourhood colours), then the same model live in 3D to orbit, zoom and hover
 12. **Neighbourhoods**: an overview and six deep dives with plan, axo, numbered kit and walking distances
 13. **By the numbers**: 651 workstations, 48 meeting and collaboration rooms, 58 phone booths and 2-pax rooms, area split
 
 Click any desk cluster, room, pantry or shared area for its light and dark renders. For the test fit, drop the images into `renders/` named `<key>-light` and `<key>-dark` (`.jpg`, `.png` or `.webp`). The build embeds them in `index-testfit.html`, so it stays one self-contained file. Real renders so far: the reception (`renders/reception-*.webp`) and the Acker Garden · Work Arena (`renders/garden-*.webp`). The garden isn't labelled in the drawing; it is placed at the curved north-west corner of Neighbourhood 01, by its coffee point, in `PLACES` in `tools/testfit/tf_data.js`. The keys are: `garden`, `desk`, `sprint`, `dept`, `huddle`, `hatchery`, `duo`, `booth`, `pantry`, `zen`, `cabin`, `board`, `studio`, `prayer`, `mother`, `cafe`, `reception`, `lobby`, `visitor`. A render for one neighbourhood only uses its two-digit id: `'N03:huddle':{light:'renders/n03-huddle-light.jpg', dark:'renders/n03-huddle-dark.jpg'}`.
+
+**Conceptual axo (test fit 03).** The two axo steps after "Exploded" come from the newer drawing `acko-layout-tf03.dxf`; the rest of the deck is still test fit 02. Rooms, cores, corridors and zones come from its `AC_*` outline layers, and desks, chairs, tables and plants from the fit-out blocks. The stills are `renders/axo-<view>-<style>.webp`. To rebuild them or the model, see `tools/axo/README.md`.
 
 **Still placeholders in the test fit:** teams and colours; the brief numbers; the loop (the drawing has no loop line yet). The fire travel distances still need checking against NBC with the fire consultant.
 

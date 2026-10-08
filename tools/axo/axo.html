@@ -1,0 +1,18 @@
+<!doctype html>
+<!-- Render harness for the stills: render.mjs serves this folder and opens
+     axo.html?view=east&style=ref&w=2400&h=1300 -->
+<meta charset="utf-8">
+<title>Acko axo</title>
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script src="axo.bundle.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 2400, H = +q.get('h') || 1300;
+const cv = document.getElementById('c'); cv.style.width = W + 'px'; cv.style.height = H + 'px';
+fetch(q.get('data') || 'axo.json').then(r => r.json()).then(A => {
+  const ax = window.ax = AckoAxo.createAxo(cv, A, { still: true, width: W, height: H, pixelRatio: 1, view: q.get('view') || 'floor', style: q.get('style') || 'ref', shadowMap: 8192 });
+  ax.renderNow();
+  requestAnimationFrame(() => { ax.renderNow(); document.title = 'ready'; });
+}).catch(e => { document.title = 'error ' + e; });
+</script>

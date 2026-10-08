@@ -250,3 +250,23 @@
 .rv-tag{top:auto; bottom:18px; color:#fff}
 .rv-tag.l{left:18px} .rv-tag.d{right:18px}
 @media (max-width:860px){ .rv-head > div:first-child{max-width:100%} }
+
+/* ---------- conceptual axo (test fit 03): stills and the live model ---------- */
+#sc-axo3{display:flex; flex-direction:column}
+.ax3-stage{position:relative; flex:1; min-height:0; margin:10px 28px 0}
+#ax3-img,#ax3-cv{position:absolute; inset:0; width:100%; height:100%}
+#ax3-img{object-fit:contain}
+#ax3-cv{touch-action:none; cursor:grab}
+#ax3-cv:active{cursor:grabbing}
+#sc-axo3[data-mode="still"] #ax3-cv,#sc-axo3[data-fail] #ax3-cv{visibility:hidden}
+#sc-axo3[data-mode="live"]:not([data-fail]) #ax3-img{visibility:hidden}
+#sc-axo3:not([data-mode="live"]) .ax3-reset,#sc-axo3[data-fail] .ax3-reset{display:none}
+.ax3-tag{position:absolute; left:0; top:0; z-index:1; font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); pointer-events:none}
+.ax3-bar{display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap; padding:10px 16px 14px; --c:var(--brand)}
+.ax3-reset{border:1px solid var(--rule); background:var(--panel); color:var(--ink-2); border-radius:999px; padding:7px 14px; font-size:13.5px; cursor:pointer}
+.ax3-reset:hover{color:var(--ink); border-color:var(--ink-3)}
+@media (max-width:640px){
+  .ax3-stage{margin:6px 16px 0}
+  .ax3-bar{gap:6px; padding:8px 8px 10px}
+  .ax3-reset{padding:6px 11px; font-size:12.5px}
+}
