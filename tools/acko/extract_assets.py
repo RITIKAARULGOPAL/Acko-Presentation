@@ -57,7 +57,9 @@ PICK = {
     # campus strategy (13): the animated axo of the floor, shot on green (the deck keys the green out; so do we)
     "strategy-anim": ("image75.gif", None, 960, 0, "green"),
     # the challenges (14) and the typologies (15)
-    "challenge-axo": ("image61.png", None, 2048), "ty-type1": ("image74.png", None, 1400), "ty-type3": ("image72.png", None, 1400),
+    "challenge-axo": ("image61.png", None, 2048),
+    "chl-grid": ("image70.png", 14, 400), "chl-compass": ("image90.jpg", 14, 300), "chl-coffee": ("image66.jpg", 14, 300),
+    "chl-walk": ("image91.png", 14, 300), "chl-people": ("image69.jpg", 14, 300), "chl-crowd": ("image67.png", 14, 300), "ty-type1": ("image74.png", None, 1400), "ty-type3": ("image72.png", None, 1400),
     "ty-type4": ("image76.png", None, 1400), "ty-icon1": ("image108.png", None, 500), "ty-icon3": ("image120.png", None, 500),
     "ty-icon4": ("image115.png", None, 500),
     # campus palette 01 (16) and its renders (17–19)
@@ -105,7 +107,8 @@ PICK = {
     "esg-scale": ("image211.jpg", None, 2048),
     "wf-corridor": ("image228.png", None, 2048), "wf-baked": ("image204.png", None, 921), "wf-room": ("image192.png", None, 1080),
     "wf-sign": ("image199.png", None, 864), "wf-tall": ("image194.png", None, 375), "wf-umbrella": ("image195.png", None, 580),
-    "wf-car": ("image197.png", None, 740),
+    "wf-car": ("image197.png", None, 740), "wf-corner": ("image205.jpg", None, 2041), "wf-person": ("image198.png", None, 564),
+    "wf-sign2": ("image220.png", None, 626), "wf-film": ("image200.png", None, 2048),
     # the layout (53–57): the four plan tiles that make the floor, the type icons, the north point
     "plan-x1": ("image206.png", None, 1449), "plan-x2": ("image212.png", None, 838), "plan-y": ("image208.png", None, 1918),
     "plan-z": ("image209.png", None, 1869), "north": ("image210.png", None, 200),

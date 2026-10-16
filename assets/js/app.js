@@ -542,6 +542,33 @@
       requestAnimationFrame(run);
     },
   };
+  /* ---- what's our challenge (slide 14), on the deck's axo of the bare floor: ① homogeneity — one uniform grid of desks floods
+     the plate; ② disorientation — a desk at the far end is a long walk from the café and the arrivals; ③ distance — the route
+     the deck draws, end to end, 245 m ---- */
+  const inPoly = (p, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j];
+    if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < ((b[0] - a[0]) * (p[1] - a[1])) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+  function clDesks(g) {
+    if (g.childElementCount) return;
+    const A = [39, 1029], U = [1359, -1014], V = [206, 130], core = [[300, 842], [1095, 241], [1190, 303], [399, 916]];
+    const terr = [[[556, 856], [628, 801], [680, 841], [608, 896]], [[1079, 466], [1154, 407], [1206, 448], [1130, 505]]];
+    const out = [], NU = 104, NV = 8;
+    for (let i = 0; i <= NU; i++) for (let j = 0; j < NV; j++) {
+      const ii = i / NU, jj = (j + 0.5) / NV, x = A[0] + U[0] * ii + V[0] * jj, y = A[1] + U[1] * ii + V[1] * jj;
+      if (inPoly([x, y], core) || terr.some((t) => inPoly([x, y], t))) continue;
+      const a = 0.62 / NU, b = 0.36 / NV;
+      out.push(`<path style="--d:${Math.round(ii * 1400)}ms" d="M${x.toFixed(1)} ${y.toFixed(1)}l${(U[0] * a).toFixed(1)} ${(U[1] * a).toFixed(1)}l${(V[0] * b).toFixed(1)} ${(V[1] * b).toFixed(1)}l${(-U[0] * a).toFixed(1)} ${(-U[1] * a).toFixed(1)}Z"/>`);
+    }
+    g.innerHTML = out.join("");
+  }
+  H["s-challenges"] = {
+    enter(_, sc) { plain(); clDesks($(".cl-desks", sc)); },
+    step(k, sc) {
+      const svg = $(".cl-svg", sc);
+      ["b1", "b2", "b3"].forEach((c, i) => svg.classList.toggle(c, k === i + 1));
+      if (k === 3) { drawPath($(".cl-route", sc), 3200, 300); later(() => countUp($(".cl-len [data-count]", sc), 2600), 500); }
+      if (k === 2) drawPath($(".cl-walk", sc), 2200, 400);
+    },
+  };
   /* ---- campus strategy (slide 13): the deck's animated axo of the floor (replaced by the DXF's axo when it arrives) ---- */
   H["s-strategy"] = { enter(_, sc) { plain(); reveal($(".page", sc), 100); } };
 
@@ -553,6 +580,16 @@
       $("#to-skv").onclick = () => go(sceneIx("s-skv"), 1);
     },
   };
+
+  /* ---- the value-addition pages and the typologies (deck 15, 46–48, 52): pictures, then words, one after another ---- */
+  $$(".scene.vpage").forEach((sc) => {
+    H[sc.id] = H[sc.id] || {
+      enter() {
+        plain(); reveal($(".page", sc), 80);
+        $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 1100 + i * 120));
+      },
+    };
+  });
 
   /* ---- a deck page as it is, until its slide is rebuilt ---- */
   $$(".scene.deck").forEach((sc) => { if (!H[sc.id]) H[sc.id] = { enter() { plain(); } }; });
@@ -683,6 +720,98 @@
       },
     };
   });
+
+  /* ======================= the layout as one plan (deck slides 53–57) =======================
+     The deck's four plan tiles as one image, with the neighbourhood outlines, the arrival zones, the fire compartment line and
+     the entrances as vectors (data/deck-plan.js). It lives in the world, so the layout flies into its blow-ups without a cut.
+     Wheel zooms on the cursor, drag pans, a double-click (or Reset) returns to the beat's view. */
+  const NB = { "#B45F06": "01", "#274E13": "02", "#45818E": "03", "#4A86E8": "04", "#9900FF": "05", "#FF00FF": "06", "#0000FF": "arrival" };
+  const DP = { svg: null, vb: [0, 0, 1920, 1080], home: [0, 0, 1920, 1080], raf: 0 };
+  function deckPlan() {
+    if (DP.svg) return DP;
+    const P = window.DECK_PLAN, host = $("#world-plan"), b = P.img.box;
+    const pts = (a) => a.map((q) => q.join(" ")).join(" ");
+    const lab = P.labels.reduce((m, l) => ((m[l.n] = l), m), {});
+    host.innerHTML = `<svg class="dplan pannable" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+      <image href="${P.img.src}" x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" preserveAspectRatio="none"/>
+      <g class="dp-nb">${P.nb.map((n) => `<polygon data-nb="${NB[n.c.toUpperCase()] || ""}" points="${pts(n.pts)}" style="--c:${n.c}"/>`).join("")}</g>
+      <g class="dp-fire">${P.fire.map((f) => `<line x1="${f[0][0]}" y1="${f[0][1]}" x2="${f[1][0]}" y2="${f[1][1]}"/>`).join("")}</g>
+      <g class="dp-entry">${P.entry.map((e) => `<path d="M${e[0] - 6} ${e[1] - 4}L${e[0] + 6} ${e[1] - 4}L${e[0]} ${e[1] + 6}Z"/>`).join("")}</g>
+      <g class="dp-blow">${Object.entries(P.blow).map(([k, r]) => `<g data-b="${k}"><rect x="${r[0]}" y="${r[1] - 6}" width="${r[2] - r[0]}" height="${r[3] - r[1] + 12}"/><text x="${(r[0] + r[2]) / 2}" y="${r[3] + 26}">Blown Up ${k}</text></g>`).join("")}</g>
+      <g class="dp-lab">${["01", "02", "03", "04", "05", "06"].map((n) => { const l = lab[n]; if (!l) return ""; const x = l.at[0], y = l.at[1] + l.wh[1] * 0.78;
+        return `<text data-nb="${n}" x="${x}" y="${y}"><tspan class="n">${n}</tspan><tspan class="s" dx="6" dy="-14">${l.seats}</tspan></text>`; }).join("")}</g>
+    </svg>`;
+    DP.svg = $("svg", host);
+    // wheel zoom on the cursor, drag to pan, double-click to reset
+    const toSvg = (e) => { const r = DP.svg.getBoundingClientRect(), s = Math.max(DP.vb[2] / r.width, DP.vb[3] / r.height);
+      const ox = (r.width - DP.vb[2] / s) / 2, oy = (r.height - DP.vb[3] / s) / 2; return [DP.vb[0] + (e.clientX - r.left - ox) * s, DP.vb[1] + (e.clientY - r.top - oy) * s]; };
+    DP.svg.addEventListener("wheel", (e) => {
+      if (!document.body.classList.contains("dp-on")) return;
+      e.preventDefault(); cancelAnimationFrame(DP.raf);
+      const k = Math.exp(e.deltaY * 0.0015), [x, y] = toSvg(e), v = DP.vb;
+      const w = clamp(v[2] * k, 160, 1920 * 1.2), h = (w * v[3]) / v[2], f = w / v[2];
+      setVb([x - (x - v[0]) * f, y - (y - v[1]) * f, w, h]);
+    }, { passive: false });
+    let drag = null;
+    DP.svg.addEventListener("pointerdown", (e) => { if (e.button !== 0) return; drag = { x0: e.clientX, y0: e.clientY, vb: DP.vb.slice() }; DP.svg.setPointerCapture(e.pointerId); cancelAnimationFrame(DP.raf); });
+    DP.svg.addEventListener("pointermove", (e) => { if (!drag) return; const r = DP.svg.getBoundingClientRect(), s = Math.max(drag.vb[2] / r.width, drag.vb[3] / r.height);
+      setVb([drag.vb[0] - (e.clientX - drag.x0) * s, drag.vb[1] - (e.clientY - drag.y0) * s, drag.vb[2], drag.vb[3]]); });
+    DP.svg.addEventListener("pointerup", () => (drag = null));
+    DP.svg.addEventListener("dblclick", () => fitVb(DP.home, 700));
+    return DP;
+  }
+  function setVb(v) { DP.vb = v; DP.svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); }
+  function fitVb(v, ms) {
+    cancelAnimationFrame(DP.raf);
+    const from = DP.vb.slice(), t0 = performance.now();
+    if (!ms || reduced) return setVb(v);
+    const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      setVb(from.map((a, i) => a + (v[i] - a) * e)); if (k < 1) DP.raf = requestAnimationFrame(run); };
+    DP.raf = requestAnimationFrame(run);
+  }
+  // the viewBox that shows box (frame px) inside the display rect (frame px)
+  function vbFor(box, disp) {
+    const bw = box[2] - box[0], bh = box[3] - box[1], dw = disp[2] - disp[0], dh = disp[3] - disp[1], s = Math.min(dw / bw, dh / bh);
+    const cx = (box[0] + box[2]) / 2, cy = (box[1] + box[3]) / 2, dcx = (disp[0] + disp[2]) / 2, dcy = (disp[1] + disp[3]) / 2;
+    return [cx - dcx / s, cy - dcy / s, 1920 / s, 1080 / s];
+  }
+  function planOn(sc, opts) {
+    deckPlan(); world("plan"); shade("");
+    document.body.classList.add("dp-on");
+    const svg = DP.svg;
+    ["nb", "fire", "blow", "lab", "entry"].forEach((k) => svg.classList.toggle("show-" + k, !!opts[k]));
+    DP.home = opts.view; fitVb(opts.view, opts.ms === undefined ? 900 : opts.ms);
+  }
+  function planOff() { document.body.classList.remove("dp-on"); if (DP.svg) DP.svg.classList.remove("show-nb", "show-fire", "show-blow", "show-lab", "show-entry"); }
+  // the neighbourhood list (beat 2): hover a row to pick out its outline
+  function nbHover(list) {
+    $$("[data-nb]", list).forEach((row) => {
+      row.onmouseenter = () => { DP.svg.classList.add("focus"); $$(`.dp-nb [data-nb="${row.dataset.nb}"], .dp-lab [data-nb="${row.dataset.nb}"]`, DP.svg).forEach((p) => p.classList.add("hi")); };
+      row.onmouseleave = () => { DP.svg.classList.remove("focus"); $$(".hi", DP.svg).forEach((p) => p.classList.remove("hi")); };
+    });
+  }
+  H["s-layout"] = {
+    enter(_, sc) { nbHover($(".ly-nbs", sc)); },
+    step(k, sc) {
+      planOn(sc, { nb: k === 2, lab: k === 2, entry: true, blow: k === 1, view: [0, 0, 1920, 1080], ms: 0 });
+      if (k === 2) {
+        $$(".dp-nb polygon", DP.svg).forEach((p, i) => { p.style.setProperty("--len", Math.ceil(p.getTotalLength())); p.style.animationDelay = i * 0.22 + "s"; });
+        $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 180));
+      }
+    },
+    leave() { planOff(); },
+  };
+  // the blow-ups: the same plan flies into X, Y and Z (the fire compartment line draws on Y)
+  const BLOW_DISP = [38, 150, 1882, 880];
+  H["s-blowup"] = {
+    step(k, sc) {
+      const key = ["X", "Y", "Z"][k - 1], P = window.DECK_PLAN;
+      planOn(sc, { fire: key === "Y", entry: true, blow: false, view: vbFor(P.blow[key], BLOW_DISP), ms: 1100 });
+      $(".bl-sub", sc).textContent = `Space Planning - Option 02A | Blown Up ${key}`;
+      $$(".bl-keys span", sc).forEach((b) => b.classList.toggle("on", b.dataset.k === key));
+    },
+    leave() { planOff(); },
+  };
 
   /* ======================= boot ======================= */
   const fromHash = () => {
