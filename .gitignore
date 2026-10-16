@@ -1,0 +1,20 @@
+# Local Claude Code permissions
+.claude/settings.local.json
+
+# Python caches
+__pycache__/
+
+# Deck media extracted by tools/rebuild.py (regenerated from the PPTX; includes an iStock-watermarked image)
+tools/_media/
+
+# intermediates of tools/import_plan_hover.py -> tools/raster_plan.js
+tools/_raster/
+
+# chat transcript for moving to another Claude account (not part of the presentation)
+CHAT-HANDOFF.md
+
+# puppeteer-core for tools/walk.js and tools/raster_plan.js (worktrees inside the repo find it here)
+node_modules/
+
+# built from slides/ by tools/build.py (tools/serve.py rebuilds it on every page load)
+index.html

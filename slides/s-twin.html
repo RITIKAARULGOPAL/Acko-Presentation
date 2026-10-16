@@ -1,0 +1,27 @@
+<section class="scene" id="s-twin" data-part="2" data-title="Axonometric view" data-lens="explore" data-steps="8" data-mins="4" data-crumb="Level 03 › Axonometric view"
+  data-beats="Zones,The SOC,Guests,The visitor's walk,09:30 workday,11:00 workshop · 50,16:00 showcase · 100,18:30 town hall · 200"
+  data-notes="Two of the three options in 3D, moving together: Option 01 above and Option 03 below to begin with; each view's tag is a dropdown that brings in another option (picking the one shown in the other view swaps them). One thing stands up per beat. 1) The two layouts, coloured by zone. 2) Where intelligence sits: the SOC. Beyond the highlight the floor goes grey. 3) Where guests are hosted: arrival, the boardroom and the podcast studio, and how far apart they are. 4) The visitor's walk from the front door to the boardroom, past the SOC and the guest rooms, all standing as tall as the SOC. (The meeting rooms by size are in the Appendix.) Then a day at Mitigata on both options at once, on a white floor, each caption with its count, footprint and seats: 5) 09:30 a normal workday. 6) 11:00 a workshop for 50 in the café. 7) 16:00 a product showcase for 100, against the SOC glass. 8) 18:30 a town hall for 200. Every grey figure is a person, 5.5 ft tall; green ones are at the event. Drag to turn, scroll or + / − to zoom; Reset (or double-click) returns to the beat's view. Next: back to the site.">
+  <div class="copy">
+    <div class="kicker">11 · Axonometric view</div>
+    <div class="only-step" data-only="1"><h2>Same floor, <span class="green">two answers.</span></h2></div>
+    <div class="only-step" data-only="2"><h2>Where intelligence <span class="green">sits.</span></h2></div>
+    <div class="only-step" data-only="3"><h2>Where guests <span class="green">are hosted.</span></h2></div>
+    <div class="only-step" data-only="4"><h2>The visitor's <span class="green">walk.</span></h2></div>
+    <div class="only-step" data-only="5,6,7,8"><h2>One floor. <span class="green">Many states.</span></h2><p class="day-hour" id="day-head"></p></div>
+    <!-- the legend (and on the day, the hours) in the middle of the column (Ritika) -->
+    <div class="twin-mid">
+    <ul class="lgd" id="axo-lgd"></ul>
+    <div class="timeline only-step" data-only="5,6,7,8" id="day-timeline"><div class="tl-track" id="timeline"><div class="tl-line"></div><div class="tl-fill" id="tl-fill"></div></div></div>
+    </div>
+  </div>
+  <!-- one toolbar at the top for both options, as on the layout slides (Ritika): north · zoom · reset -->
+  <div class="axo-bar ui" id="axo-bar"><span class="ctl-north" title="North"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="10"/><line x1="13" y1="13" x2="22" y2="13"/></svg><b>N</b></span><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" title="Back to this beat's view">Reset</button></div>
+  <!-- the occupancy, as Ritika's chart (Mitigata_Occupancy Chart - Sheet1, 12.10): the brief and both options' counts; it
+       replaces the scorecard, and opens from a button bottom left as on the layout slides -->
+  <div class="lay-tools ui twin-occ">
+    <div class="occ-scrim"></div>
+    <div class="lay-panel occ-glass" data-panel="occ"><div class="occ-h"><span>Occupancy against the brief</span><button type="button" class="occ-x" aria-label="Close">✕</button></div><div class="occ-body"></div></div>
+    <div class="lay-btns"><button type="button" data-tool="occ" class="only-step" data-only="1,2,3,4">Occupancy</button></div>
+  </div>
+  <div class="axo-host ui" id="axo-host"></div>
+</section>

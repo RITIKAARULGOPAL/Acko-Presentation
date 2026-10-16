@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mitigata · Living Network</title>
+<meta name="description" content="SKV × Mitigata — a continuous, interactive concept journey for the Mitigata office at Sattva Hallmark, Bengaluru, Level 03.">
+<link rel="stylesheet" href="assets/css/app.css?v=42">
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the deck's topics as one layered Mitigata arc: a ring per topic, the current one green; hover lists them -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="Topics"><svg viewBox="0 0 34 21" aria-hidden="true"></svg></button><div class="tm-list" id="tm-list"></div></div>
+  <span class="crumb" id="crumb"></span>
+</header>
+
+<!-- ======================= THE WORLD (persistent) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map">
+    <div class="mapstack" id="mapstack">
+      <img data-z="12" src="assets/site/sat_z12.webp" alt="">
+      <img data-z="14" src="assets/site/sat_z14.webp" alt="">
+      <img data-z="16" src="assets/site/sat_z16.webp" alt="">
+      <img data-z="18" src="assets/site/sat_z18.webp" alt="">
+      <img data-z="19" src="assets/site/sat_z19.webp" alt="">
+      <svg class="map-site" id="map-site" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path/></svg>
+    </div>
+    <div class="map-label" data-zl="12" style="left:62%;top:22%">Bengaluru · east</div>
+    <div class="map-label" data-zl="14" style="left:60%;top:30%">Bellandur</div>
+    <div class="map-label" data-zl="16" style="left:60%;top:40%">Outer Ring Road · tech corridor</div>
+    <div class="map-pin" id="map-pin"><i></i><span>Sattva Hallmark · Level 03</span></div>
+    <div class="credit">Imagery ©2026 Google, Airbus, Maxar Technologies</div>
+  </div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+    <div class="plan-frame hidden-b" id="frame-b"><div class="plan-host" id="world-plan-b" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-b">Layout Option 02</span></div>
+  </div>
+  <div class="w-layer" id="w-twin"><div class="twin-host" id="world-twin"></div></div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<div class="ticker" id="soc-ticker"><div></div></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: Mitigata presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-mitigata" data-track="mitigata" title="Back to the presentation, where you left it">
+    <img class="logo-light" src="assets/img/mitigata-light.png" alt="Mitigata"><img class="logo-ink" src="assets/img/mitigata-ink.png" alt="Mitigata">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open (Ritika, 12.10: one slide per space) -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg></button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg></button>
+    <span class="wk-br" id="wk-br"><button type="button" data-br="meet" class="on">Meeting</button><button type="button" data-br="present">Presentation</button><button type="button" data-br="dinner">Dinner</button></span>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <div class="wk-studio" id="wk-studio"><svg class="studio-svg" id="wk-studio-svg" viewBox="0 0 620 340"></svg></div>
+  <div class="wk-name">
+    <div class="kicker">Visual direction · Layout Option 01</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-ix" id="wk-ix"></div>
+    <p class="wk-p" id="wk-p"></p>
+    <div class="wk-foot">
+      <ul class="wk-lgd" id="wk-lgd"><li class="k"><i></i>Kit of parts</li><li class="a"><i></i>Acoustics</li><li class="b"><i></i>Brand</li></ul>
+    </div>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<!-- @slides: tools/build.py puts slides/order.txt here -->
+
+</main>
+
+<div class="overview" id="overview"><div class="kicker">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · E explore · 1 / 2 option · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/plan-data.js?v=42"></script>
+<script src="data/plan-textures.js?v=42"></script>
+<script src="data/plan-furn.js?v=42"></script>
+<script src="data/plan-names.js?v=42"></script>
+<script src="data/site-data.js?v=42"></script>
+<script src="assets/js/plan2d.js?v=42"></script>
+<script src="assets/js/plan-measure.js?v=42"></script>
+<script src="assets/js/twin.js?v=42"></script>
+<script src="assets/js/axo.js?v=42"></script>
+<script src="assets/js/site.js?v=42"></script>
+<script src="assets/js/app.js?v=42"></script>
+</body>
+</html>

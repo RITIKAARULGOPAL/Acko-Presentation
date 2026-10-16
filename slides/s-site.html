@@ -1,0 +1,35 @@
+<section class="scene" id="s-site" data-part="2" data-title="The floor" data-lens="explore" data-steps="1" data-mins="1.5" data-crumb="Sattva Hallmark › Level 03"
+  data-notes="The map turns and the plan lands on its own roof. The building has already decided for us: the core holds the east edge (lifts and lobby, the fire stair, toilets, two AHU rooms, shafts; hover the legend to pick each out), one front door in the north-west corner, and the prow at the far end, all glass. The plate is about 65 m by 30 m. Both layouts answer it the same way: reception at the door; café, server and podcast studio backing onto the core; the SOC in the prow. Then the day runs by itself (20 March), over the same floor; the brightest light sits under the sun and moves with it. The west and south-west glazing look onto the atrium: its space-frame roof and the west block across it (15.2 m high, about 22 m away) take most of the direct sun: through the space frame about a third gets in, dappled, and none once the sun drops behind the west block (below about 6°: Level 03 is the top floor, the block barely rises above it). Every glass gives daylight all day. Direct sun comes in only through the south-east glazing and the short east glass, in the morning and at midday. When the day ends, the daylight band appears: 6 m in from the glass, about a quarter of the floor. Both layouts give most of it to the SOC, meeting rooms and arrival. The south-east glazing gets the gentle morning. Press E for the season and time controls. Sun: NOAA solar position, ASHRAE clear-sky model, 3 m glass head; the west block is 15.2 m high, about 22 m across the atrium. North points right, 1.8° off true north. The full due-diligence list is in the Appendix.">
+  <div class="copy">
+    <div class="kicker">05 · The floor</div>
+    <h2>What the building <span class="green">decides.</span></h2>
+    <p class="lede">The core holds the east edge; the one front door is at the north-west corner. The west glass looks onto the atrium: daylight, and only softened sun.</p>
+    <!-- the plate in one list, label and figure (Sathwick: tidy the column) -->
+    <dl class="site-spec">
+      <div><dt>Floor plate</dt><dd id="fact-area">≈18,620 sq ft</dd></div>
+      <div><dt>Length × depth</dt><dd id="fact-len">≈65 × 30 m</dd></div>
+      <div><dt>Glass</dt><dd id="fact-glass">≈93 m</dd></div>
+      <div><dt>Deepest direct sun <small>south-east glazing</small></dt><dd id="sun-edge">≈4 m</dd></div>
+      <div class="dl-fact"><dt>Within 6 m of glass</dt><dd id="dl-share">30%</dd></div>
+    </dl>
+    <div class="sunctl ui">
+      <div class="tog" id="sun-season" role="group" aria-label="Day of the year"><button type="button" data-season="mar">20 Mar · 23 Sep</button><button type="button" data-season="jun">21 Jun</button><button type="button" data-season="dec">21 Dec</button></div>
+      <div class="sunrow"><button type="button" class="sun-play" id="sun-play" aria-label="Play the day"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="pl" d="M4 2.5v11l9-5.5z"/><path class="pa" d="M4 3h3v10H4zM9 3h3v10H9z"/></svg></button><input type="range" id="sun-range" min="420" max="1110" step="1" value="420" aria-label="Time of day"><output id="sun-t">07:00</output></div>
+      <p class="sun-read" id="sun-read" aria-live="polite"></p>
+    </div>
+    <div id="sun-beats" class="sun-beats" hidden></div>
+    <!-- the core's key, as the layout slides' zoning key: swatch and name, the area on hover, its bottom level with the floor's -->
+    <div class="zone-key core-key"><ul class="lgd why-lgd" id="core-list"></ul></div>
+  </div>
+  <!-- the toilets against the code: a button bottom left, as the layout slides' Occupancy, opening the check above it (Sathwick) -->
+  <div class="lay-tools ui">
+    <div class="lay-panel nbc-panel" data-panel="nbc" id="nbc-panel">
+      <div class="nbc-h"><b>Toilets against the code</b><button type="button" class="nbc-x" aria-label="Close">×</button></div>
+      <p class="nbc-who">Required for each option's seats · men : women
+        <span class="nbc-split" id="nbc-split"><button type="button" data-s="50">50:50</button><button type="button" data-s="60">60:40</button></span></p>
+      <table class="nbc-t"><thead><tr id="nbc-head"></tr></thead><tbody id="nbc-body"></tbody></table>
+      <p class="note">NBCS 2026 (SP 7) Part E, Section 2, Table 1 Office Buildings: WCs 1 per 25 men, 1 per 15 women · urinals 1 for 7–20 men, 2 to 45, 3 to 70, 4 to 100, then 3% to 200 and 2.5% above · wash basins 1 per 25 · men and women taken as half each (note 3) · 1 accessible WC.</p>
+    </div>
+    <div class="lay-btns"><button type="button" data-tool="nbc" class="shown">Toilets vs NBC</button></div>
+  </div>
+</section>
