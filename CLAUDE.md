@@ -16,6 +16,59 @@ This is SKV's interactive design presentation for ACKO's head office (Regalium, 
   - If a slide truly needs a shared change, keep it minimal and start a commit line with `Shared:`.
 - **Generated, never hand-edit:** `index.html`, `preview.html`, `assets/js/shell.js`, `dist/`.
 
+## Which slide you are
+
+A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that one slide. The main folder on `main` is the merge session.
+
+<!-- worktrees:start (python tools/worktrees.py table) -->
+| # | Slide (file) | Deck slides | Title | Branch | Worktree |
+|---|---|---|---|---|---|
+| 1 | `slides/s-cover.html` | 1 | Cover | `slide/s-cover` | `.claude/worktrees/s-cover` |
+| 2 | `slides/s-team.html` | 2 | Meet the team | `slide/s-team` | `.claude/worktrees/s-team` |
+| 3 | `slides/s-aspiration.html` | 3 | Workplace aspiration | `slide/s-aspiration` | `.claude/worktrees/s-aspiration` |
+| 4 | `slides/s-acko.html` | 4 | What defines ACKO | `slide/s-acko` | `.claude/worktrees/s-acko` |
+| 5 | `slides/s-journey.html` | 5 | We respect the journey | `slide/s-journey` | `.claude/worktrees/s-journey` |
+| 6 | `slides/s-challenge.html` | 6–7 | The challenge at hand | `slide/s-challenge` | `.claude/worktrees/s-challenge` |
+| 7 | `slides/s-memories.html` | 8 | Maybe, we've felt this before | `slide/s-memories` | `.claude/worktrees/s-memories` |
+| 8 | `slides/s-whatif.html` | 9 | What if | `slide/s-whatif` | `.claude/worktrees/s-whatif` |
+| 9 | `slides/s-mobius.html` | 10 | The Möbius | `slide/s-mobius` | `.claude/worktrees/s-mobius` |
+| 10 | `slides/s-loop.html` | 11–12 | The Loop | `slide/s-loop` | `.claude/worktrees/s-loop` |
+| 11 | `slides/s-strategy.html` | 13 | Campus strategy | `slide/s-strategy` | `.claude/worktrees/s-strategy` |
+| 12 | `slides/s-site.html` | new | The site | `slide/s-site` | `.claude/worktrees/s-site` |
+| 13 | `slides/s-floor.html` | new | The floor | `slide/s-floor` | `.claude/worktrees/s-floor` |
+| 14 | `slides/s-challenges.html` | 14 | What's our challenge | `slide/s-challenges` | `.claude/worktrees/s-challenges` |
+| 15 | `slides/s-typologies.html` | 15 | Workstation typologies | `slide/s-typologies` | `.claude/worktrees/s-typologies` |
+| 16 | `slides/s-palette1.html` | 16–19 | The campus palette 01 | `slide/s-palette1` | `.claude/worktrees/s-palette1` |
+| 17 | `slides/s-palette2.html` | 20–23 | The campus palette 02 | `slide/s-palette2` | `.claude/worktrees/s-palette2` |
+| 18 | `slides/s-w-board.html` | 24–25 | State Room · Boardroom | `slide/s-w-board` | `.claude/worktrees/s-w-board` |
+| 19 | `slides/s-w-dept.html` | 26–27 | Departmental Room | `slide/s-w-dept` | `.claude/worktrees/s-w-dept` |
+| 20 | `slides/s-w-sprint.html` | 28–29 | Quick Sprint Room | `slide/s-w-sprint` | `.claude/worktrees/s-w-sprint` |
+| 21 | `slides/s-w-arena.html` | 30–31 | Work Arena · Neighbourhood | `slide/s-w-arena` | `.claude/worktrees/s-w-arena` |
+| 22 | `slides/s-w-arena2a.html` | 32–33 | Work Arena · Option 2A | `slide/s-w-arena2a` | `.claude/worktrees/s-w-arena2a` |
+| 23 | `slides/s-w-library.html` | 34 | Work Arena · Library | `slide/s-w-library` | `.claude/worktrees/s-w-library` |
+| 24 | `slides/s-w-garden.html` | 35–36 | The Acker Garden | `slide/s-w-garden` | `.claude/worktrees/s-w-garden` |
+| 25 | `slides/s-w-exec.html` | 37 | Executive Room | `slide/s-w-exec` | `.claude/worktrees/s-w-exec` |
+| 26 | `slides/s-w-cafe1.html` | 38, 40 | Cafe · View 1 | `slide/s-w-cafe1` | `.claude/worktrees/s-w-cafe1` |
+| 27 | `slides/s-w-cafe2.html` | 39, 41 | Cafe · View 2 | `slide/s-w-cafe2` | `.claude/worktrees/s-w-cafe2` |
+| 28 | `slides/s-w-coffee.html` | 42 | Coffee Point | `slide/s-w-coffee` | `.claude/worktrees/s-w-coffee` |
+| 29 | `slides/s-w-mothers.html` | 43 | Mothers Room | `slide/s-w-mothers` | `.claude/worktrees/s-w-mothers` |
+| 30 | `slides/s-w-zen.html` | 44 | Zen Room | `slide/s-w-zen` | `.claude/worktrees/s-w-zen` |
+| 31 | `slides/s-w-studio.html` | 45 | Studio Room | `slide/s-w-studio` | `.claude/worktrees/s-w-studio` |
+| 32 | `slides/s-engage.html` | 46 | Acker's engagement points | `slide/s-engage` | `.claude/worktrees/s-engage` |
+| 33 | `slides/s-material.html` | 47 | Material strategy | `slide/s-material` | `.claude/worktrees/s-material` |
+| 34 | `slides/s-acoustic.html` | 48 | Acoustic strategy | `slide/s-acoustic` | `.claude/worktrees/s-acoustic` |
+| 35 | `slides/s-wayfinding.html` | 52 | Wayfinding | `slide/s-wayfinding` | `.claude/worktrees/s-wayfinding` |
+| 36 | `slides/s-layout.html` | 53–54 | Layout · Option 02A | `slide/s-layout` | `.claude/worktrees/s-layout` |
+| 37 | `slides/s-blowup.html` | 55–57 | Blown up X · Y · Z | `slide/s-blowup` | `.claude/worktrees/s-blowup` |
+| 38 | `slides/s-axo.html` | 58–60 | Schematic axonometric | `slide/s-axo` | `.claude/worktrees/s-axo` |
+| 39 | `slides/s-occupancy.html` | 61 | Occupancy chart | `slide/s-occupancy` | `.claude/worktrees/s-occupancy` |
+| 40 | `slides/s-thanks.html` | — | Thank you | `slide/s-thanks` | `.claude/worktrees/s-thanks` |
+| 41 | `slides/s-wellbeing.html` | 49 | Well-being by design | `slide/s-wellbeing` | `.claude/worktrees/s-wellbeing` |
+| 42 | `slides/s-di.html` | 50 | Designed for all | `slide/s-di` | `.claude/worktrees/s-di` |
+| 43 | `slides/s-esg.html` | 51 | ESG strategy | `slide/s-esg` | `.claude/worktrees/s-esg` |
+| 44 | `slides/s-skv.html` | SKV's deck | About SKV | `slide/s-skv` | `.claude/worktrees/s-skv` |
+<!-- worktrees:end -->
+
 ## Parallel sessions (one per slide), when Ritika asks
 - **Setup** (from the main folder, on `main`):
   ```bash
