@@ -38,7 +38,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const mediaAbort = (r) => (/\.(mp3|m4a|ogg|mp4|webm)$/i.test(r.url()) || r.resourceType() === "media") && (r.failure() || {}).errorText === "net::ERR_ABORTED";
   page.on("requestfailed", (r) => { if (!mediaAbort(r)) errors.push(`${at}: FAILED ${r.url()} (${r.resourceType()}, ${(r.failure() || {}).errorText})`); });
   // the single file must not reach for anything beside itself
-  if (PAGEFILE && process.argv.includes("--single")) page.on("request", (r) => { const u = r.url(); if (!/^(blob:|data:|about:)/.test(u) && u.split("#")[0] !== PAGE) errors.push(`${at}: REQUEST ${u}`); });
+  if (PAGEFILE && process.argv.includes("--single")) page.on("request", (r) => { const u = r.url(); if (!/^(blob:|data:|about:)/.test(u) && decodeURI(u.split("#")[0]) !== PAGE) errors.push(`${at}: REQUEST ${u}`); });
   await page.goto(PAGE, { waitUntil: "load", timeout: 120000 });
   await page.waitForFunction(() => window.ACKO && window.ACKO.state && window.ACKO.state.idx >= 0, { timeout: 120000 });
   await sleep(1500);
