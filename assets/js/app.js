@@ -581,6 +581,23 @@
     },
   };
 
+  /* ---- the schematic axonometrics (slides 58–60): west, middle, east; the leaders draw out to their spaces ---- */
+  H["s-axo"] = {
+    enter() { plain(); },
+    step(k, sc) { $$(".ax-keys span", sc).forEach((b) => b.classList.toggle("on", +b.dataset.k === k)); },
+  };
+
+  /* ---- the occupancy chart (slide 61): the rows come in one after another; shortfalls in maroon, more than asked in purple ---- */
+  H["s-occupancy"] = {
+    enter(_, sc) {
+      plain();
+      const rows = $$(".oc tbody tr", sc); rows.forEach((r) => r.classList.remove("in"));
+      rows.forEach((r, i) => later(() => { r.classList.add("in"); $$("[data-count]", r).forEach((e) => countUp(e, 700)); }, 200 + i * 70));
+      reveal($(".page", sc), 100);
+      later(() => countUp($(".oc-big [data-count]", sc), 1600), 400 + rows.length * 70);
+    },
+  };
+
   /* ---- the value-addition pages and the typologies (deck 15, 46–48, 52): pictures, then words, one after another ---- */
   $$(".scene.vpage").forEach((sc) => {
     H[sc.id] = H[sc.id] || {

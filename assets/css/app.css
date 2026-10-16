@@ -576,3 +576,43 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .vt.ty-n span { font-family: var(--num); font-size: 1.8em; color: #000; margin-right: .2em; }
 .vt.ty-sum { font-size: calc(var(--pt) * 9.5); color: #555; }
 .vt.ty-sum b { font-family: var(--num); font-weight: 500; color: var(--purple); }
+
+/* ---------- schematic axonometrics (slides 58-60) ---------- */
+.ax-img { position: absolute; background-repeat: no-repeat; }
+.ax-img.shown { animation: axIn 1.4s var(--ease) both; }
+@keyframes axIn { from { transform: scale(.96); opacity: 0; } }
+.ax-labs { left: 0; top: 0; width: 100%; height: 100%; }
+.ax-labs svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.ax-labs path { stroke: var(--maroon); stroke-width: 1.4; fill: none; vector-effect: non-scaling-stroke; stroke-dasharray: 600; stroke-dashoffset: 600; }
+.ax-labs circle { fill: var(--maroon); opacity: 0; }
+.ax-labs.shown path { animation: draw 1s var(--ease) .8s forwards; }
+.ax-labs.shown circle { animation: rise .4s .8s forwards; }
+@keyframes rise { to { opacity: 1; } }
+.ax-labs span { position: absolute; font-size: calc(var(--pt) * 9); white-space: nowrap; opacity: 0; transition: opacity .5s calc(1s + var(--i) * 120ms); }
+.ax-labs.shown span { opacity: 1; }
+.ax-hand { font-size: calc(var(--pt) * 24); color: #666; }
+.ax-keys { position: absolute; display: flex; gap: calc(var(--pt) * 10); font-size: calc(var(--pt) * 8); font-weight: 700; }
+.ax-keys span { color: #c9c3d8; transition: color .4s; } .ax-keys span.on { color: var(--purple); }
+
+/* ---------- occupancy chart (slide 61) ---------- */
+.oc { width: 100%; border-collapse: collapse; font-size: calc(var(--pt) * 6.4); }
+.oc th { font-size: calc(var(--pt) * 5.6); letter-spacing: .1em; text-transform: uppercase; font-weight: 700; background: #efefef; padding: calc(var(--pt) * 3.2) calc(var(--pt) * 4); text-align: center; }
+.oc td { padding: calc(var(--pt) * 1.6) calc(var(--pt) * 5); border-bottom: 1px solid #fff; }
+.oc td:nth-last-child(-n+2) { text-align: center; }
+.oc td:last-child { font-family: var(--num); font-weight: 500; }
+.oc td[rowspan], .oc tr td:first-child[rowspan] { font-size: calc(var(--pt) * 5.6); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; text-align: center; background: #efefef; }
+.oc tr.z1 td { background: #f3f1dc; } .oc tr.z2 td { background: #eae5e0; } .oc tr.z3 td { background: #d7d6da; } .oc tr.z4 td { background: #d8c8d3; }
+.oc tr.z5 td { background: #d8c8d3; } .oc tr.z6 td { background: #b3abaa; }
+.oc tr td[rowspan] { background: #efefef !important; }
+.oc tr { opacity: 0; transform: translateX(-8px); transition: opacity .4s var(--ease), transform .4s var(--ease); }
+.oc tr.in, .oc thead tr { opacity: 1; transform: none; }
+.oc td.up { color: var(--purple); font-weight: 700; } .oc td.short { color: var(--maroon); font-weight: 700; }
+.oc td small { font-size: .82em; font-weight: 400; }
+.oc-key p { font-size: calc(var(--pt) * 8.4); line-height: 1.5; color: #444; margin-bottom: calc(var(--pt) * 10); padding-left: calc(var(--pt) * 14); position: relative; }
+.oc-key p i { position: absolute; left: 0; top: .45em; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); }
+.oc-key i.up { background: var(--purple); } .oc-key i.short { background: var(--maroon); }
+.oc-key b { font-weight: 700; color: #000; }
+.oc-big { padding-left: 0 !important; }
+.oc-big span { display: block; font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 44); color: var(--purple); line-height: 1; }
+.oc-big small { font-size: calc(var(--pt) * 8.4); color: #666; }
+.oc tr.z4 td:first-child { font-size: calc(var(--pt) * 5.6); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; text-align: center; background: #efefef !important; }
