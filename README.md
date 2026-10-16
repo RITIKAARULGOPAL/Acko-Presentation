@@ -18,6 +18,14 @@ It's the 20.10.26 design deck (`20.10.26 _ ACKO Presentation _ Design Deck.pptx`
 - `index.html` is the same deck, linking `assets/` and `data/`. `python tools/build.py` writes it.
 - While editing, run `python tools/serve.py`, or use the **acko** preview, which rebuilds it on every page load. `/?only=s-loop,s-site` shows just those slides.
 
+## On GitHub
+
+`RITIKAARULGOPAL/Acko-Presentation` (private):
+- **`the-loop/main`:** this presentation.
+- **`the-loop/slide/<id>`:** one branch per slide, for working in parallel (see `CLAUDE.md`).
+
+The repo's own `main` holds the earlier Acko decks and is untouched.
+
 ## Working on slides separately
 
 Every slide is **its own HTML page**, `slides/<id>.html`:

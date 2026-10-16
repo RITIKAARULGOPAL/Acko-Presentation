@@ -16,6 +16,13 @@ This is SKV's interactive design presentation for ACKO's head office (Regalium, 
   - If a slide truly needs a shared change, keep it minimal and start a commit line with `Shared:`.
 - **Generated, never hand-edit:** `index.html`, `preview.html`, `assets/js/shell.js`, `dist/`.
 
+## GitHub
+- **Repository:** `RITIKAARULGOPAL/Acko-Presentation` (private), alongside the earlier Acko decks. This presentation lives under its own branch names there, so the repo's `main` is untouched:
+  - `main` here pushes to **`the-loop/main`**
+  - each `slide/<id>` pushes to **`the-loop/slide/<id>`**
+- **How:** the mapping is set in this repo's push config, so a plain `git push` from the main folder pushes `main` and every slide branch to those names.
+- **When:** push only when Ritika asks.
+
 ## Which slide you are
 
 A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that one slide. The main folder on `main` is the merge session.
