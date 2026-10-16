@@ -70,11 +70,8 @@ A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that 
 <!-- worktrees:end -->
 
 ## Parallel sessions (one per slide), when Ritika asks
-- **Setup** (from the main folder, on `main`):
-  ```bash
-  git worktree add .claude/worktrees/<id> -b slide/<id>
-  ```
-  One per slide.
+- **Setup:** done (16 Oct). `python tools/worktrees.py add` makes any missing worktree: `.claude/worktrees/<id>` on `slide/<id>`, one per slide in `order.txt`.
+- **Who has work:** `python tools/worktrees.py status` shows each slide's commits ahead of `main` and any uncommitted changes.
 - **In a slide worktree:**
   - Change only `slides/<id>.html` and `assets/img/<id>/`.
   - Commit small and often on `slide/<id>`, and put Ritika's decisions in the message ("Ritika: …").
@@ -85,11 +82,11 @@ A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that 
   - Both report 0 errors. puppeteer-core needs `NODE_PATH=C:/Users/Ritika/Mitigata/node_modules`.
 - **The merge session (main folder):**
   1. Create `feat/merge` from `main`.
-  2. Merge every `slide/<id>` that has commits, with `--no-ff`, in deck order. Conflicts are rare, because each slide is its own file; `order.txt` is the usual one.
+  2. `python tools/worktrees.py merge` merges every `slide/<id>` that has commits, with `--no-ff`, in deck order, and stops at a conflict. Conflicts are rare, because each slide is its own file; `order.txt` is the usual one.
   3. `node tools/walk.js` must report 0 errors.
   4. `python tools/build.py --single`, then `node tools/walk.js --page dist/ACKO-The-Loop.html --single` must report 0 errors and no file requests.
   5. Export `versions/Acko-20min/` and its zip, update the README journey table, then fast-forward `main`.
-  6. Remove worktrees only with Ritika's OK. Push only when asked.
+  6. Remove worktrees only with Ritika's OK (`python tools/worktrees.py remove --yes`). Push only when asked.
 
 ## Ritika's standing rules
 - **Design system = her PPT** (`20.10.26 _ ACKO Presentation _ Design Deck.pptx`):
