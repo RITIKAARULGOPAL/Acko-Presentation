@@ -94,7 +94,13 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
 **Later:** replaced by the DXF's `AC_CAM` cameras.
 
 ## 9. Small beats that read well
-- **The founder's words** type in word by word (each word a span, `.on` every 90 ms) after the timeline's milestones (`.jr-ms`, 230 ms apart) come in along a line that scales from the left (`transform: scaleX(0 → 1)`, 2.6 s).
+- **A deck's one-click sequence, in its own timing** (the journey, slide 5). One click in the PPT runs a chain of "after previous" effects. Here one beat class (`.b2`) plays it as CSS transitions with delays:
+  - the collage fades out (1 s); the road, heading and quote fade in (1.2 s, from 1 s)
+  - the years and labels appear (`opacity 0s 2.2s`)
+  - the timeline flies in from the left, one page width, linear (`translateX(-100%) → none`, 2.5 s, from 2.2 s), clipped to the page
+  - the wordmarks appear (`opacity 0s 4.7s`)
+  
+  **Replay:** going forward, remove `.b2`, force a reflow, add it. Going back, or arriving from the next slide, add `.rm` (`transition: none`) so it switches without playing. Read the timings with `deck_anim.py` and the slide's `p:timing` (`nodeType`, `dur`, `cond delay`, `ppt_x`).
 - **Homogeneity:** a lattice of desk parallelograms along the axo's two axes, clipped to the floor polygon, minus the core and terraces. They appear sweeping along the length (`--d = i/N * 1400ms`), then dim to .28 for the next beat.
 - **The sun on the bare plate:** 24 half-hour frames of sun patches, 300 ms apart, with a sun dot on an ellipse at the frame's azimuth (corrected 11.5° for the plan's north). Then the 6 m daylight band appears: the plate outline stroked 12 m wide and clipped to the plate.
 - **Exit rings:** `transform-box: fill-box; transform-origin: center; scale(.2 → 1)` on SVG circles.

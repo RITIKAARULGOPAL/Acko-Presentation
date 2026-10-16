@@ -39,6 +39,7 @@ PICK = {
     # the journey (5)
     "jr-loop": ("image39.png", 5, 1600, 90), "jr-confidence": ("image35.jpg", None, 700), "jr-assurance": ("image37.png", None, 700),
     "jr-trust": ("image43.png", None, 700), "jr-empowerment": ("image56.png", None, 700), "jr-protection": ("image40.png", None, 700),
+    "acko-2016": ("image33.png", 5, 300),                # the journey's 2016 milestone: ACKO's first wordmark
     # the challenge (6) and the solution (7): the four icons each
     "ch-disoriented": ("image41.png", None, 300), "ch-unsettled": ("image44.png", None, 300), "ch-displaced": ("image50.png", None, 300),
     "ch-disconnected": ("image42.png", None, 300), "ch-familiar": ("image47.png", None, 300), "ch-comfort": ("image48.png", None, 300),
