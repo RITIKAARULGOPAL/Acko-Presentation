@@ -1,65 +1,63 @@
 # The order of the slides. One slide per line: its id, which is also its file (slides/<id>.html).
 # Move a line to move the slide. Lines starting with # are notes and are not part of the page.
-# A slide's chapter is its data-part attribute (cover · 1 · 2 · 3 · 4 · A appendix · 0 About SKV), not its place in this
-# list: when moving a slide to another chapter, change data-part too. Leave a slide out to hide it.
-# Ritika, 12.10: four sections as in the PPT, each opened by a section starter (s-part1…4, no chapter number).
+# A slide's section is its data-part attribute (cover · 1 design concept · 2 design strategy · 3 visual direction · 4 value addition ·
+# 5 space planning · A appendix · 0 About SKV), not its place in this list. Leave a slide out to hide it.
+# Ritika, 16.10: the PPT's own order (20.10.26 design deck); the palettes as two chapters; each space OP 01 then OP 02; ~20 min.
 
-# COVER (deck slide 1)
+# OPENING (deck slides 1–2)
 s-cover
+s-team
 
-# THE BRIEF, PLAYED BACK (Sathwick, 13.10)
-s-heard
+# 1 · DESIGN CONCEPT (deck 3–13)
+s-aspiration
+s-acko
+s-journey
+s-challenge
+s-memories
+s-whatif
+s-mobius
+s-loop
+s-strategy
 
-# PART 1 · DESIGN CONCEPT (deck 14–18)
-s-part1
-s-mitigata
-s-idea
-s-living
+# 2 · DESIGN STRATEGY (deck 14–15, with the site and the floor first)
+s-challenges
+s-typologies
 
-# PART 2 · SPACE PLANNING (deck 19–26) · s-open … s-twin are being reworked on another branch
-s-part2
-s-open
-s-site
-s-arc
-s-net
-s-opt3
-s-twin
+# 3 · VISUAL DIRECTION (deck 16–45): the two palettes, then the walk, one slide per space
+s-palette1
+s-palette2
+s-w-board
+s-w-dept
+s-w-sprint
+s-w-arena
+s-w-arena2a
+s-w-library
+s-w-garden
+s-w-exec
+s-w-cafe1
+s-w-cafe2
+s-w-coffee
+s-w-mothers
+s-w-zen
+s-w-studio
 
-# PART 3 · VISUAL DIRECTION (deck 27–33)
-s-part3
-s-inspire
-s-w-arrival
-s-w-soc
-s-w-boardroom
-s-w-meeting
-s-w-breakout
-
-# PART 4 · VALUE ENGINEERING (deck 34–38)
-s-part4
-s-kit
+# 4 · VALUE ADDITION (deck 46, 47, 48, 52)
+s-engage
+s-material
 s-acoustic
-s-brand
+s-wayfinding
+
+# 5 · SPACE PLANNING (deck 53–61)
+s-layout
+s-blowup
+s-axo
+s-occupancy
 s-thanks
 
-# APPENDIX · its own deck, opened from the index or the last page
-s-agenda
-s-values
-s-layers
-s-future
-s-w-studio
-s-green
-s-types
-s-teams
-s-score
-s-stories
-s-events
-s-socops
-s-flex
-s-kitmore
-s-rooms
-s-meetaxo
-s-dd
-s-ex
+# APPENDIX · its own deck (deck 49–51)
+s-wellbeing
+s-di
+s-esg
 
-# ABOUT SKV (deck slides 3–13) · its own deck, opened from the SKV logo
+# ABOUT SKV · its own deck, opened from the SKV logo
 s-skv

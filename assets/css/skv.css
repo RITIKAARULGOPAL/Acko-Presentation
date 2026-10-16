@@ -1,0 +1,165 @@
+/* About SKV (its own deck, opened from the SKV logo): carried over unchanged from the Mitigata presentation (SKV's deck slides 3–13). It reads the shared tokens of app.css. */
+:root { --skv-gold: #fbbc04; }
+:root { --skv-cream: #fbf0cf; --skv-card: #dedede; --skv-l: var(--gutter); --skv-r: 56px; --skv-b: 40px; }
+.gold { color: var(--skv-gold); }
+.skv-board { position: absolute; inset: 84px var(--skv-r) var(--skv-b) var(--skv-l); }
+.skv [data-in] { opacity: 0; transform: translateY(14px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.skv [data-in].in { opacity: 1; transform: none; }
+.skv-h { margin-bottom: 22px; }
+.skv-label { font-family: var(--display); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+.skv-foot, .cover-foot { position: absolute; left: var(--skv-l); bottom: 12px; font-family: var(--display); font-size: 9.5px; letter-spacing: .08em; color: var(--mute); opacity: .75; }
+.skv-photo { background-size: cover; background-position: center; border-radius: 0; }
+/* full-bleed rows that run to the window edges under the board */
+.skv-strip, .skv-factory, .skv-cut { position: absolute; left: calc(-1 * var(--skv-l)); right: calc(-1 * var(--skv-r)); bottom: calc(34px - var(--skv-b)); }
+
+/* 1 · divider with the live ASCII field */
+.skv-ascii { position: absolute; right: 0; top: 64px; width: 64vw; height: 58vh; pointer-events: none; opacity: 0; transition: opacity 1.4s var(--ease);
+  -webkit-mask-image: radial-gradient(120% 100% at 100% 0%, #000 40%, transparent 78%); mask-image: radial-gradient(120% 100% at 100% 0%, #000 40%, transparent 78%); }
+.skv-ascii.on { opacity: .9; }
+.skv-intro .skv-mark { height: 46px; width: auto; }
+.skv-title { position: absolute; left: 0; bottom: 64px; border-left: 8px solid var(--accent); padding: 4px 0 4px 26px; }
+.skv-title h1 { font-size: clamp(56px, 6.6vw, 116px); font-weight: 500; line-height: 1; margin-bottom: 18px; }
+.skv-title p { font-size: clamp(18px, 1.6vw, 26px); font-weight: 300; color: var(--soft); line-height: 1.4; }
+
+/* 2 · numbers + presence */
+.skv-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 0; overflow: hidden; }
+.skv-stats > div { background: var(--panel-solid); padding: 18px 26px 16px; }
+.skv-stats b, .skv-cap b { display: flex; align-items: baseline; gap: 4px; font-size: clamp(40px, 4.2vw, 72px); font-weight: 600; letter-spacing: -.03em; line-height: 1; white-space: nowrap; }
+.skv-stats b i, .skv-cap b i { font-style: normal; color: var(--mute); }
+.skv-stats b small { font-size: .36em; font-weight: 400; letter-spacing: 0; margin-left: 6px; }
+.skv-stats > div > span, .skv-cap > div > span { display: block; margin-top: 8px; font-size: 14.5px; color: var(--mute); }
+.skv-found { margin-top: 24px; max-width: 1180px; }
+.skv-found h3 { margin-bottom: 6px; }
+.skv-found p { font-size: clamp(14.5px, 1.12vw, 18px); line-height: 1.62; color: var(--soft); }
+.skv-cities { margin-top: 22px; }
+.skv-cities > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.skv-cities i { font-style: normal; padding: 7px 15px; border: 1px solid var(--line); border-radius: 0; font-size: 14px; background: var(--panel); }
+.skv-cities i.here { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+/* 3 · what sets us apart */
+.skv-apart { position: absolute; top: 80px; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: minmax(260px, 33%) 1fr; gap: 56px; }
+.skv-photo.arch { border-radius: 4px 150px 4px 4px; }
+.skv-icons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px 28px; align-content: center; }
+.skv-icons > div { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.skv-icons img { width: 108px; height: 108px; padding: 27px; border-radius: 50%; background: var(--skv-cream); object-fit: contain; }
+.skv-icons p { font-size: 15px; line-height: 1.5; color: var(--soft); max-width: 230px; }
+.skv-icons p b { color: var(--ink); font-weight: 600; }
+
+/* 4 · services */
+.skv-services { display: grid; grid-template-columns: 38% 1fr; gap: 48px; align-items: start; }
+.skv-db h3 { font-size: clamp(24px, 2vw, 34px); margin: 4px 0 14px; }
+.skv-db ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 9px; font-size: clamp(15px, 1.15vw, 19px); color: var(--soft); line-height: 1.45; }
+.skv-db li::marker { color: var(--skv-gold); }
+.skv-svc-card { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 36px; padding: 28px 34px; border: 1px solid var(--line); border-radius: 0; background: var(--panel-solid); }
+.skv-svc-card > div { display: flex; gap: 18px; align-items: flex-start; }
+.skv-svc-card img { width: 58px; height: 58px; object-fit: contain; flex: none; }
+.skv-svc-card b { display: block; font-size: 17px; margin-bottom: 6px; }
+.skv-svc-card span { display: block; font-size: 14.5px; color: var(--soft); line-height: 1.6; }
+.skv-svc-card span::before { content: "•"; color: var(--skv-gold); margin-right: 8px; }
+.skv-strip { height: 22vh; display: flex; }
+.skv-strip > div { background-size: cover; background-position: center; }
+
+/* 5 · what we stand for */
+.skv-values { display: grid; grid-template-columns: repeat(3, 1fr); }
+.skv-values > div { padding: 0 32px; border-left: 1px solid var(--line); }
+.skv-values > div:first-child { border-left: 0; padding-left: 0; }
+.skv-values h3 { font-size: clamp(22px, 1.7vw, 28px); margin-bottom: 10px; }
+.skv-values .intro { margin-bottom: 8px; font-size: 15px; color: var(--soft); line-height: 1.5; }
+.skv-ilist { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-direction: column; gap: 12px; }
+.skv-ilist li { display: grid; grid-template-columns: 34px 1fr; gap: 14px; align-items: center; font-size: 15px; line-height: 1.45; }
+.skv-ilist img { width: 34px; height: 34px; object-fit: contain; }
+
+/* 6 · brands */
+.skv-logos { position: absolute; top: 82px; bottom: 6px; left: 0; right: 0; display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(6, 1fr); gap: 10px; }
+.skv-logos > div { background: #fff; border-radius: 0; border: 1px solid var(--line); padding: 12px 18px; min-height: 0; }
+.skv-logos img { width: 100%; height: 100%; object-fit: contain; }
+
+/* 7 · factory */
+.skv-fstats { position: absolute; top: 0; right: 0; width: 68%; display: grid; grid-template-columns: repeat(4, 1fr); z-index: 1; }
+.skv-fstats > div { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 0 12px; border-left: 1px solid var(--line); }
+.skv-fstats > div:first-child { border-left: 0; }
+.skv-fstats b { font-size: clamp(30px, 3.2vw, 56px); font-weight: 600; letter-spacing: -.02em; line-height: 1.05; white-space: nowrap; }
+.skv-fstats b small { font-size: .42em; font-weight: 400; margin-left: 4px; letter-spacing: 0; }
+.skv-fstats > div > span { font-size: 14px; color: var(--mute); max-width: 190px; line-height: 1.4; min-height: 2.8em; }
+.skv-fstats img { width: 72px; height: 72px; padding: 17px; margin-top: 8px; border-radius: 50%; background: var(--skv-cream); object-fit: contain; }
+.skv-factory { width: calc(100% + var(--skv-l) + var(--skv-r)); max-width: none; height: auto; max-height: 68vh; object-fit: cover; object-position: bottom; }
+
+/* 8 · factory capacity */
+.skv-cap { display: flex; margin-top: 6px; }
+.skv-cap > div { padding: 0 48px; border-left: 1px solid var(--line); }
+.skv-cap > div:first-child { padding-left: 0; border-left: 0; }
+.skv-cap b { font-size: clamp(34px, 3.4vw, 58px); }
+.skv-cut > img { width: 100%; height: auto; max-width: none; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.skv-cut .lbl { position: absolute; top: 2.4vw; display: flex; align-items: center; gap: 12px; translate: calc(-100% + 32px) -100%; }
+.skv-cut .lbl span { color: var(--skv-gold); font-weight: 600; font-size: clamp(16px, 1.3vw, 21px); line-height: 1.2; text-align: right; max-width: 130px; }
+.skv-cut .lbl img { width: 64px; height: 64px; padding: 14px; border-radius: 50%; background: var(--skv-card); object-fit: contain; flex: none; }
+.skv-cut .lbl::after { content: ""; position: absolute; right: 31px; top: 100%; height: 4.6vw; border-left: 2px dashed var(--ink); opacity: .7; }
+
+/* 9 · what we create */
+.skv-create { position: absolute; top: 80px; bottom: 82px; left: 0; right: 0; display: grid; grid-template-columns: 29% 1fr 17%; gap: 28px; }
+.skv-ftm { display: flex; flex-direction: column; justify-content: center; gap: 4px; font-size: clamp(36px, 3.6vw, 64px); font-weight: 600; letter-spacing: -.02em; line-height: 1.18; }
+.skv-fgrid { display: grid; grid-template-columns: repeat(16, 1fr); grid-template-rows: 1fr 1fr; gap: 10px; min-height: 0; }
+.skv-fgrid > :nth-child(1) { grid-column: span 6; } .skv-fgrid > :nth-child(2) { grid-column: span 10; }
+.skv-fgrid > :nth-child(3), .skv-fgrid > :nth-child(4) { grid-column: span 8; }
+.skv-side { align-self: end; border-left: 2px solid var(--line); padding-left: 16px; font-size: 16px; line-height: 1.6; color: var(--soft); }
+.skv-cats { position: absolute; left: 0; right: 0; bottom: 6px; display: flex; flex-wrap: wrap; align-items: center; row-gap: 8px; border: 1px solid var(--line); border-radius: 0; background: var(--panel-solid); padding: 15px 22px; }
+.skv-cats b { font-family: var(--display); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-right: 6px; }
+.skv-cats span { font-size: 14.5px; padding: 0 20px; border-left: 1px solid var(--line); }
+
+/* 10 · leadership */
+.skv-team { position: absolute; top: 82px; bottom: 4px; left: 0; right: 0; display: grid; grid-template-rows: 1fr 1fr; gap: 16px; }
+.skv-row { position: relative; display: flex; align-items: flex-end; justify-content: center; gap: clamp(12px, 1.6vw, 30px); padding-left: 64px; }
+.skv-vlabel { position: absolute; left: 0; top: 0; bottom: 0; width: 40px; background: var(--skv-gold); color: var(--bg); writing-mode: vertical-rl; transform: rotate(180deg); display: flex; align-items: center; justify-content: center; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 16px; border-radius: 0; }
+.skv-team figure { margin: 0; width: clamp(118px, 10.4vw, 172px); text-align: center; }
+.skv-team figure > div { position: relative; height: clamp(140px, 20vh, 196px); display: flex; align-items: flex-end; justify-content: center; }
+.skv-team figure > div::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 78%; border-radius: 0; background: var(--skv-card); }
+.skv-team figure img { position: relative; height: 100%; width: auto; max-width: 112%; object-fit: contain; object-position: bottom; border-radius: 0 0 18px 18px; }
+.skv-team figcaption { margin-top: 10px; min-height: 56px; font-size: 12.5px; color: var(--mute); line-height: 1.35; }
+.skv-team figcaption b { display: block; font-size: 16px; color: var(--ink); font-weight: 500; margin-bottom: 2px; }
+
+/* 11 · testimonials */
+.skv-caps { display: flex; justify-content: center; gap: clamp(10px, 1.1vw, 22px); height: 33vh; }
+.skv-caps > div { flex: 0 0 clamp(78px, 7.8vw, 128px); border-radius: 0; background-size: cover; background-position: center; }
+.skv-caps > div:nth-child(even) { margin-top: 4.5vh; }
+.skv-caps > div:nth-child(odd) { margin-bottom: 4.5vh; }
+.skv-pill { width: max-content; margin: 14px auto 0; padding: 9px 22px; border: 1.5px solid var(--ink); border-radius: 0; font-weight: 600; font-size: 15px; }
+.skv-quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 320px)); justify-content: center; margin-top: 20px; }
+.skv-quotes blockquote { position: relative; margin: 0; padding: 0 30px; border-left: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; }
+.skv-quotes blockquote:first-child { border-left: 0; }
+.skv-quotes blockquote::before { content: "\201C"; position: absolute; left: 12px; top: -20px; font-size: 40px; line-height: 1; color: var(--mute); }
+.skv-quotes p { margin-bottom: 12px; font-size: 13.5px; line-height: 1.62; color: var(--soft); }
+.skv-quotes p::after { content: "\201D"; }
+.skv-quotes footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11.5px; color: var(--mute); line-height: 1.4; }
+.skv-quotes footer img { height: 42px; width: auto; max-width: 100px; object-fit: contain; background: #fff; border-radius: 0; padding: 3px 6px; }
+
+/* index: beat chips on the About SKV card */
+.overview button .beats { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.overview button .beats span { font-family: var(--display); font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border: 1px solid var(--line); border-radius: 0; color: var(--soft); }
+.overview button .beats span:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-height: 860px) and (min-width: 1101px) {
+  :root { --skv-l: var(--gutter); --skv-r: 40px; --skv-b: 34px; }
+  .skv-board { top: 76px; }
+  .skv-h { margin-bottom: 16px; }
+  .skv-stats > div { padding: 12px 20px 11px; } .skv-stats b, .skv-cap b { font-size: clamp(34px, 3.6vw, 56px); }
+  .skv-found { margin-top: 16px; } .skv-found p { font-size: 14px; line-height: 1.55; } .skv-cities { margin-top: 14px; } .skv-cities i { padding: 5px 12px; font-size: 13px; }
+  .skv-apart, .skv-create { top: 66px; } .skv-icons { gap: 22px 22px; } .skv-icons img { width: 84px; height: 84px; padding: 21px; } .skv-icons p { font-size: 14px; }
+  .skv-db ul { gap: 6px; font-size: 14.5px; } .skv-svc-card { padding: 20px 26px; gap: 16px 28px; } .skv-svc-card span { font-size: 13.5px; line-height: 1.5; }
+  .skv-strip { height: 19vh; }
+  .skv-values .intro, .skv-ilist li { font-size: 13.5px; } .skv-ilist { gap: 8px; margin-top: 10px; } .skv-ilist img { width: 28px; height: 28px; } .skv-ilist li { grid-template-columns: 28px 1fr; }
+  .skv-logos { top: 70px; gap: 8px; } .skv-logos > div { padding: 9px 14px; }
+  .skv-fstats > div > span { font-size: 12.5px; } .skv-fstats img { width: 56px; height: 56px; padding: 13px; margin-top: 4px; }
+  .skv-cut .lbl img { width: 52px; height: 52px; padding: 11px; } .skv-cut .lbl { translate: calc(-100% + 26px) -100%; } .skv-cut .lbl::after { right: 25px; }
+  .skv-create { bottom: 72px; } .skv-cats { padding: 11px 18px; } .skv-cats span { font-size: 13px; padding: 0 14px; } .skv-side { font-size: 14.5px; }
+  .skv-team { top: 70px; } .skv-team figure > div { height: clamp(120px, 19vh, 160px); } .skv-team figcaption b { font-size: 14.5px; } .skv-team figcaption { font-size: 11.5px; min-height: 50px; }
+  .skv-caps { height: 28vh; } .skv-quotes { margin-top: 14px; } .skv-quotes p { font-size: 12.5px; line-height: 1.55; } .skv-pill { margin-top: 10px; padding: 7px 18px; }
+}
+@media (max-width: 1100px) {
+  :root { --skv-l: 16px; --skv-r: 16px; }
+  .skv-board { overflow: auto; }
+  .skv-stats, .skv-values, .skv-services, .skv-apart, .skv-create { grid-template-columns: 1fr; }
+  .skv-logos { grid-template-columns: repeat(6, 1fr); grid-template-rows: none; grid-auto-rows: 64px; bottom: auto; }
+  .skv-row { flex-wrap: wrap; }
+}
+
+/* ---------- plan: satellite underlay + hover on the CAD rooms and teams (09.10 layouts) ---------- */
