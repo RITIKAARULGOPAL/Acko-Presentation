@@ -20,6 +20,8 @@ s-loop
 s-strategy
 
 # 2 · DESIGN STRATEGY (deck 14–15, with the site and the floor first)
+s-site
+s-floor
 s-challenges
 s-typologies
 

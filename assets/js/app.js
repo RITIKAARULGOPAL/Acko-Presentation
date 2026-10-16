@@ -542,6 +542,106 @@
       requestAnimationFrame(run);
     },
   };
+  /* ---- the site (new, short): Koramangala as a vector map (Overture/OSM, from the earlier Acko analysis); it closes in on
+     Regalium, then turns 11.5° so the building lines up with the plans ---- */
+  const SV = { built: false, vb: [-760, -590, 1520, 1180], rot: 0, raf: 0 };
+  function siteMap() {
+    if (SV.built || !window.ACKO_SITE) return;
+    const S = window.ACKO_SITE, svg = $("#vmap");
+    const roads = S.roads.slice().sort((a, b) => b.rank - a.rank);
+    const land = S.land ? Object.entries(S.land).map(([k, d]) => `<path class="vm-land ${k}" d="${d}"/>`).join("") : "";
+    const water = (S.water || []).map((w) => `<path class="vm-water" d="${w.d}"/>`).join("");
+    const rail = (S.rail || []).map((r) => `<path class="vm-rail" d="${r.d}"/>`).join("");
+    const hosur = S.hosur.map((seg) => `<path class="vm-hosur" d="M${seg.map((q) => q.join(" ")).join("L")}"/>`).join("");
+    const marks = S.marks.slice(0, 5).map((m) => `<g class="vm-mark" transform="translate(${m.x} ${m.y})"><circle r="6"/><text x="10" y="4">${m.n}</text></g>`).join("");
+    const labels = S.labels.map((l) => `<text class="vm-lab" transform="translate(${l.x} ${l.y}) rotate(${l.a})" text-anchor="middle">${l.t}</text>`).join("");
+    svg.setAttribute("viewBox", SV.vb.join(" ")); svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
+    svg.innerHTML = `<g id="vm-root">${land}${water}` +
+      roads.map((r) => `<path class="vm-road c" d="${r.d}" style="stroke-width:${r.w + 2.4}"/>`).join("") +
+      roads.map((r) => `<path class="vm-road" d="${r.d}" style="stroke-width:${r.w}"/>`).join("") + rail + hosur +
+      `<g class="vm-bld">${S.buildings.map((d) => `<path d="${d}"/>`).join("")}</g>` +
+      `<path class="vm-foot" d="${S.footprint.d}"/><path class="vm-plate" d="${S.onSite.plate}"/>` +
+      `<circle class="vm-gate" cx="${S.gate[0]}" cy="${S.gate[1]}" r="7"/>${labels}${marks}` +
+      `<g class="vm-pin" transform="translate(0 10)"><text y="-62" text-anchor="middle">Regalium · 3rd floor</text></g></g>`;
+    $("#map-credit").textContent = S.attribution || "© OpenStreetMap contributors, Overture Maps";
+    $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"} walk</span></li>`).join("");
+    SV.built = true;
+  }
+  function siteView(vb, rot, ms) {
+    cancelAnimationFrame(SV.raf);
+    const svg = $("#vmap"), root = $("#vm-root"), from = SV.vb.slice(), r0 = SV.rot, t0 = performance.now();
+    const set = (v, r) => { SV.vb = v; SV.rot = r; svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); root.setAttribute("transform", `rotate(${r.toFixed(2)} 0 10)`); };
+    if (!ms || reduced) return set(vb, rot);
+    const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      set(from.map((a, i) => a + (vb[i] - a) * e), r0 + (rot - r0) * e); if (k < 1) SV.raf = requestAnimationFrame(run); };
+    SV.raf = requestAnimationFrame(run);
+  }
+  H["s-site"] = {
+    enter(_, sc) {
+      siteMap(); world("map"); shade("left");
+      // the whole neighbourhood, then closer, with Regalium right of the copy; then the turn that lines it up with the plans
+      siteView([-1060, -590, 2100, 1180], 0, 0);
+      later(() => siteView([-860, -360, 1300, 731], 0, 3000), 500);
+      later(() => siteView([-713, -315, 1150, 647], -(window.ACKO_SITE ? window.ACKO_SITE.grid : 11.5), 1800), 3700);
+      reveal($(".si-copy", sc), 300);
+      $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 900 + i * 150));
+    },
+    leave() { cancelAnimationFrame(SV.raf); },
+  };
+
+  /* ---- the floor (new, short): the bare plate before any furniture. 1 the sun runs across an equinox day, its patches falling
+     through the glass, then the 6 m daylight band; 2 fire first: 15/30/45 m rings at the five stairs, then the eight measured
+     exit paths, then the compartment line ---- */
+  const FL = { built: false };
+  function floorSvg(svg) {
+    if (FL.built || !window.ACKO_FLOOR) return;
+    const F = window.ACKO_FLOOR, P = (a) => "M" + a.map((q) => q.join(" ")).join("L") + "Z", L = (a) => "M" + a.map((q) => q.join(" ")).join("L");
+    const plate = P(F.plate);
+    svg.innerHTML = `<defs><clipPath id="fl-clip"><path d="${plate}"/></clipPath></defs>` +
+      `<path class="fl-plate" d="${plate}"/>` +
+      `<g clip-path="url(#fl-clip)"><path class="fl-band" d="${plate}"/><g class="fl-sun"></g></g>` +
+      F.terraces.map((t) => `<path class="fl-terr" d="${P(t)}"/>`).join("") +
+      F.cores.map((c) => `<path class="fl-core" d="${P(c)}"/>`).join("") +
+      F.cols.map((c) => `<rect class="fl-col" x="${c[0] - c[2] / 2}" y="${c[1] - c[3] / 2}" width="${c[2]}" height="${c[3]}"/>`).join("") +
+      F.stairs.map((s) => `<g class="fl-stair"><rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}"/><text x="${s.x + s.w / 2}" y="${s.y + s.h / 2 + 22}">${s.id}</text></g>`).join("") +
+      `<g class="fl-rings">${F.stairs.map((s) => [900, 600, 300].map((r) => `<circle cx="${s.x + s.w / 2}" cy="${s.y + s.h / 2}" r="${r}"/>`).join("")).join("")}</g>` +
+      `<g class="fl-routes">${F.routes.map((r) => `<path d="${L(r.pts)}"/>`).join("")}</g>` +
+      `<g class="fl-rlab">${F.routes.map((r) => { const q = r.pts[0]; return `<text x="${q[0]}" y="${q[1] - 18}">${Math.round(r.m)} m</text>`; }).join("")}</g>` +
+      `<g class="fl-comp">${(F.comp || []).map((c) => `<path d="${L(c)}"/>`).join("")}</g>` +
+      `<g class="fl-entry">${(F.entries || []).map((e) => `<path d="${P(e)}"/>`).join("")}</g>` +
+      `<g class="fl-sunpos"><circle r="46"/></g><text class="fl-n" x="4960" y="-150">N</text>`;
+    FL.built = true;
+  }
+  function sunRun(svg, day) {
+    const F = window.ACKO_FLOOR, frames = F.sun.find((d) => d.k === day) || F.sun[0], g = $(".fl-sun", svg), pos = $(".fl-sunpos", svg);
+    const cx = 2460, cy = 380, R = 2600, up = 11.5;
+    let i = 0;
+    $("#fl-d").textContent = frames.label;
+    const show = () => {
+      const f = frames.frames[i];
+      g.innerHTML = f.p.map((d) => `<path d="${d}"/>`).join("");
+      $("#fl-t").textContent = f.t;
+      const a = ((f.az - up) * Math.PI) / 180, x = cx + R * Math.sin(a), y = cy - R * 0.36 * Math.cos(a);
+      pos.setAttribute("transform", `translate(${x.toFixed(0)} ${y.toFixed(0)})`); pos.style.opacity = f.alt > 0 ? 1 : 0;
+      i++;
+      if (i < frames.frames.length) later(show, 300); else later(() => svg.classList.add("band"), 400);
+    };
+    show();
+  }
+  H["s-floor"] = {
+    enter(_, sc) { plain(); floorSvg($("#fl-svg", sc)); },
+    step(k, sc) {
+      clearTimers();
+      const svg = $("#fl-svg", sc);
+      svg.classList.remove("band", "fire1", "fire2", "fire3");
+      if (k === 1) { svg.classList.add("sunny"); sunRun(svg, "mar"); $$("[data-only='1'] [data-count]", sc).forEach((e) => countUp(e, 1500)); return; }
+      svg.classList.remove("sunny"); $(".fl-sun", svg).innerHTML = "";
+      svg.classList.add("fire1");
+      later(() => { svg.classList.add("fire2"); $$(".fl-routes path", svg).forEach((q, i) => drawPath(q, 1400, i * 160)); }, 1500);
+      later(() => svg.classList.add("fire3"), 3600);
+    },
+  };
+
   /* ---- what's our challenge (slide 14), on the deck's axo of the bare floor: ① homogeneity — one uniform grid of desks floods
      the plate; ② disorientation — a desk at the far end is a long walk from the café and the arrivals; ③ distance — the route
      the deck draws, end to end, 245 m ---- */

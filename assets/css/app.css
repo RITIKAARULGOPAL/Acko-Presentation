@@ -616,3 +616,67 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .oc-big span { display: block; font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 44); color: var(--purple); line-height: 1; }
 .oc-big small { font-size: calc(var(--pt) * 8.4); color: #666; }
 .oc tr.z4 td:first-child { font-size: calc(var(--pt) * 5.6); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; text-align: center; background: #efefef !important; }
+
+/* ---------- the site: a vector map (Overture / OSM) ---------- */
+#w-map { background: #f2f1f5; }
+.vm-land { fill: #e3ecdd; stroke: none; } .vm-water { fill: #d7e4f0; }
+.vm-road { fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; }
+.vm-road.c { stroke: #d9d6df; }
+.vm-rail { fill: none; stroke: #c06; stroke-width: 3; stroke-dasharray: 10 6; opacity: .5; }
+.vm-hosur { fill: none; stroke: #cfc6e6; stroke-width: 9; stroke-linecap: round; }
+.vm-bld path { fill: #dcd8e3; stroke: #cdc8d6; stroke-width: .4; }
+.vm-foot { fill: #c9b3f3; stroke: #5222d0; stroke-width: 1.4; }
+.vm-plate { fill: #5222d0; opacity: .55; }
+.vm-gate { fill: #980000; }
+.vm-lab { font-family: var(--body); font-size: 11px; fill: #8a849a; letter-spacing: .06em; }
+.vm-mark circle { fill: #ffffff; stroke: #5222d0; stroke-width: 2; }
+.vm-mark text { font-family: var(--body); font-size: 11px; font-weight: 600; fill: #3b3550; paint-order: stroke; stroke: #f2f1f5; stroke-width: 4px; }
+.vm-pin text { font-family: var(--body); font-size: 15px; font-weight: 700; fill: #5222d0; paint-order: stroke; stroke: #fff; stroke-width: 5px; }
+.si-copy h2 { font-size: calc(var(--pt) * 22); font-weight: 600; color: var(--purple-2); line-height: 1.1; }
+.si-copy > p { margin-top: calc(var(--pt) * 4); font-size: calc(var(--pt) * 8.6); color: #555; }
+.si-facts { margin: calc(var(--pt) * 12) 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--pt) * 8) calc(var(--pt) * 14); }
+.si-facts dt { font-size: calc(var(--pt) * 6); letter-spacing: .12em; text-transform: uppercase; color: #888; }
+.si-facts dd { margin: 0; font-size: calc(var(--pt) * 11); font-weight: 600; }
+.si-facts dd span { font-family: var(--num); font-weight: 400; color: var(--purple); }
+.si-walk { list-style: none; margin: calc(var(--pt) * 14) 0 0; padding: 0; display: flex; flex-direction: column; gap: calc(var(--pt) * 4); font-size: calc(var(--pt) * 7.6); }
+.si-walk li { display: flex; justify-content: space-between; gap: 1em; border-top: 1px solid #e3e0ea; padding-top: calc(var(--pt) * 3); }
+.si-walk b { font-weight: 500; } .si-walk span { color: var(--purple); font-family: var(--num); white-space: nowrap; }
+
+/* ---------- the floor: the bare plate, the sun, the daylight band, the exits ---------- */
+.fl-h { font-size: calc(var(--pt) * 20); font-weight: 600; color: var(--purple-2); position: relative; height: 1.2em; }
+.fl-h span { position: absolute; left: 0; top: 0; white-space: nowrap; }
+.fl-p { position: absolute; top: calc(var(--pt) * 30); font-size: calc(var(--pt) * 9.5); color: #444; line-height: 1.45; max-width: 90%; }
+.fl-p b { color: var(--purple); }
+.fl-p span { font-family: var(--num); }
+.fl-svg { overflow: visible; }
+.fl-plate { fill: #ffffff; stroke: #111; stroke-width: 3; vector-effect: non-scaling-stroke; }
+.fl-band { fill: none; stroke: #fbbc04; stroke-width: 240; stroke-opacity: 0; transition: stroke-opacity 1.2s var(--ease); }
+.fl-svg.band .fl-band { stroke-opacity: .22; }
+.fl-sun path { fill: #fbbc04; fill-opacity: .42; }
+.fl-terr { fill: #93c47d; fill-opacity: .5; stroke: #111; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.fl-core { fill: #d9d9d9; stroke: #9a9a9a; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.fl-col { fill: #777; }
+.fl-stair rect { fill: #c9b3f3; stroke: #5222d0; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.fl-stair text { font-family: var(--num); font-size: 64px; fill: #3e19a0; text-anchor: middle; }
+.fl-rings circle { fill: rgba(146, 111, 243, .06); stroke: #926ff3; stroke-width: 1.2; stroke-dasharray: 6 6; vector-effect: non-scaling-stroke; opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.2); transition: opacity .8s var(--ease), transform 1.2s var(--ease); }
+.fl-svg.fire1 .fl-rings circle { opacity: 1; transform: none; }
+.fl-svg.fire2 .fl-rings circle { opacity: .35; }
+.fl-routes path { fill: none; stroke: #6f2f9f; stroke-width: 3; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: 0; }
+.fl-svg.fire2 .fl-routes path { opacity: 1; }
+.fl-rlab text { font-family: var(--num); font-size: 58px; fill: #6f2f9f; opacity: 0; transition: opacity .6s 1.2s; paint-order: stroke; stroke: #fff; stroke-width: 10px; }
+.fl-svg.fire2 .fl-rlab text { opacity: 1; }
+.fl-comp path { fill: none; stroke: #980000; stroke-width: 3.5; stroke-dasharray: 12 8; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .8s; }
+.fl-svg.fire3 .fl-comp path { opacity: 1; }
+.fl-entry path { fill: #c40000; }
+.fl-sunpos { transition: transform .3s linear, opacity .4s; opacity: 0; }
+.fl-svg.sunny .fl-sunpos { display: inline; } .fl-svg:not(.sunny) .fl-sunpos { display: none; }
+.fl-sunpos circle { fill: #fbbc04; stroke: #fff; stroke-width: 8; }
+.fl-n { font-family: var(--body); font-weight: 700; font-size: 70px; fill: #5222d0; text-anchor: end; }
+.fl-time { position: absolute; display: flex; align-items: baseline; gap: calc(var(--pt) * 8); }
+.fl-time b { font-family: var(--num); font-weight: 400; font-size: calc(var(--pt) * 22); color: #d89b00; }
+.fl-time span { font-size: calc(var(--pt) * 8); color: #666; }
+.fl-key { position: absolute; display: flex; gap: calc(var(--pt) * 16); font-size: calc(var(--pt) * 7.6); color: #444; }
+.fl-key span { display: flex; align-items: center; gap: calc(var(--pt) * 5); }
+.fl-key i { display: inline-block; width: calc(var(--pt) * 20); }
+.fl-key i.r { height: calc(var(--pt) * 8); border: 1px dashed #926ff3; border-radius: 50%; }
+.fl-key i.p { border-top: 2px solid #6f2f9f; } .fl-key i.c { border-top: 2px dashed #980000; }
