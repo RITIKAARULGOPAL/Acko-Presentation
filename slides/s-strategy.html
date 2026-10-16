@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus strategy · ACKO slide s-strategy</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-strategy" data-part="1" data-title="Campus strategy" data-steps="1" data-mins="0.5"
   data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker — an employee, or a client walking in. How it started, looping it all together, the client's journey. Inspired by institutional pathways, the ACKO Loop connects people and spaces.">
   <div class="page">
@@ -9,3 +22,18 @@
     <p class="st-hand hand rv-i" style="--i:3;left:1.8%;top:56%;width:38%;font-size:calc(var(--pt) * 22)">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
   </div>
 </section>
+<style>
+/* ---------- campus strategy (slide 13) ---------- */
+.st-anim { left: -17.9%; top: -2.2%; width: 119.4%; height: 89.3%; background: url(assets/img/strategy-anim.webp) center / contain no-repeat; }
+.st-h { left: 1.8%; top: 15%; width: 26%; }
+.st-h h3 { font-size: calc(var(--pt) * 10.5); font-style: italic; font-weight: 700; color: var(--purple); }
+.st-h p { margin-top: calc(var(--pt) * 6); font-size: calc(var(--pt) * 6.4); font-style: italic; line-height: 1.5; color: #555; }
+.st-hand { left: 23.6%; top: 72%; width: 40%; font-size: calc(var(--pt) * 21); line-height: 1.05; }
+</style>
+<script>
+/* campus strategy (deck slide 13): the deck's animated axo of the floor, keyed out of its green screen */
+ACKO.slide("s-strategy", ({ $, plain, reveal }) => ({ enter(_, sc) { plain(); reveal($(".page", sc), 100); } }));
+</script>
+<!-- slide:end -->
+</body>
+</html>

@@ -1,6 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What if · ACKO slide s-whatif</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-whatif" data-part="1" data-title="What if" data-steps="1" data-mins="0.2"
   data-notes="So: what if we tap into that familiar feeling of safety and protection, and bring it into the workplace?">
   <div class="page">
     <p class="wi-q hand" style="left:1.7%;top:39.3%;width:96.8%;text-align:center;font-size:calc(var(--pt) * 34);color:var(--purple)">What if we tap into the familiarity of Safety &amp; Protection into the workplace?</p>
   </div>
 </section>
+<style>
+/* ---------- what if (slide 9) ---------- */
+.wi-q { left: 18%; top: 38%; width: 66%; font-size: calc(var(--pt) * 25); line-height: 1.3; font-weight: 400; }
+.wi-q b { font-weight: 700; color: var(--purple); }
+.wi-q span { display: inline; opacity: 0; transition: opacity .5s; }
+.wi-q span.on { opacity: 1; }
+</style>
+<script>
+/* what if (deck slide 9): the question, word by word */
+ACKO.slide("s-whatif", ({ $, plain, typeWords }) => ({ enter(_, sc) { plain(); typeWords($(".wi-q", sc), 120, 300); } }));
+</script>
+<!-- slide:end -->
+</body>
+</html>

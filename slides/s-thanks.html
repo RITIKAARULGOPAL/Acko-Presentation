@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thank you · ACKO slide s-thanks</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-thanks" data-part="5" data-mode="dark" data-nonum data-title="Thank you" data-steps="1" data-mins="0.2"
   data-notes="Thank you. One loop, one experience: welcomed, connected, impactful, cared for. The Appendix holds well-being, D&amp;I and ESG; About SKV opens from the SKV logo.">
   <div class="page">
@@ -7,3 +20,23 @@
     <div class="th-btns ui rv-i" style="--i:3"><button type="button" class="chip on" id="to-appendix">Appendix →</button><button type="button" class="chip" id="to-skv">About SKV →</button></div>
   </div>
 </section>
+<style>
+/* ---------- thank you ---------- */
+.th-loop { left: 0; top: 18%; width: 100%; height: 50%; background: url(assets/img/loop-ribbon.webp) center / contain no-repeat; opacity: .28; }
+.th-h { left: 0; width: 100%; top: 40%; text-align: center; font-size: calc(var(--pt) * 46); font-weight: 700; color: #fff; }
+.th-p { left: 0; width: 100%; top: 56%; text-align: center; font-size: calc(var(--pt) * 26); color: var(--lilac); }
+.th-btns { left: 0; width: 100%; top: 72%; display: flex; justify-content: center; gap: 10px; }
+</style>
+<script>
+/* thank you: the Appendix and About SKV from here */
+ACKO.slide("s-thanks", ({ $, plain, reveal, go, trackIdx, sceneIx }) => ({
+  enter(_, sc) {
+    plain(); reveal($(".page", sc), 100);
+    $("#to-appendix").onclick = () => go(trackIdx("appendix")[0], 1);
+    $("#to-skv").onclick = () => go(sceneIx("s-skv"), 1);
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What defines ACKO · ACKO slide s-acko</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-acko" data-part="1" data-mode="grey" data-title="What defines ACKO" data-steps="1" data-mins="0.6"
   data-notes="ACKO is India's first fully digital insurer: simple, transparent, technology-driven, customer-centric. No paperwork, no intermediaries; data, AI and digital experience instead. Five words define the brand: confidence, trust, protection, assurance, empowerment. People-centric, technology-first, transparent.">
   <div class="page">
@@ -14,3 +27,33 @@
     <div class="val-words rv-i" style="--i:10">PEOPLE - CENTRIC &nbsp;I&nbsp; TECHNOLOGY - FIRST &nbsp;I&nbsp; TRANSPARENCY</div>
   </div>
 </section>
+<style>
+/* ---------- what defines ACKO (slide 4) ---------- */
+.val-strips { left: 7.3%; top: 19.1%; width: 84.4%; height: 42.5%; display: grid; grid-template-columns: 15.9fr 15.9fr 15.7fr 16.9fr 16.9fr; gap: 0 .9%; }
+.val-strip { position: relative; display: flex; flex-direction: column; }
+.val-strip > b { flex: none; height: 11.6%; display: grid; place-items: center; background: #666; color: #d9d9d9; font-weight: 400; font-size: calc(var(--pt) * 8.5); }
+.val-strip > div { position: relative; flex: 1; overflow: hidden; background: #ddd; }
+.val-strip > div i { position: absolute; inset: 0; background: center / cover no-repeat; }
+.val-strip > div i + i { opacity: 0; transition: opacity 1.2s var(--ease); }
+.val-strip.swap > div i + i { opacity: 1; }
+.val-strip > div { transform: scaleY(0); transform-origin: top; transition: transform 1s var(--ease); transition-delay: calc(var(--i) * 160ms + 150ms); }
+.go .val-strip > div { transform: none; }
+.val-p { left: 7.3%; top: 63.6%; width: 84.2%; font-size: calc(var(--pt) * 7.2); line-height: 1.5; }
+.val-p b { font-weight: 700; }
+.val-hand { left: 7.6%; top: 72.8%; font-size: calc(var(--pt) * 20); }
+.val-words { left: 24.1%; top: 74.6%; font-size: calc(var(--pt) * 9); color: var(--violet); letter-spacing: .04em; }
+</style>
+<script>
+/* what defines ACKO (deck slide 4): the five values open like shutters; then, slowly, each strip turns to its second picture
+   (the deck's click swaps the first) */
+ACKO.slide("s-acko", ({ $, $$, plain, reveal, later }) => ({
+  enter(_, sc) {
+    plain(); const strips = $$(".val-strip", sc); strips.forEach((s) => s.classList.remove("swap"));
+    reveal($(".page", sc), 100);
+    strips.forEach((s, i) => later(() => s.classList.add("swap"), 4200 + i * 900));
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

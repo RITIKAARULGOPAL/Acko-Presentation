@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blown up X · Y · Z · ACKO slide s-blowup</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-blowup" data-part="5" data-title="Blown up X · Y · Z" data-steps="3" data-mins="1" data-beats="Blown up X,Blown up Y,Blown up Z"
   data-notes="The same plan, closer. X: the west end — reception, the café for 178, training, the Acker Garden at the curved corner. Y: the middle — departmental rooms and huddles along the corridor, and the fire compartmentalisation line. Z: the east end — the neighbourhoods around the second arrival, executive cabins and the hatchery.">
   <div class="page">
@@ -7,3 +20,28 @@
     <div class="bl-fire" data-only="2" style="left:36%;top:86.4%"><i></i>Fire Compartmentalisation</div>
   </div>
 </section>
+<style>
+.bl-keys { position: absolute; display: flex; gap: calc(var(--pt) * 14); font-size: calc(var(--pt) * 9); font-weight: 700; }
+.bl-keys span { color: #c9c3d8; transition: color .4s; }
+.bl-keys span.on { color: var(--purple); }
+.bl-fire { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 6); font-size: calc(var(--pt) * 7); }
+.bl-fire i { width: calc(var(--pt) * 26); border-top: 2px dashed var(--maroon); }
+</style>
+<script>
+/* the blow-ups (deck slides 55–57): the same plan flies into X, Y and Z; the fire compartment line draws on Y */
+ACKO.slide("s-blowup", ({ $, $$, plan }) => {
+  const DISP = [38, 150, 1882, 880];
+  return {
+    step(k, sc) {
+      const key = ["X", "Y", "Z"][k - 1], P = window.DECK_PLAN;
+      plan.planOn(sc, { fire: key === "Y", entry: true, blow: false, view: plan.vbFor(P.blow[key], DISP), ms: 1100 });
+      $(".bl-sub", sc).textContent = `Space Planning - Option 02A | Blown Up ${key}`;
+      $$(".bl-keys span", sc).forEach((b) => b.classList.toggle("on", b.dataset.k === key));
+    },
+    leave() { plan.planOff(); },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

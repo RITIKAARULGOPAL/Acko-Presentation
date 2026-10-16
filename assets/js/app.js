@@ -1,7 +1,30 @@
-/* ACKO · The Loop — SKV's design presentation as one continuous journey (engine forked from the Mitigata presentation).
+/* ACKO · The Loop — the presentation engine (forked from the Mitigata presentation).
    A persistent WORLD (vector map · plan · photographs) lives behind the slides; each slide is a 16:9 page in deck points.
-   Keys: → / PageDown / Space next beat · ← / PageUp previous · O index · N notes · F fullscreen · B blank · L laser. */
+   Keys: → / PageDown / Space next beat · ← / PageUp previous · O index · N notes · F fullscreen · B blank · L laser.
+
+   Every slide is its own file (slides/<id>.html): its section, its <style> and its script. A slide's script registers itself:
+       ACKO.slide("s-id", (K) => ({ enter(_, sc) {…}, step(k, sc) {…}, leave(_, sc) {…} }));
+   K is the kit below (helpers, the world, navigation, the shared layout plan). Nothing here runs until ACKO.start(): the
+   joined deck calls it after all the slides' scripts; a slide opened on its own calls it from assets/js/dev.js. */
 (function () {
+  const FACTORIES = {};
+  let booted = false;
+  const asset = (p) => (window.ASSET_URLS && window.ASSET_URLS[p]) || p;   // an embedded copy in the single file, else the path
+  window.ACKO = {
+    slide(id, factory) { FACTORIES[id] = factory; },
+    start() { if (!booted) { booted = true; boot(); } },
+    asset,
+  };
+
+  function boot() {
+  /* a slide opened on its own: wrap the deck's chrome (assets/js/shell.js) around its section */
+  if (!document.getElementById("stage") && window.ACKO_SHELL) {
+    const secs = Array.from(document.querySelectorAll("section.scene"));
+    const holder = document.createElement("div"); holder.innerHTML = window.ACKO_SHELL;
+    document.body.prepend(...holder.childNodes);
+    const stage = document.getElementById("stage"); secs.forEach((s) => stage.appendChild(s));
+    document.documentElement.classList.add("standalone");
+  }
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -16,6 +39,7 @@
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
   const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
   const raf2 = (fn) => requestAnimationFrame(() => requestAnimationFrame(fn));
+  if (!scenes.length) return;
 
   /* ======================= mode ======================= */
   // each slide has its own mode: data-mode = dark (black) · lavender · grey; otherwise the deck's white pages
@@ -37,7 +61,7 @@
   /* ---------- photographs ---------- */
   const PHOTO = {
     stack: $("#photo-stack"), cur: null,
-    src(key) { return /[./]/.test(key) ? key : `assets/img/${key}.webp`; },
+    src(key) { return asset(/[./]/.test(key) ? key : "assets/img/" + key + ".webp"); },
     // o.kb drifts the frame slowly; o.ar is the image's aspect (cover fit keeps the whole frame filled)
     show(key, o) {
       o = o || {};
@@ -101,7 +125,7 @@
     $$("#topic-mark [data-part]").forEach((el) => (el.onclick = (e) => {
       e.stopPropagation(); if (document.activeElement) document.activeElement.blur();
       if (el.dataset.part === "cover") state.t0 = null;
-      go(firstOf(el.dataset.part), 1);
+      const i = firstOf(el.dataset.part); if (i >= 0) go(i, 1);
     }));
     topicMark.track = track;
   }
@@ -133,6 +157,7 @@
 
   /* ======================= navigation ======================= */
   function go(i, step) {
+    if (i === undefined || i < 0 || Number.isNaN(i)) return;      // a slide that isn't in this deck (e.g. a slide opened on its own)
     i = clamp(i, 0, scenes.length - 1);
     const prev = scenes[state.idx], next = scenes[i];
     if (prev !== next) {
@@ -155,8 +180,9 @@
     $$("[data-only]", sc).forEach((e) => e.classList.toggle("shown", e.dataset.only.split(",").map(Number).includes(state.step)));
     hook(sc, "step", state.step);
     updateChrome();
+    // the address follows the beat; absolute, because a slide opened on its own has a <base> pointing at the project root
     const h = "#" + sc.id + "/" + state.step;
-    if (location.hash !== h) { try { location.replace(h); } catch (e) { /* file:// */ } }
+    if (location.hash !== h) { try { location.replace(location.href.split("#")[0] + h); } catch (e) { /* file:// */ } }
   }
   const steps = (i) => +scenes[i].dataset.steps || 1;
   function next() {
@@ -257,14 +283,15 @@
     else if (["ArrowRight", "ArrowLeft", "PageDown", "PageUp", " ", "Enter", "Backspace", "Home", "End"].includes(e.key)) lightboxOff();
   }, true);
 
-  /* ======================= chapters ======================= */
+  /* ======================= helpers the slides use ======================= */
   const H = {};
-  function hook(sc, ev, arg) { const h = sc && H[sc.id]; if (h && h[ev]) h[ev](arg, sc); }
+  function hook(sc, ev, arg) { const h = sc && H[sc.id]; if (h && h[ev]) { try { h[ev](arg, sc); } catch (e) { console.error(`${sc.id} ${ev}:`, e); } } }
   // a page with no world behind it: the slide is the whole picture
   const plain = () => { world("none"); shade(""); };
   // .rv / .rv-i children come in one after another; restart by removing and re-adding .go
   function reveal(el, delay) { if (!el) return; el.classList.remove("go"); void el.offsetWidth; later(() => el.classList.add("go"), delay || 60); }
   function countUp(el, ms) {
+    if (!el) return;
     const to = +el.dataset.count, dec = +(el.dataset.dec || 0), pre = el.dataset.pre || "", post = el.dataset.post || "";
     const show = (v) => (el.textContent = pre + (dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-IN")) + post);
     if (reduced) return show(to);
@@ -284,455 +311,85 @@
     void path.getBoundingClientRect();
     later(() => { path.style.transition = `stroke-dashoffset ${ms}ms cubic-bezier(.45,.05,.3,1)`; path.style.strokeDashoffset = 0; }, delay || 0);
   }
-
-  /* ---- About SKV (SKV's own deck, unchanged from the Mitigata presentation) ---- */
-  const LOGOS = ("Google,Amazon,Samsung,PepsiCo,adidas,Godrej,Aramco,Shell,Honeywell,Qualcomm,GlobalLogic,KPMG,H&M,Max Healthcare,Amway,SYSTRA,PwC,Levi's," +
-    "McDermott,DLF,DXC Technology,University of Cambridge,M&S,CNH,Perfetti Van Melle,Kia,The Times of India,MetLife,Cadence,Cyril Amarchand Mangaldas,dunnhumby,Airtel," +
-    "MG Motor,Hindustan Times,Concentrix,Spark Minda,Vedanta,British Council,Aon,Fortis,Hero MotoCorp,NTT,Amity University,STL,Macquarie,SRF,BIBA,Synopsys,Adani,ReNew," +
-    "Muthoot Finance,Grant Thornton,Stryker,Target").split(",");
-  const n2 = (i) => String(i + 1).padStart(2, "0");
-  if ($("#skv-logos")) $("#skv-logos").innerHTML = LOGOS.map((n, i) => `<div data-in="${1 + Math.floor(i / 9)}"><img src="assets/img/skv/logo-${n2(i)}.webp" alt="${n.replace(/&/g, "&amp;")}"></div>`).join("");
-  if ($("#skv-caps")) $("#skv-caps").innerHTML = LOGOS.slice(0, 10).map((_, i) => `<div data-in="1" style="background-image:url(assets/img/skv/project-${n2(i)}.webp)"></div>`).join("");
-  // the deck's animated ASCII data-field, redrawn live (About SKV's opening beat)
-  const makeAscii = (cv) => ({
-    cv, on: false, last: 0, color: null, GLYPHS: " .:-=+itl1I/T7M#",
-    start() { if (!this.cv || this.on) return; this.on = true; this.cv.classList.add("on"); this.frame(performance.now()); },
-    stop() { if (!this.cv) return; this.on = false; this.cv.classList.remove("on"); cancelAnimationFrame(this.raf); },
-    frame(now) {
-      if (!this.on) return;
-      this.raf = requestAnimationFrame((t) => this.frame(t));
-      if (now - this.last < 70) return;
-      this.last = now;
-      const cv = this.cv, dpr = Math.min(2, devicePixelRatio || 1), W = cv.clientWidth, Hh = cv.clientHeight;
-      if (!W || !Hh) return;
-      if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(Hh * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(Hh * dpr); }
-      const g = cv.getContext("2d"), fs = 12, cw = fs * 0.62, ch = fs * 1.18, t = reduced ? 0 : now / 1000;
-      if (!this.color) this.color = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#5222d0";
-      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, Hh);
-      g.font = `400 ${fs}px "Lexend", sans-serif`; g.fillStyle = this.color; g.textBaseline = "top";
-      const cols = Math.ceil(W / cw), rows = Math.ceil(Hh / ch), G = this.GLYPHS, n = G.length - 1;
-      for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
-        const a = Math.sin(x * 0.11 + t * 0.7) + Math.sin(y * 0.23 - t * 0.5) + Math.sin((x + y * 1.7) * 0.045 + t * 0.35);
-        const cloud = Math.sin(x * 0.035 - t * 0.12) * Math.cos(y * 0.09 + t * 0.1);
-        const v = Math.max(0, Math.min(1, ((a / 3 + 1) / 2) * 0.9 + cloud * 0.55 - 0.08));
-        const c = G[Math.floor(Math.pow(v, 1.35) * n)];
-        if (c === " ") continue;
-        g.globalAlpha = 0.2 + 0.8 * v; g.fillText(c, x * cw, y * ch);
-      }
-      g.globalAlpha = 1;
-    },
-  });
-  const ASCII = makeAscii($("#skv-ascii"));
-  H["s-skv"] = {
-    enter() { plain(); },
-    step(k) {
-      const board = $(`#s-skv .skv-board[data-only="${k}"]`), seen = {};
-      if (!board) return;
-      const delay = (g) => 80 + g * 260;
-      $$("[data-in]", board).forEach((e) => {
-        e.classList.remove("in");
-        const g = +e.dataset.in, n = (seen[g] = (seen[g] || 0) + 1) - 1;
-        later(() => e.classList.add("in"), delay(g) + n * (k === 6 ? 26 : 70));
-      });
-      $$("[data-count]", board).forEach((e) => later(() => countUp(e, 1500), delay(+e.closest("[data-in]").dataset.in)));
-      if (k === 1) ASCII.start(); else ASCII.stop();
-    },
-    leave() { ASCII.stop(); },
-  };
-
-  /* ---- cover (slide 1): the facts come up; a thin Möbius line draws itself over the stairs ---- */
-  // the edge of a Möbius strip (one curve, twice round), seen in perspective
-  function mobiusEdge(R, w, tilt, turn) {
-    const pts = [];
-    for (let i = 0; i <= 720; i++) {
-      const u = (i / 720) * 4 * Math.PI, r = R + w * Math.cos(u / 2);
-      let x = r * Math.cos(u + turn), y = r * Math.sin(u + turn), z = w * Math.sin(u / 2);
-      const y2 = y * Math.cos(tilt) - z * Math.sin(tilt), z2 = y * Math.sin(tilt) + z * Math.cos(tilt), k = 260 / (260 + z2 * 2.2);
-      pts.push([(x * k).toFixed(1), (y2 * k).toFixed(1)]);
-    }
-    return "M" + pts.map((q) => q.join(" ")).join("L");
-  }
-  H["s-cover"] = {
-    enter(_, sc) {
-      plain(); reveal($(".page.rv", sc), 200);
-      const p = $(".cv-mobius path", sc);
-      if (p && !p.getAttribute("d")) p.setAttribute("d", mobiusEdge(62, 22, 1.08, 0.35));
-      if (p) { p.style.animation = "none"; p.style.setProperty("--len", Math.ceil(p.getTotalLength())); void p.getBoundingClientRect(); p.style.animation = ""; }
-    },
-  };
-  /* ---- team (slide 2) ---- */
-  H["s-team"] = { enter(_, sc) { plain(); reveal($(".tm-people", sc), 150); } };
-  /* ---- workplace aspiration (slide 3): the three tiles rise in, then the handwritten line ---- */
-  H["s-aspiration"] = { enter(_, sc) { plain(); reveal($(".page", sc), 100); } };
-  /* ---- what defines ACKO (slide 4): the five values open like shutters; then, slowly, each strip turns to its second picture
-     (the deck's click swaps the first) ---- */
-  H["s-acko"] = {
-    enter(_, sc) {
-      plain(); const strips = $$(".val-strip", sc); strips.forEach((s) => s.classList.remove("swap"));
-      reveal($(".page", sc), 100);
-      strips.forEach((s, i) => later(() => s.classList.add("swap"), 4200 + i * 900));
-    },
-  };
-  /* ---- the journey (slide 5): ① why an insurance, over five faces of protection; ② we respect the journey — the timeline
-     draws along its line, the milestones come up, then the founder's words ---- */
-  H["s-journey"] = {
-    enter() { plain(); },
-    step(k, sc) {
-      clearTimers();
-      sc.classList.toggle("b2", k === 2);
-      if (k === 1) { reveal($(".jr-collage", sc), 200); return; }
-      const ms = $$(".jr-ms", sc), line = $(".jr-line", sc);
-      line.classList.remove("go"); ms.forEach((m) => m.classList.remove("go"));
-      later(() => line.classList.add("go"), 500);
-      ms.forEach((m, i) => later(() => m.classList.add("go"), 700 + i * 230));
-      typeWords($(".jr-quote q", sc), 90, 900 + ms.length * 230);
-    },
-  };
-  /* ---- the challenge → the solution (slides 6 → 7) ---- */
-  // the people of two offices: two clusters that drift towards each other (1) and then become one loop (2)
-  const CH = { n: 64 };
-  function chDots(svg) {
-    if (svg.children.length) return;
-    let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-    const out = [];
-    for (let i = 0; i < CH.n; i++) {
-      const a = i < CH.n / 2 ? [330, 260] : [1530, 250], ang = rnd() * Math.PI * 2, rr = Math.sqrt(rnd()) * 130;
-      const from = [a[0] + Math.cos(ang) * rr, a[1] + Math.sin(ang) * rr * 0.62];
-      const near = [from[0] + (i < CH.n / 2 ? 260 : -260), from[1]];
-      // on the loop: a figure of eight across the middle of the page
-      const t = (i / CH.n) * Math.PI * 2, loop = [960 + 520 * Math.sin(t), 270 + 150 * Math.sin(t) * Math.cos(t) * 1.6];
-      out.push(`<circle r="${(5 + rnd() * 4).toFixed(1)}" cx="0" cy="0" data-a="${from.map(Math.round)}" data-b="${near.map(Math.round)}" data-c="${loop.map(Math.round)}" style="transform:translate(${from[0]}px,${from[1]}px)"/>`);
-    }
-    svg.innerHTML = `<g class="ch-people">${out.join("")}</g>` +
-      `<text x="330" y="470" text-anchor="middle" class="ch-l a">TWO EXISTING LOCATIONS</text><text x="1530" y="470" text-anchor="middle" class="ch-l a"></text>` +
-      `<text x="960" y="520" text-anchor="middle" class="ch-l b">ONE PLACE</text>`;
-  }
-  function chMove(svg, key, ms) {
-    $$("circle", svg).forEach((c, i) => {
-      const [x, y] = c.dataset[key].split(",").map(Number);
-      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${Math.round((i % 16) * 25)}ms` : "none";
-      c.style.transform = `translate(${x}px,${y}px)`;
-    });
-  }
-  H["s-challenge"] = {
-    enter(_, sc) { plain(); chDots($("#ch-dots", sc)); },
-    step(k, sc) {
-      const pg = $(".page", sc), svg = $("#ch-dots", sc);
-      pg.classList.toggle("solved", k === 2);
-      if (k === 1) { chMove(svg, "a", 0); raf2(() => chMove(svg, "b", 2800)); }
-      else chMove(svg, "c", 2400);
-      reveal($(".ch-words", sc), 100);
-    },
-  };
-  /* ---- memories (slide 8): a dotted path across the campus; the six moments come up along it ---- */
-  H["s-memories"] = {
-    enter(_, sc) {
-      plain();
-      const stops = $$(".mem-stop", sc); stops.forEach((s) => s.classList.remove("on"));
-      const path = $(".mem-path path", sc); drawPath(path, 5200, 400);
-      stops.forEach((s, i) => later(() => s.classList.add("on"), 700 + i * 820));
-      reveal($(".mem-h", sc), 100);
-      $$(".mem-h span", sc).forEach((e, i) => e.style.setProperty("--i", i * 4));
-    },
-  };
-  /* ---- what if (slide 9): the question, word by word ---- */
-  H["s-whatif"] = { enter(_, sc) { plain(); typeWords($(".wi-q", sc), 120, 300); } };
-
-  /* ---- the Möbius (slide 10): a live white strip, softly lit, turning slowly — Acko's own mark, one continuous surface ---- */
-  const MOB = { r: null };
-  function mobius(host) {
-    if (MOB.r) { host.appendChild(MOB.r.domElement); return; }
-    const THREE = window.THREE; if (!THREE) return;
-    const r = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    r.setPixelRatio(Math.min(2, devicePixelRatio || 1)); r.setClearColor(0x000000, 0);
-    host.appendChild(r.domElement);
-    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
-    cam.position.set(0, 6.6, 5.6); cam.lookAt(0, -0.05, 0.1);
-    // the strip: u around the loop, v across the band (a flat, wide ribbon as in the deck's render)
-    const NU = 360, NV = 24, R = 1.95, Wd = 0.52, T = 0.06;
-    const pos = [], idx = [];
-    const pt = (u, v, off) => {
-      const c = Math.cos(u / 2), s = Math.sin(u / 2);
-      const x = (R + v * c) * Math.cos(u), z = (R + v * c) * Math.sin(u), y = v * s;
-      // the surface normal, for the thickness: d/du × d/dv
-      const du = [-(R + v * c) * Math.sin(u) - 0.5 * v * s * Math.cos(u), 0.5 * v * c, (R + v * c) * Math.cos(u) - 0.5 * v * s * Math.sin(u)];
-      const dv = [c * Math.cos(u), s, c * Math.sin(u)];
-      let n = [du[1] * dv[2] - du[2] * dv[1], du[2] * dv[0] - du[0] * dv[2], du[0] * dv[1] - du[1] * dv[0]];
-      const l = Math.hypot(...n); n = n.map((q) => q / l);
-      return [x + n[0] * off, y + n[1] * off, z + n[2] * off];
-    };
-    for (let side = 0; side < 2; side++) {
-      const base = pos.length / 3, off = side ? -T / 2 : T / 2;
-      for (let i = 0; i <= NU; i++) for (let j = 0; j <= NV; j++) pos.push(...pt((i / NU) * Math.PI * 2, -Wd + (2 * Wd * j) / NV, off));
-      for (let i = 0; i < NU; i++) for (let j = 0; j < NV; j++) {
-        const a = base + i * (NV + 1) + j, b = a + NV + 1;
-        if (side) idx.push(a, a + 1, b, b, a + 1, b + 1); else idx.push(a, b, a + 1, b, b + 1, a + 1);
-      }
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
-    const mat = new THREE.MeshStandardMaterial({ color: 0xe6e1f0, roughness: 0.55, metalness: 0.0, side: THREE.DoubleSide });
-    const mesh = new THREE.Mesh(g, mat); scene.add(mesh);
-    // its one edge (twice round), drawn as a fine lavender line so the strip reads on the white page
-    const ep = [];
-    for (let i = 0; i <= 1440; i++) ep.push(...pt((i / 1440) * Math.PI * 4, Wd, 0));
-    const eg = new THREE.BufferGeometry(); eg.setAttribute("position", new THREE.Float32BufferAttribute(ep, 3));
-    mesh.add(new THREE.Line(eg, new THREE.LineBasicMaterial({ color: 0x8f78dc, transparent: true, opacity: 0.85 })));
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x5a5175, 0.7));
-    const key = new THREE.DirectionalLight(0xffffff, 0.85); key.position.set(-5, 6, 4); scene.add(key);
-    const fill = new THREE.DirectionalLight(0xffffff, 0.25); fill.position.set(5, 2, 6); scene.add(fill);
-    const rim = new THREE.DirectionalLight(0xc9b3f3, 0.7); rim.position.set(4, -3, -5); scene.add(rim);
-    MOB.r = r; MOB.scene = scene; MOB.cam = cam; MOB.mesh = mesh;
-  }
-  function mobiusRun(host) {
-    const r = MOB.r; if (!r) return;
-    const t0 = performance.now();
-    const loop = (now) => {
-      if (document.body.dataset.scene !== "s-mobius") return;
-      const W = host.clientWidth, Hh = host.clientHeight;
-      if (W && Hh && (r.domElement.width !== Math.round(W * r.getPixelRatio()) || r.domElement.height !== Math.round(Hh * r.getPixelRatio()))) { r.setSize(W, Hh, false); MOB.cam.aspect = W / Hh; MOB.cam.updateProjectionMatrix(); }
-      const t = reduced ? 0 : (now - t0) / 1000;
-      MOB.mesh.rotation.y = -0.6 + 0.28 * Math.sin(t * 0.18);   // a slow sway, so the copy always sits in the loop
-      MOB.mesh.rotation.x = 0.06 * Math.sin(t * 0.4);
-      r.render(MOB.scene, MOB.cam);
-      MOB.raf = requestAnimationFrame(loop);
-    };
-    cancelAnimationFrame(MOB.raf); MOB.raf = requestAnimationFrame(loop);
-  }
-  H["s-mobius"] = {
-    enter(_, sc) { plain(); const host = $(".mb-stage", sc); mobius(host); mobiusRun(host); reveal($(".mb-copy", sc), 600); },
-    leave() { cancelAnimationFrame(MOB.raf); },
-  };
-
-  /* ---- the Loop (slides 11–12): ① welcome to the Loop — people and trees along the line; ② the lavender ribbon draws from left
-     to right and the seven stops come up as it reaches them, each with what it should feel like ---- */
-  // the seven stops of slide 12: [name, words, dot x/y, label x/y] in % of the page
-  const LOOP_STOPS = [
-    ["Arrival", "I feel welcomed", [2.4, 38.9], [6.1, 26]], ["Cafe", "Hey We finally meet !", [17, 46.8], [14, 35.4]],
-    ["Board Room", "This is my big moment", [40.3, 43.9], [46.3, 24.5]], ["Meeting Rooms", "My Impact", [55.7, 45.7], [62.7, 23.2]],
-    ["Collab", "Wow, worth the commute", [76.1, 45.4], [79.3, 23.2]], ["Work", "These are my folks!", [96.8, 46.8], [93.6, 30.5]],
-    ["Wellness", "They thought of me too!", [78.4, 70], [90.2, 66.2]],
-  ];
-  function loopStops(sc) {
-    const host = $(".lp-stops", sc); if (host.children.length) return;
-    host.innerHTML = LOOP_STOPS.map(([n, q, d, l]) => `<div class="lp-stop" style="left:${d[0]}%;top:${d[1]}%"><i></i>` +
-      `<div class="lab" style="left:calc(${l[0] - d[0]} * var(--pw) / 100);top:calc(${l[1] - d[1]} * var(--ph) / 100)"><b>${n}</b><q>${q}</q></div></div>`).join("");
-    // a dotted leader from each label to its dot
-    $(".lp-leads", sc).innerHTML = LOOP_STOPS.map(([, , d, l], i) => {
-      const x1 = l[0] * 19.2, y1 = (l[1] + (l[1] < d[1] ? 5 : -0.5)) * 10.8, x2 = d[0] * 19.2, y2 = d[1] * 10.8;
-      return `<path data-k="${i}" d="M${x1} ${y1}Q${x1} ${(y1 + y2) / 2} ${x2} ${y2}"/>`;
-    }).join("");
-  }
-  H["s-loop"] = {
-    enter(_, sc) { plain(); loopStops(sc); reveal($(".lp-cuts", sc), 100); },
-    step(k, sc) {
-      clearTimers();
-      const rib = $(".lp-ribbon", sc), stops = $$(".lp-stop", sc);
-      $$(".lp-leads path", sc).forEach((l) => l.classList.remove("on"));
-      if (k === 1) { rib.style.setProperty("--rv", "0%"); stops.forEach((s) => s.classList.remove("on")); return; }
-      const t0 = performance.now(), MS = reduced ? 1 : 4200;
-      stops.forEach((s) => s.classList.remove("on"));
-      const run = (now) => {
-        if (document.body.dataset.scene !== "s-loop" || state.step !== 2) return;
-        const e = Math.min(1, (now - t0) / MS), v = (1 - Math.pow(1 - e, 2)) * 106;
-        rib.style.setProperty("--rv", v + "%");
-        stops.forEach((s, i) => { if (parseFloat(s.style.left) <= v - 2 && !s.classList.contains("on")) { s.classList.add("on"); const l = $(`.lp-leads [data-k="${i}"]`, sc); if (l) l.classList.add("on"); } });
-        if (e < 1) requestAnimationFrame(run);
-      };
-      requestAnimationFrame(run);
-    },
-  };
-  /* ---- the site (new, short): Koramangala as a vector map (Overture/OSM, from the earlier Acko analysis); it closes in on
-     Regalium, then turns 11.5° so the building lines up with the plans ---- */
-  const SV = { built: false, vb: [-760, -590, 1520, 1180], rot: 0, raf: 0 };
-  function siteMap() {
-    if (SV.built || !window.ACKO_SITE) return;
-    const S = window.ACKO_SITE, svg = $("#vmap");
-    const roads = S.roads.slice().sort((a, b) => b.rank - a.rank);
-    const land = S.land ? Object.entries(S.land).map(([k, d]) => `<path class="vm-land ${k}" d="${d}"/>`).join("") : "";
-    const water = (S.water || []).map((w) => `<path class="vm-water" d="${w.d}"/>`).join("");
-    const rail = (S.rail || []).map((r) => `<path class="vm-rail" d="${r.d}"/>`).join("");
-    const hosur = S.hosur.map((seg) => `<path class="vm-hosur" d="M${seg.map((q) => q.join(" ")).join("L")}"/>`).join("");
-    const marks = S.marks.slice(0, 5).map((m) => `<g class="vm-mark" transform="translate(${m.x} ${m.y})"><circle r="6"/><text x="10" y="4">${m.n}</text></g>`).join("");
-    const labels = S.labels.map((l) => `<text class="vm-lab" transform="translate(${l.x} ${l.y}) rotate(${l.a})" text-anchor="middle">${l.t}</text>`).join("");
-    svg.setAttribute("viewBox", SV.vb.join(" ")); svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
-    svg.innerHTML = `<g id="vm-root">${land}${water}` +
-      roads.map((r) => `<path class="vm-road c" d="${r.d}" style="stroke-width:${r.w + 2.4}"/>`).join("") +
-      roads.map((r) => `<path class="vm-road" d="${r.d}" style="stroke-width:${r.w}"/>`).join("") + rail + hosur +
-      `<g class="vm-bld">${S.buildings.map((d) => `<path d="${d}"/>`).join("")}</g>` +
-      `<path class="vm-foot" d="${S.footprint.d}"/><path class="vm-plate" d="${S.onSite.plate}"/>` +
-      `<circle class="vm-gate" cx="${S.gate[0]}" cy="${S.gate[1]}" r="7"/>${labels}${marks}` +
-      `<g class="vm-pin" transform="translate(0 10)"><text y="-62" text-anchor="middle">Regalium · 3rd floor</text></g></g>`;
-    $("#map-credit").textContent = S.attribution || "© OpenStreetMap contributors, Overture Maps";
-    $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"} walk</span></li>`).join("");
-    SV.built = true;
-  }
-  function siteView(vb, rot, ms) {
-    cancelAnimationFrame(SV.raf);
-    const svg = $("#vmap"), root = $("#vm-root"), from = SV.vb.slice(), r0 = SV.rot, t0 = performance.now();
-    const set = (v, r) => { SV.vb = v; SV.rot = r; svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); root.setAttribute("transform", `rotate(${r.toFixed(2)} 0 10)`); };
-    if (!ms || reduced) return set(vb, rot);
-    const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      set(from.map((a, i) => a + (vb[i] - a) * e), r0 + (rot - r0) * e); if (k < 1) SV.raf = requestAnimationFrame(run); };
-    SV.raf = requestAnimationFrame(run);
-  }
-  H["s-site"] = {
-    enter(_, sc) {
-      siteMap(); world("map"); shade("left");
-      // the whole neighbourhood, then closer, with Regalium right of the copy; then the turn that lines it up with the plans
-      siteView([-1060, -590, 2100, 1180], 0, 0);
-      later(() => siteView([-860, -360, 1300, 731], 0, 3000), 500);
-      later(() => siteView([-713, -315, 1150, 647], -(window.ACKO_SITE ? window.ACKO_SITE.grid : 11.5), 1800), 3700);
-      reveal($(".si-copy", sc), 300);
-      $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 900 + i * 150));
-    },
-    leave() { cancelAnimationFrame(SV.raf); },
-  };
-
-  /* ---- the floor (new, short): the bare plate before any furniture. 1 the sun runs across an equinox day, its patches falling
-     through the glass, then the 6 m daylight band; 2 fire first: 15/30/45 m rings at the five stairs, then the eight measured
-     exit paths, then the compartment line ---- */
-  const FL = { built: false };
-  function floorSvg(svg) {
-    if (FL.built || !window.ACKO_FLOOR) return;
-    const F = window.ACKO_FLOOR, P = (a) => "M" + a.map((q) => q.join(" ")).join("L") + "Z", L = (a) => "M" + a.map((q) => q.join(" ")).join("L");
-    const plate = P(F.plate);
-    svg.innerHTML = `<defs><clipPath id="fl-clip"><path d="${plate}"/></clipPath></defs>` +
-      `<path class="fl-plate" d="${plate}"/>` +
-      `<g clip-path="url(#fl-clip)"><path class="fl-band" d="${plate}"/><g class="fl-sun"></g></g>` +
-      F.terraces.map((t) => `<path class="fl-terr" d="${P(t)}"/>`).join("") +
-      F.cores.map((c) => `<path class="fl-core" d="${P(c)}"/>`).join("") +
-      F.cols.map((c) => `<rect class="fl-col" x="${c[0] - c[2] / 2}" y="${c[1] - c[3] / 2}" width="${c[2]}" height="${c[3]}"/>`).join("") +
-      F.stairs.map((s) => `<g class="fl-stair"><rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}"/><text x="${s.x + s.w / 2}" y="${s.y + s.h / 2 + 22}">${s.id}</text></g>`).join("") +
-      `<g class="fl-rings">${F.stairs.map((s) => [900, 600, 300].map((r) => `<circle cx="${s.x + s.w / 2}" cy="${s.y + s.h / 2}" r="${r}"/>`).join("")).join("")}</g>` +
-      `<g class="fl-routes">${F.routes.map((r) => `<path d="${L(r.pts)}"/>`).join("")}</g>` +
-      `<g class="fl-rlab">${F.routes.map((r) => { const q = r.pts[0]; return `<text x="${q[0]}" y="${q[1] - 18}">${Math.round(r.m)} m</text>`; }).join("")}</g>` +
-      `<g class="fl-comp">${(F.comp || []).map((c) => `<path d="${L(c)}"/>`).join("")}</g>` +
-      `<g class="fl-entry">${(F.entries || []).map((e) => `<path d="${P(e)}"/>`).join("")}</g>` +
-      `<g class="fl-sunpos"><circle r="46"/></g><text class="fl-n" x="4960" y="-150">N</text>`;
-    FL.built = true;
-  }
-  function sunRun(svg, day) {
-    const F = window.ACKO_FLOOR, frames = F.sun.find((d) => d.k === day) || F.sun[0], g = $(".fl-sun", svg), pos = $(".fl-sunpos", svg);
-    const cx = 2460, cy = 380, R = 2600, up = 11.5;
-    let i = 0;
-    $("#fl-d").textContent = frames.label;
-    const show = () => {
-      const f = frames.frames[i];
-      g.innerHTML = f.p.map((d) => `<path d="${d}"/>`).join("");
-      $("#fl-t").textContent = f.t;
-      const a = ((f.az - up) * Math.PI) / 180, x = cx + R * Math.sin(a), y = cy - R * 0.36 * Math.cos(a);
-      pos.setAttribute("transform", `translate(${x.toFixed(0)} ${y.toFixed(0)})`); pos.style.opacity = f.alt > 0 ? 1 : 0;
-      i++;
-      if (i < frames.frames.length) later(show, 300); else later(() => svg.classList.add("band"), 400);
-    };
-    show();
-  }
-  H["s-floor"] = {
-    enter(_, sc) { plain(); floorSvg($("#fl-svg", sc)); },
-    step(k, sc) {
-      clearTimers();
-      const svg = $("#fl-svg", sc);
-      svg.classList.remove("band", "fire1", "fire2", "fire3");
-      if (k === 1) { svg.classList.add("sunny"); sunRun(svg, "mar"); $$("[data-only='1'] [data-count]", sc).forEach((e) => countUp(e, 1500)); return; }
-      svg.classList.remove("sunny"); $(".fl-sun", svg).innerHTML = "";
-      svg.classList.add("fire1");
-      later(() => { svg.classList.add("fire2"); $$(".fl-routes path", svg).forEach((q, i) => drawPath(q, 1400, i * 160)); }, 1500);
-      later(() => svg.classList.add("fire3"), 3600);
-    },
-  };
-
-  /* ---- what's our challenge (slide 14), on the deck's axo of the bare floor: ① homogeneity — one uniform grid of desks floods
-     the plate; ② disorientation — a desk at the far end is a long walk from the café and the arrivals; ③ distance — the route
-     the deck draws, end to end, 245 m ---- */
   const inPoly = (p, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j];
     if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < ((b[0] - a[0]) * (p[1] - a[1])) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
-  function clDesks(g) {
-    if (g.childElementCount) return;
-    const A = [39, 1029], U = [1359, -1014], V = [206, 130], core = [[300, 842], [1095, 241], [1190, 303], [399, 916]];
-    const terr = [[[556, 856], [628, 801], [680, 841], [608, 896]], [[1079, 466], [1154, 407], [1206, 448], [1130, 505]]];
-    const out = [], NU = 104, NV = 8;
-    for (let i = 0; i <= NU; i++) for (let j = 0; j < NV; j++) {
-      const ii = i / NU, jj = (j + 0.5) / NV, x = A[0] + U[0] * ii + V[0] * jj, y = A[1] + U[1] * ii + V[1] * jj;
-      if (inPoly([x, y], core) || terr.some((t) => inPoly([x, y], t))) continue;
-      const a = 0.62 / NU, b = 0.36 / NV;
-      out.push(`<path style="--d:${Math.round(ii * 1400)}ms" d="M${x.toFixed(1)} ${y.toFixed(1)}l${(U[0] * a).toFixed(1)} ${(U[1] * a).toFixed(1)}l${(V[0] * b).toFixed(1)} ${(V[1] * b).toFixed(1)}l${(-U[0] * a).toFixed(1)} ${(-U[1] * a).toFixed(1)}Z"/>`);
-    }
-    g.innerHTML = out.join("");
+
+  /* ======================= the layout as one plan (deck slides 53–57) =======================
+     The deck's four plan tiles as one image, with the neighbourhood outlines, the arrival zones, the fire compartment line and
+     the entrances as vectors (data/deck-plan.js). It lives in the world, so the layout flies into its blow-ups without a cut.
+     Wheel zooms on the cursor, drag pans, a double-click returns to the beat's view. Used by s-layout and s-blowup. */
+  const NB = { "#B45F06": "01", "#274E13": "02", "#45818E": "03", "#4A86E8": "04", "#9900FF": "05", "#FF00FF": "06", "#0000FF": "arrival" };
+  const DP = { svg: null, vb: [0, 0, 1920, 1080], home: [0, 0, 1920, 1080], raf: 0 };
+  function deckPlan() {
+    if (DP.svg) return DP;
+    const P = window.DECK_PLAN, host = $("#world-plan"), b = P.img.box;
+    const pts = (a) => a.map((q) => q.join(" ")).join(" ");
+    const lab = P.labels.reduce((m, l) => ((m[l.n] = l), m), {});
+    host.innerHTML = `<svg class="dplan pannable" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+      <image href="${asset(P.img.src)}" x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" preserveAspectRatio="none"/>
+      <g class="dp-nb">${P.nb.map((n) => `<polygon data-nb="${NB[n.c.toUpperCase()] || ""}" points="${pts(n.pts)}" style="--c:${n.c}"/>`).join("")}</g>
+      <g class="dp-fire">${P.fire.map((f) => `<line x1="${f[0][0]}" y1="${f[0][1]}" x2="${f[1][0]}" y2="${f[1][1]}"/>`).join("")}</g>
+      <g class="dp-entry">${P.entry.map((e) => `<path d="M${e[0] - 6} ${e[1] - 4}L${e[0] + 6} ${e[1] - 4}L${e[0]} ${e[1] + 6}Z"/>`).join("")}</g>
+      <g class="dp-blow">${Object.entries(P.blow).map(([k, r]) => `<g data-b="${k}"><rect x="${r[0]}" y="${r[1] - 6}" width="${r[2] - r[0]}" height="${r[3] - r[1] + 12}"/><text x="${(r[0] + r[2]) / 2}" y="${r[3] + 26}">Blown Up ${k}</text></g>`).join("")}</g>
+      <g class="dp-lab">${["01", "02", "03", "04", "05", "06"].map((n) => { const l = lab[n]; if (!l) return ""; const x = l.at[0], y = l.at[1] + l.wh[1] * 0.78;
+        return `<text data-nb="${n}" x="${x}" y="${y}"><tspan class="n">${n}</tspan><tspan class="s" dx="6" dy="-14">${l.seats}</tspan></text>`; }).join("")}</g>
+    </svg>`;
+    DP.svg = $("svg", host);
+    const toSvg = (e) => { const r = DP.svg.getBoundingClientRect(), s = Math.max(DP.vb[2] / r.width, DP.vb[3] / r.height);
+      const ox = (r.width - DP.vb[2] / s) / 2, oy = (r.height - DP.vb[3] / s) / 2; return [DP.vb[0] + (e.clientX - r.left - ox) * s, DP.vb[1] + (e.clientY - r.top - oy) * s]; };
+    DP.svg.addEventListener("wheel", (e) => {
+      if (!document.body.classList.contains("dp-on")) return;
+      e.preventDefault(); cancelAnimationFrame(DP.raf);
+      const k = Math.exp(e.deltaY * 0.0015), [x, y] = toSvg(e), v = DP.vb;
+      const w = clamp(v[2] * k, 160, 1920 * 1.2), h = (w * v[3]) / v[2], f = w / v[2];
+      setVb([x - (x - v[0]) * f, y - (y - v[1]) * f, w, h]);
+    }, { passive: false });
+    let drag = null;
+    DP.svg.addEventListener("pointerdown", (e) => { if (e.button !== 0) return; drag = { x0: e.clientX, y0: e.clientY, vb: DP.vb.slice() }; DP.svg.setPointerCapture(e.pointerId); cancelAnimationFrame(DP.raf); });
+    DP.svg.addEventListener("pointermove", (e) => { if (!drag) return; const r = DP.svg.getBoundingClientRect(), s = Math.max(drag.vb[2] / r.width, drag.vb[3] / r.height);
+      setVb([drag.vb[0] - (e.clientX - drag.x0) * s, drag.vb[1] - (e.clientY - drag.y0) * s, drag.vb[2], drag.vb[3]]); });
+    DP.svg.addEventListener("pointerup", () => (drag = null));
+    DP.svg.addEventListener("dblclick", () => fitVb(DP.home, 700));
+    return DP;
   }
-  H["s-challenges"] = {
-    enter(_, sc) { plain(); clDesks($(".cl-desks", sc)); },
-    step(k, sc) {
-      const svg = $(".cl-svg", sc);
-      ["b1", "b2", "b3"].forEach((c, i) => svg.classList.toggle(c, k === i + 1));
-      if (k === 3) { drawPath($(".cl-route", sc), 3200, 300); later(() => countUp($(".cl-len [data-count]", sc), 2600), 500); }
-      if (k === 2) drawPath($(".cl-walk", sc), 2200, 400);
-    },
-  };
-  /* ---- campus strategy (slide 13): the deck's animated axo of the floor (replaced by the DXF's axo when it arrives) ---- */
-  H["s-strategy"] = { enter(_, sc) { plain(); reveal($(".page", sc), 100); } };
-
-  /* ---- thank you: the Appendix and About SKV from here ---- */
-  H["s-thanks"] = {
-    enter(_, sc) {
-      plain(); reveal($(".page", sc), 100);
-      $("#to-appendix").onclick = () => go(trackIdx("appendix")[0], 1);
-      $("#to-skv").onclick = () => go(sceneIx("s-skv"), 1);
-    },
-  };
-
-  /* ---- the schematic axonometrics (slides 58–60): west, middle, east; the leaders draw out to their spaces ---- */
-  H["s-axo"] = {
-    enter() { plain(); },
-    step(k, sc) { $$(".ax-keys span", sc).forEach((b) => b.classList.toggle("on", +b.dataset.k === k)); },
-  };
-
-  /* ---- the occupancy chart (slide 61): the rows come in one after another; shortfalls in maroon, more than asked in purple ---- */
-  H["s-occupancy"] = {
-    enter(_, sc) {
-      plain();
-      const rows = $$(".oc tbody tr", sc); rows.forEach((r) => r.classList.remove("in"));
-      rows.forEach((r, i) => later(() => { r.classList.add("in"); $$("[data-count]", r).forEach((e) => countUp(e, 700)); }, 200 + i * 70));
-      reveal($(".page", sc), 100);
-      later(() => countUp($(".oc-big [data-count]", sc), 1600), 400 + rows.length * 70);
-    },
-  };
-
-  /* ---- the value-addition pages and the typologies (deck 15, 46–48, 52): pictures, then words, one after another ---- */
-  $$(".scene.vpage").forEach((sc) => {
-    H[sc.id] = H[sc.id] || {
-      enter() {
-        plain(); reveal($(".page", sc), 80);
-        $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 1100 + i * 120));
-      },
-    };
-  });
-
-  /* ---- a deck page as it is, until its slide is rebuilt ---- */
-  $$(".scene.deck").forEach((sc) => { if (!H[sc.id]) H[sc.id] = { enter() { plain(); } }; });
+  function setVb(v) { DP.vb = v; DP.svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); }
+  function fitVb(v, ms) {
+    cancelAnimationFrame(DP.raf);
+    const from = DP.vb.slice(), t0 = performance.now();
+    if (!ms || reduced) return setVb(v);
+    const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      setVb(from.map((a, i) => a + (v[i] - a) * e)); if (k < 1) DP.raf = requestAnimationFrame(run); };
+    DP.raf = requestAnimationFrame(run);
+  }
+  // the viewBox that shows box (frame px) inside the display rect (frame px)
+  function vbFor(box, disp) {
+    const bw = box[2] - box[0], bh = box[3] - box[1], dw = disp[2] - disp[0], dh = disp[3] - disp[1], s = Math.min(dw / bw, dh / bh);
+    const cx = (box[0] + box[2]) / 2, cy = (box[1] + box[3]) / 2, dcx = (disp[0] + disp[2]) / 2, dcy = (disp[1] + disp[3]) / 2;
+    return [cx - dcx / s, cy - dcy / s, 1920 / s, 1080 / s];
+  }
+  function planOn(sc, opts) {
+    deckPlan(); world("plan"); shade("");
+    document.body.classList.add("dp-on");
+    const svg = DP.svg;
+    ["nb", "fire", "blow", "lab", "entry"].forEach((k) => svg.classList.toggle("show-" + k, !!opts[k]));
+    DP.home = opts.view; fitVb(opts.view, opts.ms === undefined ? 900 : opts.ms);
+  }
+  function planOff() { document.body.classList.remove("dp-on"); if (DP.svg) DP.svg.classList.remove("show-nb", "show-fire", "show-blow", "show-lab", "show-entry"); }
+  // a list of [data-nb] rows: hover one to pick out its outline on the plan
+  function nbHover(list) {
+    $$("[data-nb]", list).forEach((row) => {
+      row.onmouseenter = () => { DP.svg.classList.add("focus"); $$(`.dp-nb [data-nb="${row.dataset.nb}"], .dp-lab [data-nb="${row.dataset.nb}"]`, DP.svg).forEach((p) => p.classList.add("hi")); };
+      row.onmouseleave = () => { DP.svg.classList.remove("focus"); $$(".hi", DP.svg).forEach((p) => p.classList.remove("hi")); };
+    });
+  }
 
   /* ======================= the walk: every space, OP 01 then OP 02 =======================
-     One slide per space (s-w-*); its beats are its renders. The render fills the window with a slow drift; the name block,
-     the Loop's words for the space, the OP tag and the keyplan (the deck's plan with its maroon camera mark) sit on it. */
-  const WALK = {
-    "s-w-board": { n: "State Room", sub: "Boardroom · 32 pax", q: "This is my big moment", r: ["r-board-op1", "r-board-op2"], kp: [24, 25] },
-    "s-w-dept": { n: "Departmental Room", sub: "20 pax meeting room", q: "My impact", r: ["r-dept-op1", "r-dept-op2"], kp: [26, 27] },
-    "s-w-sprint": { n: "Quick Sprint Room", sub: "4 pax meeting room", q: "My impact", r: ["r-sprint-op1", "r-sprint-op2"], kp: [28, 29] },
-    "s-w-arena": { n: "Work Arena", sub: "Neighbourhood", q: "These are my folks!", r: ["r-arena-op1", "r-arena-op2"], kp: [30, 31] },
-    "s-w-arena2a": { n: "Work Arena", sub: "Neighbourhood · Option 2A", q: "These are my folks!", r: ["r-arena2a-1", "r-arena2a-2"], kp: [32, 33], tags: ["View 1", "View 2"] },
-    "s-w-library": { n: "Work Arena", sub: "Library", q: "These are my folks!", r: ["r-library"], kp: [34] },
-    "s-w-garden": { n: "The Acker Garden", sub: "Work arena", q: "Wow, worth the commute", r: ["r-garden-op1", "r-garden-op2"], kp: [35, 36] },
-    "s-w-exec": { n: "Executive Room", sub: "Executive corner cabin", r: ["r-exec"], kp: [37] },
-    "s-w-cafe1": { n: "Cafe", sub: "View 1", q: "Hey, we finally meet!", r: ["r-cafe1-op1", "r-cafe1-op2"], kp: [38, 40] },
-    "s-w-cafe2": { n: "Cafe", sub: "View 2", q: "Hey, we finally meet!", r: ["r-cafe2-op1", "r-cafe2-op2"], kp: [39, 41] },
-    "s-w-coffee": { n: "Coffee Point", sub: "Coffee corner", q: "Hey, we finally meet!", r: ["r-coffee"], kp: [42] },
-    "s-w-mothers": { n: "Mothers Room", sub: "A space for all moms @ Acko", q: "They thought of me too!", p: "Designed with a soothing palette that keeps calm amid a busy day.", r: ["r-mothers"], kp: [43] },
-    "s-w-zen": { n: "Zen Room", sub: "A space to unwind", q: "They thought of me too!", p: "A night-sky optic-fibre ceiling in the brand's hues: peace, and a little curiosity.", r: ["r-zen"], kp: [44] },
-    "s-w-studio": { n: "Studio Room", sub: "A space for Acko's voice", r: ["r-studio"], kp: [45] },
-  };
+     One slide per space (class "walk"); its configuration is its own data-walk attribute:
+       {"n": name, "sub": subtitle, "q": the Loop's words, "p": a line, "r": [render per beat], "kp": [deck slide of each keyplan], "tags": [...]}.
+     The render fills the window with a slow drift; the name block, the words, the OP tag and the keyplan (the deck's plan with its
+     maroon camera mark) sit on it. */
   const AR = {};   // render aspect ratios, read once loaded
   const WKUI = $$("#walk-ui > *"), PHL = LAYERS.photo;
-  let WK = null;
   const isWalk = (s) => !!s && s.classList.contains("walk");
   // music: fades in on the walk, out when you leave; a browser only plays after a click or key, so it retries on the next one
   const AUD = {
@@ -783,14 +440,14 @@
     const place = () => {
       const W = box.clientWidth, Hh = box.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
       if (!W || !iw) return;
-      const vw = (k.view[2] - k.view[0]) / 100 * iw, vh = (k.view[3] - k.view[1]) / 100 * ih;
+      const vw = ((k.view[2] - k.view[0]) / 100) * iw, vh = ((k.view[3] - k.view[1]) / 100) * ih;
       const s = Math.min(W / (vw * 1.5), Hh / (vh * 1.5)), w = iw * s, h = ih * s;
       const cx = (k.x / 100) * w, cy = (k.y / 100) * h;
       const tx = clamp(W / 2 - cx, W - w, 0), ty = clamp(Hh / 2 - cy, Hh - h, 0);
       inner.style.width = w + "px"; inner.style.transform = `translate(${tx}px, ${ty}px)`;
       cam.style.left = cx + "px"; cam.style.top = cy + "px"; cam.style.setProperty("--rot", k.rot + "deg");
     };
-    if (img.getAttribute("src") !== `assets/img/${k.img}.webp`) { img.onload = place; img.src = `assets/img/${k.img}.webp`; } else place();
+    if (img.dataset.key !== k.img) { img.dataset.key = k.img; img.onload = place; img.src = asset("assets/img/" + k.img + ".webp"); } else place();
   }
   function walkShow(s, k) {
     const key = s.r[k - 1];
@@ -798,145 +455,79 @@
     if (!AR[key]) { const im = new Image(); im.onload = () => { AR[key] = im.naturalWidth / im.naturalHeight; $$(".cover", f).forEach((c) => (c.dataset.ar = AR[key])); layoutCovers(); }; im.src = PHOTO.src(key); }
     world("photo"); shade("photo");
     $$("#wk-opt span").forEach((b, i) => b.classList.toggle("on", i === k - 1));
-    keyplan(s.kp[k - 1]);
+    keyplan((s.kp || [])[k - 1]);
     if (AUD.want && AUD.el.paused) AUD.play();
   }
-  function walkHook(id) {
-    const s = WALK[id];
+  function walkHook(sc) {
+    let s = {};
+    try { s = JSON.parse(sc.dataset.walk || "{}"); } catch (e) { console.error(`${sc.id}: data-walk is not valid JSON`, e); }
+    s.r = s.r || [];
     return {
-      enter(_, sc) {
-        WK = sc; WKUI.forEach((n) => sc.appendChild(n));
+      enter() {
+        WKUI.forEach((n) => sc.appendChild(n));
         document.body.classList.add("in-walk");
         const deck = scenes.filter((x) => isWalk(x) && trackOf(x) === trackOf(sc)), at = deck.indexOf(sc);
-        $("#wk-nav").innerHTML = deck.map((x, i) => `<button type="button" data-to="${x.id}"${x === sc ? ' class="on"' : ""}><b>${String(i + 1).padStart(2, "0")}</b>${x.dataset.title}</button>`).join("");
+        $("#wk-nav").innerHTML = deck.length > 1 ? deck.map((x, i) => `<button type="button" data-to="${x.id}"${x === sc ? ' class="on"' : ""}><b>${String(i + 1).padStart(2, "0")}</b>${x.dataset.title}</button>`).join("") : "";
         $$("#wk-nav button").forEach((b) => (b.onclick = () => go(sceneIx(b.dataset.to), 1)));
-        $("#wk-n").innerHTML = `${s.n}<small>${s.sub || ""}</small>`;
+        $("#wk-n").innerHTML = `${s.n || sc.dataset.title}<small>${s.sub || ""}</small>`;
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
         $("#wk-opt").innerHTML = s.r.length > 1 ? (s.tags || ["OP 01", "OP 02"]).map((t) => `<span>${t}</span>`).join("") : "";
         $("#wk-kick").textContent = `Visual Direction · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
         AUD.play();
       },
-      step(k) { walkShow(s, k); },
+      step(k) { if (s.r[k - 1]) walkShow(s, k); },
       leave() {
         setPan(false); document.body.classList.remove("in-walk");
         setTimeout(() => { if (!isWalk(scenes[state.idx])) AUD.stop(); }, 0);
       },
     };
   }
-  Object.keys(WALK).forEach((id) => { if ($("#" + id)) H[id] = walkHook(id); });
-
-  /* ---- campus palettes (slides 16–23): ① the board builds tile by tile; ②–④ the three renders, full bleed ---- */
-  $$(".scene.palette").forEach((sc) => {
-    const renders = sc.dataset.renders.split(",");
-    H[sc.id] = {
+  /* campus palettes (class "palette", data-renders="a,b,c"): 1 the board builds tile by tile; 2–4 the renders, full bleed */
+  function paletteHook(sc) {
+    const renders = (sc.dataset.renders || "").split(",").filter(Boolean);
+    return {
       enter() { plain(); },
       step(k) {
-        if (k === 1) { world("none"); shade(""); reveal($(".pl-board", sc), 80); sc.classList.remove("rendered"); return; }
+        if (k === 1 || !renders[k - 2]) { world("none"); shade(""); reveal($(".pl-board", sc), 80); sc.classList.remove("rendered"); return; }
         sc.classList.add("rendered");
         PHOTO.show(renders[k - 2], { kb: true, ar: 2.357 }); world("photo"); shade("photo");
       },
     };
+  }
+  /* deck pages rebuilt as HTML (class "vpage"): pictures, then words, one after another; [data-count] numbers count up */
+  function vpageHook(sc) {
+    return { enter() { plain(); reveal($(".page", sc), 80); $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 1100 + i * 120)); } };
+  }
+
+  /* ======================= the slides' own scripts ======================= */
+  const kit = {
+    $, $$, clamp, later, clearTimers, raf2, reduced, asset,
+    reveal, countUp, typeWords, drawPath, inPoly,
+    plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
+    go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
+    plan: { deckPlan, planOn, planOff, vbFor, fitVb, nbHover, get svg() { return DP.svg; } },
+  };
+  for (const id in FACTORIES) {
+    if (!document.getElementById(id)) continue;
+    try { H[id] = FACTORIES[id](kit) || {}; } catch (e) { console.error(`${id}: its script failed to start`, e); }
+  }
+  // slides with no script of their own: the shared behaviour of their class
+  scenes.forEach((sc) => {
+    if (H[sc.id]) return;
+    if (sc.classList.contains("walk")) H[sc.id] = walkHook(sc);
+    else if (sc.classList.contains("palette")) H[sc.id] = paletteHook(sc);
+    else if (sc.classList.contains("vpage")) H[sc.id] = vpageHook(sc);
+    else H[sc.id] = { enter() { plain(); } };
   });
 
-  /* ======================= the layout as one plan (deck slides 53–57) =======================
-     The deck's four plan tiles as one image, with the neighbourhood outlines, the arrival zones, the fire compartment line and
-     the entrances as vectors (data/deck-plan.js). It lives in the world, so the layout flies into its blow-ups without a cut.
-     Wheel zooms on the cursor, drag pans, a double-click (or Reset) returns to the beat's view. */
-  const NB = { "#B45F06": "01", "#274E13": "02", "#45818E": "03", "#4A86E8": "04", "#9900FF": "05", "#FF00FF": "06", "#0000FF": "arrival" };
-  const DP = { svg: null, vb: [0, 0, 1920, 1080], home: [0, 0, 1920, 1080], raf: 0 };
-  function deckPlan() {
-    if (DP.svg) return DP;
-    const P = window.DECK_PLAN, host = $("#world-plan"), b = P.img.box;
-    const pts = (a) => a.map((q) => q.join(" ")).join(" ");
-    const lab = P.labels.reduce((m, l) => ((m[l.n] = l), m), {});
-    host.innerHTML = `<svg class="dplan pannable" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
-      <image href="${P.img.src}" x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" preserveAspectRatio="none"/>
-      <g class="dp-nb">${P.nb.map((n) => `<polygon data-nb="${NB[n.c.toUpperCase()] || ""}" points="${pts(n.pts)}" style="--c:${n.c}"/>`).join("")}</g>
-      <g class="dp-fire">${P.fire.map((f) => `<line x1="${f[0][0]}" y1="${f[0][1]}" x2="${f[1][0]}" y2="${f[1][1]}"/>`).join("")}</g>
-      <g class="dp-entry">${P.entry.map((e) => `<path d="M${e[0] - 6} ${e[1] - 4}L${e[0] + 6} ${e[1] - 4}L${e[0]} ${e[1] + 6}Z"/>`).join("")}</g>
-      <g class="dp-blow">${Object.entries(P.blow).map(([k, r]) => `<g data-b="${k}"><rect x="${r[0]}" y="${r[1] - 6}" width="${r[2] - r[0]}" height="${r[3] - r[1] + 12}"/><text x="${(r[0] + r[2]) / 2}" y="${r[3] + 26}">Blown Up ${k}</text></g>`).join("")}</g>
-      <g class="dp-lab">${["01", "02", "03", "04", "05", "06"].map((n) => { const l = lab[n]; if (!l) return ""; const x = l.at[0], y = l.at[1] + l.wh[1] * 0.78;
-        return `<text data-nb="${n}" x="${x}" y="${y}"><tspan class="n">${n}</tspan><tspan class="s" dx="6" dy="-14">${l.seats}</tspan></text>`; }).join("")}</g>
-    </svg>`;
-    DP.svg = $("svg", host);
-    // wheel zoom on the cursor, drag to pan, double-click to reset
-    const toSvg = (e) => { const r = DP.svg.getBoundingClientRect(), s = Math.max(DP.vb[2] / r.width, DP.vb[3] / r.height);
-      const ox = (r.width - DP.vb[2] / s) / 2, oy = (r.height - DP.vb[3] / s) / 2; return [DP.vb[0] + (e.clientX - r.left - ox) * s, DP.vb[1] + (e.clientY - r.top - oy) * s]; };
-    DP.svg.addEventListener("wheel", (e) => {
-      if (!document.body.classList.contains("dp-on")) return;
-      e.preventDefault(); cancelAnimationFrame(DP.raf);
-      const k = Math.exp(e.deltaY * 0.0015), [x, y] = toSvg(e), v = DP.vb;
-      const w = clamp(v[2] * k, 160, 1920 * 1.2), h = (w * v[3]) / v[2], f = w / v[2];
-      setVb([x - (x - v[0]) * f, y - (y - v[1]) * f, w, h]);
-    }, { passive: false });
-    let drag = null;
-    DP.svg.addEventListener("pointerdown", (e) => { if (e.button !== 0) return; drag = { x0: e.clientX, y0: e.clientY, vb: DP.vb.slice() }; DP.svg.setPointerCapture(e.pointerId); cancelAnimationFrame(DP.raf); });
-    DP.svg.addEventListener("pointermove", (e) => { if (!drag) return; const r = DP.svg.getBoundingClientRect(), s = Math.max(drag.vb[2] / r.width, drag.vb[3] / r.height);
-      setVb([drag.vb[0] - (e.clientX - drag.x0) * s, drag.vb[1] - (e.clientY - drag.y0) * s, drag.vb[2], drag.vb[3]]); });
-    DP.svg.addEventListener("pointerup", () => (drag = null));
-    DP.svg.addEventListener("dblclick", () => fitVb(DP.home, 700));
-    return DP;
-  }
-  function setVb(v) { DP.vb = v; DP.svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); }
-  function fitVb(v, ms) {
-    cancelAnimationFrame(DP.raf);
-    const from = DP.vb.slice(), t0 = performance.now();
-    if (!ms || reduced) return setVb(v);
-    const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      setVb(from.map((a, i) => a + (v[i] - a) * e)); if (k < 1) DP.raf = requestAnimationFrame(run); };
-    DP.raf = requestAnimationFrame(run);
-  }
-  // the viewBox that shows box (frame px) inside the display rect (frame px)
-  function vbFor(box, disp) {
-    const bw = box[2] - box[0], bh = box[3] - box[1], dw = disp[2] - disp[0], dh = disp[3] - disp[1], s = Math.min(dw / bw, dh / bh);
-    const cx = (box[0] + box[2]) / 2, cy = (box[1] + box[3]) / 2, dcx = (disp[0] + disp[2]) / 2, dcy = (disp[1] + disp[3]) / 2;
-    return [cx - dcx / s, cy - dcy / s, 1920 / s, 1080 / s];
-  }
-  function planOn(sc, opts) {
-    deckPlan(); world("plan"); shade("");
-    document.body.classList.add("dp-on");
-    const svg = DP.svg;
-    ["nb", "fire", "blow", "lab", "entry"].forEach((k) => svg.classList.toggle("show-" + k, !!opts[k]));
-    DP.home = opts.view; fitVb(opts.view, opts.ms === undefined ? 900 : opts.ms);
-  }
-  function planOff() { document.body.classList.remove("dp-on"); if (DP.svg) DP.svg.classList.remove("show-nb", "show-fire", "show-blow", "show-lab", "show-entry"); }
-  // the neighbourhood list (beat 2): hover a row to pick out its outline
-  function nbHover(list) {
-    $$("[data-nb]", list).forEach((row) => {
-      row.onmouseenter = () => { DP.svg.classList.add("focus"); $$(`.dp-nb [data-nb="${row.dataset.nb}"], .dp-lab [data-nb="${row.dataset.nb}"]`, DP.svg).forEach((p) => p.classList.add("hi")); };
-      row.onmouseleave = () => { DP.svg.classList.remove("focus"); $$(".hi", DP.svg).forEach((p) => p.classList.remove("hi")); };
-    });
-  }
-  H["s-layout"] = {
-    enter(_, sc) { nbHover($(".ly-nbs", sc)); },
-    step(k, sc) {
-      planOn(sc, { nb: k === 2, lab: k === 2, entry: true, blow: k === 1, view: [0, 0, 1920, 1080], ms: 0 });
-      if (k === 2) {
-        $$(".dp-nb polygon", DP.svg).forEach((p, i) => { p.style.setProperty("--len", Math.ceil(p.getTotalLength())); p.style.animationDelay = i * 0.22 + "s"; });
-        $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 180));
-      }
-    },
-    leave() { planOff(); },
-  };
-  // the blow-ups: the same plan flies into X, Y and Z (the fire compartment line draws on Y)
-  const BLOW_DISP = [38, 150, 1882, 880];
-  H["s-blowup"] = {
-    step(k, sc) {
-      const key = ["X", "Y", "Z"][k - 1], P = window.DECK_PLAN;
-      planOn(sc, { fire: key === "Y", entry: true, blow: false, view: vbFor(P.blow[key], BLOW_DISP), ms: 1100 });
-      $(".bl-sub", sc).textContent = `Space Planning - Option 02A | Blown Up ${key}`;
-      $$(".bl-keys span", sc).forEach((b) => b.classList.toggle("on", b.dataset.k === key));
-    },
-    leave() { planOff(); },
-  };
-
-  /* ======================= boot ======================= */
+  /* ======================= start ======================= */
   const fromHash = () => {
-    const m = (location.hash || "").match(/^#([\w-]+)\/(\d+)/);
-    go(m ? Math.max(0, sceneIx(m[1])) : 0, m ? +m[2] : 1);
+    const m = (location.hash || "").match(/^#([\w-]+)\/(\d+)/), i = m ? sceneIx(m[1]) : -1;
+    go(i >= 0 ? i : 0, i >= 0 ? +m[2] : 1);
   };
   addEventListener("hashchange", () => { if (location.hash !== "#" + scenes[state.idx].id + "/" + state.step) fromHash(); });
   fromHash();
   tick();
-  window.ACKO = { go, setStep, setTheme, state, H, lightbox, countUp };
+  Object.assign(window.ACKO, { go, setStep, setTheme, state, H, kit });
+  }
 })();

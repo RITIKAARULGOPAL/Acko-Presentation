@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Loop · ACKO slide s-loop</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-loop" data-part="1" data-title="The Loop" data-steps="2" data-mins="1" data-beats="Welcome to the Loop,Where emotions matter"
   data-notes="1 · Welcome to the Loop, ACKO's campus: it draws on that familiar feeling and reinterprets it for the workplace — not a conventional office but a loop of familiar, human-centric spaces where people pause, connect, interact and feel at ease. 2 · The Loop, where emotions matter: a continuous emotional journey. Arrival: I feel welcomed. Café: hey, we finally meet. Boardroom: this is my big moment. Meeting rooms: my impact. Collab: worth the commute. Work: these are my folks. Wellness: they thought of me too.">
   <div class="page">
@@ -26,3 +39,77 @@
     <p class="lp-p" data-only="2">The ACKO Loop transforms the workplace from a collection of spaces <b>into a continuous emotional journey,</b> where every transition, interaction and pause is designed to make <b>people feel safe, welcomed, connected, impactful and cared for.</b></p>
   </div>
 </section>
+<style>
+/* ---------- the Loop (slides 11–12) ---------- */
+.lp-world { left: 0; top: 6%; width: 100%; height: 72%; }
+.lp-ribbon { position: absolute; left: 0; top: 4.2%; width: 100%; height: 96%; background: url(assets/img/loop-ribbon.webp) center / 100% 100% no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 var(--rv, 0%), transparent calc(var(--rv, 0%) + 6%)); mask-image: linear-gradient(90deg, #000 0, #000 var(--rv, 0%), transparent calc(var(--rv, 0%) + 6%)); }
+.lp-cut { position: absolute; background: center / contain no-repeat; opacity: .95; }
+.lp-stop { width: 0; height: 0; opacity: 0; transition: opacity .6s var(--ease); }
+.lp-stop.on { opacity: 1; }
+.lp-stop i { position: absolute; left: -.55%; top: -.55%; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); margin: calc(var(--pt) * -3.5) 0 0 calc(var(--pt) * -3.5); border-radius: 50%; background: var(--purple); }
+.lp-stop.on i { animation: pulseP 2.2s infinite; }
+.lp-stop svg { position: absolute; overflow: visible; pointer-events: none; }
+.lp-stop svg path { fill: none; stroke: var(--purple); stroke-width: 1; stroke-dasharray: 1.5 3; vector-effect: non-scaling-stroke; }
+.lp-stop .lab { position: absolute; transform: translateX(-50%); text-align: center; white-space: nowrap; line-height: 1.3; }
+.lp-stop .lab b { display: block; font-size: calc(var(--pt) * 7); font-weight: 700; color: #000; }
+.lp-stop .lab q { display: block; quotes: none; font-size: calc(var(--pt) * 7); font-style: italic; font-weight: 600; color: var(--plum); }
+.lp-stop .lab q::before { content: "\201C  "; }
+.lp-stop .lab q::after { content: "  \201D"; }
+.lp-title { left: 2.8%; top: 66.6%; display: flex; align-items: center; gap: calc(var(--pt) * 10); }
+.lp-title img { height: calc(var(--pt) * 15); width: auto; }
+.lp-title span { font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); }
+.lp-p { left: 2.9%; top: 73.4%; width: 40%; font-size: calc(var(--pt) * 9.6); line-height: 1.45; font-style: italic; text-align: justify; }
+.lp-p b { font-weight: 700; }
+.lp-welcome { left: 49%; top: 10.5%; width: 46%; font-size: calc(var(--pt) * 13); line-height: 1.35; font-weight: 400; }
+.lp-welcome b { font-size: .62em; font-weight: 500; color: var(--purple); }
+.lp-leads path { fill: none; stroke: var(--purple); stroke-width: 1.2; stroke-dasharray: 2 4; opacity: 0; transition: opacity .5s; vector-effect: non-scaling-stroke; }
+.lp-leads path.on { opacity: .9; }
+.lp-cut { position: absolute; }
+.lp-stop { position: absolute; }
+.lp-cut[style*="loop-people"] { opacity: .5; }
+</style>
+<script>
+/* the Loop (deck slides 11–12): 1 welcome to the Loop — people and trees along the line; 2 the lavender ribbon draws from left
+   to right and the seven stops come up as it reaches them, each with what it should feel like */
+ACKO.slide("s-loop", ({ $, $$, plain, reveal, clearTimers, reduced, state }) => {
+  // the seven stops of slide 12: [name, words, dot x/y, label x/y] in % of the page
+  const STOPS = [
+    ["Arrival", "I feel welcomed", [2.4, 38.9], [6.1, 26]], ["Cafe", "Hey We finally meet !", [17, 46.8], [14, 35.4]],
+    ["Board Room", "This is my big moment", [40.3, 43.9], [46.3, 24.5]], ["Meeting Rooms", "My Impact", [55.7, 45.7], [62.7, 23.2]],
+    ["Collab", "Wow, worth the commute", [76.1, 45.4], [79.3, 23.2]], ["Work", "These are my folks!", [96.8, 46.8], [93.6, 30.5]],
+    ["Wellness", "They thought of me too!", [78.4, 70], [90.2, 66.2]],
+  ];
+  function build(sc) {
+    const host = $(".lp-stops", sc); if (host.children.length) return;
+    host.innerHTML = STOPS.map(([n, q, d, l]) => `<div class="lp-stop" style="left:${d[0]}%;top:${d[1]}%"><i></i>` +
+      `<div class="lab" style="left:calc(${l[0] - d[0]} * var(--pw) / 100);top:calc(${l[1] - d[1]} * var(--ph) / 100)"><b>${n}</b><q>${q}</q></div></div>`).join("");
+    $(".lp-leads", sc).innerHTML = STOPS.map(([, , d, l], i) => {
+      const x1 = l[0] * 19.2, y1 = (l[1] + (l[1] < d[1] ? 5 : -0.5)) * 10.8, x2 = d[0] * 19.2, y2 = d[1] * 10.8;
+      return `<path data-k="${i}" d="M${x1} ${y1}Q${x1} ${(y1 + y2) / 2} ${x2} ${y2}"/>`;
+    }).join("");
+  }
+  return {
+    enter(_, sc) { plain(); build(sc); reveal($(".lp-cuts", sc), 100); },
+    step(k, sc) {
+      clearTimers();
+      const rib = $(".lp-ribbon", sc), stops = $$(".lp-stop", sc);
+      $$(".lp-leads path", sc).forEach((l) => l.classList.remove("on"));
+      if (k === 1) { rib.style.setProperty("--rv", "0%"); stops.forEach((s) => s.classList.remove("on")); return; }
+      const t0 = performance.now(), MS = reduced ? 1 : 4200;
+      stops.forEach((s) => s.classList.remove("on"));
+      const run = (now) => {
+        if (document.body.dataset.scene !== "s-loop" || state.step !== 2) return;
+        const e = Math.min(1, (now - t0) / MS), v = (1 - Math.pow(1 - e, 2)) * 106;
+        rib.style.setProperty("--rv", v + "%");
+        stops.forEach((s, i) => { if (parseFloat(s.style.left) <= v - 2 && !s.classList.contains("on")) { s.classList.add("on"); const l = $(`.lp-leads [data-k="${i}"]`, sc); if (l) l.classList.add("on"); } });
+        if (e < 1) requestAnimationFrame(run);
+      };
+      requestAnimationFrame(run);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

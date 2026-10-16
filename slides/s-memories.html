@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maybe, we&#x27;ve felt this before · ACKO slide s-memories</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-memories" data-part="1" data-mode="dark" data-title="Maybe, we've felt this before" data-steps="1" data-mins="0.6"
   data-notes="Maybe we've felt this before: in the pathways, courtyards and cafeterias of our formative years. Meeting at the basketball court, walking memorable pathways, huddling on the stairs, focusing at study time, chilling with friends, the café lunches. A campus is where we first felt safe among people.">
   <div class="page">
@@ -14,3 +27,37 @@
     <div class="mem-stop" style="left:56.1%;top:30.8%;--s:.085"><i style="background-image:url(assets/img/mem-cafe.webp)"></i><b class="dot"></b><span style="left:calc(var(--pt) * -26);top:calc(var(--pt) * -58)">The Cafe lunches</span></div>
   </div>
 </section>
+<style>
+/* ---------- memories (slide 8), black ---------- */
+.mem-map { left: 0; top: 0; width: 100%; height: 100%; background: url(assets/img/mem-campus.webp) center / cover; opacity: .8; }
+.mem-h { left: 1.8%; top: 13.3%; width: 33%; font-size: calc(var(--pt) * 21); line-height: 1.12; font-style: italic; font-weight: 600; color: var(--lilac); }
+.mem-h small { display: block; margin-top: calc(var(--pt) * 4); font-size: calc(var(--pt) * 7); font-weight: 400; color: rgba(255,255,255,.75); }
+.mem-path { left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.mem-path path { fill: none; stroke: rgba(201,179,243,.85); stroke-width: 1.6; stroke-dasharray: 2 5; vector-effect: non-scaling-stroke; }
+.mem-path .mask { stroke: #fff; stroke-dasharray: none; stroke-width: 6; }
+.mem-stop { width: 0; height: 0; opacity: 0; transform: scale(.6); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.mem-stop.on { opacity: 1; transform: none; }
+.mem-stop i { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: calc(var(--pw) * var(--s, .1)); aspect-ratio: 1; border-radius: 50%; background: center / cover no-repeat; filter: grayscale(1) contrast(1.05); box-shadow: 0 0 0 2px rgba(255,255,255,.85); }
+.mem-stop.on i { animation: memIn 1.4s var(--ease) both; }
+.mem-stop span { position: absolute; white-space: nowrap; font-family: var(--hand); font-size: calc(var(--pt) * 17); line-height: .95; color: #fff; }
+.mem-stop .dot { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 50%; background: var(--lilac); box-shadow: 0 0 0 0 rgba(201,179,243,.6); animation: pulseL 2s infinite; }
+.mem-stop { position: absolute; }
+.mem-map { opacity: .34; }
+.mem-h span + span { display: block; margin-top: calc(var(--pt) * 6); font-size: calc(var(--pt) * 9); font-weight: 400; color: rgba(255,255,255,.82); line-height: 1.4; }
+</style>
+<script>
+/* memories (deck slide 8): a dotted path across the campus; the six moments come up along it */
+ACKO.slide("s-memories", ({ $, $$, plain, reveal, later, drawPath }) => ({
+  enter(_, sc) {
+    plain();
+    const stops = $$(".mem-stop", sc); stops.forEach((s) => s.classList.remove("on"));
+    drawPath($(".mem-path path", sc), 5200, 400);
+    stops.forEach((s, i) => later(() => s.classList.add("on"), 700 + i * 820));
+    reveal($(".mem-h", sc), 100);
+    $$(".mem-h span", sc).forEach((e, i) => e.style.setProperty("--i", i * 4));
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New slide · ACKO slide s-new</title>
+<!-- HOW TO USE THIS TEMPLATE
+     1. Copy this file to slides/s-<name>.html and replace every "s-new" below with "s-<name>" (the id, the CSS, the script).
+     2. Double-click your file to see it: arrows step through its beats, N shows the notes, O the index. It works offline.
+     3. Images you add go in assets/img/s-<name>/ and are written from the project root: assets/img/s-<name>/photo.webp.
+     4. Only edit your own file (and your image folder). When it's ready, send the file (and the folder) back; it is added to
+        slides/order.txt and joined with: python tools/build.py --single
+     The build takes only what sits between the two markers below; this head is just for opening the slide on its own. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- data-part: cover · 1 design concept · 2 design strategy · 3 visual direction · 4 value addition · 5 space planning · A appendix
+     data-mode: (leave out for the white page) dark · lavender · grey
+     data-steps: how many beats (clicks); data-beats: their names; data-mins: planned minutes; data-notes: the speaker notes (N) -->
+<section class="scene" id="s-new" data-part="1" data-title="New slide" data-steps="2" data-mins="0.5" data-beats="First beat,Second beat"
+  data-notes="What to say on this slide. 1 · the first beat. 2 · the second beat.">
+  <div class="page">
+    <!-- the deck's header, top left -->
+    <div class="hdr"><b>Page title</b><span>Design concept</span></div>
+    <!-- everything is placed in % of the 16:9 page, as on the PPT slide; type in deck points: calc(var(--pt) * 16) is 16 pt -->
+    <h2 class="nw-h" style="left:5%;top:30%;width:50%">A headline in the deck's purple</h2>
+    <p class="nw-p hand" style="left:5%;top:45%;width:45%">A handwritten line in Square Peg</p>
+    <!-- data-step="2": appears from beat 2 on;  data-only="1": only on beat 1 -->
+    <div class="nw-box rv" data-step="2" style="left:58%;top:28%;width:36%;height:44%">
+      <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i>
+    </div>
+  </div>
+</section>
+<style>
+/* this slide's styles only: start every rule with #s-new so nothing leaks into other slides */
+#s-new .nw-h { font-size: calc(var(--pt) * 24); color: var(--purple-2); font-weight: 600; }
+#s-new .nw-p { font-size: calc(var(--pt) * 22); }
+#s-new .nw-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3%; }
+#s-new .nw-box i { background: var(--lilac); }
+</style>
+<script>
+/* this slide's behaviour: ACKO.slide(id, kit => hooks). The kit (K) gives the deck's helpers:
+     $ $$            query inside the page (pass sc as the second argument to stay inside your slide)
+     plain()         no world behind the slide (most slides start with this)
+     reveal(el)      children of an .rv element come in one after another (their --i sets the order)
+     later(fn, ms)   a timer that is cleared when the slide is left;  countUp(el, ms) counts a data-count number up
+     typeWords(el)   types a line in, word by word;  drawPath(path, ms) draws an SVG path by its length
+     PHOTO.show(key) a full-bleed image in the world;  world("photo" | "plan" | "map" | "none");  asset(path)
+     go(i, beat), state, scenes, sceneIx(id)     navigation;  plan.*  the shared layout plan (see s-layout)
+   enter runs when the slide opens, step(k) on every beat (1, 2, …), leave when it closes. */
+ACKO.slide("s-new", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); },
+  step(k, sc) { if (k === 2) reveal($(".nw-box", sc), 200); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

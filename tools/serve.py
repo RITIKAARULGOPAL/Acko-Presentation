@@ -1,5 +1,6 @@
 """Local server for the presentation that tells browsers not to cache, so edits always show. Every page load
 rebuilds index.html from slides/ (tools/build.py), so save a slide or change slides/order.txt and refresh.
+/?only=s-loop,s-site serves just those slides, joined (as build.py --only).
 
 usage: python tools/serve.py [port]      (serves this checkout's root on 127.0.0.1; the port can also come from $PORT,
                                           which the preview launcher sets, so every worktree gets its own)
@@ -20,8 +21,11 @@ class NoCache(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path.split("?")[0].split("#")[0] in ("/", "/index.html"):
+            q = self.path.split("?", 1)[1] if "?" in self.path else ""
+            only = [v for k, _, v in (p.partition("=") for p in q.split("&")) if k == "only"]
             try:
-                body, code = build.write().encode("utf-8"), 200
+                html = build.build(only[0].split(","), "preview.html") if only else build.build()
+                body, code = html.encode("utf-8"), 200
             except BaseException as e:      # a broken order.txt or slide: say so on the page instead of serving a stale deck
                 body, code = f"<pre>index.html could not be built:\n{e}</pre>".encode("utf-8"), 500
             self.send_response(code)

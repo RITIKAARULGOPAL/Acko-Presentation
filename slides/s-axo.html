@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schematic axonometric · ACKO slide s-axo</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-axo" data-part="5" data-title="Schematic axonometric" data-steps="3" data-mins="0.9" data-beats="West,Middle,East"
   data-notes="Let's understand the neighbourhood better, west to east. West: the reception and terrace, the boardroom, executive rooms, collaboration huddles, departmental rooms and a zen room. Middle: 4-pax rooms, executive rooms and huddles along the corridor, the workhall, the critical rooms and the café. East: the workhall neighbourhoods with their huddles, departmental rooms and the hatchery.">
   <div class="page">
@@ -12,3 +25,30 @@
     <div class="ax-keys" style="left:79%;top:88%"><span data-k="1">West</span><span data-k="2">Middle</span><span data-k="3">East</span></div>
   </div>
 </section>
+<style>
+/* ---------- schematic axonometrics (slides 58-60) ---------- */
+.ax-img { position: absolute; background-repeat: no-repeat; }
+.ax-img.shown { animation: axIn 1.4s var(--ease) both; }
+.ax-labs { left: 0; top: 0; width: 100%; height: 100%; }
+.ax-labs svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.ax-labs path { stroke: var(--maroon); stroke-width: 1.4; fill: none; vector-effect: non-scaling-stroke; stroke-dasharray: 600; stroke-dashoffset: 600; }
+.ax-labs circle { fill: var(--maroon); opacity: 0; }
+.ax-labs.shown path { animation: draw 1s var(--ease) .8s forwards; }
+.ax-labs.shown circle { animation: rise .4s .8s forwards; }
+.ax-labs span { position: absolute; font-size: calc(var(--pt) * 9); white-space: nowrap; opacity: 0; transition: opacity .5s calc(1s + var(--i) * 120ms); }
+.ax-labs.shown span { opacity: 1; }
+.ax-hand { font-size: calc(var(--pt) * 24); color: #666; }
+.ax-keys { position: absolute; display: flex; gap: calc(var(--pt) * 10); font-size: calc(var(--pt) * 8); font-weight: 700; }
+.ax-keys span { color: #c9c3d8; transition: color .4s; }
+.ax-keys span.on { color: var(--purple); }
+</style>
+<script>
+/* the schematic axonometrics (deck slides 58–60): west, middle, east; the leaders draw out to their spaces */
+ACKO.slide("s-axo", ({ $$, plain }) => ({
+  enter() { plain(); },
+  step(k, sc) { $$(".ax-keys span", sc).forEach((b) => b.classList.toggle("on", +b.dataset.k === k)); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

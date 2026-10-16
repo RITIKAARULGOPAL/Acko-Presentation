@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We respect the journey · ACKO slide s-journey</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-journey" data-part="1" data-title="We respect the journey" data-steps="2" data-mins="1" data-beats="Why an insurance?,The journey"
   data-notes="1 · Why insurance at all: it turns uncertainty into assurance, protecting people, their families and their financial future. 2 · We respect ACKO's journey: from car insurance in 2016 to an integrated digital protection ecosystem today; unicorn in 2021, ₹1,000 Cr revenue in 2022. In the founder's words: where others saw tradition, he saw friction — and knew insurance needed a revolution.">
   <div class="page">
@@ -30,3 +43,68 @@
     </div>
   </div>
 </section>
+<style>
+/* ---------- the journey (slide 5) ---------- */
+.jr-road { left: 1.8%; top: 2.8%; width: 96.7%; height: 62%; background: url(assets/img/jr-loop.webp) center / cover; overflow: hidden; }
+.jr-road::after { content: ""; position: absolute; inset: 0; background: rgba(255,255,255,.58); }
+.jr-collage { left: 14.9%; top: 14.4%; width: 26%; height: 71.1%; }
+.jr-collage figure { position: absolute; margin: 0; background: center / cover no-repeat; }
+.jr-collage figcaption { position: absolute; left: 4%; bottom: 3%; color: #fff; font-size: calc(var(--pt) * 7); }
+.jr-why { left: 41.3%; top: 43.2%; width: 50%; }
+.jr-why h3 { font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 32); line-height: .95; color: var(--purple-2); }
+.jr-why p { margin-top: calc(var(--pt) * 5); font-size: calc(var(--pt) * 8.6); line-height: 1.45; color: #555; font-style: italic; }
+.jr-why p b { font-weight: 700; color: #444; }
+.jr-respect { left: 1.8%; top: 29.1%; width: 40.9%; color: #fff; }
+.jr-respect h2 { font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 52); line-height: .82; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.25); }
+.jr-respect p { margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 9); line-height: 1.45; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.45); font-weight: 400; width: 90%; }
+.jr-quote { left: 50%; top: 22%; width: 47%; color: var(--purple); }
+.jr-quote q { display: block; quotes: none; font-size: calc(var(--pt) * 17); font-weight: 700; line-height: 1.22; }
+.jr-quote q::before { content: "\201C"; position: absolute; left: -.05em; top: -.95em; font-family: Georgia, serif; font-size: 3.4em; line-height: 1; color: var(--purple); }
+.jr-quote q span { opacity: 0; transition: opacity .25s; }
+.jr-quote q span.on { opacity: 1; }
+.jr-line { position: absolute; left: 0; right: 0; top: 82.6%; height: 1px; border-top: 1px dotted #aaa; transform-origin: left; transform: scaleX(0); transition: transform 2.6s var(--ease); }
+.go .jr-line, .jr-line.go { transform: none; }
+.jr-ms { width: 0; height: 0; }
+.jr-ms i { position: absolute; left: calc(var(--pt) * -5); top: calc(var(--pt) * -5); width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--lilac); }
+.jr-ms b { position: absolute; left: 0; transform: translateX(-50%); font-weight: 600; font-size: calc(var(--pt) * 8); color: #999; white-space: nowrap; }
+.jr-ms span { position: absolute; left: 0; transform: translateX(-50%); font-weight: 300; font-size: calc(var(--pt) * 8.2); color: #555; white-space: nowrap; text-align: center; line-height: 1.25; }
+.jr-ms.up b { top: calc(var(--pt) * -16); }
+.jr-ms.up span { top: calc(var(--pt) * -30); }
+.jr-ms.dn b { top: calc(var(--pt) * 10); }
+.jr-ms.dn span { top: calc(var(--pt) * 24); }
+.jr-ms.k span { color: var(--plum); font-weight: 600; }
+.jr-ms img { position: absolute; left: 0; transform: translateX(-50%); top: calc(var(--pt) * -30); height: calc(var(--pt) * 9); width: auto; }
+.jr-ms.end span { font-style: italic; }
+/* ---------- pieces that come in on a beat ---------- */
+.jr-ms { opacity: 0; transform: translateY(6px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.jr-ms.go { opacity: 1; transform: none; }
+.jr-collage figure, .jr-collage .jr-why { position: absolute; }
+.jr-ms { position: absolute; }
+/* the journey's photo band: washed for the collage (1); darker behind "We respect the journey", light behind the founder's words (2) */
+.jr-road::after { transition: opacity .8s var(--ease); }
+.jr-road::before { content: ""; position: absolute; inset: 0; z-index: 1; opacity: 0; transition: opacity .8s var(--ease);
+  background: linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.12) 36%, rgba(255,255,255,.72) 49%, rgba(255,255,255,.8) 100%); }
+#s-journey.b2 .jr-road::after { opacity: 0; }
+#s-journey.b2 .jr-road::before { opacity: 1; }
+.jr-road { isolation: isolate; z-index: 0; }
+</style>
+<script>
+/* the journey (deck slide 5): 1 why an insurance, over five faces of protection; 2 we respect the journey — the timeline draws
+   along its line, the milestones come up, then the founder's words */
+ACKO.slide("s-journey", ({ $, $$, plain, reveal, later, clearTimers, typeWords }) => ({
+  enter() { plain(); },
+  step(k, sc) {
+    clearTimers();
+    sc.classList.toggle("b2", k === 2);
+    if (k === 1) { reveal($(".jr-collage", sc), 200); return; }
+    const ms = $$(".jr-ms", sc), line = $(".jr-line", sc);
+    line.classList.remove("go"); ms.forEach((m) => m.classList.remove("go"));
+    later(() => line.classList.add("go"), 500);
+    ms.forEach((m, i) => later(() => m.classList.add("go"), 700 + i * 230));
+    typeWords($(".jr-quote q", sc), 90, 900 + ms.length * 230);
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

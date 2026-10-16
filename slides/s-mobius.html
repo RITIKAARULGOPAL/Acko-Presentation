@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Möbius · ACKO slide s-mobius</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-mobius" data-part="1" data-title="The Möbius" data-steps="1" data-mins="0.4"
   data-notes="A workplace inspired by the Möbius strip: one continuous surface, one continuous journey, where every connection leads to another. It is ACKO's own mark. So, let's embrace what's next: bold, fresh, fearless.">
   <div class="page">
@@ -10,3 +23,93 @@
     </div>
   </div>
 </section>
+<style>
+/* ---------- the Möbius (slide 10) ---------- */
+.mb-stage { left: 6%; top: 0; width: 88%; height: 100%; }
+.mb-stage canvas { display: block; width: 100% !important; height: 100% !important; }
+.mb-copy { left: 22%; top: 46%; width: 30%; text-align: left; }
+.mb-copy small { display: block; font-size: calc(var(--pt) * 7); font-style: italic; color: #b9a6ee; margin-bottom: calc(var(--pt) * 5); }
+.mb-copy h3 { font-size: calc(var(--pt) * 14); font-weight: 600; color: var(--purple); }
+.mb-copy p { margin-top: calc(var(--pt) * 9); font-size: calc(var(--pt) * 6.8); line-height: 1.5; color: #444; }
+.mb-copy b { display: block; margin-top: calc(var(--pt) * 4); font-size: calc(var(--pt) * 9.5); font-weight: 600; color: #888; letter-spacing: .02em; }
+.mb-stage { left: 8%; top: -3%; width: 92%; height: 100%; }
+.mb-copy { left: 33.4%; top: 31%; width: 36%; }
+.mb-copy small { font-family: var(--body); font-style: italic; font-size: calc(var(--pt) * 12); color: var(--lilac); }
+.mb-copy h3 { font-size: calc(var(--pt) * 19); font-weight: 500; color: var(--purple-2); }
+.mb-copy p { font-size: calc(var(--pt) * 9.5); color: #666; margin-top: calc(var(--pt) * 5); }
+.mb-copy b { font-size: calc(var(--pt) * 11); color: #999; margin-top: calc(var(--pt) * 6); }
+.mb-stage::before { content: ""; position: absolute; left: 18%; right: 18%; top: 78%; height: 12%; border-radius: 50%; background: radial-gradient(closest-side, rgba(70, 50, 120, .14), rgba(70, 50, 120, 0)); }
+.mb-stage { left: 5.4%; top: -4.5%; width: 92%; height: 100%; }
+.mb-stage::before { display: none; }
+</style>
+<script>
+/* the Möbius (deck slide 10): a live white strip, softly lit, swaying slowly — ACKO's own mark, one continuous surface.
+   three.js r147 (assets/vendor); its single edge is drawn as a fine lavender line so the strip reads on the white page */
+ACKO.slide("s-mobius", ({ $, plain, reveal, reduced }) => {
+  const MOB = { r: null };
+  function mobius(host) {
+    if (MOB.r) { host.appendChild(MOB.r.domElement); return; }
+    const THREE = window.THREE; if (!THREE) return;
+    const r = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    r.setPixelRatio(Math.min(2, devicePixelRatio || 1)); r.setClearColor(0x000000, 0);
+    host.appendChild(r.domElement);
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
+    cam.position.set(0, 6.6, 5.6); cam.lookAt(0, -0.05, 0.1);
+    // the strip: u around the loop, v across the band (a flat, wide ribbon as in the deck's render)
+    const NU = 360, NV = 24, R = 1.95, Wd = 0.52, T = 0.06;
+    const pos = [], idx = [];
+    const pt = (u, v, off) => {
+      const c = Math.cos(u / 2), s = Math.sin(u / 2);
+      const x = (R + v * c) * Math.cos(u), z = (R + v * c) * Math.sin(u), y = v * s;
+      const du = [-(R + v * c) * Math.sin(u) - 0.5 * v * s * Math.cos(u), 0.5 * v * c, (R + v * c) * Math.cos(u) - 0.5 * v * s * Math.sin(u)];
+      const dv = [c * Math.cos(u), s, c * Math.sin(u)];
+      let n = [du[1] * dv[2] - du[2] * dv[1], du[2] * dv[0] - du[0] * dv[2], du[0] * dv[1] - du[1] * dv[0]];
+      const l = Math.hypot(...n); n = n.map((q) => q / l);
+      return [x + n[0] * off, y + n[1] * off, z + n[2] * off];
+    };
+    for (let side = 0; side < 2; side++) {
+      const base = pos.length / 3, off = side ? -T / 2 : T / 2;
+      for (let i = 0; i <= NU; i++) for (let j = 0; j <= NV; j++) pos.push(...pt((i / NU) * Math.PI * 2, -Wd + (2 * Wd * j) / NV, off));
+      for (let i = 0; i < NU; i++) for (let j = 0; j < NV; j++) {
+        const a = base + i * (NV + 1) + j, b = a + NV + 1;
+        if (side) idx.push(a, a + 1, b, b, a + 1, b + 1); else idx.push(a, b, a + 1, b, b + 1, a + 1);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+    const mat = new THREE.MeshStandardMaterial({ color: 0xe6e1f0, roughness: 0.55, metalness: 0.0, side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(g, mat); scene.add(mesh);
+    const ep = [];
+    for (let i = 0; i <= 1440; i++) ep.push(...pt((i / 1440) * Math.PI * 4, Wd, 0));
+    const eg = new THREE.BufferGeometry(); eg.setAttribute("position", new THREE.Float32BufferAttribute(ep, 3));
+    mesh.add(new THREE.Line(eg, new THREE.LineBasicMaterial({ color: 0x8f78dc, transparent: true, opacity: 0.85 })));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x5a5175, 0.7));
+    const key = new THREE.DirectionalLight(0xffffff, 0.85); key.position.set(-5, 6, 4); scene.add(key);
+    const fill = new THREE.DirectionalLight(0xffffff, 0.25); fill.position.set(5, 2, 6); scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xc9b3f3, 0.7); rim.position.set(4, -3, -5); scene.add(rim);
+    MOB.r = r; MOB.scene = scene; MOB.cam = cam; MOB.mesh = mesh;
+  }
+  function run(host) {
+    const r = MOB.r; if (!r) return;
+    const t0 = performance.now();
+    const loop = (now) => {
+      if (document.body.dataset.scene !== "s-mobius") return;
+      const W = host.clientWidth, Hh = host.clientHeight;
+      if (W && Hh && (r.domElement.width !== Math.round(W * r.getPixelRatio()) || r.domElement.height !== Math.round(Hh * r.getPixelRatio()))) { r.setSize(W, Hh, false); MOB.cam.aspect = W / Hh; MOB.cam.updateProjectionMatrix(); }
+      const t = reduced ? 0 : (now - t0) / 1000;
+      MOB.mesh.rotation.y = -0.6 + 0.28 * Math.sin(t * 0.18);   // a slow sway, so the copy always sits in the loop
+      MOB.mesh.rotation.x = 0.06 * Math.sin(t * 0.4);
+      r.render(MOB.scene, MOB.cam);
+      MOB.raf = requestAnimationFrame(loop);
+    };
+    cancelAnimationFrame(MOB.raf); MOB.raf = requestAnimationFrame(loop);
+  }
+  return {
+    enter(_, sc) { plain(); const host = $(".mb-stage", sc); mobius(host); run(host); reveal($(".mb-copy", sc), 600); },
+    leave() { cancelAnimationFrame(MOB.raf); },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

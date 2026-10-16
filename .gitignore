@@ -21,3 +21,7 @@ index.html
 
 # exported versions for the meeting (folder + zip)
 versions/
+
+# the joined single file and one-slide previews (tools/build.py --single / --only)
+dist/
+preview.html

@@ -3,6 +3,8 @@
 //   node tools/walk.js                    every beat of every slide: console errors, failed requests, anything on the logo lockup;
 //                                         exits 1 on any error
 //   node tools/walk.js --slide s-loop     one slide: each beat screenshotted (to --out), plus its errors
+//   node tools/walk.js --page dist/ACKO-The-Loop.html --single    the single file: also fails on ANY request for a file (it must need nothing)
+//   node tools/walk.js --page slides/s-loop.html                  one slide file opened on its own
 //   options: --out <dir>  --size 1366x768
 //
 // Needs node, puppeteer-core (set NODE_PATH=C:/Users/Ritika/Mitigata/node_modules) and Chrome.
@@ -12,9 +14,10 @@ const puppeteer = require("puppeteer-core");
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
 const SLIDE = arg("--slide"), [W, H] = arg("--size", "1600x900").split("x").map(Number);
 const OUT = arg("--out", path.join(os.tmpdir(), "acko-walk", SLIDE || "all"));
-// index.html is built from slides/ (tools/build.py): build it first so the walk sees the current slides
-require("child_process").execFileSync(process.env.PYTHON || "python", [path.join(__dirname, "build.py")], { stdio: "inherit" });
-const PAGE = "file:///" + path.resolve(__dirname, "..", "index.html").replace(/\\/g, "/");
+// index.html is built from slides/ (tools/build.py): build it first so the walk sees the current slides (unless --page names a file)
+const PAGEFILE = arg("--page");
+if (!PAGEFILE) require("child_process").execFileSync(process.env.PYTHON || "python", [path.join(__dirname, "build.py")], { stdio: "inherit" });
+const PAGE = "file:///" + path.resolve(PAGEFILE || path.join(__dirname, "..", "index.html")).replace(/\\/g, "/");
 const CHROME = process.env.CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe";
 // slides whose beats animate for a while before they settle
 const WAIT = { "s-cover": 2600, "s-team": 1800, "s-aspiration": 2600, "s-acko": 2400, "s-journey": 6200, "s-challenge": 3600, "s-memories": 6800,
@@ -32,9 +35,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   page.on("pageerror", (e) => errors.push(`${at}: ${e.message}`));
   page.on("console", (m) => { if (m.type() === "error") errors.push(`${at}: ${m.text()}`); });
   // a paused audio stream has its open download dropped by Chrome (net::ERR_ABORTED): normal, not an error
-  const mediaAbort = (r) => /\.(mp3|m4a|ogg|mp4|webm)$/i.test(r.url()) && (r.failure() || {}).errorText === "net::ERR_ABORTED";
-  page.on("requestfailed", (r) => { if (!mediaAbort(r)) errors.push(`${at}: FAILED ${r.url()}`); });
-  await page.goto(PAGE, { waitUntil: "load" });
+  const mediaAbort = (r) => (/\.(mp3|m4a|ogg|mp4|webm)$/i.test(r.url()) || r.resourceType() === "media") && (r.failure() || {}).errorText === "net::ERR_ABORTED";
+  page.on("requestfailed", (r) => { if (!mediaAbort(r)) errors.push(`${at}: FAILED ${r.url()} (${r.resourceType()}, ${(r.failure() || {}).errorText})`); });
+  // the single file must not reach for anything beside itself
+  if (PAGEFILE && process.argv.includes("--single")) page.on("request", (r) => { const u = r.url(); if (!/^(blob:|data:|about:)/.test(u) && u.split("#")[0] !== PAGE) errors.push(`${at}: REQUEST ${u}`); });
+  await page.goto(PAGE, { waitUntil: "load", timeout: 120000 });
+  await page.waitForFunction(() => window.ACKO && window.ACKO.state && window.ACKO.state.idx >= 0, { timeout: 120000 });
   await sleep(1500);
   const list = await page.evaluate(() => [...document.querySelectorAll(".scene")].map((s, i) => ({ i, id: s.id, n: +s.dataset.steps || 1 })));
   await page.evaluate(() => {   // anything visible sitting on the bottom-right logo lockup

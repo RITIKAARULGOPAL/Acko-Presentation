@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What&#x27;s our challenge · ACKO slide s-challenges</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-challenges" data-part="2" data-title="What's our challenge" data-steps="3" data-mins="1.2" data-beats="Homogeneity,Disorientation,Distance"
   data-notes="One vast floor, a thousand disconnected experiences. 1 · Homogeneity: a repetitive, uninterrupted workstation layout makes a uniform environment with little spatial identity. 2 · Disorientation: the amenities feel disconnected from the work zones, so distances feel longer and people meet less by chance. 3 · Distance: 245 m end to end, about three minutes on foot; the elongated plate weakens the sense of direction. So: a campus that connects, not just accommodates.">
   <div class="page">
@@ -29,3 +42,64 @@
     <p class="cl-hand hand" data-step="3" style="left:53%;top:77.5%;width:40%">A campus that connects, not just accommodates.</p>
   </div>
 </section>
+<style>
+/* ---------- what's our challenge (slide 14) ---------- */
+.cl-axo { background: url(assets/img/challenge-axo.webp) 100% 0 / 111.4% 100% no-repeat; }
+.cl-svg { overflow: visible; }
+.cl-desks path { fill: #b9a6ea; opacity: 0; transition: opacity .5s var(--ease) var(--d); }
+.cl-svg.b1 .cl-desks path { opacity: .85; }
+.cl-svg.b2 .cl-desks path, .cl-svg.b3 .cl-desks path { opacity: .28; transition-delay: 0s; }
+.cl-terrace path { fill: #93c47d; opacity: .75; }
+.cl-far { opacity: 0; transition: opacity .6s var(--ease); }
+.cl-svg.b2 .cl-far { opacity: 1; }
+.cl-walk { fill: none; stroke: var(--maroon); stroke-width: 2.5; stroke-dasharray: 8 7; vector-effect: non-scaling-stroke; }
+.cl-pin circle { fill: var(--purple); stroke: #fff; stroke-width: 3; }
+.cl-pin.far circle { fill: var(--maroon); }
+.cl-pin text, .cl-km { font-family: var(--body); font-size: 20px; font-weight: 600; fill: #3b3550; paint-order: stroke; stroke: #fff; stroke-width: 5px; }
+.cl-km { font-size: 26px; fill: var(--maroon); }
+.cl-route { fill: none; stroke: var(--plum); stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; opacity: 0; }
+.cl-svg.b3 .cl-route { opacity: 1; }
+.cl-h { left: 1.8%; top: 14%; width: 63.5%; font-size: calc(var(--pt) * 16); font-style: italic; color: var(--mist); }
+.cl-c b { display: block; font-size: calc(var(--pt) * 9.5); font-weight: 600; color: var(--purple-2); }
+.cl-c p { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 8.2); font-weight: 300; line-height: 1.45; color: #555; }
+.cl-c img, .cl-n { position: absolute; }
+.cl-n { left: calc(var(--pt) * 52); top: calc(var(--pt) * 46); font-size: calc(var(--pt) * 32); font-weight: 400; color: var(--lavender); line-height: 1; }
+.cl-icons { display: flex; align-items: flex-end; gap: calc(var(--pt) * 10); margin-top: calc(var(--pt) * 8); }
+.cl-icons img { height: calc(var(--pt) * 24); width: auto; mix-blend-mode: multiply; }
+.cl-len { margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 9); color: var(--plum); font-weight: 600; }
+.cl-len span { font-family: var(--num); font-size: 1.6em; font-weight: 500; }
+.cl-hand { font-size: calc(var(--pt) * 26); color: var(--plum); }
+.cl-icons img { position: static; }
+</style>
+<script>
+/* what's our challenge (deck slide 14), on the deck's axo of the bare floor: 1 homogeneity — one uniform grid of desks floods the
+   plate; 2 disorientation — a desk at the far end is a long walk from the café and the arrivals; 3 distance — the route the deck
+   draws, end to end, 245 m */
+ACKO.slide("s-challenges", ({ $, plain, later, countUp, drawPath, inPoly }) => {
+  function clDesks(g) {
+    if (g.childElementCount) return;
+    const A = [39, 1029], U = [1359, -1014], V = [206, 130], core = [[300, 842], [1095, 241], [1190, 303], [399, 916]];
+    const terr = [[[556, 856], [628, 801], [680, 841], [608, 896]], [[1079, 466], [1154, 407], [1206, 448], [1130, 505]]];
+    const out = [], NU = 104, NV = 8;
+    for (let i = 0; i <= NU; i++) for (let j = 0; j < NV; j++) {
+      const ii = i / NU, jj = (j + 0.5) / NV, x = A[0] + U[0] * ii + V[0] * jj, y = A[1] + U[1] * ii + V[1] * jj;
+      if (inPoly([x, y], core) || terr.some((t) => inPoly([x, y], t))) continue;
+      const a = 0.62 / NU, b = 0.36 / NV;
+      out.push(`<path style="--d:${Math.round(ii * 1400)}ms" d="M${x.toFixed(1)} ${y.toFixed(1)}l${(U[0] * a).toFixed(1)} ${(U[1] * a).toFixed(1)}l${(V[0] * b).toFixed(1)} ${(V[1] * b).toFixed(1)}l${(-U[0] * a).toFixed(1)} ${(-U[1] * a).toFixed(1)}Z"/>`);
+    }
+    g.innerHTML = out.join("");
+  }
+  return {
+    enter(_, sc) { plain(); clDesks($(".cl-desks", sc)); },
+    step(k, sc) {
+      const svg = $(".cl-svg", sc);
+      ["b1", "b2", "b3"].forEach((c, i) => svg.classList.toggle(c, k === i + 1));
+      if (k === 3) { drawPath($(".cl-route", sc), 3200, 300); later(() => countUp($(".cl-len [data-count]", sc), 2600), 500); }
+      if (k === 2) drawPath($(".cl-walk", sc), 2200, 400);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

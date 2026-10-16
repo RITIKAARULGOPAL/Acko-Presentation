@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meet the team · ACKO slide s-team</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-team" data-part="cover" data-mode="dark" data-title="Meet the team" data-steps="1" data-mins="0.4"
   data-notes="The SKV team in the room today: Tushar Mittal, founder; Jegan, design and technology; Bisa, workplace strategy; Nabeela, design; Sai, architecture; and Ashish, Rishabh, Umar, Deepak and Sudeeti on the business, project and commercial side.">
   <div class="page">
@@ -17,3 +30,20 @@
     </div>
   </div>
 </section>
+<style>
+/* ---------- team (slide 2) ---------- */
+.tm-photo { right: 0; top: 0; width: 53.7%; height: 100%; background: url(assets/img/team-dark.webp) center / cover; opacity: .38; -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%); mask-image: linear-gradient(90deg, transparent, #000 30%); }
+.tm-h { left: 5%; top: 22.3%; font-size: calc(var(--pt) * 16); font-weight: 600; font-style: italic; color: var(--violet); }
+.tm-p { width: 13.5%; text-align: center; }
+.tm-p i { display: block; width: 57.8%; aspect-ratio: 1; margin: 0 auto calc(var(--pt) * 5); border-radius: 50%; background: #222 center / cover no-repeat; box-shadow: 0 0 0 calc(var(--pt) * 1.2) rgba(255,255,255,.9); }
+.tm-p b { display: block; font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 6); color: #fff; }
+.tm-p span { display: block; font-family: var(--label); font-size: calc(var(--pt) * 5); color: rgba(255,255,255,.62); line-height: 1.3; }
+.tm-p { position: absolute; }
+</style>
+<script>
+/* the team (deck slide 2): the portraits come in one after another */
+ACKO.slide("s-team", ({ $, plain, reveal }) => ({ enter(_, sc) { plain(); reveal($(".tm-people", sc), 150); } }));
+</script>
+<!-- slide:end -->
+</body>
+</html>

@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The challenge at hand · ACKO slide s-challenge</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-challenge" data-part="1" data-mode="lavender" data-title="The challenge at hand" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
   data-notes="1 · The challenge: bringing people from two existing locations together. Breaking away from an established experience can leave people disoriented, unsettled, displaced, disconnected. 2 · The solution: a protection destination where people have one continuous experience — familiar teams, comfort in the unknown, a different spatial experience, existing team dynamics kept. One place, one experience.">
   <div class="page">
@@ -17,3 +30,75 @@
     <div class="ch-copy" data-only="2"><small>Opening the Way to What’s Next</small><h3>&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3><span class="one">One Place One Experience</span></div>
   </div>
 </section>
+<style>
+/* ---------- the challenge → the solution (slides 6–7), lavender ---------- */
+.ch-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.ch-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ch-words { left: 1.8%; top: 67%; width: 44%; height: 14%; display: grid; grid-template-columns: repeat(4, 1fr); }
+.ch-word { position: relative; text-align: center; }
+.ch-word span { display: block; font-size: calc(var(--pt) * 8.5); line-height: 1.25; color: #222; min-height: 2.6em; display: flex; align-items: flex-end; justify-content: center; }
+.ch-word img { height: calc(var(--pt) * 26); width: auto; margin: calc(var(--pt) * 4) auto 0; mix-blend-mode: multiply; }
+.ch-word .b { position: absolute; inset: 0; opacity: 0; transition: opacity .8s var(--ease); transition-delay: calc(var(--i) * 140ms); }
+.ch-word .a { transition: opacity .6s var(--ease); transition-delay: calc(var(--i) * 140ms); }
+.solved .ch-word .a { opacity: 0; }
+.solved .ch-word .b { opacity: 1; }
+.ch-copy { left: 48.6%; top: 61%; width: 34%; }
+.ch-copy small { display: block; font-size: calc(var(--pt) * 6.5); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 6); }
+.ch-copy h3 { font-size: calc(var(--pt) * 13); line-height: 1.25; font-weight: 700; color: var(--purple-2); }
+.ch-copy h3 b { font-weight: 800; }
+.ch-copy .one { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: #fff; }
+.ch-dots { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.ch-dots circle { fill: var(--purple-2); }
+.ch-dots text { font-family: var(--label); font-size: 9px; fill: #3b3550; letter-spacing: .08em; }
+.ch-people circle { fill: var(--purple-2); opacity: .78; }
+.ch-l { font-family: var(--label); font-size: 15px; letter-spacing: .16em; fill: #4e4767; transition: opacity .8s var(--ease); }
+.ch-l.b { opacity: 0; }
+.solved .ch-l.a { opacity: 0; }
+.solved .ch-l.b { opacity: 1; transition-delay: 1.6s; }
+.ch-word span { font-size: calc(var(--pt) * 15); line-height: 1; min-height: 2em; color: #434343; }
+.ch-word img { height: calc(var(--pt) * 32); }
+.ch-l { font-size: 24px; }
+</style>
+<script>
+/* the challenge → the solution (deck slides 6 → 7): the people of two offices, two clusters that drift towards each other (1)
+   and then become one loop (2) */
+ACKO.slide("s-challenge", ({ $, $$, plain, reveal, raf2 }) => {
+  const N = 64;
+  function chDots(svg) {
+    if (svg.children.length) return;
+    let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    const out = [];
+    for (let i = 0; i < N; i++) {
+      const a = i < N / 2 ? [330, 260] : [1530, 250], ang = rnd() * Math.PI * 2, rr = Math.sqrt(rnd()) * 130;
+      const from = [a[0] + Math.cos(ang) * rr, a[1] + Math.sin(ang) * rr * 0.62];
+      const near = [from[0] + (i < N / 2 ? 260 : -260), from[1]];
+      // on the loop: a figure of eight across the middle of the page
+      const t = (i / N) * Math.PI * 2, loop = [960 + 520 * Math.sin(t), 270 + 150 * Math.sin(t) * Math.cos(t) * 1.6];
+      out.push(`<circle r="${(5 + rnd() * 4).toFixed(1)}" cx="0" cy="0" data-a="${from.map(Math.round)}" data-b="${near.map(Math.round)}" data-c="${loop.map(Math.round)}" style="transform:translate(${from[0]}px,${from[1]}px)"/>`);
+    }
+    svg.innerHTML = `<g class="ch-people">${out.join("")}</g>` +
+      `<text x="330" y="470" text-anchor="middle" class="ch-l a">TWO EXISTING LOCATIONS</text><text x="1530" y="470" text-anchor="middle" class="ch-l a"></text>` +
+      `<text x="960" y="520" text-anchor="middle" class="ch-l b">ONE PLACE</text>`;
+  }
+  function chMove(svg, key, ms) {
+    $$("circle", svg).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px)`;
+    });
+  }
+  return {
+    enter(_, sc) { plain(); chDots($("#ch-dots", sc)); },
+    step(k, sc) {
+      const pg = $(".page", sc), svg = $("#ch-dots", sc);
+      pg.classList.toggle("solved", k === 2);
+      if (k === 1) { chMove(svg, "a", 0); raf2(() => chMove(svg, "b", 2800)); }
+      else chMove(svg, "c", 2400);
+      reveal($(".ch-words", sc), 100);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

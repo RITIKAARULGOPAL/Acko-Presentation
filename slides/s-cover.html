@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cover · ACKO slide s-cover</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-cover" data-part="cover" data-mode="dark" data-title="Cover" data-steps="1" data-mins="0.25"
   data-notes="ACKO head office, design and build. Regalium, Koramangala: one floor of 91,000 sq ft. Technical bid by Studiokon Ventures for Anarock PMES, on behalf of ACKO.">
   <div class="cv-photo"></div><div class="cv-veil"></div>
@@ -20,3 +33,48 @@
     </div>
   </div>
 </section>
+<style>
+/* ---------- cover (slide 1) ---------- */
+#s-cover .cv-photo { position: fixed; inset: 0; background: #0b0b0c url(assets/img/cover-stair.webp) center / cover no-repeat; opacity: 0; transition: opacity 1.6s var(--ease); }
+#s-cover.active .cv-photo { opacity: .62; }
+#s-cover .cv-veil { position: fixed; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.25) 70%, rgba(0,0,0,.1)); }
+#s-cover .page { color: #fff; }
+.cv-small { font-size: calc(var(--pt) * 6); letter-spacing: .14em; text-transform: uppercase; color: #fff; }
+.cv-rule { height: 1px; background: rgba(255,255,255,.55); transform-origin: left; transform: scaleX(0); transition: transform 1.4s var(--ease) .2s; }
+#s-cover.active .cv-rule { transform: scaleX(1); }
+.cv-logo { width: 17.5%; height: auto; }
+.cv-title { font-size: calc(var(--pt) * 33); font-weight: 700; letter-spacing: -.005em; color: var(--purple-2); white-space: nowrap; line-height: 1; }
+.cv-facts { display: grid; grid-template-columns: 30fr 21fr 21fr 22fr; gap: 0; }
+.cv-facts span { display: block; font-size: calc(var(--pt) * 5); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: calc(var(--pt) * 2); }
+.cv-facts b { display: block; font-weight: 400; font-size: calc(var(--pt) * 8); color: #fff; line-height: 1.3; padding-right: 2em; }
+.cv-mobius { right: 2%; top: 4%; width: 44%; height: 92%; overflow: visible; }
+.cv-mobius path { fill: none; stroke: rgba(201, 179, 243, .55); stroke-width: 1.2; vector-effect: non-scaling-stroke; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); }
+#s-cover.active .cv-mobius path { animation: draw 4.5s var(--ease) .6s forwards; }
+</style>
+<script>
+/* the cover (deck slide 1): the facts come up; a thin Möbius line draws itself over the stairs */
+ACKO.slide("s-cover", ({ $, plain, reveal }) => {
+  // the edge of a Möbius strip (one curve, twice round), seen in perspective
+  function mobiusEdge(R, w, tilt, turn) {
+    const pts = [];
+    for (let i = 0; i <= 720; i++) {
+      const u = (i / 720) * 4 * Math.PI, r = R + w * Math.cos(u / 2);
+      const x = r * Math.cos(u + turn), y = r * Math.sin(u + turn), z = w * Math.sin(u / 2);
+      const y2 = y * Math.cos(tilt) - z * Math.sin(tilt), z2 = y * Math.sin(tilt) + z * Math.cos(tilt), k = 260 / (260 + z2 * 2.2);
+      pts.push([(x * k).toFixed(1), (y2 * k).toFixed(1)]);
+    }
+    return "M" + pts.map((q) => q.join(" ")).join("L");
+  }
+  return {
+    enter(_, sc) {
+      plain(); reveal($(".page.rv", sc), 200);
+      const p = $(".cv-mobius path", sc);
+      if (p && !p.getAttribute("d")) p.setAttribute("d", mobiusEdge(62, 22, 1.08, 0.35));
+      if (p) { p.style.animation = "none"; p.style.setProperty("--len", Math.ceil(p.getTotalLength())); void p.getBoundingClientRect(); p.style.animation = ""; }
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

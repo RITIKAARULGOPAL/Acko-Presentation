@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Occupancy chart · ACKO slide s-occupancy</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
 <section class="scene" id="s-occupancy" data-part="5" data-title="Occupancy chart" data-steps="1" data-mins="0.6"
   data-notes="The brief against Option 2A. Met or more: 651 workstations against 600–700; the boardroom seats 35 against 32; the café 178 against 150; training 42 against 40; reception, lounge, executive cabins, visitor hubs, the hatchery, studio, mothers', zen and prayer rooms all in. Short of the ask: focus rooms 16 of 20, 4-pax sprints 17 of 25 — with 3-, 6- and 8-pax rooms added — huddles 13 of 18, departmental rooms 6 of 8, phone booths 42 of 44.">
   <div class="page">
@@ -41,3 +54,48 @@
     </div>
   </div>
 </section>
+<style>
+/* ---------- occupancy chart (slide 61) ---------- */
+.oc { width: 100%; border-collapse: collapse; font-size: calc(var(--pt) * 6.4); }
+.oc th { font-size: calc(var(--pt) * 5.6); letter-spacing: .1em; text-transform: uppercase; font-weight: 700; background: #efefef; padding: calc(var(--pt) * 3.2) calc(var(--pt) * 4); text-align: center; }
+.oc td { padding: calc(var(--pt) * 1.6) calc(var(--pt) * 5); border-bottom: 1px solid #fff; }
+.oc td:nth-last-child(-n+2) { text-align: center; }
+.oc td:last-child { font-family: var(--num); font-weight: 500; }
+.oc td[rowspan], .oc tr td:first-child[rowspan] { font-size: calc(var(--pt) * 5.6); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; text-align: center; background: #efefef; }
+.oc tr.z1 td { background: #f3f1dc; }
+.oc tr.z2 td { background: #eae5e0; }
+.oc tr.z3 td { background: #d7d6da; }
+.oc tr.z4 td { background: #d8c8d3; }
+.oc tr.z5 td { background: #d8c8d3; }
+.oc tr.z6 td { background: #b3abaa; }
+.oc tr td[rowspan] { background: #efefef !important; }
+.oc tr { opacity: 0; transform: translateX(-8px); transition: opacity .4s var(--ease), transform .4s var(--ease); }
+.oc tr.in, .oc thead tr { opacity: 1; transform: none; }
+.oc td.up { color: var(--purple); font-weight: 700; }
+.oc td.short { color: var(--maroon); font-weight: 700; }
+.oc td small { font-size: .82em; font-weight: 400; }
+.oc-key p { font-size: calc(var(--pt) * 8.4); line-height: 1.5; color: #444; margin-bottom: calc(var(--pt) * 10); padding-left: calc(var(--pt) * 14); position: relative; }
+.oc-key p i { position: absolute; left: 0; top: .45em; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); }
+.oc-key i.up { background: var(--purple); }
+.oc-key i.short { background: var(--maroon); }
+.oc-key b { font-weight: 700; color: #000; }
+.oc-big { padding-left: 0 !important; }
+.oc-big span { display: block; font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 44); color: var(--purple); line-height: 1; }
+.oc-big small { font-size: calc(var(--pt) * 8.4); color: #666; }
+.oc tr.z4 td:first-child { font-size: calc(var(--pt) * 5.6); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; text-align: center; background: #efefef !important; }
+</style>
+<script>
+/* the occupancy chart (deck slide 61): the rows come in one after another; shortfalls in maroon, more than asked in purple */
+ACKO.slide("s-occupancy", ({ $, $$, plain, reveal, later, countUp }) => ({
+  enter(_, sc) {
+    plain();
+    const rows = $$(".oc tbody tr", sc); rows.forEach((r) => r.classList.remove("in"));
+    rows.forEach((r, i) => later(() => { r.classList.add("in"); $$("[data-count]", r).forEach((e) => countUp(e, 700)); }, 200 + i * 70));
+    reveal($(".page", sc), 100);
+    later(() => countUp($(".oc-big [data-count]", sc), 1600), 400 + rows.length * 70);
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>
