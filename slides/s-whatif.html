@@ -14,19 +14,23 @@
 <section class="scene" id="s-whatif" data-part="1" data-title="What if" data-steps="1" data-mins="0.2"
   data-notes="So: what if we tap into that familiar feeling of safety and protection, and bring it into the workplace?">
   <div class="page">
-    <p class="wi-q hand" style="left:1.7%;top:39.3%;width:96.8%;text-align:center;font-size:calc(var(--pt) * 34);color:var(--purple)">What if we tap into the familiarity of Safety &amp; Protection into the workplace?</p>
+    <!-- the deck's text box: left-aligned, centred in its height, 7.2 pt insets -->
+    <div class="wi-box" style="left:1.7%;top:39.3%;width:96.8%;height:21.5%">
+      <!-- each space belongs to the next run, as in the deck, so it takes that run's font and size -->
+      <p class="wi-q"><span class="wi-h">What if we tap into the familiarity</span><b> of Safety &amp; Protection</b><span class="wi-h"> into the workplace?</span></p>
+    </div>
   </div>
 </section>
 <style>
-/* ---------- what if (slide 9) ---------- */
-.wi-q { left: 18%; top: 38%; width: 66%; font-size: calc(var(--pt) * 25); line-height: 1.3; font-weight: 400; }
-.wi-q b { font-weight: 700; color: var(--purple); }
-.wi-q span { display: inline; opacity: 0; transition: opacity .5s; }
-.wi-q span.on { opacity: 1; }
+/* ---------- what if (slide 9): the deck's two fonts, Square Peg 30 pt in black and Figtree Bold 28 pt in purple ---------- */
+.wi-box { display: flex; align-items: center; padding: 0 calc(var(--pt) * 7.2); box-sizing: border-box; }
+.wi-q { margin: 0; text-align: left; line-height: 1.15; }
+.wi-h { font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 30); color: var(--hand-ink); }
+.wi-q b { font-family: var(--body); font-weight: 700; font-size: calc(var(--pt) * 28); color: var(--purple); }
 </style>
 <script>
-/* what if (deck slide 9): the question, word by word */
-ACKO.slide("s-whatif", ({ $, plain, typeWords }) => ({ enter(_, sc) { plain(); typeWords($(".wi-q", sc), 120, 300); } }));
+/* what if (deck slide 9): the question as the deck sets it, with no animation (the deck has none here) */
+ACKO.slide("s-whatif", ({ plain }) => ({ enter() { plain(); } }));
 </script>
 <!-- slide:end -->
 </body>
