@@ -60,18 +60,12 @@ button { font: inherit; color: inherit; }
 img { display: block; max-width: 100%; }
 p { margin: 0; }
 h1, h2, h3 { margin: 0; font-weight: 600; }
-/* ---------- chrome: the section mark (top right), the copyright line and the ACKO | SKV lockup (the deck's footer) ---------- */
+/* ---------- chrome: the ACKO symbol with the sections list (top right), the copyright line and the ACKO | SKV lockup (the deck's footer) ---------- */
 .topbar { position: fixed; top: calc(var(--ptop) + var(--ph) * .03); right: calc(var(--pl) + var(--pw) * .018); z-index: 50; pointer-events: none; }
 .topbar > * { pointer-events: auto; }
 .topic-mark { position: relative; display: flex; align-items: center; }
 .tm-btn { display: block; padding: 4px 0; border: 0; background: none; line-height: 0; cursor: pointer; }
-.tm-btn svg { width: 60px; height: 16px; display: block; overflow: visible; }
-.tm-loop { fill: none; stroke: var(--line); stroke-width: 1.2; }
-.tm-bead { fill: #e3e0ea; cursor: pointer; transition: fill .5s var(--ease); }
-.tm-bead[data-state="past"] { fill: #2e2e2e; }
-.tm-bead[data-state="now"] { fill: var(--accent); }
-html[data-theme="dark"] .tm-bead { fill: rgba(255,255,255,.2); }
-html[data-theme="dark"] .tm-bead[data-state="past"] { fill: rgba(255,255,255,.7); }
+.tm-btn img { height: calc(var(--pt) * 9); width: auto; }   /* the symbol alone, a little taller than the lockup's wordmark */
 .tm-list { position: absolute; right: -10px; top: calc(100% + 10px); min-width: 230px; padding: 6px; display: flex; flex-direction: column; background: var(--bg); border: 1px solid var(--line);
   opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s linear .25s; }
 .tm-list::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
@@ -94,10 +88,10 @@ html[data-theme="dark"] .tm-bead[data-state="past"] { fill: rgba(255,255,255,.7)
 .logo-ink { display: block; }
 html[data-theme="dark"] .logo-light { display: block; }
 html[data-theme="dark"] .logo-ink { display: none; }
-/* over a full-bleed render or the black pages the footer is white */
+/* over a full-bleed render or the black pages the footer and the top symbol are white */
 body.on-photo .hint { color: rgba(255,255,255,.85); text-shadow: 0 1px 3px rgba(0,0,0,.5); }
-body.on-photo .lockup .logo-ink { display: none; }
-body.on-photo .lockup .logo-light { display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.6)); }
+body.on-photo :is(.lockup, .topbar) .logo-ink { display: none; }
+body.on-photo :is(.lockup, .topbar) .logo-light { display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.6)); }
 body.on-photo .lockup i { background: rgba(255,255,255,.6); }
 .progress { position: fixed; left: 0; bottom: 0; height: 2px; background: var(--accent); z-index: 60; transition: width .6s var(--ease); }
 /* ---------- the world ---------- */

@@ -111,15 +111,12 @@
     o.onclick = (e) => { const beat = e.target.closest("[data-beat]"); toggleOverview(false); go(i, beat ? +beat.dataset.beat : 1); };
     grid.appendChild(o);
   });
-  /* the section mark (top right): the deck's five sections as beads along one loop — past ink, now purple, next pale;
-     hover lists them, a click opens a section */
+  /* the sections list behind the ACKO symbol (top right): hover lists the deck's five sections — past ink, now purple,
+     next pale — and a click opens one */
   const TOPICS = { main: [["1", "Design concept"], ["2", "Design strategy"], ["3", "Visual direction"], ["4", "Value addition"], ["5", "Space planning"]], appendix: [["A", "Appendix"]], skv: [["0", "About SKV"]] };
   const firstOf = (p) => scenes.findIndex((s) => s.dataset.part === p);
   function topicMark(track) {
     const tp = TOPICS[track] || TOPICS.main, n = tp.length;
-    const xs = tp.map((_, k) => (n === 1 ? 30 : 6 + (48 * k) / (n - 1)));
-    $("#topic-mark svg").innerHTML = `<path class="tm-loop" d="M6 8C6 1 18 1 30 8S54 15 54 8 42 1 30 8 6 15 6 8"/>` +
-      tp.map(([p], k) => `<circle class="tm-bead" data-part="${p}" cx="${xs[k]}" cy="8" r="3.4"/>`).join("");
     $("#tm-list").innerHTML = (track === "main" ? `<button type="button" data-part="cover"><b>—</b>Cover</button>` : "") +
       tp.map(([p, nm], k) => `<button type="button" data-part="${p}"><b>${n > 1 ? String(k + 1).padStart(2, "0") : ""}</b>${nm}</button>`).join("");
     $$("#topic-mark [data-part]").forEach((el) => (el.onclick = (e) => {
