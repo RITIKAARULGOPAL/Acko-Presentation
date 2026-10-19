@@ -7,6 +7,12 @@
       "runtimeArgs": ["tools/serve.py"],
       "port": 8771,
       "autoPort": true
+    },
+    {
+      "name": "dxf-viewer",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8010", "--directory", "C:/Users/Ritika/Downloads/dxf-plan-toolkit-v1.0/dxf-plan-toolkit/viewer"],
+      "port": 8010
     }
   ]
 }

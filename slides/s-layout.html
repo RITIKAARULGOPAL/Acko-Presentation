@@ -11,11 +11,12 @@
 </head>
 <body>
 <!-- slide:start -->
-<section class="scene" id="s-layout" data-part="5" data-title="Layout · Option 02A" data-steps="2" data-mins="1.2" data-beats="The layout,Six neighbourhoods"
-  data-notes="1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 142 seats, 02 · 137, 03 · 53, 04 · 128, 05 · 70, 06 · 118 — 648, plus 3 executive cabins = 651. The two arrival zones sit at the lift lobbies.">
+<section class="scene" id="s-layout" data-part="5" data-title="Layout · Option 02A" data-steps="3" data-mins="1.5" data-beats="The layout,Six neighbourhoods,Fire egress"
+  data-notes="1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The Fire egress button shows the layer on any beat, and on the blow-ups.">
   <div class="page">
     <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
     <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
+    <button type="button" class="ly-eg-btn ui" style="left:76%;top:3.2%"><i></i>Fire egress</button>
     <div class="ly-legend" data-only="1">
       <b class="ly-lh">Legend</b>
       <ul style="left:3.4%;top:58%">
@@ -33,18 +34,22 @@
         <span><img src="assets/img/ty-icon3.webp" alt="">Type 3 | 36 Pax</span><span><img src="assets/img/ty-icon4.webp" alt="">Type 4 | 525 Pax</span>
       </div>
     </div>
-    <div class="ly-nbs ui" data-only="2">
+    <div class="ly-nbs" data-only="2">
       <b class="ly-lh">Six neighbourhoods</b>
       <div class="ly-rows">
-        <div data-nb="01" style="--c:#B45F06"><b>01</b><span data-count="142">142</span><small>seats</small></div>
+        <div data-nb="01" style="--c:#B45F06"><b>01</b><span data-count="140">140</span><small>seats</small></div>
         <div data-nb="02" style="--c:#274E13"><b>02</b><span data-count="137">137</span><small>seats</small></div>
-        <div data-nb="03" style="--c:#45818E"><b>03</b><span data-count="53">53</span><small>seats</small></div>
-        <div data-nb="04" style="--c:#4A86E8"><b>04</b><span data-count="128">128</span><small>seats</small></div>
-        <div data-nb="05" style="--c:#9900FF"><b>05</b><span data-count="70">70</span><small>seats</small></div>
-        <div data-nb="06" style="--c:#FF00FF"><b>06</b><span data-count="118">118</span><small>seats</small></div>
+        <div data-nb="03" style="--c:#45818E"><b>03</b><span data-count="65">65</span><small>seats</small></div>
+        <div data-nb="04" style="--c:#4A86E8"><b>04</b><span data-count="82">82</span><small>seats</small></div>
+        <div data-nb="05" style="--c:#9900FF"><b>05</b><span data-count="104">104</span><small>seats</small></div>
+        <div data-nb="06" style="--c:#FF00FF"><b>06</b><span data-count="123">123</span><small>seats</small></div>
         <div data-nb="arrival" style="--c:#0000FF" class="arr"><b>Arrival</b><span></span><small>at the two lift lobbies</small></div>
       </div>
-      <p class="ly-total"><span data-count="648">648</span> seats in six neighbourhoods + 3 executive cabins = <b>651</b></p>
+      <p class="ly-total"><span data-count="651">651</span> workstations in six neighbourhoods</p>
+    </div>
+    <div class="ly-eg" data-only="3">
+      <b class="ly-lh">Fire egress</b>
+      <ul style="left:4.6%;top:59%"><li><i style="background:#2f9e44"></i>Exit path, less than 50 m</li><li><i style="background:#f08c00"></i>Exit path, 50 m – 60 m</li></ul>
     </div>
   </div>
 </section>
@@ -68,18 +73,31 @@
 .ly-rows > div:hover { background: rgba(0,0,0,.03); }
 .ly-total { position: absolute; left: 4.6%; top: 84%; font-size: calc(var(--pt) * 9); color: #434343; }
 .ly-total span, .ly-total b { font-family: var(--num); font-weight: 500; color: var(--purple); }
+.ly-eg { left: 0; top: 0; width: 100%; height: 100%; }
+.ly-eg ul { position: absolute; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: calc(var(--pt) * 5); font-size: calc(var(--pt) * 8.5); }
+.ly-eg li { display: flex; align-items: center; gap: calc(var(--pt) * 9); }
+.ly-eg li i { width: calc(var(--pt) * 22); height: calc(var(--pt) * 2.4); border-radius: 2px; }
+/* the fire egress layer, on or off at any beat */
+.ly-eg-btn { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
+  border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
+  font: 600 calc(var(--pt) * 6.5) var(--body); }
+.ly-eg-btn i { width: calc(var(--pt) * 12); height: 3px; background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); border-radius: 2px; }
+.ly-eg-btn.on { background: #5222d0; color: #fff; border-color: #5222d0; }
 </style>
 <script>
-/* layout Option 02A (deck slides 53–54) on the shared plan (K.plan): 1 the plan and its legend; 2 the six neighbourhoods draw in,
-   their seats count up, and hovering a row picks out its outline */
+/* layout Option 02A (deck slides 53–54) on the shared plan, the DXF's (K.plan): 1 the plan, its spaces coloured as the
+   legend has them (hover a space: its name and area); 2 the six neighbourhoods draw in, their workstations count up, and
+   hovering a row (or a neighbourhood) picks it out; 3 fire egress, the exit paths as an extra layer. The Fire egress button
+   switches that layer on any beat */
 ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => ({
-  enter(_, sc) { plan.deckPlan(); plan.nbHover($(".ly-nbs", sc)); },
+  enter(_, sc) {
+    plan.deckPlan(); plan.nbHover($(".ly-nbs", sc));
+    const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress());
+  },
   step(k, sc) {
-    plan.planOn(sc, { nb: k === 2, lab: k === 2, entry: true, blow: k === 1, view: [0, 0, 1920, 1080], ms: 0 });
-    if (k === 2) {
-      $$(".dp-nb polygon", plan.svg).forEach((p, i) => { p.style.setProperty("--len", Math.ceil(p.getTotalLength())); p.style.animationDelay = i * 0.22 + "s"; });
-      $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 180));
-    }
+    plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, blow: k === 1, egress: k === 3, ms: 0 });
+    $(".ly-eg-btn", sc).classList.toggle("on", k === 3);
+    if (k === 2) $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 180));
   },
   leave() { plan.planOff(); },
 }));

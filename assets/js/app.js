@@ -312,71 +312,85 @@
     if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < ((b[0] - a[0]) * (p[1] - a[1])) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
 
   /* ======================= the layout as one plan (deck slides 53–57) =======================
-     The deck's four plan tiles as one image, with the neighbourhood outlines, the arrival zones, the fire compartment line and
-     the entrances as vectors (data/deck-plan.js). It lives in the world, so the layout flies into its blow-ups without a cut.
-     Wheel zooms on the cursor, drag pans, a double-click returns to the beat's view. Used by s-layout and s-blowup. */
-  const NB = { "#B45F06": "01", "#274E13": "02", "#45818E": "03", "#4A86E8": "04", "#9900FF": "05", "#FF00FF": "06", "#0000FF": "arrival" };
-  const DP = { svg: null, vb: [0, 0, 1920, 1080], home: [0, 0, 1920, 1080], raf: 0 };
+     The DXF plan (data/plan-dxf.js, made by tools/acko/plan_dxf.py from the DXF plan toolkit's output), mounted once with
+     PlanHover (assets/js/plan-hover.js) in the world, so the layout flies into its blow-ups without a cut. The plan is a
+     picture at three sharpnesses (12 / 24 / 48 px per m; the one the zoom needs shows over the coarser ones). Beneath it,
+     the spaces in the colours the deck's legend gives them; on it, hovers for the spaces (name, m²) and the six
+     neighbourhoods (seats), the neighbourhood outlines, the fire egress paths and the deck's own marks (blow-up boxes, fire
+     compartment line, entrances, arrival zones). Wheel zooms on the cursor, drag pans, a double-click returns to the beat's
+     view. Used by s-layout and s-blowup. */
+  const NB_COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
+  const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, P: null };
   function deckPlan() {
-    if (DP.svg) return DP;
-    const P = window.DECK_PLAN, host = $("#world-plan"), b = P.img.box;
-    const pts = (a) => a.map((q) => q.join(" ")).join(" ");
-    const lab = P.labels.reduce((m, l) => ((m[l.n] = l), m), {});
-    host.innerHTML = `<svg class="dplan pannable" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
-      <image href="${asset(P.img.src)}" x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" preserveAspectRatio="none"/>
-      <g class="dp-nb">${P.nb.map((n) => `<polygon data-nb="${NB[n.c.toUpperCase()] || ""}" points="${pts(n.pts)}" style="--c:${n.c}"/>`).join("")}</g>
-      <g class="dp-fire">${P.fire.map((f) => `<line x1="${f[0][0]}" y1="${f[0][1]}" x2="${f[1][0]}" y2="${f[1][1]}"/>`).join("")}</g>
-      <g class="dp-entry">${P.entry.map((e) => `<path d="M${e[0] - 6} ${e[1] - 4}L${e[0] + 6} ${e[1] - 4}L${e[0]} ${e[1] + 6}Z"/>`).join("")}</g>
-      <g class="dp-blow">${Object.entries(P.blow).map(([k, r]) => `<g data-b="${k}"><rect x="${r[0]}" y="${r[1] - 6}" width="${r[2] - r[0]}" height="${r[3] - r[1] + 12}"/><text x="${(r[0] + r[2]) / 2}" y="${r[3] + 26}">Blown Up ${k}</text></g>`).join("")}</g>
-      <g class="dp-lab">${["01", "02", "03", "04", "05", "06"].map((n) => { const l = lab[n]; if (!l) return ""; const x = l.at[0], y = l.at[1] + l.wh[1] * 0.78;
-        return `<text data-nb="${n}" x="${x}" y="${y}"><tspan class="n">${n}</tspan><tspan class="s" dx="6" dy="-14">${l.seats}</tspan></text>`; }).join("")}</g>
-    </svg>`;
-    DP.svg = $("svg", host);
-    const toSvg = (e) => { const r = DP.svg.getBoundingClientRect(), s = Math.max(DP.vb[2] / r.width, DP.vb[3] / r.height);
-      const ox = (r.width - DP.vb[2] / s) / 2, oy = (r.height - DP.vb[3] / s) / 2; return [DP.vb[0] + (e.clientX - r.left - ox) * s, DP.vb[1] + (e.clientY - r.top - oy) * s]; };
-    DP.svg.addEventListener("wheel", (e) => {
-      if (!document.body.classList.contains("dp-on")) return;
-      e.preventDefault(); cancelAnimationFrame(DP.raf);
-      const k = Math.exp(e.deltaY * 0.0015), [x, y] = toSvg(e), v = DP.vb;
-      const w = clamp(v[2] * k, 160, 1920 * 1.2), h = (w * v[3]) / v[2], f = w / v[2];
-      setVb([x - (x - v[0]) * f, y - (y - v[1]) * f, w, h]);
-    }, { passive: false });
-    let drag = null;
-    DP.svg.addEventListener("pointerdown", (e) => { if (e.button !== 0) return; drag = { x0: e.clientX, y0: e.clientY, vb: DP.vb.slice() }; DP.svg.setPointerCapture(e.pointerId); cancelAnimationFrame(DP.raf); });
-    DP.svg.addEventListener("pointermove", (e) => { if (!drag) return; const r = DP.svg.getBoundingClientRect(), s = Math.max(drag.vb[2] / r.width, drag.vb[3] / r.height);
-      setVb([drag.vb[0] - (e.clientX - drag.x0) * s, drag.vb[1] - (e.clientY - drag.y0) * s, drag.vb[2], drag.vb[3]]); });
-    DP.svg.addEventListener("pointerup", () => (drag = null));
-    DP.svg.addEventListener("dblclick", () => fitVb(DP.home, 700));
+    if (DP.ph) return DP;
+    const P = (DP.P = window.PLAN_DXF), host = $("#world-plan"), [vx, vy, vw, vh] = P.viewBox, vb = P.viewBox.join(" ");
+    const imgs = P.levels.map((l) => `<image class="lv lv-${l.ppm}" href="${asset(l.src)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>`).join("");
+    const data = { options: { plan: { label: "Layout", viewBox: vb, svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}">${imgs}</svg>`,
+      rooms: P.spaces.map((r) => ({ id: r.id, name: r.name, m2: r.m2, x: r.x, y: r.y, d: r.d })),
+      teams: P.zones.map((z) => ({ id: z.id, name: z.name, pax: null, seats: z.seats, hot_desks: 0, x: z.x, y: z.y, zone: z.zone, desks: z.desks })) } } };
+    host.classList.add("dxplan");
+    DP.root = host;
+    DP.ph = PlanHover.mount(host, { data });
+    DP.ph.addLayer("dx-fill", `<image href="${asset(P.floor)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>` +
+      P.spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join(""), { below: true });
+    const O = P.overlays, tri = (x, y) => `M${x - 900} ${y - 600}L${x + 900} ${y - 600}L${x} ${y + 900}Z`;
+    DP.ph.addLayer("dx-marks",
+      `<g class="dx-arrival">${O.arrival.map((d) => `<path d="${d}"/>`).join("")}</g>` +
+      `<g class="dx-nb">${P.zones.map((z) => `<path data-nb="${z.n}" d="${z.zone}" style="--c:${NB_COL[z.n] || "#888"}"/>`).join("")}</g>` +
+      `<g class="dx-egress">${P.egress.map((e) => `<path class="${e.band === "lt50" ? "b50" : "b60"}" d="${e.d}"/>`).join("")}</g>` +
+      `<g class="dx-fire">${O.fire.map((f) => `<line x1="${f[0]}" y1="${f[1]}" x2="${f[2]}" y2="${f[3]}"/>`).join("")}</g>` +
+      `<g class="dx-entry">${O.entry.map((e) => `<path d="${tri(e[0], e[1])}"/>`).join("")}</g>` +
+      `<g class="dx-blow">${Object.entries(O.blow).map(([k, r]) => `<text x="${r[0] + r[2] / 2}" y="${r[1] + r[3] + 2600}">Blown Up ${k}</text>`).join("")}</g>` +
+      `<g class="dx-lab">${P.zones.map((z) => `<text data-nb="${z.n}" x="${z.x}" y="${z.y}"><tspan class="n">${z.n}</tspan><tspan class="s" dx="500" dy="-1500">${z.seats}</tspan></text>`).join("")}</g>`);
+    // the picture sharp enough for the zoom (screen px per metre, times the device's pixel ratio)
+    const level = () => {
+      const r = host.getBoundingClientRect(), v = DP.ph.view; if (!r.width) return;
+      const need = (r.width / (v[2] / 1000)) * (window.devicePixelRatio || 1);
+      P.levels.forEach((l, i) => host.classList.toggle("lv-" + l.ppm, i === 0 || P.levels[i - 1].ppm < need * 0.85));
+    };
+    DP.level = () => { cancelAnimationFrame(DP.lvRaf); DP.lvRaf = requestAnimationFrame(level); };
+    ["wheel", "pointermove", "pointerup"].forEach((ev) => host.addEventListener(ev, DP.level, { passive: true }));
+    addEventListener("resize", DP.level);
+    level();
+    // decode the sharper pictures ahead, so the first zoom into them doesn't stall
+    P.levels.slice(1).forEach((l) => { const im = new Image(); im.src = asset(l.src); if (im.decode) im.decode().catch(() => {}); });
     return DP;
   }
-  function setVb(v) { DP.vb = v; DP.svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); }
   function fitVb(v, ms) {
     cancelAnimationFrame(DP.raf);
-    const from = DP.vb.slice(), t0 = performance.now();
-    if (!ms || reduced) return setVb(v);
+    const from = DP.ph.view, t0 = performance.now();
+    if (!ms || reduced) { DP.ph.zoomTo(...v); return DP.level(); }
     const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      setVb(from.map((a, i) => a + (v[i] - a) * e)); if (k < 1) DP.raf = requestAnimationFrame(run); };
+      DP.ph.zoomTo(...from.map((a, i) => a + (v[i] - a) * e)); if (k < 1) DP.raf = requestAnimationFrame(run); else DP.level(); };
     DP.raf = requestAnimationFrame(run);
   }
-  // the viewBox that shows box (frame px) inside the display rect (frame px)
+  // the viewBox (plan mm) that shows box [x0, y0, x1, y1] (plan mm) inside the display rect disp (frame px of the 1920 × 1080 page)
   function vbFor(box, disp) {
     const bw = box[2] - box[0], bh = box[3] - box[1], dw = disp[2] - disp[0], dh = disp[3] - disp[1], s = Math.min(dw / bw, dh / bh);
     const cx = (box[0] + box[2]) / 2, cy = (box[1] + box[3]) / 2, dcx = (disp[0] + disp[2]) / 2, dcy = (disp[1] + disp[3]) / 2;
     return [cx - dcx / s, cy - dcy / s, 1920 / s, 1080 / s];
   }
+  // the whole plan where the deck's slide 53 has it (frame px [32.6, 175] – [1883.5, 442.8])
+  const planView = () => { const [x, y, w, h] = DP.P.viewBox; return vbFor([x, y, x + w, y + h], [32.6, 175, 1883.5, 442.8]); };
+  const PLAN_LAYERS = ["rooms", "teams", "nb", "fire", "blow", "lab", "entry", "egress"];
   function planOn(sc, opts) {
     deckPlan(); world("plan"); shade("");
     document.body.classList.add("dp-on");
-    const svg = DP.svg;
-    ["nb", "fire", "blow", "lab", "entry"].forEach((k) => svg.classList.toggle("show-" + k, !!opts[k]));
-    DP.home = opts.view; fitVb(opts.view, opts.ms === undefined ? 900 : opts.ms);
+    PLAN_LAYERS.forEach((k) => DP.root.classList.toggle("show-" + k, !!opts[k]));
+    DP.ph.clear();
+    const v = opts.view || planView();
+    DP.home = v; DP.ph.setHome(...v); fitVb(v, opts.ms === undefined ? 900 : opts.ms);
   }
-  function planOff() { document.body.classList.remove("dp-on"); if (DP.svg) DP.svg.classList.remove("show-nb", "show-fire", "show-blow", "show-lab", "show-entry"); }
-  // a list of [data-nb] rows: hover one to pick out its outline on the plan
+  function planOff() { document.body.classList.remove("dp-on"); if (DP.root) { PLAN_LAYERS.forEach((k) => DP.root.classList.remove("show-" + k)); DP.root.classList.remove("focus"); DP.ph.clear(); } }
+  // the fire egress layer, switched by a button on the slide (on top of whatever the beat shows)
+  function planEgress(on) { deckPlan(); return DP.root.classList.toggle("show-egress", on); }
+  // a list of [data-nb] rows: hover one to pick out its neighbourhood on the plan (outline, seats)
   function nbHover(list) {
+    deckPlan();
     $$("[data-nb]", list).forEach((row) => {
-      row.onmouseenter = () => { DP.svg.classList.add("focus"); $$(`.dp-nb [data-nb="${row.dataset.nb}"], .dp-lab [data-nb="${row.dataset.nb}"]`, DP.svg).forEach((p) => p.classList.add("hi")); };
-      row.onmouseleave = () => { DP.svg.classList.remove("focus"); $$(".hi", DP.svg).forEach((p) => p.classList.remove("hi")); };
+      const z = DP.P.zones.find((q) => q.n === row.dataset.nb);
+      row.onmouseenter = () => { DP.root.classList.add("focus"); $$(`.dx-nb [data-nb="${row.dataset.nb}"], .dx-lab [data-nb="${row.dataset.nb}"]`, DP.root).forEach((p) => p.classList.add("hi")); if (z) DP.ph.highlight("team", z.id); };
+      row.onmouseleave = () => { DP.root.classList.remove("focus"); $$(".dx-marks .hi", DP.root).forEach((p) => p.classList.remove("hi")); DP.ph.clear(); };
     });
   }
 
@@ -502,7 +516,7 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, vbFor, fitVb, nbHover, get svg() { return DP.svg; } },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {
     if (!document.getElementById(id)) continue;

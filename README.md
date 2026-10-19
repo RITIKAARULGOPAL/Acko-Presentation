@@ -72,12 +72,13 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
 - **About SKV:** from the SKV logo
 
 **Interaction:**
-- **Layout and blow-ups:**
+- **Layout and blow-ups** (the DXF plan):
   - Scroll to zoom on the cursor, drag to pan, and double-click to go back to the beat's view.
-  - On *Six neighbourhoods*, hover a row to pick out that neighbourhood.
+  - Hover a space for its name and area. On *Six neighbourhoods*, hover a neighbourhood, or its row, to pick it out with its seats.
+  - **Fire egress** (top right) switches the exit-path layer on or off on any beat.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 
-## The journey (≈ 20 min, 65 beats)
+## The journey (≈ 20 min, 66 beats)
 
 The PPT's own order. Ritika's choices (16 Oct):
 - the palettes are two chapters
@@ -105,8 +106,8 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 20–23 | Campus palette 02 | 4 | The same, for palette 02 |
 | 24–45 | Visual direction: the walk | 22 | One slide per space, OP 01 then OP 02, each with its Loop words and the keyplan's camera mark |
 | 46, 47, 48, 52 | Value addition | 4 | Engagement points, materials, acoustics (NRC 0.70–0.90), wayfinding (Nalanda, Sabha, Takshashila) |
-| 53–54 | Layout · Option 02A | 2 | The plan and its legend; then the six neighbourhoods draw in and their seats count up |
-| 55–57 | Blown up X · Y · Z | 3 | The same plan flies into each blow-up; the fire compartment line draws on Y |
+| 53–54 | Layout · Option 02A | 3 | The DXF plan, its spaces coloured by the legend (hover: name, area); then the six neighbourhoods draw in and their workstations count up (651); then fire egress, the exit paths as an extra layer |
+| 55–57 | Blown up X · Y · Z | 3 | The same DXF plan flies into each blow-up (hover a space); the fire compartment line draws on Y |
 | 58–60 | Schematic axonometric | 3 | West, middle, east, with the leaders drawn out to their spaces |
 | 61 | Occupancy chart | 1 | Brief against Option 2A, row by row; shortfalls in maroon, more than asked in purple |
 | — | Thank you | 1 | Buttons to the Appendix and About SKV |
@@ -133,9 +134,15 @@ The PPT's own order. Ritika's choices (16 Oct):
   - `tools/acko/extract_assets.py` cuts every image out by name (`PICK`), with the deck's crop and rotation, and keys the green-screen animation.
   - `tools/acko/deck_inventory.py`, `deck_text.py`, `deck_layout.py` and `deck_anim.py` read the deck's layout, text, crops and click order.
   - `tools/acko/make_value_slides.py` writes the typology and value-addition pages.
-- **The layout, until the DXF arrives:**
-  - `tools/acko/deck_plan.py` composes the deck's four plan tiles (slides 53–57) into `assets/img/plan-full.webp`.
-  - It also lifts the neighbourhood outlines, the arrival zones, the fire compartment line and the entrances as vectors, into `data/deck-plan.js`.
+- **The layout and blow-ups: the DXF** (`Downloads/ACKO.dxf`, Option 02A), in three steps:
+  1. **The DXF plan toolkit** (`Downloads/dxf-plan-toolkit-v1.0/dxf-plan-toolkit`, its `projects/acko.json`): `python tools/build.py --config projects/acko.json` (about 25 min). It converts the drawing (0.71 mm accuracy) and reads the six neighbourhoods (`ak_zone_*`, seats from the drawing's workstation counts) into `viewer/out/op2a/`. Check it in its viewer.
+  2. **`tools/acko/plan_dxf.py "<toolkit>/viewer/out/op2a" "<ACKO.dxf>" "<deck.pptx>"`** (needs `NODE_PATH` for puppeteer):
+     - **Pictures:** the plan at 12 / 24 / 48 px per m (`assets/img/plan-dxf-*.webp`, rendered by `plan_raster.js`; the full vector plan is too heavy to fly), plus the workhall floor tint.
+     - **Spaces:** from the deck's layout slide (53): every patch of a legend colour on its plan tiles, registered onto the DXF and named by the DXF label inside it.
+     - **The rest:** the neighbourhoods, the fire egress paths (`ak_Ep_*`), and the deck's own marks (blow-up boxes, fire compartment line, entrances, arrival zones; from `data/deck-plan.js`).
+     - **Output:** all into `data/plan-dxf.js`.
+  3. **The component** is the toolkit's `component/assets/js/plan-hover.js` and `.css`, copied into `assets/`. The engine mounts it once in the world (`plan` in the kit).
+- **The old deck plan:** `tools/acko/deck_plan.py` made `plan-full.webp` and `data/deck-plan.js` from the deck's plan tiles. They're no longer loaded; `plan_dxf.py` still reads the marks from `deck-plan.js`.
 - **The site and the bare floor:** from the earlier Acko analysis (Acko New 01: test fit 03, the same shell). `tools/acko/site_floor.py` writes `data/site-floor.js`.
   - map: Overture/OSM
   - sun: NOAA formulas
@@ -145,9 +152,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 
 ## What to drop in next (`inputs/`, not committed)
 
-- **`inputs/layout.dxf`:** Option 02A as DXF 2018, with the `AC_*` layers of test fit 03.
-  - It replaces the deck plan with the drawing: hover rooms, highlight typologies, true camera positions.
-  - Optional: an `AC_CAM` layer, one short line per render pointing where it looks, labelled with the render's file name.
+- **A new DXF of the layout:** re-run the toolkit and `plan_dxf.py` (see above). Optional for later: an `AC_CAM` layer (one short line per render pointing where it looks, labelled with the render's file name) for true camera positions in the walk.
 - **`inputs/renders/`:** JPG or PNG, 2400 px or larger, named `<space>-op01.jpg` / `-op02.jpg`.
   - `palette01-1..3` and `palette02-1..3`
   - `boardroom`, `departmental`, `sprint`, `arena`, `arena-2a-1`, `arena-2a-2`
@@ -185,4 +190,5 @@ The PPT's own order. Ritika's choices (16 Oct):
   - `build.py`: joins the slides, `--only` for a preview, `--single` for the single file
   - `serve.py`, `walk.js`
   - `acko/`: the deck and data pipeline (including the one-off `split_slides.py`)
-  - `raster_plan.js`: kept for the DXF step, with `assets/js/plan2d.js` and `axo.js` (not loaded yet)
+  - `acko/plan_dxf.py` and `acko/plan_raster.js`: the layout plan from the DXF (see above)
+  - `raster_plan.js`, with `assets/js/plan2d.js` and `axo.js`: from Mitigata, not loaded

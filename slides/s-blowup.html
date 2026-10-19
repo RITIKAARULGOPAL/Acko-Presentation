@@ -16,6 +16,7 @@
   <div class="page">
     <div class="hdr"><b>Layout</b><span class="bl-sub">Space Planning - Option 02A | Blown Up X</span></div>
     <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
+    <button type="button" class="ly-eg-btn ui" style="left:76%;top:3.2%"><i></i>Fire egress</button>
     <div class="bl-keys" style="left:1.8%;top:86%"><span data-k="X">Blown Up X</span><span data-k="Y">Blown Up Y</span><span data-k="Z">Blown Up Z</span></div>
     <div class="bl-fire" data-only="2" style="left:36%;top:86.4%"><i></i>Fire Compartmentalisation</div>
   </div>
@@ -26,15 +27,23 @@
 .bl-keys span.on { color: var(--purple); }
 .bl-fire { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 6); font-size: calc(var(--pt) * 7); }
 .bl-fire i { width: calc(var(--pt) * 26); border-top: 2px dashed var(--maroon); }
+#s-blowup .ly-eg-btn { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
+  border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
+  font: 600 calc(var(--pt) * 6.5) var(--body); }
+#s-blowup .ly-eg-btn i { width: calc(var(--pt) * 12); height: 3px; background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); border-radius: 2px; }
+#s-blowup .ly-eg-btn.on { background: #5222d0; color: #fff; border-color: #5222d0; }
 </style>
 <script>
-/* the blow-ups (deck slides 55–57): the same plan flies into X, Y and Z; the fire compartment line draws on Y */
+/* the blow-ups (deck slides 55–57): the same plan, the DXF's, flies into X, Y and Z (hover a space for its name and area);
+   the fire compartment line draws on Y; the Fire egress button adds the exit paths */
 ACKO.slide("s-blowup", ({ $, $$, plan }) => {
   const DISP = [38, 150, 1882, 880];
   return {
+    enter(_, sc) { const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress()); },
     step(k, sc) {
-      const key = ["X", "Y", "Z"][k - 1], P = window.DECK_PLAN;
-      plan.planOn(sc, { fire: key === "Y", entry: true, blow: false, view: plan.vbFor(P.blow[key], DISP), ms: 1100 });
+      const key = ["X", "Y", "Z"][k - 1], b = plan.data.overlays.blow[key];
+      plan.planOn(sc, { rooms: true, fire: key === "Y", entry: true, view: plan.vbFor([b[0], b[1], b[0] + b[2], b[1] + b[3]], DISP), ms: 1100 });
+      $(".ly-eg-btn", sc).classList.remove("on");
       $(".bl-sub", sc).textContent = `Space Planning - Option 02A | Blown Up ${key}`;
       $$(".bl-keys span", sc).forEach((b) => b.classList.toggle("on", b.dataset.k === key));
     },

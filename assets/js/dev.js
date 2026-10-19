@@ -7,8 +7,8 @@
   // every path in a slide is written from the project root (assets/img/…), as in the joined deck: the slide file says
   // <base href="../"> itself (so the browser's early image fetches use it too); set one here only if it doesn't
   if (!document.querySelector("base")) document.write('<base href="' + root + '">');
-  var css = ["assets/css/app.css"];
-  var js = ["assets/vendor/three.min.js", "data/keyplans.js", "data/deck-plan.js", "data/site-floor.js", "assets/js/shell.js", "assets/js/app.js"];
+  var css = ["assets/css/app.css", "assets/css/plan-hover.css"];
+  var js = ["assets/vendor/three.min.js", "data/keyplans.js", "data/plan-dxf.js", "data/site-floor.js", "assets/js/shell.js", "assets/js/plan-hover.js", "assets/js/app.js"];
   document.write(css.map(function (h) { return '<link rel="stylesheet" href="' + h + '">'; }).join("") +
     js.map(function (s) { return '<script src="' + s + '"><\/script>'; }).join(""));
   document.addEventListener("DOMContentLoaded", function () { if (window.ACKO) window.ACKO.start(); });

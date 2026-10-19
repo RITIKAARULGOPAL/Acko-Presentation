@@ -152,3 +152,42 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - A run id stops an old loop when the beat changes.
   - `ctx.globalAlpha` is the deck's 75%.
 - **Layering:** as on slide 12, the canvas sits in front of the trees and people, which read through it; the Work figures stay on top. The cut-outs' white backgrounds vanish under the ribbon.
+
+## 12. The DXF plan in the world (PlanHover, pictures at three sharpnesses)
+**What:** the layout and its blow-ups use the DXF plan (via the DXF plan toolkit). Hover a space for its name and m², or a neighbourhood for its seats. The plan still lives in the world layer, so the layout flies into X / Y / Z without a cut (§7).
+
+**Why pictures:** the toolkit's vector plan (16.5 MB, half a million line pieces) animates at about 5 fps, too slow for a fly-in. So the plan is rendered from its `full.svg` (puppeteer, transparent) at 12, 24 and 48 px per m: 0.5, 1.1 and 2.6 MB.
+- They sit as three `<image>`s in the component's plan SVG. The coarse one always shows.
+- A sharper one turns visible when the zoom needs it: screen px per m × devicePixelRatio, against each level's px per m.
+- The sharper ones are decoded ahead (`new Image().decode()`), so the first zoom doesn't stall.
+- **Result:** fly-ins and wheel zoom at 60 fps.
+
+**Layers through `addLayer`** (toolkit component 1.1):
+- **Beneath:** fills, the floor tint and the spaces in their legend colours.
+- **Above:** marks, with `pointer-events: none` and lines `vector-effect: non-scaling-stroke`. The marks are the neighbourhood outlines and numbers, the egress paths, the fire line, the entrances, the arrival zones and the blow-up labels.
+- **Hovers per beat:** set by classes on the root, `.dxplan:not(.show-rooms) .ph-room { pointer-events: none }`.
+- **Legend rows:** call `highlight("team", id)`.
+- **Fly-ins:** a tween calls `zoomTo` from `view`.
+
+**Gotchas:**
+- Text and fill sizes in the marks are in plan mm (for example `font-size: 2600px`), so they scale with the plan. Only strokes stay constant on screen.
+- A full-page `.ui` overlay on a slide (`.scene.active .ui { pointer-events: auto }`) blocks the plan's hovers underneath. Keep `ui` on the controls, not on page-sized wrappers.
+
+## 13. Spaces from a slide's legend colours, placed on the DXF
+**What:** the deck's layout slide colours every space by its legend. Those colours become the space boundaries on the DXF plan; walls alone gave boundaries that didn't match the design.
+
+**How** (`tools/acko/plan_dxf.py`):
+- **Fill patches:** in each of the slide's plan tiles (lossless PNGs, read at their own resolution), the flat fill colours are every distinct colour with ≥ 300 px.
+  - Skipped: white, black and the workhall floor.
+  - Shades within 2 levels are merged.
+  - Each colour is masked, closed 3×3 (bridging furniture lines but not thin walls), and traced with `cv2.findContours`.
+- **Onto the DXF:**
+  - **Global fit:** an affine from the slide's frame px to DXF mm. It was measured by overlaying the composed tiles on a render of the DXF and is good to about 0.3 m.
+  - **Per tile:** a small `cv2.phaseCorrelate` shift of the tile's ink against the render's lines.
+- **Names:** the DXF room label inside each patch. A pod's label often sits just outside it, so the nearest label within 1.2 m is taken.
+- **Type:** from the name (BOARD, HUDDLE, SPRINT, PB …), or failing that from the nearest legend colour (within 4 levels).
+- **Small pods:** phone booths are lilac pods of only 0.3 m² of colour, so they get their own size threshold and are grown 150 mm to make them hoverable.
+- **Seams:** patches cut by a tile seam (same type, touching) are merged.
+- **The floor tint:** warped into the plan frame as one picture.
+
+**Result:** 136 spaces, including 42 phone booths, on the DXF walls, each keeping its slide colour.

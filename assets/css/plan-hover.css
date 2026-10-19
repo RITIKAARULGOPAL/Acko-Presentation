@@ -1,0 +1,91 @@
+﻿/* plan-hover.css - styles for assets/js/plan-hover.js.
+ * Every colour is a CSS variable: override them on .ph-root (or any ancestor) to match the deck theme.
+ * A night-theme set is included below: it applies under html[data-theme="dark"] (a deck's
+ * Day/Night toggle) or when the mount element has class "ph-dark". */
+.ph-root {
+  --ph-paper: #fbfaf7;
+  --ph-wall: #1a1a1a;
+  --ph-line: #2a2a2a;
+  --ph-glass: #3a7bbf;
+  --ph-door: #555555;
+  --ph-furniture: #5d5d5d;
+  --ph-plant: #4c8a46;
+  --ph-shade: #a3a3a3;
+  --ph-hatch: #c4c4c4;
+  --ph-fill: #e8e6e1;
+  --ph-fill-green: #cfe3cb;
+  --ph-fill-glass: #d6e6f5;
+  --ph-text: #2b2b2b;
+  --ph-hover: rgba(255, 64, 64, 0.5);          /* coral red at 50% */
+  --ph-hover-line: rgb(255, 64, 64);
+  --ph-label-bg: rgba(255, 255, 255, 0.94);
+  --ph-label-ink: #1d1d1d;
+  --ph-label-sub: #6b6b6b;
+
+  position: relative;
+  overflow: hidden;
+  background: var(--ph-paper);
+  user-select: none;
+  touch-action: none;
+}
+/* night: follows a deck's toggle (html[data-theme="dark"]) automatically, or add class ph-dark */
+html[data-theme="dark"] .ph-root, .ph-root.ph-dark {
+  --ph-paper: #15171a;
+  --ph-wall: #e8e6e1;
+  --ph-line: #cfcac2;
+  --ph-glass: #6aa7e6;
+  --ph-door: #a9a49b;
+  --ph-furniture: #9c978e;
+  --ph-plant: #79b571;
+  --ph-shade: #5d5a55;
+  --ph-hatch: #4a4844;
+  --ph-fill: #2a2c2f;
+  --ph-fill-green: #23362a;
+  --ph-fill-glass: #1e2c3a;
+  --ph-text: #e8e6e1;
+  --ph-label-bg: rgba(24, 26, 29, 0.94);
+  --ph-label-ink: #f2f0ec;
+  --ph-label-sub: #a9a49b;
+}
+
+.ph-stage { position: absolute; inset: 0; cursor: grab; }
+.ph-root.ph-dragging .ph-stage { cursor: grabbing; }
+.ph-stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* the plan: line weights stay constant on screen at every zoom */
+.ph-plan { pointer-events: none; }
+.ph-plan path { vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.ph-plan .s { fill: none; }
+.ph-plan .s.base  { stroke: var(--ph-line); stroke-width: .9; }
+.ph-plan .s.wall  { stroke: var(--ph-wall); stroke-width: 1.4; }
+.ph-plan .s.glass { stroke: var(--ph-glass); stroke-width: 1; }
+.ph-plan .s.door  { stroke: var(--ph-door); stroke-width: .7; }
+.ph-plan .s.furn  { stroke: var(--ph-furniture); stroke-width: .6; }
+.ph-plan .s.green { stroke: var(--ph-plant); stroke-width: .5; }
+.ph-plan .s.shade { stroke: var(--ph-shade); stroke-width: .4; }
+.ph-plan .s.anno  { stroke: var(--ph-door); stroke-width: .5; }
+.ph-plan .h { fill: none; stroke-width: .3; stroke: var(--ph-hatch); }
+.ph-plan .h.green { stroke: var(--ph-plant); opacity: .6; }
+.ph-plan .f { fill-rule: evenodd; stroke: none; fill: var(--ph-fill); }
+.ph-plan .f.green { fill: var(--ph-fill-green); }
+.ph-plan .f.glass { fill: var(--ph-fill-glass); }
+.ph-plan .m { fill: var(--ph-paper); stroke: none; }          /* wipeouts mask what is behind them */
+.ph-plan .t { font-family: Arial, Helvetica, sans-serif; fill: var(--ph-text); }
+
+/* hover layers: invisible until hovered */
+.ph-layer { pointer-events: none; }
+.ph-room { fill: transparent; fill-rule: evenodd; stroke: none; pointer-events: all; cursor: pointer; }
+.ph-room.ph-on { fill: var(--ph-hover); }
+.ph-seats { fill: transparent; stroke: none; pointer-events: all; cursor: pointer; }
+.ph-team.ph-on .ph-seats { fill: var(--ph-hover); }
+.ph-zone { fill: none; stroke: var(--ph-hover-line); stroke-width: 1.5; stroke-dasharray: 6 4;
+  vector-effect: non-scaling-stroke; pointer-events: none; display: none; }
+.ph-team.ph-on .ph-zone { display: inline; }
+
+/* name label, centred in the hovered room / team */
+.ph-label { position: absolute; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; display: none;
+  background: var(--ph-label-bg); color: var(--ph-label-ink); border: 1px solid var(--ph-hover);
+  border-radius: 6px; padding: 4px 10px; text-align: center; white-space: nowrap;
+  font: 12.5px/1.3 system-ui, -apple-system, "Segoe UI", sans-serif; box-shadow: 0 2px 8px rgba(0, 0, 0, .14); }
+.ph-label b { display: block; font-weight: 600; }
+.ph-label span { color: var(--ph-label-sub); font-size: 11.5px; }
