@@ -147,6 +147,8 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
 - **Fit the box:** place the finished ribbon on the slide-12 still, where the stops were placed, by matching their alpha bounding boxes. The deck's two boxes differ by a few px.
 - **Reach array:** per frame, the cumulative rightmost drawn column, mapped to % of the page. A stop turns on when the ribbon's reach passes its x.
 - **Player:** preload every frame on `enter`, through `asset(`…`draw-${nn}.webp`)` so the single file embeds them by prefix. A rAF loop draws `floor(elapsed / 40)` and holds the last frame.
+  - The clock starts only once every frame has loaded (or failed), so a slow load never skips the writing.
   - It draws a frame only once it has loaded, so the canvas never blinks empty.
   - A run id stops an old loop when the beat changes.
-  - `ctx.globalAlpha` matches the still's colour.
+  - `ctx.globalAlpha` is the deck's 75%.
+- **Layering:** as on slide 12, the canvas sits in front of the trees and people, which read through it; the Work figures stay on top. The cut-outs' white backgrounds vanish under the ribbon.
