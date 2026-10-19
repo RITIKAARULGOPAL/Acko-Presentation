@@ -86,7 +86,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 
 | Deck slides | Chapter | Beats | What happens |
 |---|---|---|---|
-| 1 | Cover | 1 | The stairs, the ACKO wordmark, the bid facts; a Möbius line draws itself |
+| 1 | Cover | 1 | The stairs, the ACKO wordmark, the bid facts |
 | 2 | Meet the team | 1 | Ten portraits, one after another |
 | 3 | Workplace aspiration | 1 | Three cues rise in: acoustic excellence, real nature, an honest palette |
 | 4 | What defines ACKO | 1 | Five values open like shutters, then turn to their second picture |

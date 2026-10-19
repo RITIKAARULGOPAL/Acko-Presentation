@@ -17,7 +17,6 @@
   <div class="page">
     <div class="cv-rule at" style="left:1.6%;top:11.6%;width:96.8%"></div>
     <div class="cv-rule at" style="left:1.6%;top:45.6%;width:96.8%"></div>
-    <svg class="cv-mobius at" viewBox="-100 -60 200 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path/></svg>
   </div>
   <div class="page rv">
     <div class="cv-small at" style="left:1.6%;top:7.8%;--i:0">Studiokon Ventures</div>
@@ -46,33 +45,12 @@
 .cv-facts { display: grid; grid-template-columns: 30fr 21fr 21fr; gap: 0; }
 .cv-facts span { display: block; font-size: calc(var(--pt) * 5); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: calc(var(--pt) * 2); }
 .cv-facts b { display: block; font-weight: 400; font-size: calc(var(--pt) * 8); color: #fff; line-height: 1.3; padding-right: 2em; }
-.cv-mobius { right: 2%; top: 4%; width: 44%; height: 92%; overflow: visible; }
-.cv-mobius path { fill: none; stroke: rgba(201, 179, 243, .55); stroke-width: 1.2; vector-effect: non-scaling-stroke; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); }
-#s-cover.active .cv-mobius path { animation: draw 4.5s var(--ease) .6s forwards; }
 </style>
 <script>
-/* the cover (deck slide 1): the facts come up; a thin Möbius line draws itself over the stairs */
-ACKO.slide("s-cover", ({ $, plain, reveal }) => {
-  // the edge of a Möbius strip (one curve, twice round), seen in perspective
-  function mobiusEdge(R, w, tilt, turn) {
-    const pts = [];
-    for (let i = 0; i <= 720; i++) {
-      const u = (i / 720) * 4 * Math.PI, r = R + w * Math.cos(u / 2);
-      const x = r * Math.cos(u + turn), y = r * Math.sin(u + turn), z = w * Math.sin(u / 2);
-      const y2 = y * Math.cos(tilt) - z * Math.sin(tilt), z2 = y * Math.sin(tilt) + z * Math.cos(tilt), k = 260 / (260 + z2 * 2.2);
-      pts.push([(x * k).toFixed(1), (y2 * k).toFixed(1)]);
-    }
-    return "M" + pts.map((q) => q.join(" ")).join("L");
-  }
-  return {
-    enter(_, sc) {
-      plain(); reveal($(".page.rv", sc), 200);
-      const p = $(".cv-mobius path", sc);
-      if (p && !p.getAttribute("d")) p.setAttribute("d", mobiusEdge(62, 22, 1.08, 0.35));
-      if (p) { p.style.animation = "none"; p.style.setProperty("--len", Math.ceil(p.getTotalLength())); void p.getBoundingClientRect(); p.style.animation = ""; }
-    },
-  };
-});
+/* the cover (deck slide 1): the facts come up over the stairs */
+ACKO.slide("s-cover", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".page.rv", sc), 200); },
+}));
 </script>
 <!-- slide:end -->
 </body>
