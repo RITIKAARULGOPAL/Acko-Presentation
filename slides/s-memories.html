@@ -79,14 +79,20 @@
 </style>
 <script>
 /* memories (deck slide 8): the deck's page as placed — map, trees, the six photographs — with the dashed route across the
-   campus, one memory per click. The same three friends walk the route from memory to memory: each click, the line draws on
-   ahead of them, they walk (stepping off the line where a memory sits beside it) and act that memory out — a dribble and
-   a wave at the court, a look at the forest path, laughs on a bench, lunch at the café, study at a desk, a huddle on the
-   stairs. Each memory's props stay where they left them. */
+   campus, one memory per click. Each click draws the line on to the next memory: its photograph, label and people come up
+   as the line reaches them, and only its people act (a dribble and a wave at the court, a stroll on the pathway, friends on
+   a bench, lunch at the café, study at a desk, a huddle on the stairs). The memories before it stand still. */
 ACKO.slide("s-memories", ({ $, $$, plain, reveal, reduced }) => {
   // the line's stop for each beat (share of the route's length); an element belongs to the beat whose stretch holds its data-s
   const STOP = [0, .065, .358, .5, .76, .84, 1];
   const beatOf = (s) => STOP.findIndex((v, i) => i > 0 && s <= v + 1e-6);
+  // the time (share of a stretch's duration) at which the eased line (cubic-bezier(.45,.05,.3,1)) has covered share f of it
+  const at = (f) => {
+    const B = (p1, p2, u) => 3 * (1 - u) * (1 - u) * u * p1 + 3 * (1 - u) * u * u * p2 + u * u * u;
+    let a = 0, b = 1;
+    for (let k = 0; k < 28; k++) { const m = (a + b) / 2; if (B(.05, 1, m) < f) a = m; else b = m; }
+    return B(.45, .3, a);
+  };
 
   /* ---------- a person, flat like the deck's cut-outs: stands on (0,0) facing right, about 97 tall. The limbs turn about fixed
      joints (hip 48, knee 25, shoulder 77, elbow 62 up from the soles); pose() sets them every frame ---------- */
@@ -158,256 +164,212 @@ ACKO.slide("s-memories", ({ $, $$, plain, reveal, reduced }) => {
   const scene = (svg, s) => { const g = document.createElementNS(NS, "g"); g.setAttribute("class", "mem-sc"); g.dataset.s = s; svg.appendChild(g); return g; };
   const draw = (root, markup) => { const g = document.createElementNS(NS, "g"); g.innerHTML = markup; root.appendChild(g); return g; };
 
-  const mixPose = (p, q, k) => ({ lf: [mix(p.lf[0], q.lf[0], k), mix(p.lf[1], q.lf[1], k)], lb: [mix(p.lb[0], q.lb[0], k), mix(p.lb[1], q.lb[1], k)],
-    af: [mix(p.af[0], q.af[0], k), mix(p.af[1], q.af[1], k)], ab: [mix(p.ab[0], q.ab[0], k), mix(p.ab[1], q.ab[1], k)], bd: mix(p.bd || 0, q.bd || 0, k), hd: mix(p.hd || 0, q.hd || 0, k) });
-  const STAND = { lf: [0, 2], lb: [0, 2], af: [3, -8], ab: [-3, -8], bd: 1, hd: 0 };
-  const SEAT = (drop) => ({ ...sit(drop), af: [-22, -44], ab: [-16, -40], bd: 4, hd: 0 });
-
-  /* ---------- the three friends, and where they stand (or sit) at each memory: [x, ground y, facing (1 right, −1 left), seat y] ---------- */
-  const FRIENDS = {
-    A: { top: "#cfae86", shirt: "#f4f4f2", legs: "#577aa8", hair: "curly", hc: "#2a211c", skin: "#b67c58" },
-    B: { top: "#e7b6c2", legs: "#efe8dc", hair: "long", hc: "#bd4430" },
-    C: { top: "#a7c0df", shirt: "#f4f4f2", legs: "#2d3b58", hair: "short", hc: "#6a4733", skin: "#e0ad85" },
-  };
-  const WHO = ["A", "B", "C"];
-  const yAt = (x) => 576 - (x + 25) * 34 / 629;            // the first stretch of the route
-  // always in the same order, left to right — A, C, B — so on the way from one memory to the next nobody passes anybody
-  const SPOT = [
-    { A: [-118, yAt(-118), 1], C: [-84, yAt(-84), 1], B: [-50, yAt(-50), 1] },               // 0 · off the page, left
-    { A: [58, yAt(58), 1], C: [112, yAt(112), -1], B: [160, yAt(160), -1] },                 // 1 · the court
-    { A: [478, yAt(478), 1], C: [510, yAt(510), 1], B: [542, yAt(542), 1] },                 // 2 · the pathway, at the forest
-    { A: [857, 972, 1, 947], C: [927, 972, -1, 947], B: [958, 972, -1] },                    // 3 · the bench, under the line
-    { A: [1209, 401, 1, 377], C: [1266, 401, -1, 377], B: [1296, 401, -1] },                 // 4 · the café table
-    { A: [1481, 828, 1, 804], C: [1566, 828, -1, 804], B: [1604, 828, -1] },                 // 5 · the desk, below the line
-    { A: [1628, 505, 1], C: [1714, 491, -1, 477], B: [1757, 477, -1, 463] },                 // 6 · the steps
-  ];
-  // the route's corners: from one memory to the next they follow the line, and step off it where a memory sits beside it
-  const R1 = [604, 542], R2 = [617, 881], R3 = [1001, 881], R4 = [1001, 428], R5 = [1132, 428], R6 = [1180, 401], R7 = [1449, 401];
-  // each friend's own copy of the corners, shifted by their lane (l), so up and down the streets they walk side by side
-  const LANE = { A: -24, C: 0, B: 24 }, at = (p, l) => [p[0] + l, p[1]];
-  const VIA = [null, () => [], () => [], (f, t, l) => [at(R1, l), at(R2, l), [t[0], 881]], (f, t, l) => [[f[0], 881], at(R3, l), at(R4, l), R5, R6], (f, t, l) => [at(R7, l)], () => []];
-  const V = 180, STRIDE = 93, AMP = 32, UP = .35, DOWN = .45;   // px/s; px per stride cycle at AMP°; standing up / sitting down (s)
-  const polyline = (pts) => { const c = [0]; for (let i = 1; i < pts.length; i++) c.push(c[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])); return { pts, c, L: c[c.length - 1] }; };
-  const along = (r, d) => {
-    d = Math.min(r.L, Math.max(0, d)); let i = 1;
-    while (i < r.pts.length - 1 && r.c[i] < d) i++;
-    const a = r.pts[i - 1], b = r.pts[i], k = (d - r.c[i - 1]) / ((r.c[i] - r.c[i - 1]) || 1);
-    return [mix(a[0], b[0], k), mix(a[1], b[1], k), b[0] - a[0]];
-  };
-
-  /* ---------- the memories: their props, and what the three do there (poses, then the props that follow a hand) ---------- */
+  /* ---------- the six scenes, in page units (1920 × 1080): each plays its loop on its own beat, and rests still otherwise ---------- */
   function build(svg) {
-    const P = {};
-    {   // 1 · the court: a ball
+    const S = [];
+    const add = (g, o) => S.push({ g, b: beatOf(+g.dataset.s), ...o });
+    // 1 · meet @ the basketball court: one dribbles, a friend waves (on the street above the court)
+    {
       const g = scene(svg, .03);
-      P.ball = draw(g, `<circle r="6.4" fill="#d9772f"/><path stroke="#7a3a12" stroke-width=".8" d="M-6.4 0H6.4M0-6.4V6.4M-4.6-4.4C-1.8-1.6-1.8 1.6-4.6 4.4M4.6-4.4C1.8-1.6 1.8 1.6 4.6 4.4"/>`);
+      const d = place(g, { x: 60, y: 571, top: "#9fbbe0", shirt: "#f4f4f2", legs: "#2d3b58", shin: "#f0c8a4", shoe: "#f4f4f2", hair: "short" });
+      const ball = draw(g, `<circle r="6.4" fill="#d9772f"/><path stroke="#7a3a12" stroke-width=".8" d="M-6.4 0H6.4M0-6.4V6.4M-4.6-4.4C-1.8-1.6-1.8 1.6-4.6 4.4M4.6-4.4C1.8-1.6 1.8 1.6 4.6 4.4"/>`);
+      const f = place(g, { x: 150, y: 568, flip: true, skin: "#e0ad85", top: "#e7b6c2", legs: "#a7c0df", hair: "long", hc: "#3a271d", bag: "#9a6b77" });
+      const T = .62;
+      const wave = (up, wv) => pose(f, { lf: [-2, 2], lb: [3, 1], af: [mix(6, -160, up), mix(-8, -12 + 26 * wv, up)], ab: [-3, -10], bd: -1, hd: -4 * up });
+      add(g, {
+        play(t) {
+          const u = (t % T) / T, h = Math.abs(Math.sin(Math.PI * u)), kn = 1 - h, af = [-30 - 4 * h, -28 - 12 * h];
+          pose(d, { lf: [-16 - 3 * kn, 24 + 6 * kn], lb: [8, 14 + 4 * kn], af, ab: [-26, -46], bd: 9, hd: -7 });
+          const hp = handAt(d, af), top = hp[1] + 2.4 + 6.4, by = mix(571 - 6.4, top, h), sq = Math.max(0, 1 - h / .1);
+          ball.setAttribute("transform", `translate(${hp[0].toFixed(1)} ${(by + 6.4 * sq * .2).toFixed(1)}) scale(${(1 + .14 * sq).toFixed(3)} ${(1 - .2 * sq).toFixed(3)})`);
+          const v = t % 4.2, up = ss(0, .5, v) * (1 - ss(2.1, 2.6, v)), wv = v > .5 && v < 2.1 ? Math.sin((v - .5) / .53 * 2 * Math.PI) : 0;
+          wave(up, wv);
+        },
+        rest() {   // the ball held at the hip, the friend's arm down
+          const af = [-24, -66];
+          pose(d, { lf: [-4, 6], lb: [4, 4], af, ab: [-8, -20], bd: 3, hd: -3 });
+          const hp = handAt(d, af); ball.setAttribute("transform", `translate(${(hp[0] + 1).toFixed(1)} ${(hp[1] + 7.6).toFixed(1)})`);
+          wave(0, 0);
+        },
+      });
     }
-    {   // 3 · a bench under the line
+    // 2 · walk through memorable pathways: two friends stroll the first stretch of the route, towards the forest path
+    {
+      const g = scene(svg, .09), walk = draw(g, "");
+      const a = place(walk, { x: 0, y: 0, top: "#577aa8", shirt: "#f4f4f2", legs: "#cfd3d8", shoe: "#2a2a2a", hair: "short", hc: "#1f1a17" });
+      const b = place(walk, { x: 0, y: 0, s: .97, skin: "#e0ad85", top: "#8db7a5", shirt: "#efe8dc", legs: "#2d3b58", shoe: "#efefec", hair: "bun", hc: "#5a3a26" });
+      const L = 6.6, REST = 1.2, X0 = 238, X1 = 560, yAt = (x) => 576 - (x + 25) * 34 / 629;
+      let xa = X1, gone = false;   // where they are now; whether they were fading out at the end of a stroll
+      const moveTo = (x) => { xa = x; a.x = x; a.y = yAt(x); b.x = x + 30; b.y = yAt(x + 30); };
+      add(g, {
+        play(t) {
+          const k = t % (L + REST);
+          walk.setAttribute("opacity", (ss(0, .5, k) * (1 - ss(L - .5, L, k))).toFixed(3));
+          moveTo(mix(X0, X1, Math.min(1, k / L))); gone = k > L - .5;
+          const w = (k / 1.05) * 2 * Math.PI;
+          pose(a, { ...stride(w, 17), bd: 2, hd: -3 + 2 * Math.sin(t * .9) });
+          pose(b, { ...stride(w + Math.PI * .85, 17), bd: 1, hd: 6 * Math.sin(t * .7) });
+        },
+        rest() {   // stopped and standing where they are (at the end of the stroll if they were fading out there)
+          walk.setAttribute("opacity", 1); moveTo(gone ? X1 : xa);
+          pose(a, { lf: [0, 2], lb: [0, 2], af: [3, -8], ab: [-3, -8], bd: 1, hd: 0 });
+          pose(b, { lf: [0, 2], lb: [0, 2], af: [3, -8], ab: [-3, -8], bd: 0, hd: -4 });
+        },
+      });
+    }
+    // 3 · chill with friends: two on a bench, one standing by them, laughing (under the route, beside the label)
+    {
       const g = scene(svg, .46);
       draw(g, `<path fill="#9c7550" d="M846 930H934V934H846Z"/><path fill="#b5895c" d="M842 947H938V951H842Z"/><path fill="#55534e" d="M850 951H853V972H850ZM927 951H930V972H927ZM850 934H853V947H850ZM927 934H930V947H927Z"/>`);
+      const a = place(g, { x: 857, y: 947, seated: true, top: "#cfae86", shirt: "#f4f4f2", legs: "#577aa8", hair: "curly", hc: "#2a211c", skin: "#b67c58" });
+      const b = place(g, { x: 927, y: 947, seated: true, flip: true, top: "#e7b6c2", legs: "#efe8dc", hair: "long", hc: "#bd4430" });
+      const c = place(g, { x: 958, y: 972, flip: true, top: "#a7c0df", shirt: "#f4f4f2", legs: "#2d3b58", hair: "short", hc: "#6a4733", skin: "#e0ad85" });
+      const legs = sit(25);
+      add(g, {
+        play(t) {
+          const la = Math.max(0, Math.sin(t * 2.1)), lb = Math.max(0, Math.sin(t * 2.1 + 2)), lc = Math.max(0, Math.sin(t * 1.7 + 4));
+          pose(a, { ...legs, af: [-34, -70 + 10 * Math.sin(t * 9) * la], ab: [-20, -50], bd: 4 - 6 * la, hd: -8 * la + 2 * Math.sin(t * 14) * la });
+          pose(b, { ...legs, af: [-24, -60], ab: [-10, -40], bd: 8 + 6 * lb, hd: 4 + 6 * lb * Math.sin(t * 13) });
+          pose(c, { lf: [2, 0], lb: [-6, 2], af: [-18 - 10 * lc, -96 + 8 * Math.sin(t * 8) * lc], ab: [6, -8], bd: 2 - 5 * lc, hd: -6 * lc });
+        },
+        rest() {   // the three upright, hands down
+          pose(a, { ...legs, af: [-30, -58], ab: [-20, -50], bd: 4, hd: 0 });
+          pose(b, { ...legs, af: [-24, -58], ab: [-10, -40], bd: 6, hd: 2 });
+          pose(c, { lf: [2, 0], lb: [-6, 2], af: [4, -10], ab: [6, -8], bd: 1, hd: 0 });
+        },
+      });
     }
-    {   // 4 · the café: a small table, two stools, a plate and a steaming cup
+    // 4 · the cafe lunches: two at a small table; one sips, the other talks (right of the café, on the route)
+    {
       const g = scene(svg, .74);
       draw(g, `<path fill="#55534e" d="M1236.6 372H1239.4V399H1236.6ZM1229 399H1247V401.2H1229ZM1209.6 380H1212V401H1209.6ZM1264 380H1266.4V401H1264Z"/>` +
         `<path fill="#b5895c" d="M1203 377H1219V380H1203ZM1257 377H1273V380H1257Z"/><path fill="#efe8dc" d="M1219 369.2H1257V372.2H1219Z"/>` +
         `<ellipse cx="1246" cy="368.6" rx="6.4" ry="1.4" fill="#f4f4f2"/><path fill="#8db7a5" d="M1242 368.4C1242 365.8 1250 365.8 1250 368.4Z"/><path fill="#d9772f" d="M1245 367.8C1245 366.2 1248 366.2 1248 367.8Z"/>` +
         `<path fill="#f4f4f2" d="M1226.6 363.4H1231.4L1231 369.2H1227Z"/>`);
-      P.steam = [...draw(g, [0, 1, 2].map((i) => `<path stroke="#e9e3f7" stroke-width=".9" d="M${1228 + i * 1.6} 361C${1226.4 + i * 1.6} 358.4 ${1230.6 + i * 1.6} 356.4 ${1228.6 + i * 1.6} 353.4"/>`).join("")).children];
+      const steam = draw(g, [0, 1, 2].map((i) => `<path stroke="#e9e3f7" stroke-width=".9" d="M${1228 + i * 1.6} 361C${1226.4 + i * 1.6} 358.4 ${1230.6 + i * 1.6} 356.4 ${1228.6 + i * 1.6} 353.4"/>`).join(""));
+      const wisps = [...steam.children];
+      const cup = draw(g, `<path fill="#f4f4f2" d="M-2.4-4.6H2.4L2 0H-2Z"/><path stroke="#f4f4f2" stroke-width=".8" d="M2.3-3.6C4-3.6 4-1.2 2.1-1.2"/>`);
+      const a = place(g, { x: 1209, y: 377, seated: true, skin: "#f2cba8", top: "#a7c0df", shirt: "#f4f4f2", legs: "#2d3b58", hair: "long", hc: "#3a271d" });
+      const b = place(g, { x: 1266, y: 377, seated: true, flip: true, skin: "#b67c58", top: "#cfae86", shirt: "#f4f4f2", legs: "#577aa8", hair: "short", hc: "#1f1a17" });
+      const legs = sit(24);
+      const sip = (k, tilt) => {
+        const af = [mix(-22, -14, k), mix(-62, -150, k)];
+        pose(a, { ...legs, af, ab: [-16, -60], bd: mix(6, 0, k), hd: -7 * k });
+        const hp = handAt(a, af); cup.setAttribute("transform", `translate(${hp[0].toFixed(1)} ${(hp[1] + 1.6).toFixed(1)}) rotate(${tilt.toFixed(1)})`);
+      };
+      add(g, {
+        play(t) {
+          const v = t % 4.6;
+          sip(ss(.6, 1.2, v) * (1 - ss(2.2, 2.8, v)), -26 * ss(1.1, 1.4, v) * (1 - ss(2, 2.3, v)));
+          const talk = Math.max(0, Math.sin(t * 1.3));
+          pose(b, { ...legs, af: [-26 - 8 * talk, -56 - 22 * talk * Math.abs(Math.sin(t * 4))], ab: [-18, -56], bd: 7, hd: 5 * Math.sin(t * 3) * talk });
+          wisps.forEach((w, i) => { const q = (t * .45 + i / 3) % 1; w.setAttribute("transform", `translate(0 ${(-7 * q).toFixed(2)})`); w.setAttribute("opacity", (Math.sin(Math.PI * q) * .8).toFixed(2)); });
+        },
+        rest() {   // the cup down, the friend's hand down, no steam
+          sip(0, 0);
+          pose(b, { ...legs, af: [-26, -56], ab: [-18, -56], bd: 7, hd: 0 });
+          wisps.forEach((w) => w.setAttribute("opacity", 0));
+        },
+      });
     }
-    {   // 5 · a desk with a laptop, a chair and a stool
+    // 5 · focus on study time: one at a desk with a laptop, typing in bursts (right of the study photo)
+    {
       const g = scene(svg, .84);
-      draw(g, `<path fill="#55534e" d="M1471 807H1473.4V828H1471ZM1485.6 807H1488V828H1485.6ZM1469.6 778H1472.2V807H1469.6ZM1500 797H1502.4V828H1500ZM1544.6 797H1547V828H1544.6ZM1559 807H1561.4V828H1559ZM1571.6 807H1574V828H1571.6Z"/>` +
-        `<path fill="#b5895c" d="M1468 804H1490V807H1468ZM1557 804H1576V807H1557Z"/><path fill="#efe8dc" d="M1496 794H1551V797H1496Z"/>` +
+      draw(g, `<path fill="#55534e" d="M1471 807H1473.4V828H1471ZM1485.6 807H1488V828H1485.6ZM1469.6 778H1472.2V807H1469.6ZM1500 797H1502.4V828H1500ZM1544.6 797H1547V828H1544.6Z"/>` +
+        `<path fill="#b5895c" d="M1468 804H1490V807H1468Z"/><path fill="#efe8dc" d="M1496 794H1551V797H1496Z"/>` +
         `<path fill="#8db7a5" d="M1532 788H1548V791H1532Z"/><path fill="#e7b6c2" d="M1533.5 791H1547V794H1533.5Z"/><path fill="#f4f4f2" d="M1539 783H1543.6V788H1539Z"/>` +
         `<path fill="#9aa2ad" d="M1505 792.4H1522V794H1505Z"/><path fill="#9aa2ad" d="M1521.4 793.4L1524.6 776.6L1526.4 777L1523.2 794Z"/>`);
-      P.glow = draw(g, `<path fill="#e6defa" d="M1521 792.6L1524.2 777.6L1525.4 777.8L1522.2 792.8Z"/><radialGradient id="mem-glow"><stop offset="0" stop-color="#e6defa" stop-opacity=".55"/><stop offset="1" stop-color="#e6defa" stop-opacity="0"/></radialGradient><ellipse cx="1520" cy="786" rx="11" ry="9" fill="url(#mem-glow)"/>`);
+      const glow = draw(g, `<path fill="#e6defa" d="M1521 792.6L1524.2 777.6L1525.4 777.8L1522.2 792.8Z"/><radialGradient id="mem-glow"><stop offset="0" stop-color="#e6defa" stop-opacity=".55"/><stop offset="1" stop-color="#e6defa" stop-opacity="0"/></radialGradient><ellipse cx="1520" cy="786" rx="11" ry="9" fill="url(#mem-glow)"/>`);
+      const p = place(g, { x: 1481, y: 804, seated: true, skin: "#e0ad85", top: "#e7b6c2", shirt: "#f4f4f2", legs: "#577aa8", hair: "bun", hc: "#2a211c" });
+      const legs = sit(24);
+      add(g, {
+        play(t) {
+          const c = t % 5.2, burst = c < 3.6, ty = burst ? Math.sin(t * 22) : 0, ty2 = burst ? Math.sin(t * 22 + 1.7) : 0, look = ss(3.6, 4.1, c) * (1 - ss(4.7, 5.2, c));
+          pose(p, { ...legs, af: [-30, -58 + 4 * ty], ab: [-26, -60 + 4 * ty2], bd: mix(10, 2, look), hd: mix(9, -6, look) + .6 * ty });
+          glow.setAttribute("opacity", (.75 + .25 * Math.sin(t * 2.4)).toFixed(2));
+        },
+        rest() {   // hands on the keys, the screen steady
+          pose(p, { ...legs, af: [-30, -58], ab: [-26, -60], bd: 10, hd: 9 });
+          glow.setAttribute("opacity", .85);
+        },
+      });
     }
-    {   // 6 · a few steps under the stairs photo
+    // 6 · huddle on stairs: three on a few steps under the stairs photo, leaning in together
+    {
       const g = scene(svg, .95);
       draw(g, `<path fill="#2b2a28" d="M1646 491H1772V505H1646ZM1688 477H1772V491H1688ZM1730 463H1772V477H1730Z"/><path stroke="#5f5c56" stroke-width="1.2" d="M1646 491H1688V477H1730V463H1772"/>`);
+      const c = place(g, { x: 1757, y: 463, seated: true, flip: true, top: "#a7c0df", shirt: "#f4f4f2", legs: "#cfd3d8", hair: "curly", hc: "#2a211c", skin: "#b67c58" });
+      const b = place(g, { x: 1714, y: 477, seated: true, flip: true, top: "#e7b6c2", legs: "#efe8dc", hair: "long", hc: "#6a4733", hold: `<path fill="#efe8dc" d="M-3-52H5V-46H-3Z"/>` });
+      const a = place(g, { x: 1628, y: 505, top: "#efe8dc", shirt: "#577aa8", legs: "#577aa8", hair: "short", hc: "#1f1a17", skin: "#e0ad85" });
+      const legs = sit(14);
+      const huddle = (br, pt) => {
+        pose(c, { ...legs, af: [-34, -40], ab: [-24, -50], bd: 16 + 3 * br(0), hd: 6 + 4 * br(1.4) });
+        pose(b, { ...legs, af: [-40, -42], ab: [-30, -48], bd: 14 + 3 * br(2.1), hd: 8 + 3 * br(.6) });
+        pose(a, { lf: [-4, 4], lb: [6, 2], af: [mix(-20, -78, pt), mix(-30, -6, pt)], ab: [-10, -22], bd: 12 + 2 * br(3), hd: 4 * br(4.2) });
+      };
+      add(g, {
+        play(t) { huddle((ph) => Math.sin(t * 1.9 + ph), ss(0, .6, t % 6) * (1 - ss(2.6, 3.2, t % 6))); },
+        rest() { huddle(() => 0, 0); },   // the three still, the pointing arm down
+      });
     }
-    // the three, above every prop; then what they hold: A's cup (it waits on the café table) and C's notebook
-    const folk = draw(svg, ""), F = {};
-    WHO.forEach((w) => (F[w] = place(folk, { x: 0, y: 0, ...FRIENDS[w] })));
-    P.cup = draw(scene(svg, .74), `<path fill="#f4f4f2" d="M-2.4-4.6H2.4L2 0H-2Z"/><path stroke="#f4f4f2" stroke-width=".8" d="M2.3-3.6C4-3.6 4-1.2 2.1-1.2"/>`);
-    P.note = draw(svg, `<path fill="#efe8dc" d="M-4.2-3.4H4.2V3.4H-4.2Z"/><path stroke="#9aa2ad" stroke-width=".6" d="M-2.6-1.4H2.6M-2.6.6H2.6"/>`);
-    return { P, F, folk };
+    return S;
   }
 
-  // what the three do at each memory, t seconds after they've all arrived: their poses, then props(F) for what follows a hand
-  const T = .62;
-  const MEM = [null,
-    {   // 1 · the court: A dribbles, C claps, B waves
-      pose(t) {
-        const u = (t % T) / T, h = Math.abs(Math.sin(Math.PI * u)), kn = 1 - h, clap = t % 2.6 < 1.5 ? Math.abs(Math.sin(t * 7)) : 0;
-        const v = t % 4.2, up = ss(0, .5, v) * (1 - ss(2.1, 2.6, v)), wv = v > .5 && v < 2.1 ? Math.sin((v - .5) / .53 * 2 * Math.PI) : 0;
-        this.h = h;
-        return {
-          A: { lf: [-16 - 3 * kn, 24 + 6 * kn], lb: [8, 14 + 4 * kn], af: [-30 - 4 * h, -28 - 12 * h], ab: [-26, -46], bd: 9, hd: -7 },
-          C: { lf: [-2, 2], lb: [3, 1], af: [-44, -58 + 22 * clap], ab: [-40, -52 + 22 * clap], bd: 3, hd: -3 },
-          B: { lf: [-2, 2], lb: [3, 1], af: [mix(6, -160, up), mix(-8, -12 + 26 * wv, up)], ab: [-3, -10], bd: -1, hd: -4 * up },
-        };
-      },
-      props(F, P, p) {
-        const hp = handAt(F.A, p.A.af), h = this.h, by = mix(570.1 - 6.4, hp[1] + 8.8, h), sq = Math.max(0, 1 - h / .1);
-        P.ball.setAttribute("transform", `translate(${hp[0].toFixed(1)} ${(by + 6.4 * sq * .2).toFixed(1)}) scale(${(1 + .14 * sq).toFixed(3)} ${(1 - .2 * sq).toFixed(3)})`);
-      },
-      rest(P) { P.ball.setAttribute("transform", "translate(84 563.7)"); },
-    },
-    {   // 2 · the pathway: they stop by the forest path; C points at it, the others look and chat
-      pose(t) {
-        const pt = ss(0, .5, t % 5) * (1 - ss(2.6, 3.1, t % 5));
-        return {
-          A: { ...STAND, hd: 3 * Math.sin(t * .9), af: [3, -8 - 6 * Math.max(0, Math.sin(t * 1.7))] },
-          B: { ...STAND, hd: -3 - 4 * pt + 2 * Math.sin(t * 1.2) },
-          C: { ...STAND, af: [mix(3, -84, pt), mix(-8, -4, pt)], bd: 1, hd: -5 * pt },
-        };
-      },
-    },
-    {   // 3 · the bench: A and C sit and laugh, B stands by them
-      pose(t) {
-        const la = Math.max(0, Math.sin(t * 2.1)), lb = Math.max(0, Math.sin(t * 2.1 + 2)), lc = Math.max(0, Math.sin(t * 1.7 + 4)), legs = sit(25);
-        return {
-          A: { ...legs, af: [-34, -70 + 10 * Math.sin(t * 9) * la], ab: [-20, -50], bd: 4 - 6 * la, hd: -8 * la + 2 * Math.sin(t * 14) * la },
-          C: { ...legs, af: [-24, -60], ab: [-10, -40], bd: 8 + 6 * lb, hd: 4 + 6 * lb * Math.sin(t * 13) },
-          B: { lf: [2, 0], lb: [-6, 2], af: [-18 - 10 * lc, -96 + 8 * Math.sin(t * 8) * lc], ab: [6, -8], bd: 2 - 5 * lc, hd: -6 * lc },
-        };
-      },
-    },
-    {   // 4 · the café: A sips from her cup, C talks, B chats beside them; the steam rises
-      pose(t) {
-        const v = t % 4.6, k = ss(.6, 1.2, v) * (1 - ss(2.2, 2.8, v)), talk = Math.max(0, Math.sin(t * 1.3)), g = Math.max(0, Math.sin(t * 1.1 + 2)), legs = sit(24);
-        this.tilt = -26 * ss(1.1, 1.4, v) * (1 - ss(2, 2.3, v)); this.t = t;
-        return {
-          A: { ...legs, af: [mix(-22, -14, k), mix(-62, -150, k)], ab: [-16, -60], bd: mix(6, 0, k), hd: -7 * k },
-          C: { ...legs, af: [-26 - 8 * talk, -56 - 22 * talk * Math.abs(Math.sin(t * 4))], ab: [-18, -56], bd: 7, hd: 5 * Math.sin(t * 3) * talk },
-          B: { lf: [2, 0], lb: [-4, 2], af: [-20 - 14 * g, -60 + 14 * Math.sin(t * 6) * g], ab: [4, -10], bd: 3, hd: 3 * Math.sin(t * 1.7) },
-        };
-      },
-      props(F, P, p) {
-        const hp = handAt(F.A, p.A.af);
-        P.cup.setAttribute("transform", `translate(${hp[0].toFixed(1)} ${(hp[1] + 1.6).toFixed(1)}) rotate(${this.tilt.toFixed(1)})`);
-        P.steam.forEach((w, i) => { const q = (this.t * .45 + i / 3) % 1; w.setAttribute("transform", `translate(0 ${(-7 * q).toFixed(2)})`); w.setAttribute("opacity", (Math.sin(Math.PI * q) * .8).toFixed(2)); });
-      },
-      rest(P) { P.cup.setAttribute("transform", "translate(1237 369.2)"); P.steam.forEach((w) => w.setAttribute("opacity", 0)); },
-    },
-    {   // 5 · the desk: A types, C leans in from the stool and nods, B thinks, a hand at the chin, and points at the screen now and then
-      pose(t) {
-        const c = t % 5.2, burst = c < 3.6, ty = burst ? Math.sin(t * 22) : 0, ty2 = burst ? Math.sin(t * 22 + 1.7) : 0, look = ss(3.6, 4.1, c) * (1 - ss(4.7, 5.2, c));
-        const pt = ss(2, 2.5, t % 6) * (1 - ss(3.8, 4.3, t % 6)), legs = sit(24); this.t = t;
-        return {
-          A: { ...legs, af: [-30, -58 + 4 * ty], ab: [-26, -60 + 4 * ty2], bd: mix(10, 2, look), hd: mix(9, -6, look) + .6 * ty },
-          C: { ...legs, af: [-28, -52], ab: [-20, -48], bd: 12 + 2 * Math.sin(t * 1.1), hd: 6 + 4 * Math.sin(t * 2.6) },
-          B: { lf: [2, 0], lb: [-4, 2], af: [mix(-14, -62, pt), mix(-136, -14, pt)], ab: [-12, -30], bd: 6, hd: 5 },
-        };
-      },
-      props(F, P) { P.glow.setAttribute("opacity", (.75 + .25 * Math.sin(this.t * 2.4)).toFixed(2)); },
-      rest(P) { P.glow.setAttribute("opacity", .85); },
-    },
-    {   // 6 · the steps: C and B sit, A stands at the foot; they lean in, A points at C's notebook
-      pose(t) {
-        const br = (ph) => Math.sin(t * 1.9 + ph), pt = ss(0, .6, t % 6) * (1 - ss(2.6, 3.2, t % 6)), legs = sit(14);
-        return {
-          B: { ...legs, af: [-34, -40], ab: [-24, -50], bd: 16 + 3 * br(0), hd: 6 + 4 * br(1.4) },
-          C: { ...legs, af: [-40, -42], ab: [-30, -48], bd: 14 + 3 * br(2.1), hd: 8 + 3 * br(.6) },
-          A: { lf: [-4, 4], lb: [6, 2], af: [mix(-20, -78, pt), mix(-30, -6, pt)], ab: [-10, -22], bd: 12 + 2 * br(3), hd: 4 * br(4.2) },
-        };
-      },
-      props(F, P, p) { const hp = handAt(F.C, p.C.af); P.note.setAttribute("transform", `translate(${hp[0].toFixed(1)} ${(hp[1] - 2).toFixed(1)})`); P.note.setAttribute("opacity", 1); },
-      rest(P) { P.note.setAttribute("opacity", 0); },
-    },
-  ];
-
-  /* ---------- one memory per beat: the walk there, the line ahead of it, then the memory ---------- */
-  let W = null, EL = [], mask = null, LEN = 0, cur = 0, raf = 0, trip = null;
+  /* ---------- one memory per beat ---------- */
+  let S = null, EL = [], mask = null, LEN = 0, cur = 0, act = null, raf = 0, timers = [];
+  const wait = (fn, ms) => timers.push(setTimeout(fn, ms));
+  const quiet = () => { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf); raf = 0; };
   function lineTo(s, ms) {
     mask.style.transition = ms ? `stroke-dashoffset ${Math.round(ms)}ms cubic-bezier(.45,.05,.3,1)` : "none";
     mask.style.strokeDashoffset = LEN * (1 - s);
   }
-  // a friend at x, y: standing (on the ground) or seated (k = 1) on a seat, blending between the two
-  function settle(f, s, k, p) {
-    f.x = s[0]; f.flip = s[2] < 0;
-    if (s[3] == null) { f.seated = false; f.y = s[1]; pose(f, p); return; }
-    f.seated = true; f.y = mix(s[1], s[3] + (HIP - 3), k); pose(f, p);
-  }
-  // the trip to memory k: each friend's path from where memory k−1 left them, and when they each get there
-  function plan(k, walk) {
-    const legs = {};
-    WHO.forEach((w) => {
-      const a = SPOT[k - 1][w], z = SPOT[k][w];
-      const r = polyline([[a[0], a[1]], ...VIA[k]([a[0], a[1]], [z[0], z[1]], LANE[w]), [z[0], z[1]]]);
-      const t0 = a[3] != null ? UP : 0;
-      legs[w] = { r, a, z, t0, t1: t0 + r.L / V, face: a[2] };
-    });
-    const t1 = Math.max(...WHO.map((w) => legs[w].t1));
-    return { k, walk, legs, t1, go: walk ? t1 + DOWN : 0, start: performance.now(), line: [STOP[walk ? k - 1 : k], STOP[k]] };
-  }
-  function frame(now) {
-    if (document.body.dataset.scene !== "s-memories" || !trip) { raf = 0; return; }
-    // (the first frame's timestamp can come from just before the trip was planned)
-    const t = Math.max(0, (now - trip.start) / 1000), k = trip.k, M = MEM[k], { F, P } = W;
-    if (trip.walk) {
-      // the line runs ahead of them, at a steady speed, and each piece of the memory comes up as it reaches it
-      const head = mix(trip.line[0], trip.line[1], Math.min(1, t / Math.max(.6, trip.t1 * .85)));
-      mask.style.strokeDashoffset = LEN * (1 - head);
-      EL.forEach((e) => { if (e.b === k && head >= e.s - 1e-6) e.el.classList.add("on"); });
-      W.folk.setAttribute("opacity", k === 1 ? ss(0, .5, t).toFixed(3) : 1);
-    }
-    const act = t >= trip.go ? M.pose(t - trip.go) : null, mixIn = act ? ss(0, .4, t - trip.go) : 0;
-    WHO.forEach((w) => {
-      const f = F[w], L = trip.legs[w], z = L.z;
-      if (trip.walk && t < L.t1) {
-        if (t < L.t0) { settle(f, L.a, 1 - ss(0, UP, t), mixPose(SEAT(L.a[1] - L.a[3]), STAND, ss(0, UP, t))); return; }   // standing up
-        const d = (t - L.t0) * V, [x, y, dx] = along(L.r, d);
-        if (Math.abs(dx) > 2) L.face = Math.sign(dx);
-        f.x = x; f.y = y; f.flip = L.face < 0; f.seated = false;
-        pose(f, { ...stride((d / STRIDE) * 2 * Math.PI, AMP), bd: 3, hd: 0 });
-        return;
-      }
-      // there: sit down if this memory has a seat, wait for the others, then join in
-      const down = z[3] != null ? ss(0, DOWN, t - (trip.walk ? L.t1 : -1)) : 0, idle = z[3] != null ? mixPose(STAND, SEAT(z[1] - z[3]), down) : STAND;
-      settle(f, z, down, act ? mixPose(idle, act[w], mixIn) : idle);
-    });
-    if (act && M.props) M.props(F, P, act);
+  // the current memory's people loop, on their own clock from the moment they come up
+  function run() {
+    cancelAnimationFrame(raf); raf = 0;
+    if (reduced || !act) return;
+    const t0 = performance.now(), me = act;
+    const frame = (now) => {
+      if (document.body.dataset.scene !== "s-memories" || act !== me) { raf = 0; return; }
+      me.play((now - t0) / 1000); raf = requestAnimationFrame(frame);
+    };
     raf = requestAnimationFrame(frame);
   }
   function beat(k) {
-    cancelAnimationFrame(raf); raf = 0;
+    quiet();
     const prev = cur; cur = k;
-    const walk = !reduced && k === prev + 1;
-    MEM.forEach((m) => m && m.rest && m.rest(W.P));
-    EL.forEach((e) => { if (e.b < k) e.el.classList.add("on"); else if (e.b > k || (walk && e.b === k)) e.el.classList.remove("on"); });
-    trip = plan(k, walk);
-    if (walk) { lineTo(STOP[k - 1], 0); void mask.getBoundingClientRect(); }
-    else {
-      // back, a jump (the overview, or ← from the next slide) or reduced motion: they are simply there
+    act = reduced ? null : S.find((s) => s.b === k) || null;
+    S.forEach((s) => (s === act ? s.play(0) : s.rest()));
+    // the memories before this one are there already; the later ones go
+    EL.forEach((e) => { if (e.b < k) e.el.classList.add("on"); else if (e.b > k) e.el.classList.remove("on"); });
+    const mine = EL.filter((e) => e.b === k);
+    if (k > prev && !reduced) {
+      // forward: the line draws this memory's stretch, and its pieces come up as the line reaches them
+      const a = STOP[k - 1], z = STOP[k], ms = 500 + 3200 * (z - a);
+      lineTo(a, 0); void mask.getBoundingClientRect(); lineTo(z, ms);
+      mine.forEach((e) => {
+        e.el.classList.remove("on");
+        wait(() => { e.el.classList.add("on"); if (act && e.el === act.g) run(); }, ms * at((e.s - a) / (z - a)));
+      });
+    } else {
+      // back (or reduced motion): the line pulls back to this memory, which plays again
       lineTo(STOP[k], reduced ? 0 : 400);
-      EL.forEach((e) => e.b === k && e.el.classList.add("on"));
-      W.folk.setAttribute("opacity", 1);
+      mine.forEach((e) => e.el.classList.add("on"));
+      run();
     }
-    if (reduced) {   // one still moment of the memory
-      const p = MEM[k].pose(1.2);
-      WHO.forEach((w) => settle(W.F[w], SPOT[k][w], 1, p[w]));
-      if (MEM[k].props) MEM[k].props(W.F, W.P, p);
-      return;
-    }
-    raf = requestAnimationFrame(frame);
   }
   return {
     enter(_, sc) {
       plain();
-      if (!W) W = build($(".mem-folk", sc));
+      if (!S) S = build($(".mem-folk", sc));
       EL = $$("[data-s]", sc).map((el) => ({ el, s: +el.dataset.s, b: beatOf(+el.dataset.s) }));
       EL.forEach((e) => e.el.classList.remove("on"));
       mask = $(".mem-route .mask", sc); LEN = mask.getTotalLength(); mask.style.strokeDasharray = LEN; lineTo(0, 0);
-      cancelAnimationFrame(raf); raf = 0; cur = 0; trip = null;
-      W.folk.setAttribute("opacity", 0);
-      MEM.forEach((m) => m && m.rest && m.rest(W.P));
+      quiet(); cur = 0; act = null; S.forEach((s) => s.rest());
       reveal($(".mem-h", sc), 100);
       $$(".mem-h > *", sc).forEach((e, i) => e.style.setProperty("--i", i * 4));
     },
     step(k) { beat(k); },
-    leave() { cancelAnimationFrame(raf); raf = 0; trip = null; },
+    leave() { quiet(); act = null; },
   };
 });
 </script>
