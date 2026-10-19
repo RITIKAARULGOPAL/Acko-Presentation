@@ -91,7 +91,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 3 | Workplace aspiration | 1 | Three cues rise in: acoustic excellence, real nature, an honest palette |
 | 4 | What defines ACKO | 1 | Five values open like shutters, then turn to their second picture |
 | 5 | We respect the journey | 2 | Why insurance (the collage, on white); then, as the deck's one click plays it, the collage gives way to the road, the founder's words and the 2016 → 2025 timeline flying in |
-| 6–7 | The challenge at hand | 2 | Two offices (dot clusters) drift together; then they become one loop, and the four words turn |
+| 6–7 | The challenge at hand | 2 | The challenge: the four words and the question; then the words turn into the solution's and "One Place One Experience" |
 | 8 | Maybe we've felt this before | 1 | A dotted campus path draws; the six memories come up along it |
 | 9 | What if | 1 | The question, word by word |
 | 10 | The Möbius | 1 | A live 3D Möbius strip, ACKO's own mark, with the copy inside the loop |

@@ -62,6 +62,8 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
 - Each dot is staggered by `(i % 16) * 25ms`.
 - CSS `transform: translate()` with a cubic-bezier transition.
 
+**Status:** removed from the ACKO deck on 19 Oct at Ritika's request (the deck leaves this space empty); kept here as a pattern. The code is in git history before the commit "Challenge: no dots animation".
+
 ## 6. A live Möbius strip (three.js r147, no textures)
 **Geometry:** a parametric strip, `x = (R + v cos(u/2)) cos u`, `z = (R + v cos(u/2)) sin u`, `y = v sin(u/2)`, with `R = 1.95` and `v ∈ ±0.52`.
 - Two offset sheets (±T/2 along the normal) give it thickness.

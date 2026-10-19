@@ -18,8 +18,6 @@
       <line x1="858" y1="0" x2="858" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/>
       <line x1="0" y1="567" x2="1920" y2="567"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/>
     </svg>
-    <!-- two existing offices drift together (1), then become one loop (2) -->
-    <svg class="ch-dots at" id="ch-dots" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"></svg>
     <div class="ch-words" style="left:1.8%;top:56%;width:42%;height:22%">
       <div class="ch-word" style="--i:0"><div class="a"><span class="hand">Disoriented</span><img src="assets/img/ch-disoriented.webp" alt=""></div><div class="b"><span class="hand">Familiar Teams</span><img src="assets/img/ch-familiar.webp" alt=""></div></div>
       <div class="ch-word" style="--i:1"><div class="a"><span class="hand">Unsettled</span><img src="assets/img/ch-unsettled.webp" alt=""></div><div class="b"><span class="hand">Comfort in unknown</span><img src="assets/img/ch-comfort.webp" alt=""></div></div>
@@ -47,57 +45,19 @@
 .ch-copy h3 { font-size: calc(var(--pt) * 13); line-height: 1.25; font-weight: 700; color: var(--purple-2); }
 .ch-copy h3 b { font-weight: 800; }
 .ch-copy .one { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: #fff; }
-.ch-dots { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-.ch-dots circle { fill: var(--purple-2); }
-.ch-dots text { font-family: var(--label); font-size: 9px; fill: #3b3550; letter-spacing: .08em; }
-.ch-people circle { fill: var(--purple-2); opacity: .78; }
-.ch-l { font-family: var(--label); font-size: 15px; letter-spacing: .16em; fill: #4e4767; transition: opacity .8s var(--ease); }
-.ch-l.b { opacity: 0; }
-.solved .ch-l.a { opacity: 0; }
-.solved .ch-l.b { opacity: 1; transition-delay: 1.6s; }
 .ch-word span { font-size: calc(var(--pt) * 15); line-height: 1; min-height: 2em; color: #434343; }
 .ch-word img { height: calc(var(--pt) * 32); }
-.ch-l { font-size: 24px; }
 </style>
 <script>
-/* the challenge → the solution (deck slides 6 → 7): the people of two offices, two clusters that drift towards each other (1)
-   and then become one loop (2) */
-ACKO.slide("s-challenge", ({ $, $$, plain, reveal, raf2 }) => {
-  const N = 64;
-  function chDots(svg) {
-    if (svg.children.length) return;
-    let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-    const out = [];
-    for (let i = 0; i < N; i++) {
-      const a = i < N / 2 ? [330, 260] : [1530, 250], ang = rnd() * Math.PI * 2, rr = Math.sqrt(rnd()) * 130;
-      const from = [a[0] + Math.cos(ang) * rr, a[1] + Math.sin(ang) * rr * 0.62];
-      const near = [from[0] + (i < N / 2 ? 260 : -260), from[1]];
-      // on the loop: a figure of eight across the middle of the page
-      const t = (i / N) * Math.PI * 2, loop = [960 + 520 * Math.sin(t), 270 + 150 * Math.sin(t) * Math.cos(t) * 1.6];
-      out.push(`<circle r="${(5 + rnd() * 4).toFixed(1)}" cx="0" cy="0" data-a="${from.map(Math.round)}" data-b="${near.map(Math.round)}" data-c="${loop.map(Math.round)}" style="transform:translate(${from[0]}px,${from[1]}px)"/>`);
-    }
-    svg.innerHTML = `<g class="ch-people">${out.join("")}</g>` +
-      `<text x="330" y="470" text-anchor="middle" class="ch-l a">TWO EXISTING LOCATIONS</text><text x="1530" y="470" text-anchor="middle" class="ch-l a"></text>` +
-      `<text x="960" y="520" text-anchor="middle" class="ch-l b">ONE PLACE</text>`;
-  }
-  function chMove(svg, key, ms) {
-    $$("circle", svg).forEach((c, i) => {
-      const [x, y] = c.dataset[key].split(",").map(Number);
-      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${Math.round((i % 16) * 25)}ms` : "none";
-      c.style.transform = `translate(${x}px,${y}px)`;
-    });
-  }
-  return {
-    enter(_, sc) { plain(); chDots($("#ch-dots", sc)); },
-    step(k, sc) {
-      const pg = $(".page", sc), svg = $("#ch-dots", sc);
-      pg.classList.toggle("solved", k === 2);
-      if (k === 1) { chMove(svg, "a", 0); raf2(() => chMove(svg, "b", 2800)); }
-      else chMove(svg, "c", 2400);
-      reveal($(".ch-words", sc), 100);
-    },
-  };
-});
+/* the challenge → the solution (deck slides 6 → 7): the four words of the challenge (1) turn into those of the solution (2);
+   the top half stays empty, as in the deck */
+ACKO.slide("s-challenge", ({ $, plain, reveal }) => ({
+  enter() { plain(); },
+  step(k, sc) {
+    $(".page", sc).classList.toggle("solved", k === 2);
+    reveal($(".ch-words", sc), 100);
+  },
+}));
 </script>
 <!-- slide:end -->
 </body>
