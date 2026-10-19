@@ -191,3 +191,16 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
 - **The floor tint:** warped into the plan frame as one picture.
 
 **Result:** 136 spaces, including 42 phone booths, on the DXF walls, each keeping its slide colour.
+
+## 14. Click a neighbourhood: zoom, key plan, occupancy chart
+**What:** on the layout's *Six neighbourhoods* beat, a click on a neighbourhood (on the plan, or its row) flies the plan into it on the left of the page; a white panel on the right shows a small key plan of the floor (that one filled), its name, workstations and area, and its occupancy chart in the occupancy slide's table style.
+
+**How:**
+- **Data** (`tools/acko/plan_dxf.py`): each zone gets `box` and `occ`. `occ` is the occupancy slide's rows, limited to the spaces whose label point lies inside the zone's outline; a space named for several labels (`PB 10 / PB 11`) counts each one.
+- **Engine** (kit `plan`):
+  - `onZoneClick(fn)`: a click anywhere inside an outline (point-in-polygon in plan mm, through the plan's own viewBox mapping), so the gaps between desks count. A press that moves more than 4 px is a pan, not a click. Cleared by `planOff`.
+  - `focusZone(id, disp)` flies to the zone's box (2.5 m margin) inside a display rect in frame px, adds `focus-zone` (the others dim, its rooms take the hover), and makes that view the double-click home. `focusZone(null)` flies back.
+  - `keyplan(id)`: markup for the key plan (the 12 px/m picture, faint, with the six outlines).
+- **Slide:** the panel and a white top and bottom band (behind the header and footer) fade in on `zp-open`, and the rows fade out. Esc is caught in the capture phase while one is open, so it doesn't reach the deck's overview key. A beat change or leaving the slide closes it.
+- **Watch:** a function named like one already in `app.js` (the walk has a `keyplan`) is silently overridden by the later declaration; give engine helpers distinct names.
+

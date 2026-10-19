@@ -320,7 +320,7 @@
      compartment line, entrances, arrival zones). Wheel zooms on the cursor, drag pans, a double-click returns to the beat's
      view. Used by s-layout and s-blowup. */
   const NB_COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
-  const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, P: null };
+  const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, P: null, onZone: null, zone: null };
   function deckPlan() {
     if (DP.ph) return DP;
     const P = (DP.P = window.PLAN_DXF), host = $("#world-plan"), [vx, vy, vw, vh] = P.viewBox, vb = P.viewBox.join(" ");
@@ -352,6 +352,18 @@
     ["wheel", "pointermove", "pointerup"].forEach((ev) => host.addEventListener(ev, DP.level, { passive: true }));
     addEventListener("resize", DP.level);
     level();
+    // a click (not a drag) anywhere inside a neighbourhood's outline: the point is taken into plan mm the way the plan
+    // draws it (viewBox, xMidYMid meet), so it works between the desks too and while the plan holds the pointer
+    const rings = P.zones.map((z) => (z.zone.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number))));
+    let down = null;
+    host.addEventListener("pointerdown", (e) => { down = [e.clientX, e.clientY]; });
+    host.addEventListener("click", (e) => {
+      if (!DP.onZone || !down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return;
+      const r = host.getBoundingClientRect(), v = DP.ph.view, k = Math.max(v[2] / r.width, v[3] / r.height);
+      const pt = [v[0] + v[2] / 2 - (r.width * k) / 2 + (e.clientX - r.left) * k, v[1] + v[3] / 2 - (r.height * k) / 2 + (e.clientY - r.top) * k];
+      const i = rings.findIndex((rs) => rs.filter((ring) => inPoly(pt, ring)).length % 2 === 1);
+      if (i >= 0) DP.onZone(P.zones[i]);
+    });
     // decode the sharper pictures ahead, so the first zoom into them doesn't stall
     P.levels.slice(1).forEach((l) => { const im = new Image(); im.src = asset(l.src); if (im.decode) im.decode().catch(() => {}); });
     return DP;
@@ -381,7 +393,37 @@
     const v = opts.view || planView();
     DP.home = v; DP.ph.setHome(...v); fitVb(v, opts.ms === undefined ? 900 : opts.ms);
   }
-  function planOff() { document.body.classList.remove("dp-on"); if (DP.root) { PLAN_LAYERS.forEach((k) => DP.root.classList.remove("show-" + k)); DP.root.classList.remove("focus"); DP.ph.clear(); } }
+  function planOff() {
+    document.body.classList.remove("dp-on"); DP.onZone = null;
+    if (DP.root) { PLAN_LAYERS.forEach((k) => DP.root.classList.remove("show-" + k)); markZone(null); DP.root.classList.remove("focus"); DP.ph.clear(); }
+  }
+  // one neighbourhood picked out: the plan flies to it (inside disp, frame px), the others dim, its rooms can be hovered;
+  // focusZone(null) flies back to the beat's view
+  function markZone(z) {
+    DP.zone = z;
+    DP.root.classList.remove("focus"); $$(".dx-marks .hi", DP.root).forEach((p) => p.classList.remove("hi"));   // a row's hover, done with
+    DP.root.classList.toggle("focus-zone", !!z);
+    $$(".dx-nb [data-nb], .dx-lab [data-nb]", DP.root).forEach((e) => e.classList.toggle("sel", !!z && e.dataset.nb === z.n));
+    $$(".ph-team", DP.root).forEach((g) => g.classList.toggle("sel", !!z && g.dataset.id === z.id));
+  }
+  function focusZone(id, disp) {
+    deckPlan(); DP.ph.clear();
+    const z = id ? DP.P.zones.find((q) => q.id === id) : null;
+    markZone(z);
+    if (!z) { DP.ph.setHome(...DP.home); fitVb(DP.home, 900); return null; }
+    const pad = 2500, b = z.box, v = vbFor([b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad], disp || [38, 120, 1230, 880]);
+    DP.ph.setHome(...v); fitVb(v, 900);
+    return z;
+  }
+  // a small key plan of the whole floor (markup), the neighbourhood id filled in its colour (kit: plan.keyplan)
+  function zoneKey(id) {
+    const P = window.PLAN_DXF, [x, y, w, h] = P.viewBox, l = P.levels[0];
+    const sel = P.zones.find((q) => q.id === id);
+    return `<svg class="dx-key" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet">` +
+      `<image href="${asset(l.src)}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" opacity=".5"/>` +
+      P.zones.map((z) => `<path class="${z.id === id ? "sel" : ""}" d="${z.zone}" style="--c:${NB_COL[z.n] || "#888"}"/>`).join("") +
+      (sel ? `<text x="${sel.x}" y="${sel.y}" style="fill:${NB_COL[sel.n] || "#555"}">${sel.n}</text>` : "") + `</svg>`;
+  }
   // the fire egress layer, switched by a button on the slide (on top of whatever the beat shows)
   function planEgress(on) { deckPlan(); return DP.root.classList.toggle("show-egress", on); }
   // a list of [data-nb] rows: hover one to pick out its neighbourhood on the plan (outline, seats)
@@ -516,7 +558,8 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
+            get zone() { return DP.zone; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {
     if (!document.getElementById(id)) continue;

@@ -73,6 +73,50 @@ def title(t):
     return re.sub(r"\bPax\b", "PAX", re.sub(r"\bPb\b", "PB", t))
 
 
+# the deck's occupancy chart (slide 61): its groups and rows, in its order. Each row: (group, area, test on a space name)
+OCC_ROWS = [
+    ("Workhall", "Executive cabin", r"EXECUTIVE"),
+    ("Meeting room", "Board room", r"BOARD"),
+    ("Meeting room", "Focus room - 2 pax", r"^2 PAX\b"),
+    ("Meeting room", "Visitor Hub", r"VISITOR HUB \d"),
+    ("Meeting room", "Quick Sprint Room - 3 pax", r"SPRINT 3 PAX"),
+    ("Meeting room", "Quick Sprint Room - 4 pax", r"SPRINT 4 PAX"),
+    ("Meeting room", "Quick Sprint Room - 6 pax", r"SPRINT 6 PAX"),
+    ("Meeting room", "Quick Sprint Room - 8 pax", r"SPRINT 8 PAX"),
+    ("Meeting room", "Quick Sprint Room - 10 pax", r"SPRINT 10 PAX"),
+    ("Meeting room", "Collaboration huddles - 10-12 pax", r"HUDDLE"),
+    ("Meeting room", "Departmental Room - 18-20 pax", r"DEPARTMENTAL"),
+    ("Meeting room", "Hatchery - 08 pax", r"HATCHERY"),
+    ("Meeting room", "Studio", r"STUDIO"),
+    ("Meeting room", "Phone booth", r"(^| / )PB \d"),
+    ("Training room", "Training Room - 40 pax", r"TRAINING"),
+    ("Recreational area / wellness", "Cafeteria", r"CAFE|HEATING STATION"),
+    ("Recreational area / wellness", "Mother's Room", r"MOTHER"),
+    ("Recreational area / wellness", "Zen Room", r"ZEN"),
+    ("Recreational area / wellness", "Prayer Room", r"PRAYER"),
+    ("Recreational area / wellness", "Coffee corner", r"COFFEE"),
+    ("Services", "UPS / Electrical", r"UPS|ELECTRICAL"),
+    ("Services", "Battery", r"BATTERY"),
+    ("Services", "Hub Room", r"HUB ROOM"),
+    ("Services", "Server Room", r"SERVER"),
+]
+
+
+def occupancy(z, zone_poly, spaces):
+    """the occupancy rows for one neighbourhood: its workstations, then a count of each kind of space inside it (by the
+    space's label point; a space named for several labels, e.g. "PB 10 / PB 11", counts each of them)"""
+    rows = [("Workhall", "Workstations", z["seats"])]
+    inside = [sp for sp in spaces if zone_poly.contains(Point(sp["x"], sp["y"])) and sp["name"] != sp["type"]]
+    for grp, area, rx in OCC_ROWS:
+        n = 0
+        for sp in inside:
+            parts = sp["name"].split(" / ")
+            n += sum(1 for part in parts if re.search(rx, part, re.I)) if area in ("Phone booth", "Focus room - 2 pax") else int(bool(re.search(rx, sp["name"], re.I)))
+        if n:
+            rows.append((grp, area, n))
+    return rows
+
+
 def d_of(poly):
     out = []
     for g in (poly.geoms if hasattr(poly, "geoms") else [poly]):
@@ -250,6 +294,13 @@ def main(tk, dxf_path, deck):
                   x=t["x"], y=t["y"], zone=t["zone"], desks=t["desks"]) for t in tj["teams"]]
     zones.sort(key=lambda z: z["n"])
     print("zones:", [(z["n"], z["seats"]) for z in zones], "total", sum(z["seats"] for z in zones))
+    # each neighbourhood's box (for the zoom) and its occupancy chart: the deck's slide-61 rows, for what lies inside it
+    for z in zones:
+        rings = [[tuple(map(float, q.split())) for q in part.split("L")] for part in re.findall(r"M([^Z]+)Z", z["zone"])]
+        g = unary_union([Polygon(r).buffer(0) for r in rings if len(r) > 2])
+        z["box"] = [round(v) for v in g.bounds]
+        z["occ"] = occupancy(z, g, out_spaces)
+        print(f"  {z['name']}: " + ", ".join(f"{a} {n}" for grp, a, n in z["occ"]))
 
     # ---- the deck's own marks, onto the DXF ----
     dp = open(os.path.join(ROOT, "data", "deck-plan.js"), encoding="utf-8").read()

@@ -75,6 +75,7 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
 - **Layout and blow-ups** (the DXF plan):
   - Scroll to zoom on the cursor, drag to pan, and double-click to go back to the beat's view.
   - Hover a space for its name and area. On *Six neighbourhoods*, hover a neighbourhood, or its row, to pick it out with its seats.
+  - On *Six neighbourhoods*, **click a neighbourhood** (on the plan or its row): the plan zooms into it, and a panel shows its key plan and its occupancy chart (workstations and the rooms inside it). Hover its rooms; click another to switch; **All neighbourhoods**, a click on the same one, or Esc goes back.
   - **Fire egress** (top right) switches the exit-path layer on or off on any beat.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 
@@ -106,7 +107,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 20–23 | Campus palette 02 | 4 | The same, for palette 02 |
 | 24–45 | Visual direction: the walk | 22 | One slide per space, OP 01 then OP 02, each with its Loop words and the keyplan's camera mark |
 | 46, 47, 48, 52 | Value addition | 4 | Engagement points, materials, acoustics (NRC 0.70–0.90), wayfinding (Nalanda, Sabha, Takshashila) |
-| 53–54 | Layout · Option 02A | 3 | The DXF plan, its spaces coloured by the legend (hover: name, area); then the six neighbourhoods draw in and their workstations count up (651); then fire egress, the exit paths as an extra layer |
+| 53–54 | Layout · Option 02A | 3 | The DXF plan, its spaces coloured by the legend (hover: name, area); then the six neighbourhoods draw in and their workstations count up (651), and a click opens one (zoom, key plan, occupancy chart); then fire egress, the exit paths as an extra layer |
 | 55–57 | Blown up X · Y · Z | 3 | The same DXF plan flies into each blow-up (hover a space); the fire compartment line draws on Y |
 | 58–60 | Schematic axonometric | 3 | West, middle, east, with the leaders drawn out to their spaces |
 | 61 | Occupancy chart | 1 | Brief against Option 2A, row by row; shortfalls in maroon, more than asked in purple |
@@ -140,6 +141,7 @@ The PPT's own order. Ritika's choices (16 Oct):
      - **Pictures:** the plan at 12 / 24 / 48 px per m (`assets/img/plan-dxf-*.webp`, rendered by `plan_raster.js`; the full vector plan is too heavy to fly), plus the workhall floor tint.
      - **Spaces:** from the deck's layout slide (53): every patch of a legend colour on its plan tiles, registered onto the DXF and named by the DXF label inside it.
      - **The rest:** the neighbourhoods, the fire egress paths (`ak_Ep_*`), and the deck's own marks (blow-up boxes, fire compartment line, entrances, arrival zones; from `data/deck-plan.js`).
+     - **Each neighbourhood:** its box (for the zoom) and its occupancy rows (`occ`): the workstations, then a count of each kind of space whose label point lies inside it, in the occupancy slide's (61) groups and order.
      - **Output:** all into `data/plan-dxf.js`.
   3. **The component** is the toolkit's `component/assets/js/plan-hover.js` and `.css`, copied into `assets/`. The engine mounts it once in the world (`plan` in the kit).
 - **The old deck plan:** `tools/acko/deck_plan.py` made `plan-full.webp` and `data/deck-plan.js` from the deck's plan tiles. They're no longer loaded; `plan_dxf.py` still reads the marks from `deck-plan.js`.

@@ -12,9 +12,18 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-layout" data-part="5" data-title="Layout · Option 02A" data-steps="3" data-mins="1.5" data-beats="The layout,Six neighbourhoods,Fire egress"
-  data-notes="1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The Fire egress button shows the layer on any beat, and on the blow-ups.">
+  data-notes="1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): the plan zooms into it, with its key plan and its occupancy chart (workstations and every room inside it); hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The Fire egress button shows the layer on any beat, and on the blow-ups.">
   <div class="page">
+    <div class="ly-veil"></div>
     <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
+    <!-- one neighbourhood open (beat 2): its key plan, name and occupancy chart, filled in by the script -->
+    <aside class="ly-zp" aria-live="polite">
+      <b class="ly-zp-k">Key plan</b>
+      <div class="ly-zp-key"></div>
+      <div class="ly-zp-h"><span class="ly-zp-n"></span><div><h3></h3><p><span class="ly-zp-ws"></span> workstations · <span class="ly-zp-m2"></span> m²</p></div></div>
+      <table class="ly-oc"><thead><tr><th>Zones</th><th>Areas</th><th>Option - 2A</th></tr></thead><tbody></tbody></table>
+      <button type="button" class="ly-zp-back"><span>←</span>All neighbourhoods</button>
+    </aside>
     <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
     <button type="button" class="ly-eg-btn ui" style="left:76%;top:3.2%"><i></i>Fire egress</button>
     <div class="ly-legend" data-only="1">
@@ -83,24 +92,104 @@
   font: 600 calc(var(--pt) * 6.5) var(--body); }
 .ly-eg-btn i { width: calc(var(--pt) * 12); height: 3px; background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); border-radius: 2px; }
 .ly-eg-btn.on { background: #5222d0; color: #fff; border-color: #5222d0; }
+/* a neighbourhood open: the rows step aside, the plan takes the left, this panel the right (white over the plan, a soft edge) */
+#s-layout .ly-rows, #s-layout .ly-nbs .ly-lh, #s-layout .ly-total { transition: opacity .45s var(--ease); }
+#s-layout.zp-open .ly-rows, #s-layout.zp-open .ly-nbs .ly-lh, #s-layout.zp-open .ly-total { opacity: 0; }
+#s-layout.zp-open .ly-rows > div { pointer-events: none; }
+#s-layout .ly-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease);
+  background: linear-gradient(#fff 0, #fff 8.5%, rgba(255,255,255,0) 12.5%, rgba(255,255,255,0) 91%, #fff 95.5%); }
+#s-layout.zp-open .ly-veil { opacity: 1; }
+#s-layout .ly-zp { position: absolute; left: 66%; top: 0; width: 34%; height: 100%; box-sizing: border-box; padding: calc(var(--pt) * 40) calc(var(--pt) * 13) 0 calc(var(--pt) * 14);
+  background: #fff; opacity: 0; visibility: hidden; transform: translateX(calc(var(--pt) * 10)); pointer-events: none;
+  transition: opacity .5s var(--ease), transform .5s var(--ease), visibility 0s linear .5s; }
+#s-layout .ly-zp::before { content: ""; position: absolute; right: 100%; top: 0; bottom: 0; width: calc(var(--pt) * 24); background: linear-gradient(90deg, rgba(255,255,255,0), #fff); }
+#s-layout .ly-zp.open { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity .5s var(--ease) .15s, transform .5s var(--ease) .15s, visibility 0s; }
+#s-layout .ly-zp-k { display: block; font-size: calc(var(--pt) * 5.6); letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: #666; margin-bottom: calc(var(--pt) * 4); }
+#s-layout .ly-zp-key { padding-bottom: calc(var(--pt) * 9); border-bottom: 1px solid #e6e6e6; }
+#s-layout .ly-zp-h { display: flex; align-items: center; gap: calc(var(--pt) * 8); margin: calc(var(--pt) * 9) 0 calc(var(--pt) * 8); }
+#s-layout .ly-zp-n { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 30); line-height: .9; color: var(--c); }
+#s-layout .ly-zp-h h3 { font-size: calc(var(--pt) * 11); font-weight: 700; }
+#s-layout .ly-zp-h p { font-size: calc(var(--pt) * 7.6); color: #434343; margin-top: calc(var(--pt) * 1.5); }
+#s-layout .ly-zp-h p span { font-family: var(--num); font-weight: 500; color: var(--purple); }
+/* its occupancy chart, in the occupancy slide's table style (slide 61) */
+#s-layout .ly-oc { width: 100%; border-collapse: collapse; font-size: calc(var(--pt) * 6.6); }
+#s-layout .ly-oc th { font-size: calc(var(--pt) * 5.6); letter-spacing: .1em; text-transform: uppercase; font-weight: 700; background: #efefef; padding: calc(var(--pt) * 3.2) calc(var(--pt) * 4); text-align: center; }
+#s-layout .ly-oc td { padding: calc(var(--pt) * 1.7) calc(var(--pt) * 5); border-bottom: 1px solid #fff; }
+#s-layout .ly-oc td:last-child { text-align: center; font-family: var(--num); font-weight: 500; }
+#s-layout .ly-oc td[rowspan] { font-size: calc(var(--pt) * 5.4); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; text-align: center; background: #efefef !important; width: 26%; }
+#s-layout .ly-oc tr.z2 td { background: #eae5e0; }
+#s-layout .ly-oc tr.z3 td { background: #d7d6da; }
+#s-layout .ly-oc tr.z4 td { background: #d8c8d3; }
+#s-layout .ly-oc tr.z5 td { background: #d8c8d3; }
+#s-layout .ly-oc tr.z6 td { background: #b3abaa; }
+#s-layout .ly-oc tr.ws td:last-child { color: var(--purple); font-weight: 600; }
+#s-layout .ly-oc tbody tr { opacity: 0; transform: translateX(-8px); transition: opacity .4s var(--ease), transform .4s var(--ease); }
+#s-layout .ly-oc tbody tr.in { opacity: 1; transform: none; }
+#s-layout .ly-zp-back { display: inline-flex; align-items: center; gap: calc(var(--pt) * 4); margin-top: calc(var(--pt) * 10); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7);
+  border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: #fff; color: #5222d0; cursor: pointer; font: 600 calc(var(--pt) * 6.5) var(--body); }
+#s-layout .ly-zp-back:hover { background: #5222d0; color: #fff; }
+#s-layout .ly-rows > div[data-nb]:not(.arr) { cursor: pointer; }
 </style>
 <script>
 /* layout Option 02A (deck slides 53–54) on the shared plan, the DXF's (K.plan): 1 the plan, its spaces coloured as the
    legend has them (hover a space: its name and area); 2 the six neighbourhoods draw in, their workstations count up, and
-   hovering a row (or a neighbourhood) picks it out; 3 fire egress, the exit paths as an extra layer. The Fire egress button
-   switches that layer on any beat */
-ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => ({
-  enter(_, sc) {
-    plan.deckPlan(); plan.nbHover($(".ly-nbs", sc));
-    const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress());
-  },
-  step(k, sc) {
-    plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, blow: k === 1, egress: k === 3, ms: 0 });
-    $(".ly-eg-btn", sc).classList.toggle("on", k === 3);
-    if (k === 2) $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 180));
-  },
-  leave() { plan.planOff(); },
-}));
+   hovering a row (or a neighbourhood) picks it out, and clicking one opens it: the plan zooms into it, and a panel shows its
+   key plan and its occupancy chart (its workstations and the rooms inside it, slide 61's table); another click switches,
+   All neighbourhoods / the same one again / Esc closes; 3 fire egress, the exit paths as an extra layer. The Fire egress
+   button switches that layer on any beat */
+ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
+  const COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
+  const GRP = { "Workhall": "z2", "Meeting room": "z3", "Training room": "z4", "Recreational area / wellness": "z5", "Services": "z6" };
+  const DISP = [38, 120, 1230, 880];          // where the open neighbourhood sits (frame px): the left of the page
+  let beat = 0;
+  function open(sc, z) {
+    if (!z || (plan.zone && plan.zone.id === z.id)) return close(sc);
+    plan.focusZone(z.id, DISP);
+    const p = $(".ly-zp", sc), c = COL[z.n] || "#5222d0", rows = z.occ;
+    p.style.setProperty("--c", c);
+    $(".ly-zp-key", p).innerHTML = plan.keyplan(z.id);
+    $(".ly-zp-n", p).textContent = z.n;
+    $("h3", p).textContent = z.name;
+    $(".ly-zp-m2", p).textContent = Math.round(z.m2);
+    const ws = $(".ly-zp-ws", p); ws.dataset.count = z.seats; ws.textContent = z.seats;
+    $("tbody", p).innerHTML = rows.map((r, j) => {
+      const first = j === 0 || rows[j - 1][0] !== r[0], span = rows.filter((q) => q[0] === r[0]).length;
+      return `<tr class="${GRP[r[0]] || "z3"}${r[1] === "Workstations" ? " ws" : ""}">${first ? `<td rowspan="${span}">${r[0]}</td>` : ""}<td>${r[1].replace(/(\d)-(\d)/g, "$1–$2")}</td><td>${r[2]}</td></tr>`;
+    }).join("");
+    sc.classList.add("zp-open"); p.classList.add("open");
+    countUp(ws, 900);
+    $$("tbody tr", p).forEach((tr, i) => later(() => tr.classList.add("in"), 250 + i * 60));
+  }
+  function close(sc) {
+    $(".ly-zp", sc).classList.remove("open"); sc.classList.remove("zp-open");
+    if (plan.zone) plan.focusZone(null);
+  }
+  return {
+    enter(_, sc) {
+      plan.deckPlan(); plan.nbHover($(".ly-nbs", sc));
+      const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress());
+      // open a neighbourhood: a click on it (the plan) or on its row, on beat 2
+      const byN = (n) => plan.data.zones.find((z) => z.n === n);
+      plan.onZoneClick((z) => { if (beat === 2) open(sc, z); });
+      $$(".ly-rows [data-nb]", sc).forEach((row) => { row.onclick = () => { const z = byN(row.dataset.nb); if (z && beat === 2) open(sc, z); }; });
+      $(".ly-zp-back", sc).onclick = () => close(sc);
+      document.removeEventListener("keydown", sc._esc, true);
+      sc._esc = (e) => { if (e.key === "Escape" && plan.zone) { close(sc); e.stopImmediatePropagation(); e.preventDefault(); } };
+      document.addEventListener("keydown", sc._esc, true);
+    },
+    step(k, sc) {
+      beat = k; close(sc);
+      plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, blow: k === 1, egress: k === 3, ms: 0 });
+      $(".ly-eg-btn", sc).classList.toggle("on", k === 3);
+      if (k === 2) $$(".ly-nbs [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 180));
+    },
+    leave(_, sc) {
+      beat = 0;
+      if (sc) { $(".ly-zp", sc).classList.remove("open"); sc.classList.remove("zp-open"); document.removeEventListener("keydown", sc._esc, true); }
+      plan.planOff();
+    },
+  };
+});
 </script>
 <!-- slide:end -->
 </body>

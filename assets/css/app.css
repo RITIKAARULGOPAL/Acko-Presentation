@@ -301,6 +301,18 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .dx-lab .s { font-size: 1900px; fill: #6f2f9f; }
 .dxplan.focus .dx-lab text { opacity: .25; transition-delay: 0s; }
 .dxplan.focus .dx-lab text.hi { opacity: 1; }
+/* one neighbourhood picked out (focusZone): the others dim, its rooms take the hover, the big numbers step aside */
+.dxplan.focus-zone .dx-nb path { opacity: .25; transition-delay: 0s; }
+.dxplan.focus-zone .dx-nb path.sel { opacity: 1; stroke-width: 4; fill: var(--c); fill-opacity: .08; }
+.dxplan.focus-zone .dx-lab text { opacity: 0; transition-delay: 0s; }
+.dxplan.focus-zone .ph-room { pointer-events: all; }
+.dxplan.focus-zone .ph-team.sel .ph-seats { pointer-events: none; }
+.dxplan.focus-zone .ph-team:not(.sel) .ph-seats { cursor: pointer; }
+/* the key plan beside it (keyplan()) */
+.dx-key { display: block; width: 100%; height: auto; }
+.dx-key path { fill: none; stroke: var(--c); stroke-width: 1.2; vector-effect: non-scaling-stroke; opacity: .7; }
+.dx-key path.sel { fill: var(--c); fill-opacity: .35; stroke-width: 2.2; opacity: 1; }
+.dx-key text { font-family: var(--body); font-weight: 700; font-size: 6000px; text-anchor: middle; dominant-baseline: middle; paint-order: stroke; stroke: #fff; stroke-width: 500px; }
 .north { position: absolute; height: auto; opacity: .7; }
 /* ---------- value addition and typologies (deck 15, 46-48, 52) ---------- */
 .vt { position: absolute; }
