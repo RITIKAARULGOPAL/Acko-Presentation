@@ -19,7 +19,8 @@
     rooms: true,            // room hovers
     teams: true,            // team hovers (workstation seats, by team)
     interactive: true,      // wheel zoom, drag pan, double-click to fit
-    labels: true,           // name label centred in the hovered room / team
+    labels: true,           // name label on hover
+    labelPlacement: "centre", // "centre": on the hovered room / team; "above": just above it (below if no room), clear of it
     onHover: null,          // callback({ kind: "room"|"team", item }) / callback(null)
   };
 
@@ -55,7 +56,7 @@
     el.innerHTML = '<div class="ph-stage"></div><div class="ph-label" aria-live="polite"></div>';
     const stage = el.querySelector(".ph-stage");
     const label = el.querySelector(".ph-label");
-    let vb, home, svgs = [], current = null, labelAt = null, drag = null;
+    let vb, home, svgs = [], current = null, labelAt = null, labelEl = null, drag = null;
     const extras = [];                      // layers added with addLayer(): kept across setOption()
 
     function load(key) {
@@ -98,15 +99,26 @@
 
     function placeLabel() {
       if (!labelAt) { label.style.display = "none"; return; }
+      label.style.display = "block";
+      if (o.labelPlacement === "above" && labelEl) {
+        // above the hovered shape's on-screen box, centred on it; below it when there is no room above
+        const st = stage.getBoundingClientRect(), r = labelEl.getBoundingClientRect(), w = label.offsetWidth, h = label.offsetHeight, gap = 8;
+        const x = Math.max(w / 2 + 4, Math.min(st.width - w / 2 - 4, r.left + r.width / 2 - st.left));
+        const below = r.top - st.top - gap - h < 0;
+        label.classList.toggle("ph-above", !below); label.classList.toggle("ph-below", below);
+        label.style.left = x + "px"; label.style.top = (below ? r.bottom - st.top + gap : r.top - st.top - gap) + "px";
+        return;
+      }
+      label.classList.remove("ph-above", "ph-below");
       const [x, y] = toScreen(labelAt[0], labelAt[1]);
-      label.style.left = x + "px"; label.style.top = y + "px"; label.style.display = "block";
+      label.style.left = x + "px"; label.style.top = y + "px";
     }
-    function showLabel(x, y, title, sub) {
+    function showLabel(x, y, title, sub, el) {
       if (!o.labels) return;
       label.innerHTML = `<b>${esc(title)}</b><span>${esc(sub)}</span>`;
-      labelAt = [x, y]; placeLabel();
+      labelAt = [x, y]; labelEl = el || null; placeLabel();
     }
-    function hideLabel() { labelAt = null; placeLabel(); }
+    function hideLabel() { labelAt = null; labelEl = null; placeLabel(); }
 
     function wire(opt) {
       const rooms = new Map(opt.rooms.map(s => [s.id, s]));
@@ -116,7 +128,7 @@
         const s = rooms.get(e.target.dataset.id);
         if (!s || drag) return;
         e.target.classList.add("ph-on");
-        showLabel(s.x, s.y, s.name || "Space", `${fmt(s.m2)} m²`);
+        showLabel(s.x, s.y, s.name || "Space", `${fmt(s.m2)} m²`, e.target);
         o.onHover && o.onHover({ kind: "room", item: s });
       });
       roomLayer.addEventListener("pointerout", e => {
@@ -129,7 +141,7 @@
         g.classList.add("ph-on");
         const pax = t.pax != null ? `${t.pax} PAX · ` : "";
         const hot = t.hot_desks ? ` (incl. ${t.hot_desks} hot desk)` : "";
-        showLabel(t.x, t.y, t.name, `${pax}${t.seats} seats${hot}`);
+        showLabel(t.x, t.y, t.name, `${pax}${t.seats} seats${hot}`, g.querySelector(".ph-seats") || g);
         o.onHover && o.onHover({ kind: "team", item: t });
       });
       teamLayer.addEventListener("pointerout", e => {
@@ -192,11 +204,11 @@
         const g = stage.querySelector(`.ph-team[data-id="${id}"]`), t = opt.teams.find((q) => q.id === id);
         if (!g || !t) return;
         g.classList.add("ph-on");
-        showLabel(t.x, t.y, t.name, `${t.pax != null ? t.pax + " PAX · " : ""}${t.seats} seats`);
+        showLabel(t.x, t.y, t.name, `${t.pax != null ? t.pax + " PAX · " : ""}${t.seats} seats`, g.querySelector(".ph-seats") || g);
       } else {
         const p = stage.querySelector(`.ph-room[data-id="${id}"]`), r = opt.rooms.find((q) => q.id === id);
         if (!p || !r) return;
-        p.classList.add("ph-on"); showLabel(r.x, r.y, r.name || "Space", `${fmt(r.m2)} m²`);
+        p.classList.add("ph-on"); showLabel(r.x, r.y, r.name || "Space", `${fmt(r.m2)} m²`, p);
       }
     }
 
@@ -221,5 +233,5 @@
     };
   }
 
-  window.PlanHover = { mount, version: "1.1" };
+  window.PlanHover = { mount, version: "1.2" };
 })();

@@ -330,7 +330,7 @@
       teams: P.zones.map((z) => ({ id: z.id, name: z.name, pax: null, seats: z.seats, hot_desks: 0, x: z.x, y: z.y, zone: z.zone, desks: z.desks })) } } };
     host.classList.add("dxplan");
     DP.root = host;
-    DP.ph = PlanHover.mount(host, { data });
+    DP.ph = PlanHover.mount(host, { data, labelPlacement: "above" });     // the label above a space, never on it
     DP.ph.addLayer("dx-fill", `<image href="${asset(P.floor)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>` +
       P.spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join(""), { below: true });
     const O = P.overlays, tri = (x, y) => `M${x - 900} ${y - 600}L${x + 900} ${y - 600}L${x} ${y + 900}Z`;

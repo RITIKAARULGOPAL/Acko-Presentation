@@ -67,6 +67,12 @@ def legend_type(col):
     return best[0] if int(np.abs(hexrgb(best[1]) - c).max()) <= 4 else None
 
 
+def title(t):
+    """"MOTHER'S ROOM" -> "Mother's Room" (str.title() would give "Mother'S"); PAX and PB stay capitals"""
+    t = re.sub(r"[A-Za-z]+(?:'[A-Za-z]+)?", lambda m: m.group(0).capitalize(), t)
+    return re.sub(r"\bPax\b", "PAX", re.sub(r"\bPb\b", "PB", t))
+
+
 def d_of(poly):
     out = []
     for g in (poly.geoms if hasattr(poly, "geoms") else [poly]):
@@ -208,7 +214,7 @@ def main(tk, dxf_path, deck):
             patches[near[0][1]]["labels"].append(l); used.add(id(l))
     spaces = []
     for p in patches:
-        names = list(dict.fromkeys(re.sub(r"\s*-\s*", " - ", t.title().replace("Pax", "PAX").replace("Pb ", "PB ")) for t, x, y in p["labels"]))
+        names = list(dict.fromkeys(re.sub(r"\s*-\s*", " - ", title(t)) for t, x, y in p["labels"]))
         typ = next((n for n, rx in BY_LABEL for t, x, y in p["labels"] if re.search(rx, t, re.I)), None) or legend_type(p["colour"])               or ("Phone booth" if p.get("booth") else None)
         if not typ or (not names and p["poly"].area < 4e6 and not p.get("booth")):
             continue
