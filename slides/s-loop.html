@@ -14,7 +14,8 @@
 <section class="scene" id="s-loop" data-part="1" data-title="The Loop" data-steps="2" data-mins="1" data-beats="Welcome to the Loop,Where emotions matter"
   data-notes="1 · Welcome to the Loop, ACKO's campus: it draws on that familiar feeling and reinterprets it for the workplace — not a conventional office but a loop of familiar, human-centric spaces where people pause, connect, interact and feel at ease. 2 · The Loop, where emotions matter: a continuous emotional journey. Arrival: I feel welcomed. Café: hey, we finally meet. Boardroom: this is my big moment. Meeting rooms: my impact. Collab: worth the commute. Work: these are my folks. Wellness: they thought of me too.">
   <div class="page">
-    <div class="lp-ribbon" data-only="2" style="left:0;top:9.1%;width:100%;height:69.4%"></div>
+    <!-- 2 · the ribbon writes itself: the deck's GIF (slide 11), frame by frame, fitted onto the slide-12 ribbon -->
+    <canvas class="lp-draw" data-only="2" width="1600" height="671" style="left:0.05%;top:6.75%;width:100.14%;height:74.19%"></canvas>
     <div class="lp-cuts rv" style="left:0;top:0;width:100%;height:100%">
       <i class="lp-cut" style="--i:0;left:0.0%;top:39.6%;width:5.3%;height:10.0%;background-image:url(assets/img/loop-people-5.webp);background-size:100.0% 100.0%;background-position:0.0% 0.0%"></i>
       <i class="lp-cut" style="--i:1;left:3.8%;top:30.5%;width:7.9%;height:24.4%;background-image:url(assets/img/mem-trees.webp);background-size:595.2% 227.8%;background-position:4.4% 0.0%"></i>
@@ -42,8 +43,7 @@
 <style>
 /* ---------- the Loop (slides 11–12) ---------- */
 .lp-world { left: 0; top: 6%; width: 100%; height: 72%; }
-.lp-ribbon { position: absolute; left: 0; top: 4.2%; width: 100%; height: 96%; background: url(assets/img/loop-ribbon.webp) center / 100% 100% no-repeat;
-  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 var(--rv, 0%), transparent calc(var(--rv, 0%) + 6%)); mask-image: linear-gradient(90deg, #000 0, #000 var(--rv, 0%), transparent calc(var(--rv, 0%) + 6%)); }
+.lp-draw { pointer-events: none; }
 .lp-cut { position: absolute; background: center / contain no-repeat; opacity: .95; }
 .lp-stop { width: 0; height: 0; opacity: 0; transition: opacity .6s var(--ease); }
 .lp-stop.on { opacity: 1; }
@@ -70,9 +70,25 @@
 .lp-cut[style*="loop-people"] { opacity: .5; }
 </style>
 <script>
-/* the Loop (deck slides 11–12): 1 welcome to the Loop — people and trees along the line; 2 the lavender ribbon draws from left
-   to right and the seven stops come up as it reaches them, each with what it should feel like */
-ACKO.slide("s-loop", ({ $, $$, plain, reveal, clearTimers, reduced, state }) => {
+/* the Loop (deck slides 11–12): 1 welcome to the Loop — people and trees along the line; 2 the lavender ribbon writes itself
+   (the deck's GIF, played once and held) and the seven stops come up as it reaches them, each with what it should feel like */
+ACKO.slide("s-loop", ({ $, $$, plain, reveal, clearTimers, reduced, state, asset }) => {
+  // the writing of the deck's loop GIF (slide 11), cut into frames by tools/acko/loop_frames.py; REACH is how far right
+  // the ribbon has got at each frame (% of the page), which brings the stops up; ALPHA gives the slide-12 ribbon's colour
+  const FRAMES = 79, FRAME_MS = 40, ALPHA = 0.93;
+  const REACH = [0, 0, 0, 0, 0, 0, 0, 0, 0.2, 0.5, 1.2, 1.8, 2.5, 3.7, 4.8, 6.4, 7.6, 8.8, 10.9, 12.2, 14.9, 19.4, 19.4, 22.3, 24.2,
+    26.5, 27.8, 28.2, 28.2, 28.2, 28.2, 28.2, 28.2, 28.2, 28.2, 30.2, 33, 36.5, 45.8, 50.6, 50.6, 50.6, 50.6, 50.6, 50.6, 59.2, 68,
+    70.6, 70.6, 70.6, 70.6, 70.6, 70.6, 77, 81.7, 90.5, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8, 91.8,
+    91.8, 91.8, 91.8, 92.5, 94.7, 95.9, 97.4, 98.1, 98.9, 99.9];
+  let frames = null, run = 0;
+  const preload = () => { frames = frames || Array.from({ length: FRAMES }, (_, i) => {
+    const im = new Image(); im.src = asset(`assets/img/s-loop/draw-${String(i).padStart(2, "0")}.webp`); return im; }); };
+  // draw frame i (only once it has loaded, so the canvas never blinks empty)
+  function paint(cv, i) {
+    const im = frames[i]; if (!im.complete || !im.naturalWidth) return false;
+    const ctx = cv.getContext("2d"); ctx.clearRect(0, 0, cv.width, cv.height); ctx.globalAlpha = ALPHA; ctx.drawImage(im, 0, 0, cv.width, cv.height);
+    return true;
+  }
   // the seven stops of slide 12: [name, words, dot x/y, label x/y] in % of the page
   const STOPS = [
     ["Arrival", "I feel welcomed", [2.4, 38.9], [6.1, 26]], ["Cafe", "Hey We finally meet !", [17, 46.8], [14, 35.4]],
@@ -90,22 +106,28 @@ ACKO.slide("s-loop", ({ $, $$, plain, reveal, clearTimers, reduced, state }) => 
     }).join("");
   }
   return {
-    enter(_, sc) { plain(); build(sc); reveal($(".lp-cuts", sc), 100); },
+    enter(_, sc) { plain(); build(sc); preload(); reveal($(".lp-cuts", sc), 100); },
     step(k, sc) {
-      clearTimers();
-      const rib = $(".lp-ribbon", sc), stops = $$(".lp-stop", sc);
-      $$(".lp-leads path", sc).forEach((l) => l.classList.remove("on"));
-      if (k === 1) { rib.style.setProperty("--rv", "0%"); stops.forEach((s) => s.classList.remove("on")); return; }
-      const t0 = performance.now(), MS = reduced ? 1 : 4200;
+      clearTimers(); preload();
+      const cv = $(".lp-draw", sc), stops = $$(".lp-stop", sc), id = ++run;
       stops.forEach((s) => s.classList.remove("on"));
-      const run = (now) => {
-        if (document.body.dataset.scene !== "s-loop" || state.step !== 2) return;
-        const e = Math.min(1, (now - t0) / MS), v = (1 - Math.pow(1 - e, 2)) * 106;
-        rib.style.setProperty("--rv", v + "%");
-        stops.forEach((s, i) => { if (parseFloat(s.style.left) <= v - 2 && !s.classList.contains("on")) { s.classList.add("on"); const l = $(`.lp-leads [data-k="${i}"]`, sc); if (l) l.classList.add("on"); } });
-        if (e < 1) requestAnimationFrame(run);
+      $$(".lp-leads path", sc).forEach((l) => l.classList.remove("on"));
+      if (k === 1) { cv.getContext("2d").clearRect(0, 0, cv.width, cv.height); return; }
+      const reach = (f) => stops.forEach((s, i) => {
+        if (parseFloat(s.style.left) <= REACH[f] && !s.classList.contains("on")) {
+          s.classList.add("on"); const l = $(`.lp-leads [data-k="${i}"]`, sc); if (l) l.classList.add("on");
+        }
+      });
+      // play the writing once at the GIF's own pace and hold the last frame (reduced motion: the finished ribbon at once)
+      const t0 = reduced ? -1e9 : performance.now();
+      let shown = -1;
+      const tick = (now) => {
+        if (id !== run || document.body.dataset.scene !== "s-loop" || state.step !== 2) return;
+        const f = Math.min(FRAMES - 1, Math.floor((now - t0) / FRAME_MS));
+        if (f !== shown && paint(cv, f)) { shown = f; reach(f); }
+        if (shown < FRAMES - 1) requestAnimationFrame(tick);
       };
-      requestAnimationFrame(run);
+      requestAnimationFrame(tick);
     },
   };
 });

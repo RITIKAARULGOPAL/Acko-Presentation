@@ -45,6 +45,8 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
 **If a static version exists, prefer it.** The ribbon is drawn crisper from the deck's 2007 px still with a moving mask:
 `mask-image: linear-gradient(90deg, #000 0, #000 var(--rv), transparent calc(var(--rv) + 6%))`, with `--rv` driven 0 → 106% by rAF.
 
+**Update (19 Oct):** Ritika preferred the deck's own GIF writing the ribbon, so the Loop now plays it frame by frame (§11). The wipe was a straight line; the GIF follows the ribbon's path.
+
 ## 4. Stops that come up as a line reaches them (the Loop)
 - **Stops:** each is `[name, words, dot x/y, label x/y]` in % of the page. The label's offset from the dot is `calc(dx * var(--pw) / 100)`.
 - **Timing:** each stop turns `.on` when the ribbon's reveal `--rv` passes its x.
@@ -131,3 +133,20 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - files under a `${`-template prefix (`assets/img/skv/logo-${n}`)
 - **Never** build a path from just `assets/img/${key}`: the bundler can't tell what's needed.
 - **Result:** 46 MB, ready in about 0.6–0.8 s. `walk.js --single` fails on any non-blob request, which proves the file needs nothing beside it.
+
+## 11. A deck GIF played once, frame by frame on a canvas (the Loop)
+**What:** the deck's loop GIF (slide 11) writes "loop", holds it, then clears it and repeats. On the stops beat it should write once and stay.
+
+**Why not an `<img>`:**
+- It loops forever, so the ribbon would clear itself under the stops.
+- It can't be restarted reliably on each visit to the beat.
+- It can't tell the stops when to appear.
+
+**How** (`tools/acko/loop_frames.py "<deck.pptx>"`):
+- **Frames:** keep only the writing, up to the first frame where the ribbon is complete (79 frames at 40 ms ≈ 3.2 s). Apply the deck's srcRect crop and save each frame as `assets/img/s-loop/draw-NN.webp` (1600 px, 2.2 MB in all).
+- **Fit the box:** place the finished ribbon on the slide-12 still, where the stops were placed, by matching their alpha bounding boxes. The deck's two boxes differ by a few px.
+- **Reach array:** per frame, the cumulative rightmost drawn column, mapped to % of the page. A stop turns on when the ribbon's reach passes its x.
+- **Player:** preload every frame on `enter`, through `asset(`…`draw-${nn}.webp`)` so the single file embeds them by prefix. A rAF loop draws `floor(elapsed / 40)` and holds the last frame.
+  - It draws a frame only once it has loaded, so the canvas never blinks empty.
+  - A run id stops an old loop when the beat changes.
+  - `ctx.globalAlpha` matches the still's colour.

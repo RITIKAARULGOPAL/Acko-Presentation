@@ -95,7 +95,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 8 | Maybe we've felt this before | 1 | A dotted campus path draws; the six memories come up along it |
 | 9 | What if | 1 | The question, in the deck's two fonts |
 | 10 | The Möbius | 1 | A live 3D Möbius strip, ACKO's own mark, with the copy inside the loop |
-| 11–12 | The Loop | 2 | People and trees along a line; then the ribbon draws and the seven stops come up with their words |
+| 11–12 | The Loop | 2 | People and trees along a line; then the ribbon writes itself (the deck's GIF) and the seven stops come up with their words as it reaches them |
 | 13 | Campus strategy | 1 | The deck's animated axo, keyed out of its green screen |
 | new | The site | 1 | A vector map of Koramangala that closes in on Regalium and turns 11.5° to line up with the plans |
 | new | The floor | 2 | The bare plate: the sun across an equinox day and the 6 m daylight band; then fire first (exit rings, the eight measured paths, the compartment line) |
