@@ -203,4 +203,8 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - `keyplan(id)`: markup for the key plan (the 12 px/m picture, faint, with the six outlines).
 - **Slide:** the panel and a white top and bottom band (behind the header and footer) fade in on `zp-open`, and the rows fade out. Esc is caught in the capture phase while one is open, so it doesn't reach the deck's overview key. A beat change or leaving the slide closes it.
 - **Watch:** a function named like one already in `app.js` (the walk has a `keyplan`) is silently overridden by the later declaration; give engine helpers distinct names.
+- **The tools** (top right on the layout and the blow-ups, a `ui` flex group of `.ly-tool` pills):
+  - **Neighbourhoods:** `plan.planNb(on, labels)` switches `show-nb`, `show-teams` and (unless `labels === false`) `show-lab` together. The blow-ups pass `false`: at their zoom the big numbers would be 4–5× larger, and the hover names each one. On the layout, opening a neighbourhood follows this button, on any beat; switching it off closes one.
+  - **Reset zoom:** `plan.planReset()` flies to `DP.cur`, the framing in force: `planOn` sets it to the beat's view, `focusZone` to the zone's (and back on close).
+  - While one is open, every beat's lower panel (legend, rows, egress legend) and the plan's blow-up captions step aside.
 

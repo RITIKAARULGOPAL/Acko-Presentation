@@ -12,11 +12,16 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-blowup" data-part="5" data-title="Blown up X · Y · Z" data-steps="3" data-mins="1" data-beats="Blown up X,Blown up Y,Blown up Z"
-  data-notes="The same plan, closer. X: the west end — reception, the café for 178, training, the Acker Garden at the curved corner. Y: the middle — departmental rooms and huddles along the corridor, and the fire compartmentalisation line. Z: the east end — the neighbourhoods around the second arrival, executive cabins and the hatchery.">
+  data-notes="The same plan, closer. X: the west end — reception, the café for 178, training, the Acker Garden at the curved corner. Y: the middle — departmental rooms and huddles along the corridor, and the fire compartmentalisation line. Z: the east end — the neighbourhoods around the second arrival, executive cabins and the hatchery. Top right: Neighbourhoods shows their outlines (hover one for its seats), Fire egress the exit paths, Reset zoom flies back to the blow-up.">
   <div class="page">
     <div class="hdr"><b>Layout</b><span class="bl-sub">Space Planning - Option 02A | Blown Up X</span></div>
     <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
-    <button type="button" class="ly-eg-btn ui" style="left:76%;top:3.2%"><i></i>Fire egress</button>
+    <!-- the plan's tools, as on the layout: neighbourhoods on / off, fire egress on / off, reset zoom -->
+    <div class="ly-tools ui" style="right:11.5%;top:3.2%">
+      <button type="button" class="ly-tool ly-nb-btn"><i></i>Neighbourhoods</button>
+      <button type="button" class="ly-tool ly-eg-btn"><i></i>Fire egress</button>
+      <button type="button" class="ly-tool ly-rs-btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset zoom</button>
+    </div>
     <div class="bl-keys" style="left:1.8%;top:86%"><span data-k="X">Blown Up X</span><span data-k="Y">Blown Up Y</span><span data-k="Z">Blown Up Z</span></div>
     <div class="bl-fire" data-only="2" style="left:36%;top:86.4%"><i></i>Fire Compartmentalisation</div>
   </div>
@@ -27,23 +32,33 @@
 .bl-keys span.on { color: var(--purple); }
 .bl-fire { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 6); font-size: calc(var(--pt) * 7); }
 .bl-fire i { width: calc(var(--pt) * 26); border-top: 2px dashed var(--maroon); }
-#s-blowup .ly-eg-btn { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
+#s-blowup .ly-tools { display: flex; gap: calc(var(--pt) * 4); }
+#s-blowup .ly-tool { display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
   border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
-  font: 600 calc(var(--pt) * 6.5) var(--body); }
-#s-blowup .ly-eg-btn i { width: calc(var(--pt) * 12); height: 3px; background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); border-radius: 2px; }
-#s-blowup .ly-eg-btn.on { background: #5222d0; color: #fff; border-color: #5222d0; }
+  font: 600 calc(var(--pt) * 6.5) var(--body); white-space: nowrap; }
+#s-blowup .ly-tool i { width: calc(var(--pt) * 12); height: 3px; border-radius: 2px; }
+#s-blowup .ly-eg-btn i { background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); }
+#s-blowup .ly-nb-btn i { background: linear-gradient(90deg, #B45F06 0 16.6%, #274E13 0 33.3%, #45818E 0 50%, #4A86E8 0 66.6%, #9900FF 0 83.3%, #FF00FF 0); }
+#s-blowup .ly-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#s-blowup .ly-tool.on { background: #5222d0; color: #fff; border-color: #5222d0; }
+#s-blowup .ly-rs-btn:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
 </style>
 <script>
 /* the blow-ups (deck slides 55–57): the same plan, the DXF's, flies into X, Y and Z (hover a space for its name and area);
-   the fire compartment line draws on Y; the Fire egress button adds the exit paths */
+   the fire compartment line draws on Y; the tools, top right: Neighbourhoods (outlines and seat hover; their big numbers stay
+   off at this zoom), Fire egress (the exit paths), Reset zoom (back to the blow-up) */
 ACKO.slide("s-blowup", ({ $, $$, plan }) => {
   const DISP = [38, 150, 1882, 880];
   return {
-    enter(_, sc) { const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress()); },
+    enter(_, sc) {
+      const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress());
+      const nb = $(".ly-nb-btn", sc); nb.onclick = () => nb.classList.toggle("on", plan.planNb(undefined, false));
+      $(".ly-rs-btn", sc).onclick = () => plan.planReset();
+    },
     step(k, sc) {
       const key = ["X", "Y", "Z"][k - 1], b = plan.data.overlays.blow[key];
       plan.planOn(sc, { rooms: true, fire: key === "Y", entry: true, view: plan.vbFor([b[0], b[1], b[0] + b[2], b[1] + b[3]], DISP), ms: 1100 });
-      $(".ly-eg-btn", sc).classList.remove("on");
+      $(".ly-eg-btn", sc).classList.remove("on"); $(".ly-nb-btn", sc).classList.remove("on");
       $(".bl-sub", sc).textContent = `Space Planning - Option 02A | Blown Up ${key}`;
       $$(".bl-keys span", sc).forEach((b) => b.classList.toggle("on", b.dataset.k === key));
     },

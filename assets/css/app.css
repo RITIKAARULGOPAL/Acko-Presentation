@@ -304,7 +304,7 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 /* one neighbourhood picked out (focusZone): the others dim, its rooms take the hover, the big numbers step aside */
 .dxplan.focus-zone .dx-nb path { opacity: .25; transition-delay: 0s; }
 .dxplan.focus-zone .dx-nb path.sel { opacity: 1; stroke-width: 4; fill: var(--c); fill-opacity: .08; }
-.dxplan.focus-zone .dx-lab text { opacity: 0; transition-delay: 0s; }
+.dxplan.focus-zone .dx-lab text, .dxplan.focus-zone .dx-blow text { opacity: 0; transition-delay: 0s; }
 .dxplan.focus-zone .ph-room { pointer-events: all; }
 .dxplan.focus-zone .ph-team.sel .ph-seats { pointer-events: none; }
 .dxplan.focus-zone .ph-team:not(.sel) .ph-seats { cursor: pointer; }

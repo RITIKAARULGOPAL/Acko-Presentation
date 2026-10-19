@@ -320,7 +320,7 @@
      compartment line, entrances, arrival zones). Wheel zooms on the cursor, drag pans, a double-click returns to the beat's
      view. Used by s-layout and s-blowup. */
   const NB_COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
-  const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, P: null, onZone: null, zone: null };
+  const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, cur: null, P: null, onZone: null, zone: null };   // home: the beat's view; cur: what Reset returns to
   function deckPlan() {
     if (DP.ph) return DP;
     const P = (DP.P = window.PLAN_DXF), host = $("#world-plan"), [vx, vy, vw, vh] = P.viewBox, vb = P.viewBox.join(" ");
@@ -391,7 +391,7 @@
     PLAN_LAYERS.forEach((k) => DP.root.classList.toggle("show-" + k, !!opts[k]));
     DP.ph.clear();
     const v = opts.view || planView();
-    DP.home = v; DP.ph.setHome(...v); fitVb(v, opts.ms === undefined ? 900 : opts.ms);
+    DP.home = DP.cur = v; DP.ph.setHome(...v); fitVb(v, opts.ms === undefined ? 900 : opts.ms);
   }
   function planOff() {
     document.body.classList.remove("dp-on"); DP.onZone = null;
@@ -410,9 +410,9 @@
     deckPlan(); DP.ph.clear();
     const z = id ? DP.P.zones.find((q) => q.id === id) : null;
     markZone(z);
-    if (!z) { DP.ph.setHome(...DP.home); fitVb(DP.home, 900); return null; }
+    if (!z) { DP.cur = DP.home; DP.ph.setHome(...DP.home); fitVb(DP.home, 900); return null; }
     const pad = 2500, b = z.box, v = vbFor([b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad], disp || [38, 120, 1230, 880]);
-    DP.ph.setHome(...v); fitVb(v, 900);
+    DP.cur = v; DP.ph.setHome(...v); fitVb(v, 900);
     return z;
   }
   // a small key plan of the whole floor (markup), the neighbourhood id filled in its colour (kit: plan.keyplan)
@@ -426,6 +426,15 @@
   }
   // the fire egress layer, switched by a button on the slide (on top of whatever the beat shows)
   function planEgress(on) { deckPlan(); return DP.root.classList.toggle("show-egress", on); }
+  // the neighbourhoods, switched the same way: outlines and arrival zones, their seat hover, and their numbers (unless labels is false)
+  function planNb(on, labels) {
+    deckPlan();
+    const v = DP.root.classList.toggle("show-nb", on);
+    DP.root.classList.toggle("show-teams", v); DP.root.classList.toggle("show-lab", v && labels !== false);
+    return v;
+  }
+  // back to the beat's view, or the open neighbourhood's (flown; a double-click jumps there)
+  function planReset(ms) { deckPlan(); DP.ph.clear(); if (DP.cur) fitVb(DP.cur, ms === undefined ? 700 : ms); }
   // a list of [data-nb] rows: hover one to pick out its neighbourhood on the plan (outline, seats)
   function nbHover(list) {
     deckPlan();
@@ -558,7 +567,7 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planReset, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
             get zone() { return DP.zone; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {

@@ -75,8 +75,11 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
 - **Layout and blow-ups** (the DXF plan):
   - Scroll to zoom on the cursor, drag to pan, and double-click to go back to the beat's view.
   - Hover a space for its name and area. On *Six neighbourhoods*, hover a neighbourhood, or its row, to pick it out with its seats.
-  - On *Six neighbourhoods*, **click a neighbourhood** (on the plan or its row): the plan zooms into it, and a panel shows its key plan and its occupancy chart (workstations and the rooms inside it). Hover its rooms; click another to switch; **All neighbourhoods**, a click on the same one, or Esc goes back.
-  - **Fire egress** (top right) switches the exit-path layer on or off on any beat.
+  - On *Six neighbourhoods* (or any layout beat with Neighbourhoods on), **click a neighbourhood** (on the plan, or its row): the plan zooms into it, and a panel shows its key plan and its occupancy chart (workstations and the rooms inside it). Hover its rooms; click another to switch; **All neighbourhoods**, a click on the same one, or Esc goes back.
+  - **The tools** (top right, on the layout and the blow-ups, any beat):
+    - **Neighbourhoods** switches the six on or off. On the layout, when they show, a click on one opens it; on the blow-ups, outlines and seat hover only.
+    - **Fire egress** switches the exit-path layer on or off.
+    - **Reset zoom** flies back to the beat's view, or to the open neighbourhood's.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 
 ## The journey (≈ 20 min, 66 beats)

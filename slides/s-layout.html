@@ -12,7 +12,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-layout" data-part="5" data-title="Layout · Option 02A" data-steps="3" data-mins="1.5" data-beats="The layout,Six neighbourhoods,Fire egress"
-  data-notes="1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): the plan zooms into it, with its key plan and its occupancy chart (workstations and every room inside it); hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The Fire egress button shows the layer on any beat, and on the blow-ups.">
+  data-notes="Top right, on any beat: Neighbourhoods switches the six on or off (when they show, a click on one opens it), Fire egress the exit paths, Reset zoom flies back to the beat's view (or the open neighbourhood's). 1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): the plan zooms into it, with its key plan and its occupancy chart (workstations and every room inside it); hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The same buttons sit on the blow-ups.">
   <div class="page">
     <div class="ly-veil"></div>
     <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
@@ -25,7 +25,12 @@
       <button type="button" class="ly-zp-back"><span>←</span>All neighbourhoods</button>
     </aside>
     <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
-    <button type="button" class="ly-eg-btn ui" style="left:76%;top:3.2%"><i></i>Fire egress</button>
+    <!-- the plan's tools, on any beat: the neighbourhoods on or off, the fire egress layer on or off, the zoom back to the beat's framing -->
+    <div class="ly-tools ui" style="right:11.5%;top:3.2%">
+      <button type="button" class="ly-tool ly-nb-btn"><i></i>Neighbourhoods</button>
+      <button type="button" class="ly-tool ly-eg-btn"><i></i>Fire egress</button>
+      <button type="button" class="ly-tool ly-rs-btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset zoom</button>
+    </div>
     <div class="ly-legend" data-only="1">
       <b class="ly-lh">Legend</b>
       <ul style="left:3.4%;top:58%">
@@ -86,15 +91,21 @@
 .ly-eg ul { position: absolute; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: calc(var(--pt) * 5); font-size: calc(var(--pt) * 8.5); }
 .ly-eg li { display: flex; align-items: center; gap: calc(var(--pt) * 9); }
 .ly-eg li i { width: calc(var(--pt) * 22); height: calc(var(--pt) * 2.4); border-radius: 2px; }
-/* the fire egress layer, on or off at any beat */
-.ly-eg-btn { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
+/* the plan's tools (top right, any beat): neighbourhoods on / off, fire egress on / off, reset zoom */
+#s-layout .ly-tools { display: flex; gap: calc(var(--pt) * 4); }
+#s-layout .ly-tool { display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
   border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
-  font: 600 calc(var(--pt) * 6.5) var(--body); }
-.ly-eg-btn i { width: calc(var(--pt) * 12); height: 3px; background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); border-radius: 2px; }
-.ly-eg-btn.on { background: #5222d0; color: #fff; border-color: #5222d0; }
+  font: 600 calc(var(--pt) * 6.5) var(--body); white-space: nowrap; }
+#s-layout .ly-tool i { width: calc(var(--pt) * 12); height: 3px; border-radius: 2px; }
+#s-layout .ly-eg-btn i { background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); }
+#s-layout .ly-nb-btn i { background: linear-gradient(90deg, #B45F06 0 16.6%, #274E13 0 33.3%, #45818E 0 50%, #4A86E8 0 66.6%, #9900FF 0 83.3%, #FF00FF 0); }
+#s-layout .ly-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#s-layout .ly-tool.on { background: #5222d0; color: #fff; border-color: #5222d0; }
+#s-layout .ly-rs-btn:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
 /* a neighbourhood open: the rows step aside, the plan takes the left, this panel the right (white over the plan, a soft edge) */
 #s-layout .ly-rows, #s-layout .ly-nbs .ly-lh, #s-layout .ly-total { transition: opacity .45s var(--ease); }
 #s-layout.zp-open .ly-rows, #s-layout.zp-open .ly-nbs .ly-lh, #s-layout.zp-open .ly-total { opacity: 0; }
+#s-layout.zp-open .ly-legend.shown, #s-layout.zp-open .ly-eg.shown { opacity: 0; }
 #s-layout.zp-open .ly-rows > div { pointer-events: none; }
 #s-layout .ly-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease);
   background: linear-gradient(#fff 0, #fff 8.5%, rgba(255,255,255,0) 12.5%, rgba(255,255,255,0) 91%, #fff 95.5%); }
@@ -135,15 +146,17 @@
    legend has them (hover a space: its name and area); 2 the six neighbourhoods draw in, their workstations count up, and
    hovering a row (or a neighbourhood) picks it out, and clicking one opens it: the plan zooms into it, and a panel shows its
    key plan and its occupancy chart (its workstations and the rooms inside it, slide 61's table); another click switches,
-   All neighbourhoods / the same one again / Esc closes; 3 fire egress, the exit paths as an extra layer. The Fire egress
-   button switches that layer on any beat */
+   All neighbourhoods / the same one again / Esc closes; 3 fire egress, the exit paths as an extra layer. The tools, top
+   right, on any beat: Neighbourhoods on / off (when they show, a click on one opens it), Fire egress on / off, Reset zoom */
 ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
   const COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
   const GRP = { "Workhall": "z2", "Meeting room": "z3", "Training room": "z4", "Recreational area / wellness": "z5", "Services": "z6" };
   const DISP = [38, 120, 1230, 880];          // where the open neighbourhood sits (frame px): the left of the page
   let beat = 0;
+  const nbOn = (sc, on) => { const v = plan.planNb(on); $(".ly-nb-btn", sc).classList.toggle("on", v); if (!v) close(sc); return v; };
   function open(sc, z) {
     if (!z || (plan.zone && plan.zone.id === z.id)) return close(sc);
+    nbOn(sc, true);
     plan.focusZone(z.id, DISP);
     const p = $(".ly-zp", sc), c = COL[z.n] || "#5222d0", rows = z.occ;
     p.style.setProperty("--c", c);
@@ -168,9 +181,11 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
     enter(_, sc) {
       plan.deckPlan(); plan.nbHover($(".ly-nbs", sc));
       const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress());
-      // open a neighbourhood: a click on it (the plan) or on its row, on beat 2
+      $(".ly-nb-btn", sc).onclick = () => nbOn(sc);
+      $(".ly-rs-btn", sc).onclick = () => plan.planReset();
+      // open a neighbourhood: a click on it (the plan) while the neighbourhoods show, on any beat, or on its row (beat 2)
       const byN = (n) => plan.data.zones.find((z) => z.n === n);
-      plan.onZoneClick((z) => { if (beat === 2) open(sc, z); });
+      plan.onZoneClick((z) => { if (beat && $(".ly-nb-btn", sc).classList.contains("on")) open(sc, z); });
       $$(".ly-rows [data-nb]", sc).forEach((row) => { row.onclick = () => { const z = byN(row.dataset.nb); if (z && beat === 2) open(sc, z); }; });
       $(".ly-zp-back", sc).onclick = () => close(sc);
       document.removeEventListener("keydown", sc._esc, true);
@@ -181,6 +196,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
       beat = k; close(sc);
       plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, blow: k === 1, egress: k === 3, ms: 0 });
       $(".ly-eg-btn", sc).classList.toggle("on", k === 3);
+      $(".ly-nb-btn", sc).classList.toggle("on", k === 2);
       if (k === 2) $$(".ly-nbs [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 180));
     },
     leave(_, sc) {
