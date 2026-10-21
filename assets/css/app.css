@@ -273,7 +273,8 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 /* beneath: the spaces in the legend's colours; hovers live per beat */
 .dxplan .dx-fill path { stroke: none; }
 .dxplan .dx-fill { transition: opacity .6s; }
-.dxplan.show-egress .dx-fill { opacity: .45; }
+.dxplan:not(.show-fill) .dx-fill { opacity: 0; }                /* the viewer's look: plain linework, the colours on a toggle */
+.dxplan.show-fill.show-egress .dx-fill { opacity: .45; }
 .dxplan:not(.show-rooms) .ph-room, .dxplan:not(.show-teams) .ph-seats { pointer-events: none; }
 /* on it: the neighbourhoods, the fire egress paths and the deck's marks */
 .dx-marks path, .dx-marks line { fill: none; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }

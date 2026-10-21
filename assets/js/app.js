@@ -384,7 +384,7 @@
   }
   // the whole plan where the deck's slide 53 has it (frame px [32.6, 175] – [1883.5, 442.8])
   const planView = () => { const [x, y, w, h] = DP.P.viewBox; return vbFor([x, y, x + w, y + h], [32.6, 175, 1883.5, 442.8]); };
-  const PLAN_LAYERS = ["rooms", "teams", "nb", "fire", "blow", "lab", "entry", "egress"];
+  const PLAN_LAYERS = ["rooms", "teams", "nb", "fire", "blow", "lab", "entry", "egress", "fill"];
   function planOn(sc, opts) {
     deckPlan(); world("plan"); shade("");
     document.body.classList.add("dp-on");
@@ -426,6 +426,8 @@
   }
   // the fire egress layer, switched by a button on the slide (on top of whatever the beat shows)
   function planEgress(on) { deckPlan(); return DP.root.classList.toggle("show-egress", on); }
+  // the spaces in their legend colours (and the workhall floor tint): off, the plan is the DXF's plain linework, as the toolkit's viewer draws it
+  function planFill(on) { deckPlan(); return DP.root.classList.toggle("show-fill", on); }
   // the neighbourhoods, switched the same way: outlines and arrival zones, their seat hover, and their numbers (unless labels is false)
   function planNb(on, labels) {
     deckPlan();
@@ -572,7 +574,7 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planReset, planHome, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planReset, planHome, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
             get zone() { return DP.zone; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {

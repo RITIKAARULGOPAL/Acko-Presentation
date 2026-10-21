@@ -77,7 +77,9 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
   - Scroll to zoom on the cursor, drag to pan, and double-click to go back to the beat's view.
   - Hover a space for its name and area. On *Six neighbourhoods*, hover a neighbourhood, or its row, to pick it out with its seats.
   - On *Six neighbourhoods* (or any layout beat with Neighbourhoods on), **click a neighbourhood** (on the plan, or its row): it fills the page, with a bar along the bottom (its key plan, workstations, area). **Occupancy chart** opens its chart on the right (workstations and the rooms inside it); **Hide chart** tucks it away. Hover its rooms; click another to switch; **All neighbourhoods**, a click on the same one, or Esc goes back.
+  - **The plan** is the DXF's plain linework, as the toolkit's viewer draws it.
   - **The tools** (top right, on the layout and the blow-ups, any beat):
+    - **Spaces** shows the spaces in their legend colours (opening the layout's Legend does too).
     - **Neighbourhoods** switches the six on or off. On the layout, when they show, a click on one opens it; on the blow-ups, outlines and seat hover only.
     - **Fire egress** switches the exit-path layer on or off.
     - **Reset zoom** flies back to the beat's view, or to the open neighbourhood's.

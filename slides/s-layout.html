@@ -12,7 +12,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-layout" data-part="5" data-title="Layout · Option 02A" data-steps="3" data-mins="1.5" data-beats="The layout,Six neighbourhoods,Fire egress"
-  data-notes="The plan takes the page: the whole floor, centred. Bottom left, the beat's key (Legend, Six neighbourhoods, Fire egress key) opens on a click and the plan moves up above it; click again to tuck it away. Top right, on any beat: Neighbourhoods switches the six on or off (when they show, a click on one opens it), Fire egress the exit paths, Reset zoom flies back to the beat's view (or the open neighbourhood's). 1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): it fills the page, with a bar along the bottom (key plan, workstations, area); Occupancy chart opens its chart on the right (workstations and every room inside it), Hide chart tucks it away; hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The same buttons sit on the blow-ups.">
+  data-notes="The plan takes the page: the whole floor, centred. Bottom left, the beat's key (Legend, Six neighbourhoods, Fire egress key) opens on a click and the plan moves up above it; click again to tuck it away. Top right, on any beat: Spaces shows the spaces in their legend colours (opening the Legend does too); Neighbourhoods switches the six on or off (when they show, a click on one opens it), Fire egress the exit paths, Reset zoom flies back to the beat's view (or the open neighbourhood's). 1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): it fills the page, with a bar along the bottom (key plan, workstations, area); Occupancy chart opens its chart on the right (workstations and every room inside it), Hide chart tucks it away; hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The same buttons sit on the blow-ups.">
   <div class="page">
     <div class="ly-veil"></div>
     <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
@@ -37,6 +37,7 @@
     <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
     <!-- the plan's tools, on any beat: the neighbourhoods on or off, the fire egress layer on or off, the zoom back to the beat's framing -->
     <div class="ly-tools ui" style="right:11.5%;top:3.2%">
+      <button type="button" class="ly-tool ly-sp-btn"><i></i>Spaces</button>
       <button type="button" class="ly-tool ly-nb-btn"><i></i>Neighbourhoods</button>
       <button type="button" class="ly-tool ly-eg-btn"><i></i>Fire egress</button>
       <button type="button" class="ly-tool ly-rs-btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset zoom</button>
@@ -110,6 +111,9 @@
 #s-layout .ly-eg-btn i { background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); }
 #s-layout .ly-nb-btn i { background: linear-gradient(90deg, #B45F06 0 16.6%, #274E13 0 33.3%, #45818E 0 50%, #4A86E8 0 66.6%, #9900FF 0 83.3%, #FF00FF 0); }
 #s-layout .ly-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#s-layout .ly-sp-btn i { width: calc(var(--pt) * 9); height: calc(var(--pt) * 6); border-radius: 1px; border: 1px solid rgba(0,0,0,.25);
+  background: linear-gradient(90deg, #D5CEED 0 33%, #CEDED1 0 66%, #C2BFBB 0); }
+#s-layout .ly-tool:focus, #s-layout .ly-zp-back:focus { outline: none; }   /* the arrow keys drive the slides, not these buttons */
 #s-layout .ly-tool.on { background: #5222d0; color: #fff; border-color: #5222d0; }
 #s-layout .ly-rs-btn:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
 /* a neighbourhood open: the rows step aside, the plan takes the left, this panel the right (white over the plan, a soft edge) */
@@ -182,7 +186,8 @@
    hovering a row (or a neighbourhood) picks it out, and clicking one opens it: the plan zooms into it, and a panel shows its
    key plan and its occupancy chart (its workstations and the rooms inside it, slide 61's table); another click switches,
    All neighbourhoods / the same one again / Esc closes; 3 fire egress, the exit paths as an extra layer. The tools, top
-   right, on any beat: Neighbourhoods on / off (when they show, a click on one opens it), Fire egress on / off, Reset zoom */
+   right, on any beat: Spaces (their legend colours) on / off, Neighbourhoods on / off (when they show, a click on one opens it),
+   Fire egress on / off, Reset zoom. The plan itself is the DXF's plain linework, as the toolkit's viewer draws it */
 /* the plan takes the page (the whole floor, centred); each beat's key is a tab, bottom left, that opens beneath the plan
    (which moves up to the deck's band); an open neighbourhood fills the page with a bar along the bottom, its chart one click away */
 ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
@@ -197,6 +202,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
   function drawer(sc, open) {
     sc.classList.toggle("dr-open", open);
     plan.planHome(open ? plan.planView() : centre());
+    if (open && beat === 1) $(".ly-sp-btn", sc).classList.toggle("on", plan.planFill(true));   // the legend explains the colours
     if (open && beat === 2) $$(".ly-nbs [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 150 + i * 120));
   }
   // the chart beside the open neighbourhood, or tucked away (the neighbourhood then takes the page)
@@ -239,6 +245,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
       plan.deckPlan(); plan.nbHover($(".ly-nbs", sc));
       const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress());
       $(".ly-nb-btn", sc).onclick = () => nbOn(sc);
+      const sp = $(".ly-sp-btn", sc); sp.onclick = () => sp.classList.toggle("on", plan.planFill());
       $(".ly-rs-btn", sc).onclick = () => plan.planReset();
       // open a neighbourhood: a click on it (the plan) while the neighbourhoods show, on any beat, or on its row (beat 2)
       const byN = (n) => plan.data.zones.find((z) => z.n === n);
@@ -257,6 +264,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
       plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, blow: k === 1, egress: k === 3, view: centre(), ms: 0 });
       $(".ly-eg-btn", sc).classList.toggle("on", k === 3);
       $(".ly-nb-btn", sc).classList.toggle("on", k === 2);
+      $(".ly-sp-btn", sc).classList.remove("on");
       $(".ly-dr-btn b", sc).textContent = KEYS[k - 1];
     },
     leave(_, sc) {
