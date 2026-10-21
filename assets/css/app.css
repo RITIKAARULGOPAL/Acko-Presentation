@@ -270,6 +270,11 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 /* the plan picture: the coarse one always, the sharper ones over it when the zoom needs them */
 .dxplan .lv-24, .dxplan .lv-48 { visibility: hidden; }
 .dxplan.lv-24 .lv-24, .dxplan.lv-48 .lv-48 { visibility: visible; }
+/* zoomed in past the sharpest picture: the DXF's own linework (data/plan-vec.js), as the toolkit's viewer draws it; the picture
+   steps aside, and carries the flights (vec-fly) */
+.dxplan .dx-vec { --ph-paper: #fff; }
+.dxplan:not(.vec-on) .dx-vec, .dxplan.vec-fly .dx-vec, .dxplan.vec-heavy.ph-dragging .dx-vec, .dxplan.vec-heavy.vec-wheel .dx-vec { display: none; }
+.dxplan.vec-on:not(.vec-fly):not(.vec-heavy.ph-dragging):not(.vec-heavy.vec-wheel) .lv { visibility: hidden !important; }
 /* beneath: the spaces in the legend's colours; hovers live per beat */
 .dxplan .dx-fill path { stroke: none; }
 .dxplan .dx-fill { transition: opacity .6s; }

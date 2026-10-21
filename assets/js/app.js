@@ -345,10 +345,20 @@
       `<g class="dx-blow">${Object.entries(O.blow).map(([k, r]) => `<text x="${r[0] + r[2] / 2}" y="${r[1] + r[3] + 2600}">Blown Up ${k}</text>`).join("")}</g>` +
       `<g class="dx-lab">${P.zones.map((z) => `<text data-nb="${z.n}" x="${z.x}" y="${z.y}"><tspan class="n">${z.n}</tspan><tspan class="s" dx="500" dy="-1500">${z.seats}</tspan></text>`).join("")}</g>`);
     // the picture sharp enough for the zoom (screen px per metre, times the device's pixel ratio)
+    // the DXF's own linework (data/plan-vec.js) as vector tiles, just above the picture and under the hovers and marks: drawn
+    // as the toolkit's viewer draws it (.ph-plan: non-scaling strokes, its colours) once the zoom is past the sharpest picture
+    if (window.PLAN_VEC) {
+      const svg = DP.ph.addLayer("ph-plan dx-vec", ""), st = host.querySelector(".ph-stage");
+      st.insertBefore(svg, st.querySelector(".ph-rooms"));
+      DP.vec = { svg, g: [] };
+      // a wheel-zoom in progress (cleared once it rests): with many tiles in view the picture carries it, as it does a drag
+      let wt = 0; host.addEventListener("wheel", () => { host.classList.add("vec-wheel"); clearTimeout(wt); wt = setTimeout(() => host.classList.remove("vec-wheel"), 180); }, { passive: true });
+    }
     const level = () => {
       const r = host.getBoundingClientRect(), v = DP.ph.view; if (!r.width) return;
       const need = (r.width / (v[2] / 1000)) * (window.devicePixelRatio || 1);
       P.levels.forEach((l, i) => host.classList.toggle("lv-" + l.ppm, i === 0 || P.levels[i - 1].ppm < need * 0.85));
+      vecLevel(r, v, need);
     };
     DP.level = () => { cancelAnimationFrame(DP.lvRaf); DP.lvRaf = requestAnimationFrame(level); };
     ["wheel", "pointermove", "pointerup"].forEach((ev) => host.addEventListener(ev, DP.level, { passive: true }));
@@ -370,12 +380,42 @@
     P.levels.slice(1).forEach((l) => { const im = new Image(); im.src = asset(l.src); if (im.decode) im.decode().catch(() => {}); });
     return DP;
   }
+  // zoomed in (past 16 device px per m: a neighbourhood, a blow-up, a wheel-zoom) the vector tiles take over from the picture.
+  // Tiles in view (and a margin) are built on first sight, a few per frame so a landing never stalls; the picture stays up
+  // until the view's tiles are all there, then steps aside (vec-on). Once on, tiles panned into view join as they're built.
+  const VEC_NEED = 16;                                 // device px per m on screen (the blow-ups are about 17 on a plain screen)
+  function vecLevel(r, v, need) {
+    const V = window.PLAN_VEC, X = DP.vec; if (!V || !X) return;
+    if (need <= VEC_NEED) { DP.root.classList.remove("vec-on"); X.pending = []; return; }
+    const k = Math.max(v[2] / r.width, v[3] / r.height), cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2;
+    const hw = (r.width * k * 1.15) / 2, hh = (r.height * k * 1.15) / 2, vis = [];
+    V.tiles.forEach((t, i) => {
+      const on = t.b[0] < cx + hw && t.b[2] > cx - hw && t.b[1] < cy + hh && t.b[3] > cy - hh;
+      if (on) vis.push(i);
+      if (X.g[i]) X.g[i].style.display = on ? "" : "none";
+    });
+    DP.root.classList.toggle("vec-heavy", vis.length > 20);          // many tiles in view: the picture carries drags and wheel-zooms
+    X.pending = vis.filter((i) => !X.g[i]);
+    if (!X.pending.length) { DP.root.classList.add("vec-on"); return; }
+    if (!X.busy) { X.busy = true; requestAnimationFrame(vecBuild); }
+  }
+  function vecBuild() {
+    const X = DP.vec, V = window.PLAN_VEC, t0 = performance.now();
+    while (X.pending.length && performance.now() - t0 < 12) {
+      const i = X.pending.shift(); if (X.g[i]) continue;
+      const g = (X.g[i] = document.createElementNS("http://www.w3.org/2000/svg", "g")); g.innerHTML = V.tiles[i].s; X.svg.appendChild(g);
+    }
+    if (X.pending.length) requestAnimationFrame(vecBuild); else { X.busy = false; DP.level(); }
+  }
+  // a flight: the picture carries the move (vec-fly), the vector comes back as it lands
   function fitVb(v, ms) {
     cancelAnimationFrame(DP.raf);
     const from = DP.ph.view, t0 = performance.now();
-    if (!ms || reduced) { DP.ph.zoomTo(...v); return DP.level(); }
+    if (!ms || reduced) { DP.root.classList.remove("vec-fly"); DP.ph.zoomTo(...v); return DP.level(); }
+    DP.root.classList.add("vec-fly");
     const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-      DP.ph.zoomTo(...from.map((a, i) => a + (v[i] - a) * e)); if (k < 1) DP.raf = requestAnimationFrame(run); else DP.level(); };
+      DP.ph.zoomTo(...from.map((a, i) => a + (v[i] - a) * e));
+      if (k < 1) DP.raf = requestAnimationFrame(run); else { DP.root.classList.remove("vec-fly"); DP.level(); } };
     DP.raf = requestAnimationFrame(run);
   }
   // the viewBox (plan mm) that shows box [x0, y0, x1, y1] (plan mm) inside the display rect disp (frame px of the 1920 × 1080 page)

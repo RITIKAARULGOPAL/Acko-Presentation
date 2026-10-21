@@ -252,4 +252,9 @@ West, Middle and East fly an orthographic camera along it.
   - **Floor chart:** it reads slide 61's rows, carrying the zone down from each rowspan cell. Each cell's class becomes a state: `short` → ▼ (maroon), `up` → ▲, `up` with nothing asked → +, otherwise ✓. It sits in a white card with a summary line computed from the rows.
   - **Expand:** ⤢ centres the card larger over a flat white 72% scrim. ✕, Esc (caught before the neighbourhood's Esc) or a click on the scrim closes it.
   - **Neighbourhood chart:** the same builder without the requirement column.
+- **As sharp as the viewer when zoomed in** (Ritika: "not as clear as" the toolkit viewer). Past the zoom the pictures are made for, their baked lines go soft and heavy.
+  - **Tiles:** `tools/acko/plan_vec.py` cuts the toolkit's `full.svg` into 12 m tiles, each with the bbox of all it holds. Each subpath goes to the tile of its first point; the paint order is kept so wipeouts still mask; coordinates are relative. 24 → 13 MB.
+  - **Layer:** `deckPlan` adds one `ph-plan dx-vec` layer (the component's own viewer styles: non-scaling strokes) just above the picture and under the hovers and marks.
+  - **Switching:** `level()` turns it on past 16 device px/m (`vec-on`). Tiles in view (plus 15%) are built on first sight, a few per 12 ms frame (`vecBuild`), and the picture steps aside only once they're all there.
+  - **Moving:** flights (`vec-fly`), and drags and wheel-zooms when more than 20 tiles are in view (`vec-heavy` with `ph-dragging` / `vec-wheel`), show the picture, so they stay at 60 fps. It sharpens as they rest.
 
