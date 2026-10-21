@@ -83,6 +83,7 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
     - **Neighbourhoods** switches the six on or off. On the layout, when they show, a click on one opens it; on the blow-ups, outlines and seat hover only.
     - **Fire egress** switches the exit-path layer on or off.
     - **Reset zoom** flies back to the beat's view, or to the open neighbourhood's.
+- **The axo:** drag to turn it, scroll to zoom on the cursor, right-drag (or Shift-drag) to pan; **Reset view** (or a double-click) goes back to the beat. Without WebGL, it shows the deck's own axo pictures.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 
 ## The journey (≈ 20 min, 66 beats)
@@ -115,7 +116,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 46, 47, 48, 52 | Value addition | 4 | Engagement points, materials, acoustics (NRC 0.70–0.90), wayfinding (Nalanda, Sabha, Takshashila) |
 | 53–54 | Layout · Option 02A | 3 | The DXF plan, its spaces coloured by the legend (hover: name, area); then the six neighbourhoods draw in and their workstations count up (651), and a click opens one (zoom, key plan, occupancy chart); then fire egress, the exit paths as an extra layer |
 | 55–57 | Blown up X · Y · Z | 3 | The same DXF plan flies into each blow-up (hover a space); the fire compartment line draws on Y |
-| 58–60 | Schematic axonometric | 3 | West, middle, east, with the leaders drawn out to their spaces |
+| 58–60 | Schematic axonometric | 3 | A live 3D model of Option 02A from the DXF, in the deck's axo look; West, Middle, East fly along it, with leaders to their spaces (drag to turn, scroll to zoom, Reset view) |
 | 61 | Occupancy chart | 1 | Brief against Option 2A, row by row; shortfalls in maroon, more than asked in purple |
 | — | Thank you | 1 | Buttons to the Appendix and About SKV |
 
@@ -150,6 +151,7 @@ The PPT's own order. Ritika's choices (16 Oct):
      - **Each neighbourhood:** its box (for the zoom) and its occupancy rows (`occ`): the workstations, then a count of each kind of space whose label point lies inside it, in the occupancy slide's (61) groups and order.
      - **Output:** all into `data/plan-dxf.js`.
   3. **The component** is the toolkit's `component/assets/js/plan-hover.js` and `.css`, copied into `assets/`. The engine mounts it once in the world (`plan` in the kit).
+- **The axo's model:** `python tools/acko/axo_dxf.py "<toolkit>/viewer/out/op2a"` writes `data/axo-dxf.js` (and a check picture, `tools/_work/axo/check.png`) from the toolkit's classed `instanced.svg` and `rooms.json`, and the deck's `data/plan-dxf.js`. It never reads the DXF itself. The slab is the floor ACKO occupies, and the solid walls exclude the legend rooms' partitions, which the axo shows as purple glass. Furniture comes from each closed outline's size: chairs, desks and tables, storage. A pod's desk tops are its `base` lines, closed across the breaks its chairs leave. Plants are the `green` blocks.
 - **The old deck plan:** `tools/acko/deck_plan.py` made `plan-full.webp` and `data/deck-plan.js` from the deck's plan tiles. They're no longer loaded; `plan_dxf.py` still reads the marks from `deck-plan.js`.
 - **The site and the bare floor:** from the earlier Acko analysis (Acko New 01: test fit 03, the same shell). `tools/acko/site_floor.py` writes `data/site-floor.js`.
   - map: Overture/OSM

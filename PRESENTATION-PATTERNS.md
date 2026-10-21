@@ -213,3 +213,30 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - **An open neighbourhood:** with its chart tucked away (the default) it fills the page above a bar (key plan, name, workstations, area, Occupancy chart, All neighbourhoods); `occ-open` brings back the right-hand panel and refits it into the left. Switching keeps the chart's state; closing resets it.
   - **Testing a click on a neighbourhood:** pick the point by the engine's own rule (the first outline that contains it). A desk of one neighbourhood can lie inside another's outline.
 
+## 15. A live axo from the toolkit's classed SVG
+**What:** the deck's schematic axonometric (slides 58–60), rebuilt as a live three.js model of the DXF in the deck's axo look:
+- a pale slab on a soft shadow
+- the rooms in translucent purple glass with dark frames
+- wood desks, grey chairs, green plants
+- black mullions round the façade
+- grey masses for the rest of the building's floor
+- thin ink edges
+- the faint plan drawing on the floor, clipped to the slab
+
+West, Middle and East fly an orthographic camera along it.
+
+**Data** (`tools/acko/axo_dxf.py` → `data/axo-dxf.js`, 0.3 MB):
+- **Source:** the toolkit's `instanced.svg`. Every path is already classed (wall, glass, furn, green, base…), and every block is drawn once and placed by `<use transform="matrix(...)">`. The DXF isn't read again.
+- **Furniture:** closed outlines, plus the faces of the open linework (polygonized face by face; merging them fuses a table with the chairs drawn across it). Each is classified first (chair, desk, store, or nothing), and only then are nested shapes dropped, so a rug or cluster outline can't hide the desks inside it.
+- **Pod desk tops:** they're the block's `base` lines, broken where CAD hid them under the chairs. They're closed by thickening the lines 110 mm and taking the enclosed holes.
+- **Furniture is stored:** per block once, plus the placements.
+- **Slab:** the occupied floor (neighbourhoods, spaces, the toolkit's rooms), closed and filled. Walls are clipped to it, and furniture is kept only in the spaces people use (not the cores' fixtures).
+
+**Slide** (`slides/s-axo.html`):
+- **Geometry:** flat-shaded prisms gathered per material into a few meshes, and one LineSegments per pen. Faces sit behind their lines (polygon offset); glass and panes draw last without writing depth.
+- **Drawing:** on demand only, while a tween or a drag runs.
+- **Beat cameras:** each third is fitted by projecting its slab points on the camera's right/up axes.
+- **Labels:** projected each frame. Each side's names sit in one column so the leaders run level; one with no room on its side goes the other way, beside its space.
+- **Fallback:** if the WebGL context fails, the section takes `ax-fallback` and shows the deck's three axo pictures with their leaders.
+- **Tests:** `sc._axo()` exposes the camera state and a projection, read-only, for the tests (WebGL canvases can't be read back without `preserveDrawingBuffer`).
+
