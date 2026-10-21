@@ -411,7 +411,7 @@
     const z = id ? DP.P.zones.find((q) => q.id === id) : null;
     markZone(z);
     if (!z) { DP.cur = DP.home; DP.ph.setHome(...DP.home); fitVb(DP.home, 900); return null; }
-    const pad = 2500, b = z.box, v = vbFor([b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad], disp || [38, 120, 1230, 880]);
+    const pad = 1500, b = z.box, v = vbFor([b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad], disp || [38, 120, 1230, 880]);
     DP.cur = v; DP.ph.setHome(...v); fitVb(v, 900);
     return z;
   }
@@ -435,6 +435,11 @@
   }
   // back to the beat's view, or the open neighbourhood's (flown; a double-click jumps there)
   function planReset(ms) { deckPlan(); DP.ph.clear(); if (DP.cur) fitVb(DP.cur, ms === undefined ? 700 : ms); }
+  // a new framing for the beat (e.g. a panel opened beneath the plan), flown to unless a neighbourhood is open (closing it returns here)
+  function planHome(v, ms) {
+    deckPlan(); DP.home = v;
+    if (!DP.zone) { DP.cur = v; DP.ph.setHome(...v); fitVb(v, ms === undefined ? 700 : ms); }
+  }
   // a list of [data-nb] rows: hover one to pick out its neighbourhood on the plan (outline, seats)
   function nbHover(list) {
     deckPlan();
@@ -567,7 +572,7 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planReset, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planReset, planHome, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
             get zone() { return DP.zone; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {

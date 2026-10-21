@@ -73,9 +73,10 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
 
 **Interaction:**
 - **Layout and blow-ups** (the DXF plan):
+  - On the layout the plan takes the page: the whole floor, centred. **The beat's key** (Legend, Six neighbourhoods, Fire egress key) is a tab at the bottom left: click it to open it beneath the plan, which moves up; click again to tuck it away. Every beat starts with it tucked away.
   - Scroll to zoom on the cursor, drag to pan, and double-click to go back to the beat's view.
   - Hover a space for its name and area. On *Six neighbourhoods*, hover a neighbourhood, or its row, to pick it out with its seats.
-  - On *Six neighbourhoods* (or any layout beat with Neighbourhoods on), **click a neighbourhood** (on the plan, or its row): the plan zooms into it, and a panel shows its key plan and its occupancy chart (workstations and the rooms inside it). Hover its rooms; click another to switch; **All neighbourhoods**, a click on the same one, or Esc goes back.
+  - On *Six neighbourhoods* (or any layout beat with Neighbourhoods on), **click a neighbourhood** (on the plan, or its row): it fills the page, with a bar along the bottom (its key plan, workstations, area). **Occupancy chart** opens its chart on the right (workstations and the rooms inside it); **Hide chart** tucks it away. Hover its rooms; click another to switch; **All neighbourhoods**, a click on the same one, or Esc goes back.
   - **The tools** (top right, on the layout and the blow-ups, any beat):
     - **Neighbourhoods** switches the six on or off. On the layout, when they show, a click on one opens it; on the blow-ups, outlines and seat hover only.
     - **Fire egress** switches the exit-path layer on or off.

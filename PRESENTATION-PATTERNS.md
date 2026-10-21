@@ -199,7 +199,7 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
 - **Data** (`tools/acko/plan_dxf.py`): each zone gets `box` and `occ`. `occ` is the occupancy slide's rows, limited to the spaces whose label point lies inside the zone's outline; a space named for several labels (`PB 10 / PB 11`) counts each one.
 - **Engine** (kit `plan`):
   - `onZoneClick(fn)`: a click anywhere inside an outline (point-in-polygon in plan mm, through the plan's own viewBox mapping), so the gaps between desks count. A press that moves more than 4 px is a pan, not a click. Cleared by `planOff`.
-  - `focusZone(id, disp)` flies to the zone's box (2.5 m margin) inside a display rect in frame px, adds `focus-zone` (the others dim, its rooms take the hover), and makes that view the double-click home. `focusZone(null)` flies back.
+  - `focusZone(id, disp)` flies to the zone's box (1.5 m margin) inside a display rect in frame px, adds `focus-zone` (the others dim, its rooms take the hover), and makes that view the double-click home. `focusZone(null)` flies back.
   - `keyplan(id)`: markup for the key plan (the 12 px/m picture, faint, with the six outlines).
 - **Slide:** the panel and a white top and bottom band (behind the header and footer) fade in on `zp-open`, and the rows fade out. Esc is caught in the capture phase while one is open, so it doesn't reach the deck's overview key. A beat change or leaving the slide closes it.
 - **Watch:** a function named like one already in `app.js` (the walk has a `keyplan`) is silently overridden by the later declaration; give engine helpers distinct names.
@@ -207,4 +207,9 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - **Neighbourhoods:** `plan.planNb(on, labels)` switches `show-nb`, `show-teams` and (unless `labels === false`) `show-lab` together. The blow-ups pass `false`: at their zoom the big numbers would be 4–5× larger, and the hover names each one. On the layout, opening a neighbourhood follows this button, on any beat; switching it off closes one.
   - **Reset zoom:** `plan.planReset()` flies to `DP.cur`, the framing in force: `planOn` sets it to the beat's view, `focusZone` to the zone's (and back on close).
   - While one is open, every beat's lower panel (legend, rows, egress legend) and the plan's blow-up captions step aside.
+- **The plan takes the page** (Ritika: the legend and chart collapsible, the layout filling the canvas):
+  - **Two framings:** the floor centred at full width (`vbFor(viewBox, [24, 130, 1896, 950])`, the default), or the deck's top band (`planView()`) while the beat's key drawer is open beneath it. `plan.planHome(v)` switches the beat's framing (and flies there unless a neighbourhood is open), so Reset and closing a neighbourhood follow it.
+  - **The key drawer:** one tab, bottom left, labelled for the beat; `dr-open` on the section shows that beat's panel (overriding `[data-only].shown`). Every beat arrives with it shut.
+  - **An open neighbourhood:** with its chart tucked away (the default) it fills the page above a bar (key plan, name, workstations, area, Occupancy chart, All neighbourhoods); `occ-open` brings back the right-hand panel and refits it into the left. Switching keeps the chart's state; closing resets it.
+  - **Testing a click on a neighbourhood:** pick the point by the engine's own rule (the first outline that contains it). A desk of one neighbourhood can lie inside another's outline.
 
