@@ -266,3 +266,38 @@ West, Middle and East fly an orthographic camera along it.
     - **Accepting:** at 75% coverage (50% for booth-sized rooms, whose traces spill out of their doors). Otherwise the trace is notch-closed and clipped to the walls.
   - **Layering:** the component's `.ph-rooms` layer moves under the picture and the vector (they take no pointer events), so the tint sits under the linework. The teams stay on top.
 
+## 16. One live model for two slides: the axo and the campus strategy
+**What:** the floor's three.js model is now a shared module, `assets/js/axo-model.js` (`window.AxoModel`), used by the schematic axonometric (`s-axo`) and the campus strategy (`s-strategy`).
+- **One renderer:** a single WebGL renderer, whose canvas moves into whichever slide is showing (one GPU context).
+- **One model:** built once, in layers (`base`, `walls`, `glass`, `facade`, `furniture`, `plants`) that a slide can hide or grow. `M.reset()` puts them back as built, and each slide calls it on entering or leaving.
+- **Camera helpers:** `AxoModel.basis / apply / frame(m, view, x0, x1, fit, asp)`, so each slide keeps its own camera state.
+- **Redraws:** async work (the floor drawing) notifies the showing slide through `AxoModel.listeners`.
+
+**The strategy slide plays once on arriving**, as the PPT's GIF did:
+- **How it started:** each layer's `scale.y` grows 0 → 1 in turn.
+- **Looping it all together:** the Loop is a flat band whose index draw range grows.
+  - **Path:** two lanes along the floor, a quarter of the way in from the slab's edges at every 2 m of its length, joined at the ends. A Catmull-Rom through stops alone left the building where the floor narrows, and pulling waypoints inside made it zigzag.
+  - **Stops:** found on the plan by type: the reception nearest the first entrance, the café, the boardroom, the quick sprint nearest the middle, collab, the biggest neighbourhood, a wellness room.
+  - **Lighting:** each stop lights when the band reaches its nearest point on the loop.
+- **The client's journey:** a maroon band, with a dot walking it.
+
+**Interaction:** a click (not a drag) replays it, drag turns, the wheel zooms, Reset view goes back.
+**Labels:** they step up to avoid each other, and hang left near the page's edge.
+
+## 17. Spaces straight from the drawing: labels in the rooms their walls enclose
+**When:** a new test fit (21.10.26) arrived after the PPT, so the PPT's legend colours (slide 53) no longer described the plan.
+
+**How:**
+- **Labels:** each room label comes from the toolkit's `labels.json`, at the centre of the drawn text's box.
+- **Faces:** the label takes the room face the partition linework encloses (`tools/acko/faces.py`, the builder from the snapping step, now shared; `snap_spaces.py` retired).
+- **Size limits per type:** each room type has a minimum and a maximum (m²).
+  - **Minimum:** a table under the label makes a small face of its own. The room face still holds it unless the table touches the walls.
+  - **Maximum:** a room leaking through a gap makes a face far too big, so the next bridging level is tried.
+- **Furniture joined to a wall:** a desk against a wall makes the label sit in the desk's own face, cut off from the room. The room-sized face touching it most closely is taken, with the piece included.
+- **Fallback:** open-plan or open-sided labels keep the previous build's outline of the same name.
+  - **Which one:** the same-named room nearest the label (names repeat, such as two "Executive Corner Cabin 02"s).
+  - **Checked:** only if that outline sits within 200 mm of the new walls. Otherwise there's no outline, which is better than a wrong one.
+  - **Reference:** the previous spaces are kept once in `tools/_work/plan/prev-spaces.json`, so re-runs compare against the same set.
+- **Not in contract:** the area (`ak_zone_Nic`) is a space with its own grey, and kept out of the axo's slab and floors.
+- **Text at its CAD size:** fixed in the toolkit (`text_outline.py`). Every text is drawn as its glyph outlines in its style's font with its width factor and MTEXT formatting, so a label never outgrows its room. Rooms read the drawn box from `labels.json`.
+

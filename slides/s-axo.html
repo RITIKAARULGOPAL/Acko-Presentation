@@ -82,7 +82,8 @@
 <script>
 /* the schematic axonometric (deck slides 58–60): a live model of Option 02A, built from the DXF (data/axo-dxf.js, made by
    tools/acko/axo_dxf.py from the DXF plan toolkit's classed SVG), in the deck's axo look: a pale slab on a soft shadow, rooms
-   in translucent purple glass, wood desks, grey chairs, green plants, black mullions round the façade, thin ink edges.
+   in translucent purple glass, wood desks, grey chairs, green plants, black mullions round the façade, thin ink edges. The model
+   and its renderer are shared with the campus strategy slide (assets/js/axo-model.js).
    West, Middle, East fly the camera along the floor; drag turns it, the wheel zooms on the cursor, right-drag (or Shift)
    pans, Reset view (or a double-click) goes back to the beat; with Hover on (the deck-wide pill: the layout, the blow-ups,
    this), the space under the cursor lights up with its name. Drawn only while something moves. three.js r147. */
@@ -91,158 +92,11 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced, plan, plain }) => {
   const BEATS = ["west", "middle", "east"];
   const VIEW = { theta: -0.6, phi: 0.98 };                    // the deck's axo angle: the floor runs bottom left to top right
   const FIT = [0.03, 0.155, 0.97, 0.935];                    // where a beat's third sits on the page (fractions)
-  const H = { wall: 2.4, glass: 2.4, top: 2.7, chair: 0.45, desk: 0.75, store: 1.0, floor: 0.02 };
-  const GLASS = new Set(["Phone booth", "Quick sprint", "Collaboration huddle", "Departmental room", "Boardroom", "Visitor hub", "The Hatchery",
-    "Studio", "Zen room", "Mother's room", "Prayer room", "Executive corner cabin", "Training room"]);
-  const SERVICE = new Set(["Server, UPS & battery", "Store room", "Mail room", "Hub room"]);
-  const FLOOR = (t) => GLASS.has(t) ? 0xe2daf2 : t === "Cafeteria" || t === "Coffee corner" ? 0xf3e9d0 : t === "Reception" ? 0xeee4d6 : SERVICE.has(t) ? 0xbdbdbd : 0xe8e8e6;
-  let CX = 0, CY = 0, T;
-  const X = (x) => (x - CX) / 1000, Z = (y) => (y - CY) / 1000;
-
-  // ---------- geometry: flat-shaded prisms and quads gathered per material, ink lines per pen ----------
-  const acc = () => ({ p: [], n: [] });
-  function tri(a, A, B, C) {
-    const ux = B[0] - A[0], uy = B[1] - A[1], uz = B[2] - A[2], vx = C[0] - A[0], vy = C[1] - A[1], vz = C[2] - A[2];
-    let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const l = Math.hypot(nx, ny, nz) || 1;
-    a.p.push(A[0], A[1], A[2], B[0], B[1], B[2], C[0], C[1], C[2]);
-    for (let i = 0; i < 3; i++) a.n.push(nx / l, ny / l, nz / l);
-  }
-  function quad(a, p, q, y0, y1) { tri(a, [p[0], y0, p[1]], [q[0], y0, q[1]], [q[0], y1, q[1]]); tri(a, [p[0], y0, p[1]], [q[0], y1, q[1]], [p[0], y1, p[1]]); }
-  // a ring (plan mm) stood up from y0 to y1 (m): its top, its sides, its ink (the top outline; corners and base on request)
-  function prism(a, ring, y0, y1, ink, o) {
-    o = o || {};
-    const pts = ring.map(([x, y]) => [X(x), Z(y)]), n = pts.length; if (n < 3) return;
-    const holes = (o.holes || []).map((h) => h.map(([x, y]) => [X(x), Z(y)]));
-    let tris = [];
-    try { tris = T.ShapeUtils.triangulateShape(pts.map(([x, z]) => new T.Vector2(x, z)), holes.map((h) => h.map(([x, z]) => new T.Vector2(x, z)))); } catch (e) { /* a broken ring: no top */ }
-    const all = pts.concat(...holes);
-    for (const [i, j, k] of tris) {
-      const A = all[i], B = all[j], C = all[k], up = (B[1] - A[1]) * (C[0] - A[0]) - (B[0] - A[0]) * (C[1] - A[1]) >= 0;
-      tri(a, [A[0], y1, A[1]], up ? [B[0], y1, B[1]] : [C[0], y1, C[1]], up ? [C[0], y1, C[1]] : [B[0], y1, B[1]]);
-    }
-    if (o.sides !== false) for (const r of [pts, ...holes]) for (let i = 0; i < r.length; i++) quad(a, r[i], r[(i + 1) % r.length], y0, y1);
-    if (!ink) return;
-    for (const r of [pts, ...holes]) for (let i = 0; i < r.length; i++) {
-      const A = r[i], B = r[(i + 1) % r.length];
-      ink.push(A[0], y1, A[1], B[0], y1, B[1]);
-      if (o.base) ink.push(A[0], y0, A[1], B[0], y0, B[1]);
-      if (o.corners) {
-        const P0 = r[(i - 1 + r.length) % r.length], t1 = Math.atan2(A[1] - P0[1], A[0] - P0[0]), t2 = Math.atan2(B[1] - A[1], B[0] - A[0]);
-        let d = Math.abs(t1 - t2); d = Math.min(d, 2 * Math.PI - d);
-        if (d > 0.45) ink.push(A[0], y0, A[1], A[0], y1, A[1]);
-      }
-    }
-  }
-  function mesh(a, mat) {
-    const g = new T.BufferGeometry();
-    g.setAttribute("position", new T.Float32BufferAttribute(a.p, 3)); g.setAttribute("normal", new T.Float32BufferAttribute(a.n, 3));
-    return new T.Mesh(g, mat);
-  }
-  function lines(l, color, opacity) {
-    const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(l, 3));
-    return new T.LineSegments(g, new T.LineBasicMaterial({ color, transparent: opacity < 1, opacity }));
-  }
-  const lam = (color, o) => new T.MeshLambertMaterial(Object.assign({ color, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 2 }, o || {}));
-
+  let T, M, X, Z, CX = 0, CY = 0, acc, prism, mesh;
+  // the shared model (assets/js/axo-model.js), and this slide's hover data on it
   function build() {
     const A = window.AXO_DXF, P = window.PLAN_DXF;
-    const xs = A.slab.map((q) => q[0]), ys = A.slab.map((q) => q[1]);
-    CX = (Math.min(...xs) + Math.max(...xs)) / 2; CY = (Math.min(...ys) + Math.max(...ys)) / 2;
-    const scene = new T.Scene();
-    // the soft shadow under the slab (a blurred silhouette, down and to the right as in the deck's axo)
-    {
-      const [x0, x1, y0, y1] = [Math.min(...xs) - 6000, Math.max(...xs) + 6000, Math.min(...ys) - 6000, Math.max(...ys) + 6000];
-      const k = 2048 / (x1 - x0), cv = document.createElement("canvas"); cv.width = 2048; cv.height = Math.round((y1 - y0) * k);
-      const c = cv.getContext("2d"); c.filter = "blur(10px)"; c.fillStyle = "rgba(60,55,70,.55)"; c.beginPath();
-      A.slab.forEach(([x, y], i) => c[i ? "lineTo" : "moveTo"]((x - x0) * k, (y - y0) * k)); c.closePath(); c.fill();
-      const pl = new T.Mesh(new T.PlaneGeometry((x1 - x0) / 1000, (y1 - y0) / 1000), new T.MeshBasicMaterial({ map: new T.CanvasTexture(cv), transparent: true, opacity: 0.5, depthWrite: false }));
-      pl.rotation.x = -Math.PI / 2; pl.position.set(X((x0 + x1) / 2) + 1.6, -0.6, Z((y0 + y1) / 2) + 2.4); scene.add(pl);
-    }
-    const INK = [], INK2 = [], GINK = [];
-    // the slab, and the floors the legend colours
-    const slab = acc(); prism(slab, A.slab, -0.18, 0, INK, { base: true, corners: true });
-    scene.add(mesh(slab, lam(0xe9e8e6)));
-    const fl = {};
-    for (const [t, r] of A.floors) { const c = FLOOR(t); prism(fl[c] || (fl[c] = acc()), r, 0, H.floor, null, { sides: false }); }
-    const green = acc(); for (const r of A.terrace.concat(A.greens)) prism(green, r, 0, H.floor + 0.005, null, { sides: false });
-    for (const c in fl) scene.add(mesh(fl[c], lam(+c, { polygonOffsetFactor: -1, polygonOffsetUnits: -2 })));
-    scene.add(mesh(green, lam(0xb7d3a2, { polygonOffsetFactor: -2, polygonOffsetUnits: -4 })));
-    // the plan drawing laid faintly on the floor: every piece of furniture reads, even where it isn't stood up
-    {
-      const lv = P.levels[1] || P.levels[0], [vx, vy, vw, vh] = P.viewBox;
-      // clipped to the slab, so the hotel band and the street around it don't float in the air
-      const cv = document.createElement("canvas"), tex = new T.CanvasTexture(cv), img = new Image();
-      img.onload = () => {
-        const max = Math.min(AX.r.capabilities.maxTextureSize, 8192), k = Math.min(1, max / img.width);
-        cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
-        const c = cv.getContext("2d"), sx = cv.width / vw, sy = cv.height / vh;
-        c.drawImage(img, 0, 0, cv.width, cv.height);
-        c.globalCompositeOperation = "destination-in"; c.beginPath();
-        A.slab.forEach(([x, y], i) => c[i ? "lineTo" : "moveTo"]((x - vx) * sx, (y - vy) * sy)); c.closePath(); c.fill();
-        tex.needsUpdate = true; need();
-      };
-      img.src = asset(lv.src); tex.anisotropy = 4;
-      const pl = new T.Mesh(new T.PlaneGeometry(vw / 1000, vh / 1000), new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.38, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8 }));
-      pl.rotation.x = -Math.PI / 2; pl.position.set(X(vx + vw / 2), H.floor + 0.01, Z(vy + vh / 2)); scene.add(pl);
-    }
-    // solid walls (cores, services, the shell) and the grey masses of the rest of the building's floor
-    const walls = acc(); for (const w of A.walls) prism(walls, w[0], 0, H.wall, INK, { holes: w.slice(1), corners: true });
-    scene.add(mesh(walls, lam(0xf3f2f0)));
-    const mass = acc(); for (const r of A.context) prism(mass, r, 0, H.top, INK, { corners: true });
-    const serv = acc(); for (const [t, r] of A.floors) if (SERVICE.has(t)) prism(serv, r, 0, H.wall, INK, { corners: true });
-    scene.add(mesh(mass, lam(0xcfcfcf))); scene.add(mesh(serv, lam(0x9a9a9a)));
-    // the rooms: purple glass along their outlines, dark frames
-    const glass = acc();
-    for (const [t, r] of A.floors) if (GLASS.has(t)) {
-      const pts = r.map(([x, y]) => [X(x), Z(y)]);
-      for (let i = 0; i < pts.length; i++) {
-        const p = pts[i], q = pts[(i + 1) % pts.length]; quad(glass, p, q, H.floor, H.glass);
-        GINK.push(p[0], H.glass, p[1], q[0], H.glass, q[1], p[0], H.floor, p[1], q[0], H.floor, q[1]);
-        const o = pts[(i - 1 + pts.length) % pts.length], t1 = Math.atan2(p[1] - o[1], p[0] - o[0]), t2 = Math.atan2(q[1] - p[1], q[0] - p[0]);
-        let d = Math.abs(t1 - t2); d = Math.min(d, 2 * Math.PI - d); if (d > 0.45) GINK.push(p[0], H.floor, p[1], p[0], H.glass, p[1]);
-      }
-    }
-    // furniture: each block's shapes once, placed by its uses; the loose ones as drawn
-    const fu = { chair: acc(), desk: acc(), store: acc() };
-    const place = (k, ring) => prism(fu[k], ring, 0, H[k], k === "chair" ? null : INK2);
-    for (const u of A.uses) {
-      const [id, a, b, c, d, e, f] = u;
-      for (const [k, r] of A.blocks[id] || []) place(k, r.map(([x, y]) => [a * x + c * y + e, b * x + d * y + f]));
-    }
-    for (const [k, r] of A.loose) place(k, r);
-    scene.add(mesh(fu.desk, lam(0xd8b78c))); scene.add(mesh(fu.chair, lam(0x5d5c62))); scene.add(mesh(fu.store, lam(0xf2f0eb)));
-    // the façade: black mullions about every 1.5 m along the slab's edge, rails top and bottom, a pale glass band;
-    // where the edge meets the rest of the building, a plain wall instead
-    const mull = acc(), pane = acc(), solidEdge = acc();
-    const nearMass = (x, y) => A.context.some((r) => r.some((q, i) => { const s = r[(i + 1) % r.length]; return segDist(x, y, q, s) < 900; }));
-    for (let i = 0; i < A.slab.length; i++) {
-      const p = A.slab[i], q = A.slab[(i + 1) % A.slab.length], L = Math.hypot(q[0] - p[0], q[1] - p[1]); if (L < 200) continue;
-      const P0 = [X(p[0]), Z(p[1])], Q0 = [X(q[0]), Z(q[1])];
-      if (nearMass((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)) { quad(solidEdge, P0, Q0, 0, H.top); INK.push(P0[0], H.top, P0[1], Q0[0], H.top, Q0[1]); continue; }
-      quad(pane, P0, Q0, 0.08, H.top - 0.06);
-      const n = Math.max(1, Math.round(L / 1500));
-      for (let j = 0; j <= n; j++) {
-        const t = j / n, x = P0[0] + (Q0[0] - P0[0]) * t, z = P0[1] + (Q0[1] - P0[1]) * t, w = 0.045;
-        prism(mull, [[x - w, z - w], [x + w, z - w], [x + w, z + w], [x - w, z + w]].map(([a, b]) => [a * 1000 + CX, b * 1000 + CY]), 0, H.top, null);
-      }
-      INK.push(P0[0], H.top, P0[1], Q0[0], H.top, Q0[1], P0[0], 0.08, P0[1], Q0[0], 0.08, Q0[1]);
-    }
-    scene.add(mesh(mull, lam(0x262626))); scene.add(mesh(solidEdge, lam(0xdcdcdc)));
-    // the see-through layers last, without writing depth, so what's behind them still shows
-    const gm = mesh(glass, new T.MeshLambertMaterial({ color: 0x8a6cd0, transparent: true, opacity: 0.26, depthWrite: false, side: T.DoubleSide })); gm.renderOrder = 2; scene.add(gm);
-    const pm = mesh(pane, new T.MeshLambertMaterial({ color: 0xdfe9ef, transparent: true, opacity: 0.16, depthWrite: false, side: T.DoubleSide })); pm.renderOrder = 3; scene.add(pm);
-    // plants: rounded crowns
-    if (A.plants.length) {
-      const im = new T.InstancedMesh(new T.IcosahedronGeometry(1, 1), new T.MeshLambertMaterial({ color: 0x5f9845, flatShading: true }), A.plants.length);
-      const m4 = new T.Matrix4(), q4 = new T.Quaternion(), s3 = new T.Vector3(), p3 = new T.Vector3();
-      A.plants.forEach(([x, y, r], i) => { const R = Math.min(0.9, r / 1000) * 0.85; im.setMatrixAt(i, m4.compose(p3.set(X(x), 0.35 + R * 0.9, Z(y)), q4, s3.set(R, R * 0.9, R))); });
-      scene.add(im);
-    }
-    scene.add(lines(INK, 0x2a2a2a, 0.75)); scene.add(lines(INK2, 0x6b5a45, 0.45));
-    const gl = lines(GINK, 0x45367a, 0.7); gl.renderOrder = 4; scene.add(gl);
-    scene.add(new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.78));
-    const key = new T.DirectionalLight(0xffffff, 0.5); key.position.set(-40, 90, 60); scene.add(key);
-    // hover: the deck's spaces (smallest first, so a room wins over what surrounds it), then the neighbourhoods
+    M = window.AxoModel.get(asset); ({ X, Z, CX, CY, acc, prism, mesh } = M);
     const ringsOf = (d) => (d.match(/M[^M]+/g) || []).map((part) => { const n = part.match(/-?\d+(?:\.\d+)?/g).map(Number), r = [];
       for (let i = 0; i + 1 < n.length; i += 2) r.push([n[i], n[i + 1]]); return r; }).filter((r) => r.length > 2);
     const item = (rings, name, sub, x, y, m2) => { const xs = rings.flat().map((q) => q[0]), ys = rings.flat().map((q) => q[1]);
@@ -253,13 +107,9 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced, plan, plain }) => {
     };
     AX.hiMat = new T.MeshBasicMaterial({ color: 0x5222d0, transparent: true, opacity: 0.22, depthWrite: false, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -6, polygonOffsetUnits: -12 });
     AX.hiLineMat = new T.LineBasicMaterial({ color: 0x5222d0 });
-    AX.scene = scene;
+    AX.scene = M.scene;
     AX.beats = BEATS.map((b) => A.beats[b]);
     AX.labels = BEATS.map((b) => A.labels[b] || []);
-  }
-  function segDist(x, y, a, b) {
-    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy, t = L ? Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / L)) : 0;
-    return Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy);
   }
 
   // ---------- hover: the space (or neighbourhood) under the cursor, lit, its name above it ----------
@@ -291,37 +141,11 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced, plan, plain }) => {
     tip.style.left = ((v.x + 1) * 50) + "%"; tip.style.top = ((1 - v.y) * 50) + "%";
   }
 
-  // ---------- camera: an orthographic axo, a state {theta, phi, t, half} tweened between beats ----------
-  function basis(s) {
-    const d = new T.Vector3(Math.sin(s.phi) * Math.sin(s.theta), Math.cos(s.phi), Math.sin(s.phi) * Math.cos(s.theta));
-    const f = d.clone().negate(), right = new T.Vector3(-f.z, 0, f.x).normalize(), up = new T.Vector3().crossVectors(right, f).normalize();
-    return { d, f, right, up };
-  }
-  function apply(s) {
-    const c = AX.cam, { d } = basis(s);
-    c.position.set(s.t[0] + d.x * 300, s.t[1] + d.y * 300, s.t[2] + d.z * 300); c.up.set(0, 1, 0); c.lookAt(s.t[0], s.t[1], s.t[2]);
-    c.top = s.half; c.bottom = -s.half; c.left = -s.half * AX.asp; c.right = s.half * AX.asp; c.near = 1; c.far = 900; c.updateProjectionMatrix();
-  }
+  // ---------- camera: an orthographic axo (AxoModel), a state {theta, phi, t, half} tweened between beats ----------
+  const basis = (st) => window.AxoModel.basis(st);
+  const apply = (st) => window.AxoModel.apply(AX.cam, st, AX.asp);
   // the camera that fits a third of the floor (plan mm x0..x1) into FIT on the page
-  function frame(k) {
-    const A = window.AXO_DXF, [x0, x1] = AX.beats[k - 1], s = { theta: VIEW.theta, phi: VIEW.phi, t: [0, 0, 0], half: 1 };
-    const { right, up } = basis(s);
-    let mnx = 1e9, mxx = -1e9, mny = 1e9, mxy = -1e9;
-    for (const [x, y] of A.slab) {
-      const px = X(Math.max(x0, Math.min(x1, x))), pz = Z(y);
-      for (const h of [0, H.top]) {
-        const v = new T.Vector3(px, h, pz), a = v.dot(right), b = v.dot(up);
-        mnx = Math.min(mnx, a); mxx = Math.max(mxx, a); mny = Math.min(mny, b); mxy = Math.max(mxy, b);
-      }
-    }
-    const fw = FIT[2] - FIT[0], fh = FIT[3] - FIT[1];
-    s.half = Math.max((mxy - mny) / (2 * fh), (mxx - mnx) / (2 * fw * AX.asp));
-    // the fit area's centre, off the page's centre: shift the target so the model lands in it
-    const ox = ((FIT[0] + FIT[2]) - 1) * s.half * AX.asp, oy = (1 - (FIT[1] + FIT[3])) * s.half;
-    const c = right.clone().multiplyScalar((mnx + mxx) / 2 - ox).add(up.clone().multiplyScalar((mny + mxy) / 2 - oy));
-    s.t = [c.x, c.y, c.z];
-    return s;
-  }
+  const frame = (k) => window.AxoModel.frame(M, VIEW, AX.beats[k - 1][0], AX.beats[k - 1][1], FIT, AX.asp);
   const lerp = (a, b, e) => a + (b - a) * e;
   function fly(to, ms) {
     if (!AX.state || reduced || !ms) { AX.state = to; AX.tween = null; need(); return; }
@@ -439,15 +263,14 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced, plan, plain }) => {
   function start(sc) {
     const host = $(".ax3", sc);
     AX.sc = sc; AX.host = host;
-    if (AX.r) { if (AX.r.domElement.parentNode !== host) host.appendChild(AX.r.domElement); return true; }
-    const THREE = window.THREE; if (!THREE || !window.AXO_DXF) return false;
-    T = THREE;
-    let r;
-    try { r = new T.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return false; }
-    r.setPixelRatio(Math.min(2, devicePixelRatio || 1)); r.setClearColor(0xffffff, 0);
-    host.appendChild(r.domElement);
+    if (!window.AxoModel || !window.AxoModel.available()) return false;
+    const r = window.AxoModel.renderer(); if (!r) return false;
+    T = window.THREE;
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    if (AX.r) return true;
     AX.r = r; AX.cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900); AX.asp = (host.clientWidth || 16) / (host.clientHeight || 9);
     build(); wire(host);
+    window.AxoModel.listeners.add(() => { if (document.body.dataset.scene === "s-axo") need(); });
     // drawn on demand: a new window size (F for fullscreen) or the tab coming back needs a fresh frame
     const again = () => { if (document.body.dataset.scene === "s-axo") need(); };
     addEventListener("resize", again); document.addEventListener("visibilitychange", again);
@@ -461,6 +284,7 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced, plan, plain }) => {
       plain();                                   // the world's flat plan (the layout, the blow-ups) out of sight
       const ok = start(sc);
       sc.classList.toggle("ax-fallback", !ok);
+      if (ok) { M.reset(); AX.frames = null; if (AX.state) need(); }
       $(".ax-rs", sc).onclick = () => fly(frame(AX.beat), 900);
       const hv = $(".ax-hv", sc); hv.classList.toggle("on", plan.hoverOn);
       hv.onclick = () => { const on = plan.planHover(); hv.classList.toggle("on", on); if (!on && AX.r) setHover(null); };
