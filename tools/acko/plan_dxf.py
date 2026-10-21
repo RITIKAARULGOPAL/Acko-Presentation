@@ -1,18 +1,19 @@
 """The layout plan from the DXF, for s-layout and s-blowup: pictures of the plan, its spaces, neighbourhoods and fire egress.
 
-    python tools/acko/plan_dxf.py "<toolkit>/viewer/out/op2a" "<ACKO.dxf>" "<deck.pptx>"
+    python tools/acko/plan_dxf.py "<toolkit>/viewer/out/tf2110" "<the test fit .dxf>"
 
-Reads the DXF plan toolkit's output for the drawing (full.svg, teams.json: run the toolkit first, with
-projects/acko.json), the DXF itself and the design deck, and writes:
+Reads the DXF plan toolkit's output for the drawing (full.svg, labels.json, teams.json, rooms.json: run the toolkit first,
+with projects/acko.json) and the DXF itself (its fire egress layers), and writes:
   assets/img/plan-dxf-12.webp, -24.webp, -48.webp   the plan drawn at 12 / 24 / 48 px per metre (transparent), so the
                                                      deck can show it sharp at every zoom (the full vector plan is too
                                                      heavy to fly smoothly)
   data/plan-dxf.js (window.PLAN_DXF), in the toolkit's plan frame (mm, y down):
     viewBox   the plan's crop [x, y, w, h]
     levels    the pictures and their px per metre
-    spaces    the spaces as the deck's layout slide (53) colours them by its legend: every flat fill patch of the slide's
-              plan tiles, registered onto the DXF plan, named by the DXF room label inside it and typed by that name or by
-              the legend colour; each keeps its slide colour
+    spaces    the rooms as the drawing encloses them: each room label (labels.json, layer OB-I-ANNO-TEXT) takes the room
+              face its walls enclose (tools/acko/faces.py), labels sharing a face share it; typed by the label, coloured
+              by the deck's legend (slide 53). Open-plan labels with no enclosing face keep the previous build's outline of
+              the same name. The not-in-contract area (ak_zone_Nic) from rooms.json
     zones     the neighbourhoods (the drawing's ak_zone outlines, seats from its workstation counts), from teams.json
     egress    the fire egress paths (ak_Ep layers): band "lt50" (< 50 m) or "50-60", and length in m
     overlays  from data/deck-plan.js, mapped onto the DXF: the Blown up X / Y / Z boxes, the fire compartment line,
@@ -54,7 +55,21 @@ BY_LABEL = [("Boardroom", r"BOARD"), ("Departmental room", r"DEPARTMENTAL"), ("C
             ("Hub room", r"HUB ROOM"), ("Mother's room", r"MOTHER"), ("Prayer room", r"PRAYER"), ("Studio", r"STUDIO"),
             ("The Hatchery", r"HATCHERY"), ("Executive corner cabin", r"EXECUTIVE"), ("Training room", r"TRAINING"),
             ("Cafeteria", r"CAFE|PANTRY|HEATING|DISHWASH|PLATE DROP|WASTE"), ("Reception", r"RECEPTION"), ("Coffee corner", r"COFFEE"),
-            ("Server, UPS & battery", r"SERVER|UPS|BATTERY|ELECTRICAL|BMS"), ("Mail room", r"MAIL"), ("Store room", r"STORE")]
+            ("Server, UPS & battery", r"SERVER|UPS|BATTERY|ELECTRICAL|BMS"), ("Mail room", r"MAIL"), ("Medical room", r"MEDICAL"),
+            ("Nap room", r"\bNAP\b"), ("Store room", r"STORE|RAIN COAT|UMBRELLA"), ("Collab", r"COLLAB")]
+# the largest each kind of room is (m2): a face bigger than this around its label has leaked through a gap in the walls
+TYPE_CAP = {"Phone booth": 4, "Quick sprint": 30, "Collaboration huddle": 45, "Departmental room": 60, "Boardroom": 90, "Visitor hub": 40,
+            "Executive corner cabin": 40, "Zen room": 20, "Mother's room": 20, "Prayer room": 25, "Hub room": 20, "Studio": 45, "The Hatchery": 45,
+            "Training room": 90, "Medical room": 25, "Nap room": 25, "Mail room": 25, "Store room": 40, "Server, UPS & battery": 40,
+            "Coffee corner": 60, "Reception": 120, "Cafeteria": 420, "Collab": 150}
+# the smallest each kind of room is (m2): a face smaller than this round its label is a table or a desk inside the room
+TYPE_MIN = {"Phone booth": 0.8, "Quick sprint": 2.4, "Collaboration huddle": 12, "Departmental room": 22, "Boardroom": 40, "Visitor hub": 4,
+            "Executive corner cabin": 10, "Zen room": 4, "Mother's room": 5, "Prayer room": 5, "Hub room": 4, "Studio": 15, "The Hatchery": 10,
+            "Training room": 30, "Medical room": 3, "Nap room": 3, "Mail room": 2.5, "Store room": 3, "Server, UPS & battery": 3,
+            "Coffee corner": 4, "Reception": 8, "Cafeteria": 50, "Collab": 10}
+# the legend's colours for what it doesn't list (slide 53 predates these rooms)
+EXTRA_COLOURS = [("Boardroom", "D2CCE2"), ("Medical room", "D6E4E6"), ("Nap room", "E3DEEE"), ("Mail room", "E2DED6"),
+                 ("Store room", "E2DED6"), ("Not in contract", "D4D4D4"), ("Room", "E4E2DD")]
 NOISE = r"[\d\s.-]+|DT|SMR\d+|MHS|ACD|FHS|PUNCH BAG|SWING CHAIR|DIGITAL SCREEN|COMMUNITY TABLE|1500MM WIDE CORRIDOR|ACD CAN BE PROVIDED HERE|SEATING AND SWING"
 
 
@@ -126,7 +141,29 @@ def d_of(poly):
     return "".join(out)
 
 
-def main(tk, dxf_path, deck):
+def check_spaces(lines, spaces, crop):
+    """the spaces over the partition lines: the whole floor and two close-ups (tools/_work/plan/spaces*.png)"""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    for name, box, k in [("spaces", None, 7000), ("spaces_west", (14000, 14500, 60000, 45000), 2500), ("spaces_mid", (95000, 14500, 140000, 48000), 2500)]:
+        x0, y0, x1, y1 = box or (crop[0], crop[1], crop[0] + crop[2], crop[1] + crop[3])
+        fig = plt.figure(figsize=((x1 - x0) / k, (y1 - y0) / k), dpi=110)
+        ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(x0, x1); ax.set_ylim(y1, y0); ax.set_aspect("equal"); ax.axis("off")
+        for l in lines:
+            bb = l.bounds
+            if bb[2] < x0 or bb[0] > x1 or bb[3] < y0 or bb[1] > y1: continue
+            ax.plot(*l.xy, color="#999", lw=.35)
+        for sp in spaces:
+            for part in re.findall(r"M([^Z]+)Z", sp["d"]):
+                pts = [tuple(map(float, q.split())) for q in part.split("L")]
+                ax.fill(*zip(*pts), fc=sp["colour"], alpha=.75, ec="#5222d0", lw=.6)
+            if box: ax.text(sp["x"], sp["y"], sp["name"][:22], fontsize=4, ha="center", color="#222")
+        fig.savefig(os.path.join(WORK, name + ".png")); plt.close(fig)
+    print("check pictures: tools/_work/plan/spaces*.png")
+
+
+def main(tk, dxf_path):
     t0 = time.time()
     os.makedirs(WORK, exist_ok=True)
     full = os.path.join(tk, "full.svg")
@@ -157,15 +194,15 @@ def main(tk, dxf_path, deck):
         im.save(dst, "WEBP", quality=84, method=6)
         print(f"  plan-dxf-{ppm}.webp {im.size[0]}x{im.size[1]} {os.path.getsize(dst) / 1e6:.2f} MB")
 
-    # ---- the DXF: room labels and the egress paths ----
-    doc = ezdxf.readfile(dxf_path); msp = doc.modelspace()
+    # ---- room labels (the toolkit's labels.json: each text's drawn box) and the egress paths (the DXF) ----
     labels = []
-    for e in msp.query("MTEXT TEXT"):
-        if e.dxf.layer != "OB-I-ANNO-TEXT":
+    for L in json.load(open(os.path.join(tk, "labels.json"), encoding="utf-8"))["labels"]:
+        if L["layer"] != "OB-I-ANNO-TEXT" or not L["text"] or re.fullmatch(NOISE, L["text"], re.I):
             continue
-        t = re.sub(r"\s+", " ", e.plain_text() if e.dxftype() == "MTEXT" else e.dxf.text).strip()
-        if t and not re.fullmatch(NOISE, t, re.I):
-            labels.append((t, *world_to_svg(e.dxf.insert.x, e.dxf.insert.y)))
+        b = L.get("box")
+        at = ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2) if b else (L["x"], L["y"])
+        labels.append((L["text"], at[0], at[1], (L["x"], L["y"])))
+    doc = ezdxf.readfile(dxf_path); msp = doc.modelspace()
     egress = []
     ep_blocks = {b.name for b in doc.blocks if any(x.dxf.layer.lower().startswith("ak_ep") for x in b)}
     def walk(ents, d=0):
@@ -181,112 +218,76 @@ def main(tk, dxf_path, deck):
     walk(msp)
     print(f"egress paths: {len(egress)}", collections.Counter(e["band"] for e in egress))
 
-    # ---- spaces from the slide's legend colours ----
-    PPM = 24
-    ref = np.array(Image.open(os.path.join(WORK, "plan-24.png")))
-    ref_ink = (ref[..., 3] > 100).astype(np.float32)
-    svg_to_ref = lambda x, y: ((x - crop[0]) / 1000 * PPM, (y - crop[1]) / 1000 * PPM)
-    def frame_to_ref(fx, fy):
-        return svg_to_ref(*world_to_svg(*frame_to_world(fx, fy)))
-    z = zipfile.ZipFile(deck)
-    inv = json.load(open(os.path.join(ROOT, "tools", "_media", "inventory.json")))
-    boxes = {r["media"]: [r["box"][0] / 100 * FW, r["box"][1] / 100 * FH, r["box"][2] / 100 * FW, r["box"][3] / 100 * FH] for r in inv["53"] if r["media"] in TILES}
-    patches = []
-    floor = np.zeros(ref_ink.shape, np.uint8)        # the workhall floor (the slide's grey), as a picture beneath the spaces
-    for ti, m in enumerate(TILES):
-        rgb = np.array(Image.open(io.BytesIO(z.read("ppt/media/" + m))).convert("RGB"))
-        th, tw = rgb.shape[:2]; bx, by, bw, bh = boxes[m]
-        (ax, ay), (bx2, by2) = frame_to_ref(bx, by), frame_to_ref(bx + bw, by + bh)
-        A = np.array([[(bx2 - ax) / tw, 0, ax], [0, (by2 - ay) / th, ay]], np.float64)
-        # a small shift onto the DXF lines: phase correlation of the two ink images over the tile's footprint
-        ink = (rgb.max(2) < 110).astype(np.float32)
-        warped = cv2.warpAffine(ink, A.astype(np.float32), (ref_ink.shape[1], ref_ink.shape[0]))
-        foot = cv2.warpAffine(np.ones_like(ink), A.astype(np.float32), (ref_ink.shape[1], ref_ink.shape[0])) > .5
-        fy_, fx_ = np.where(foot); x0, x1, y0, y1 = fx_.min(), fx_.max(), fy_.min(), fy_.max()
-        ra, rb = cv2.GaussianBlur(ref_ink[y0:y1, x0:x1], (0, 0), 2), cv2.GaussianBlur(warped[y0:y1, x0:x1], (0, 0), 2)
-        (dx, dy), _ = cv2.phaseCorrelate(rb, ra, cv2.createHanningWindow((ra.shape[1], ra.shape[0]), cv2.CV_32F))
-        if abs(dx) < 40 and abs(dy) < 40:
-            A[0, 2] += dx; A[1, 2] += dy
-        print(f"  {m}: shift ({dx:+.1f}, {dy:+.1f}) px")
-        fm = (np.abs(rgb.astype(int) - (0xE2, 0xE2, 0xE1)).max(2) <= 2).astype(np.uint8)
-        fm = cv2.morphologyEx(fm, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8))
-        floor = np.maximum(floor, cv2.warpAffine(fm, A.astype(np.float32), (floor.shape[1], floor.shape[0]), flags=cv2.INTER_NEAREST))
-        # flat fill colours (not white, black or the workhall floor), near shades merged
-        cols, counts = np.unique(rgb.reshape(-1, 3), axis=0, return_counts=True)
-        groups = []
-        for c, n in sorted(zip(map(tuple, cols.astype(int)), counts), key=lambda t: -t[1]):
-            if n < 300 or min(c) > 246 or max(c) < 120 or max(abs(c[i] - (0xE2, 0xE2, 0xE1)[i]) for i in range(3)) <= 3 \
-                    or (max(c) - min(c) < 3 and min(c) > 238):
-                continue
-            g = next((g for g in groups if max(abs(c[i] - g["c"][i]) for i in range(3)) <= 2), None)
-            if g: g["cols"].append(c)
-            else: groups.append(dict(c=c, cols=[c]))
-        for g in groups:
-            mask = np.zeros((th, tw), np.uint8)
-            for c in g["cols"]:
-                mask |= np.all(np.abs(rgb.astype(int) - c) <= 1, axis=2).astype(np.uint8)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8))
-            cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            booth = legend_type("%02X%02X%02X" % g["c"]) == "Phone booth" or (g["c"][2] > g["c"][0] + 20 and g["c"][2] > g["c"][1] + 20)
-            for c in cnts:
-                if cv2.contourArea(c) < (30 if booth else 120):
-                    continue
-                c = cv2.approxPolyDP(c, 1.0, True).reshape(-1, 2).astype(np.float64)
-                if len(c) < 3:
-                    continue
-                P = (A[:, :2] @ c.T).T + A[:, 2]
-                poly = Polygon([(crop[0] + x / PPM * 1000, crop[1] + y / PPM * 1000) for x, y in P]).buffer(0)
-                if isinstance(poly, MultiPolygon):
-                    poly = max(poly.geoms, key=lambda h: h.area)
-                if booth and poly.area >= 0.2e6:             # phone booths: small lilac pods, grown a little to hover
-                    patches.append(dict(tile=ti, colour="%02X%02X%02X" % g["c"], poly=poly.buffer(150, join_style=2), booth=True))
-                elif poly.area >= 0.9e6:
-                    patches.append(dict(tile=ti, colour="%02X%02X%02X" % g["c"], poly=poly))
-    fl = np.zeros((*floor.shape, 4), np.uint8); fl[floor > 0] = (0xE2, 0xE2, 0xE1, 255)
-    Image.fromarray(fl).save(os.path.join(ROOT, "assets", "img", "plan-dxf-floor.webp"), "WEBP", quality=80, method=6)
-    print(f"  plan-dxf-floor.webp {os.path.getsize(os.path.join(ROOT, 'assets', 'img', 'plan-dxf-floor.webp')) / 1e3:.0f} KB")
-    # names: the label inside; a pod's label often sits just outside it (nearest within 1.2 m)
-    for p in patches:
-        p["labels"] = [l for l in labels if p["poly"].contains(Point(l[1], l[2]))]
-    used = {id(l) for p in patches for l in p["labels"]}
-    for l in labels:
-        if id(l) in used:
-            continue
-        q = Point(l[1], l[2])
-        near = sorted((p["poly"].distance(q), i) for i, p in enumerate(patches) if not p["labels"] and p["poly"].distance(q) <= 1200)
-        if near:
-            patches[near[0][1]]["labels"].append(l); used.add(id(l))
-    spaces = []
-    for p in patches:
-        names = list(dict.fromkeys(re.sub(r"\s*-\s*", " - ", title(t)) for t, x, y in p["labels"]))
-        typ = next((n for n, rx in BY_LABEL for t, x, y in p["labels"] if re.search(rx, t, re.I)), None) or legend_type(p["colour"])               or ("Phone booth" if p.get("booth") else None)
-        if not typ or (not names and p["poly"].area < 4e6 and not p.get("booth")):
-            continue
-        spaces.append(dict(tile=p["tile"], type=typ, name=" / ".join(names) or typ, colour=p["colour"], poly=p["poly"],
-                           at=(p["labels"][0][1], p["labels"][0][2]) if p["labels"] else None))
-    # one space cut by a tile edge: same type, touching across the seam
-    merged = True
-    while merged:
-        merged = False
-        for i in range(len(spaces)):
-            for j in range(i + 1, len(spaces)):
-                a, b = spaces[i], spaces[j]
-                if a["tile"] != b["tile"] and a["type"] == b["type"] and a["poly"].buffer(400).intersects(b["poly"]) and \
-                        (a["name"] == a["type"] or b["name"] == b["type"] or a["name"] == b["name"]):
-                    g = unary_union([a["poly"].buffer(450), b["poly"].buffer(450)]).buffer(-450)
-                    a["poly"] = max(g.geoms, key=lambda h: h.area) if isinstance(g, MultiPolygon) else g
-                    if a["name"] == a["type"]: a["name"], a["at"] = b["name"], b["at"]
-                    del spaces[j]; merged = True; break
-            if merged: break
+    # ---- spaces: each room label in the room its walls enclose ----
+    import faces as FC
+    svg = open(full, encoding="utf-8").read()
+    lines, ndoors = FC.partition_lines(svg)
+    LV = FC.levels(lines)
+    from shapely.strtree import STRtree
+    ltree = STRtree(lines)
+    print(f"partition lines {len(lines)} ({ndoors} doorways shut); faces " + ", ".join(f"{g} mm: {len(fs)}" for g, fs, _ in LV))
+    # the previous drawing's spaces (Option 02A, snapped to its walls), kept once in tools/_work/plan/prev-spaces.json so re-runs
+    # compare against the same reference: their areas cap a leaky face, their outlines stand in for open-plan labels with none
+    prev, keep = {}, os.path.join(WORK, "prev-spaces.json")
+    try:
+        if not os.path.exists(keep):
+            pj = open(os.path.join(ROOT, "data", "plan-dxf.js"), encoding="utf-8").read()
+            json.dump(json.loads(pj[pj.index("{"):pj.rindex("}") + 1])["spaces"], open(keep, "w", encoding="utf-8"))
+        for sp in json.load(open(keep, encoding="utf-8")):
+            prev.setdefault(sp["name"].upper(), []).append(sp)
+    except Exception:
+        pass
+    rooms, unplaced, carried = {}, [], []
+    for t, x, y, ins in labels:
+        typ = next((n for n, rx in BY_LABEL if re.search(rx, t, re.I)), None)
+        # the largest a room of its kind can be (m2), and no more than 1.6x what the same room measured in the previous build: a
+        # face bigger than that has leaked through a gap, so the next (wider-bridging) level is tried, else the previous outline
+        hi = TYPE_CAP.get(typ, 200) * 1e6
+        same = prev.get(re.sub(r"\s*-\s*", " - ", title(t)).upper(), [])
+        old = min(same, key=lambda q: (q["x"] - x) ** 2 + (q["y"] - y) ** 2) if same else None   # the same-named room nearest this label
+        if old is not None and ((old["x"] - x) ** 2 + (old["y"] - y) ** 2) > 15000 ** 2: old = None
+        if old is not None and old.get("m2", 0) >= TYPE_MIN.get(typ, 0.8): hi = min(hi, max(old["m2"] * 1.6, old["m2"] + 4) * 1e6)
+        poly = gap = None
+        for pt in ((x, y), ins):
+            poly, gap = FC.room_at(pt, LV, lo=TYPE_MIN.get(typ, 0.8) * 1e6, hi=hi)
+            if poly is not None: break
+        if poly is None:
+            if old is not None:
+                rings = [[tuple(map(float, q.split())) for q in part.split("L")] for part in re.findall(r"M([^Z]+)Z", old["d"])]
+                poly = unary_union([Polygon(r).buffer(0) for r in rings if len(r) > 2]); gap = "prev"
+                # how well the carried outline sits on the new drawing's walls: its vertices' median distance to a partition line
+                ds = sorted(min((lines[j].distance(Point(c)) for j in ltree.query(Point(c).buffer(1500))), default=1500)
+                            for g_ in (poly.geoms if hasattr(poly, "geoms") else [poly]) for c in list(g_.exterior.coords)[::2])
+                if ds[len(ds) // 2] > 200:          # off the new walls: that part of the plan changed; no outline beats a wrong one
+                    unplaced.append(f"{t} (previous outline {ds[len(ds) // 2]:.0f} mm off the walls)"); continue
+                carried.append(f"{t} ({ds[len(ds) // 2]:.0f} mm)")
+        if poly is None:
+            unplaced.append(t); continue
+        key = (round(poly.area), round(poly.bounds[0]), round(poly.bounds[1]))
+        r = rooms.setdefault(key, dict(poly=poly, labels=[], gap=gap))
+        r["labels"].append((t, x, y))
+    for rj in json.load(open(os.path.join(tk, "rooms.json"), encoding="utf-8"))["spaces"]:
+        if rj["name"] == "Not in contract":
+            for part in re.findall(r"M([^M]+)", rj["d"]):
+                nums = list(map(float, re.findall(r"-?\d+(?:\.\d+)?", part)))
+                pts = [(nums[i], nums[i + 1]) for i in range(0, len(nums) - 1, 2)]
+                if len(pts) > 2:
+                    g = Polygon(pts).buffer(0)
+                    rooms[("nic", round(g.area))] = dict(poly=g, labels=[], gap="nic", typ="Not in contract")
     out_spaces = []
-    for i, s in enumerate(sorted(spaces, key=lambda s: (s["poly"].centroid.x, s["poly"].centroid.y))):
-        at = s["at"] or s["poly"].representative_point().coords[0]
-        if not s["poly"].buffer(300).contains(Point(at)):
-            at = s["poly"].representative_point().coords[0]
-        out_spaces.append(dict(id=f"r{i + 1}", type=s["type"], name=s["name"], colour="#" + s["colour"], m2=round(s["poly"].area / 1e6, 1),
-                               x=round(at[0]), y=round(at[1]), d=d_of(s["poly"].simplify(40))))
+    COL = dict(LEGEND + EXTRA_COLOURS)
+    for i, r in enumerate(sorted(rooms.values(), key=lambda r: (r["poly"].centroid.x, r["poly"].centroid.y))):
+        names = list(dict.fromkeys(re.sub(r"\s*-\s*", " - ", title(t)) for t, x, y in r["labels"]))
+        typ = r.get("typ") or next((n for n, rx in BY_LABEL for t, x, y in r["labels"] if re.search(rx, t, re.I)), None) or "Room"
+        at = (r["labels"][0][1], r["labels"][0][2]) if r["labels"] else r["poly"].representative_point().coords[0]
+        if not r["poly"].buffer(300).contains(Point(at)): at = r["poly"].representative_point().coords[0]
+        g = r["poly"].simplify(10)
+        out_spaces.append(dict(id=f"r{i + 1}", type=typ, name=" / ".join(names) or typ, colour="#" + COL.get(typ, "E4E2DD"),
+                               m2=round(g.area / 1e6, 1), x=round(at[0]), y=round(at[1]), d=d_of(g)))
     print(f"spaces: {len(out_spaces)}", collections.Counter(s["type"] for s in out_spaces).most_common())
-    print("labels without a space:", sorted({t for t, x, y in labels if not any(t == l[0] for p in patches for l in p["labels"])}))
+    print(f"by gap: {collections.Counter(str(r['gap']) for r in rooms.values())}; carried from the previous build: {carried}")
+    print("labels not placed:", unplaced)
+    check_spaces(lines, out_spaces, crop)
 
     # ---- neighbourhoods ----
     tj = json.load(open(os.path.join(tk, "teams.json")))
@@ -318,13 +319,14 @@ def main(tk, dxf_path, deck):
                     arrival=["M" + "L".join(f"{x} {y}" for x, y in (f2s(*p) for p in n["pts"])) + "Z" for n in D["nb"] if n["c"].upper() == "#0000FF"])
 
     data = dict(source=os.path.basename(dxf_path), built=time.strftime("%Y-%m-%d %H:%M"), viewBox=crop,
-                levels=[dict(ppm=p, src=f"assets/img/plan-dxf-{p}.webp") for p in LEVELS], floor="assets/img/plan-dxf-floor.webp",
+                levels=[dict(ppm=p, src=f"assets/img/plan-dxf-{p}.webp") for p in LEVELS], floor=None,
                 spaces=out_spaces, zones=zones, egress=egress, overlays=overlays)
     with open(os.path.join(ROOT, "data", "plan-dxf.js"), "w", encoding="utf-8") as f:
-        f.write("/* generated by tools/acko/plan_dxf.py from the DXF plan toolkit's output for ACKO.dxf: don't hand-edit */\n")
+        f.write(f"/* generated by tools/acko/plan_dxf.py from the DXF plan toolkit's output for {os.path.basename(dxf_path)}: don't hand-edit */\n")
         f.write("window.PLAN_DXF = " + json.dumps(data, separators=(",", ":"), ensure_ascii=False) + ";\n")
     print(f"data/plan-dxf.js {os.path.getsize(os.path.join(ROOT, 'data', 'plan-dxf.js')) / 1e6:.2f} MB  ({time.time() - t0:.0f} s)")
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    main(*sys.argv[1:3])

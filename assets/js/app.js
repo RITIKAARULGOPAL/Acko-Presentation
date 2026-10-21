@@ -333,7 +333,7 @@
     host.classList.toggle("no-hover", !HOVER);
     DP.root = host;
     DP.ph = PlanHover.mount(host, { data, labelPlacement: "above" });     // the label above a space, never on it
-    DP.ph.addLayer("dx-fill", `<image href="${asset(P.floor)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>` +
+    DP.ph.addLayer("dx-fill", (P.floor ? `<image href="${asset(P.floor)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>` : "") +
       P.spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join(""), { below: true });
     const O = P.overlays, tri = (x, y) => `M${x - 900} ${y - 600}L${x + 900} ${y - 600}L${x} ${y + 900}Z`;
     DP.ph.addLayer("dx-marks",

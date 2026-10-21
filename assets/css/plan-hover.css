@@ -1,4 +1,4 @@
-﻿/* plan-hover.css - styles for assets/js/plan-hover.js.
+/* plan-hover.css - styles for assets/js/plan-hover.js.
  * Every colour is a CSS variable: override them on .ph-root (or any ancestor) to match the deck theme.
  * A night-theme set is included below: it applies under html[data-theme="dark"] (a deck's
  * Day/Night toggle) or when the mount element has class "ph-dark". */
@@ -71,6 +71,7 @@ html[data-theme="dark"] .ph-root, .ph-root.ph-dark {
 .ph-plan .f.glass { fill: var(--ph-fill-glass); }
 .ph-plan .m { fill: var(--ph-paper); stroke: none; }          /* wipeouts mask what is behind them */
 .ph-plan .t { font-family: Arial, Helvetica, sans-serif; fill: var(--ph-text); }
+.ph-plan .tx { fill: var(--ph-text); stroke: none; vector-effect: none; }   /* text drawn as its CAD glyph outlines */
 
 /* hover layers: invisible until hovered */
 .ph-layer { pointer-events: none; }

@@ -107,7 +107,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 9 | What if | 1 | The question, in the deck's two fonts |
 | 10 | The Möbius | 1 | A live 3D Möbius strip, ACKO's own mark, with the copy inside the loop |
 | 11–12 | The Loop | 2 | People and trees along a line; then the ribbon writes itself (the deck's GIF) and the seven stops come up with their words as it reaches them |
-| 13 | Campus strategy | 1 | The deck's animated axo, keyed out of its green screen |
+| 13 | Campus strategy | 1 | The live model of the 21.10.26 test fit (the axo's, shared): the floor builds up, the ACKO Loop draws through its seven stops, the client's journey traces from the entrance. A click replays; drag turns; without WebGL, the deck's GIF |
 | new | The site | 1 | A vector map of Koramangala that closes in on Regalium and turns 11.5° to line up with the plans |
 | new | The floor | 2 | The bare plate: the sun across an equinox day and the 6 m daylight band; then fire first (exit rings, the eight measured paths, the compartment line) |
 | 14 | What's our challenge | 3 | On the axo of the bare floor: a uniform desk grid, the long walk to lunch, then the route draws (245 m) |
@@ -144,18 +144,25 @@ The PPT's own order. Ritika's choices (16 Oct):
   - `tools/acko/extract_assets.py` cuts every image out by name (`PICK`), with the deck's crop and rotation, and keys the green-screen animation.
   - `tools/acko/deck_inventory.py`, `deck_text.py`, `deck_layout.py` and `deck_anim.py` read the deck's layout, text, crops and click order.
   - `tools/acko/make_value_slides.py` writes the typology and value-addition pages.
-- **The layout and blow-ups: the DXF** (`Downloads/ACKO.dxf`, Option 02A), in three steps:
-  1. **The DXF plan toolkit** (`Downloads/dxf-plan-toolkit-v1.0/dxf-plan-toolkit`, its `projects/acko.json`): `python tools/build.py --config projects/acko.json` (about 25 min). It converts the drawing (0.71 mm accuracy) and reads the six neighbourhoods (`ak_zone_*`, seats from the drawing's workstation counts) into `viewer/out/op2a/`. Check it in its viewer.
-  2. **`tools/acko/plan_dxf.py "<toolkit>/viewer/out/op2a" "<ACKO.dxf>" "<deck.pptx>"`** (needs `NODE_PATH` for puppeteer):
-     - **Pictures:** the plan at 12 / 24 / 48 px per m (`assets/img/plan-dxf-*.webp`, rendered by `plan_raster.js`; the full vector plan is too heavy to fly), plus the workhall floor tint.
-     - **Spaces:** from the deck's layout slide (53): every patch of a legend colour on its plan tiles, registered onto the DXF and named by the DXF label inside it.
-     - **The rest:** the neighbourhoods, the fire egress paths (`ak_Ep_*`), and the deck's own marks (blow-up boxes, fire compartment line, entrances, arrival zones; from `data/deck-plan.js`).
-     - **Each neighbourhood:** its box (for the zoom) and its occupancy rows (`occ`): the workstations, then a count of each kind of space whose label point lies inside it, in the occupancy slide's (61) groups and order.
+- **The layout and blow-ups: the DXF** (`Downloads/ACKO_Testfit_21.10.26 (3).dxf`, the 21.10.26 test fit; the toolkit plan `tf2110`), in three steps:
+  1. **The DXF plan toolkit** (`Downloads/dxf-plan-toolkit-v1.0/dxf-plan-toolkit`, its `projects/acko.json`): `python tools/build.py --config projects/acko.json --only tf2110` (about 30 min).
+     - **Conversion:** the drawing at 0.49 mm median accuracy (0.81 mm worst), with every text as the outlines of its own glyphs (its style's font, width factor and MTEXT formatting), so labels keep their CAD size.
+     - **Neighbourhoods:** `ak_zone_*`, with seats from the drawing's workstation counts: 140 / 137 / 65 / 82 / 104 / 123 = 651.
+     - **Not in contract:** `ak_zone_Nic`, the hotel band.
+     - **Output:** `viewer/out/tf2110/`. Check it in its viewer.
+  2. **`tools/acko/plan_dxf.py "<toolkit>/viewer/out/tf2110" "<the .dxf>"`** (needs `NODE_PATH` for puppeteer):
+     - **Pictures:** the plan at 12 / 24 / 48 px per m (`assets/img/plan-dxf-*.webp`, rendered by `plan_raster.js`).
+     - **Spaces from the drawing:** each room label (the toolkit's `labels.json`) takes the room its walls enclose (`tools/acko/faces.py`):
+       - **Lines used:** walls, glass, doors shut at their closed position, the shell, planters and the façade's rails, with small breaks bridged at 45 / 120 / 160 mm.
+       - **Size limits:** per room type there's a minimum (so a table or desk under the label is never taken for the room) and a maximum (so a room that leaks through a gap is caught).
+       - **Furniture against a wall:** when a label sits on furniture that joins the walls, the room touching that furniture is taken.
+       - **Result:** 133 spaces. 118 come from the new walls; 13 open-plan or open-sided ones keep the previous build's outline (each checked to sit within 150 mm of the new walls); 4 labels whose old outline is off the new walls get none.
+     - **Colours:** the deck's legend (slide 53), plus colours for the rooms it predates (medical, nap, mail and store, not in contract).
+     - **The rest:** the neighbourhoods (with boxes and occupancy rows), the fire egress (`ak_Ep_*`), and the deck's marks (blow-up boxes, fire line, entrances, arrival zones). The new drawing shares the old one's frame, so the marks map unchanged.
      - **Output:** all into `data/plan-dxf.js`.
   3. **The component** is the toolkit's `component/assets/js/plan-hover.js` and `.css`, copied into `assets/`. The engine mounts it once in the world (`plan` in the kit).
-- **Room outlines on the walls:** `python tools/acko/snap_spaces.py "<toolkit>/viewer/out/op2a"`, run after `plan_dxf.py`, snaps each legend-traced space onto the drawing's own walls. Mitigata's hover used the CAD team's room outlines; ACKO's DXF has none, so this takes them from `full.svg`'s partition lines (walls, glass, doors shut at their closed position, planters, the façade's rails), bridging small breaks. Result: 115 of 136 snapped, 11 clipped to the walls, 10 kept (open areas); the median distance from outline to wall is 0 mm, from 119 mm. The hover tint sits under the drawing, as in Mitigata.
-- **Sharp when zoomed in:** `python tools/acko/plan_vec.py "<toolkit>/viewer/out/op2a"` writes `data/plan-vec.js` (13 MB): the toolkit's `full.svg` as 81 vector tiles of 12 m, in relative coordinates and the drawing's paint order. Past 16 device px per metre (a neighbourhood, a blow-up, a wheel-zoom), the deck draws the tiles in view exactly as the toolkit's viewer does (non-scaling lines, its colours) in place of the picture. The picture still carries the whole floor and the flights, and drags and wheel-zooms when more than 20 tiles are in view.
-- **The axo's model:** `python tools/acko/axo_dxf.py "<toolkit>/viewer/out/op2a"` writes `data/axo-dxf.js` (and a check picture, `tools/_work/axo/check.png`) from the toolkit's classed `instanced.svg` and `rooms.json`, and the deck's `data/plan-dxf.js`. It never reads the DXF itself. The slab is the floor ACKO occupies, and the solid walls exclude the legend rooms' partitions, which the axo shows as purple glass. Furniture comes from each closed outline's size: chairs, desks and tables, storage. A pod's desk tops are its `base` lines, closed across the breaks its chairs leave. Plants are the `green` blocks.
+- **Sharp when zoomed in:** `python tools/acko/plan_vec.py "<toolkit>/viewer/out/tf2110"` writes `data/plan-vec.js` (13.5 MB): the toolkit's `full.svg` as 81 vector tiles of 12 m, in relative coordinates and the drawing's paint order. Past 16 device px per metre (a neighbourhood, a blow-up, a wheel-zoom), the deck draws the tiles in view exactly as the toolkit's viewer does (non-scaling lines, its colours) in place of the picture. The picture still carries the whole floor and the flights, and drags and wheel-zooms when more than 20 tiles are in view.
+- **The axo's model:** `python tools/acko/axo_dxf.py "<toolkit>/viewer/out/tf2110"` writes `data/axo-dxf.js` (and a check picture, `tools/_work/axo/check.png`) from the toolkit's classed `instanced.svg` and `rooms.json`, and the deck's `data/plan-dxf.js`. It never reads the DXF itself. The slab is the floor ACKO occupies, and the solid walls exclude the legend rooms' partitions, which the axo shows as purple glass. Furniture comes from each closed outline's size: chairs, desks and tables, storage. A pod's desk tops are its `base` lines, closed across the breaks its chairs leave. Plants are the `green` blocks.
 - **The old deck plan:** `tools/acko/deck_plan.py` made `plan-full.webp` and `data/deck-plan.js` from the deck's plan tiles. They're no longer loaded; `plan_dxf.py` still reads the marks from `deck-plan.js`.
 - **The site and the bare floor:** from the earlier Acko analysis (Acko New 01: test fit 03, the same shell). `tools/acko/site_floor.py` writes `data/site-floor.js`.
   - map: Overture/OSM

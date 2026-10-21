@@ -241,11 +241,11 @@ def main(out_dir):
     js = open(os.path.join(ROOT, "data", "plan-dxf.js"), encoding="utf-8").read()
     P = json.loads(js[js.index("{"):js.rindex("}") + 1])
     occ = [q for z in P["zones"] for r in rings_of_d(z["zone"]) for q in valid(r)]
-    occ += [q for sp in rooms for r in rings_of_d(sp["d"]) for q in valid(r)]
-    occ += [q for sp in P["spaces"] for r in rings_of_d(sp["d"]) for q in valid(r)]
+    occ += [q for sp in rooms if sp["name"] != "Not in contract" for r in rings_of_d(sp["d"]) for q in valid(r)]
+    occ += [q for sp in P["spaces"] if sp["type"] != "Not in contract" for r in rings_of_d(sp["d"]) for q in valid(r)]
     u = unary_union([q.buffer(1500) for q in occ]).buffer(-1500)
     used = [q for z in P["zones"] for r in rings_of_d(z["zone"]) for q in valid(r)]
-    used += [q for sp in P["spaces"] for r in rings_of_d(sp["d"]) for q in valid(r)]
+    used += [q for sp in P["spaces"] if sp["type"] != "Not in contract" for r in rings_of_d(sp["d"]) for q in valid(r)]
     used += [q for sp in rooms if sp["name"] in ("Common area", "Terrace") for r in rings_of_d(sp["d"]) for q in valid(r)]
     used = unary_union([q.buffer(300) for q in used])           # not the cores (toilets, shafts, lifts): their fixtures aren't furniture
     slab = max((u.geoms if isinstance(u, MultiPolygon) else [u]), key=lambda q: q.area)
@@ -290,7 +290,7 @@ def main(out_dir):
 
     # floors: the deck's spaces, as the legend colours them
     floors = []
-    for s in P["spaces"]:
+    for s in [s for s in P["spaces"] if s["type"] != "Not in contract"]:      # the hotel band: grey masses already
         for r in rings_of_d(s["d"]):
             for q in valid(r): floors.append([s["type"], ring_out(q.simplify(20))])
 
