@@ -347,9 +347,12 @@
     // the picture sharp enough for the zoom (screen px per metre, times the device's pixel ratio)
     // the DXF's own linework (data/plan-vec.js) as vector tiles, just above the picture and under the hovers and marks: drawn
     // as the toolkit's viewer draws it (.ph-plan: non-scaling strokes, its colours) once the zoom is past the sharpest picture
+    // a hovered room tints its floor under the drawing, as in Mitigata (its "hoverfloor"): the component's rooms layer goes
+    // beneath the picture and the vector, which take no pointer events, so the hover still reaches it; teams stay on top
+    { const st = host.querySelector(".ph-stage"); st.insertBefore(st.querySelector(".ph-rooms"), st.querySelector(".ph-plan")); }
     if (window.PLAN_VEC) {
       const svg = DP.ph.addLayer("ph-plan dx-vec", ""), st = host.querySelector(".ph-stage");
-      st.insertBefore(svg, st.querySelector(".ph-rooms"));
+      st.insertBefore(svg, st.querySelector(".ph-teams"));
       DP.vec = { svg, g: [] };
       // a wheel-zoom in progress (cleared once it rests): with many tiles in view the picture carries it, as it does a drag
       let wt = 0; host.addEventListener("wheel", () => { host.classList.add("vec-wheel"); clearTimeout(wt); wt = setTimeout(() => host.classList.remove("vec-wheel"), 180); }, { passive: true });

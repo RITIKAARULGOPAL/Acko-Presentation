@@ -257,4 +257,12 @@ West, Middle and East fly an orthographic camera along it.
   - **Layer:** `deckPlan` adds one `ph-plan dx-vec` layer (the component's own viewer styles: non-scaling strokes) just above the picture and under the hovers and marks.
   - **Switching:** `level()` turns it on past 16 device px/m (`vec-on`). Tiles in view (plus 15%) are built on first sight, a few per 12 ms frame (`vecBuild`), and the picture steps aside only once they're all there.
   - **Moving:** flights (`vec-fly`), and drags and wheel-zooms when more than 20 tiles are in view (`vec-heavy` with `ph-dragging` / `vec-wheel`), show the picture, so they stay at 60 fps. It sharpens as they rest.
+- **Hover on the real room boundaries, tinted under the drawing** (Ritika: "follow how it is in mitigata"). Mitigata's rooms were the CAD team's polylines, drawn in a "hoverfloor" group under the furniture.
+  - **Outlines:** ACKO's legend traces are notched wherever the slide's furniture sat, and about 0.3 m off, so `tools/acko/snap_spaces.py` snaps them to the faces of the drawing's partition linework:
+    - **Lines used:** walls, glass, doors and the shell; planters (`shade`); the façade rails, which the toolkit classes as furniture, so `furn` lines over 2.5 m count.
+    - **Doorways:** each one is shut along the door's closed position (from the swing arc's hinge to its ends).
+    - **Breaks:** bridged by thickening the lines, taking the enclosed holes and growing them back. Each space tries 45, 120 and 160 mm (the small gap keeps the booths).
+    - **Choosing faces:** a face counts if it's mostly inside the trace, or holds 30%+ of it and is at most 4× the trace (2.5× past 60 m², so a trace never takes the open floor).
+    - **Accepting:** at 75% coverage (50% for booth-sized rooms, whose traces spill out of their doors). Otherwise the trace is notch-closed and clipped to the walls.
+  - **Layering:** the component's `.ph-rooms` layer moves under the picture and the vector (they take no pointer events), so the tint sits under the linework. The teams stay on top.
 
