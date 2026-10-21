@@ -393,6 +393,9 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced }) => {
     host.appendChild(r.domElement);
     AX.r = r; AX.cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900); AX.asp = (host.clientWidth || 16) / (host.clientHeight || 9);
     build(); wire(host);
+    // drawn on demand: a new window size (F for fullscreen) or the tab coming back needs a fresh frame
+    const again = () => { if (document.body.dataset.scene === "s-axo") need(); };
+    addEventListener("resize", again); document.addEventListener("visibilitychange", again);
     sc._axo = () => ({ state: AX.state, beat: AX.beat, tween: !!AX.tween, beats: AX.beats, frame: (k) => frame(k),
       project: (x, y, h) => { const v = new T.Vector3(X(x), h || 0, Z(y)).project(AX.cam); return [(v.x + 1) / 2, (1 - v.y) / 2]; } });
     return true;
