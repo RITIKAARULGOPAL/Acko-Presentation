@@ -17,8 +17,9 @@
     <div class="ax3 ui"></div>
     <div class="ax3-veil"></div>
     <div class="ax3-labs"><svg viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg></div>
+    <div class="ax3-tip"></div>
     <div class="hdr"><b>Schematic Axonometric</b><span>Space Planning · Option 02A</span></div>
-    <div class="ax-tools ui" style="right:11.5%;top:3.2%"><button type="button" class="ax-tool ax-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
+    <div class="ax-tools ui" style="right:11.5%;top:3.2%"><button type="button" class="ax-tool ax-hv"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5l8.5 5.2-3.9 1 2.3 3.9-1.6.9-2.3-3.9-2.8 2.8z"/></svg>Hover</button><button type="button" class="ax-tool ax-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
     <div class="ax-img ax-old" data-only="1" style="left:-1.5%;top:10.1%;width:100%;height:90.4%;background-size:121.1% 100.0%;background-position:50.0% 0.0%;background-image:url(assets/img/axo-west.webp)"></div>
     <div class="ax-img ax-old" data-only="2" style="left:1.8%;top:9.4%;width:96.7%;height:85.6%;background-size:118.5% 100.0%;background-position:50.0% 0.0%;background-image:url(assets/img/axo-middle.webp)"></div>
     <div class="ax-img ax-old" data-only="3" style="left:7.5%;top:9.4%;width:91%;height:85.6%;background-size:125.9% 100.0%;background-position:50.0% 0.0%;background-image:url(assets/img/axo-east.webp)"></div>
@@ -51,7 +52,14 @@
   border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
   font: 600 calc(var(--pt) * 6.5) var(--body); white-space: nowrap; }
 #s-axo .ax-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-#s-axo .ax-tool:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
+#s-axo .ax-tool:hover, #s-axo .ax-tool.on { background: #5222d0; color: #fff; border-color: #5222d0; }
+#s-axo .ax-hv svg { fill: currentColor; stroke: none; }
+/* the name of the space under the cursor (Hover on), above it, in the plan's label style */
+#s-axo .ax3-tip { left: 0; top: 0; display: none; transform: translate(-50%, calc(-100% - 8px)); pointer-events: none; z-index: 3; text-align: center; white-space: nowrap;
+  padding: calc(var(--pt) * 2.2) calc(var(--pt) * 5); background: #fff; border: 1px solid rgba(82, 34, 208, .45); border-radius: 4px; box-shadow: 0 2px 8px rgba(0, 0, 0, .08); font-size: calc(var(--pt) * 6.6); }
+#s-axo .ax3-tip.on { display: block; }
+#s-axo .ax3-tip b { display: block; font-weight: 600; }
+#s-axo .ax3-tip span { color: #5222d0; font-family: var(--num); font-size: .9em; }
 #s-axo .ax-tool:focus { outline: none; }
 #s-axo .ax-hand { font-size: calc(var(--pt) * 24); color: #666; pointer-events: none; }
 #s-axo .ax-keys { position: absolute; display: flex; gap: calc(var(--pt) * 10); font-size: calc(var(--pt) * 8); font-weight: 700; }
@@ -59,7 +67,7 @@
 #s-axo .ax-keys span.on { color: var(--purple); }
 /* the deck's own axo pictures: only if the presenting machine has no WebGL */
 #s-axo:not(.ax-fallback) .ax-old { display: none; }
-#s-axo.ax-fallback .ax3, #s-axo.ax-fallback .ax3-labs, #s-axo.ax-fallback .ax-tools { display: none; }
+#s-axo.ax-fallback .ax3, #s-axo.ax-fallback .ax3-labs, #s-axo.ax-fallback .ax-tools, #s-axo.ax-fallback .ax3-tip { display: none; }
 #s-axo .ax-img { position: absolute; background-repeat: no-repeat; }
 #s-axo .ax-img.shown { animation: axIn 1.4s var(--ease) both; }
 #s-axo .ax-labs { left: 0; top: 0; width: 100%; height: 100%; }
@@ -76,8 +84,9 @@
    tools/acko/axo_dxf.py from the DXF plan toolkit's classed SVG), in the deck's axo look: a pale slab on a soft shadow, rooms
    in translucent purple glass, wood desks, grey chairs, green plants, black mullions round the façade, thin ink edges.
    West, Middle, East fly the camera along the floor; drag turns it, the wheel zooms on the cursor, right-drag (or Shift)
-   pans, Reset view (or a double-click) goes back to the beat. Drawn only while something moves. three.js r147. */
-ACKO.slide("s-axo", ({ $, $$, asset, reduced }) => {
+   pans, Reset view (or a double-click) goes back to the beat; with Hover on (the deck-wide pill: the layout, the blow-ups,
+   this), the space under the cursor lights up with its name. Drawn only while something moves. three.js r147. */
+ACKO.slide("s-axo", ({ $, $$, asset, reduced, plan, plain }) => {
   const AX = { r: null, raf: 0, state: null, tween: null, beat: 1, labs: [] };
   const BEATS = ["west", "middle", "east"];
   const VIEW = { theta: -0.6, phi: 0.98 };                    // the deck's axo angle: the floor runs bottom left to top right
@@ -233,6 +242,17 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced }) => {
     const gl = lines(GINK, 0x45367a, 0.7); gl.renderOrder = 4; scene.add(gl);
     scene.add(new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.78));
     const key = new T.DirectionalLight(0xffffff, 0.5); key.position.set(-40, 90, 60); scene.add(key);
+    // hover: the deck's spaces (smallest first, so a room wins over what surrounds it), then the neighbourhoods
+    const ringsOf = (d) => (d.match(/M[^M]+/g) || []).map((part) => { const n = part.match(/-?\d+(?:\.\d+)?/g).map(Number), r = [];
+      for (let i = 0; i + 1 < n.length; i += 2) r.push([n[i], n[i + 1]]); return r; }).filter((r) => r.length > 2);
+    const item = (rings, name, sub, x, y, m2) => { const xs = rings.flat().map((q) => q[0]), ys = rings.flat().map((q) => q[1]);
+      return { rings, name, sub, x, y, m2, b: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)] }; };
+    AX.hv = {
+      spaces: P.spaces.map((sp) => item(ringsOf(sp.d), sp.name, `${Math.round(sp.m2 * 10) / 10} m²`, sp.x, sp.y, sp.m2)).sort((a, b) => a.m2 - b.m2),
+      zones: P.zones.map((z) => item(ringsOf(z.zone), z.name, `${z.seats} seats`, z.x, z.y, z.m2)),
+    };
+    AX.hiMat = new T.MeshBasicMaterial({ color: 0x5222d0, transparent: true, opacity: 0.22, depthWrite: false, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -6, polygonOffsetUnits: -12 });
+    AX.hiLineMat = new T.LineBasicMaterial({ color: 0x5222d0 });
     AX.scene = scene;
     AX.beats = BEATS.map((b) => A.beats[b]);
     AX.labels = BEATS.map((b) => A.labels[b] || []);
@@ -240,6 +260,35 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced }) => {
   function segDist(x, y, a, b) {
     const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy, t = L ? Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / L)) : 0;
     return Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy);
+  }
+
+  // ---------- hover: the space (or neighbourhood) under the cursor, lit, its name above it ----------
+  const inPoly = (pt, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j];
+    if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < ((b[0] - a[0]) * (pt[1] - a[1])) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+  function hoverAt(px, py) {
+    const hit = (it) => px >= it.b[0] && px <= it.b[2] && py >= it.b[1] && py <= it.b[3] && it.rings.filter((r) => inPoly([px, py], r)).length % 2 === 1;
+    return AX.hv.spaces.find(hit) || AX.hv.zones.find(hit) || null;
+  }
+  function setHover(it) {
+    if (AX.hvItem === it) return;
+    AX.hvItem = it;
+    if (AX.hiMesh) { AX.scene.remove(AX.hiMesh, AX.hiLine); AX.hiMesh.geometry.dispose(); AX.hiLine.geometry.dispose(); AX.hiMesh = AX.hiLine = null; }
+    const tip = $(".ax3-tip", AX.sc);
+    if (it) {
+      const a = acc(), l = [];
+      for (const r of it.rings) prism(a, r, 0.03, 0.05, l, { sides: false });
+      AX.hiMesh = mesh(a, AX.hiMat); AX.hiMesh.renderOrder = 5;
+      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(l, 3)); AX.hiLine = new T.LineSegments(g, AX.hiLineMat); AX.hiLine.renderOrder = 6;
+      AX.scene.add(AX.hiMesh, AX.hiLine);
+      tip.innerHTML = `<b>${it.name}</b><span>${it.sub}</span>`;
+    }
+    tip.classList.toggle("on", !!it);
+    need();
+  }
+  function placeTip() {
+    const it = AX.hvItem; if (!it) return;
+    const v = new T.Vector3(X(it.x), 2.6, Z(it.y)).project(AX.cam), tip = $(".ax3-tip", AX.sc);
+    tip.style.left = ((v.x + 1) * 50) + "%"; tip.style.top = ((1 - v.y) * 50) + "%";
   }
 
   // ---------- camera: an orthographic axo, a state {theta, phi, t, half} tweened between beats ----------
@@ -299,7 +348,7 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced }) => {
     }
     apply(AX.state);
     AX.r.render(AX.scene, AX.cam);
-    labels();
+    labels(); placeTip();
     if (AX.tween) need();
   }
   // the beat's call-outs: a dot on the space, a leader out to its name, on the nearer side; spread so they never overlap
@@ -348,14 +397,20 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced }) => {
   function wire(host) {
     let drag = null;
     const ndc = (e) => { const r = host.getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1]; };
-    const ground = (e) => {   // the point on the floor under the cursor
+    const ground = (e, h) => {   // the point under the cursor on the floor (or at height h, m)
       const [nx, ny] = ndc(e), s = AX.state, { f, right, up } = basis(s), c = AX.cam.position;
       const o = c.clone().add(right.clone().multiplyScalar(nx * s.half * AX.asp)).add(up.clone().multiplyScalar(ny * s.half));
-      const t = -o.y / f.y; return o.add(f.clone().multiplyScalar(t));
+      const t = ((h || 0) - o.y) / f.y; return o.add(f.clone().multiplyScalar(t));
     };
-    host.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, pan: e.button === 2 || e.shiftKey }; host.setPointerCapture(e.pointerId); host.classList.add("drag"); AX.tween = null; });
+    // hover: the space under the cursor, at desk height (less parallax than the floor); not while dragging or flying
+    const pick = (e) => {
+      if (!plan.hoverOn || AX.tween || !AX.state) return setHover(null);
+      const g = ground(e, 0.4); setHover(hoverAt(g.x * 1000 + CX, g.z * 1000 + CY));
+    };
+    host.addEventListener("pointerleave", () => setHover(null));
+    host.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, pan: e.button === 2 || e.shiftKey }; host.setPointerCapture(e.pointerId); host.classList.add("drag"); AX.tween = null; setHover(null); });
     host.addEventListener("pointermove", (e) => {
-      if (!drag) return;
+      if (!drag) return pick(e);
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
       const s = AX.state, base = frame(AX.beat);
       if (drag.pan) {
@@ -396,28 +451,30 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced }) => {
     // drawn on demand: a new window size (F for fullscreen) or the tab coming back needs a fresh frame
     const again = () => { if (document.body.dataset.scene === "s-axo") need(); };
     addEventListener("resize", again); document.addEventListener("visibilitychange", again);
-    sc._axo = () => ({ state: AX.state, beat: AX.beat, tween: !!AX.tween, beats: AX.beats, frame: (k) => frame(k),
+    sc._axo = () => ({ state: AX.state, beat: AX.beat, tween: !!AX.tween, hover: AX.hvItem && AX.hvItem.name, beats: AX.beats, frame: (k) => frame(k),
       project: (x, y, h) => { const v = new T.Vector3(X(x), h || 0, Z(y)).project(AX.cam); return [(v.x + 1) / 2, (1 - v.y) / 2]; } });
     return true;
   }
 
   return {
     enter(_, sc) {
-      document.body.classList.remove("dp-on");
+      plain();                                   // the world's flat plan (the layout, the blow-ups) out of sight
       const ok = start(sc);
       sc.classList.toggle("ax-fallback", !ok);
       $(".ax-rs", sc).onclick = () => fly(frame(AX.beat), 900);
+      const hv = $(".ax-hv", sc); hv.classList.toggle("on", plan.hoverOn);
+      hv.onclick = () => { const on = plan.planHover(); hv.classList.toggle("on", on); if (!on && AX.r) setHover(null); };
     },
     step(k, sc) {
       $$(".ax-keys span", sc).forEach((b) => b.classList.toggle("on", +b.dataset.k === k));
       if (sc.classList.contains("ax-fallback") || !AX.r) return;
       const first = !AX.state;
-      AX.beat = k; AX.labsFor = 0;
+      AX.beat = k; AX.labsFor = 0; setHover(null);
       $(".ax3-labs", sc).classList.remove("on");
       fly(frame(k), first ? 0 : 1200);
       if (first) $(".ax3-labs", sc).classList.add("on");
     },
-    leave() { cancelAnimationFrame(AX.raf); AX.raf = 0; AX.tween = null; },
+    leave() { cancelAnimationFrame(AX.raf); AX.raf = 0; AX.tween = null; if (AX.r) setHover(null); },
   };
 });
 </script>

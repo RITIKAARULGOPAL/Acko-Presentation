@@ -82,8 +82,10 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
     - **Spaces** shows the spaces in their legend colours (opening the layout's Legend does too).
     - **Neighbourhoods** switches the six on or off. On the layout, when they show, a click on one opens it; on the blow-ups, outlines and seat hover only.
     - **Fire egress** switches the exit-path layer on or off.
+    - **Hover** switches the names on hover on or off. It's one setting for the layout, the blow-ups and the axo, and it stays as set (as in Mitigata). A neighbourhood still opens on a click with Hover off.
     - **Reset zoom** flies back to the beat's view, or to the open neighbourhood's.
-- **The axo:** drag to turn it, scroll to zoom on the cursor, right-drag (or Shift-drag) to pan; **Reset view** (or a double-click) goes back to the beat. Without WebGL, it shows the deck's own axo pictures.
+  - **Occupancy** (bottom left, beside the Legend tab) opens the floor's occupancy chart beneath the plan, the plan moving up. It's slide 61's own table, cloned and split in two.
+- **The axo:** with Hover on, the space under the cursor lights up with its name and area. Drag to turn it, scroll to zoom on the cursor, right-drag (or Shift-drag) to pan; **Reset view** (or a double-click) goes back to the beat. Without WebGL, it shows the deck's own axo pictures.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 
 ## The journey (≈ 20 min, 66 beats)

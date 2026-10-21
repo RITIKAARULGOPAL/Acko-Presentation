@@ -320,6 +320,7 @@
      compartment line, entrances, arrival zones). Wheel zooms on the cursor, drag pans, a double-click returns to the beat's
      view. Used by s-layout and s-blowup. */
   const NB_COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
+  let HOVER = true;                                   // the Hover pill's state, deck-wide (planHover)
   const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, cur: null, P: null, onZone: null, zone: null };   // home: the beat's view; cur: what Reset returns to
   function deckPlan() {
     if (DP.ph) return DP;
@@ -329,6 +330,7 @@
       rooms: P.spaces.map((r) => ({ id: r.id, name: r.name, m2: r.m2, x: r.x, y: r.y, d: r.d })),
       teams: P.zones.map((z) => ({ id: z.id, name: z.name, pax: null, seats: z.seats, hot_desks: 0, x: z.x, y: z.y, zone: z.zone, desks: z.desks })) } } };
     host.classList.add("dxplan");
+    host.classList.toggle("no-hover", !HOVER);
     DP.root = host;
     DP.ph = PlanHover.mount(host, { data, labelPlacement: "above" });     // the label above a space, never on it
     DP.ph.addLayer("dx-fill", `<image href="${asset(P.floor)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>` +
@@ -428,6 +430,8 @@
   function planEgress(on) { deckPlan(); return DP.root.classList.toggle("show-egress", on); }
   // the spaces in their legend colours (and the workhall floor tint): off, the plan is the DXF's plain linework, as the toolkit's viewer draws it
   function planFill(on) { deckPlan(); return DP.root.classList.toggle("show-fill", on); }
+  // hover on / off (Ritika, as in Mitigata): names on hover across the layout, the blow-ups and the axo; it stays as set
+  function planHover(on) { HOVER = on === undefined ? !HOVER : !!on; if (DP.root) { DP.root.classList.toggle("no-hover", !HOVER); if (!HOVER) DP.ph.clear(); } return HOVER; }
   // the neighbourhoods, switched the same way: outlines and arrival zones, their seat hover, and their numbers (unless labels is false)
   function planNb(on, labels) {
     deckPlan();
@@ -574,8 +578,8 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planReset, planHome, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
-            get zone() { return DP.zone; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planHover, planReset, planHome, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
+            get zone() { return DP.zone; }, get hoverOn() { return HOVER; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {
     if (!document.getElementById(id)) continue;

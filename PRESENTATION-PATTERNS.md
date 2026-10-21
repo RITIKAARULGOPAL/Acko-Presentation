@@ -239,4 +239,12 @@ West, Middle and East fly an orthographic camera along it.
 - **Labels:** projected each frame. Each side's names sit in one column so the leaders run level; one with no room on its side goes the other way, beside its space.
 - **Fallback:** if the WebGL context fails, the section takes `ax-fallback` and shows the deck's three axo pictures with their leaders.
 - **Tests:** `sc._axo()` exposes the camera state and a projection, read-only, for the tests (WebGL canvases can't be read back without `preserveDrawingBuffer`).
+- **Hover on / off** (Ritika, as in Mitigata): one deck-wide state in the engine.
+  - **Engine:** `HOVER`, with `plan.planHover(on)` and `plan.hoverOn`. `no-hover` on the plan root hides the label and turns off the hover targets with `!important`, which beats the open neighbourhood's room hovers. It survives `planOn` / `planOff`, so it stays as set across the layout, the blow-ups and the axo.
+  - **Slides:** each one's pill syncs from `plan.hoverOn` on enter.
+  - **The axo's own hover:** the cursor is taken to a plane at 0.4 m (desk height, less parallax than the floor) and tested against the deck's spaces, smallest first, then the neighbourhoods. The hit space gets a purple floor fill and outline, and a label in the plan's style above its label point at 2.6 m.
+- **The floor's occupancy chart on the layout:** a second tab beside the Legend; one drawer at a time.
+  - **Source:** the occupancy slide's table (`#s-occupancy .oc`), cloned on first open and split at "Training room" into two columns. One source for both slides.
+  - **Standalone:** opened on its own, the layout slide has no slide 61, so the tab hides (`no-fo`).
+- **Gotcha:** a slide that draws over the world (the axo) must call `plain()` on enter. Otherwise the layout's flat plan, left in the world by the blow-ups, shows through its transparent canvas.
 
