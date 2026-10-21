@@ -84,7 +84,7 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
     - **Fire egress** switches the exit-path layer on or off.
     - **Hover** switches the names on hover on or off. It's one setting for the layout, the blow-ups and the axo, and it stays as set (as in Mitigata). A neighbourhood still opens on a click with Hover off.
     - **Reset zoom** flies back to the beat's view, or to the open neighbourhood's.
-  - **Occupancy** (bottom left, beside the Legend tab) opens the floor's occupancy chart beneath the plan, the plan moving up. It's slide 61's own table, cloned and split in two.
+  - **Occupancy** (bottom left, beside the Legend tab) opens the floor's occupancy chart beneath the plan, the plan moving up. It shows slide 61's numbers in Mitigata's chart look: hairlines, the zones in small purple capitals, a mark before each count (✓ meets, ▲ above, + not asked, ▼ short) and a summary line. ⤢ opens it centred and larger; ✕, Esc or a click outside closes it. Each neighbourhood's chart has the same look.
 - **The axo:** with Hover on, the space under the cursor lights up with its name and area. Drag to turn it, scroll to zoom on the cursor, right-drag (or Shift-drag) to pan; **Reset view** (or a double-click) goes back to the beat. Without WebGL, it shows the deck's own axo pictures.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 

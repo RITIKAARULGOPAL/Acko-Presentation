@@ -247,4 +247,9 @@ West, Middle and East fly an orthographic camera along it.
   - **Source:** the occupancy slide's table (`#s-occupancy .oc`), cloned on first open and split at "Training room" into two columns. One source for both slides.
   - **Standalone:** opened on its own, the layout slide has no slide 61, so the tab hides (`no-fo`).
 - **Gotcha:** a slide that draws over the world (the axo) must call `plain()` on enter. Otherwise the layout's flat plan, left in the world by the blow-ups, shows through its transparent canvas.
+- **The occupancy charts in Mitigata's look** (Ritika: "take reference from mitigata presentation"):
+  - **Builder:** one `occTable(rows, req)` gives Mitigata's `occ-t`: Zone | Area (| Requirement) | count. The zone cell spans its rows in small purple capitals, the rows are hairlines with no fills, and each count gets a mark.
+  - **Floor chart:** it reads slide 61's rows, carrying the zone down from each rowspan cell. Each cell's class becomes a state: `short` → ▼ (maroon), `up` → ▲, `up` with nothing asked → +, otherwise ✓. It sits in a white card with a summary line computed from the rows.
+  - **Expand:** ⤢ centres the card larger over a flat white 72% scrim. ✕, Esc (caught before the neighbourhood's Esc) or a click on the scrim closes it.
+  - **Neighbourhood chart:** the same builder without the requirement column.
 

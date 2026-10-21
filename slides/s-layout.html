@@ -12,7 +12,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-layout" data-part="5" data-title="Layout · Option 02A" data-steps="3" data-mins="1.5" data-beats="The layout,Six neighbourhoods,Fire egress"
-  data-notes="The plan takes the page: the whole floor, centred. Bottom left, the beat's key (Legend, Six neighbourhoods, Fire egress key) opens on a click and the plan moves up above it; click again to tuck it away. Bottom left, Occupancy opens the floor's occupancy chart (slide 61's) beneath the plan, as the Legend does. Top right, on any beat: Spaces shows the spaces in their legend colours (opening the Legend does too); Hover switches the names on hover on or off (on the blow-ups and the axo too, and it stays as set); Neighbourhoods switches the six on or off (when they show, a click on one opens it), Fire egress the exit paths, Reset zoom flies back to the beat's view (or the open neighbourhood's). 1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): it fills the page, with a bar along the bottom (key plan, workstations, area); Occupancy chart opens its chart on the right (workstations and every room inside it), Hide chart tucks it away; hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The same buttons sit on the blow-ups.">
+  data-notes="The plan takes the page: the whole floor, centred. Bottom left, the beat's key (Legend, Six neighbourhoods, Fire egress key) opens on a click and the plan moves up above it; click again to tuck it away. Bottom left, Occupancy opens the floor's occupancy chart (slide 61's numbers, in Mitigata's chart look) beneath the plan, as the Legend does; ⤢ opens it centred and larger. Top right, on any beat: Spaces shows the spaces in their legend colours (opening the Legend does too); Hover switches the names on hover on or off (on the blow-ups and the axo too, and it stays as set); Neighbourhoods switches the six on or off (when they show, a click on one opens it), Fire egress the exit paths, Reset zoom flies back to the beat's view (or the open neighbourhood's). 1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): it fills the page, with a bar along the bottom (key plan, workstations, area); Occupancy chart opens its chart on the right (workstations and every room inside it), Hide chart tucks it away; hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The same buttons sit on the blow-ups.">
   <div class="page">
     <div class="ly-veil"></div>
     <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
@@ -21,7 +21,7 @@
       <b class="ly-zp-k">Key plan</b>
       <div class="ly-zp-key"></div>
       <div class="ly-zp-h"><span class="ly-zp-n"></span><div><h3></h3><p><span class="ly-zp-ws"></span> workstations · <span class="ly-zp-m2"></span> m²</p></div></div>
-      <table class="ly-oc"><thead><tr><th>Zones</th><th>Areas</th><th>Option - 2A</th></tr></thead><tbody></tbody></table>
+      <div class="ly-zp-occ"></div>
       <div class="ly-zp-btns"><button type="button" class="ly-zp-back"><span>←</span>All neighbourhoods</button><button type="button" class="ly-zp-back ly-zp-hide">Hide chart<span>▸</span></button></div>
     </aside>
     <!-- the open neighbourhood with its chart tucked away: a bar along the bottom (key plan, name, workstations, area) -->
@@ -37,11 +37,13 @@
       <button type="button" class="ly-tool ly-dr-btn"><b>Legend</b><span>▴</span></button>
       <button type="button" class="ly-tool ly-fo-btn"><b>Occupancy</b><span>▴</span></button>
     </div>
-    <!-- the floor's occupancy chart: the occupancy slide's own table (slide 61), cloned and split in two on first open -->
+    <!-- the floor's occupancy chart: the occupancy slide's rows (slide 61), in Mitigata's chart look; ⤢ opens it centred and larger -->
     <div class="ly-fo">
-      <b class="ly-lh">Occupancy chart</b>
-      <div class="ly-fo-l"></div>
-      <div class="ly-fo-r"></div>
+      <div class="ly-fo-scrim"></div>
+      <div class="ly-fo-card">
+        <div class="ly-fo-h"><b>Occupancy</b><span class="ly-fo-sum"></span><button type="button" class="ly-fo-xp" title="Expand" aria-label="Expand the occupancy chart">⤢</button></div>
+        <div class="ly-fo-cols"><div class="ly-fo-l"></div><div class="ly-fo-r"></div></div>
+      </div>
     </div>
     <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
     <!-- the plan's tools, on any beat: the neighbourhoods on or off, the fire egress layer on or off, the zoom back to the beat's framing -->
@@ -148,19 +150,28 @@
 #s-layout .ly-zp-h p { font-size: calc(var(--pt) * 7.6); color: #434343; margin-top: calc(var(--pt) * 1.5); }
 #s-layout .ly-zp-h p span { font-family: var(--num); font-weight: 500; color: var(--purple); }
 /* its occupancy chart, in the occupancy slide's table style (slide 61) */
-#s-layout .ly-oc { width: 100%; border-collapse: collapse; font-size: calc(var(--pt) * 6.6); }
-#s-layout .ly-oc th { font-size: calc(var(--pt) * 5.6); letter-spacing: .1em; text-transform: uppercase; font-weight: 700; background: #efefef; padding: calc(var(--pt) * 3.2) calc(var(--pt) * 4); text-align: center; }
-#s-layout .ly-oc td { padding: calc(var(--pt) * 1.7) calc(var(--pt) * 5); border-bottom: 1px solid #fff; }
-#s-layout .ly-oc td:last-child { text-align: center; font-family: var(--num); font-weight: 500; }
-#s-layout .ly-oc td[rowspan] { font-size: calc(var(--pt) * 5.4); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; text-align: center; background: #efefef !important; width: 26%; }
-#s-layout .ly-oc tr.z2 td { background: #eae5e0; }
-#s-layout .ly-oc tr.z3 td { background: #d7d6da; }
-#s-layout .ly-oc tr.z4 td { background: #d8c8d3; }
-#s-layout .ly-oc tr.z5 td { background: #d8c8d3; }
-#s-layout .ly-oc tr.z6 td { background: #b3abaa; }
-#s-layout .ly-oc tr.ws td:last-child { color: var(--purple); font-weight: 600; }
-#s-layout .ly-oc tbody tr { opacity: 0; transform: translateX(-8px); transition: opacity .4s var(--ease), transform .4s var(--ease); }
-#s-layout .ly-oc tbody tr.in { opacity: 1; transform: none; }
+/* the occupancy charts, in Mitigata's look: hairlines, no fills, the zones in small purple capitals, a mark before each count */
+#s-layout .occ-t { width: 100%; border-collapse: collapse; font-family: var(--body); font-size: calc(var(--pt) * 5.8); color: var(--ink); }
+#s-layout .occ-t th { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5); text-align: left; color: var(--mute); padding: calc(var(--pt) * 1) calc(var(--pt) * 4) calc(var(--pt) * 1.6) 0; border-bottom: 1px solid var(--line); }
+#s-layout .occ-t td { padding: calc(var(--pt) * .42) calc(var(--pt) * 4) calc(var(--pt) * .42) 0; border-top: 1px solid rgba(0, 0, 0, .05); vertical-align: baseline; line-height: 1.3; }
+#s-layout .occ-t tr.g0 td { border-top: 1px solid var(--line); }
+#s-layout .occ-t td.grp { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 4.6); letter-spacing: .04em; text-transform: uppercase; color: var(--purple);
+  vertical-align: top; padding-top: calc(var(--pt) * 1.4); padding-right: calc(var(--pt) * 8); width: 1%; white-space: nowrap; }
+#s-layout .occ-t td.br { color: var(--mute); }
+#s-layout .occ-t td.n { font-family: var(--num); white-space: nowrap; }
+#s-layout .occ-t td small { color: var(--mute); font-family: var(--body); font-size: .82em; }
+#s-layout .occ-t td i { font-style: normal; display: inline-block; width: 1.4em; font-size: .85em; }
+#s-layout .occ-t td.ok i, #s-layout .occ-key i.ok { color: var(--purple); }
+#s-layout .occ-t td.dn i, #s-layout .occ-key i.dn { color: var(--maroon); }
+#s-layout .occ-t td.up i, #s-layout .occ-key i.up, #s-layout .occ-t td.x i, #s-layout .occ-key i.x { color: var(--soft); }
+#s-layout .occ-t tr.ws td.n { color: var(--purple); font-weight: 600; }
+#s-layout .occ-t tbody tr { opacity: 0; transition: opacity .35s var(--ease); }
+#s-layout .occ-t tbody tr.in { opacity: 1; }
+#s-layout .occ-key { margin: calc(var(--pt) * 5) 0 0; font-family: var(--body); font-size: calc(var(--pt) * 5.3); line-height: 1.6; color: var(--mute); }
+#s-layout .occ-key i { font-style: normal; margin: 0 calc(var(--pt) * 1.4) 0 calc(var(--pt) * 4); }
+#s-layout .occ-key i:first-child { margin-left: 0; }
+#s-layout .ly-zp-occ .occ-t { font-size: calc(var(--pt) * 6.3); }
+#s-layout .ly-zp-occ .occ-t td { padding-top: calc(var(--pt) * 1.1); padding-bottom: calc(var(--pt) * 1.1); }
 #s-layout .ly-zp-back { display: inline-flex; align-items: center; gap: calc(var(--pt) * 4); margin-top: calc(var(--pt) * 10); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7);
   border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: #fff; color: #5222d0; cursor: pointer; font: 600 calc(var(--pt) * 6.5) var(--body); }
 #s-layout .ly-zp-back:hover { background: #5222d0; color: #fff; }
@@ -178,16 +189,28 @@
 /* the floor's occupancy chart beneath the plan (the occupancy slide's table, in two columns) */
 #s-layout .ly-fo { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility 0s linear .35s; }
 #s-layout.fo-open .ly-fo { opacity: 1; visibility: visible; transition: opacity .5s var(--ease) .15s, visibility 0s; }
-#s-layout .ly-fo .ly-lh { top: 42.4%; left: 1.8%; }
-#s-layout .ly-fo-l, #s-layout .ly-fo-r { position: absolute; top: 46.6%; }
-#s-layout .ly-fo-l { left: 1.8%; width: 50%; }
-#s-layout .ly-fo-r { left: 54%; width: 44.2%; }
-#s-layout .ly-fo .oc { font-size: calc(var(--pt) * 5.9); }
-#s-layout .ly-fo .oc th { padding: calc(var(--pt) * 2.4) calc(var(--pt) * 4); font-size: calc(var(--pt) * 5.2); }
-#s-layout .ly-fo .oc td { padding: calc(var(--pt) * .85) calc(var(--pt) * 4.5); }
-#s-layout .ly-fo .ly-fo-key { margin-top: calc(var(--pt) * 7); display: flex; flex-direction: column; gap: calc(var(--pt) * 3); font-size: calc(var(--pt) * 6.4); color: #444; }
-#s-layout .ly-fo .ly-fo-key span { display: flex; align-items: center; gap: calc(var(--pt) * 5); }
-#s-layout .ly-fo .ly-fo-key i { width: calc(var(--pt) * 6); height: calc(var(--pt) * 6); flex: none; }
+#s-layout .ly-fo-card { position: absolute; left: 1.8%; right: 1.8%; top: 43.7%; box-sizing: border-box; padding: calc(var(--pt) * 3) calc(var(--pt) * 7) calc(var(--pt) * 3.2);
+  background: #fff; border: 1px solid var(--line); pointer-events: auto; }
+#s-layout .ly-fo-h { display: flex; align-items: center; gap: calc(var(--pt) * 6); padding-bottom: calc(var(--pt) * 1.6); font-family: var(--label); }
+#s-layout .ly-fo-h > b { font-weight: 600; font-size: calc(var(--pt) * 6.8); color: var(--ink); }
+#s-layout .ly-fo-sum { font-size: calc(var(--pt) * 5.6); font-weight: 600; color: var(--soft); }
+#s-layout .ly-fo-sum b { font-family: var(--num); font-weight: 400; color: var(--ink); }
+#s-layout .ly-fo-xp { margin-left: auto; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer;
+  font-size: calc(var(--pt) * 6.4); line-height: 1; padding: 0; }
+#s-layout .ly-fo-xp:hover { background: var(--accent-soft); color: var(--purple); }
+#s-layout .ly-fo-xp:focus { outline: none; }
+#s-layout .ly-fo-cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: calc(var(--pt) * 14); align-items: start; }
+/* expanded (⤢): centred and larger, over a flat white backdrop; ✕, Esc or a click outside closes it */
+#s-layout .ly-fo-scrim { position: absolute; inset: 0; background: rgba(255, 255, 255, .72); opacity: 0; pointer-events: none; transition: opacity .3s var(--ease); }
+#s-layout .ly-fo.big .ly-fo-scrim { opacity: 1; pointer-events: auto; }
+#s-layout .ly-fo.big .ly-fo-card { left: 7%; right: 7%; top: 50%; transform: translateY(-50%); padding: calc(var(--pt) * 8) calc(var(--pt) * 12) calc(var(--pt) * 9); box-shadow: 0 10px 40px rgba(0, 0, 0, .08); }
+#s-layout .ly-fo.big .ly-fo-h > b { font-size: calc(var(--pt) * 9); }
+#s-layout .ly-fo.big .ly-fo-sum { font-size: calc(var(--pt) * 7); }
+#s-layout .ly-fo.big .occ-t { font-size: calc(var(--pt) * 7.4); }
+#s-layout .ly-fo.big .occ-t th { font-size: calc(var(--pt) * 6.2); }
+#s-layout .ly-fo.big .occ-t td.grp { font-size: calc(var(--pt) * 5.8); }
+#s-layout .ly-fo.big .occ-t td { padding-top: calc(var(--pt) * 1.3); padding-bottom: calc(var(--pt) * 1.3); }
+#s-layout .ly-fo.big .occ-key { font-size: calc(var(--pt) * 6.4); }
 /* the open neighbourhood's bar (its chart tucked away) */
 #s-layout .ly-zbar { left: 1.8%; right: 1.8%; top: 87.4%; height: 6.8%; box-sizing: border-box; display: flex; align-items: center; gap: calc(var(--pt) * 9);
   padding: 0 calc(var(--pt) * 8) 0 calc(var(--pt) * 5); background: #fff; border: 1px solid #e6e6e6; border-radius: calc(var(--pt) * 4);
@@ -218,7 +241,6 @@
    (which moves up to the deck's band); an open neighbourhood fills the page with a bar along the bottom, its chart one click away */
 ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
   const COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
-  const GRP = { "Workhall": "z2", "Meeting room": "z3", "Training room": "z4", "Recreational area / wellness": "z5", "Services": "z6" };
   const DISP = [38, 120, 1230, 880];          // where the open neighbourhood sits (frame px) with its chart: the left of the page
   const FULL = [38, 120, 1882, 920];          // and with its chart tucked away: the page, above its bar
   const KEYS = ["Legend", "Six neighbourhoods", "Fire egress key"];
@@ -228,24 +250,44 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
   // one drawer beneath the plan at a time: "key" (the beat's legend) or "occ" (the floor's occupancy chart), or none
   function drawer(sc, which) {
     sc.classList.toggle("dr-open", which === "key"); sc.classList.toggle("fo-open", which === "occ");
+    if (which !== "occ") big(sc, false);
     plan.planHome(which ? plan.planView() : centre());
     if (which === "key" && beat === 1) $(".ly-sp-btn", sc).classList.toggle("on", plan.planFill(true));   // the legend explains the colours
     if (which === "key" && beat === 2) $$(".ly-nbs [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 150 + i * 120));
-    if (which === "occ" && floorChart(sc)) $$(".ly-fo tbody tr", sc).forEach((tr, i) => {
-      tr.classList.remove("in"); later(() => { tr.classList.add("in"); $$("[data-count]", tr).forEach((e) => countUp(e, 700)); }, 150 + i * 45);
-    });
+    if (which === "occ" && floorChart(sc)) $$(".ly-fo tbody tr", sc).forEach((tr, i) => { tr.classList.remove("in"); later(() => tr.classList.add("in"), 150 + i * 35); });
   }
-  // the occupancy slide's own table (slide 61), cloned once and split at Training: one source for both
+  // the occupancy charts in Mitigata's look: Zone | Area (| Requirement) | count, the zone spanning its rows, a mark per count
+  const MARK = { ok: "✓", up: "▲", x: "+", dn: "▼" };
+  function occTable(rows, req) {
+    const groups = []; rows.forEach((r) => { const g = groups[groups.length - 1]; if (g && g[0] === r.grp) g[1].push(r); else groups.push([r.grp, [r]]); });
+    return `<table class="occ-t"><thead><tr><th>Zone</th><th>Area</th>${req ? "<th>Requirement</th><th>Option 02A</th>" : "<th>Count</th>"}</tr></thead><tbody>` +
+      groups.map(([g, list]) => list.map((r, i) => `<tr class="${i === 0 ? "g0" : ""}${r.ws ? " ws" : ""}">` + (i === 0 ? `<td class="grp" rowspan="${list.length}">${g}</td>` : "") +
+        `<td>${r.area}</td>${req ? `<td class="br">${r.req}</td>` : ""}<td class="n ${r.st || ""}">${r.st ? `<i>${MARK[r.st]}</i>` : ""}${r.val}</td></tr>`).join("")).join("") + "</tbody></table>";
+  }
+  // the floor's chart: the occupancy slide's own rows (slide 61), read once, each count marked from its state there
+  // (short: below the ask; up: above it, or + where nothing was asked); split at Training into two columns
   function floorChart(sc) {
-    if ($(".ly-fo .oc", sc)) return true;
+    if ($(".ly-fo .occ-t", sc)) return true;
     const src = document.querySelector("#s-occupancy .oc"); if (!src) return false;
-    const rows = $$("tbody tr", src), cut = rows.findIndex((r) => /Training/i.test(r.textContent));
-    const part = (list) => { const t = src.cloneNode(false), head = $("thead", src).cloneNode(true), b = document.createElement("tbody");
-      list.forEach((r) => b.appendChild(r.cloneNode(true))); t.append(head, b); return t; };
-    $(".ly-fo-l", sc).appendChild(part(cut > 0 ? rows.slice(0, cut) : rows));
-    if (cut > 0) $(".ly-fo-r", sc).appendChild(part(rows.slice(cut)));
-    $(".ly-fo-r", sc).insertAdjacentHTML("beforeend", '<div class="ly-fo-key"><span><i style="background:var(--purple)"></i>More than asked</span><span><i style="background:var(--maroon)"></i>Short of the ask</span></div>');
+    let grp = "";
+    const rows = $$("tbody tr", src).map((tr) => {
+      const td = $$("td", tr); if (td.length === 4) grp = td.shift().textContent.trim();
+      const [a, q, v] = td, req = q.textContent.trim(), asked = !/^[–—-]$/.test(req);
+      const st = v.classList.contains("short") ? "dn" : v.classList.contains("up") ? (asked ? "up" : "x") : "ok";
+      return { grp, area: a.textContent.trim(), req: q.innerHTML.trim(), val: v.innerHTML.trim(), st, n: parseInt(v.textContent, 10) || 0, ws: /^Workstations/i.test(a.textContent.trim()) };
+    });
+    const cut = rows.findIndex((r) => /Training/i.test(r.grp));
+    $(".ly-fo-l", sc).innerHTML = occTable(cut > 0 ? rows.slice(0, cut) : rows, true);
+    $(".ly-fo-r", sc).innerHTML = (cut > 0 ? occTable(rows.slice(cut), true) : "") +
+      '<p class="occ-key"><i class="ok">✓</i>meets the requirement<i class="up">▲</i>more than asked<i class="x">+</i>not asked for<i class="dn">▼</i>short of the ask · from the occupancy chart (slide 61)</p>';
+    const n = (f) => rows.filter(f).reduce((a, r) => a + r.n, 0);
+    $(".ly-fo-sum", sc).innerHTML = `<b>${n((r) => r.ws)}</b> workstations · <b>${n((r) => r.grp === "Meeting room" && !/Phone booth/i.test(r.area))}</b> meeting rooms · <b>${n((r) => /Phone booth/i.test(r.area))}</b> phone booths`;
     return true;
+  }
+  // ⤢: the floor's chart centred and larger, over a flat white backdrop
+  function big(sc, on) {
+    $(".ly-fo", sc).classList.toggle("big", on);
+    const b = $(".ly-fo-xp", sc); b.textContent = on ? "✕" : "⤢"; b.title = on ? "Close" : "Expand";
   }
   // the chart beside the open neighbourhood, or tucked away (the neighbourhood then takes the page)
   function chart(sc, open) {
@@ -270,10 +312,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
     $("h3", p).textContent = z.name;
     $(".ly-zp-m2", p).textContent = Math.round(z.m2);
     const ws = $(".ly-zp-ws", p); ws.dataset.count = z.seats; ws.textContent = z.seats;
-    $("tbody", p).innerHTML = rows.map((r, j) => {
-      const first = j === 0 || rows[j - 1][0] !== r[0], span = rows.filter((q) => q[0] === r[0]).length;
-      return `<tr class="${GRP[r[0]] || "z3"}${r[1] === "Workstations" ? " ws" : ""}">${first ? `<td rowspan="${span}">${r[0]}</td>` : ""}<td>${r[1].replace(/(\d)-(\d)/g, "$1–$2")}</td><td>${r[2]}</td></tr>`;
-    }).join("");
+    $(".ly-zp-occ", p).innerHTML = occTable(rows.map(([g, a, n]) => ({ grp: g, area: a.replace(/(\d)-(\d)/g, "$1–$2"), val: n, ws: a === "Workstations" })), false);
     sc.classList.add("zp-open"); p.classList.add("open");
     countUp(ws, 900);
     if (occ) $$("tbody tr", p).forEach((tr, i) => later(() => tr.classList.add("in"), 250 + i * 60));
@@ -298,14 +337,20 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
       $(".ly-zb-occ", sc).onclick = () => chart(sc, true);
       $(".ly-dr-btn", sc).onclick = () => drawer(sc, sc.classList.contains("dr-open") ? null : "key");
       $(".ly-fo-btn", sc).onclick = () => drawer(sc, sc.classList.contains("fo-open") ? null : "occ");
+      $(".ly-fo-xp", sc).onclick = (e) => { e.currentTarget.blur(); big(sc, !$(".ly-fo", sc).classList.contains("big")); };
+      $(".ly-fo-scrim", sc).onclick = () => big(sc, false);
       sc.classList.toggle("no-fo", !document.querySelector("#s-occupancy .oc"));
       const hv = $(".ly-hv-btn", sc); hv.classList.toggle("on", plan.hoverOn); hv.onclick = () => hv.classList.toggle("on", plan.planHover());
       document.removeEventListener("keydown", sc._esc, true);
-      sc._esc = (e) => { if (e.key === "Escape" && plan.zone) { close(sc); e.stopImmediatePropagation(); e.preventDefault(); } };
+      sc._esc = (e) => {          // Esc: the expanded chart first, then an open neighbourhood
+        if (e.key !== "Escape") return;
+        if ($(".ly-fo", sc).classList.contains("big")) big(sc, false); else if (plan.zone) close(sc); else return;
+        e.stopImmediatePropagation(); e.preventDefault();
+      };
       document.addEventListener("keydown", sc._esc, true);
     },
     step(k, sc) {
-      beat = k; close(sc); sc.classList.remove("dr-open", "fo-open");
+      beat = k; close(sc); sc.classList.remove("dr-open", "fo-open"); big(sc, false);
       plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, blow: k === 1, egress: k === 3, view: centre(), ms: 0 });
       $(".ly-eg-btn", sc).classList.toggle("on", k === 3);
       $(".ly-nb-btn", sc).classList.toggle("on", k === 2);
@@ -314,7 +359,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
     },
     leave(_, sc) {
       beat = 0;
-      if (sc) { $(".ly-zp", sc).classList.remove("open"); sc.classList.remove("zp-open", "occ-open", "dr-open", "fo-open"); document.removeEventListener("keydown", sc._esc, true); }
+      if (sc) { big(sc, false); $(".ly-zp", sc).classList.remove("open"); sc.classList.remove("zp-open", "occ-open", "dr-open", "fo-open"); document.removeEventListener("keydown", sc._esc, true); }
       plan.planOff();
     },
   };
