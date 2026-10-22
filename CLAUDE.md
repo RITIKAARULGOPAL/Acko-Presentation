@@ -42,37 +42,36 @@ A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that 
 | 10 | `slides/s-loop.html` | 11–12 | The Loop | `slide/s-loop` | `.claude/worktrees/s-loop` |
 | 11 | `slides/s-strategy.html` | 13 | Campus strategy | `slide/s-strategy` | `.claude/worktrees/s-strategy` |
 | 12 | `slides/s-site.html` | new | The site | `slide/s-site` | `.claude/worktrees/s-site` |
-| 13 | `slides/s-floor.html` | new | The floor | `slide/s-floor` | `.claude/worktrees/s-floor` |
-| 14 | `slides/s-challenges.html` | 14 | What's our challenge | `slide/s-challenges` | `.claude/worktrees/s-challenges` |
-| 15 | `slides/s-typologies.html` | 15 | Workstation typologies | `slide/s-typologies` | `.claude/worktrees/s-typologies` |
-| 16 | `slides/s-palette1.html` | 16–19 | The campus palette 01 | `slide/s-palette1` | `.claude/worktrees/s-palette1` |
-| 17 | `slides/s-palette2.html` | 20–23 | The campus palette 02 | `slide/s-palette2` | `.claude/worktrees/s-palette2` |
-| 18 | `slides/s-w-board.html` | 24–25 | State Room · Boardroom | `slide/s-w-board` | `.claude/worktrees/s-w-board` |
-| 19 | `slides/s-w-dept.html` | 26–27 | Departmental Room | `slide/s-w-dept` | `.claude/worktrees/s-w-dept` |
-| 20 | `slides/s-w-sprint.html` | 28–29 | Quick Sprint Room | `slide/s-w-sprint` | `.claude/worktrees/s-w-sprint` |
-| 21 | `slides/s-w-arena.html` | 30–31 | Work Arena · Neighbourhood | `slide/s-w-arena` | `.claude/worktrees/s-w-arena` |
-| 22 | `slides/s-w-arena2a.html` | 32–33 | Work Arena · Option 2A | `slide/s-w-arena2a` | `.claude/worktrees/s-w-arena2a` |
-| 23 | `slides/s-w-library.html` | 34 | Work Arena · Library | `slide/s-w-library` | `.claude/worktrees/s-w-library` |
-| 24 | `slides/s-w-garden.html` | 35–36 | The Acker Garden | `slide/s-w-garden` | `.claude/worktrees/s-w-garden` |
-| 25 | `slides/s-w-exec.html` | 37 | Executive Room | `slide/s-w-exec` | `.claude/worktrees/s-w-exec` |
-| 26 | `slides/s-w-cafe1.html` | 38, 40 | Cafe · View 1 | `slide/s-w-cafe1` | `.claude/worktrees/s-w-cafe1` |
-| 27 | `slides/s-w-cafe2.html` | 39, 41 | Cafe · View 2 | `slide/s-w-cafe2` | `.claude/worktrees/s-w-cafe2` |
-| 28 | `slides/s-w-coffee.html` | 42 | Coffee Point | `slide/s-w-coffee` | `.claude/worktrees/s-w-coffee` |
-| 29 | `slides/s-w-mothers.html` | 43 | Mothers Room | `slide/s-w-mothers` | `.claude/worktrees/s-w-mothers` |
-| 30 | `slides/s-w-zen.html` | 44 | Zen Room | `slide/s-w-zen` | `.claude/worktrees/s-w-zen` |
-| 31 | `slides/s-w-studio.html` | 45 | Studio Room | `slide/s-w-studio` | `.claude/worktrees/s-w-studio` |
-| 32 | `slides/s-engage.html` | 46 | Acker's engagement points | `slide/s-engage` | `.claude/worktrees/s-engage` |
-| 33 | `slides/s-material.html` | 47 | Material strategy | `slide/s-material` | `.claude/worktrees/s-material` |
-| 34 | `slides/s-acoustic.html` | 48 | Acoustic strategy | `slide/s-acoustic` | `.claude/worktrees/s-acoustic` |
-| 35 | `slides/s-wayfinding.html` | 52 | Wayfinding | `slide/s-wayfinding` | `.claude/worktrees/s-wayfinding` |
-| 36 | `slides/s-layout.html` | 53–54 | Layout · Option 02A | `slide/s-layout` | `.claude/worktrees/s-layout` |
-| 37 | `slides/s-blowup.html` | 55–57 | Blown up X · Y · Z | `slide/s-blowup` | `.claude/worktrees/s-blowup` |
-| 38 | `slides/s-axo.html` | 58–60 | Schematic axonometric | `slide/s-axo` | `.claude/worktrees/s-axo` |
-| 39 | `slides/s-thanks.html` | — | Thank you | `slide/s-thanks` | `.claude/worktrees/s-thanks` |
-| 40 | `slides/s-wellbeing.html` | 49 | Well-being by design | `slide/s-wellbeing` | `.claude/worktrees/s-wellbeing` |
-| 41 | `slides/s-di.html` | 50 | Designed for all | `slide/s-di` | `.claude/worktrees/s-di` |
-| 42 | `slides/s-esg.html` | 51 | ESG strategy | `slide/s-esg` | `.claude/worktrees/s-esg` |
-| 43 | `slides/s-skv.html` | SKV's deck | About SKV | `slide/s-skv` | `.claude/worktrees/s-skv` |
+| 13 | `slides/s-challenges.html` | 14 | What's our challenge | `slide/s-challenges` | `.claude/worktrees/s-challenges` |
+| 14 | `slides/s-typologies.html` | 15 | Workstation typologies | `slide/s-typologies` | `.claude/worktrees/s-typologies` |
+| 15 | `slides/s-palette1.html` | 16–19 | The campus palette 01 | `slide/s-palette1` | `.claude/worktrees/s-palette1` |
+| 16 | `slides/s-palette2.html` | 20–23 | The campus palette 02 | `slide/s-palette2` | `.claude/worktrees/s-palette2` |
+| 17 | `slides/s-w-board.html` | 24–25 | State Room · Boardroom | `slide/s-w-board` | `.claude/worktrees/s-w-board` |
+| 18 | `slides/s-w-dept.html` | 26–27 | Departmental Room | `slide/s-w-dept` | `.claude/worktrees/s-w-dept` |
+| 19 | `slides/s-w-sprint.html` | 28–29 | Quick Sprint Room | `slide/s-w-sprint` | `.claude/worktrees/s-w-sprint` |
+| 20 | `slides/s-w-arena.html` | 30–31 | Work Arena · Neighbourhood | `slide/s-w-arena` | `.claude/worktrees/s-w-arena` |
+| 21 | `slides/s-w-arena2a.html` | 32–33 | Work Arena · Option 2A | `slide/s-w-arena2a` | `.claude/worktrees/s-w-arena2a` |
+| 22 | `slides/s-w-library.html` | 34 | Work Arena · Library | `slide/s-w-library` | `.claude/worktrees/s-w-library` |
+| 23 | `slides/s-w-garden.html` | 35–36 | The Acker Garden | `slide/s-w-garden` | `.claude/worktrees/s-w-garden` |
+| 24 | `slides/s-w-exec.html` | 37 | Executive Room | `slide/s-w-exec` | `.claude/worktrees/s-w-exec` |
+| 25 | `slides/s-w-cafe1.html` | 38, 40 | Cafe · View 1 | `slide/s-w-cafe1` | `.claude/worktrees/s-w-cafe1` |
+| 26 | `slides/s-w-cafe2.html` | 39, 41 | Cafe · View 2 | `slide/s-w-cafe2` | `.claude/worktrees/s-w-cafe2` |
+| 27 | `slides/s-w-coffee.html` | 42 | Coffee Point | `slide/s-w-coffee` | `.claude/worktrees/s-w-coffee` |
+| 28 | `slides/s-w-mothers.html` | 43 | Mothers Room | `slide/s-w-mothers` | `.claude/worktrees/s-w-mothers` |
+| 29 | `slides/s-w-zen.html` | 44 | Zen Room | `slide/s-w-zen` | `.claude/worktrees/s-w-zen` |
+| 30 | `slides/s-w-studio.html` | 45 | Studio Room | `slide/s-w-studio` | `.claude/worktrees/s-w-studio` |
+| 31 | `slides/s-engage.html` | 46 | Acker's engagement points | `slide/s-engage` | `.claude/worktrees/s-engage` |
+| 32 | `slides/s-material.html` | 47 | Material strategy | `slide/s-material` | `.claude/worktrees/s-material` |
+| 33 | `slides/s-acoustic.html` | 48 | Acoustic strategy | `slide/s-acoustic` | `.claude/worktrees/s-acoustic` |
+| 34 | `slides/s-wayfinding.html` | 52 | Wayfinding | `slide/s-wayfinding` | `.claude/worktrees/s-wayfinding` |
+| 35 | `slides/s-layout.html` | 53–54 | Layout · Option 02A | `slide/s-layout` | `.claude/worktrees/s-layout` |
+| 36 | `slides/s-blowup.html` | 55–57 | Blown up X · Y · Z | `slide/s-blowup` | `.claude/worktrees/s-blowup` |
+| 37 | `slides/s-axo.html` | 58–60 | Schematic axonometric | `slide/s-axo` | `.claude/worktrees/s-axo` |
+| 38 | `slides/s-thanks.html` | — | Thank you | `slide/s-thanks` | `.claude/worktrees/s-thanks` |
+| 39 | `slides/s-wellbeing.html` | 49 | Well-being by design | `slide/s-wellbeing` | `.claude/worktrees/s-wellbeing` |
+| 40 | `slides/s-di.html` | 50 | Designed for all | `slide/s-di` | `.claude/worktrees/s-di` |
+| 41 | `slides/s-esg.html` | 51 | ESG strategy | `slide/s-esg` | `.claude/worktrees/s-esg` |
+| 42 | `slides/s-skv.html` | SKV's deck | About SKV | `slide/s-skv` | `.claude/worktrees/s-skv` |
 <!-- worktrees:end -->
 
 ## Parallel sessions (one per slide), when Ritika asks
@@ -105,7 +104,7 @@ A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that 
   - **Palettes:** two chapters.
   - **The walk:** each space shows OP 01 then OP 02.
   - **Length:** about 20 minutes.
-  - **Site:** short site, sun and fire beats before the challenges.
+  - **Site:** a short site beat before the challenges (the floor's sun and fire beats removed 22 Oct, Ritika).
 - **The thread:** the Loop's seven stops (Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness, each with its words).
 - **Before editing:** confirm anything big with Ritika, and follow her screenshots and comments literally.
 - **Log new patterns** in `PRESENTATION-PATTERNS.md`, and ask which presenter cursor a slide uses while building it.
