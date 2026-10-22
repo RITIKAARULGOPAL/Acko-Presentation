@@ -68,12 +68,11 @@ A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that 
 | 36 | `slides/s-layout.html` | 53–54 | Layout · Option 02A | `slide/s-layout` | `.claude/worktrees/s-layout` |
 | 37 | `slides/s-blowup.html` | 55–57 | Blown up X · Y · Z | `slide/s-blowup` | `.claude/worktrees/s-blowup` |
 | 38 | `slides/s-axo.html` | 58–60 | Schematic axonometric | `slide/s-axo` | `.claude/worktrees/s-axo` |
-| 39 | `slides/s-occupancy.html` | 61 | Occupancy chart | `slide/s-occupancy` | `.claude/worktrees/s-occupancy` |
-| 40 | `slides/s-thanks.html` | — | Thank you | `slide/s-thanks` | `.claude/worktrees/s-thanks` |
-| 41 | `slides/s-wellbeing.html` | 49 | Well-being by design | `slide/s-wellbeing` | `.claude/worktrees/s-wellbeing` |
-| 42 | `slides/s-di.html` | 50 | Designed for all | `slide/s-di` | `.claude/worktrees/s-di` |
-| 43 | `slides/s-esg.html` | 51 | ESG strategy | `slide/s-esg` | `.claude/worktrees/s-esg` |
-| 44 | `slides/s-skv.html` | SKV's deck | About SKV | `slide/s-skv` | `.claude/worktrees/s-skv` |
+| 39 | `slides/s-thanks.html` | — | Thank you | `slide/s-thanks` | `.claude/worktrees/s-thanks` |
+| 40 | `slides/s-wellbeing.html` | 49 | Well-being by design | `slide/s-wellbeing` | `.claude/worktrees/s-wellbeing` |
+| 41 | `slides/s-di.html` | 50 | Designed for all | `slide/s-di` | `.claude/worktrees/s-di` |
+| 42 | `slides/s-esg.html` | 51 | ESG strategy | `slide/s-esg` | `.claude/worktrees/s-esg` |
+| 43 | `slides/s-skv.html` | SKV's deck | About SKV | `slide/s-skv` | `.claude/worktrees/s-skv` |
 <!-- worktrees:end -->
 
 ## Parallel sessions (one per slide), when Ritika asks

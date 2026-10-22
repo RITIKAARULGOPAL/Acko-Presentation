@@ -49,11 +49,10 @@ s-material
 s-acoustic
 s-wayfinding
 
-# 5 · SPACE PLANNING (deck 53–61)
+# 5 · SPACE PLANNING (deck 53–60; 61, the occupancy chart, is the layout's Occupancy panel)
 s-layout
 s-blowup
 s-axo
-s-occupancy
 s-thanks
 
 # APPENDIX · its own deck (deck 49–51)

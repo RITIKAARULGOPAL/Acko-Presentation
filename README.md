@@ -84,7 +84,7 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
     - **Fire egress** switches the exit-path layer on or off.
     - **Hover** switches the names on hover on or off. It's one setting for the layout, the blow-ups and the axo, and it stays as set (as in Mitigata). A neighbourhood still opens on a click with Hover off.
     - **Reset zoom** flies back to the beat's view, or to the open neighbourhood's.
-  - **Occupancy** (bottom left, beside the Legend tab) opens the floor's occupancy chart beneath the plan, the plan moving up. It shows slide 61's numbers in Mitigata's chart look: hairlines, the zones in small purple capitals, a mark before each count (✓ meets, ▲ above, + not asked, ▼ short) and a summary line. ⤢ opens it centred and larger; ✕, Esc or a click outside closes it. Each neighbourhood's chart has the same look.
+  - **Occupancy** (bottom left, beside the Legend tab) opens the floor's occupancy chart beneath the plan, the plan moving up. It shows the brief against Option 2A (deck slide 61, which is no longer a slide of its own: its table lives in the layout slide) in Mitigata's chart look: hairlines, the zones in small purple capitals, a mark before each count (✓ meets, ▲ above, + not asked, ▼ short) and a summary line. ⤢ opens it centred and larger; ✕, Esc or a click outside closes it. Each neighbourhood's chart has the same look.
 - **The axo:** with Hover on, the space under the cursor lights up with its name and area. Drag to turn it, scroll to zoom on the cursor, right-drag (or Shift-drag) to pan; **Reset view** (or a double-click) goes back to the beat. Without WebGL, it shows the deck's own axo pictures.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 
@@ -119,7 +119,6 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 53–54 | Layout · Option 02A | 3 | The DXF plan, its spaces coloured by the legend (hover: name, area); then the six neighbourhoods draw in and their workstations count up (651), and a click opens one (zoom, key plan, occupancy chart); then fire egress, the exit paths as an extra layer |
 | 55–57 | Blown up X · Y · Z | 3 | The same DXF plan flies into each blow-up (hover a space); the fire compartment line draws on Y |
 | 58–60 | Schematic axonometric | 3 | A live 3D model of Option 02A from the DXF, in the deck's axo look; West, Middle, East fly along it, with leaders to their spaces (drag to turn, scroll to zoom, Reset view) |
-| 61 | Occupancy chart | 1 | Brief against Option 2A, row by row; shortfalls in maroon, more than asked in purple |
 | — | Thank you | 1 | Buttons to the Appendix and About SKV |
 
 **Appendix:** well-being (49), D&I (50) and ESG (51), shown as the deck's own pages.

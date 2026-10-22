@@ -12,7 +12,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-layout" data-part="5" data-title="Layout · Option 02A" data-steps="3" data-mins="1.5" data-beats="The layout,Six neighbourhoods,Fire egress"
-  data-notes="The plan takes the page: the whole floor, centred. Bottom left, the beat's key (Legend, Six neighbourhoods, Fire egress key) opens on a click and the plan moves up above it; click again to tuck it away. Bottom left, Occupancy opens the floor's occupancy chart (slide 61's numbers, in Mitigata's chart look) beneath the plan, as the Legend does; ⤢ opens it centred and larger. Top right, on any beat: Spaces shows the spaces in their legend colours (opening the Legend does too); Hover switches the names on hover on or off (on the blow-ups and the axo too, and it stays as set); Neighbourhoods switches the six on or off (when they show, a click on one opens it), Fire egress the exit paths, Reset zoom flies back to the beat's view (or the open neighbourhood's). 1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): it fills the page, with a bar along the bottom (key plan, workstations, area); Occupancy chart opens its chart on the right (workstations and every room inside it), Hide chart tucks it away; hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The same buttons sit on the blow-ups.">
+  data-notes="The plan takes the page: the whole floor, centred. Bottom left, the beat's key (Legend, Six neighbourhoods, Fire egress key) opens on a click and the plan moves up above it; click again to tuck it away. Bottom left, Occupancy opens the floor's occupancy chart (the brief against Option 2A, in Mitigata's chart look) beneath the plan, as the Legend does; ⤢ opens it centred and larger. Top right, on any beat: Spaces shows the spaces in their legend colours (opening the Legend does too); Hover switches the names on hover on or off (on the blow-ups and the axo too, and it stays as set); Neighbourhoods switches the six on or off (when they show, a click on one opens it), Fire egress the exit paths, Reset zoom flies back to the beat's view (or the open neighbourhood's). 1 · Layout Option 02A, the revised option: one floor, 651 workstations in the workhall; reception and visitor hub; departmental rooms for 20; collaboration huddles for 10–12; quick sprints for 2, 4, 6 and 8; a café for 178; training; the hatchery; studio; zen, prayer and mothers' rooms. Occupancy, the brief against Option 2A: met or more — 651 workstations against 600–700; the boardroom seats 35 against 32; the café 178 against 150; training 42 against 40; the hatchery 12 against 8; reception, lounge, executive cabins, visitor hubs, studio, mothers', zen and prayer rooms all in, with 3-, 6- and 8-pax rooms the brief didn't list. Short of the ask: focus rooms 16 of 20, 4-pax sprints 17 of 25, huddles 13 of 18, departmental rooms 6 of 8, phone booths 42 of 44. 2 · Six neighbourhoods, each with its own identity: 01 · 140 workstations, 02 · 137, 03 · 65, 04 · 82, 05 · 104, 06 · 123 — 651 in all. The two arrival zones sit at the lift lobbies. Click a neighbourhood (on the plan or its row): it fills the page, with a bar along the bottom (key plan, workstations, area); Occupancy chart opens its chart on the right (workstations and every room inside it), Hide chart tucks it away; hover its rooms for their names. Click another to switch; All neighbourhoods, a click on the same one, or Esc goes back. 3 · Fire egress: every exit path, under 50 m in green, 50–60 m in orange. The same buttons sit on the blow-ups.">
   <div class="page">
     <div class="ly-veil"></div>
     <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
@@ -37,7 +37,41 @@
       <button type="button" class="ly-tool ly-dr-btn"><b>Legend</b><span>▴</span></button>
       <button type="button" class="ly-tool ly-fo-btn"><b>Occupancy</b><span>▴</span></button>
     </div>
-    <!-- the floor's occupancy chart: the occupancy slide's rows (slide 61), in Mitigata's chart look; ⤢ opens it centred and larger -->
+    <!-- the floor's occupancy chart: the brief against Option 2A (deck slide 61, folded in here), in Mitigata's chart look; ⤢ opens it
+         centred and larger. Its rows, as the PPT's table has them: per row the requirement and the count, short of the ask (short) or
+         more than asked (up); read once into the chart -->
+    <template class="ly-oc-src">
+      <table class="oc">
+        <thead><tr><th>Zones</th><th>Areas</th><th>Requirements</th><th>Option - 2A</th></tr></thead>
+        <tbody>
+          <tr class="z1"><td rowspan="2">Public zone</td><td>Reception</td><td>1</td><td data-count="1">1</td></tr>
+          <tr class="z1"><td>Waiting Lounge</td><td>1</td><td data-count="1">1</td></tr>
+          <tr class="z2"><td rowspan="2">Workhall</td><td>Workstations</td><td>600–700</td><td class="ok" data-count="651">651</td></tr>
+          <tr class="z2"><td>Executive cabin</td><td>3</td><td data-count="3">3</td></tr>
+          <tr class="z3"><td rowspan="12">Meeting room</td><td>Board room - 32 pax</td><td>1</td><td class="up">1 <small>(35 pax)</small></td></tr>
+          <tr class="z3"><td>Focus room - 2 pax</td><td>20</td><td class="short" data-count="16">16</td></tr>
+          <tr class="z3"><td>Visitor Hub</td><td>5</td><td data-count="5">5</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="2">2</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 4 pax</td><td>25</td><td class="short" data-count="17">17</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 6 pax</td><td>–</td><td class="up" data-count="2">2</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 8 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
+          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="13">13</td></tr>
+          <tr class="z3"><td>Departmental Room - 18–20 pax</td><td>8</td><td class="short" data-count="6">6</td></tr>
+          <tr class="z3"><td>Hatchery - 08 pax</td><td>1</td><td class="up">1 <small>(12 pax)</small></td></tr>
+          <tr class="z3"><td>Studio</td><td>1</td><td data-count="1">1</td></tr>
+          <tr class="z3"><td>Phone booth</td><td>44</td><td class="short" data-count="42">42</td></tr>
+          <tr class="z4"><td>Training room</td><td>Training Room - 40 pax</td><td>1</td><td class="up">1 <small>(42 pax)</small></td></tr>
+          <tr class="z5"><td rowspan="4">Recreational area / wellness</td><td>Cafeteria</td><td>1 <small>(150 pax)</small></td><td class="up">1 <small>(178 pax)</small></td></tr>
+          <tr class="z5"><td>Mother's Room</td><td>1</td><td data-count="1">1</td></tr>
+          <tr class="z5"><td>Zen Room</td><td>5</td><td data-count="5">5</td></tr>
+          <tr class="z5"><td>Prayer Room</td><td>1</td><td data-count="1">1</td></tr>
+          <tr class="z6"><td rowspan="4">Services</td><td>UPS / Electrical</td><td>1</td><td>1</td></tr>
+          <tr class="z6"><td>Battery</td><td>1</td><td>1</td></tr>
+          <tr class="z6"><td>Hub Room</td><td>2</td><td>2</td></tr>
+          <tr class="z6"><td>Server Room</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </template>
     <div class="ly-fo">
       <div class="ly-fo-scrim"></div>
       <div class="ly-fo-card">
@@ -189,7 +223,6 @@
 #s-layout.dr-open .ly-dr-btn span, #s-layout.fo-open .ly-fo-btn span { transform: rotate(180deg); }
 #s-layout.dr-open .ly-dr-btn, #s-layout.fo-open .ly-fo-btn { background: #5222d0; color: #fff; border-color: #5222d0; }
 #s-layout.zp-open .ly-tabs { opacity: 0; pointer-events: none; }
-#s-layout.no-fo .ly-fo-btn { display: none; }          /* the slide on its own: no occupancy slide to take the chart from */
 /* the floor's occupancy chart beneath the plan (the occupancy slide's table, in two columns) */
 #s-layout .ly-fo { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility 0s linear .35s; }
 #s-layout.fo-open .ly-fo { opacity: 1; visibility: visible; transition: opacity .5s var(--ease) .15s, visibility 0s; }
@@ -268,11 +301,11 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
       groups.map(([g, list]) => list.map((r, i) => `<tr class="${i === 0 ? "g0" : ""}${r.ws ? " ws" : ""}">` + (i === 0 ? `<td class="grp" rowspan="${list.length}">${g}</td>` : "") +
         `<td>${r.area}</td>${req ? `<td class="br">${r.req}</td>` : ""}<td class="n ${r.st || ""}">${r.st ? `<i>${MARK[r.st]}</i>` : ""}${r.val}</td></tr>`).join("")).join("") + "</tbody></table>";
   }
-  // the floor's chart: the occupancy slide's own rows (slide 61), read once, each count marked from its state there
+  // the floor's chart: the brief's rows (the template above, deck slide 61), read once, each count marked from its state there
   // (short: below the ask; up: above it, or + where nothing was asked); split at Training into two columns
   function floorChart(sc) {
     if ($(".ly-fo .occ-t", sc)) return true;
-    const src = document.querySelector("#s-occupancy .oc"); if (!src) return false;
+    const src = $(".ly-oc-src", sc).content.querySelector("table");
     let grp = "";
     const rows = $$("tbody tr", src).map((tr) => {
       const td = $$("td", tr); if (td.length === 4) grp = td.shift().textContent.trim();
@@ -283,7 +316,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
     const cut = rows.findIndex((r) => /Training/i.test(r.grp));
     $(".ly-fo-l", sc).innerHTML = occTable(cut > 0 ? rows.slice(0, cut) : rows, true);
     $(".ly-fo-r", sc).innerHTML = (cut > 0 ? occTable(rows.slice(cut), true) : "") +
-      '<p class="occ-key"><i class="ok">✓</i>meets the requirement<i class="up">▲</i>more than asked<i class="x">+</i>not asked for<i class="dn">▼</i>short of the ask · from the occupancy chart (slide 61)</p>';
+      '<p class="occ-key"><i class="ok">✓</i>meets the requirement<i class="up">▲</i>more than asked<i class="x">+</i>not asked for<i class="dn">▼</i>short of the ask · against the brief</p>';
     const n = (f) => rows.filter(f).reduce((a, r) => a + r.n, 0);
     $(".ly-fo-sum", sc).innerHTML = `<b>${n((r) => r.ws)}</b> workstations · <b>${n((r) => r.grp === "Meeting room" && !/Phone booth/i.test(r.area))}</b> meeting rooms · <b>${n((r) => /Phone booth/i.test(r.area))}</b> phone booths`;
     return true;
@@ -343,7 +376,6 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
       $(".ly-fo-btn", sc).onclick = () => drawer(sc, sc.classList.contains("fo-open") ? null : "occ");
       $(".ly-fo-xp", sc).onclick = (e) => { e.currentTarget.blur(); big(sc, !$(".ly-fo", sc).classList.contains("big")); };
       $(".ly-fo-scrim", sc).onclick = () => big(sc, false);
-      sc.classList.toggle("no-fo", !document.querySelector("#s-occupancy .oc"));
       const hv = $(".ly-hv-btn", sc); hv.classList.toggle("on", plan.hoverOn); hv.onclick = () => hv.classList.toggle("on", plan.planHover());
       document.removeEventListener("keydown", sc._esc, true);
       sc._esc = (e) => {          // Esc: the expanded chart first, then an open neighbourhood
@@ -355,7 +387,7 @@ ACKO.slide("s-layout", ({ $, $$, later, countUp, plan }) => {
     },
     step(k, sc) {
       beat = k; close(sc); sc.classList.remove("dr-open", "fo-open"); big(sc, false);
-      plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, blow: k === 1, egress: k === 3, view: centre(), ms: 0 });
+      plan.planOn(sc, { rooms: k === 1, teams: k === 2, nb: k === 2, lab: k === 2, entry: true, egress: k === 3, view: centre(), ms: 0 });
       $(".ly-eg-btn", sc).classList.toggle("on", k === 3);
       $(".ly-nb-btn", sc).classList.toggle("on", k === 2);
       $(".ly-sp-btn", sc).classList.remove("on");

@@ -244,8 +244,8 @@ West, Middle and East fly an orthographic camera along it.
   - **Slides:** each one's pill syncs from `plan.hoverOn` on enter.
   - **The axo's own hover:** the cursor is taken to a plane at 0.4 m (desk height, less parallax than the floor) and tested against the deck's spaces, smallest first, then the neighbourhoods. The hit space gets a purple floor fill and outline, and a label in the plan's style above its label point at 2.6 m.
 - **The floor's occupancy chart on the layout:** a second tab beside the Legend; one drawer at a time.
-  - **Source:** the occupancy slide's table (`#s-occupancy .oc`), cloned on first open and split at "Training room" into two columns. One source for both slides.
-  - **Standalone:** opened on its own, the layout slide has no slide 61, so the tab hides (`no-fo`).
+  - **Source:** the brief's table, kept in the layout slide itself (`<template class="ly-oc-src">`), read on first open and split at "Training room" into two columns. (It was the occupancy slide's table until that slide, deck 61, was folded into this panel on 22 Oct: Ritika, "its there in layout page already".)
+  - **Standalone:** the table travels with the slide, so the tab works when the layout slide is opened on its own too.
 - **Gotcha:** a slide that draws over the world (the axo) must call `plain()` on enter. Otherwise the layout's flat plan, left in the world by the blow-ups, shows through its transparent canvas.
 - **The occupancy charts in Mitigata's look** (Ritika: "take reference from mitigata presentation"):
   - **Builder:** one `occTable(rows, req)` gives Mitigata's `occ-t`: Zone | Area (| Requirement) | count. The zone cell spans its rows in small purple capitals, the rows are hairlines with no fills, and each count gets a mark.
