@@ -113,7 +113,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 16–19 | Campus palette 01 | 4 | The board builds, then its three renders full bleed |
 | 20–23 | Campus palette 02 | 4 | The same, for palette 02 |
 | 24–45 | Visual direction: the walk | 22 | One slide per space, OP 01 then OP 02, each with its Loop words and the keyplan's camera mark |
-| 46, 47, 48, 52 | Value addition | 4 | Engagement points, materials, acoustics (NRC 0.70–0.90), wayfinding (Nalanda, Sabha, Takshashila) |
+| 46, 47, 48, 52 | Value addition | 7 | Engagement points, a lens on the PPT collage over four beats (Feel it, Play it, Share it, then All; chips jump, photos open large); materials, acoustics (NRC 0.70–0.90), wayfinding (Nalanda, Sabha, Takshashila) |
 | 53–54 | Layout · Option 02A | 3 | The DXF plan, its spaces coloured by the legend (hover: name, area); then the six neighbourhoods draw in and their workstations count up (651), and a click opens one (zoom, key plan, occupancy chart); then fire egress, the exit paths as an extra layer |
 | 55–57 | Blown up X · Y · Z | 3 | The same DXF plan flies into each blow-up (hover a space); the fire compartment line draws on Y |
 | 58–60 | Schematic axonometric | 3 | A live 3D model of Option 02A from the DXF, in the deck's axo look; West, Middle, East fly along it, with leaders to their spaces (drag to turn, scroll to zoom, Reset view) |

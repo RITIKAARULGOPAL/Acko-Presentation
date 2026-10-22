@@ -436,3 +436,15 @@ West, Middle and East fly an orthographic camera along it.
   - `pieces.py`: cuts, piece files, simulation
   - `bridge3.py`: the exit
   - `mb/make_ribbon3.py`: writes both slides
+
+## 21. A lens on a collage (Engagement points)
+**What (Ritika, 21–22 Oct):** her PPT collage stays whole; each beat lights one group and dims the rest (Feel it, Play it, Share it, then All last). Picked from the comparison pages (`index-engage.html`).
+
+**How:**
+- **Grouping:** every part of a point (tile, label, arrow) carries `data-k`. `step(k)` toggles `.lens` on the section and `.lit` on the group's `data-k`.
+- **Dimming:** unlit tiles get `filter: grayscale(1) opacity(.25)`, with a per-property transition so the entrance stagger is kept.
+- **Arrows:** each label's dashed arrow draws through a mask whose path animates `stroke-dashoffset` (`pathLength` 1), so the visible stroke stays dashed.
+- **Chips** jump to a beat; photos open in the lightbox.
+- **Matching the PPT page:** screenshot headless Chrome at 1376×774 (`--virtual-time-budget=30000`), then compare ink boxes per region against her PPT screenshot (within 0.2%).
+- **Gotcha:** `tools/acko/make_value_slides.py` writes `slides/s-engage.html`; don't re-run it for s-engage.
+
