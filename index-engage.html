@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engagement points · five ways</title>
+<!-- Deck slide 46, "Acker's engagement points", shown five ways side by side so one can be chosen for the HTML deck.
+     The shell (bar, slide, beats, collage, lightbox) is shared with index-engage-groups.html: engage/engage.css, engage/engage.js.
+     Photos, logos and fonts are copies from the slide engine (engage/); ppt-46.webp is a screenshot of the PPT page.
+     Serve the folder (the .claude/launch.json "engage-options" entry) or open the file directly. -->
+<link rel="stylesheet" href="engage/engage.css">
+<style>
+/* ---------- 0 · as today: the screenshot carries its own chrome ---------- */
+.page[data-v="0"] .chrome { opacity: 0; }
+
+/* ---------- 2 · polaroid pinboard: each label on its own photo ---------- */
+.pol { width: calc(var(--pt) * 96); padding: calc(var(--pt) * 5.5) calc(var(--pt) * 5.5) 0; background: #fff; cursor: zoom-in; opacity: 0;
+  box-shadow: 0 calc(var(--pt) * 2) calc(var(--pt) * 9) rgba(30, 20, 60, .2), 0 0 0 1px rgba(0, 0, 0, .04);
+  transform: translateY(calc(var(--pt) * -12)) rotate(calc(var(--r) * 2.6)) scale(1.12);
+  transition: transform .65s cubic-bezier(.3, 1.35, .5, 1), opacity .35s, box-shadow .3s; }
+.pol.on { opacity: 1; transform: rotate(var(--r)); transition-delay: calc(var(--i) * .14s); }
+.pol.on:hover { transform: rotate(0deg) scale(1.07); z-index: 4; transition-delay: 0s; box-shadow: 0 calc(var(--pt) * 6) calc(var(--pt) * 18) rgba(30, 20, 60, .28); }
+.pol.wide { width: calc(var(--pt) * 128); }
+.pol .ph { height: calc(var(--pt) * 96); pointer-events: none; }
+.pol .hand { display: block; text-align: center; font-size: calc(var(--pt) * var(--fs, 15)); color: #333; padding: calc(var(--pt) * 5) 0 calc(var(--pt) * 7); white-space: nowrap; }
+.pol::before { content: ""; position: absolute; left: 50%; top: calc(var(--pt) * -5); width: calc(var(--pt) * 30); height: calc(var(--pt) * 10); transform: translateX(-50%) rotate(var(--t, -4deg)); background: rgba(201, 179, 243, .75); }
+
+/* ---------- 3 · grouped by feeling ---------- */
+.v3 .ph { border-radius: calc(var(--pt) * 3); }
+
+/* ---------- 4 · hero + list ---------- */
+.list { list-style: none; }
+.li { display: flex; align-items: center; gap: calc(var(--pt) * 7); height: calc(var(--ph) * .076); cursor: pointer; }
+.li em { width: calc(var(--pt) * 12); font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 6.5); letter-spacing: .05em; color: #a19bb5; transition: color .3s; }
+.li .hand { position: relative; font-size: calc(var(--pt) * 19); color: #555; transition: color .3s; }
+.li .hand::after { content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--pt) * -1.5); height: calc(var(--pt) * 1.6); border-radius: 9px; background: var(--purple); transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); }
+.li.act .hand { color: var(--purple-2); }
+.li.act .hand::after { transform: scaleX(1); }
+.li.act em { color: var(--purple); }
+.hero { overflow: hidden; background: #f1eff6; border-radius: calc(var(--pt) * 3); cursor: zoom-in; }
+.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.05); transition: opacity .55s, transform 5s linear; }
+.hero img.vis { opacity: 1; transform: scale(1); }
+.hero img.small { object-fit: contain; padding: 9%; }
+.th { border-radius: calc(var(--pt) * 2); cursor: pointer; }
+.th.on { opacity: .5; }
+.th.on:hover, .th.on.act { opacity: 1; }
+.th.act { outline: calc(var(--pt) * 1.5) solid var(--purple); outline-offset: calc(var(--pt) * 1.5); }
+
+/* ---------- 5 · on the Loop: the ribbon draws, the seven points come up on its seven stops ---------- */
+.rib { left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.rib .r { fill: none; stroke: var(--lavender); stroke-width: 34; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: .9; transition: stroke-dashoffset 1.7s cubic-bezier(.45, 0, .3, 1); }
+.rib.on .r { stroke-dashoffset: 0; }
+.rib .dot { fill: var(--purple); opacity: 0; transition: opacity .3s; }
+.rib.on .dot { opacity: 1; transition-delay: calc(var(--i) * .2s + .25s); }
+.rib .ring { fill: none; stroke: var(--purple); stroke-width: 1.6; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.rib.on .ring { animation: ring 2.4s calc(var(--i) * .2s + 1.6s) infinite; }
+@keyframes ring { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(2.4); opacity: 0; } }
+.rib .ld { stroke: var(--purple); stroke-width: 1.6; stroke-dasharray: 3 5; opacity: 0; transition: opacity .4s; }
+.rib .ld.on { opacity: .75; transition-delay: calc(var(--i) * .16s + .25s); }
+.st { display: flex; flex-direction: column; align-items: center; opacity: 0; transform: scale(.86); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+.st.on { opacity: 1; transform: none; transition-delay: calc(var(--i) * .16s); }
+.st .ph { width: 100%; height: calc(var(--ph) * .18); border-radius: calc(var(--pt) * 4); }
+.st small { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 5.6); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--purple); }
+.st .hand { margin-top: calc(var(--pt) * 1); font-size: calc(var(--pt) * 14); color: #333; white-space: nowrap; }
+</style>
+</head>
+<body>
+<header class="bar" id="bar">
+  <div class="bar-top">
+    <div class="ttl"><b>Acker’s engagement points</b><span>Five ways to show deck slide 46 · <a href="index-engage-groups.html">Grouping variations →</a></span></div>
+    <nav class="pills" id="pills" aria-label="Options">
+      <button data-v="0"><i>0</i>As today</button>
+      <button data-v="1"><i>1</i>Annotated collage</button>
+      <button data-v="2"><i>2</i>Polaroid pinboard</button>
+      <button data-v="3"><i>3</i>Grouped by feeling</button>
+      <button data-v="4"><i>4</i>Hero + list</button>
+      <button data-v="5"><i>5</i>On the Loop</button>
+    </nav>
+    <div class="ctl">
+      <button id="prev" aria-label="Previous beat">←</button><span id="beat">1 / 1</span><button id="next" aria-label="Next beat">→</button>
+      <button id="replay">Replay</button>
+    </div>
+  </div>
+  <p class="cap"><span id="cap"></span><span class="k"><kbd>←</kbd> <kbd>→</kbd> beats · <kbd>0</kbd>–<kbd id="kmax">5</kbd> options · <kbd>R</kbd> replay · <kbd>F</kbd> full screen</span></p>
+</header>
+
+<main class="stage">
+<div class="page" id="page">
+
+  <!-- 0 · the PPT page as it stands (Ritika's screenshot of slide 46) -->
+  <section class="view v0" data-v="0">
+    <img src="engage/img/ppt-46.webp" alt="Deck slide 46 as it is in the PPT" style="left:0;top:0;width:100%;height:100%;object-fit:cover">
+  </section>
+
+  <!-- 1 · annotated collage: the PPT's layout and crops (ENGAGE.collage); beat 2 draws the arrows -->
+  <section class="view v1" data-v="1">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:8;left:2%;top:39.6%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:9;--s:.8;left:2.9%;top:46%;white-space:nowrap"></div>
+    <p class="body b" data-b="1" data-t="body" style="--i:10;left:2.9%;top:53%;width:30%"></p>
+    <p class="note b" data-b="1" data-t="note" style="--i:11;left:80.5%;top:53%;width:17.5%"></p>
+  </section>
+
+  <!-- 2 · polaroid pinboard: text left, the seven pinned on one after another -->
+  <section class="view v2" data-v="2">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.82;left:2.5%;top:30%"></div>
+    <div class="hand tag b" data-b="1" style="--i:1;--s:.92;left:2.5%;top:37%">Designed for Interaction.<br>Built for Engagement.</div>
+    <p class="body b" data-b="1" data-t="body" style="--i:2;--s:.95;left:2.5%;top:52%;width:33%"></p>
+    <div class="pol" data-b="2" data-lb="g" style="--i:0;--r:-4deg;--t:-6deg;left:39.4%;top:14.3%"><div class="ph" data-p="g"></div><span class="hand">Mood Check-In</span></div>
+    <div class="pol" data-b="2" data-lb="a" style="--i:1;--r:3deg;--t:4deg;left:54%;top:12.3%"><div class="ph" data-p="a"></div><span class="hand">Interactive Gaming</span></div>
+    <div class="pol" data-b="2" data-lb="b" style="--i:2;--r:-2deg;left:68.6%;top:15.3%"><div class="ph" data-p="b"></div><span class="hand">Come nerd it out</span></div>
+    <div class="pol" data-b="2" data-lb="d" style="--i:3;--r:4deg;--t:3deg;left:83.2%;top:12.8%"><div class="ph" data-p="d"></div><span class="hand">Pause &amp; Play</span></div>
+    <div class="pol" data-b="2" data-lb="e" style="--i:4;--r:3deg;--t:-2deg;left:41.7%;top:50.6%"><div class="ph" data-p="e"></div><span class="hand">To Express out</span></div>
+    <div class="pol" data-b="2" data-lb="c" style="--i:5;--r:-3deg;--t:5deg;--fs:13;left:56.7%;top:53.1%"><div class="ph" data-p="c"></div><span class="hand">For the frustrated Ackers</span></div>
+    <div class="pol wide" data-b="2" data-lb="f" style="--i:6;--r:2deg;--t:-5deg;left:72.2%;top:49.4%"><div class="ph" data-p="f"></div><span class="hand">Happy conversations</span></div>
+  </section>
+
+  <!-- 3 · grouped by feeling: the text, then one column per beat -->
+  <section class="view v3" data-v="3">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.9;left:2.5%;top:13%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.85;left:2.5%;top:19.6%;white-space:nowrap"></div>
+    <p class="body b" data-b="1" data-t="body" style="--i:2;--s:.88;left:50%;top:13%;width:47.5%"></p>
+
+    <i class="rule b" data-b="2" style="--i:0;left:2.5%;top:33%;width:30%"></i>
+    <div class="col-h b" data-b="2" style="--i:1;left:2.5%;top:35%"><b>Feel it</b><span class="hand">check in, let it out</span></div>
+    <div class="ph b" data-b="2" data-p="g" style="--i:2;left:2.5%;top:45%;width:9.33%;height:36%"></div>
+    <div class="ph b" data-b="2" data-p="e" style="--i:3;left:12.83%;top:45%;width:9.33%;height:36%"></div>
+    <div class="ph b" data-b="2" data-p="c" style="--i:4;left:23.17%;top:45%;width:9.33%;height:36%"></div>
+    <div class="hand lab b" data-b="2" style="--i:5;left:2.5%;top:82.5%;width:9.33%">Mood Check-In</div>
+    <div class="hand lab b" data-b="2" style="--i:6;left:12.83%;top:82.5%;width:9.33%">To Express out</div>
+    <div class="hand lab b" data-b="2" style="--i:7;left:23.17%;top:82.5%;width:9.33%">For the frustrated Ackers</div>
+
+    <i class="rule b" data-b="3" style="--i:0;left:35%;top:33%;width:30%"></i>
+    <div class="col-h b" data-b="3" style="--i:1;left:35%;top:35%"><b>Play it</b><span class="hand">pause, nerd out, play</span></div>
+    <div class="ph b" data-b="3" data-p="a" style="--i:2;left:35%;top:45%;width:9.33%;height:36%"></div>
+    <div class="ph b" data-b="3" data-p="b" style="--i:3;left:45.33%;top:45%;width:9.33%;height:36%"></div>
+    <div class="ph b" data-b="3" data-p="d" style="--i:4;left:55.67%;top:45%;width:9.33%;height:36%"></div>
+    <div class="hand lab b" data-b="3" style="--i:5;left:35%;top:82.5%;width:9.33%">Interactive Gaming</div>
+    <div class="hand lab b" data-b="3" style="--i:6;left:45.33%;top:82.5%;width:9.33%">Come nerd it out</div>
+    <div class="hand lab b" data-b="3" style="--i:7;left:55.67%;top:82.5%;width:9.33%">Pause &amp; Play</div>
+
+    <i class="rule b" data-b="4" style="--i:0;left:67.5%;top:33%;width:30%"></i>
+    <div class="col-h b" data-b="4" style="--i:1;left:67.5%;top:35%"><b>Share it</b><span class="hand">talk, laugh, connect</span></div>
+    <div class="ph b" data-b="4" data-p="f" data-pos="35% 30%" style="--i:2;left:67.5%;top:45%;width:30%;height:36%"></div>
+    <div class="hand lab b" data-b="4" style="--i:3;left:67.5%;top:82.5%;width:30%">Happy conversations</div>
+  </section>
+
+  <!-- 4 · hero + list: one beat per point; a label or thumbnail jumps to it -->
+  <section class="view v4" data-v="4">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.82;left:2.5%;top:13%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.85;left:2.5%;top:19.6%;white-space:nowrap"></div>
+    <ol class="list b" data-b="1" style="--i:2;left:2.5%;top:30%;width:34%"></ol>
+    <div class="hero b" data-b="1" style="--i:3;left:39.5%;top:12%;width:29%;height:80%"><img alt=""><img alt=""></div>
+    <p class="note b" data-b="1" data-t="note" style="--i:5;--s:.88;left:71%;top:76%;width:27%"></p>
+  </section>
+
+  <!-- 5 · on the Loop: the ribbon (beat 1), then a point at each stop (beat 2); the stop mapping is a placeholder -->
+  <section class="view v5" data-v="5">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.9;left:2.5%;top:12%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.85;left:2.5%;top:17.6%;white-space:nowrap"></div>
+    <p class="note b" data-b="1" data-t="note" style="--i:2;--s:.9;left:62%;top:12%;width:35.5%"></p>
+    <svg class="rib" data-b="1" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
+  </section>
+
+  <div class="chrome hdr"><b>Acker’s engagement points</b><span>Value Addition | Kit of parts</span></div>
+  <div class="chrome copy">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+  <div class="chrome lock"><img src="engage/img/acko-ink.webp" alt="ACKO"><i></i><img src="engage/img/skv-ink.webp" alt="SKV"></div>
+</div>
+</main>
+
+<div id="lb" role="dialog" aria-label="Photo"><img alt=""><div class="hand"></div></div>
+
+<script src="engage/engage.js"></script>
+<script>
+(() => {
+  const { $, $$, IMG, P, ORDER } = ENGAGE;
+
+  /* ---------- 1 · the PPT collage ---------- */
+  ENGAGE.collage($(".v1"));
+
+  /* ---------- 4 · the list and thumbnails (data-go: a click jumps to that point's beat) ---------- */
+  $(".v4 .list").innerHTML = ORDER.map((k, i) =>
+    `<li class="li" data-go="${i + 1}"><em>${String(i + 1).padStart(2, "0")}</em><span class="hand">${P[k].label}</span></li>`).join("");
+  $(".v4").insertAdjacentHTML("beforeend", ORDER.map((k, i) =>
+    `<div class="ph th b" data-b="1" data-p="${k}" data-go="${i + 1}" style="--i:${4 + i * .5};left:${71 + (i % 2) * 14}%;top:${12 + Math.floor(i / 2) * 15.5}%;width:13%;height:14%"></div>`).join(""));
+
+  /* ---------- 5 · the Loop: seven stops along a lavender ribbon, alternately above and below it ---------- */
+  const STOPS = [["Arrival", "g"], ["Café", "f"], ["Board Room", "e"], ["Meeting Rooms", "d"], ["Collab", "b"], ["Work", "a"], ["Wellness", "c"]];
+  (function loop() {
+    const W = 1920, H = 1080, r = (n) => Math.round(n);
+    const xs = STOPS.map((_, i) => 7.5 + i * 84 / 6);            // % of the page
+    const up = (i) => i % 2 === 0, dy = (i) => (up(i) ? 54.5 : 64.5); // the dot's height, % of the page
+    // a smooth curve through the dots (Catmull-Rom as cubic Béziers), running off both edges
+    const pts = [[-60, .595 * H], ...xs.map((x, i) => [x * W / 100, dy(i) * H / 100]), [W + 60, .595 * H]];
+    let d = `M${pts[0].map(r).join(" ")}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ` C${c1.map(r).join(" ")} ${c2.map(r).join(" ")} ${p2.map(r).join(" ")}`;
+    }
+    $(".v5 .rib").innerHTML = `<path class="r" pathLength="1" d="${d}"/>` + xs.map((x, i) => {
+      const cx = r(x * W / 100), cy = r(dy(i) * H / 100);
+      const [y1, y2] = up(i) ? [.51 * H, cy - 16] : [cy + 16, .685 * H];
+      return `<line class="ld" data-b="2" style="--i:${i}" x1="${cx}" y1="${r(y1)}" x2="${cx}" y2="${r(y2)}"/>` +
+        `<circle class="ring" style="--i:${i}" cx="${cx}" cy="${cy}" r="9"/><circle class="dot" style="--i:${i}" cx="${cx}" cy="${cy}" r="9"/>`;
+    }).join("");
+    $(".v5").insertAdjacentHTML("beforeend", STOPS.map(([name, k], i) =>
+      `<div class="st" data-b="2" style="--i:${i};left:${xs[i] - 5.5}%;top:${up(i) ? 26.5 : 68.5}%;width:11%">` +
+      `<div class="ph" data-p="${k}"></div><small>${name}</small><span class="hand">${P[k].label}</span></div>`).join(""));
+  })();
+
+  /* ---------- 4 · the hero: cross-fades to the active point ---------- */
+  const hero = $(".v4 .hero"), heroImgs = $$("img", hero);
+  let heroAt = -1;
+  function setHero(i) {
+    if (i === heroAt) return;
+    heroAt = i;
+    $$(".v4 .li").forEach((el, j) => el.classList.toggle("act", j === i));
+    $$(".v4 .th").forEach((el, j) => el.classList.toggle("act", j === i));
+    if (i < 0) return;
+    const k = ORDER[i], cur = heroImgs.find((im) => im.classList.contains("vis")), nx = heroImgs.find((im) => im !== cur);
+    hero.dataset.lb = k;
+    nx.src = IMG(k); nx.alt = P[k].label; nx.style.objectPosition = P[k].pos;
+    nx.classList.toggle("small", k === "d");   // the word search is only 379×532: shown smaller rather than blown up
+    void nx.offsetWidth;
+    nx.classList.add("vis"); if (cur) cur.classList.remove("vis");
+  }
+
+  /* ---------- the options and their beats ---------- */
+  const deck = ENGAGE.start([
+    { n: 1, cap: "The PPT page as it stands (deck slide 46, your screenshot), for comparison." },
+    { n: 2, cap: "Closest to the PPT. Beat 2 draws each label’s dashed arrow out of its photo. The handwritten line no longer sits on the heading." },
+    { n: 2, cap: "Each label is written on its own polaroid, so no arrows are needed. Hover lifts one; click opens it large." },
+    { n: 4, cap: "Feel it · Play it · Share it, one column per beat. The grouping is a proposal to confirm." },
+    { n: 7, cap: "One beat per point; click a label or thumbnail to jump. The word-search photo is low-res (379×532), so it is shown smaller.",
+      hook: (k) => setHero(k ? k - 1 : -1) },
+    { n: 2, cap: "The seven points on the Loop’s seven stops: the ribbon draws, then the points come up. Which point sits at which stop is a placeholder to confirm." },
+  ]);
+
+  // option 4: hovering a label or thumbnail previews it; leaving returns to the beat
+  $$(".v4 [data-go]").forEach((el) => el.addEventListener("mouseenter", () => setHero(+el.dataset.go - 1)));
+  $$(".v4 .list, .v4 .th").forEach((el) => el.addEventListener("mouseleave", () => setHero(deck.k - 1)));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engagement points · grouping</title>
+<!-- Deck slide 46, "Acker's engagement points": variations on option 3 of index-engage.html (grouping the seven points).
+     Each variation regroups the points, re-lays the groups, or both; every grouping is a proposal for Ritika to confirm.
+     The shell (bar, slide, beats, collage, lightbox) is shared: engage/engage.css, engage/engage.js. -->
+<link rel="stylesheet" href="engage/engage.css">
+<style>
+.ph.rd { border-radius: calc(var(--pt) * 3); }
+
+/* ---------- 1 · for me / for us: a lavender line between the halves, an "&" on it ---------- */
+.split { width: calc(var(--pt) * 1.4); background: var(--lavender); }
+.amp { font-size: calc(var(--pt) * 44); line-height: 1.1; color: var(--purple-2); text-align: center; background: #fff; }
+
+/* ---------- 2 · how do you feel today: the mood shelves ---------- */
+.ask { font-size: calc(var(--pt) * 46); line-height: .95; color: var(--purple-2); }
+.mood { font-size: calc(var(--pt) * 9); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #9d97b3; }
+.ledge { height: calc(var(--pt) * 2.4); background: #ebe7f3; border-radius: 1px; box-shadow: 0 calc(var(--pt) * 1.5) calc(var(--pt) * 3) rgba(60, 40, 110, .14); }
+.lab.side { text-align: left; font-size: calc(var(--pt) * 14); }
+
+/* ---------- 3 · kit of parts: numbered parts in bands ---------- */
+.kit-h small { display: block; margin-bottom: calc(var(--pt) * 2); font-size: calc(var(--pt) * 6); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--violet); }
+.part em { display: block; font-style: normal; font-size: calc(var(--pt) * 8); font-weight: 700; color: var(--purple); }
+.part .hand { display: block; margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 15); color: #333; }
+
+/* ---------- 4 · a day at the Loop: the sun's path, the sun on it ---------- */
+.sky { pointer-events: none; overflow: visible; }
+.sky .hz { stroke: #e6e2ef; stroke-width: 2; }
+.sky .arc { fill: none; stroke: var(--lilac); stroke-width: 3; stroke-dasharray: 3 12; stroke-linecap: round; }
+.sky .tick { fill: #d8d2e8; }
+.sun { opacity: 0; transition: opacity .5s; }
+.sun.up { opacity: 1; }
+.sun circle { fill: var(--sun); }
+.sun .halo { fill: rgba(251, 188, 4, .22); }
+
+/* ---------- 5 · recharge → release: the scale fills, the zones bracket it ---------- */
+.spec { height: calc(var(--pt) * 5); border-radius: 99px; background: linear-gradient(90deg, var(--lavender), var(--purple)); transform: scaleX(0); transform-origin: left; transition: transform 1.3s cubic-bezier(.5, 0, .2, 1) .2s; }
+.spec.on { transform: none; }
+.brk { border: calc(var(--pt) * 1.2) solid var(--lilac); border-top: 0; border-radius: 0 0 calc(var(--pt) * 3) calc(var(--pt) * 3); }
+.col-h.mid { text-align: center; }
+
+/* ---------- 6 · lens on the collage: one group lit, the rest dimmed ---------- */
+.g6 .ph { transition: opacity .5s var(--ease), transform .6s var(--ease), filter .5s; }
+.g6.lens .ph.on:not(.lit) { opacity: .22; filter: grayscale(1); }
+.g6 .c-lab.on { transition-delay: .25s; }
+.g6.lens .c-lab.on:not(.lit) { opacity: .2; transition-delay: 0s; }
+.g6 .arrows .vis { transition: opacity .5s; }
+.g6.lens .arrows .vis:not(.lit) { opacity: .15; }
+.g6 .arrows.on .mk { transition-delay: 0s; }
+.lens-name { opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .45s, transform .45s var(--ease); }
+.lens-name.cur { opacity: 1; transform: none; }
+.lens-name b { display: block; font-size: calc(var(--pt) * 40); font-weight: 400; color: var(--purple-2); }
+.lens-name span { display: block; margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 17); color: #666; }
+.chip { margin-right: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7); font: 600 calc(var(--pt) * 7) Figtree, sans-serif; color: var(--purple-2); background: #fff; border: calc(var(--pt) * .8) solid var(--lilac); border-radius: 99px; cursor: pointer; }
+.chip:hover { border-color: var(--purple); }
+.chip.act { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+/* ---------- 7 · the 2×2: on my own ↔ together, calm ↔ energetic ---------- */
+.mx { border: calc(var(--pt) * .8) solid #dcd7e8; border-radius: calc(var(--pt) * 3); }
+.ax { background: var(--lavender); }
+.axl { font-size: calc(var(--pt) * 15); color: #8a84a0; white-space: nowrap; }
+</style>
+</head>
+<body>
+<header class="bar" id="bar">
+  <div class="bar-top">
+    <div class="ttl"><b>Acker’s engagement points</b><span>Grouping variations · <a href="index-engage.html#3">← Five ways</a></span></div>
+    <nav class="pills" id="pills" aria-label="Variations">
+      <button data-v="0"><i>0</i>Feel / Play / Share</button>
+      <button data-v="1"><i>1</i>For me / for us</button>
+      <button data-v="2"><i>2</i>Mood shelves</button>
+      <button data-v="3"><i>3</i>Kit of parts</button>
+      <button data-v="4"><i>4</i>A day at the Loop</button>
+      <button data-v="5"><i>5</i>Recharge → release</button>
+      <button data-v="6"><i>6</i>Lens on the collage</button>
+      <button data-v="7"><i>7</i>Me/us × calm/energetic</button>
+    </nav>
+    <div class="ctl">
+      <button id="prev" aria-label="Previous beat">←</button><span id="beat">1 / 1</span><button id="next" aria-label="Next beat">→</button>
+      <button id="replay">Replay</button>
+    </div>
+  </div>
+  <p class="cap"><span id="cap"></span><span class="k"><kbd>←</kbd> <kbd>→</kbd> beats · <kbd>0</kbd>–<kbd id="kmax">7</kbd> variations · <kbd>R</kbd> replay · <kbd>F</kbd> full screen</span></p>
+</header>
+
+<main class="stage">
+<div class="page" id="page">
+
+  <!-- 0 · option 3 as built: Feel it · Play it · Share it, one column per beat -->
+  <section class="view g0" data-v="0">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.9;left:2.5%;top:13%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.85;left:2.5%;top:19.6%;white-space:nowrap"></div>
+    <p class="body b" data-b="1" data-t="body" style="--i:2;--s:.88;left:50%;top:13%;width:47.5%"></p>
+  </section>
+
+  <!-- 1 · for me / for us: what an Acker does on their own, and with others -->
+  <section class="view g1" data-v="1">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.9;left:2.5%;top:13%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.85;left:2.5%;top:19.6%;white-space:nowrap"></div>
+    <p class="body b" data-b="1" data-t="body" style="--i:2;--s:.88;left:50%;top:13%;width:47.5%"></p>
+    <i class="split b" data-b="3" style="--i:0;left:50.3%;top:33%;height:55%"></i>
+    <div class="hand amp b" data-b="3" style="--i:1;left:48.4%;top:55%;width:4%">&amp;</div>
+  </section>
+
+  <!-- 2 · how do you feel today: the groups take the mood shelf's own words, one shelf per beat -->
+  <section class="view g2" data-v="2">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.82;left:2.5%;top:13%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.8;left:2.5%;top:19.6%;white-space:nowrap"></div>
+    <div class="hand ask b" data-b="1" style="--i:2;left:2.5%;top:31%">How do you<br>feel today?</div>
+    <p class="body b" data-b="1" data-t="body" style="--i:3;--s:.82;left:2.5%;top:56%;width:33%"></p>
+  </section>
+
+  <!-- 3 · kit of parts: three numbered bands, one per beat -->
+  <section class="view g3" data-v="3">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.82;left:2.5%;top:11.5%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.8;left:38%;top:11%;white-space:nowrap"></div>
+  </section>
+
+  <!-- 4 · a day at the Loop: the sun crosses its path, morning → afternoon → evening -->
+  <section class="view g4" data-v="4">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.82;left:2.5%;top:12%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.8;left:2.5%;top:17.8%;white-space:nowrap"></div>
+    <p class="note b" data-b="1" data-t="note" style="--i:2;--s:.88;left:64%;top:11.5%;width:33.5%"></p>
+    <svg class="sky b" data-b="1" viewBox="0 0 1920 1080" aria-hidden="true" style="--i:3;left:0;top:0;width:100%;height:100%">
+      <line class="hz" x1="96" y1="475" x2="1824" y2="475"/>
+      <path class="arc" d="M96 475 Q960 0 1824 475"/>
+      <circle class="tick" cx="317" cy="369" r="6"/><circle class="tick" cx="960" cy="238" r="6"/><circle class="tick" cx="1603" cy="369" r="6"/>
+      <g class="sun"><circle class="halo" r="30"/><circle r="16"/></g>
+    </svg>
+  </section>
+
+  <!-- 5 · recharge → release: the points from calm to energetic, in three zones -->
+  <section class="view g5" data-v="5">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.9;left:2.5%;top:13%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.85;left:2.5%;top:19.6%;white-space:nowrap"></div>
+    <p class="body b" data-b="1" data-t="body" style="--i:2;--s:.88;left:50%;top:13%;width:47.5%"></p>
+    <i class="spec" data-b="1" style="left:2.5%;top:76%;width:95%"></i>
+  </section>
+
+  <!-- 6 · lens on the collage: the PPT collage whole, one group lit per beat -->
+  <section class="view g6" data-v="6">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:8;left:2%;top:39.6%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:9;--s:.8;left:2.9%;top:46%;white-space:nowrap"></div>
+    <p class="body b" data-b="1" data-t="body" style="--i:10;left:2.9%;top:53%;width:30%"></p>
+    <p class="note b" data-b="1" data-t="note" style="--i:11;left:80.5%;top:53%;width:17.5%"></p>
+    <div class="b" data-b="1" style="--i:12;left:2.9%;top:79.5%">
+      <button class="chip" data-go="1">Feel it</button><button class="chip" data-go="2">Play it</button><button class="chip" data-go="3">Share it</button><button class="chip" data-go="4">All</button>
+    </div>
+    <div class="lens-name" data-g="1" style="left:2.9%;top:16%"><b class="hand">Feel it</b><span class="hand">check in, let it out</span></div>
+    <div class="lens-name" data-g="2" style="left:2.9%;top:16%"><b class="hand">Play it</b><span class="hand">pause, nerd out, play</span></div>
+    <div class="lens-name" data-g="3" style="left:2.9%;top:16%"><b class="hand">Share it</b><span class="hand">talk, laugh, connect</span></div>
+  </section>
+
+  <!-- 7 · the 2×2: across, on my own ↔ together; up, calm ↔ energetic -->
+  <section class="view g7" data-v="7">
+    <div class="loop b" data-b="1" data-t="loop" style="--i:0;--s:.82;left:2.5%;top:13%"></div>
+    <div class="hand tag b" data-b="1" data-t="tag" style="--i:1;--s:.8;left:2.5%;top:19.6%;white-space:nowrap"></div>
+    <p class="body b" data-b="1" data-t="body" style="--i:2;--s:.85;left:2.5%;top:29%;width:32.5%"></p>
+    <i class="mx b" data-b="1" style="--i:3;left:38%;top:12%;width:59.5%;height:80%"></i>
+    <i class="ax b" data-b="1" style="--i:4;left:67.65%;top:12%;width:calc(var(--pt) * 1.4);height:80%"></i>
+    <i class="ax b" data-b="1" style="--i:4;left:38%;top:51.8%;width:59.5%;height:calc(var(--pt) * 1.4)"></i>
+    <div class="hand axl b" data-b="1" style="--i:5;left:68.8%;top:13.2%">energetic</div>
+    <div class="hand axl b" data-b="1" style="--i:5;left:68.8%;top:87.4%">calm</div>
+    <div class="hand axl b" data-b="1" style="--i:5;left:38.8%;top:47.6%">on my own</div>
+    <div class="hand axl b" data-b="1" style="--i:5;left:86.5%;top:47.6%;width:10.5%;text-align:right">together</div>
+  </section>
+
+  <div class="chrome hdr"><b>Acker’s engagement points</b><span>Value Addition | Kit of parts</span></div>
+  <div class="chrome copy">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+  <div class="chrome lock"><img src="engage/img/acko-ink.webp" alt="ACKO"><i></i><img src="engage/img/skv-ink.webp" alt="SKV"></div>
+</div>
+</main>
+
+<div id="lb" role="dialog" aria-label="Photo"><img alt=""><div class="hand"></div></div>
+
+<script src="engage/engage.js"></script>
+<script>
+(() => {
+  const { $, $$, esc, P } = ENGAGE;
+  const add = (sel, html) => $(sel).insertAdjacentHTML("beforeend", html);
+
+  // a group: lavender rule, heading, then its points as equal tiles with labels under them (all in % of the page)
+  function group(sel, { beat, x, w, name, line, keys, top = 33, tileTop = 45, tileH = 36, gap = 1, pos = {} }) {
+    const tw = (w - gap * (keys.length - 1)) / keys.length, at = (i) => (x + i * (tw + gap)).toFixed(2);
+    add(sel,
+      `<i class="rule b" data-b="${beat}" style="--i:0;left:${x}%;top:${top}%;width:${w}%"></i>` +
+      `<div class="col-h b" data-b="${beat}" style="--i:1;left:${x}%;top:${top + 2}%"><b>${name}</b><span class="hand">${line}</span></div>` +
+      keys.map((k, i) => `<div class="ph rd b" data-b="${beat}" data-p="${k}"${pos[k] ? ` data-pos="${pos[k]}"` : ""} ` +
+        `style="--i:${2 + i};left:${at(i)}%;top:${tileTop}%;width:${tw.toFixed(2)}%;height:${tileH}%"></div>`).join("") +
+      keys.map((k, i) => `<div class="hand lab b" data-b="${beat}" style="--i:${2 + keys.length + i};left:${at(i)}%;top:${tileTop + tileH + 1.5}%;width:${tw.toFixed(2)}%">${esc(P[k].label)}</div>`).join(""));
+  }
+
+  /* ---------- 0 · Feel / Play / Share, as option 3 ---------- */
+  group(".g0", { beat: 2, x: 2.5, w: 30, name: "Feel it", line: "check in, let it out", keys: ["g", "e", "c"] });
+  group(".g0", { beat: 3, x: 35, w: 30, name: "Play it", line: "pause, nerd out, play", keys: ["a", "b", "d"] });
+  group(".g0", { beat: 4, x: 67.5, w: 30, name: "Share it", line: "talk, laugh, connect", keys: ["f"], pos: { f: "35% 30%" } });
+
+  /* ---------- 1 · for me / for us ---------- */
+  group(".g1", { beat: 2, x: 2.5, w: 45, gap: 1.2, name: "For me", line: "a moment to myself", keys: ["g", "e", "d", "c"] });
+  group(".g1", { beat: 3, x: 53, w: 44.5, gap: 1.2, name: "For us", line: "better together", keys: ["a", "b", "f"] });
+
+  /* ---------- 2 · the mood shelves: a mood word, its points on a ledge, labels beside them ---------- */
+  const SHELVES = [["Happy", ["g", "f"]], ["Excited", ["a", "b"]], ["Sad", ["d", "e"]], ["Angry", ["c"]]];
+  add(".g2", SHELVES.map(([mood, keys], s) => {
+    const top = 11 + s * 20.5, beat = s + 2;
+    return `<div class="mood b" data-b="${beat}" style="--i:0;left:40%;top:${top + 6.2}%">${mood}</div>` +
+      `<i class="ledge b" data-b="${beat}" style="--i:0;left:40%;top:${top + 16.6}%;width:57.5%"></i>` +
+      keys.map((k, j) => `<div class="ph rd b" data-b="${beat}" data-p="${k}"${k === "c" ? ` data-pos="56% 30%"` : ""} style="--i:${1 + j * 2};left:${48.5 + j * 24.5}%;top:${top + 1}%;width:14%;height:15.5%"></div>` +
+        `<div class="hand lab side b" data-b="${beat}" style="--i:${2 + j * 2};left:${63.5 + j * 24.5}%;top:${top + 5.2}%;width:8.5%">${esc(P[k].label)}</div>`).join("");
+  }).join(""));
+
+  /* ---------- 3 · kit of parts: a band per group, each part numbered ---------- */
+  const KIT = [["Feel it", "check in, let it out", ["g", "e", "c"]], ["Play it", "pause, nerd out, play", ["a", "b", "d"]], ["Share it", "talk, laugh, connect", ["f"]]];
+  let part = 0;
+  add(".g3", KIT.map(([name, line, keys], r) => {
+    const top = 21 + r * 24, beat = r + 2;
+    return `<i class="rule b" data-b="${beat}" style="--i:0;left:2.5%;top:${top - 2}%;width:95%"></i>` +
+      `<div class="kit-h col-h b" data-b="${beat}" style="--i:1;left:2.5%;top:${top + 1}%"><small>Kit 0${r + 1}</small><b>${name}</b><span class="hand">${line}</span></div>` +
+      keys.map((k, j) => {
+        const x = 21 + j * 25.5, w = keys.length === 1 ? 41 : 15, n = String(++part).padStart(2, "0");
+        return `<div class="ph rd b" data-b="${beat}" data-p="${k}" style="--i:${2 + j};left:${x}%;top:${top}%;width:${w}%;height:21%"></div>` +
+          `<div class="part b" data-b="${beat}" style="--i:${2.5 + j};left:${x + w + 1.2}%;top:${top + 4}%;width:9%"><em>${n}</em><span class="hand">${esc(P[k].label)}</span></div>`;
+      }).join("");
+  }).join(""));
+
+  /* ---------- 4 · a day at the Loop: three times of day under the sun's path ---------- */
+  group(".g4", { beat: 2, x: 2.5, w: 28, top: 45, tileTop: 56, tileH: 28, gap: 1.2, name: "Morning", line: "arrive and check in", keys: ["g", "e"] });
+  group(".g4", { beat: 3, x: 34, w: 32, top: 45, tileTop: 56, tileH: 28, gap: 1.2, name: "Afternoon", line: "take a break", keys: ["d", "b", "a"] });
+  group(".g4", { beat: 4, x: 69.5, w: 28, top: 45, tileTop: 56, tileH: 28, gap: 1.2, name: "Evening", line: "let it out", keys: ["f", "c"] });
+  // the sun moves along the arc (a quadratic: x is linear in t) to the time of day of the beat
+  const SUN_T = { 2: .128, 3: .5, 4: .872 }, arcAt = (t) => [96 + 1728 * t, 475 * ((1 - t) ** 2 + t ** 2)];
+  let sunT = null, sunRaf = 0, sunEnd = 0;
+  function sun(k, view) {
+    const g = $(".sun", view), to = SUN_T[k];
+    const put = (t) => { const [x, y] = arcAt(t); g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`); sunT = t; };
+    cancelAnimationFrame(sunRaf); clearTimeout(sunEnd);
+    g.classList.toggle("up", to !== undefined);
+    if (to === undefined) { sunT = null; return; }
+    if (sunT === null || ENGAGE.reduced || document.hidden) { put(to); return; }
+    const from = sunT, t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / 1000), e = p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
+      put(from + (to - from) * e);
+      if (p < 1) sunRaf = requestAnimationFrame(tick);
+    };
+    sunRaf = requestAnimationFrame(tick);
+    sunEnd = setTimeout(() => { cancelAnimationFrame(sunRaf); put(to); }, 1100);   // lands even where frames are held back
+  }
+
+  /* ---------- 5 · recharge → release: the points in a row from calm to energetic, the zones under the scale ---------- */
+  const SPEC = ["g", "e", "d", "f", "b", "a", "c"], ZONES = [["Recharge", "slow down, check in", 0, 3], ["Connect", "talk, nerd out", 3, 5], ["Release", "play it out, punch it out", 5, 7]];
+  const sx = (i) => 2.5 + i * 13.74, sw = 12.54;
+  add(".g5", SPEC.map((k, i) =>
+    `<div class="ph rd b" data-b="2" data-p="${k}" style="--i:${i};left:${sx(i)}%;top:33%;width:${sw}%;height:33%"></div>` +
+    `<div class="hand lab b" data-b="2" style="--i:${i + .5};left:${sx(i)}%;top:67.5%;width:${sw}%">${esc(P[k].label)}</div>`).join("") +
+    ZONES.map(([name, line, a, b], z) => {
+      const l = sx(a), w = (sx(b - 1) + sw - l).toFixed(2);
+      return `<i class="brk b" data-b="3" style="--i:${z * 2};left:${l}%;top:78.4%;width:${w}%;height:1.8%"></i>` +
+        `<div class="col-h mid b" data-b="3" style="--i:${z * 2 + 1};left:${l}%;top:81.5%;width:${w}%"><b>${name}</b><span class="hand">${line}</span></div>`;
+    }).join(""));
+
+  /* ---------- 6 · lens on the collage ---------- */
+  ENGAGE.collage($(".g6"), { beat: 1, drawBeat: 1 });
+  // Ritika: Feel → Play → Share, then all of them last
+  const LENS = { 1: ["g", "e", "c"], 2: ["a", "b", "d"], 3: ["f"] };
+  function lens(k, view) {
+    const grp = LENS[k];
+    view.classList.toggle("lens", !!grp);
+    $$("[data-k]", view).forEach((el) => el.classList.toggle("lit", !!grp && grp.includes(el.dataset.k)));
+    $$(".lens-name", view).forEach((el) => el.classList.toggle("cur", +el.dataset.g === k));
+    $$(".chip", view).forEach((el) => el.classList.toggle("act", +el.dataset.go === k));
+  }
+
+  /* ---------- 7 · the 2×2: each point at [on my own → together, calm → energetic] ---------- */
+  const MX = { g: [.1, .2], d: [.42, .4], f: [.9, .35], a: [.75, .8], b: [.7, .4], e: [.25, .25], c: [.15, .9] };
+  add(".g7", Object.entries(MX).map(([k, [x, y]], i) => {
+    const cx = 38 + 59.5 * x, cy = 92 - 80 * y;
+    return `<div class="ph rd b" data-b="2" data-p="${k}" style="--i:${i};left:${(cx - 4).toFixed(2)}%;top:${(cy - 6.5).toFixed(2)}%;width:8%;height:13%"></div>` +
+      `<div class="hand lab b" data-b="2" style="--i:${i};left:${(cx - 6).toFixed(2)}%;top:${(cy + 7).toFixed(2)}%;width:12%;font-size:calc(var(--pt) * 12)">${esc(P[k].label)}</div>`;
+  }).join(""));
+
+  /* ---------- the variations and their beats ---------- */
+  ENGAGE.start([
+    { n: 4, cap: "Option 3 as built (Feel it · Play it · Share it), the starting point for the variations." },
+    { n: 3, cap: "Two groups: what an Acker does on their own (4) and with others (3), one half per beat. Grouping to confirm." },
+    { n: 5, cap: "The groups borrow the mood shelf’s own words: Happy, Excited, Sad, Angry. One shelf per beat. Grouping to confirm." },
+    { n: 4, cap: "A literal kit of parts: numbered parts in three bands, one band per beat." },
+    { n: 4, cap: "A day at the Loop: the sun crosses its path, and each time of day brings its points. Grouping to confirm.", hook: sun },
+    { n: 3, cap: "From calm to energetic: the scale fills, the points line up along it, then the three zones. Order to confirm." },
+    { n: 4, cap: "Your PPT collage, kept whole: Feel it, Play it, Share it each light their points and dim the rest; the last beat shows them all. Click a chip to jump.", hook: lens },
+    { n: 2, cap: "Two axes: on my own ↔ together, calm ↔ energetic. Where each point sits is a proposal." },
+  ]);
+})();
+</script>
+</body>
+</html>
