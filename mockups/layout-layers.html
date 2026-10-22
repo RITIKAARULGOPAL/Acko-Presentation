@@ -84,13 +84,19 @@ button { font-family: inherit; }
 #plan.zopen .nbz:not(.sel), #plan.zopen .nbn:not(.sel) { opacity: .2; }
 #plan.zopen .nbz.sel { stroke-width: 4; }
 
-.pl { fill: #3f8f3a; opacity: .9; }
-.pl-bad { fill: none; stroke: #d00; stroke-width: 2; }
-.eg { fill: none; stroke-width: 3; opacity: .95; }
-.eg.b50 { stroke: #2f9e44; } .eg.b60 { stroke: #f08c00; }
-.svc { fill: rgba(240, 140, 0, .18); stroke: #e8590c; stroke-width: 1.4; stroke-dasharray: 4 3; }
+.pl { fill: #3f8f3a; opacity: 0; transition: opacity .3s; }
+.pl.in { opacity: .95; }
+.eg { fill: none; stroke: #1c64b4; stroke-width: 2.4; opacity: .95; }
+.eg.b60 { stroke-dasharray: 7 4; }
+.svc { fill: rgba(92, 99, 110, .14); stroke: #5c636e; stroke-width: 1.3; stroke-dasharray: 4 3; }
 #plan:not(.eg-on) .m-eg { display: none; }
-#plan[data-layer="bio"] .m-eg { display: inline; }
+#plan[data-layer="bio"][data-b="2"] .m-eg { display: inline; }
+#plan .h-heat, #plan .h-glow { transition: opacity .7s; }
+#plan[data-b="3"] .h-heat, #plan:not([data-b="2"]) .h-glow { opacity: 0; }
+#plan[data-b="3"] .svc { display: none; }
+#plan:not([data-b="3"]) .m-views { display: none; }
+.vw { stroke: #926ff3; stroke-width: 1; opacity: .6; }
+.st { fill: #5222d0; } .st.no { fill: #c9c9cf; }
 .wv { fill: none; stroke: #7a52e8; stroke-width: 2.2; }
 .wv.d { stroke: #3d17a8; stroke-width: 1.6; }
 #plan[class*="ac-c"] .f-ac path:not(.hi) { opacity: .25; }
@@ -149,8 +155,18 @@ button { font-family: inherit; }
 .sw { height: calc(var(--pt) * 7); border-radius: calc(var(--pt) * 2); }
 .sw.heat { background: linear-gradient(90deg, rgba(255, 236, 170, .9), #fb923c, #dc2626); }
 .sw.plant { background: radial-gradient(circle, #3f8f3a 0 26%, rgba(76, 138, 70, .25) 30% 100%); width: calc(var(--pt) * 7); justify-self: center; border-radius: 50%; }
-.sw.svc { border: 1.5px dashed #e8590c; background: rgba(240, 140, 0, .18); }
-.sw.eg { background: linear-gradient(90deg, #2f9e44 0 50%, #f08c00 50%); height: calc(var(--pt) * 2); }
+.sw.svc { border: 1.5px dashed #5c636e; background: rgba(92, 99, 110, .14); }
+.sw.eg { background: linear-gradient(90deg, #1c64b4 0 55%, transparent 55% 65%, #1c64b4 65% 80%, transparent 80% 88%, #1c64b4 88%); height: calc(var(--pt) * 2); }
+.sw.seat { background: radial-gradient(circle, #5222d0 0 30%, transparent 32%), radial-gradient(circle, #c9c9cf 0 30%, transparent 32%); background-size: 50% 100%; background-repeat: no-repeat; background-position: 0 0, 100% 0; }
+.sw.view { background: linear-gradient(#926ff3, #926ff3) center / 100% 1.5px no-repeat; opacity: .8; }
+.bsteps { display: flex; gap: calc(var(--pt) * 2.5); margin: 0 0 calc(var(--pt) * 4); }
+.bsteps button { border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 1.6) calc(var(--pt) * 5); font-size: calc(var(--pt) * 5.4); cursor: pointer; }
+.bsteps button small { display: inline; font-family: var(--num); font-weight: 400; font-size: .85em; color: inherit; margin-right: .35em; opacity: .7; }
+.bsteps button.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+.panel[data-p="2"] .lead > [data-b], .panel[data-p="2"] .bio > [data-b] { display: none; }
+.panel[data-p="2"].b1 .lead > [data-b~="1"], .panel[data-p="2"].b2 .lead > [data-b~="2"], .panel[data-p="2"].b3 .lead > [data-b~="3"] { display: block; }
+.panel[data-p="2"].b1 .bio > [data-b~="1"], .panel[data-p="2"].b2 .bio > [data-b~="2"], .panel[data-p="2"].b3 .bio > [data-b~="3"] { display: grid; }
+.concept { font-size: calc(var(--pt) * 5.4) !important; color: var(--mute) !important; font-style: italic; }
 .big { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 13); color: #2f7d2b; text-align: center; }
 
 .acs { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--pt) * 5); }
@@ -185,7 +201,7 @@ button { font-family: inherit; }
     <button data-tool="reset" title="Reset zoom"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset</button>
     <span class="sep"></span>
     <button data-tool="hover" class="on" title="Names on hover"><svg viewBox="0 0 16 16"><path d="M4 2.5l8.5 5.2-3.9 1 2.3 3.9-1.6.9-2.3-3.9-2.8 2.8z" fill="currentColor" stroke="none"/></svg>Hover</button>
-    <button data-tool="eg" title="Fire egress"><svg viewBox="0 0 16 16"><path d="M2 12h5l3-8h4" stroke="#2f9e44"/></svg>Egress</button>
+    <button data-tool="eg" title="Fire egress"><svg viewBox="0 0 16 16"><path d="M2 12h5l3-8h4" stroke="#1c64b4"/></svg>Egress</button>
     <img src="../assets/img/north.webp" alt="North">
   </div>
   <div class="m-read"></div>
@@ -213,17 +229,24 @@ button { font-family: inherit; }
       <div class="zone"><div class="kp" id="kp"></div><div class="occ" id="occ"></div></div>
     </div>
   </section>
-  <!-- 03 · biophilia -->
-  <section class="panel" data-p="2">
+  <!-- 03 · biophilia: 1 the heat, 2 the planting (conceptual), 3 views to green -->
+  <section class="panel b1" data-p="2">
     <div class="lead"><small>03</small><h2>Biophilia</h2>
-      <p><b>Where people gather, the plants gather.</b> The heat shows where breathing out (CO₂) concentrates: the desks, the café, reception and the arrival lobbies. The green is the planting around it.</p>
-      <p>Fresh air with CO₂ sensing carries the load; the plants support air quality and wellbeing. <b>Service rooms</b> (server, UPS, battery) are counted as sources too.</p></div>
+      <div class="bsteps"><button data-b="1" class="on"><small>1</small>Heat</button><button data-b="2"><small>2</small>Planting</button><button data-b="3"><small>3</small>Views to green</button></div>
+      <p data-b="1"><b>Where people gather, CO₂ gathers.</b> The heat shows where breathing out concentrates: the desks, the café, reception, the lift lobbies and the meeting rooms. <b>Service rooms</b> (server, UPS, battery) are counted as sources too.</p>
+      <p data-b="2"><b>Planting where it's needed.</b> The plants are placed where people gather, and the busiest spots soften around them.</p>
+      <p data-b="2" class="concept">Conceptual: fresh air with CO₂ sensing carries the load; the planting supports air quality and wellbeing.</p>
+      <p data-b="3"><b>Green in view.</b> Planting placed in the line of sight from the desks: a glance at green, all day, to lift the mood.</p>
+      <p data-b="3" class="concept">Straight sight lines on the plan, up to 8 m, not through a room.</p></div>
     <div class="bio">
-      <div><span class="sw heat"></span><span><b>People and activity</b>, from quieter to busiest (desks, café, reception, lift lobbies, meeting rooms)</span></div>
-      <div><span class="big" id="cov">–</span><span id="cov-p"></span></div>
-      <div><span class="sw plant"></span><span><b id="np">–</b> plants, each drawn where it stands</span></div>
-      <div><span class="sw svc"></span><span><b>Service rooms</b>: server, UPS and battery, counted as sources of heat and emissions</span></div>
-      <div><span class="sw eg"></span><span id="eg-p"><b>Egress paths</b></span></div>
+      <div data-b="1 2"><span class="sw heat"></span><span><b>People and activity</b>, from quieter to busiest (desks, café, reception, lift lobbies, meeting rooms)</span></div>
+      <div data-b="1"><span class="sw svc"></span><span><b>Service rooms</b>: server, UPS and battery, counted as sources of heat and emissions</span></div>
+      <div data-b="2"><span class="big" id="cov">0%</span><span id="cov-p">of the <b>busiest floor</b> has a plant within 3 m</span></div>
+      <div data-b="2 3"><span class="sw plant"></span><span><b id="np">–</b> plants, each drawn where it stands</span></div>
+      <div data-b="2"><span class="sw eg"></span><span><b>Egress paths</b>: planting placed beside the exit routes (solid: under 50 m, dashed: 50–60 m)</span></div>
+      <div data-b="3"><span class="big" id="vw">–</span><span id="vw-p"></span></div>
+      <div data-b="3"><span class="sw seat"></span><span><b id="ns">–</b> seats: with a plant in view, and without</span></div>
+      <div data-b="3"><span class="sw view"></span><span><b>Sight line</b> from a seat to its nearest plant in view</span></div>
     </div>
   </section>
   <!-- 04 · acoustics -->
@@ -294,18 +317,17 @@ button { font-family: inherit; }
     spaces.filter((s) => CAT[s.type]).map((s) => `<path data-c="${CAT[s.type]}" d="${s.d}" style="fill:var(--c${CAT[s.type]})"/>`).join("");
 
   // ---- the layers ----
-  ph.addLayer("m-under", `<g class="f-sp">${spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join("")}</g><g class="f-ac">${acFill}</g><g class="h-img"></g>`, { below: true });
+  ph.addLayer("m-under", `<g class="f-sp">${spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join("")}</g><g class="f-ac">${acFill}</g><g class="h-img"><image class="h-heat" x="${vx}" y="${vy}" preserveAspectRatio="none" opacity=".85"/><image class="h-glow" x="${vx}" y="${vy}" preserveAspectRatio="none"/></g>`, { below: true });
   ph.addLayer("m-types", tyMarkup);
   ph.addLayer("m-nb", `<g>${P.overlays.arrival.map((d) => { const r = rings(d)[0], cx = r.reduce((a, q) => a + q[0], 0) / r.length, cy = r.reduce((a, q) => a + q[1], 0) / r.length; return `<path class="arr" d="${d}"/><text class="arr-t" x="${cx}" y="${cy}">Arrival</text>`; }).join("")}</g>` +
     P.zones.map((z) => `<path class="nbz" data-nb="${z.n}" d="${z.zone}" style="--c:${NB_COL[z.n]}"/><text class="nbn" data-nb="${z.n}" x="${z.x}" y="${z.y}" style="--c:${NB_COL[z.n]}">${z.n}</text>`).join(""));
   const egSvg = `<g class="m-eg">${P.egress.map((e) => `<path class="eg ${e.band === "lt50" ? "b50" : "b60"}" d="${e.d}"/>`).join("")}</g>`;
-  const bioSvg = ph.addLayer("m-bio-l", `<g class="m-bio"></g>${egSvg}`);
+  const bioSvg = ph.addLayer("m-bio-l", `<g class="m-views"></g><g class="m-bio"></g>${egSvg}`);
   const wavesSvg = ph.addLayer("m-waves", "");
   const measureSvg = ph.addLayer("m-measure", "");
 
-  // ---- biophilia: where people breathe out (a heat field) against the planting, and the egress check ----
-  const segs = P.egress.flatMap((e) => { const p = e.d.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)); return p.slice(1).map((q, i) => [p[i], q]); });
-  const dseg = (p, [a, b]) => { const dx = b[0] - a[0], dy = b[1] - a[1], l = dx * dx + dy * dy; let t = l ? ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / l : 0; t = Math.max(0, Math.min(1, t)); return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy); };
+  // ---- biophilia, in three steps: 1 the heat (where people breathe out), 2 the planting softening it (conceptual), 3 views to green ----
+  const BIO = { B: 1, raf: 0 };
   function biophilia() {
     const S = 200, W = Math.ceil(vw / S), H = Math.ceil(vh / S);
     const c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d"); g.globalCompositeOperation = "lighter";
@@ -320,40 +342,109 @@ button { font-family: inherit; }
     const PEOPLE = { "Cafeteria": 178, "Reception": 18, "Coffee corner": 10, "Visitor hub": 4, "Collaboration huddle": 6, "Departmental room": 10, "Boardroom": 16, "The Hatchery": 8, "Pantry": 4 };
     spaces.forEach((s) => { if (PEOPLE[s.type]) spread(s.d, PEOPLE[s.type]); else if (s.type === "Quick sprint") spread(s.d, (+(s.name.match(/(\d+)\s*PAX/i) || [0, 4])[1]) * 0.6); });
     P.overlays.arrival.forEach((d) => spread(d, 30, 3600));
-    const id = g.getImageData(0, 0, W, H), out = g.createImageData(W, H);
-    let mx = 0; for (let i = 3; i < id.data.length; i += 4) mx = Math.max(mx, id.data[i]);
-    const ramp = [[0, [255, 236, 170]], [0.5, [251, 146, 60]], [1, [220, 38, 38]]];
-    const hot = [];
-    for (let i = 0; i < W * H; i++) {
-      const v = id.data[i * 4 + 3] / (mx || 1); if (v < 0.07) continue;
-      let k = 0; while (k < ramp.length - 2 && v > ramp[k + 1][0]) k++;
-      const [a, ca] = ramp[k], [b, cb] = ramp[k + 1], f = Math.min(1, (v - a) / (b - a));
-      out.data[i * 4] = ca[0] + (cb[0] - ca[0]) * f; out.data[i * 4 + 1] = ca[1] + (cb[1] - ca[1]) * f; out.data[i * 4 + 2] = ca[2] + (cb[2] - ca[2]) * f;
-      out.data[i * 4 + 3] = Math.min(190, 40 + v * 200);
-      if (v >= 0.4) hot.push([vx + (i % W + 0.5) * S, vy + (Math.floor(i / W) + 0.5) * S]);
+    const id = g.getImageData(0, 0, W, H); let mx = 0; for (let i = 3; i < id.data.length; i += 4) mx = Math.max(mx, id.data[i]);
+    const raw = new Float32Array(W * H); for (let i = 0; i < W * H; i++) raw[i] = id.data[i * 4 + 3] / (mx || 1);
+    // the colours: a warm ramp only (nothing else on the slide is warm)
+    const out = g.createImageData(W, H), ramp = [[0, [255, 236, 170]], [0.5, [251, 146, 60]], [1, [220, 38, 38]]];
+    const heatImg = $(".h-heat", host), glowImg = $(".h-glow", host);
+    [heatImg, glowImg].forEach((im) => { im.setAttribute("width", W * S); im.setAttribute("height", H * S); });
+    function paint(f) {
+      for (let i = 0; i < W * H; i++) {
+        const v = f[i], o = i * 4; if (v < 0.07) { out.data[o + 3] = 0; continue; }
+        let k = 0; while (k < ramp.length - 2 && v > ramp[k + 1][0]) k++;
+        const [a, ca] = ramp[k], [b, cb] = ramp[k + 1], t = Math.min(1, (v - a) / (b - a));
+        out.data[o] = ca[0] + (cb[0] - ca[0]) * t; out.data[o + 1] = ca[1] + (cb[1] - ca[1]) * t; out.data[o + 2] = ca[2] + (cb[2] - ca[2]) * t; out.data[o + 3] = Math.min(190, 40 + v * 200);
+      }
+      g.putImageData(out, 0, 0); heatImg.setAttribute("href", c.toDataURL());
     }
-    g.globalCompositeOperation = "copy"; g.putImageData(out, 0, 0);
-    // the planting's glow
+    // the planting, busiest spots first; each plant softens the heat within 3 m (a Gaussian dip, up to 45%: conceptual)
+    const at = (x, y) => raw[Math.min(H - 1, Math.max(0, Math.floor((y - vy) / S))) * W + Math.min(W - 1, Math.max(0, Math.floor((x - vx) / S)))];
+    const order = A.plants.map((p, i) => [at(p[0], p[1]), i]).sort((a, b) => b[0] - a[0]).map((q) => A.plants[q[1]]);
+    const dips = order.map(([x, y]) => { const ci = (x - vx) / S, cj = (y - vy) / S, R = 3000 / S, cells = [], f = [];
+      for (let j = Math.max(0, Math.floor(cj - R)); j <= Math.min(H - 1, Math.ceil(cj + R)); j++) for (let i = Math.max(0, Math.floor(ci - R)); i <= Math.min(W - 1, Math.ceil(ci + R)); i++) {
+        const d = Math.hypot(i + 0.5 - ci, j + 0.5 - cj) * S; if (d > 3000) continue; cells.push(j * W + i); f.push(1 - 0.45 * Math.exp(-(d * d) / (2 * 1500 * 1500))); }
+      return [cells, f]; });
+    // the busiest floor (cells at 40%+ of the peak) and, for each, the first plant (in planting order) within 3 m
+    const hot = [], first = [];
+    const cellsz = 3000, grid = new Map(); order.forEach((p, k) => { const key = Math.floor(p[0] / cellsz) + "," + Math.floor(p[1] / cellsz); (grid.get(key) || grid.set(key, []).get(key)).push([p, k]); });
+    for (let i = 0; i < W * H; i++) if (raw[i] >= 0.4) {
+      const x = vx + (i % W + 0.5) * S, y = vy + (Math.floor(i / W) + 0.5) * S, cx = Math.floor(x / cellsz), cy = Math.floor(y / cellsz); let best = Infinity;
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (const [q, k] of grid.get(cx + a + "," + (cy + b)) || []) if (k < best && Math.hypot(q[0] - x, q[1] - y) <= 3000) best = k;
+      hot.push(i); first.push(best);
+    }
+    const covAt = (n) => (hot.length ? Math.round((100 * first.filter((k) => k < n).length) / hot.length) : 0);
+    // the glow of the plants planted so far
     const gc = document.createElement("canvas"); gc.width = W; gc.height = H; const gg = gc.getContext("2d");
-    A.plants.forEach(([x, y, r]) => { const px = (x - vx) / S, py = (y - vy) / S, pr = (r + 2600) / S, gr = gg.createRadialGradient(px, py, 0, px, py, pr);
-      gr.addColorStop(0, "rgba(63,143,58,.38)"); gr.addColorStop(1, "rgba(63,143,58,0)"); gg.fillStyle = gr; gg.fillRect(px - pr, py - pr, pr * 2, pr * 2); });
-    $(".h-img", host).innerHTML = `<image href="${c.toDataURL()}" x="${vx}" y="${vy}" width="${W * S}" height="${H * S}" preserveAspectRatio="none" opacity=".85"/>` +
-      `<image href="${gc.toDataURL()}" x="${vx}" y="${vy}" width="${W * S}" height="${H * S}" preserveAspectRatio="none"/>`;
-    // the busiest floor with a plant within 3 m (computed: hot cells against the plants' positions)
-    const cell = 3000, grid = new Map(); A.plants.forEach((p) => { const k = Math.floor(p[0] / cell) + "," + Math.floor(p[1] / cell); (grid.get(k) || grid.set(k, []).get(k)).push(p); });
-    const near = (p) => { const cx = Math.floor(p[0] / cell), cy = Math.floor(p[1] / cell); for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (const q of grid.get(cx + i + "," + (cy + j)) || []) if (Math.hypot(q[0] - p[0], q[1] - p[1]) <= cell) return true; return false; };
-    const cov = hot.length ? Math.round((100 * hot.filter(near).length) / hot.length) : 0;
-    $("#cov").textContent = cov + "%"; $("#cov-p").innerHTML = "of the <b>busiest floor</b> has a plant within 3 m";
-    // plants, the service rooms, and the egress check (a plant's crown within 0.75 m of an exit path's line: the corridor's half-width)
-    const bad = A.plants.filter((p) => Math.min(...segs.map((s) => dseg(p, s))) - p[2] < 750), touch = A.plants.filter((p) => Math.min(...segs.map((s) => dseg(p, s))) < p[2]);
+    function glow(n) { gg.clearRect(0, 0, W, H); for (let k = 0; k < n; k++) { const [x, y, r] = order[k], px = (x - vx) / S, py = (y - vy) / S, pr = (r + 2600) / S, gr = gg.createRadialGradient(px, py, 0, px, py, pr);
+      gr.addColorStop(0, "rgba(63,143,58,.38)"); gr.addColorStop(1, "rgba(63,143,58,0)"); gg.fillStyle = gr; gg.fillRect(px - pr, py - pr, pr * 2, pr * 2); } glowImg.setAttribute("href", gc.toDataURL()); }
     $(".m-bio", host).innerHTML = spaces.filter((s) => /Server|UPS/.test(s.type)).map((s) => `<path class="svc" d="${s.d}"/>`).join("") +
-      A.plants.map(([x, y, r]) => `<circle class="pl" cx="${x}" cy="${y}" r="${Math.max(r, 380)}"/>`).join("") +
-      bad.map(([x, y, r]) => `<circle class="pl-bad" cx="${x}" cy="${y}" r="${r + 600}"/>`).join("");
+      order.map(([x, y, r], k) => `<circle class="pl" data-k="${k}" cx="${x}" cy="${y}" r="${Math.max(r, 380)}"/>`).join("");
+    const plEls = $$(".pl", host);
     $("#np").textContent = A.plants.length;
-    $("#eg-p").innerHTML = bad.length
-      ? `<b>Egress paths</b> checked against every plant: <b class="flag">${touch.length} on an exit path, ${bad.length} within 0.75 m</b>, ringed in red, to be moved`
-      : `<b>Egress paths</b> checked against every plant: none within 0.75 m of an exit path`;
+    const cool = new Float32Array(raw);
+    let planted = 0;
+    function plantTo(n) {
+      if (n < planted) { cool.set(raw); planted = 0; }
+      for (; planted < n; planted++) { const [cells, f] = dips[planted]; for (let q = 0; q < cells.length; q++) cool[cells[q]] *= f[q]; }
+      plEls.forEach((e, k) => e.classList.toggle("in", k < n));
+    }
+    BIO.show = (b, animate) => {
+      cancelAnimationFrame(BIO.raf);
+      if (b === 1) { plantTo(0); paint(raw); glow(0); $("#cov").textContent = "0%"; return; }
+      if (b === 3 || !animate) { plantTo(order.length); paint(cool); glow(order.length); $("#cov").textContent = covAt(order.length) + "%"; return; }
+      plantTo(0); paint(raw); glow(0);
+      const t0 = performance.now(), DUR = 3200; let last = 0;
+      const run = (now) => {
+        const k = Math.min(1, (now - t0) / DUR), e = 1 - Math.pow(1 - k, 2), n = Math.round(order.length * e);
+        if (now - last > 60 || k >= 1) { last = now; plantTo(n); paint(cool); glow(n); $("#cov").textContent = covAt(n) + "%"; }
+        if (k < 1) BIO.raf = requestAnimationFrame(run);
+      };
+      BIO.raf = requestAnimationFrame(run);
+    };
+    // ---- 3 · views to green: every seat (the desk blocks' chairs) to its nearest plant within 8 m, not through a room ----
+    const seats = [];
+    TYPES.forEach((T) => A.uses.filter((u) => T.blocks.includes(u[0])).forEach((u) => (A.blocks[u[0]] || []).forEach(([kind, ring]) => {
+      if (kind !== "chair") return;
+      const pts = ring.map((q) => place(u, q)); seats.push([pts.reduce((a, q) => a + q[0], 0) / pts.length, pts.reduce((a, q) => a + q[1], 0) / pts.length]);
+    })));
+    const EB = 4000, edges = new Map();
+    spaces.forEach((sp) => rings(sp.d).forEach((r) => r.forEach((a, i) => {
+      const b = r[(i + 1) % r.length], seg = [a, b];
+      for (let x = Math.floor(Math.min(a[0], b[0]) / EB); x <= Math.floor(Math.max(a[0], b[0]) / EB); x++)
+        for (let y = Math.floor(Math.min(a[1], b[1]) / EB); y <= Math.floor(Math.max(a[1], b[1]) / EB); y++) { const k = x + "," + y; (edges.get(k) || edges.set(k, []).get(k)).push(seg); }
+    })));
+    const cross = (p, q, a, b) => { const d = (u, v, w) => (v[0] - u[0]) * (w[1] - u[1]) - (v[1] - u[1]) * (w[0] - u[0]); const d1 = d(a, b, p), d2 = d(a, b, q), d3 = d(p, q, a), d4 = d(p, q, b); return (d1 > 0) !== (d2 > 0) && (d3 > 0) !== (d4 > 0); };
+    const clear = (p, q) => {
+      const seen = new Set();
+      for (let x = Math.floor(Math.min(p[0], q[0]) / EB); x <= Math.floor(Math.max(p[0], q[0]) / EB); x++)
+        for (let y = Math.floor(Math.min(p[1], q[1]) / EB); y <= Math.floor(Math.max(p[1], q[1]) / EB); y++)
+          for (const e of edges.get(x + "," + y) || []) { if (seen.has(e)) continue; seen.add(e); if (cross(p, q, e[0], e[1])) return false; }
+      return true;
+    };
+    const PB = 8000, pg = new Map(); A.plants.forEach((p) => { const k = Math.floor(p[0] / PB) + "," + Math.floor(p[1] / PB); (pg.get(k) || pg.set(k, []).get(k)).push(p); });
+    let lines = "", dots = "", seen = 0; const dist = [];
+    for (const s_ of seats) {
+      const cx = Math.floor(s_[0] / PB), cy = Math.floor(s_[1] / PB), cand = [];
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (const q of pg.get(cx + a + "," + (cy + b)) || []) { const d = Math.hypot(q[0] - s_[0], q[1] - s_[1]); if (d <= 8000) cand.push([d, q]); }
+      cand.sort((a, b) => a[0] - b[0]);
+      const hit = cand.find(([, q]) => clear(s_, q));
+      if (hit) { seen++; dist.push(hit[0]); lines += `<line class="vw" x1="${s_[0].toFixed(0)}" y1="${s_[1].toFixed(0)}" x2="${hit[1][0]}" y2="${hit[1][1]}"/>`; }
+      dots += `<circle class="st${hit ? "" : " no"}" cx="${s_[0].toFixed(0)}" cy="${s_[1].toFixed(0)}" r="260"/>`;
+    }
+    $(".m-views", host).innerHTML = lines + dots;
+    dist.sort((a, b) => a - b);
+    $("#ns").textContent = seats.length;
+    $("#vw").textContent = Math.round((100 * seen) / seats.length) + "%";
+    $("#vw-p").innerHTML = `of the seats have a plant in view within 8 m · median <b>${dist.length ? (dist[Math.floor(dist.length / 2)] / 1000).toFixed(1) : "–"} m</b>`;
+    BIO.stats = { seats: seats.length, seen, hot: hot.length, final: covAt(order.length) };
   }
+  function setBio(b, animate = true) {
+    BIO.B = Math.max(1, Math.min(3, b)); host.dataset.b = BIO.B;
+    const panel = $('.panel[data-p="2"]'); panel.classList.remove("b1", "b2", "b3"); panel.classList.add("b" + BIO.B);
+    $$(".bsteps button").forEach((x) => x.classList.toggle("on", +x.dataset.b === BIO.B));
+    BIO.show(BIO.B, animate);
+  }
+  $$(".bsteps button").forEach((x) => (x.onclick = () => { setBio(+x.dataset.b); x.blur(); }));
 
   // ---- acoustics: the cards (a room drawn in iso, its treatment, a waveform that flattens), and sound rings on the plan ----
   const cnt = (re) => spaces.filter((s) => re.test(s.type)).length;
@@ -507,8 +598,9 @@ button { font-family: inherit; }
   // ---- the layers as beats ----
   let L = 0;
   const KEYS = ["spaces", "nb", "bio", "ac"];
-  function setLayer(i) {
+  function setLayer(i, bioStep = 1) {
     L = Math.max(0, Math.min(3, i)); closeZone(); host.dataset.layer = KEYS[L]; ph.clear();
+    if (L === 2) setBio(bioStep, false); else { cancelAnimationFrame(BIO.raf); host.dataset.b = ""; }
     host.classList.remove("t-T1", "t-T2", "t-T3", "t-T4"); pin = null; $$(".chip").forEach((c) => c.classList.remove("pin"));
     $$(".layers button").forEach((b) => b.classList.toggle("on", +b.dataset.l === L));
     $$(".panel").forEach((p) => p.classList.toggle("on", +p.dataset.p === L));
@@ -519,13 +611,14 @@ button { font-family: inherit; }
   addEventListener("keydown", (e) => {
     if (e.key === "Escape") { if (MS.mode) { if (MS.cur) { MS.cur = null; MS.live = null; drawMeasure(); } else if (MS.shapes.length) { MS.shapes = []; drawMeasure(); } else setMode(MS.mode); } else closeZone(); }
     else if (e.key === "m" || e.key === "M") setMode("dist"); else if (e.key === "a" || e.key === "A") setMode("area");
-    else if (e.key === "ArrowRight" || e.key === "PageDown") setLayer(L + 1); else if (e.key === "ArrowLeft" || e.key === "PageUp") setLayer(L - 1);
+    else if (e.key === "ArrowRight" || e.key === "PageDown") { if (L === 2 && BIO.B < 3) setBio(BIO.B + 1); else setLayer(L + 1); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") { if (L === 2 && BIO.B > 1) setBio(BIO.B - 1, false); else setLayer(L - 1, 3); }
   });
 
   biophilia();
   setLayer(+(location.hash.match(/\d/) || [1])[0] - 1);
   levels();
-  window._mock = { ph, openZone, closeZone, setLayer, setMode, desks, TYPES };   // for the checks
+  window._mock = { ph, openZone, closeZone, setLayer, setMode, setBio, BIO, desks, TYPES };   // for the checks
 })();
 </script>
 </body>
