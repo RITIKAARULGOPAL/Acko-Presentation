@@ -26,11 +26,11 @@
       <i class="dk click" data-k="e" style="--i:4;left:59.4%;top:22.0%;width:9.9%;height:50.1%;background-size:160.8% 100.0%;background-position:43.9% 0.0%;background-image:url(assets/img/eng-e.webp)"></i>
       <i class="dk click" data-k="f" style="--i:5;left:79.4%;top:22.0%;width:18.9%;height:27.6%;background-size:117.9% 167.8%;background-position:0.0% 22.8%;background-image:url(assets/img/eng-f.webp)"></i>
       <i class="dk click" data-k="g" style="--i:6;left:47.9%;top:34.1%;width:11.1%;height:16.5%;background-size:100.0% 221.7%;background-position:0.0% 46.4%;background-image:url(assets/img/eng-g.webp)"></i>
-      <div class="vt h-loop" style="--i:8;left:2%;top:39.6%"><img src="assets/img/acko-ink.webp" alt="ACKO"><span>Loop , where Emotions Matter!</span></div>
-      <div class="vt hand h-hand" style="--i:9;left:2.9%;top:46%;font-size:calc(var(--pt) * 19.2);white-space:nowrap">Designed for Interaction. Built for Engagement.</div>
-      <div class="vt p-g" style="--i:10;left:2.9%;top:53%;width:30%">From <b>conversation and connection</b> to <b>games, self-expression and opportunities to pause or unwind</b>, these elements make the workplace feel more human and approachable. The interventions also add a sense of <b>discovery and personality</b>, creating spaces where employees can interact, recharge and have moments of fun throughout the day.</div>
-      <div class="vt p-g it" style="--i:11;left:80.5%;top:53%;width:17.5%">Acker’s engagement points explore how the workplace can go beyond functionality to create moments of interaction, play and emotional engagement.</div>
-      <div class="vt eg-chips" style="--i:12;left:2.9%;top:79.5%">
+      <div class="vt h-loop" style="--i:8;left:2%;top:39.6%"><img src="assets/img/s-engage/acko-word.webp" alt="ACKO"><span>Loop , where Emotions Matter!</span></div>
+      <div class="vt hand h-hand" style="--i:9;left:2.9%;top:46%;font-size:calc(var(--pt) * 18);white-space:nowrap">Designed for Interaction. Built for Engagement.</div>
+      <div class="vt p-g" style="--i:10;left:2.9%;top:53%;width:30%">From <b>conversation and connection</b> to <b>games, <span style="white-space:nowrap">self-expression</span> and opportunities to pause or unwind</b>, these elements make the workplace feel more human and approachable. The interventions also add a sense of <b>discovery and personality</b>, creating spaces where employees can interact, recharge and have moments of fun throughout the day.</div>
+      <div class="vt p-g it" style="--i:11;left:80.5%;top:53%;width:16.2%">Acker’s engagement points explore how the workplace can go beyond functionality to create moments of interaction, play and emotional engagement.</div>
+      <div class="vt eg-chips" style="--i:12;left:2.9%;top:76%">
         <button class="eg-chip" data-to="1">Feel it</button><button class="eg-chip" data-to="2">Play it</button><button class="eg-chip" data-to="3">Share it</button><button class="eg-chip" data-to="4">All</button>
       </div>
     </div>
@@ -53,18 +53,14 @@
         <path class="vis" data-k="e" mask="url(#eg-m5)" marker-end="url(#eg-ah)" d="M1200 790 C1196 826 1222 836 1264 834"/>
         <path class="vis" data-k="c" mask="url(#eg-m6)" marker-end="url(#eg-ah)" d="M1450 790 C1478 812 1494 838 1487 866"/>
       </svg>
-      <div class="vt hand lab" data-k="g" style="--i:0;left:45.1%;top:15.6%">Mood Check-In</div>
+      <div class="vt hand lab" data-k="g" style="--i:0;left:45%;top:16.2%">Mood Check-In</div>
       <div class="vt hand lab" data-k="d" style="--i:1;left:63.8%;top:12.9%">Pause &amp; Play</div>
       <div class="vt hand lab" data-k="f" style="--i:2;left:84.8%;top:12.9%">Happy conversations</div>
       <div class="vt hand lab" data-k="a" style="--i:3;left:35.4%;top:77.4%">Interactive Gaming</div>
-      <div class="vt hand lab" data-k="b" style="--i:4;left:47.2%;top:83%">Come nerd it out</div>
+      <div class="vt hand lab" data-k="b" style="--i:4;left:47.2%;top:83.2%">Come nerd it out</div>
       <div class="vt hand lab" data-k="e" style="--i:5;left:66.5%;top:75.8%">To Express out</div>
       <div class="vt hand lab" data-k="c" style="--i:6;left:77%;top:81.2%">For the frustrated Ackers</div>
     </div>
-    <!-- the group of the beat, in hand, top left (none on the last beat: all of them) -->
-    <div class="eg-name" data-only="1" style="left:2.9%;top:16%"><b class="hand">Feel it</b><span class="hand">check in, let it out</span></div>
-    <div class="eg-name" data-only="2" style="left:2.9%;top:16%"><b class="hand">Play it</b><span class="hand">pause, nerd out, play</span></div>
-    <div class="eg-name" data-only="3" style="left:2.9%;top:16%"><b class="hand">Share it</b><span class="hand">talk, laugh, connect</span></div>
   </div>
 </section>
 <style>
@@ -72,7 +68,15 @@
 /* the tiles keep the collage's staggered entrance; the lens (filter) changes at once */
 #s-engage .dk { transition: opacity .7s var(--ease) calc(var(--i, 0) * 90ms), transform .7s var(--ease) calc(var(--i, 0) * 90ms), filter .5s var(--ease); }
 #s-engage.lens .dk:not(.lit) { filter: grayscale(1) opacity(.25); }
+/* the PPT's template for this page, measured on deck slide 46: header 12 / 9 pt from 2.5%, the ACKO wordmark alone (no symbol),
+   text 8.95 pt at 1.2 line spacing (its boxes wrap the PPT's lines), labels 13.8 pt */
+#s-engage .hdr { left: 2.5%; }
+#s-engage .hdr b { font-size: calc(var(--pt) * 12); }
+#s-engage .hdr span { font-size: calc(var(--pt) * 9); }
+#s-engage .vt.h-loop img { height: calc(var(--pt) * 13.1); }
+#s-engage .vt.p-g { font-size: calc(var(--pt) * 8.95); line-height: 1.2; }
 #s-engage .vt.p-g b { font-weight: 700; color: #333; }
+#s-engage .vt.lab { font-size: calc(var(--pt) * 13.8); }
 /* the arrows draw out of their photos one after another once the collage is in, the labels just behind */
 #s-engage .eg-draw { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
 #s-engage .eg-draw svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
@@ -83,9 +87,7 @@
 #s-engage .eg-in.go ~ .eg-draw .lab { opacity: 1; transition-delay: calc(var(--i) * .3s + 1.3s), 0s; }
 #s-engage.lens .eg-draw .lab:not(.lit) { filter: opacity(.22); }
 #s-engage.lens .eg-draw .vis:not(.lit) { opacity: .15; }
-/* the group's name in hand, and the chips that jump to a group */
-#s-engage .eg-name b { display: block; font-size: calc(var(--pt) * 40); font-weight: 400; color: var(--purple-2); }
-#s-engage .eg-name span { display: block; margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 17); color: #666; }
+/* the chips that jump to a group */
 #s-engage .eg-chips { display: flex; gap: calc(var(--pt) * 4); }
 #s-engage .eg-chip { padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7); font-family: var(--body); font-size: calc(var(--pt) * 7); font-weight: 600; color: var(--purple-2); background: #fff;
   border: calc(var(--pt) * .8) solid var(--lilac); border-radius: 99px; cursor: pointer; transition: background .3s, color .3s, border-color .3s; }
