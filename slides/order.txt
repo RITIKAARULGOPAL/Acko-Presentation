@@ -2,7 +2,7 @@
 # Move a line to move the slide. Lines starting with # are notes and are not part of the page.
 # A slide's section is its data-part attribute (cover · 1 design concept · 2 design strategy · 3 visual direction · 4 value addition ·
 # 5 space planning · A appendix · 0 About SKV), not its place in this list. Leave a slide out to hide it.
-# Ritika, 16.10: the PPT's own order (20.10.26 design deck); the palettes as two chapters; each space OP 01 then OP 02; ~20 min.
+# Ritika, 16.10: the PPT's own order (20.10.26 design deck); ~20 min. 22.10: one palette; the walk in OP 02, Reception alone in OP 01 and OP 02.
 
 # OPENING (deck slides 1–2)
 s-cover
@@ -23,9 +23,9 @@ s-strategy
 s-challenges
 s-typologies
 
-# 3 · VISUAL DIRECTION (deck 16–45): the two palettes, then the walk, one slide per space
-s-palette1
+# 3 · VISUAL DIRECTION (deck 20–45): the campus palette, then the walk, one slide per space (Reception first)
 s-palette2
+s-w-reception
 s-w-board
 s-w-dept
 s-w-sprint

@@ -43,8 +43,8 @@ A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that 
 | 11 | `slides/s-strategy.html` | 13 | Campus strategy | `slide/s-strategy` | `.claude/worktrees/s-strategy` |
 | 12 | `slides/s-challenges.html` | 14 | What's our challenge | `slide/s-challenges` | `.claude/worktrees/s-challenges` |
 | 13 | `slides/s-typologies.html` | 15 | Workstation typologies | `slide/s-typologies` | `.claude/worktrees/s-typologies` |
-| 14 | `slides/s-palette1.html` | 16–19 | The campus palette 01 | `slide/s-palette1` | `.claude/worktrees/s-palette1` |
-| 15 | `slides/s-palette2.html` | 20–23 | The campus palette 02 | `slide/s-palette2` | `.claude/worktrees/s-palette2` |
+| 14 | `slides/s-palette2.html` | 20–23 | The campus palette | `slide/s-palette2` | `.claude/worktrees/s-palette2` |
+| 15 | `slides/s-w-reception.html` |  | Reception | `slide/s-w-reception` | `.claude/worktrees/s-w-reception` |
 | 16 | `slides/s-w-board.html` | 24–25 | State Room · Boardroom | `slide/s-w-board` | `.claude/worktrees/s-w-board` |
 | 17 | `slides/s-w-dept.html` | 26–27 | Departmental Room | `slide/s-w-dept` | `.claude/worktrees/s-w-dept` |
 | 18 | `slides/s-w-sprint.html` | 28–29 | Quick Sprint Room | `slide/s-w-sprint` | `.claude/worktrees/s-w-sprint` |
@@ -101,8 +101,8 @@ A session opened in `.claude/worktrees/<id>` (on branch `slide/<id>`) owns that 
   - **Chrome:** the header top left, the copyright bottom left, the ACKO | SKV lockup bottom right.
 - **The story:**
   - **Order:** the PPT's own.
-  - **Palettes:** two chapters.
-  - **The walk:** each space shows OP 01 then OP 02.
+  - **Palettes:** one, the campus palette (the former 02; palette 01 removed 22 Oct, Ritika).
+  - **The walk:** each space shows one render (OP 02); Reception alone shows OP 01 then OP 02 (22 Oct, Ritika).
   - **Length:** about 20 minutes.
   - **Site:** in the Appendix, first (22 Oct, Ritika; the floor's sun and fire beats removed the same day).
 - **The thread:** the Loop's seven stops (Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness, each with its words).
