@@ -19,8 +19,7 @@ s-mobius
 s-loop
 s-strategy
 
-# 2 · DESIGN STRATEGY (deck 14–15, with the site first)
-s-site
+# 2 · DESIGN STRATEGY (deck 14–15)
 s-challenges
 s-typologies
 
@@ -54,7 +53,8 @@ s-blowup
 s-axo
 s-thanks
 
-# APPENDIX · its own deck (deck 49–51)
+# APPENDIX · its own deck (the site, then deck 49–51)
+s-site
 s-wellbeing
 s-di
 s-esg

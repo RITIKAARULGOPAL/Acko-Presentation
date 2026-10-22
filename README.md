@@ -93,7 +93,7 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
 The PPT's own order. Ritika's choices (16 Oct):
 - the palettes are two chapters
 - each space shows OP 01, then OP 02
-- a short site beat comes before the challenges (the floor's sun and fire beats were removed on 22 Oct)
+- the site sits in the Appendix, first (22 Oct); the floor's sun and fire beats were removed the same day
 
 | Deck slides | Chapter | Beats | What happens |
 |---|---|---|---|
@@ -108,7 +108,6 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 10 | The Möbius | 1 | A live 3D Möbius strip, ACKO's own mark, with the copy inside the loop |
 | 11–12 | The Loop | 2 | People and trees along a line; then the ribbon writes itself (the deck's GIF) and the seven stops come up with their words as it reaches them |
 | 13 | Campus strategy | 1 | The live model of the 21.10.26 test fit (the axo's, shared): the floor builds up, the ACKO Loop draws through its seven stops, the client's journey traces from the entrance. A click replays; drag turns; without WebGL, the deck's GIF |
-| new | The site | 1 | A vector map of Koramangala that closes in on Regalium and turns 11.5° to line up with the plans |
 | 14 | What's our challenge | 3 | On the axo of the bare floor: a uniform desk grid, the long walk to lunch, then the route draws (245 m) |
 | 15 | Workstation typologies | 1 | Types 1–4; the seats add to 648, +3 cabins = 651 |
 | 16–19 | Campus palette 01 | 4 | The board builds, then its three renders full bleed |
@@ -120,7 +119,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 58–60 | Schematic axonometric | 3 | A live 3D model of Option 02A from the DXF, in the deck's axo look; West, Middle, East fly along it, with leaders to their spaces (drag to turn, scroll to zoom, Reset view) |
 | — | Thank you | 1 | Buttons to the Appendix and About SKV |
 
-**Appendix:** well-being (49), D&I (50) and ESG (51), shown as the deck's own pages.
+**Appendix:** the site (A1: a vector map of Koramangala that closes in on Regalium and turns 11.5° to line up with the plans), then well-being (49), D&I (50) and ESG (51), shown as the deck's own pages.
 
 **About SKV:** SKV's own deck, carried over from the Mitigata presentation.
 
