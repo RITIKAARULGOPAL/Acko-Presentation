@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layout layers · mockup</title>
+<!-- A basic mockup (22 Oct, for Ritika's review): the layout slide in one template with four layers (Spaces, Neighbourhoods,
+     Biophilia, Acoustics) and Mitigata's plan tools. Standalone, offline; it reads the deck's own data and pictures and changes
+     nothing in the deck. ← → (or the pills) step through the layers. -->
+<link rel="stylesheet" href="../assets/css/plan-hover.css">
+<style>
+@font-face { font-family: "Figtree"; font-weight: 300 900; src: url("../assets/fonts/figtree-latin-var.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-style: italic; font-weight: 300 900; src: url("../assets/fonts/figtree-latin-italic-var.woff2") format("woff2"); }
+@font-face { font-family: "Square Peg"; src: url("../assets/fonts/squarepeg-latin-400.woff2") format("woff2"); }
+@font-face { font-family: "Lexend"; font-weight: 100 900; src: url("../assets/fonts/lexend-latin-var.woff2") format("woff2"); }
+:root { --purple: #5222d0; --purple-2: #4e29bb; --plum: #6f2f9f; --violet: #926ff3; --lilac: #c9b3f3; --lavender: #d2c9eb; --maroon: #980000;
+  --ink: #000; --soft: #434343; --mute: #6b6b6b; --line: #e4e1ec; --ease: cubic-bezier(.2, .7, .2, 1);
+  --body: "Figtree", "Segoe UI", sans-serif; --num: "Lexend", "Figtree", sans-serif; --hand: "Square Peg", cursive;
+  --c1: #efe9fd; --c2: #cdb9f5; --c3: #9a79f2; --c4: #5222d0; }
+html, body { margin: 0; height: 100%; background: #ecebf1; overflow: hidden; font-family: var(--body); color: var(--ink); -webkit-font-smoothing: antialiased; }
+#stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; overflow: hidden; --pt: calc(var(--pw) / 720); box-shadow: 0 10px 40px rgba(40, 20, 90, .12); }
+#stage > * { position: absolute; }
+button { font-family: inherit; }
+
+/* chrome */
+.hdr { left: 1.8%; top: 2.9%; line-height: 1.35; }
+.hdr b { display: block; font-weight: 700; font-size: calc(var(--pt) * 8.5); }
+.hdr span { display: block; font-size: calc(var(--pt) * 7); }
+.mock { left: 50%; top: 2.4%; transform: translateX(-50%); font-size: calc(var(--pt) * 5); letter-spacing: .14em; text-transform: uppercase; color: var(--maroon); border: 1px dashed rgba(152, 0, 0, .45); border-radius: 999px; padding: calc(var(--pt) * 1.6) calc(var(--pt) * 6); }
+.foot { left: 1.8%; top: 95.3%; font-size: calc(var(--pt) * 4.6); letter-spacing: .12em; color: var(--soft); }
+.lockup { right: 1.8%; top: 93.8%; display: flex; align-items: center; gap: calc(var(--pt) * 6); }
+.lockup img { height: calc(var(--pt) * 7.5); }
+.lockup i { width: 1px; height: calc(var(--pt) * 9); background: #c8c8c8; }
+.beats { left: 50%; top: 95.1%; transform: translateX(-50%); display: flex; gap: calc(var(--pt) * 3); }
+.beats i { width: calc(var(--pt) * 14); height: 2px; background: #ddd; border-radius: 2px; transition: background .3s; }
+.beats i.on { background: var(--purple); }
+
+/* layers: pills, top right; then the plan tools under them */
+.layers { right: 1.8%; top: 3%; display: flex; gap: calc(var(--pt) * 3); }
+.layers button { display: flex; align-items: center; gap: calc(var(--pt) * 3); border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px;
+  padding: calc(var(--pt) * 2.4) calc(var(--pt) * 7); font-size: calc(var(--pt) * 6.2); font-weight: 600; cursor: pointer; transition: background .25s, color .25s; }
+.layers button small { font-family: var(--num); font-weight: 400; font-size: .8em; opacity: .7; }
+.layers button.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+.tools { right: 1.8%; top: 8.9%; display: flex; align-items: center; gap: calc(var(--pt) * 2); }
+.tools button { border: 1px solid #e3def2; background: #fff; color: #3b3550; border-radius: calc(var(--pt) * 3); height: calc(var(--pt) * 12); min-width: calc(var(--pt) * 12);
+  padding: 0 calc(var(--pt) * 4); font-size: calc(var(--pt) * 5.2); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: calc(var(--pt) * 2); }
+.tools button svg { width: calc(var(--pt) * 6); height: calc(var(--pt) * 6); fill: none; stroke: currentColor; stroke-width: 1.6; }
+.tools button.on { background: rgba(82, 34, 208, .1); color: var(--purple); border-color: rgba(82, 34, 208, .4); }
+.tools .sep { width: 1px; height: calc(var(--pt) * 9); background: #e3def2; margin: 0 calc(var(--pt) * 1.5); }
+.tools img { height: calc(var(--pt) * 12); margin-left: calc(var(--pt) * 2); }
+.m-read { right: 1.8%; top: 13.2%; font-size: calc(var(--pt) * 5.4); color: var(--purple); font-family: var(--num); display: none; }
+.measuring ~ .m-read, #stage.measuring .m-read { display: block; }
+
+/* the plan */
+#plan { left: 1.8%; right: 1.8%; top: 15.5%; height: 39%; }
+#plan.ph-root { background: transparent; --ph-paper: transparent; --ph-hover: rgba(82, 34, 208, .22); --ph-hover-line: #5222d0; }
+#plan .ph-label { font-family: var(--body); border-color: rgba(82, 34, 208, .45); }
+#plan .lv-24, #plan .lv-48 { visibility: hidden; }
+#plan.lv-24 .lv-24, #plan.lv-48 .lv-48 { visibility: visible; }
+#plan.no-hover .ph-label { display: none !important; }
+#plan.no-hover .ph-room { pointer-events: none !important; }
+#plan .ph-extra path, #plan .ph-extra circle, #plan .ph-extra line { vector-effect: non-scaling-stroke; }
+#plan.measuring .ph-stage { cursor: crosshair; }
+#plan.measuring .ph-room { pointer-events: none; }
+
+/* layer contents (each layer svg holds groups shown per layer) */
+.f-sp path { stroke: none; transition: opacity .4s; }
+.f-ac path { stroke: none; }
+#plan:not([data-layer="spaces"]):not([data-layer="nb"]) .f-sp { display: none; }
+#plan[data-layer="nb"] .f-sp { opacity: .45; }
+#plan:not([data-layer="ac"]) .f-ac, #plan:not([data-layer="ac"]) .m-waves { display: none; }
+#plan:not([data-layer="bio"]) .h-img, #plan:not([data-layer="bio"]) .m-bio { display: none; }
+#plan:not([data-layer="nb"]) .m-nb { display: none; }
+#plan:not([data-layer="spaces"]) .m-types { display: none; }
+
+.ty path { fill: rgba(82, 34, 208, .5); stroke: #5222d0; stroke-width: 1; opacity: 0; transition: opacity .25s; }
+#plan.t-T1 .ty[data-t="T1"] path, #plan.t-T2 .ty[data-t="T2"] path, #plan.t-T3 .ty[data-t="T3"] path, #plan.t-T4 .ty[data-t="T4"] path { opacity: 1; }
+#plan[class*="t-T"] .f-sp { opacity: .3; }
+
+.nbz { fill: none; stroke: var(--c); stroke-width: 2.6; transition: opacity .3s, stroke-width .3s; }
+.nbn { font-family: var(--num); font-weight: 300; font-size: 2600px; fill: var(--c); text-anchor: middle; transition: opacity .3s; }
+.arr { fill: none; stroke: #0000ff; stroke-width: 1.4; stroke-dasharray: 5 4; }
+.arr-t { font-family: var(--body); font-size: 1100px; fill: #0000ff; font-weight: 600; text-anchor: middle; }
+#plan.zopen .nbz:not(.sel), #plan.zopen .nbn:not(.sel) { opacity: .2; }
+#plan.zopen .nbz.sel { stroke-width: 4; }
+
+.pl { fill: #3f8f3a; opacity: .9; }
+.pl-bad { fill: none; stroke: #d00; stroke-width: 2; }
+.eg { fill: none; stroke-width: 3; opacity: .95; }
+.eg.b50 { stroke: #2f9e44; } .eg.b60 { stroke: #f08c00; }
+.svc { fill: rgba(240, 140, 0, .18); stroke: #e8590c; stroke-width: 1.4; stroke-dasharray: 4 3; }
+#plan:not(.eg-on) .m-eg { display: none; }
+#plan[data-layer="bio"] .m-eg { display: inline; }
+.wv { fill: none; stroke: #7a52e8; stroke-width: 2.2; }
+.wv.d { stroke: #3d17a8; stroke-width: 1.6; }
+#plan[class*="ac-c"] .f-ac path:not(.hi) { opacity: .25; }
+
+.m-line { fill: none; stroke: #5222d0; stroke-width: 2; }
+.m-line.live { stroke-dasharray: 6 4; }
+.m-area { fill: rgba(82, 34, 208, .12); stroke: none; }
+.m-pt { fill: #fff; stroke: #5222d0; stroke-width: 1.5; }
+.m-snap { fill: none; stroke: #d00; stroke-width: 1.5; }
+.m-lab { font-family: var(--num); fill: #2a1680; paint-order: stroke; stroke: #fff; stroke-linejoin: round; text-anchor: middle; font-weight: 500; }
+
+/* the layer panels, bottom band */
+.panel { left: 1.8%; right: 1.8%; top: 58.5%; height: 32%; display: none; grid-template-columns: 27% 1fr; gap: 3%; }
+.panel.on { display: grid; animation: up .5s var(--ease); }
+@keyframes up { from { opacity: 0; transform: translateY(6px); } }
+.lead small { display: block; font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 7); color: var(--violet); }
+.lead h2 { margin: calc(var(--pt) * 1) 0 calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); color: var(--purple-2); font-weight: 600; }
+.lead p { margin: 0 0 calc(var(--pt) * 3); font-size: calc(var(--pt) * 6.4); line-height: 1.5; color: var(--soft); }
+.lead p b { color: var(--ink); }
+.hand { font-family: var(--hand); font-size: calc(var(--pt) * 14); color: var(--plum); line-height: 1; }
+.flag { color: var(--maroon) !important; }
+
+.types { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--pt) * 5); }
+.chip { border: 1px solid var(--line); border-radius: calc(var(--pt) * 5); padding: calc(var(--pt) * 5); cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .2s; }
+.chip:hover, .chip.pin { border-color: var(--purple); box-shadow: 0 6px 18px rgba(82, 34, 208, .14); transform: translateY(-2px); }
+.chip img { height: calc(var(--pt) * 20); display: block; margin-bottom: calc(var(--pt) * 3); }
+.chip b { display: block; font-size: calc(var(--pt) * 7); }
+.chip .n { font-family: var(--num); font-size: calc(var(--pt) * 15); font-weight: 300; color: var(--purple); line-height: 1.1; }
+.chip .n small { font-size: .38em; color: var(--mute); margin-left: .3em; }
+.chip em { display: block; font-style: normal; font-size: calc(var(--pt) * 5); color: var(--mute); margin-top: calc(var(--pt) * 1); }
+.note { margin-top: calc(var(--pt) * 4); font-size: calc(var(--pt) * 5); color: var(--mute); }
+.note i { display: inline-block; width: calc(var(--pt) * 3.4); height: calc(var(--pt) * 3.4); border-radius: 50%; background: var(--maroon); margin-right: calc(var(--pt) * 1.5); vertical-align: middle; }
+
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(var(--pt) * 8); }
+.three > div { border-top: 2px solid var(--purple); padding-top: calc(var(--pt) * 4); }
+.three b { display: block; font-size: calc(var(--pt) * 8); color: var(--purple-2); }
+.three .fig { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 22); color: var(--purple); line-height: 1.1; margin: calc(var(--pt) * 2) 0; }
+.three .fig small { font-size: .35em; color: var(--mute); }
+.three p { margin: 0; font-size: calc(var(--pt) * 5.8); line-height: 1.45; color: var(--soft); }
+.three .pre { font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+.zone { display: none; grid-template-columns: 30% 1fr; gap: calc(var(--pt) * 8); align-items: start; }
+.panel.zoned .three { display: none; } .panel.zoned .zone { display: grid; }
+.kp svg { width: 100%; }
+.kp path { fill: #f1f0f4; stroke: #c9c4d6; stroke-width: 450; }
+.kp path.sel { fill: var(--c); fill-opacity: .35; stroke: var(--c); stroke-width: 700; }
+.kp b { display: block; font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
+.occ { columns: 2; column-gap: calc(var(--pt) * 10); font-size: calc(var(--pt) * 5.6); }
+.occ div { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: calc(var(--pt) * 1.2) 0; break-inside: avoid; }
+.occ div.g { border: 0; padding-top: calc(var(--pt) * 3); font-size: .85em; letter-spacing: .12em; text-transform: uppercase; color: var(--purple); font-weight: 700; }
+.occ span:last-child { font-family: var(--num); }
+.back { margin-top: calc(var(--pt) * 4); border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 2) calc(var(--pt) * 6); font-size: calc(var(--pt) * 5.6); cursor: pointer; }
+
+.bio { display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--pt) * 6) calc(var(--pt) * 12); align-content: start; }
+.bio > div { display: grid; grid-template-columns: calc(var(--pt) * 24) 1fr; gap: calc(var(--pt) * 5); align-items: center; font-size: calc(var(--pt) * 5.8); color: var(--soft); line-height: 1.4; }
+.bio b { color: var(--ink); }
+.sw { height: calc(var(--pt) * 7); border-radius: calc(var(--pt) * 2); }
+.sw.heat { background: linear-gradient(90deg, rgba(255, 236, 170, .9), #fb923c, #dc2626); }
+.sw.plant { background: radial-gradient(circle, #3f8f3a 0 26%, rgba(76, 138, 70, .25) 30% 100%); width: calc(var(--pt) * 7); justify-self: center; border-radius: 50%; }
+.sw.svc { border: 1.5px dashed #e8590c; background: rgba(240, 140, 0, .18); }
+.sw.eg { background: linear-gradient(90deg, #2f9e44 0 50%, #f08c00 50%); height: calc(var(--pt) * 2); }
+.big { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 13); color: #2f7d2b; text-align: center; }
+
+.acs { display: grid; grid-template-columns: repeat(4, 1fr); gap: calc(var(--pt) * 5); }
+.ac { border: 1px solid var(--line); border-radius: calc(var(--pt) * 5); padding: calc(var(--pt) * 4) calc(var(--pt) * 5); cursor: default; transition: border-color .2s, box-shadow .2s; }
+.ac:hover { border-color: var(--purple); box-shadow: 0 6px 18px rgba(82, 34, 208, .14); }
+.ac .k { display: flex; align-items: center; gap: calc(var(--pt) * 3); font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+.ac .k i { width: calc(var(--pt) * 6); height: calc(var(--pt) * 6); border-radius: calc(var(--pt) * 1.5); }
+.ac svg.iso { width: 100%; height: calc(var(--pt) * 46); display: block; margin: calc(var(--pt) * 1) 0; }
+.ac svg.wave { width: 100%; height: calc(var(--pt) * 9); display: block; }
+.ac b { display: block; font-size: calc(var(--pt) * 6.2); line-height: 1.3; }
+.ac p { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 5.2); color: var(--mute); line-height: 1.35; }
+.ac p span { font-family: var(--num); color: var(--purple); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
+  <div class="mock">Mockup · layers on the layout · not in the deck yet</div>
+
+  <nav class="layers">
+    <button data-l="0"><small>01</small>Spaces</button>
+    <button data-l="1"><small>02</small>Neighbourhoods</button>
+    <button data-l="2"><small>03</small>Biophilia</button>
+    <button data-l="3"><small>04</small>Acoustics</button>
+  </nav>
+  <div class="tools">
+    <button data-tool="dist" title="Measure a distance (M)"><svg viewBox="0 0 16 16"><path d="M2 12L12 2M2 12l2 2M5 9l1.5 1.5M8 6l1.5 1.5M11 3l2 2"/></svg>Measure</button>
+    <button data-tool="area" title="Measure an area (A)"><svg viewBox="0 0 16 16"><path d="M3 3h10v10H3z" stroke-dasharray="2 1.5"/></svg>Area</button>
+    <span class="sep"></span>
+    <button data-tool="out" title="Zoom out">−</button>
+    <button data-tool="in" title="Zoom in">+</button>
+    <button data-tool="reset" title="Reset zoom"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset</button>
+    <span class="sep"></span>
+    <button data-tool="hover" class="on" title="Names on hover"><svg viewBox="0 0 16 16"><path d="M4 2.5l8.5 5.2-3.9 1 2.3 3.9-1.6.9-2.3-3.9-2.8 2.8z" fill="currentColor" stroke="none"/></svg>Hover</button>
+    <button data-tool="eg" title="Fire egress"><svg viewBox="0 0 16 16"><path d="M2 12h5l3-8h4" stroke="#2f9e44"/></svg>Egress</button>
+    <img src="../assets/img/north.webp" alt="North">
+  </div>
+  <div class="m-read"></div>
+
+  <div id="plan"></div>
+
+  <!-- 01 · spaces -->
+  <section class="panel" data-p="0">
+    <div class="lead"><small>01</small><h2>Spaces</h2>
+      <p>Every space in its colour. <b>Hover a workstation type</b> to see where it sits on the floor.</p>
+      <p class="hand">651 workstations, four ways to work</p></div>
+    <div><div class="types" id="types"></div><p class="note" id="typenote"></p></div>
+  </section>
+  <!-- 02 · neighbourhoods -->
+  <section class="panel" data-p="1">
+    <div class="lead"><small>02</small><h2 id="nb-h">Neighbourhoods</h2>
+      <p id="nb-p">Six neighbourhoods, outlined. <b>Click one</b> to zoom in and open its occupancy chart.</p>
+      <button class="back" id="nb-back" style="display:none">← All neighbourhoods</button></div>
+    <div>
+      <div class="three">
+        <div><span class="pre">Vastness, dealt with</span><b>Homogeneity</b><div class="fig">6 <small>neighbourhoods</small></div><p>Each with its own number, colour and identity, so a 245 m floor reads as six places.</p></div>
+        <div><span class="pre">&nbsp;</span><b>Disorientation</b><div class="fig">2 <small>arrival zones</small></div><p>Arrival at both lift lobbies, and meeting rooms, booths and planting inside every neighbourhood.</p></div>
+        <div><span class="pre">&nbsp;</span><b>Distance</b><div class="fig" id="dist-fig">– <small>m</small></div><p id="dist-p"></p></div>
+      </div>
+      <div class="zone"><div class="kp" id="kp"></div><div class="occ" id="occ"></div></div>
+    </div>
+  </section>
+  <!-- 03 · biophilia -->
+  <section class="panel" data-p="2">
+    <div class="lead"><small>03</small><h2>Biophilia</h2>
+      <p><b>Where people gather, the plants gather.</b> The heat shows where breathing out (CO₂) concentrates: the desks, the café, reception and the arrival lobbies. The green is the planting around it.</p>
+      <p>Fresh air with CO₂ sensing carries the load; the plants support air quality and wellbeing. <b>Service rooms</b> (server, UPS, battery) are counted as sources too.</p></div>
+    <div class="bio">
+      <div><span class="sw heat"></span><span><b>People and activity</b>, from quieter to busiest (desks, café, reception, lift lobbies, meeting rooms)</span></div>
+      <div><span class="big" id="cov">–</span><span id="cov-p"></span></div>
+      <div><span class="sw plant"></span><span><b id="np">–</b> plants, each drawn where it stands</span></div>
+      <div><span class="sw svc"></span><span><b>Service rooms</b>: server, UPS and battery, counted as sources of heat and emissions</span></div>
+      <div><span class="sw eg"></span><span id="eg-p"><b>Egress paths</b></span></div>
+    </div>
+  </section>
+  <!-- 04 · acoustics -->
+  <section class="panel" data-p="3">
+    <div class="lead"><small>04</small><h2>Acoustics</h2>
+      <p>Four levels of treatment, matched to how loud and how private each space is. <b>Hover a level</b> to find its rooms.</p>
+      <p>The rings show sound: wide and lingering in the open workhall, cut short in the treated rooms.</p></div>
+    <div class="acs" id="acs"></div>
+  </section>
+
+  <div class="foot">COPYRIGHT © 2026 STUDIOKON VENTURES PVT LTD. ALL RIGHTS RESERVED</div>
+  <div class="beats"><i></i><i></i><i></i><i></i></div>
+  <div class="lockup"><img src="../assets/img/acko-ink.webp" alt="ACKO"><i></i><img src="../assets/img/skv-ink.webp" alt="SKV"></div>
+</div>
+
+<script src="../data/plan-dxf.js"></script>
+<script src="../data/axo-dxf.js"></script>
+<script src="../assets/js/plan-hover.js"></script>
+<script>
+(() => {
+  const P = window.PLAN_DXF, A = window.AXO_DXF, $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const asset = (p) => "../" + p;
+  const NB_COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
+  const stage = $("#stage"), host = $("#plan");
+  const rings = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
+  const inPoly = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
+  const inside = (p, d) => rings(d).filter((r) => inPoly(p, r)).length % 2 === 1;
+  const dpath = (pts, close) => "M" + pts.map((q) => q[0].toFixed(0) + " " + q[1].toFixed(0)).join("L") + (close ? "Z" : "");
+
+  // ---- the 16:9 page ----
+  function size() { const pw = Math.min(innerWidth - 24, (innerHeight - 24) * 16 / 9); stage.style.width = pw + "px"; stage.style.height = pw * 9 / 16 + "px"; stage.style.setProperty("--pw", pw + "px"); }
+  size();
+
+  // ---- the plan (the deck's PlanHover, with the pictures at three sharpnesses) ----
+  const [vx, vy, vw, vh] = P.viewBox, vb = P.viewBox.join(" ");
+  const imgs = P.levels.map((l) => `<image class="lv lv-${l.ppm}" href="${asset(l.src)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>`).join("");
+  const spaces = P.spaces.filter((s) => s.type !== "Not in contract");
+  const ph = PlanHover.mount(host, { labelPlacement: "above", data: { options: { plan: { label: "Layout", viewBox: vb,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}">${imgs}</svg>`,
+    rooms: spaces.map((r) => ({ id: r.id, name: r.name, m2: r.m2, x: r.x, y: r.y, d: r.d })), teams: [] } } } });
+  { const st = $(".ph-stage", host); st.insertBefore($(".ph-rooms", st), $(".ph-plan", st)); }   // the room tint under the drawing
+
+  // ---- workstation types: the five desk blocks of the drawing (ids of this toolkit run), placed by their uses ----
+  const TYPES = [
+    { t: "T1", name: "Type 1", icon: "ty-icon1", blocks: ["b644", "b782"], ppt: 73, per: 1, what: "single desk" },
+    { t: "T2", name: "Type 2", icon: "ty-icon2", blocks: ["b887"], ppt: 14, per: 1, what: "single desk, side by side" },
+    { t: "T3", name: "Type 3", icon: "ty-icon3", blocks: ["b786"], ppt: 36, per: 4, what: "round table of four" },
+    { t: "T4", name: "Type 4", icon: "ty-icon4", blocks: ["b785"], ppt: 525, per: 3, what: "pinwheel of three" },
+  ];
+  const place = (u, q) => [u[1] * q[0] + u[3] * q[1] + u[5], u[2] * q[0] + u[4] * q[1] + u[6]];
+  const desks = [];                                                  // [x, y, seats]
+  const tyMarkup = TYPES.map((T) => {
+    const uses = A.uses.filter((u) => T.blocks.includes(u[0]));
+    T.seats = uses.length * T.per;
+    let s = "";
+    for (const u of uses) {
+      const sh = A.blocks[u[0]] || [], all = [];
+      for (const [, ring] of sh) { const pts = ring.map((q) => place(u, q)); all.push(...pts); s += `<path d="${dpath(pts, true)}"/>`; }
+      const xs = all.map((p) => p[0]), ys = all.map((p) => p[1]);
+      desks.push([(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2, T.per]);
+    }
+    return `<g class="ty" data-t="${T.t}">${s}</g>`;
+  }).join("");
+
+  // ---- acoustic categories ----
+  const CAT = { "Quick sprint": 2, "Collaboration huddle": 2, "Visitor hub": 2, "The Hatchery": 2, "Departmental room": 3, "Boardroom": 3, "Phone booth": 4, "Studio": 4 };
+  const acFill = P.zones.map((z) => `<path data-c="1" d="${z.zone}" style="fill:var(--c1)"/>`).join("") +
+    spaces.filter((s) => CAT[s.type]).map((s) => `<path data-c="${CAT[s.type]}" d="${s.d}" style="fill:var(--c${CAT[s.type]})"/>`).join("");
+
+  // ---- the layers ----
+  ph.addLayer("m-under", `<g class="f-sp">${spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join("")}</g><g class="f-ac">${acFill}</g><g class="h-img"></g>`, { below: true });
+  ph.addLayer("m-types", tyMarkup);
+  ph.addLayer("m-nb", `<g>${P.overlays.arrival.map((d) => { const r = rings(d)[0], cx = r.reduce((a, q) => a + q[0], 0) / r.length, cy = r.reduce((a, q) => a + q[1], 0) / r.length; return `<path class="arr" d="${d}"/><text class="arr-t" x="${cx}" y="${cy}">Arrival</text>`; }).join("")}</g>` +
+    P.zones.map((z) => `<path class="nbz" data-nb="${z.n}" d="${z.zone}" style="--c:${NB_COL[z.n]}"/><text class="nbn" data-nb="${z.n}" x="${z.x}" y="${z.y}" style="--c:${NB_COL[z.n]}">${z.n}</text>`).join(""));
+  const egSvg = `<g class="m-eg">${P.egress.map((e) => `<path class="eg ${e.band === "lt50" ? "b50" : "b60"}" d="${e.d}"/>`).join("")}</g>`;
+  const bioSvg = ph.addLayer("m-bio-l", `<g class="m-bio"></g>${egSvg}`);
+  const wavesSvg = ph.addLayer("m-waves", "");
+  const measureSvg = ph.addLayer("m-measure", "");
+
+  // ---- biophilia: where people breathe out (a heat field) against the planting, and the egress check ----
+  const segs = P.egress.flatMap((e) => { const p = e.d.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)); return p.slice(1).map((q, i) => [p[i], q]); });
+  const dseg = (p, [a, b]) => { const dx = b[0] - a[0], dy = b[1] - a[1], l = dx * dx + dy * dy; let t = l ? ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / l : 0; t = Math.max(0, Math.min(1, t)); return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy); };
+  function biophilia() {
+    const S = 200, W = Math.ceil(vw / S), H = Math.ceil(vh / S);
+    const c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d"); g.globalCompositeOperation = "lighter";
+    const blob = (x, y, r, a) => { const px = (x - vx) / S, py = (y - vy) / S, pr = r / S, gr = g.createRadialGradient(px, py, 0, px, py, pr);
+      gr.addColorStop(0, `rgba(255,255,255,${Math.min(1, a)})`); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(px - pr, py - pr, pr * 2, pr * 2); };
+    desks.forEach(([x, y, n]) => blob(x, y, 3600, 0.09 * n));
+    // people in a space, spread over it (the café's covers, a room's PAX), and the lift lobbies' flow
+    const spread = (d, people, r = 3000) => { const R = rings(d), xs = R.flat().map((q) => q[0]), ys = R.flat().map((q) => q[1]), pts = [];
+      for (let x = Math.min(...xs) + 1200; x < Math.max(...xs); x += 2400) for (let y = Math.min(...ys) + 1200; y < Math.max(...ys); y += 2400) if (inside([x, y], d)) pts.push([x, y]);
+      if (!pts.length) pts.push([(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2]);
+      pts.forEach(([x, y]) => blob(x, y, r, (0.09 * people) / pts.length * 2.2)); };
+    const PEOPLE = { "Cafeteria": 178, "Reception": 18, "Coffee corner": 10, "Visitor hub": 4, "Collaboration huddle": 6, "Departmental room": 10, "Boardroom": 16, "The Hatchery": 8, "Pantry": 4 };
+    spaces.forEach((s) => { if (PEOPLE[s.type]) spread(s.d, PEOPLE[s.type]); else if (s.type === "Quick sprint") spread(s.d, (+(s.name.match(/(\d+)\s*PAX/i) || [0, 4])[1]) * 0.6); });
+    P.overlays.arrival.forEach((d) => spread(d, 30, 3600));
+    const id = g.getImageData(0, 0, W, H), out = g.createImageData(W, H);
+    let mx = 0; for (let i = 3; i < id.data.length; i += 4) mx = Math.max(mx, id.data[i]);
+    const ramp = [[0, [255, 236, 170]], [0.5, [251, 146, 60]], [1, [220, 38, 38]]];
+    const hot = [];
+    for (let i = 0; i < W * H; i++) {
+      const v = id.data[i * 4 + 3] / (mx || 1); if (v < 0.07) continue;
+      let k = 0; while (k < ramp.length - 2 && v > ramp[k + 1][0]) k++;
+      const [a, ca] = ramp[k], [b, cb] = ramp[k + 1], f = Math.min(1, (v - a) / (b - a));
+      out.data[i * 4] = ca[0] + (cb[0] - ca[0]) * f; out.data[i * 4 + 1] = ca[1] + (cb[1] - ca[1]) * f; out.data[i * 4 + 2] = ca[2] + (cb[2] - ca[2]) * f;
+      out.data[i * 4 + 3] = Math.min(190, 40 + v * 200);
+      if (v >= 0.4) hot.push([vx + (i % W + 0.5) * S, vy + (Math.floor(i / W) + 0.5) * S]);
+    }
+    g.globalCompositeOperation = "copy"; g.putImageData(out, 0, 0);
+    // the planting's glow
+    const gc = document.createElement("canvas"); gc.width = W; gc.height = H; const gg = gc.getContext("2d");
+    A.plants.forEach(([x, y, r]) => { const px = (x - vx) / S, py = (y - vy) / S, pr = (r + 2600) / S, gr = gg.createRadialGradient(px, py, 0, px, py, pr);
+      gr.addColorStop(0, "rgba(63,143,58,.38)"); gr.addColorStop(1, "rgba(63,143,58,0)"); gg.fillStyle = gr; gg.fillRect(px - pr, py - pr, pr * 2, pr * 2); });
+    $(".h-img", host).innerHTML = `<image href="${c.toDataURL()}" x="${vx}" y="${vy}" width="${W * S}" height="${H * S}" preserveAspectRatio="none" opacity=".85"/>` +
+      `<image href="${gc.toDataURL()}" x="${vx}" y="${vy}" width="${W * S}" height="${H * S}" preserveAspectRatio="none"/>`;
+    // the busiest floor with a plant within 3 m (computed: hot cells against the plants' positions)
+    const cell = 3000, grid = new Map(); A.plants.forEach((p) => { const k = Math.floor(p[0] / cell) + "," + Math.floor(p[1] / cell); (grid.get(k) || grid.set(k, []).get(k)).push(p); });
+    const near = (p) => { const cx = Math.floor(p[0] / cell), cy = Math.floor(p[1] / cell); for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (const q of grid.get(cx + i + "," + (cy + j)) || []) if (Math.hypot(q[0] - p[0], q[1] - p[1]) <= cell) return true; return false; };
+    const cov = hot.length ? Math.round((100 * hot.filter(near).length) / hot.length) : 0;
+    $("#cov").textContent = cov + "%"; $("#cov-p").innerHTML = "of the <b>busiest floor</b> has a plant within 3 m";
+    // plants, the service rooms, and the egress check (a plant's crown within 0.75 m of an exit path's line: the corridor's half-width)
+    const bad = A.plants.filter((p) => Math.min(...segs.map((s) => dseg(p, s))) - p[2] < 750), touch = A.plants.filter((p) => Math.min(...segs.map((s) => dseg(p, s))) < p[2]);
+    $(".m-bio", host).innerHTML = spaces.filter((s) => /Server|UPS/.test(s.type)).map((s) => `<path class="svc" d="${s.d}"/>`).join("") +
+      A.plants.map(([x, y, r]) => `<circle class="pl" cx="${x}" cy="${y}" r="${Math.max(r, 380)}"/>`).join("") +
+      bad.map(([x, y, r]) => `<circle class="pl-bad" cx="${x}" cy="${y}" r="${r + 600}"/>`).join("");
+    $("#np").textContent = A.plants.length;
+    $("#eg-p").innerHTML = bad.length
+      ? `<b>Egress paths</b> checked against every plant: <b class="flag">${touch.length} on an exit path, ${bad.length} within 0.75 m</b>, ringed in red, to be moved`
+      : `<b>Egress paths</b> checked against every plant: none within 0.75 m of an exit path`;
+  }
+
+  // ---- acoustics: the cards (a room drawn in iso, its treatment, a waveform that flattens), and sound rings on the plan ----
+  const cnt = (re) => spaces.filter((s) => re.test(s.type)).length;
+  const wh = Math.round(P.zones.reduce((a, z) => a + z.m2, 0));
+  const ACS = [
+    { c: 1, title: "High-ounce carpet", who: `Workhall · six neighbourhoods, <span>${wh.toLocaleString()} m²</span>`, walls: 0, ceil: false, amp: 0.95, damp: 0.6 },
+    { c: 2, title: "Carpet + wall panelling on 1 or 2 sides", who: `Meeting rooms · quick sprints, huddles, visitor hubs, hatchery · <span>${cnt(/Quick sprint|Collaboration huddle|Visitor hub|Hatchery/)}</span>`, walls: 1, ceil: false, amp: 0.62, damp: 1.4 },
+    { c: 3, title: "Carpet + wall panelling on 1 or 2 sides + soft panelling / ceiling", who: `Departmental rooms + boardroom · <span>${cnt(/Departmental|Boardroom/)}</span>`, walls: 2, ceil: true, amp: 0.38, damp: 2.6 },
+    { c: 4, title: "Carpet + wall panelling on 3 sides + soft panelling / ceiling", who: `Phone booths + podcast studio · <span>${cnt(/Phone booth|Studio/)}</span>`, walls: 3, ceil: true, amp: 0.18, damp: 4.5 },
+  ];
+  function iso(a) {
+    // floor F(60,82) R(112,56) B(60,30) L(8,56); walls 36 high
+    const h = 36, L = [8, 56], B = [60, 30], R = [112, 56], F = [60, 82], up = (p) => [p[0], p[1] - h], pts = (...q) => q.map((p) => p.join(",")).join(" ");
+    const slat = (p, q, cls) => { let s = ""; for (let i = 1; i < 9; i++) { const t = i / 9, x = p[0] + (q[0] - p[0]) * t, y = p[1] + (q[1] - p[1]) * t; s += `<line x1="${x}" y1="${y - 3}" x2="${x}" y2="${y - h + 4}" class="${cls}"/>`; } return s; };
+    let s = `<defs><pattern id="cp${a.c}" width="3" height="3" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".55" fill="#7d68b8"/></pattern></defs>`;
+    s += `<polygon points="${pts(F, R, B, L)}" fill="#ece7f8"/><polygon points="${pts(F, R, B, L)}" fill="url(#cp${a.c})"/>`;
+    if (a.walls) {
+      s += `<polygon points="${pts(L, B, up(B), up(L))}" fill="#f6f4fb" stroke="#bdb3dc" stroke-width=".6"/><polygon points="${pts(B, R, up(R), up(B))}" fill="#f1eef9" stroke="#bdb3dc" stroke-width=".6"/>`;
+      s += `<polygon points="${pts(B, R, up(R), up(B))}" fill="var(--c${a.c})" opacity=".55"/>` + slat(B, R, "sl");
+      if (a.walls >= 2) s += `<polygon points="${pts(L, B, up(B), up(L))}" fill="var(--c${a.c})" opacity="${a.walls === 2 ? ".3" : ".55"}" ${a.walls === 2 ? 'stroke-dasharray="2 1.5"' : ""}/>` + slat(L, B, "sl");
+      if (a.walls === 3) s += `<polygon points="${pts(L, F, up(F), up(L))}" fill="var(--c${a.c})" opacity=".22" stroke="var(--c4)" stroke-width=".5" stroke-dasharray="2 1.5"/>`;
+    } else {
+      s += `<g transform="translate(60 56)" fill="#9b8bc7"><rect x="-14" y="-5" width="10" height="5" rx="1"/><rect x="4" y="-5" width="10" height="5" rx="1"/><rect x="-5" y="4" width="10" height="5" rx="1"/></g>`;
+    }
+    if (a.ceil) s += `<polygon points="${pts([60, 20 - h + 22], [96, 38 - h + 22], [60, 56 - h + 22], [24, 38 - h + 22])}" fill="var(--c${a.c})" opacity=".8" stroke="#fff" stroke-width=".8"/>`;
+    return `<svg class="iso" viewBox="0 -14 120 100"><style>.sl{stroke:#fff;stroke-width:.7;opacity:.9}</style>${s}</svg>`;
+  }
+  function wave(a) { let d = ""; for (let i = 0; i <= 120; i++) { const t = i / 120, y = 12 - Math.sin(t * Math.PI * 14) * 10 * a.amp * Math.exp(-a.damp * t); d += (i ? "L" : "M") + i + " " + y.toFixed(2); }
+    return `<svg class="wave" viewBox="0 0 120 24" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="var(--c${Math.max(2, a.c)})" stroke-width="1.4"/></svg>`; }
+  $("#acs").innerHTML = ACS.map((a) => `<div class="ac" data-c="${a.c}"><div class="k"><i style="background:var(--c${a.c});${a.c === 1 ? "border:1px solid #d9cff6" : ""}"></i>Category ${a.c}</div>${iso(a)}${wave(a)}<b>${a.title}</b><p>${a.who}</p></div>`).join("");
+  $$(".ac").forEach((el) => {
+    el.onmouseenter = () => { host.classList.add("ac-c" + el.dataset.c); $$(`.f-ac path`, host).forEach((p) => p.classList.toggle("hi", p.dataset.c === el.dataset.c)); };
+    el.onmouseleave = () => { host.classList.remove("ac-c1", "ac-c2", "ac-c3", "ac-c4"); $$(`.f-ac path.hi`, host).forEach((p) => p.classList.remove("hi")); };
+  });
+  {
+    const ring = (x, y, R, dur, n, cls, op) => Array.from({ length: n }, (_, i) => `<circle class="wv ${cls}" cx="${x}" cy="${y}" r="0"><animate attributeName="r" values="0;${R}" dur="${dur}s" begin="${-(i * dur) / n}s" repeatCount="indefinite"/><animate attributeName="opacity" values="${op};0" dur="${dur}s" begin="${-(i * dur) / n}s" repeatCount="indefinite"/></circle>`).join("");
+    const loud = [...spaces.filter((s) => /Cafeteria|Reception|Coffee/.test(s.type)).map((s) => [s.x, s.y]), ...P.zones.map((z) => [z.x, z.y])];
+    const quiet = spaces.filter((s) => /Departmental|Boardroom|Studio/.test(s.type) || (s.type === "Phone booth" && +s.id.slice(1) % 6 === 0));
+    wavesSvg.innerHTML = `<g class="m-waves">${loud.map(([x, y]) => ring(x, y, 15000, 3.6, 3, "", 0.9)).join("")}` +
+      quiet.map((s) => { const R = rings(s.d)[0], w = Math.max(...R.map((q) => q[0])) - Math.min(...R.map((q) => q[0])), h = Math.max(...R.map((q) => q[1])) - Math.min(...R.map((q) => q[1])); return ring(s.x, s.y, Math.min(w, h) * 0.42, 1.3, 2, "d", 0.6); }).join("") + "</g>";
+  }
+
+  // ---- spaces: the type chips (drawing's count against the PPT's) ----
+  $("#types").innerHTML = TYPES.map((T) => `<div class="chip" data-t="${T.t}"><img src="../assets/img/${T.icon}.webp" alt=""><b>${T.name}</b><div class="n">${T.seats}<small>seats</small></div><em class="${T.seats !== T.ppt ? "flag" : ""}">${T.what} · PPT ${T.ppt}</em></div>`).join("");
+  const off = TYPES.filter((T) => T.seats !== T.ppt);
+  $("#typenote").innerHTML = off.length ? `<i></i>Counted from the current drawing: ${off.map((T) => `${T.name} ${T.seats} against the PPT's ${T.ppt}`).join(" · ")}. Type 1 / Type 2 to confirm; re-checked when the new DXF arrives.` : "";
+  let pin = null;
+  $$(".chip").forEach((el) => {
+    el.onmouseenter = () => { if (!pin) host.classList.add("t-" + el.dataset.t); };
+    el.onmouseleave = () => { if (!pin) host.classList.remove("t-" + el.dataset.t); };
+    el.onclick = () => { host.classList.remove("t-T1", "t-T2", "t-T3", "t-T4"); $$(".chip").forEach((c) => c.classList.remove("pin")); pin = pin === el.dataset.t ? null : el.dataset.t; if (pin) { host.classList.add("t-" + pin); el.classList.add("pin"); } };
+  });
+
+  // ---- neighbourhoods: the distance figures (straight-line, every desk to its nearest room), the click to open one ----
+  {
+    const pts = (re) => spaces.filter((s) => re.test(s.type)).map((s) => [s.x, s.y]);
+    const far = (P_) => Math.max(...desks.map((d) => Math.min(...P_.map((p) => Math.hypot(p[0] - d[0], p[1] - d[1]))))) / 1000;
+    const mr = Math.ceil(far(pts(/Quick sprint|Collaboration huddle|Departmental/))), pb = Math.ceil(far(pts(/Phone booth/)));
+    $("#dist-fig").innerHTML = `${mr} <small>m at most</small>`;
+    $("#dist-p").innerHTML = `Every desk is within ${mr} m of a meeting room and ${pb} m of a phone booth, measured on the plan.`;
+  }
+  const zr = P.zones.map((z) => rings(z.zone));
+  let zoneOpen = null;
+  function openZone(z) {
+    zoneOpen = z; host.classList.add("zopen");
+    $$(".nbz, .nbn", host).forEach((e) => e.classList.toggle("sel", e.dataset.nb === z.n));
+    const pad = 1500, b = z.box; fly([b[0] - pad, b[1] - pad, b[2] - b[0] + pad * 2, b[3] - b[1] + pad * 2]);
+    const panel = $('.panel[data-p="1"]'); panel.classList.add("zoned");
+    $("#nb-h").textContent = z.name; $("#nb-p").innerHTML = `<b>${z.seats}</b> workstations · <b>${Math.round(z.m2)}</b> m²`; $("#nb-back").style.display = "";
+    const kb = P.viewBox; $("#kp").innerHTML = `<b>Key plan</b><svg viewBox="${kb.join(" ")}">${P.zones.map((q) => `<path d="${q.zone}" class="${q.n === z.n ? "sel" : ""}" style="--c:${NB_COL[q.n]}"/>`).join("")}</svg>`;
+    let g = ""; $("#occ").innerHTML = z.occ.map(([grp, a, n]) => (grp !== g ? `<div class="g">${(g = grp)}</div>` : "") + `<div><span>${a.replace(/(\d)-(\d)/g, "$1–$2")}</span><span>${n}</span></div>`).join("");
+  }
+  function closeZone() {
+    if (!zoneOpen) return; zoneOpen = null; host.classList.remove("zopen"); $$(".sel", host).forEach((e) => e.classList.remove("sel"));
+    const panel = $('.panel[data-p="1"]'); panel.classList.remove("zoned");
+    $("#nb-h").textContent = "Neighbourhoods"; $("#nb-p").innerHTML = "Six neighbourhoods, outlined. <b>Click one</b> to zoom in and open its occupancy chart."; $("#nb-back").style.display = "none";
+    fly(P.viewBox);
+  }
+  $("#nb-back").onclick = closeZone;
+
+  // ---- view: flights, the picture's sharpness ----
+  const kOf = () => { const r = host.getBoundingClientRect(), v = ph.view; return Math.max(v[2] / r.width, v[3] / r.height); };
+  const toPlan = (e) => { const r = host.getBoundingClientRect(), v = ph.view, k = kOf(); return [v[0] + v[2] / 2 - (r.width * k) / 2 + (e.clientX - r.left) * k, v[1] + v[3] / 2 - (r.height * k) / 2 + (e.clientY - r.top) * k, k]; };
+  function levels() { const r = host.getBoundingClientRect(); if (!r.width) return; const need = (r.width / (ph.view[2] / 1000)) * (devicePixelRatio || 1);
+    host.classList.toggle("lv-24", need > 12 * 0.85); host.classList.toggle("lv-48", need > 24 * 0.85); }
+  let tw = 0;
+  function fly(v, ms = 750) { cancelAnimationFrame(tw); const a = ph.view, t0 = performance.now();
+    const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; ph.zoomTo(...a.map((q, i) => q + (v[i] - q) * e)); levels(); drawMeasure(); if (k < 1) tw = requestAnimationFrame(run); };
+    tw = requestAnimationFrame(run); }
+  const zoomBy = (f) => { const v = ph.view, cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; fly([cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f], 300); };
+  ["wheel", "pointermove", "pointerup"].forEach((ev) => host.addEventListener(ev, () => requestAnimationFrame(() => { levels(); drawMeasure(); }), { passive: true }));
+  addEventListener("resize", () => { size(); levels(); drawMeasure(); });
+
+  // ---- measure / area (Mitigata's tool, basic: snaps to the rooms' corners; m and m²) ----
+  const VERTS = spaces.flatMap((s) => rings(s.d).flat());
+  const MS = { mode: null, shapes: [], cur: null, live: null, down: null };
+  const snap = (p, k) => { let best = null, bd = 12 * k; for (const q of VERTS) { const d = Math.hypot(q[0] - p[0], q[1] - p[1]); if (d < bd) { bd = d; best = q; } } return best ? [best[0], best[1], 1] : [p[0], p[1], 0]; };
+  const len = (p) => p.slice(1).reduce((a, q, i) => a + Math.hypot(q[0] - p[i][0], q[1] - p[i][1]), 0);
+  const area = (p) => Math.abs(p.reduce((a, q, i) => { const r = p[(i + 1) % p.length]; return a + q[0] * r[1] - r[0] * q[1]; }, 0)) / 2;
+  const fm = (mm) => (mm / 1000).toFixed(2) + " m", fa = (mm2) => (mm2 / 1e6).toFixed(1) + " m²";
+  function setMode(m) {
+    MS.mode = MS.mode === m ? null : m; MS.cur = null; MS.live = null; if (!MS.mode) MS.shapes = [];
+    host.classList.toggle("measuring", !!MS.mode); stage.classList.toggle("measuring", !!MS.mode);
+    $$('.tools [data-tool="dist"], .tools [data-tool="area"]').forEach((b) => b.classList.toggle("on", b.dataset.tool === MS.mode)); ph.clear(); drawMeasure();
+  }
+  function finish() { const c = MS.cur; MS.cur = null; MS.live = null; if (c) { c.pts = c.pts.filter((q, i) => !i || Math.hypot(q[0] - c.pts[i - 1][0], q[1] - c.pts[i - 1][1]) > 1); if (c.pts.length >= (c.mode === "area" ? 3 : 2)) MS.shapes.push(c); } drawMeasure(); }
+  function drawMeasure() {
+    if (!MS.mode) { measureSvg.innerHTML = ""; $(".m-read").textContent = ""; return; }
+    const k = kOf(), lab = (p, t) => `<text class="m-lab" x="${p[0]}" y="${p[1]}" font-size="${11.5 * k}" stroke-width="${3.2 * k}">${t}</text>`;
+    let s = ""; const all = MS.shapes.concat(MS.cur ? [{ mode: MS.cur.mode, pts: MS.cur.pts.concat(MS.live ? [[MS.live[0], MS.live[1]]] : []), live: true }] : []);
+    for (const sh of all) {
+      const p = sh.pts; if (!p.length) continue;
+      if (sh.mode === "area" && p.length > 2) { s += `<path class="m-area" d="${dpath(p, true)}"/>`; const cx = p.reduce((a, q) => a + q[0], 0) / p.length, cy = p.reduce((a, q) => a + q[1], 0) / p.length; s += lab([cx, cy], fa(area(p))); }
+      s += `<path class="m-line${sh.live ? " live" : ""}" d="${dpath(p, sh.mode === "area" && !sh.live && p.length > 2)}"/>`;
+      if (sh.mode === "dist") for (let i = 1; i < p.length; i++) { const a = p[i - 1], b = p[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]); if (L > 1) s += lab([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2 - 8 * k], fm(L)); }
+      p.forEach((q) => (s += `<circle class="m-pt" cx="${q[0]}" cy="${q[1]}" r="${3 * k}"/>`));
+    }
+    if (MS.live && MS.live[2]) s += `<rect class="m-snap" x="${MS.live[0] - 4.5 * k}" y="${MS.live[1] - 4.5 * k}" width="${9 * k}" height="${9 * k}"/>`;
+    measureSvg.innerHTML = s;
+    const c = MS.cur, p = c ? c.pts.concat(MS.live ? [[MS.live[0], MS.live[1]]] : []) : null, last = MS.shapes[MS.shapes.length - 1];
+    $(".m-read").textContent = c && p.length > 1 ? (c.mode === "dist" ? `${fm(len(p))} · click on, double-click to finish` : `${fa(area(p))} · perimeter ${fm(len(p.concat([p[0]])))}`)
+      : last ? (last.mode === "dist" ? `${fm(len(last.pts))} measured · Esc clears` : `${fa(area(last.pts))} · perimeter ${fm(len(last.pts.concat([last.pts[0]])))} · Esc clears`)
+      : MS.mode === "dist" ? "Click two points (snaps to room corners) · double-click to finish · Esc" : "Click the corners · click the first again to close · Esc";
+  }
+  host.addEventListener("pointerdown", (e) => { MS.down = [e.clientX, e.clientY]; }, true);
+  host.addEventListener("click", (e) => {
+    const moved = MS.down && Math.hypot(e.clientX - MS.down[0], e.clientY - MS.down[1]) > 3; if (moved) return;
+    const [x, y, k] = toPlan(e);
+    if (MS.mode) {
+      const s = snap([x, y], k); if (!MS.cur) MS.cur = { mode: MS.mode, pts: [] };
+      if (MS.cur.mode === "area" && MS.cur.pts.length > 2 && Math.hypot(s[0] - MS.cur.pts[0][0], s[1] - MS.cur.pts[0][1]) < 12 * k) return finish();
+      MS.cur.pts.push([s[0], s[1]]); drawMeasure(); return;
+    }
+    if (host.dataset.layer === "nb") { const i = zr.findIndex((rs) => rs.filter((r) => inPoly([x, y], r)).length % 2 === 1); if (i >= 0 && (!zoneOpen || zoneOpen.n !== P.zones[i].n)) openZone(P.zones[i]); }
+  }, true);
+  host.addEventListener("dblclick", (e) => { if (!MS.mode) return; e.stopPropagation(); e.preventDefault(); finish(); }, true);
+  host.addEventListener("contextmenu", (e) => { if (!MS.mode) return; e.preventDefault(); finish(); });
+  host.addEventListener("pointermove", (e) => { if (!MS.mode || !MS.cur) return; const [x, y, k] = toPlan(e); MS.live = snap([x, y], k); drawMeasure(); });
+
+  // ---- tools ----
+  $$(".tools button").forEach((b) => b.onclick = () => {
+    const t = b.dataset.tool;
+    if (t === "dist" || t === "area") setMode(t);
+    else if (t === "in") zoomBy(0.7); else if (t === "out") zoomBy(1 / 0.7);
+    else if (t === "reset") fly(zoneOpen ? (() => { const bx = zoneOpen.box, pad = 1500; return [bx[0] - pad, bx[1] - pad, bx[2] - bx[0] + pad * 2, bx[3] - bx[1] + pad * 2]; })() : P.viewBox);
+    else if (t === "hover") { b.classList.toggle("on"); host.classList.toggle("no-hover", !b.classList.contains("on")); ph.clear(); }
+    else if (t === "eg") { b.classList.toggle("on"); host.classList.toggle("eg-on", b.classList.contains("on")); }
+    b.blur();
+  });
+
+  // ---- the layers as beats ----
+  let L = 0;
+  const KEYS = ["spaces", "nb", "bio", "ac"];
+  function setLayer(i) {
+    L = Math.max(0, Math.min(3, i)); closeZone(); host.dataset.layer = KEYS[L]; ph.clear();
+    host.classList.remove("t-T1", "t-T2", "t-T3", "t-T4"); pin = null; $$(".chip").forEach((c) => c.classList.remove("pin"));
+    $$(".layers button").forEach((b) => b.classList.toggle("on", +b.dataset.l === L));
+    $$(".panel").forEach((p) => p.classList.toggle("on", +p.dataset.p === L));
+    $$(".beats i").forEach((b, k) => b.classList.toggle("on", k <= L));
+    fly(P.viewBox, 500);
+  }
+  $$(".layers button").forEach((b) => (b.onclick = () => { setLayer(+b.dataset.l); b.blur(); }));
+  addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { if (MS.mode) { if (MS.cur) { MS.cur = null; MS.live = null; drawMeasure(); } else if (MS.shapes.length) { MS.shapes = []; drawMeasure(); } else setMode(MS.mode); } else closeZone(); }
+    else if (e.key === "m" || e.key === "M") setMode("dist"); else if (e.key === "a" || e.key === "A") setMode("area");
+    else if (e.key === "ArrowRight" || e.key === "PageDown") setLayer(L + 1); else if (e.key === "ArrowLeft" || e.key === "PageUp") setLayer(L - 1);
+  });
+
+  biophilia();
+  setLayer(+(location.hash.match(/\d/) || [1])[0] - 1);
+  levels();
+  window._mock = { ph, openZone, closeZone, setLayer, setMode, desks, TYPES };   // for the checks
+})();
+</script>
+</body>
+</html>
