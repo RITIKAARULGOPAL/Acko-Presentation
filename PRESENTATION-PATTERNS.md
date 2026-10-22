@@ -318,6 +318,7 @@ West, Middle and East fly an orthographic camera along it.
 - **Names:** the dining floor is labelled only by its counters (Heating Station, Waste Disposal), so it is named "Cafeteria"; Dishwash and Plate Drop are its back of house, in the cafeteria's colour.
 
 ## 18. A hand-drawn path on a photo, drawn in one stroke (the Möbius)
+**Status:** replaced in the deck on 22 Oct by §20 (Ritika: "replace these slides"); the drawn-path version is in git history.
 **What:** deck slide 10's own Möbius photo, with Ritika's path along the strip drawn on in a single stroke (6.5 s, after the copy).
 - The path runs twice round the strip before it meets itself.
 - In front of the strip it is purple. Behind it, it is lilac, and it runs under the front where they cross.
@@ -349,6 +350,7 @@ West, Middle and East fly an orthographic camera along it.
 - Headless Chrome on SwiftShader leaves stray, rectangle-clipped smudges around animated SVG blur filters and blend modes. The real browser draws them cleanly. Check motion like that in the real browser before chasing it.
 
 ## 19. A line that carries on from one slide onto the next (the Möbius → the Loop)
+**Status:** replaced in the deck on 22 Oct by §20; in git history.
 **What (Ritika, 22 Oct):** the purple line of the Möbius slide carries on onto the Loop's ribbon.
 1. **The opening frame:** the Loop opens on the Möbius slide's last frame: the deck's photo at 35% and her path drawn, placed exactly as `s-mobius` places them. So the engine's cross-fade only fades the Möbius words.
 2. **Beat 1:** the photo and path fade as the ribbon (the deck's artwork, `draw-78.webp` at 75%) comes in. A stretch of the path, the arc round its start that she marked, about 480 page px, stays, then glides onto the ribbon's start by Arrival and waits there. Then the people, trees and welcome words come in.
@@ -387,6 +389,7 @@ West, Middle and East fly an orthographic camera along it.
 - **Testing:** headless SwiftShader is too slow to film canvas or rAF motion in real time, and screenshots lag too. Film it on a virtual clock instead: replace `requestAnimationFrame` and `performance.now` before load, and step 16 ms at a time between screenshots.
 
 ## 20. A ribbon that slides off one slide and reveals the deck's artwork on the next (ribbon version: Möbius → Loop)
+**Status:** in the deck since 22 Oct as `s-mobius` → `s-loop` (Ritika: "replace these slides"); the pieces now live in `assets/img/s-loop/ribbon-01..10.webp`. Mentions of `s-mobius-ribbon` / `s-loop-ribbon` below are their earlier names.
 **What (Ritika, 22 Oct):** another version of §18–19, in `s-mobius-ribbon` → `s-loop-ribbon`, not in `order.txt` (see them at `/?only=s-mobius-ribbon,s-loop-ribbon`).
 - **On the Möbius:** a lavender ribbon (60 px), not a line, runs along her path from its left-most point, twice round, and back to it.
   - Narrow at both ends.
