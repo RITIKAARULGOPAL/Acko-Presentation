@@ -23,7 +23,7 @@ s-strategy
 s-challenges
 s-typologies
 
-# 3 · VISUAL DIRECTION (deck 20–45): the campus palette, then the walk, one slide per space (Reception first)
+# 3 · VISUAL DIRECTION (deck 20, 24–45): the campus palette, then the walk, one slide per space (Reception first)
 s-palette2
 s-w-reception
 s-w-board

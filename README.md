@@ -110,7 +110,7 @@ The PPT's own order. Ritika's choices (16 Oct):
 | 13 | Campus strategy | 1 | The live model of the 21.10.26 test fit (the axo's, shared): the floor builds up, the ACKO Loop draws through its seven stops, the client's journey traces from the entrance. A click replays; drag turns; without WebGL, the deck's GIF |
 | 14 | What's our challenge | 3 | On the axo of the bare floor: a uniform desk grid, the long walk to lunch, then the route draws (245 m) |
 | 15 | Workstation typologies | 1 | Types 1–4; the seats add to 648, +3 cabins = 651 |
-| 20–23 | The campus palette | 4 | The board builds, then its three renders full bleed |
+| 20 | The campus palette | 1 | The board builds |
 | 24–45 | Visual direction: the walk | 17 | One slide per space, one render each (OP 02), each with its Loop words and the keyplan's camera mark; Reception first, in OP 01 then OP 02 |
 | 46, 47, 48, 52 | Value addition | 7 | Engagement points, a lens on the PPT collage over four beats (Feel it, Play it, Share it, then All; chips jump, photos open large); materials, acoustics (NRC 0.70–0.90), wayfinding (Nalanda, Sabha, Takshashila) |
 | 53–54 | Layout · Option 02A | 3 | The DXF plan, its spaces coloured by the legend (hover: name, area); then the six neighbourhoods draw in and their workstations count up (651), and a click opens one (zoom, key plan, occupancy chart); then fire egress, the exit paths as an extra layer |
