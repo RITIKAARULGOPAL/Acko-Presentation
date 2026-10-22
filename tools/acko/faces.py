@@ -1,12 +1,16 @@
 """Rooms as the drawing encloses them: the faces of the partition linework in the DXF plan toolkit's full.svg.
 
-Used by plan_dxf.py to give each room label the room it sits in. The linework:
-  walls, glass, doors, the shell, planters (shade), and furniture lines longer than 2.5 m (the facade's rails and long
-  counters, which the toolkit classes as furniture; tables too, whose own small faces room_at's minimum size skips); each doorway shut along its door's closed position (from the swing
-  arc's hinge to its two ends)
+Used by plan_dxf.py to give each room label the room it sits in. The lines that bound a room:
+  walls, glass, the shell, planters (shade); doors without their swing arcs (folding and sliding doors and frames close a room
+  as walls do), each swing replaced by its doorway shut along the door's closed position (from the arc's hinge to its two ends:
+  the leaf, without its arc, dangles inside the room and splits nothing), so a door's swing belongs to its room, not to a
+  sector of its own as when the arc was a wall; furniture lines over 2.5 m that are open or thin (the facade's
+  rails), never tables or desks; and, when given, the floor plate's outline as the outside wall (the facade's mullion units are
+  short furniture pieces, so rooms along it would otherwise leak out of the building).
 Breaks where a wall stops short of a glass frame or a door are bridged by thickening every line by GAP, taking the enclosed
 holes and growing them back by GAP (square corners kept). A small GAP keeps narrow rooms (phone booths); larger ones close
-rooms whose walls stop further short: levels(lines) builds all three, and room_at() tries them in turn.
+rooms whose walls stop further short, the largest (0.5 m) doorways drawn without a door: levels(lines) builds all four, and
+room_at() tries them in turn.
 """
 import math, re
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
@@ -14,9 +18,9 @@ from shapely.ops import unary_union
 from shapely.strtree import STRtree
 
 TOK = re.compile(r"[MLCQ]|-?\d+(?:\.\d+)?(?:e-?\d+)?")
-PARTITION = {"s wall", "f wall", "m wall", "s glass", "s door", "f door", "s base", "f base", "s shade", "f shade"}
+PARTITION = {"s wall", "f wall", "m wall", "s glass", "s base", "f base", "s shade", "f shade"}
 LONG_FURN = 2500
-GAPS = (45, 120, 160)
+GAPS = (45, 120, 160, 500)
 
 
 def subpaths(d, tol=60.0):
@@ -66,17 +70,39 @@ def door_closers(pts):
     return [LineString([(ux, uy), pts[0]]), LineString([(ux, uy), pts[-1]])]
 
 
-def partition_lines(svg):
-    """the lines that bound rooms, from full.svg's classed paths"""
+def _thin(p):
+    g = Polygon(p).buffer(0)
+    return g.is_empty or 2 * g.area / max(g.length, 1) <= 200
+
+
+def partition_lines(svg, plate=None):
+    """the lines that bound rooms, from full.svg's classed paths (and the floor plate's outline, when given)"""
     lines, closers = [], []
     for cls, d in re.findall(r'<path class="([^"]+)" d="([^"]*)"', svg):
-        if cls not in PARTITION and cls != "s furn": continue
+        if cls not in PARTITION and cls not in ("s door", "s furn"): continue
         for p in subpaths(d):
             if len(p) < 2: continue
-            l = LineString(p)
-            if cls in PARTITION or l.length > LONG_FURN: lines.append(l)   # tables too: a room's face still holds them (room_at's lo skips their own)
-            if cls == "s door": closers.extend(door_closers(p))
+            if cls in PARTITION:
+                lines.append(LineString(p))
+            elif cls == "s door":
+                c = door_closers(p)
+                if c: closers.extend(c)                # a swing: the door shut instead (its leaf then dangles, splitting nothing)
+                else: lines.append(LineString(p))     # folding and sliding doors, frames: they close a room as walls do
+            elif LineString(p).length > LONG_FURN and (math.dist(p[0], p[-1]) > 20 or len(p) < 4 or _thin(p)):
+                lines.append(LineString(p))          # a facade rail, not a table
+    if plate is not None:
+        for g in (plate.geoms if hasattr(plate, "geoms") else [plate]):
+            lines.append(LineString(g.exterior.coords))
     return lines + closers, len(closers) // 2
+
+
+def floor_plate(zones, rooms, extra=()):
+    """the floor the client occupies: the neighbourhood zones, the rooms and any extra faces, closed by 1.5 m, its largest
+    part, out by 150 mm to the facade line"""
+    occ = [g for g in list(zones) + list(rooms) + list(extra) if g is not None and not g.is_empty]
+    U = unary_union([g.buffer(1500) for g in occ]).buffer(-1500)
+    big = max((U.geoms if hasattr(U, "geoms") else [U]), key=lambda g: g.area)
+    return Polygon(big.exterior).buffer(150, join_style=2)
 
 
 def levels(lines, gaps=GAPS):
@@ -101,24 +127,11 @@ def is_strip(f):
 
 
 def room_at(pt, lv, lo=0.8e6, hi=200e6):
-    """the room round pt, at the first gap level that has one: (polygon, gap) or (None, None). The smallest room-sized face
-    containing pt; or, when pt sits on a piece of furniture whose outline joins the walls (a desk against the wall, a table
-    touching a partition: a face of its own), the room-sized face that touches that piece along most of its edge, with the
-    piece included"""
+    """the room round pt: the smallest room-sized face containing it, at the first gap level that has one -> (polygon, gap),
+    or (None, None)"""
     p = Point(pt)
     for gap, fs, tr in lv:
-        under = [fs[i] for i in tr.query(p) if fs[i].contains(p)]
-        cand = [f for f in under if lo <= f.area <= hi and not is_strip(f)]
+        cand = [fs[i] for i in tr.query(p) if fs[i].contains(p) and lo <= fs[i].area <= hi and not is_strip(fs[i])]
         if cand:
             return fill_holes(min(cand, key=lambda f: f.area), 6e6), gap
-        small = [f for f in under if f.area < lo]
-        if small:
-            piece = min(small, key=lambda f: f.area)
-            ring = piece.buffer(gap + 40)
-            near = [fs[i] for i in tr.query(ring) if fs[i] is not piece and lo <= fs[i].area <= hi and not is_strip(fs[i])]
-            near = [(ring.intersection(f).area, f) for f in near]
-            near = [(a, f) for a, f in near if a > 0]
-            if near:
-                a, f = max(near, key=lambda t: t[0])
-                return fill_holes(unary_union([f, piece.buffer(gap + 40).intersection(f.buffer(gap + 40)), piece]).buffer(0), 6e6), gap
     return None, None

@@ -153,10 +153,9 @@ The PPT's own order. Ritika's choices (16 Oct):
   2. **`tools/acko/plan_dxf.py "<toolkit>/viewer/out/tf2110" "<the .dxf>"`** (needs `NODE_PATH` for puppeteer):
      - **Pictures:** the plan at 12 / 24 / 48 px per m (`assets/img/plan-dxf-*.webp`, rendered by `plan_raster.js`).
      - **Spaces from the drawing:** each room label (the toolkit's `labels.json`) takes the room its walls enclose (`tools/acko/faces.py`):
-       - **Lines used:** walls, glass, doors shut at their closed position, the shell, planters and the façade's rails, with small breaks bridged at 45 / 120 / 160 mm.
-       - **Size limits:** per room type there's a minimum (so a table or desk under the label is never taken for the room) and a maximum (so a room that leaks through a gap is caught).
-       - **Furniture against a wall:** when a label sits on furniture that joins the walls, the room touching that furniture is taken.
-       - **Result:** 133 spaces. 118 come from the new walls; 13 open-plan or open-sided ones keep the previous build's outline (each checked to sit within 150 mm of the new walls); 4 labels whose old outline is off the new walls get none.
+       - **Lines used:** walls, glass, the shell, planters and the façade's rails; folding and sliding doors as walls; each swing door shut along its closed position, so its swing area belongs to its room. Tables and desks are never used. The floor plate's outline is the outside wall. Small breaks are bridged at 45 / 120 / 160 mm, and doorways drawn without a door at 0.5 m.
+       - **Size limits:** per room type there's a minimum, raised to 0.9 m² per PAX in the label (so a table under the label is never taken for the room), and a maximum (so a room that leaks through a gap is caught).
+       - **Result:** 137 spaces. 131 come from the new walls; 4 keep the previous build's outline (only where it holds the label and at least half of it lies on the new walls; open-plan areas trimmed to their open floor); 2 are not in contract. One label (a second "Rain coat" tag in the corridor) gets no outline of its own.
      - **Colours:** the deck's legend (slide 53), plus colours for the rooms it predates (medical, nap, mail and store, not in contract).
      - **The rest:** the neighbourhoods (with boxes and occupancy rows), the fire egress (`ak_Ep_*`), and the deck's marks (blow-up boxes, fire line, entrances, arrival zones). The new drawing shares the old one's frame, so the marks map unchanged.
      - **Output:** all into `data/plan-dxf.js`.

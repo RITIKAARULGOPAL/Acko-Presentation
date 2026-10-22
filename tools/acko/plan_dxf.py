@@ -54,19 +54,21 @@ BY_LABEL = [("Boardroom", r"BOARD"), ("Departmental room", r"DEPARTMENTAL"), ("C
             ("Quick sprint", r"SPRINT|^\d+ PAX"), ("Visitor hub", r"VISITOR"), ("Phone booth", r"^PB\b"), ("Zen room", r"ZEN"),
             ("Hub room", r"HUB ROOM"), ("Mother's room", r"MOTHER"), ("Prayer room", r"PRAYER"), ("Studio", r"STUDIO"),
             ("The Hatchery", r"HATCHERY"), ("Executive corner cabin", r"EXECUTIVE"), ("Training room", r"TRAINING"),
-            ("Cafeteria", r"CAFE|PANTRY|HEATING|DISHWASH|PLATE DROP|WASTE"), ("Reception", r"RECEPTION"), ("Coffee corner", r"COFFEE"),
+            ("Pantry", r"DISHWASH|PLATE DROP"), ("Cafeteria", r"CAFE|PANTRY|HEATING|WASTE"), ("Reception", r"RECEPTION"), ("Coffee corner", r"COFFEE"),
             ("Server, UPS & battery", r"SERVER|UPS|BATTERY|ELECTRICAL|BMS"), ("Mail room", r"MAIL"), ("Medical room", r"MEDICAL"),
             ("Nap room", r"\bNAP\b"), ("Store room", r"STORE|RAIN COAT|UMBRELLA"), ("Collab", r"COLLAB")]
+# rooms without walls all round: their outline can't come from the drawing alone
+OPEN_PLAN = {"Reception", "Cafeteria", "Visitor hub", "Collab", "Coffee corner", "The Hatchery"}
 # the largest each kind of room is (m2): a face bigger than this around its label has leaked through a gap in the walls
 TYPE_CAP = {"Phone booth": 4, "Quick sprint": 30, "Collaboration huddle": 45, "Departmental room": 60, "Boardroom": 90, "Visitor hub": 40,
             "Executive corner cabin": 40, "Zen room": 20, "Mother's room": 20, "Prayer room": 25, "Hub room": 20, "Studio": 45, "The Hatchery": 45,
             "Training room": 90, "Medical room": 25, "Nap room": 25, "Mail room": 25, "Store room": 40, "Server, UPS & battery": 40,
-            "Coffee corner": 60, "Reception": 120, "Cafeteria": 420, "Collab": 150}
+            "Coffee corner": 60, "Reception": 120, "Cafeteria": 420, "Collab": 150, "Pantry": 30}
 # the smallest each kind of room is (m2): a face smaller than this round its label is a table or a desk inside the room
 TYPE_MIN = {"Phone booth": 0.8, "Quick sprint": 2.4, "Collaboration huddle": 12, "Departmental room": 22, "Boardroom": 40, "Visitor hub": 4,
             "Executive corner cabin": 10, "Zen room": 4, "Mother's room": 5, "Prayer room": 5, "Hub room": 4, "Studio": 15, "The Hatchery": 10,
             "Training room": 30, "Medical room": 3, "Nap room": 3, "Mail room": 2.5, "Store room": 3, "Server, UPS & battery": 3,
-            "Coffee corner": 4, "Reception": 8, "Cafeteria": 50, "Collab": 10}
+            "Coffee corner": 4, "Reception": 8, "Cafeteria": 50, "Collab": 10, "Pantry": 2}
 # the legend's colours for what it doesn't list (slide 53 predates these rooms)
 EXTRA_COLOURS = [("Boardroom", "D2CCE2"), ("Medical room", "D6E4E6"), ("Nap room", "E3DEEE"), ("Mail room", "E2DED6"),
                  ("Store room", "E2DED6"), ("Not in contract", "D4D4D4"), ("Room", "E4E2DD")]
@@ -220,12 +222,20 @@ def main(tk, dxf_path):
 
     # ---- spaces: each room label in the room its walls enclose ----
     import faces as FC
-    svg = open(full, encoding="utf-8").read()
-    lines, ndoors = FC.partition_lines(svg)
-    LV = FC.levels(lines)
     from shapely.strtree import STRtree
+    svg = open(full, encoding="utf-8").read()
+    rings_of = lambda d: [pts for part in re.findall(r"M([^M]+)", d)
+                          for nums in [list(map(float, re.findall(r"-?\d+(?:\.\d+)?", part)))]
+                          for pts in [[(nums[i], nums[i + 1]) for i in range(0, len(nums) - 1, 2)]] if len(pts) > 2]
+    zone_polys = [Polygon(r).buffer(0) for t in json.load(open(os.path.join(tk, "teams.json")))["teams"] for r in rings_of(t["zone"])]
+    room_polys = [Polygon(r).buffer(0) for sp in json.load(open(os.path.join(tk, "rooms.json"), encoding="utf-8"))["spaces"]
+                  if sp["name"] != "Not in contract" for r in rings_of(sp["d"])]
+    plate = FC.floor_plate(zone_polys, room_polys)                    # the neighbourhoods and the toolkit's rooms: the floor
+    lines, ndoors = FC.partition_lines(svg, plate)                    # its outline as the outside wall
+    LV = FC.levels(lines)
     ltree = STRtree(lines)
-    print(f"partition lines {len(lines)} ({ndoors} doorways shut); faces " + ", ".join(f"{g} mm: {len(fs)}" for g, fs, _ in LV))
+    print(f"partition lines {len(lines)} ({ndoors} doorways shut, the floor plate {plate.area / 1e6:.0f} m2 as the outside wall); "
+          "faces " + ", ".join(f"{g} mm: {len(fs)}" for g, fs, _ in LV))
     # the previous drawing's spaces (Option 02A, snapped to its walls), kept once in tools/_work/plan/prev-spaces.json so re-runs
     # compare against the same reference: their areas cap a leaky face, their outlines stand in for open-plan labels with none
     prev, keep = {}, os.path.join(WORK, "prev-spaces.json")
@@ -247,20 +257,31 @@ def main(tk, dxf_path):
         old = min(same, key=lambda q: (q["x"] - x) ** 2 + (q["y"] - y) ** 2) if same else None   # the same-named room nearest this label
         if old is not None and ((old["x"] - x) ** 2 + (old["y"] - y) ** 2) > 15000 ** 2: old = None
         if old is not None and old.get("m2", 0) >= TYPE_MIN.get(typ, 0.8): hi = min(hi, max(old["m2"] * 1.6, old["m2"] + 4) * 1e6)
+        pax = re.search(r"(\d+)\s*PAX", t, re.I)
+        lo = max(TYPE_MIN.get(typ, 0.8), 0.9 * int(pax.group(1)) if pax else 0) * 1e6     # a table is never the room
         poly = gap = None
         for pt in ((x, y), ins):
-            poly, gap = FC.room_at(pt, LV, lo=TYPE_MIN.get(typ, 0.8) * 1e6, hi=hi)
+            poly, gap = FC.room_at(pt, LV, lo=lo, hi=max(hi, lo * 1.5))
             if poly is not None: break
         if poly is None:
             if old is not None:
                 rings = [[tuple(map(float, q.split())) for q in part.split("L")] for part in re.findall(r"M([^Z]+)Z", old["d"])]
                 poly = unary_union([Polygon(r).buffer(0) for r in rings if len(r) > 2]); gap = "prev"
+                if not poly.buffer(300).contains(Point(x, y)):     # the same name somewhere else in the old plan: not this room
+                    unplaced.append(f"{t} (previous outline elsewhere)"); continue
                 # how well the carried outline sits on the new drawing's walls: its vertices' median distance to a partition line
                 ds = sorted(min((lines[j].distance(Point(c)) for j in ltree.query(Point(c).buffer(1500))), default=1500)
                             for g_ in (poly.geoms if hasattr(poly, "geoms") else [poly]) for c in list(g_.exterior.coords)[::2])
-                if ds[len(ds) // 2] > 200:          # off the new walls: that part of the plan changed; no outline beats a wrong one
-                    unplaced.append(f"{t} (previous outline {ds[len(ds) // 2]:.0f} mm off the walls)"); continue
-                carried.append(f"{t} ({ds[len(ds) // 2]:.0f} mm)")
+                # an open-plan room has open sides with no wall near them: half its edge on the new walls is enough; less, and
+                # that part of the plan changed (no outline beats a wrong one)
+                on = sum(1 for v in ds if v <= 250) / max(len(ds), 1)
+                if typ in OPEN_PLAN and on < 0.5:     # an open-plan area: its old outline, trimmed to the open floor it's in
+                    big = [fs[i] for g_, fs, tr_ in LV[:1] for i in tr_.query(Point(x, y)) if fs[i].contains(Point(x, y))]
+                    if big:
+                        poly = poly.intersection(big[0]).buffer(0); on = 1.0
+                if on < 0.5:
+                    unplaced.append(f"{t} (previous outline: {on:.0%} of it on the new walls)"); continue
+                carried.append(f"{t} ({on:.0%} on the walls)")
         if poly is None:
             unplaced.append(t); continue
         key = (round(poly.area), round(poly.bounds[0]), round(poly.bounds[1]))
@@ -276,9 +297,12 @@ def main(tk, dxf_path):
                     rooms[("nic", round(g.area))] = dict(poly=g, labels=[], gap="nic", typ="Not in contract")
     out_spaces = []
     COL = dict(LEGEND + EXTRA_COLOURS)
+    COL.setdefault("Pantry", COL.get("Cafeteria", "E4E2DD"))         # the cafeteria's back of house, in its colour
     for i, r in enumerate(sorted(rooms.values(), key=lambda r: (r["poly"].centroid.x, r["poly"].centroid.y))):
         names = list(dict.fromkeys(re.sub(r"\s*-\s*", " - ", title(t)) for t, x, y in r["labels"]))
         typ = r.get("typ") or next((n for n, rx in BY_LABEL for t, x, y in r["labels"] if re.search(rx, t, re.I)), None) or "Room"
+        if typ == "Cafeteria" and not any(re.search(r"CAFE", t, re.I) for t, x, y in r["labels"]):
+            names = ["Cafeteria"]          # the dining floor, labelled only by its counters (heating station, waste disposal)
         at = (r["labels"][0][1], r["labels"][0][2]) if r["labels"] else r["poly"].representative_point().coords[0]
         if not r["poly"].buffer(300).contains(Point(at)): at = r["poly"].representative_point().coords[0]
         g = r["poly"].simplify(10)

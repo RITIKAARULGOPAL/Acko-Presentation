@@ -301,3 +301,12 @@ West, Middle and East fly an orthographic camera along it.
 - **Not in contract:** the area (`ak_zone_Nic`) is a space with its own grey, and kept out of the axo's slab and floors.
 - **Text at its CAD size:** fixed in the toolkit (`text_outline.py`). Every text is drawn as its glyph outlines in its style's font with its width factor and MTEXT formatting, so a label never outgrows its room. Rooms read the drawn box from `labels.json`.
 
+**Addendum (21 Oct, Ritika: "include the door area also"; "all the spaces are not rendered"):**
+- **Doors:** a swing door's leaf and arc were walls, so each swing became a small sector of its own, left white beside its room. Now only the closed position (the arc's hinge to both its ends) shuts the doorway. The leaf dangles and splits nothing, so the swing area is part of the room. Folding and sliding doors still close a room as walls do.
+- **No furniture:** tables and desks never bound a room (a Quick Sprint took only its table). Only furniture lines over 2.5 m that are open or thin (the façade's rails) are used, and the furniture-against-a-wall rule is retired.
+- **The floor plate as the outside wall:** the façade's mullion units are short furniture pieces, so rooms along it leaked outside. The plate (neighbourhood zones plus the toolkit's rooms, closed by 1.5 m, out 150 mm) is added as a line.
+- **Minimum by PAX:** a meeting room's minimum is at least 0.9 m² per PAX in its label.
+- **A 0.5 m bridging level** comes last, for doorways drawn without a door (Collaboration Huddle 01, Store Room, Dishwash).
+- **Carried outlines** only where they hold the label (within 0.3 m) and at least half their vertices lie within 250 mm of the new walls; open-plan areas (Reception) are trimmed to the open floor they're in.
+- **Names:** the dining floor is labelled only by its counters (Heating Station, Waste Disposal), so it is named "Cafeteria"; Dishwash and Plate Drop are its back of house, in the cafeteria's colour.
+
