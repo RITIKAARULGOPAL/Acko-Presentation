@@ -13,7 +13,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-mobius-ribbon" data-part="1" data-title="The Möbius · ribbon" data-steps="1" data-mins="0.4"
-  data-notes="A workplace inspired by the Möbius strip: one continuous surface, one continuous journey, where every connection leads to another. It is ACKO's own mark. So, let's embrace what's next: bold, fresh, fearless. The line runs twice round the strip before it meets itself, lighter where it passes behind: one surface, one side. The ribbon runs twice round the strip, narrow at both ends, softly lighter where it passes behind; on the next slide it slides off to the left and the Loop is revealed. The slide moves on to the Loop by itself, no click.">
+  data-notes="A workplace inspired by the Möbius strip: one continuous surface, one continuous journey, where every connection leads to another. It is ACKO's own mark. So, let's embrace what's next: bold, fresh, fearless. The line runs twice round the strip before it meets itself, lighter where it passes behind: one surface, one side. The ribbon runs twice round the strip, narrow at both ends, softly lighter where it passes behind; without stopping it unwraps: its head runs on along the path and out flat at the right, at the Loop's height, its tail unwinding it off the strip, and the Loop page opens by itself, no click (also when come back to).">
   <div class="page">
     <div class="mb-art">
       <img src="assets/img/mobius.webp" alt="">
@@ -24,6 +24,8 @@
       </svg>
     </div>
     <canvas class="mr-strip"></canvas>
+    <!-- the way out (page px, geometry only): from her path's right-most point down-right off the right edge -->
+    <svg class="mr-route" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><path class="mr-exit" d="M1612.57 405.38C1641.56 469.09 1710 570 1860 570C1920 569 1980 568 2040 567"/></svg>
     <div class="mb-copy rv">
       <small style="--i:0">Navigating the way forward …</small>
       <h3 style="--i:1">So, let’s embrace what’s next.</h3>
@@ -47,18 +49,19 @@
 #s-mobius-ribbon .mb-copy h3 { left: 33.43%; top: 36.46%; width: 42.19%; font-size: calc(var(--pt) * 19); font-weight: 700; color: var(--purple-2); }
 #s-mobius-ribbon .mb-copy p { left: 33.43%; top: 45.73%; width: 42.19%; padding-top: calc(var(--pt) * 19.2); font-size: calc(var(--pt) * 10); line-height: 1.38; color: #666; }   /* + its 12 pt space before */
 #s-mobius-ribbon .mb-copy b { left: 33.43%; top: 55.76%; width: 42.19%; font-size: calc(var(--pt) * 14); font-weight: 700; color: #999; }
-/* the strip, drawn on a canvas over the photo (its path's pieces stay in the SVG for their geometry only) */
-#s-mobius-ribbon .mr-geo { fill: none; stroke: none; }
-#s-mobius-ribbon .mr-strip { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+/* the strip, drawn on a canvas over the photo (its path's pieces and the exit stay in SVGs for their geometry only) */
+#s-mobius-ribbon .mr-geo, #s-mobius-ribbon .mr-route path { fill: none; stroke: none; }
+#s-mobius-ribbon .mr-strip, #s-mobius-ribbon .mr-route { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
 </style>
 <script>
 /* the Möbius (deck slide 10), ribbon version (Ritika, 22 Oct): on the deck's own photo, a ribbon (the Loop's lavender) runs
    along Ritika's path in a single stroke (5 s, after the copy) from her path's left-most point, twice round the strip and
-   back to it: narrow at both ends, softly lighter where it passes behind. It rests a moment, then the slide moves on to the
-   Loop by itself, with no click (Ritika: "without click, let it start animating the loop"), where it slides off that point to
-   the left and the Loop is revealed. Only going forward: back from the Loop, it stays. Reduced motion: drawn at once, and it
-   moves on at the same moment. */
-ACKO.slide("s-mobius-ribbon", ({ $, plain, reveal, later, reduced, next, sceneIx }) => {
+   back to it: narrow at both ends, softly lighter where it passes behind. It doesn't stop as it closes ("the ribbon should
+   unwrap and go to next slide without beat"): its head runs straight on along the path, up over the top and down the strip's
+   right side, and out flat off the right edge at the height where the Loop begins on the next page (her green line), while
+   its tail unwraps it off the strip, faster, and leaves last; as the tail leaves, the next page (s-loop-ribbon) opens and
+   draws the Loop. It always moves on by itself, also when come back to. Reduced motion: drawn at once, then the next page. */
+ACKO.slide("s-mobius-ribbon", ({ $, plain, reveal, later, reduced, next }) => {
   const S = { raf: 0, R: null };
   // the strip: a stretch [tail, head] of a route, drawn as filled polygons so that both ends narrow to a point (an SVG
   // stroke can't taper). A route is one line in page px, sampled about every STEP: { pts, ss (length along it), nn (normals),
@@ -147,33 +150,45 @@ ACKO.slide("s-mobius-ribbon", ({ $, plain, reveal, later, reduced, next, sceneIx
     return [{ pts: sample(bk, toPage, c), back: true }, { pts: sample(f2, toPage), back: false }, { pts: sample(f1, toPage), back: false },
             { pts: sample(bk, toPage, 0, c), back: true }];
   }
-  const MS = 5000, HOLD = 800, ease = (k) => (1 - Math.cos(Math.PI * k)) / 2;   // ms: the draw · the rest before the Loop
-  const path = (sc) => S.R || (S.R = route(mobius($(".mr-geo.f1", sc), $(".mr-geo.bk", sc), $(".mr-geo.f2", sc))));
-  // which slide this one was entered from (the engine sets body[data-scene] just before enter; the record arrives after it),
-  // so that it moves on by itself only when the presentation is going forward
-  new MutationObserver((rs) => rs.forEach((r) => { if (document.body.dataset.scene === "s-mobius-ribbon") S.from = r.oldValue; }))
-    .observe(document.body, { attributes: true, attributeFilter: ["data-scene"], attributeOldValue: true });
-  const onward = (sc) => {
-    if (document.body.dataset.scene !== sc.id || (S.from && sceneIx(S.from) > sceneIx(sc.id))) return;
-    next();
-  };
+  const MS = 5000, OUT = 4000, ACC = 0.3, TACC = 0.35;      // ms: the draw · the unwrap; the share of each spent speeding up
+  const XPT = [1612.57, 405.38];                         // where the exit leaves her path (page px)
+  const run = (a) => { const v = 1 / (1 - a / 2); return (k) => (k < a ? v * k * k / (2 * a) : v * (a / 2 + k - a)); };   // speeds up, then steady
+  const drawn = run(ACC), unwrap = run(TACC), V = 1 / (1 - ACC / 2);    // V: the draw's steady speed, as a share of L per MS
+  // the route: her path from its left-most point, round twice and back to it (the draw: 0 → L); then on along it, up over
+  // the top and down the strip's right side (behind it) to where the exit leaves, and out by the exit, which comes out from
+  // behind (its fade falls inside it)
+  function path(sc) {
+    if (S.R) return S.R;
+    const f1 = $(".mr-geo.f1", sc), bk = $(".mr-geo.bk", sc), f2 = $(".mr-geo.f2", sc);
+    const R = route(mobius(f1, bk, f2).concat([{ pts: sample(bk, toPage, nearest(bk, toPage, CUT), nearest(bk, toPage, XPT)), back: true },
+                                                { pts: sample($(".mr-exit", sc)), back: false, lead: FADE }]));
+    R.L = R.starts[4];                                      // the closed ribbon's length
+    const o = R.ss.findIndex((s, i) => s > R.starts[5] && R.pts[i][0] > 1920 + WID);
+    R.out = o > 0 ? R.ss[o] : R.end;                        // past here, the tail is off the page
+    return (S.R = R);
+  }
+  // one motion: the draw (the head speeds up, then runs steadily round to the close); then, without a stop, the head carries
+  // on at that speed and out, while the tail unwraps from rest, speeding up past it, and leaves; then the next page
+  function play(sc, cv, R) {
+    const t0 = performance.now(), v0 = (R.L * V) / MS;      // the head's speed at the close (px/ms)
+    const frame = (now) => {
+      if (document.body.dataset.scene !== sc.id) return;
+      const t = now - t0;
+      if (t < MS) { strip(cv, R, 0, R.L * drawn(t / MS), 1); S.raf = requestAnimationFrame(frame); return; }
+      const u = t - MS, k = Math.min(1, u / OUT), tail = R.out * unwrap(k);
+      strip(cv, R, tail, Math.max(R.L + v0 * u, tail), 1);
+      if (k < 1) S.raf = requestAnimationFrame(frame); else next();
+    };
+    S.raf = requestAnimationFrame(frame);
+  }
   return {
     enter(_, sc) {
       plain(); reveal($(".mb-copy", sc), 600);
       const cv = $(".mr-strip", sc), R = path(sc);
       cancelAnimationFrame(S.raf);
-      later(() => onward(sc), 1000 + MS + HOLD);
-      if (reduced) { strip(cv, R, 0, R.end, 1); return; }
+      if (reduced) { strip(cv, R, 0, R.L, 1); later(() => next(), 1000 + MS); return; }
       strip(cv, R, 0, 0, 1);
-      later(() => {
-        const t0 = performance.now();
-        const frame = (now) => {
-          if (document.body.dataset.scene !== sc.id) return;
-          const k = Math.min(1, (now - t0) / MS); strip(cv, R, 0, R.end * ease(k), 1);
-          if (k < 1) S.raf = requestAnimationFrame(frame);
-        };
-        S.raf = requestAnimationFrame(frame);
-      }, 1000);
+      later(() => play(sc, cv, R), 1000);
     },
     leave() { cancelAnimationFrame(S.raf); },
   };
