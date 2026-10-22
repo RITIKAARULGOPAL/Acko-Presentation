@@ -302,11 +302,29 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - "Both loop animations are not aligning." Round 2's vector Loop ≠ the deck's artwork.
 
 **No click between them (Ritika: "without click, let it start animating the loop"):**
-- The Möbius slide calls the kit's `next()` 0.8 s after its draw ends (a `later()`, so any slide change first cancels it).
+- The Möbius slide calls the kit's `next()` 0.15 s after its draw ends (a `later()`, so any slide change first cancels it), and the Loop starts moving 0.3 s in, inside the 0.7 s cross-fade (Ritika: "start the Loop sooner"). The Loop opens on the Möbius's exact last frame and the motion starts slowly, so nothing doubles.
 - **Only going forward:** a `MutationObserver` on `body[data-scene]` (`attributeOldValue`) records the slide it was entered from; coming back from a later slide (`sceneIx`), it stays.
   - The engine's `enter` doesn't say where it came from, and the record arrives after `enter`, so the check runs in the timer.
 - **The words** (both Möbius versions) sit in the PPT's own text boxes: each line placed at its box's x, y and width, padded by the box inset (7.2 pt; 7.6 pt for the kicker, centred in its box), with the body's 12 pt space before.
   - Checked against PowerPoint's own export of slide 10 (COM `Slide.Export`, 1920 × 1080): each line within 1–4 px. PowerPoint draws it in Arial here because Figtree isn't installed for it, so compare positions, not glyphs.
+
+**Round 4 (Ritika: "after the ending, again let it follow the path and move to next page… remove the unwravelling step with the mobius image in the background and directly draw the loop - when drawing the loop the text should slide and move in"):**
+- **The Möbius:** after the draw, the ribbon slides on as one piece along her path, round to its right-most point (the behind pass down the strip's right side), and out down-right off the right edge along her green line (`mb3/bridge4.py`, `.mr-exit`), over 4 s.
+  - It speeds up, then runs steadily out; it doesn't slow at the end, so it leaves moving.
+  - As its tail leaves, the slide calls `next()`. Forward only, as before; back from the Loop it draws and stays.
+- **The Loop page has no Möbius on it** (no photo, no strip, no left exit). It opens empty and reveals the deck's ribbon from Arrival at once, entering at speed, 4 s, slowing at the end.
+  - **The words:** the title and paragraph slide in from the left once the head is 300 px in; the welcome line slides in from the right at mid-way. Classes `lr-hold-a` / `lr-hold-b` hold them off to the sides, and the frame loop removes them.
+  - The words' hide transition keeps a delayed `visibility`, so they still fade out on beat 2.
+  - The people and trees come in at the end.
+- **Generator:** `mb/make_ribbon4.py` (the Möbius part spliced from `mob4_section.py`, the Loop part from `loop4_section.py`).
+- **Round 5 (Ritika: "the ribbon should unwrap and go to next slide without beat"):**
+  - **No stop at the close:** one frame loop runs the draw (the head speeds up, then steadily round) and the unwrap. At the close the head carries on at the same speed, up over the top and down the strip's right side, then out flat at y≈560, the Loop's start height on the next page, along her second line (`mb3/bridge5.py`, leaving her path at 1608, 396).
+  - **The tail** unwraps from rest, faster than the head, and leaves last; then `next()` at once.
+  - **The Loop draw** starts at 0 ms (3.3 s), entering at about the tail's speed.
+  - **Always onward:** the forward-only check is gone (her choice), so coming back to the Möbius replays it and moves on again.
+- **Made smooth (Ritika: "make it smooth"):** the exit is now one cubic Bézier plus a straight run (`mb3/bridge6.py`, leaving her path at 1612.6, 405.4). The leave point and control lengths come from a small search: even bend, smallest radius 240 px, within 7 px of her trace.
+  - A Catmull-Rom through hand points had bent down to 45 px just after the join, which pinched a 30 px half-width ribbon. Measure the radius along any path a wide ribbon follows.
+- The two paragraphs below describe round 3, where the strip still ran on the Loop page; the strip renderer is now on the Möbius slide only.
 
 **How: the strip** (a canvas renderer, in both files):
 - **One route, one polyline:** the Möbius pieces re-cut at the left-most point (found as the point of the behind piece nearest a fixed page point, so both slides cut alike), then the exit, in page px every 6 px.
