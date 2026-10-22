@@ -78,6 +78,8 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
 
 **Framing:** fov 24, camera `(0, 6.6, 5.6)`, so the hole frames the copy. A slow sway `rotation.y = -0.6 + 0.28 sin(0.18 t)` keeps the copy inside the loop. Don't spin it fully.
 
+**Status:** replaced on 21 Oct 2026 by §15 (Ritika: the deck's own photo, with her path drawn on it). The three.js strip is in git history before that change; `three.min.js` stays for `s-challenges` and the axo.
+
 ## 7. One plan in the world, flown between slides
 **What:** the layout is an SVG in the persistent world layer (`#world-plan`). Successive slides retarget its viewBox, so the layout flies into blow-ups X / Y / Z without a cut.
 - `vbFor(box, display)` returns the viewBox that shows a frame-px box inside a frame-px display rectangle.
@@ -153,6 +155,11 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - `ctx.globalAlpha` is the deck's 75%.
 - **Layering:** as on slide 12, the canvas sits in front of the trees and people, which read through it; the Work figures stay on top. The cut-outs' white backgrounds vanish under the ribbon.
 
+**Status:** on 21 Oct 2026 the writing was retired in favour of §16. The ribbon is in place as the Loop opens, and the Möbius line runs along it.
+- Only the GIF's last frame (`draw-78.webp`) is used, by its literal path, so the single file embeds one frame.
+- The frame files stay on disk.
+- The player above is in git history.
+
 ## 12. The DXF plan in the world (PlanHover, pictures at three sharpnesses)
 **What:** the layout and its blow-ups use the DXF plan (via the DXF plan toolkit). Hover a space for its name and m², or a neighbourhood for its seats. The plan still lives in the world layer, so the layout flies into X / Y / Z without a cut (§7).
 
@@ -213,3 +220,122 @@ frames[0].save(p, "WEBP", save_all=True, append_images=frames[1:], duration=durs
   - **An open neighbourhood:** with its chart tucked away (the default) it fills the page above a bar (key plan, name, workstations, area, Occupancy chart, All neighbourhoods); `occ-open` brings back the right-hand panel and refits it into the left. Switching keeps the chart's state; closing resets it.
   - **Testing a click on a neighbourhood:** pick the point by the engine's own rule (the first outline that contains it). A desk of one neighbourhood can lie inside another's outline.
 
+## 15. A hand-drawn path on a photo, drawn in one stroke (the Möbius)
+**What:** deck slide 10's own Möbius photo, with Ritika's path along the strip drawn on in a single stroke (6.5 s, after the copy).
+- The path runs twice round the strip before it meets itself.
+- In front of the strip it is purple. Behind it, it is lilac, and it runs under the front where they cross.
+- Ritika chose this over a light that flows along the path, marching dashes, a lane with a centre line, a travelling trail and a felt-tip look (21 Oct).
+
+**The photo:** `assets/img/mobius.webp`, where the deck puts it (x 7.8%, 84.4% × 100%: the photo's own 3:2).
+- **Opacity 35%:** the PPTX picture has `alphaModFix amt="35000"`. Without it the strip looks much darker than the deck. Check a picture's `alphaModFix` before matching tones.
+- The SVG's viewBox is the photo's 1536 × 1024, so the path is written in photo pixels.
+
+**The path:** she drew it as a red polyline in a layer over a deck screenshot (`Downloads/Screenshot 2026-10-21 131243.svg`): bright where it runs in front, light where it runs behind. Traced in a scratch script:
+- **Register** the screenshot to the photo with `cv2.findTransformECC`, starting from the slide layout.
+  - The warp it returns maps the template (the photo, at 35% on white) into the input (the screenshot); invert it for screenshot → photo.
+  - It agreed with the plain layout to within about 7 px.
+- **Trace** the line with a small tracker on the red pixels: a circle of samples ahead, the run nearest straight on.
+  - Where two strokes cross at a shallow angle, prefer the colour it is already on. Otherwise it turns onto the other stroke and closes early.
+  - Two colour switches with no crossing are the front/behind ends.
+- **Smooth** with a periodic smoothing spline (`splprep(per=1)`, 6 px rms).
+  - This rounds her polyline's corners while staying near her line: 4 px on average, at most 18 px, at the sharp tip.
+  - A small Gaussian (σ 12 px) kept her corners.
+- **Pieces:** front 1 → behind → front 2, as Catmull-Rom cubics. In the SVG the behind piece comes first, so the front lies on top at the crossings.
+
+**The draw:** the three pieces are drawn as one line, with one progress and one easing over their joint length.
+- `data-i` gives their order along the path.
+- The engine's `drawPath` eases each path on its own, so a chain of them would stutter.
+- Each piece stays `visibility: hidden` until the line reaches it, or a round cap shows as a dot before it arrives.
+
+**Gotchas:**
+- On Windows, a Python `print` with "→" fails under the console's code page. Run with `python -X utf8`; `-I` ignores `PYTHONIOENCODING`.
+- Headless Chrome on SwiftShader leaves stray, rectangle-clipped smudges around animated SVG blur filters and blend modes. The real browser draws them cleanly. Check motion like that in the real browser before chasing it.
+
+## 16. A line that carries on from one slide onto the next (the Möbius → the Loop)
+**What (Ritika, 22 Oct):** the purple line of the Möbius slide carries on onto the Loop's ribbon.
+1. **The opening frame:** the Loop opens on the Möbius slide's last frame: the deck's photo at 35% and her path drawn, placed exactly as `s-mobius` places them. So the engine's cross-fade only fades the Möbius words.
+2. **Beat 1:** the photo and path fade as the ribbon (the deck's artwork, `draw-78.webp` at 75%) comes in. A stretch of the path, the arc round its start that she marked, about 480 page px, stays, then glides onto the ribbon's start by Arrival and waits there. Then the people, trees and welcome words come in.
+3. **Beat 2:** the stretch runs the whole ribbon left to right, through every loop, and slides off its right end. Each stop and its leader come up as the line reaches it.
+
+**How (`s-loop.html`):**
+- **One full-page SVG (`.lp-run`, viewBox 1920 × 1080).**
+  - **`.lp-line`:** the ribbon's centre line, also the visible stretch. One dash, `stroke-dasharray: LS (L + 2·LS)` and `stroke-dashoffset: LS − s`, so the dash covers [s − LS, s].
+  - **`.lp-glide`:** a 40-point polyline for the glide.
+  - **Hidden** (`visibility`) whenever not in use, so a round cap never shows as a dot.
+- **No stored geometry for the glide:**
+  - **The arc:** read at runtime from the `.lp-mob` path pieces with `getPointAtLength`: the end of front piece 2 and the start of front piece 1, which meet at the path's start. Mapped photo px → page px as `s-mobius` places the photo (x = 149.76 + 1.055·x, y = 1.0547·y).
+  - **The landing:** the first LS of the centre line.
+  - **The motion:** each point eases from one to the other (cubic in-out, 1.2 s). At the end, `.lp-line` takes over at s = LS: the same geometry, so nothing visibly changes.
+- **Stops:** each stop's trigger is the first arc length where the centre line comes within 1.2 × its nearest approach to the stop's dot, because the ribbon passes some stops twice. The run (5.5 s, sine in-out) turns each stop on as s passes it.
+- **Other entries:**
+  - **Back to beat 1:** the line waits at Arrival, with no replay.
+  - **Entering at beat 2 (going backwards):** every stop on and no line.
+  - **Reduced motion:** each beat's end at once.
+
+**The ribbon's centre line** (scratch scripts, the session scratchpad):
+- **The route:**
+  - **A tracker failed:** on this coil ("loop" in cursive), going straight through crossings skips each ring.
+  - **The writing order:** for each pixel, the first frame of the deck's GIF that paints it, plus the centre of each frame's new paint, gave the order.
+  - **96 points placed by hand** in that order (centripetal Catmull-Rom).
+- **The snap:** at every 4 px, measure the band across the path (along its normal) and move the point to that cross-section's centre.
+  - **Skipped where** the run is too wide (two bands overlapping at a crossing); there the neighbours' offsets carry across.
+  - **Offsets** are smoothed along the path; three passes.
+  - **Result:** every point on the ribbon (100%, up from about 85%).
+- **Where the deck's own GIF does the same:** the route laps each ring and passes over its top twice, and dips through the crossing between the first two rings.
+
+**Tried and replaced:** a 2D band morphing the Möbius strip itself into the ribbon (edge curves, staggered lerp, offscreen composite). Ritika: the line should move, not the strip. It is in git history (21 Oct).
+
+**Gotchas:**
+- **The cut-outs:** the slide's own `.lp-cut { opacity }` overrides the reveal's hidden state. Hold them with a container opacity (`#s-loop.lp-wait .lp-cuts`) instead.
+- **Testing:** headless SwiftShader is too slow to film canvas or rAF motion in real time, and screenshots lag too. Film it on a virtual clock instead: replace `requestAnimationFrame` and `performance.now` before load, and step 16 ms at a time between screenshots.
+
+## 17. A ribbon that slides off one slide and reveals the deck's artwork on the next (ribbon version: Möbius → Loop)
+**What (Ritika, 22 Oct):** another version of §15–16, in `s-mobius-ribbon` → `s-loop-ribbon`, not in `order.txt` (see them at `/?only=s-mobius-ribbon,s-loop-ribbon`).
+- **On the Möbius:** a lavender ribbon (60 px), not a line, runs along her path from its left-most point, twice round, and back to it.
+  - Narrow at both ends.
+  - Softly lighter where it passes behind.
+- **On the Loop, beat 1:** the ribbon slides along itself, off that point and out of the left edge, its tail following it twice round the strip. As the tail leaves, the head comes back in at Arrival and **reveals the deck's own ribbon** along the Loop's line, so the Loop is the artwork from the first pixel.
+- **Her notes that shaped it:**
+  - "Ending also should be narrow."
+  - "The strip should be gradient."
+  - "This whole animation is very chaotic." Round 2 swung the whole strip round the page.
+  - "Both loop animations are not aligning." Round 2's vector Loop ≠ the deck's artwork.
+
+**No click between them (Ritika: "without click, let it start animating the loop"):**
+- The Möbius slide calls the kit's `next()` 0.8 s after its draw ends (a `later()`, so any slide change first cancels it).
+- **Only going forward:** a `MutationObserver` on `body[data-scene]` (`attributeOldValue`) records the slide it was entered from; coming back from a later slide (`sceneIx`), it stays.
+  - The engine's `enter` doesn't say where it came from, and the record arrives after `enter`, so the check runs in the timer.
+- **The words** (both Möbius versions) sit in the PPT's own text boxes: each line placed at its box's x, y and width, padded by the box inset (7.2 pt; 7.6 pt for the kicker, centred in its box), with the body's 12 pt space before.
+  - Checked against PowerPoint's own export of slide 10 (COM `Slide.Export`, 1920 × 1080): each line within 1–4 px. PowerPoint draws it in Arial here because Figtree isn't installed for it, so compare positions, not glyphs.
+
+**How: the strip** (a canvas renderer, in both files):
+- **One route, one polyline:** the Möbius pieces re-cut at the left-most point (found as the point of the behind piece nearest a fixed page point, so both slides cut alike), then the exit, in page px every 6 px.
+- **Both ends taper:** half-width = W · (0.08 + 0.92 · smoothstep(min(s − tail, head − s) / 220)).
+- **Front-ness F per sample:** 1 in front, 0 behind, smoothstep over ±90 px of each switch.
+  - The exit's `lead` keeps the last part's side for 90 px into it, so the Möbius slide's last frame and the Loop's first frame match.
+- **Two offscreen layers,** composited at 35% (behind, filled) and 75% (front, filled and edged in white). Each layer's share is 1 − F or F.
+  - **Where a share is full:** one polygon per stretch.
+  - **Where it is partial:** two-step pieces starting at every sample, each at 1 − √(1 − share), so every stretch lies under exactly two and comes to the share without seams.
+  - An alpha gradient or one-piece-per-step leaves seams.
+- **The pace:** the strip moves as one piece (tail = head − Möbius length). The turn off the page is as long as the ribbon, so the head comes back in exactly as the tail goes out. Trapezoid speed (15% up, 22% down) over 6.5 s (Ritika: "a little faster"; it was 8.5 s). The Möbius draw takes 5 s.
+
+**How: the reveal** (no pixel reads, so it works from `file://`):
+- **The artwork in pieces:** the deck's ribbon frame (`draw-78`) is cut into 10 pieces in `assets/img/s-loop-ribbon/` (lossless webp, cropped).
+  - Each pixel is placed along the Loop's centre line: the earliest strand whose band it lies in (the band's half-width measured where the ribbon is single), else the nearest. The boundaries are median-smoothed.
+  - Pieces are cut wherever a wide mask on one strand would uncover the same piece's pixels on another strand early (ring passes, crossings, the Wellness hook). The cuts come from interval stabbing.
+- **Each frame,** each piece is drawn through a mask along its stretch of the line onto `.lp-draw` itself (1600 × 671, the ribbon's own canvas), `source-in`, at 75%.
+  - **The mask:** one quad per step, all turned the same way so they join under nonzero.
+  - **Its width:** a point at the head, the band's width 220 px behind it, then 100 px wide for the widest twist.
+  - **Once the mask has passed a piece,** the piece is drawn whole.
+- **At the end it is the artwork exactly,** and `lay()` redraws it.
+
+**Gotchas:**
+- **OpenCV `fillPoly` with many polygons in one call XORs where they overlap,** which left speckled holes in the simulation. Fill each quad on its own.
+- **The GIF's first-paint map is blocky** (8-px codec blocks), so assigning crossing pixels by it gives stair-stepped edges. Assign them by geometry instead.
+- **Small notches** still show for a moment where the inner pass of a ring meets the lap. They are gone once the head passes.
+- **Scripts** (scratchpad `mb3/`):
+  - `frames.py`: the GIF's paint history
+  - `assign.py`, `assign2.py`: pixels → line
+  - `pieces.py`: cuts, piece files, simulation
+  - `bridge3.py`: the exit
+  - `mb/make_ribbon3.py`: writes both slides
