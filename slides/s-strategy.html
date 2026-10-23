@@ -13,7 +13,7 @@
 <!-- slide:start -->
 <section class="scene" id="s-strategy" data-part="1" data-title="Campus strategy" data-steps="5" data-mins="1.5"
   data-beats="How it started,Planning Acko’s Neighbourhood,Looping it all together,The Employee’s Journey,The Client’s Journey"
-  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Five beats, as the 3D renders build it. 1 How it started: the whole floor, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the two atriums and terraces. 3 Looping it all together: the floor in colour, then the rooms, the café, the terraces, the workstations, the plants and the façade. 4 The employee's journey: from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. 5 The client's journey. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Five beats, as the 3D renders build it. 1 How it started: the whole floor, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the café, the two atriums and terraces. 3 Looping it all together: the floor in colour, then the rooms, the café, the terraces, the workstations, the plants and the façade. 4 The employee's journey: from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. 5 The client's journey. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
   <div class="page">
     <div class="st-anim"></div>
     <div class="st-3d ui"></div>
@@ -81,8 +81,8 @@
 /* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), built up in five beats as the
    3D renders (axo_update/acko2A_model*.png) and the deck's animation build it, at the renders' camera:
      1 How it started                 the whole floor as a white model; the two entrances
-     2 Planning Acko's Neighbourhood  the six neighbourhoods drop in, 01 to 06, with their numbers, then the atriums and terraces;
-                                      their names
+     2 Planning Acko's Neighbourhood  the six neighbourhoods drop in, 01 to 06, with their numbers, then the atriums, terraces and
+                                      the café's zone; their names (the boundaries from ACKO_NEI.dxf)
      3 Looping it all together        the volumes lift away and the floor goes to colour (render 01), then the rooms (02), the café
                                       (03), the terraces (04), the workstations (05), the plants (06) and the façade (07) rise
      4 The Employee's Journey         the red route draws from the entrances (render 08); the Loop's seven stops are named as it
@@ -99,10 +99,11 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   // so a drag or zoom carries it: the entrances (maroon ▲), the names (the deck's colours), the numbers' centres
   const MARKS = {
     ent: [[686, 714], [1094, 408]],
-    names: [["ACKO Auto", 1516, 268, "#8d9aab"], ["ACKO Life", 1208, 220, "#9f88d9"], ["ACKO Health", 1193, 330, "#5e68c4"], ["ACKO Travel", 838, 570, "#c9a7b1"],
-      ["ACKO Home", 380, 840, "#a68bd6"], ["ACKO Drive", 684, 891, "#a8aa8f"], ["Atrium", 1045, 448, "#737373", 1], ["Atrium", 732, 685, "#737373", 1],
-      ["Terrace", 1220, 485, "#6f7356", 1], ["Terrace", 804, 797, "#6f7356", 1]],
-    nums: { "01": [1441, 166, 16.3], "02": [1340, 262, 16.3], "03": [1279, 372, 19], "04": [1060, 536, 16.1], "05": [650, 805, 16.6], "06": [500, 845, 16.5] },   // centre, height (m)
+    // Drive, Travel and the café where ACKO_NEI.dxf has them (23 Oct): Drive east of the west atrium, the café in Drive's old place
+    names: [["ACKO Auto", 1516, 268, "#8d9aab"], ["ACKO Life", 1208, 220, "#9f88d9"], ["ACKO Health", 1193, 330, "#5e68c4"], ["ACKO Travel", 1105, 556, "#c9a7b1"],
+      ["ACKO Home", 380, 840, "#a68bd6"], ["ACKO Drive", 960, 653, "#a8aa8f"], ["Atrium", 1045, 448, "#737373", 1], ["Atrium", 732, 685, "#737373", 1],
+      ["Terrace", 1220, 485, "#6f7356", 1], ["Terrace", 804, 797, "#6f7356", 1], ["Café", 669, 817, "#8f8a5c", 1]],
+    nums: { "01": [1441, 166, 16.3], "02": [1340, 262, 16.3], "03": [1279, 372, 19], "04": [1045, 524, 16.1], "05": [910, 617, 16.6], "06": [500, 845, 16.5] },   // centre, height (m)
     rot: -4,            // the names lean this much steeper than the floor's long axis (deg)
   };
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Looping it all together", "The Employee’s Journey", "The Client’s Journey"];
@@ -133,7 +134,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       if (k === 3) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }
       v.position.y = y; M.fade(v, f);
     });
-    M.atrium.concat(M.terrace).forEach((v) => {
+    M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
       let f = 0;
       if (k === 2) f = win(t, 2.3, 3.0);
       if (k === 3) f = 1 - win(t, 0, 0.6);

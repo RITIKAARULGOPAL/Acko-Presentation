@@ -8,7 +8,8 @@
      cafe      the café's and training room's furniture (03)       terrace   the terraces' furniture (04)
      work      the workstations and the open floor's furniture (05) plants    the plants (06)
      facade    mullions, rails and pale glass round the floor (07)
-     zones     the six neighbourhoods 01-06 as translucent volumes with their numbers, the atriums and the terraces (-01, 00)
+     zones     the six neighbourhoods 01-06 as translucent volumes with their numbers, the atriums, the terraces and the café's
+               zone (-01, 00; the boundaries from ACKO_NEI.dxf)
      routes    the employee's journey (red dashes, 08) and the client's (blue, 09), drawn on from the entrances
    M.tint(k) takes the whole model from the white model (k = 0, render -02) to the renders' colours (k = 1).
    Plan mm, y down; the model's metres: x east, y up, z south (X(), Z()). It shares AxoModel's renderer and camera helpers. */
@@ -189,7 +190,8 @@
     const zones = A.zones.map((z) => { const v = volume(z.ring, z.colour, z.n === "03" ? 0.78 : 0.62, H.zone, z.n, "#ffffff"); v.userData.zone = z; return v; });
     const atrium = A.atrium.map((r) => volume(r, "#929292", 0.85, H.zone * 0.5));
     const terr = A.terrace.map((r) => volume(r, "#8f8f6a", 0.55, H.zone * 0.5));
-    zones.concat(atrium, terr).forEach((v) => G.zones.add(v));
+    const cafe = (A.cafezone || []).map((r) => volume(r, "#efe7a6", 0.8, H.zone * 0.5));     // the café's own zone (ACKO_NEI.dxf), in the renders' cream
+    zones.concat(atrium, terr, cafe).forEach((v) => G.zones.add(v));
 
     // ---------- the routes (renders 08 and 09): dashes on the floor, drawn on in order of their distance from the entrances ----------
     function dashes(runs, col) {
@@ -225,7 +227,7 @@
     scene.add(new T.HemisphereLight(0xffffff, 0xd0ccd8, 0.7));
     const key = new T.DirectionalLight(0xffffff, 0.35); key.position.set(-50, 80, 50); scene.add(key);
 
-    M = { scene, groups: G, X, Z, CX, CY, slab: A.slab, zones, atrium, terrace: terr, routes, data: A };
+    M = { scene, groups: G, X, Z, CX, CY, slab: A.slab, zones, atrium, terrace: terr, cafe, routes, data: A };
     // the white model (0) to the renders' colours (1)
     M.tint = (k) => { for (const m of tinted) { m.color.lerpColors(m.userData.white, m.userData.col, k); if (m.userData.op) m.opacity = m.userData.op[0] + (m.userData.op[1] - m.userData.op[0]) * k; } };
     // a volume's fade (0..1)
