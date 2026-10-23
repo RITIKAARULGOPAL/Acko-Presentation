@@ -18,8 +18,8 @@
     <div class="jr-second" style="left:0;top:0;width:100%;height:100%">
       <div class="jr-road"></div>
       <div class="jr-respect"><h2>We Respect the journey</h2>
-        <p>From insuring vehicles to protecting lives. Zero paperwork. Zero complexity. Just simple, transparent insurance.</p></div>
-      <div class="jr-quote"><q>Where others saw tradition, I saw friction - paperwork, middlemen and endless fine print. That’s when I knew insurance didn’t just need a change, it needed a revolution</q></div>
+        <p>From insuring vehicles to protecting lives, Zero paperwork. Zero complexity. Just simple, transparent insurance.</p></div>
+      <div class="jr-quote"><span class="jr-mark">“</span><q>Where others saw tradition, I saw friction - paperwork, middlemen and endless fine print. That’s when i knew insurance didn’t just need a change, it needed a revolution</q></div>
     </div>
     <!-- 1 · why an insurance, over five faces of protection, on the white page -->
     <div class="jr-collage" style="left:0;top:0;width:100%;height:100%">
@@ -29,7 +29,7 @@
       <figure style="left:14.9%;top:48.5%;width:13.3%;height:37%;background-image:url(assets/img/jr-empowerment.webp)"><figcaption>Empowerment</figcaption></figure>
       <figure style="left:28.7%;top:61.5%;width:12.1%;height:24.1%;background-image:url(assets/img/jr-protection.webp)"><figcaption>Protection</figcaption></figure>
       <div class="jr-why"><h3>Let us understand, Why an insurance?</h3>
-        <p><b>Insurance</b> transforms <b>uncertainty into assurance, protecting</b> people, their families, and their financial future against life's unexpected moments.</p></div>
+        <p><span><b>Insurance</b> transforms <b>uncertainty into assurance,</b> <b>protecting</b> people, their families, and their financial future against life's unexpected moments.</span></p></div>
     </div>
     <!-- 2 · the years and milestones: appear all at once -->
     <div class="jr-labels" style="left:0;top:0;width:100%;height:100%">
@@ -68,24 +68,26 @@
   background: linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.12) 36%, rgba(255,255,255,.72) 49%, rgba(255,255,255,.8) 100%); }
 .jr-collage figure { margin: 0; background: center / cover no-repeat; }
 .jr-collage figcaption { position: absolute; left: 4%; bottom: 3%; color: #fff; font-size: calc(var(--pt) * 7); }
-.jr-why { left: 41.3%; top: 43.2%; width: 50%; }
-.jr-why h3 { font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 32); line-height: .95; color: var(--purple-2); }
-.jr-why p { margin-top: calc(var(--pt) * 5); font-size: calc(var(--pt) * 8.6); line-height: 1.45; color: #555; font-style: italic; }
-.jr-why p b { font-weight: 700; color: #444; }
-.jr-respect { left: 1.8%; top: 29.1%; width: 40.9%; color: #fff; }
-.jr-respect h2 { font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 52); line-height: .82; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.25); }
-.jr-respect p { margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 9); line-height: 1.45; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.45); font-weight: 400; width: 90%; }
-.jr-quote { left: 50%; top: 22%; width: 47%; color: var(--purple); }
-.jr-quote q { display: block; quotes: none; font-size: calc(var(--pt) * 17); font-weight: 700; line-height: 1.22; }
-.jr-quote q::before { content: "\201C"; position: absolute; left: -.05em; top: -.95em; font-family: Georgia, serif; font-size: 3.4em; line-height: 1; color: var(--purple); }
+/* the words in their PPT boxes (slide 5): x, y, width, height of the page; the box's anchor and inset */
+.jr-why, .jr-respect, .jr-quote { left: 0; top: 0; width: 100%; height: 100%; }
+.jr-why > *, .jr-respect > *, .jr-quote > * { position: absolute; display: flex; flex-direction: column; box-sizing: border-box; margin: 0; }
+.jr-why h3 { left: 41.28%; top: 43.24%; width: 43.84%; height: 12.32%; justify-content: center; padding: calc(var(--pt) * 7.2); font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 30); line-height: .95; color: var(--purple-2); }
+.jr-why p { left: 41.28%; top: 55.56%; width: 43.84%; height: 11.18%; justify-content: flex-start; padding: calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 9); line-height: 1.3; color: #999; font-style: italic; }
+.jr-why p b { font-weight: 700; }
+.jr-respect h2 { left: 1.82%; top: 29.11%; width: 40.89%; height: 18.33%; justify-content: center; padding: calc(var(--pt) * 7.2); font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 48); line-height: .9; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.25); }
+.jr-respect p { left: 1.82%; top: 45.75%; width: 40.89%; height: 8.67%; justify-content: flex-start; padding: calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 9); line-height: 1.3; font-weight: 300; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.45); }
+/* the quote's box sits in a group the PPT shifts by 4.43% right and 1% down */
+.jr-quote q { left: 52.46%; top: 29.02%; width: 46%; height: 33.09%; justify-content: center; padding: calc(var(--pt) * 7.2); quotes: none; font-size: calc(var(--pt) * 18); font-weight: 700; line-height: 1.22; color: var(--purple); }
+/* the PPT's quote mark: Georgia bold 90 pt, its glyph at x 47.4–53%, y 21.8–29.3% of the page */
+.jr-quote .jr-mark { left: 46.35%; top: 18.3%; display: block; font-family: Georgia, serif; font-weight: 700; font-size: calc(var(--pt) * 90); line-height: 1; color: var(--purple); }
 /* the milestones: years and labels above (up) or below (dn) the line at 82.6% */
 .jr-ms { top: 82.6%; width: 0; height: 0; }
 .jr-ms b { position: absolute; left: 0; transform: translateX(-50%); font-weight: 600; font-size: calc(var(--pt) * 8); color: #999; white-space: nowrap; }
 .jr-ms span { position: absolute; left: 0; transform: translateX(-50%); font-weight: 300; font-size: calc(var(--pt) * 8); color: #666; white-space: nowrap; text-align: center; line-height: 1.25; }
 .jr-ms.up b { top: calc(var(--pt) * -16); }
-.jr-ms.up span { top: calc(var(--pt) * -30); }
+.jr-ms.up span { top: calc(var(--pt) * -33); }
 .jr-ms.dn b { top: calc(var(--pt) * 10); }
-.jr-ms.dn span { top: calc(var(--pt) * 24); }
+.jr-ms.dn span { top: calc(var(--pt) * 27.7); }
 .jr-ms.k span { color: var(--plum); font-weight: 600; }
 /* the timeline: the deck's dotted purple line and lilac dots */
 .jr-clip { overflow: hidden; pointer-events: none; }
