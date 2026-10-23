@@ -9,14 +9,19 @@
      facade     mullions, rails and the pale glass band
      furniture  desks, chairs, storage
      plants     rounded crowns
+     marks      the entrances (red triangles)
    Plan mm, y down; the model's metres: x east, y up, z south (X(), Z()). three.js r147. */
 (function () {
   const AM = {};
-  const H = { wall: 2.4, glass: 2.4, top: 2.7, chair: 0.45, desk: 0.75, store: 1.0, floor: 0.02 };
+  const H = { wall: 2.4, glass: 2.4, top: 2.7, chair: 0.45, desk: 0.75, store: 1.0, floor: 0.02, sill: 0.32 };
   const GLASS = new Set(["Phone booth", "Quick sprint", "Collaboration huddle", "Departmental room", "Boardroom", "Visitor hub", "The Hatchery",
     "Studio", "Zen room", "Mother's room", "Prayer room", "Executive corner cabin", "Training room", "Medical room", "Nap room"]);
   const SERVICE = new Set(["Server, UPS & battery", "Store room", "Mail room", "Hub room", "Not in contract"]);
-  const FLOOR = (t) => GLASS.has(t) ? 0xe2daf2 : t === "Cafeteria" || t === "Coffee corner" ? 0xf3e9d0 : t === "Reception" ? 0xeee4d6 : SERVICE.has(t) ? 0xbdbdbd : 0xe8e8e6;
+  // the floors by zone, as the PPT's schematic axo has them (Ritika, 22 Oct: "take the schematic axo in ppt as reference"): a dark
+  // corridor band, the workhall pale, the café cream, the terrace grass, the rooms lavender, the services grey
+  const FLOOR = (t) => GLASS.has(t) ? 0xd6c9ef : t === "Corridor" ? 0x5a5a60 : t === "Cafeteria" || t === "Coffee corner" || t === "Pantry" ? 0xf2e7c6
+    : t === "Reception" || t === "Entry" ? 0xefe4d2 : t === "Terrace" ? 0x9dc27c : t === "Lift lobby" ? 0xdddce2 : t === "Washroom" ? 0xd6d6d6
+    : t === "Collab" ? 0xe4dff0 : SERVICE.has(t) ? 0xbdbdbd : 0xebebe9;
   let T, M = null, R = null;
 
   AM.H = H; AM.GLASS = GLASS; AM.SERVICE = SERVICE;
@@ -89,7 +94,7 @@
       return Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy); };
 
     const scene = new T.Scene(), G = {};
-    for (const k of ["base", "walls", "glass", "facade", "furniture", "plants"]) { G[k] = new T.Group(); G[k].name = k; scene.add(G[k]); }
+    for (const k of ["base", "walls", "glass", "facade", "furniture", "plants", "marks"]) { G[k] = new T.Group(); G[k].name = k; scene.add(G[k]); }
     // the soft shadow under the slab (a blurred silhouette, down and to the right as in the deck's axo)
     {
       const [x0, x1, y0, y1] = [Math.min(...xs) - 6000, Math.max(...xs) + 6000, Math.min(...ys) - 6000, Math.max(...ys) + 6000];
@@ -107,7 +112,7 @@
     for (const [t, r] of A.floors) { const c = FLOOR(t); prism(fl[c] || (fl[c] = acc()), r, 0, H.floor, null, { sides: false }); }
     const green = acc(); for (const r of A.terrace.concat(A.greens)) prism(green, r, 0, H.floor + 0.005, null, { sides: false });
     for (const c in fl) G.base.add(mesh(fl[c], lam(+c, { polygonOffsetFactor: -1, polygonOffsetUnits: -2 })));
-    G.base.add(mesh(green, lam(0xb7d3a2, { polygonOffsetFactor: -2, polygonOffsetUnits: -4 })));
+    G.base.add(mesh(green, lam(0x9dc27c, { polygonOffsetFactor: -2, polygonOffsetUnits: -4 })));
     // the plan drawing laid faintly on the floor (clipped to the slab): every piece of furniture reads, even where not stood up
     {
       const lv = P.levels[1] || P.levels[0], [vx, vy, vw, vh] = P.viewBox;
@@ -122,7 +127,7 @@
         tex.needsUpdate = true; changed();
       };
       img.src = asset(lv.src); tex.anisotropy = 4;
-      const mat = new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.38, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8 });
+      const mat = new T.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.3, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8 });
       const pl = new T.Mesh(new T.PlaneGeometry(vw / 1000, vh / 1000), mat);
       pl.rotation.x = -Math.PI / 2; pl.position.set(X(vx + vw / 2), H.floor + 0.01, Z(vy + vh / 2)); G.base.add(pl);
       AM.drawingMaterial = mat;
@@ -133,12 +138,12 @@
     const mass = acc(); for (const r of A.context) prism(mass, r, 0, H.top, INK_W, { corners: true });
     const serv = acc(); for (const [t, r] of A.floors) if (SERVICE.has(t)) prism(serv, r, 0, H.wall, INK_W, { corners: true });
     G.walls.add(mesh(mass, lam(0xcfcfcf))); G.walls.add(mesh(serv, lam(0x9a9a9a)));
-    // the rooms: purple glass along their outlines, dark frames
-    const glass = acc();
+    // the rooms: purple glass along their outlines over a solid deeper-purple base (as in the PPT's axo), dark frames
+    const glass = acc(), sill = acc();
     for (const [t, r] of A.floors) if (GLASS.has(t)) {
       const pts = r.map(([x, y]) => [X(x), Z(y)]);
       for (let i = 0; i < pts.length; i++) {
-        const p = pts[i], q = pts[(i + 1) % pts.length]; quad(glass, p, q, H.floor, H.glass);
+        const p = pts[i], q = pts[(i + 1) % pts.length]; quad(glass, p, q, H.sill, H.glass); quad(sill, p, q, H.floor, H.sill);
         GINK.push(p[0], H.glass, p[1], q[0], H.glass, q[1], p[0], H.floor, p[1], q[0], H.floor, q[1]);
         const o = pts[(i - 1 + pts.length) % pts.length], t1 = Math.atan2(p[1] - o[1], p[0] - o[0]), t2 = Math.atan2(q[1] - p[1], q[0] - p[0]);
         let d = Math.abs(t1 - t2); d = Math.min(d, 2 * Math.PI - d); if (d > 0.45) GINK.push(p[0], H.floor, p[1], p[0], H.glass, p[1]);
@@ -171,14 +176,19 @@
     }
     G.facade.add(mesh(mull, lam(0x262626))); G.walls.add(mesh(solidEdge, lam(0xdcdcdc)));
     // the see-through layers last, without writing depth, so what's behind them still shows
-    const gm = mesh(glass, new T.MeshLambertMaterial({ color: 0x8a6cd0, transparent: true, opacity: 0.26, depthWrite: false, side: T.DoubleSide })); gm.renderOrder = 2; G.glass.add(gm);
+    const gm = mesh(glass, new T.MeshLambertMaterial({ color: 0x7d5fd2, transparent: true, opacity: 0.32, depthWrite: false, side: T.DoubleSide })); gm.renderOrder = 2; G.glass.add(gm);
+    G.glass.add(mesh(sill, lam(0x6a4cb4)));
     const pm = mesh(pane, new T.MeshLambertMaterial({ color: 0xdfe9ef, transparent: true, opacity: 0.16, depthWrite: false, side: T.DoubleSide })); pm.renderOrder = 3; G.facade.add(pm);
     if (A.plants.length) {
-      const im = new T.InstancedMesh(new T.IcosahedronGeometry(1, 1), new T.MeshLambertMaterial({ color: 0x5f9845, flatShading: true }), A.plants.length);
+      const im = new T.InstancedMesh(new T.IcosahedronGeometry(1, 1), new T.MeshLambertMaterial({ color: 0x4f8f3a, flatShading: true }), A.plants.length);
       const m4 = new T.Matrix4(), q4 = new T.Quaternion(), s3 = new T.Vector3(), p3 = new T.Vector3();
       A.plants.forEach(([x, y, r], i) => { const Rr = Math.min(0.9, r / 1000) * 0.85; im.setMatrixAt(i, m4.compose(p3.set(X(x), 0.35 + Rr * 0.9, Z(y)), q4, s3.set(Rr, Rr * 0.9, Rr))); });
       G.plants.add(im);
     }
+    // the entrances: red triangles, as the deck marks them (on the core's cap, pointing in)
+    const tri3 = acc();
+    for (const [ex, ey] of (P.overlays && P.overlays.entry) || []) prism(tri3, [[ex - 1300, ey - 900], [ex + 1300, ey - 900], [ex, ey + 1300]], H.top + 0.02, H.top + 0.06, null);
+    G.marks.add(mesh(tri3, new T.MeshBasicMaterial({ color: 0xc40000, side: T.DoubleSide })));
     G.base.add(lines(INK_B, 0x2a2a2a, 0.75)); G.walls.add(lines(INK_W, 0x2a2a2a, 0.75)); G.facade.add(lines(INK_F, 0x2a2a2a, 0.75));
     G.furniture.add(lines(INK2, 0x6b5a45, 0.45));
     const gl = lines(GINK, 0x45367a, 0.7); gl.renderOrder = 4; G.glass.add(gl);
