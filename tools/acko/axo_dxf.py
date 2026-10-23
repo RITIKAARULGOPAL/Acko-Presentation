@@ -237,11 +237,16 @@ def main(out_dir):
     # the slab: the floor ACKO occupies (the neighbourhoods, the deck's spaces, the toolkit's rooms: cores, common areas,
     # terrace), closed up and filled; the rest of the building's floor (the hotel rooms' band) becomes plain grey masses
     rooms = json.load(open(os.path.join(out_dir, "rooms.json"), encoding="utf-8"))["spaces"]
+    # a drawing with named layers (AC_*): its out-of-scope band is "not in contract", and an outline bigger than the floor is a
+    # block's frame on a layer, not a space
+    nic = lambda sp: sp["name"] in ("Not in contract", "Out Of Scope") or sp.get("layer") == "AC_OUT_OF_SCOPE"
+    named = any(str(sp.get("layer", "")).startswith("AC_") for sp in rooms)
+    rooms = [sp for sp in rooms if sp.get("m2", 0) < 6000 and not (named and str(sp.get("layer", "")).startswith("AC_") and sp["name"] != "Terrace")]
     terrace = [q for s in rooms if s["name"] == "Terrace" for r in rings_of_d(s["d"]) for q in valid(r)]
     js = open(os.path.join(ROOT, "data", "plan-dxf.js"), encoding="utf-8").read()
     P = json.loads(js[js.index("{"):js.rindex("}") + 1])
     occ = [q for z in P["zones"] for r in rings_of_d(z["zone"]) for q in valid(r)]
-    occ += [q for sp in rooms if sp["name"] != "Not in contract" for r in rings_of_d(sp["d"]) for q in valid(r)]
+    occ += [q for sp in rooms if not nic(sp) for r in rings_of_d(sp["d"]) for q in valid(r)]
     occ += [q for sp in P["spaces"] if sp["type"] != "Not in contract" for r in rings_of_d(sp["d"]) for q in valid(r)]
     u = unary_union([q.buffer(1500) for q in occ]).buffer(-1500)
     used = [q for z in P["zones"] for r in rings_of_d(z["zone"]) for q in valid(r)]
@@ -319,9 +324,9 @@ def main(out_dir):
             cand = [s for s in P["spaces"] if s["type"] == t and lo <= s["x"] <= hi]
             if cand:
                 s = max(cand, key=lambda s: s["m2"]); got.append([NAME[t], round(s["x"]), round(s["y"])])
-        for tp in terrace:
-            c_ = tp.representative_point()
-            if lo <= c_.x <= hi: got.insert(1, ["Terrace", round(c_.x), round(c_.y)])
+        tps = [tp for tp in terrace if lo <= tp.representative_point().x <= hi]
+        if tps:                                                # one call-out per terrace in view (a terrace drawn as several outlines)
+            c_ = max(tps, key=lambda q: q.area).representative_point(); got.insert(1, ["Terrace", round(c_.x), round(c_.y)])
         for z in P["zones"]:
             if lo <= z["x"] <= hi: got.append([f"Workhall · {z['name']}", round(z["x"]), round(z["y"])])
         labels[b] = got[:9]

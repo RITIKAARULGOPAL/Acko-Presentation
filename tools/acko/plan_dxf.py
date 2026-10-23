@@ -71,7 +71,10 @@ TYPE_MIN = {"Phone booth": 0.8, "Quick sprint": 2.4, "Collaboration huddle": 12,
             "Coffee corner": 4, "Reception": 8, "Cafeteria": 50, "Collab": 10, "Pantry": 2}
 # the legend's colours for what it doesn't list (slide 53 predates these rooms)
 EXTRA_COLOURS = [("Boardroom", "D2CCE2"), ("Medical room", "D6E4E6"), ("Nap room", "E3DEEE"), ("Mail room", "E2DED6"),
-                 ("Store room", "E2DED6"), ("Not in contract", "D4D4D4"), ("Room", "E4E2DD")]
+                 ("Store room", "E2DED6"), ("Not in contract", "D4D4D4"), ("Room", "E4E2DD"),
+                 # the named-layer drawing's floors (22.10.26): the open floor, its corridors, entries, lobbies, terrace, washrooms
+                 ("Workhall", "E9E9E8"), ("Corridor", "EFEEEB"), ("Entry", "EAE6DF"), ("Lift lobby", "E6E3EE"),
+                 ("Terrace", "D2E3C8"), ("Washroom", "DEDEDE")]
 NOISE = r"[\d\s.-]+|DT|SMR\d+|MHS|ACD|FHS|PUNCH BAG|SWING CHAIR|DIGITAL SCREEN|COMMUNITY TABLE|1500MM WIDE CORRIDOR|ACD CAN BE PROVIDED HERE|SEATING AND SWING"
 
 
@@ -220,117 +223,142 @@ def main(tk, dxf_path):
     walk(msp)
     print(f"egress paths: {len(egress)}", collections.Counter(e["band"] for e in egress))
 
-    # ---- spaces: each room label in the room its walls enclose ----
-    import faces as FC
-    from shapely.strtree import STRtree
-    svg = open(full, encoding="utf-8").read()
-    rings_of = lambda d: [pts for part in re.findall(r"M([^M]+)", d)
-                          for nums in [list(map(float, re.findall(r"-?\d+(?:\.\d+)?", part)))]
-                          for pts in [[(nums[i], nums[i + 1]) for i in range(0, len(nums) - 1, 2)]] if len(pts) > 2]
-    zone_polys = [Polygon(r).buffer(0) for t in json.load(open(os.path.join(tk, "teams.json")))["teams"] for r in rings_of(t["zone"])]
-    room_polys = [Polygon(r).buffer(0) for sp in json.load(open(os.path.join(tk, "rooms.json"), encoding="utf-8"))["spaces"]
-                  if sp["name"] != "Not in contract" for r in rings_of(sp["d"])]
-    plate = FC.floor_plate(zone_polys, room_polys)                    # the neighbourhoods and the toolkit's rooms: the floor
-    lines, ndoors = FC.partition_lines(svg, plate)                    # its outline as the outside wall
-    LV = FC.levels(lines)
-    ltree = STRtree(lines)
-    print(f"partition lines {len(lines)} ({ndoors} doorways shut, the floor plate {plate.area / 1e6:.0f} m2 as the outside wall); "
-          "faces " + ", ".join(f"{g} mm: {len(fs)}" for g, fs, _ in LV))
-    # the previous drawing's spaces (Option 02A, snapped to its walls), kept once in tools/_work/plan/prev-spaces.json so re-runs
-    # compare against the same reference: their areas cap a leaky face, their outlines stand in for open-plan labels with none
-    prev, keep = {}, os.path.join(WORK, "prev-spaces.json")
-    try:
-        if not os.path.exists(keep):
-            pj = open(os.path.join(ROOT, "data", "plan-dxf.js"), encoding="utf-8").read()
-            json.dump(json.loads(pj[pj.index("{"):pj.rindex("}") + 1])["spaces"], open(keep, "w", encoding="utf-8"))
-        for sp in json.load(open(keep, encoding="utf-8")):
-            prev.setdefault(sp["name"].upper(), []).append(sp)
-    except Exception:
-        pass
-    rooms, unplaced, carried = {}, [], []
-    for t, x, y, ins in labels:
-        typ = next((n for n, rx in BY_LABEL if re.search(rx, t, re.I)), None)
-        # the largest a room of its kind can be (m2), and no more than 1.6x what the same room measured in the previous build: a
-        # face bigger than that has leaked through a gap, so the next (wider-bridging) level is tried, else the previous outline
-        hi = TYPE_CAP.get(typ, 200) * 1e6
-        same = prev.get(re.sub(r"\s*-\s*", " - ", title(t)).upper(), [])
-        old = min(same, key=lambda q: (q["x"] - x) ** 2 + (q["y"] - y) ** 2) if same else None   # the same-named room nearest this label
-        if old is not None and ((old["x"] - x) ** 2 + (old["y"] - y) ** 2) > 15000 ** 2: old = None
-        if old is not None and old.get("m2", 0) >= TYPE_MIN.get(typ, 0.8): hi = min(hi, max(old["m2"] * 1.6, old["m2"] + 4) * 1e6)
-        pax = re.search(r"(\d+)\s*PAX", t, re.I)
-        lo = max(TYPE_MIN.get(typ, 0.8), 0.9 * int(pax.group(1)) if pax else 0) * 1e6     # a table is never the room
-        poly = gap = None
-        for pt in ((x, y), ins):
-            poly, gap = FC.room_at(pt, LV, lo=lo, hi=max(hi, lo * 1.5))
-            if poly is not None: break
-        if poly is None:
-            if old is not None:
-                rings = [[tuple(map(float, q.split())) for q in part.split("L")] for part in re.findall(r"M([^Z]+)Z", old["d"])]
-                poly = unary_union([Polygon(r).buffer(0) for r in rings if len(r) > 2]); gap = "prev"
-                if not poly.buffer(300).contains(Point(x, y)):     # the same name somewhere else in the old plan: not this room
-                    unplaced.append(f"{t} (previous outline elsewhere)"); continue
-                # how well the carried outline sits on the new drawing's walls: its vertices' median distance to a partition line
-                ds = sorted(min((lines[j].distance(Point(c)) for j in ltree.query(Point(c).buffer(1500))), default=1500)
-                            for g_ in (poly.geoms if hasattr(poly, "geoms") else [poly]) for c in list(g_.exterior.coords)[::2])
-                # an open-plan room has open sides with no wall near them: half its edge on the new walls is enough; less, and
-                # that part of the plan changed (no outline beats a wrong one)
-                on = sum(1 for v in ds if v <= 250) / max(len(ds), 1)
-                if typ in OPEN_PLAN and on < 0.5:     # an open-plan area: its old outline, trimmed to the open floor it's in
-                    big = [fs[i] for g_, fs, tr_ in LV[:1] for i in tr_.query(Point(x, y)) if fs[i].contains(Point(x, y))]
-                    if big:
-                        poly = poly.intersection(big[0]).buffer(0); on = 1.0
-                if on < 0.5:
-                    unplaced.append(f"{t} (previous outline: {on:.0%} of it on the new walls)"); continue
-                carried.append(f"{t} ({on:.0%} on the walls)")
-        if poly is None:
-            unplaced.append(t); continue
-        key = (round(poly.area), round(poly.bounds[0]), round(poly.bounds[1]))
-        r = rooms.setdefault(key, dict(poly=poly, labels=[], gap=gap))
-        r["labels"].append((t, x, y))
-    for rj in json.load(open(os.path.join(tk, "rooms.json"), encoding="utf-8"))["spaces"]:
-        if rj["name"] == "Not in contract":
-            for part in re.findall(r"M([^M]+)", rj["d"]):
-                nums = list(map(float, re.findall(r"-?\d+(?:\.\d+)?", part)))
-                pts = [(nums[i], nums[i + 1]) for i in range(0, len(nums) - 1, 2)]
-                if len(pts) > 2:
-                    g = Polygon(pts).buffer(0)
-                    rooms[("nic", round(g.area))] = dict(poly=g, labels=[], gap="nic", typ="Not in contract")
-    out_spaces = []
+    # ---- a drawing with its spaces on named layers (AC_*: the 22.10.26 drawing): the spaces, neighbourhoods and workstation
+    # types come straight from the layers (tools/acko/named_layers.py); otherwise each room label is snapped into its walls ----
+    import named_layers as NL
+    named = any(str(sp.get("layer", "")).startswith("AC_") for sp in json.load(open(os.path.join(tk, "rooms.json"), encoding="utf-8"))["spaces"])
+    prev_tk = os.path.join(os.path.dirname(tk), "tf2110")          # the previous drawing: its neighbourhood numbers and egress paths
+    shift, types = (0.0, 0.0, 1.0), []
     COL = dict(LEGEND + EXTRA_COLOURS)
     COL.setdefault("Pantry", COL.get("Cafeteria", "E4E2DD"))         # the cafeteria's back of house, in its colour
-    for i, r in enumerate(sorted(rooms.values(), key=lambda r: (r["poly"].centroid.x, r["poly"].centroid.y))):
-        names = list(dict.fromkeys(re.sub(r"\s*-\s*", " - ", title(t)) for t, x, y in r["labels"]))
-        typ = r.get("typ") or next((n for n, rx in BY_LABEL for t, x, y in r["labels"] if re.search(rx, t, re.I)), None) or "Room"
-        if typ == "Cafeteria" and not any(re.search(r"CAFE", t, re.I) for t, x, y in r["labels"]):
-            names = ["Cafeteria"]          # the dining floor, labelled only by its counters (heating station, waste disposal)
-        at = (r["labels"][0][1], r["labels"][0][2]) if r["labels"] else r["poly"].representative_point().coords[0]
-        if not r["poly"].buffer(300).contains(Point(at)): at = r["poly"].representative_point().coords[0]
-        g = r["poly"].simplify(10)
-        out_spaces.append(dict(id=f"r{i + 1}", type=typ, name=" / ".join(names) or typ, colour="#" + COL.get(typ, "E4E2DD"),
-                               m2=round(g.area / 1e6, 1), x=round(at[0]), y=round(at[1]), d=d_of(g)))
-    print(f"spaces: {len(out_spaces)}", collections.Counter(s["type"] for s in out_spaces).most_common())
-    print(f"by gap: {collections.Counter(str(r['gap']) for r in rooms.values())}; carried from the previous build: {carried}")
-    print("labels not placed:", unplaced)
-    check_spaces(lines, out_spaces, crop)
+    if named:
+        shift = NL.frame_shift(tk, prev_tk) if os.path.exists(os.path.join(prev_tk, "full.svg")) else (0.0, 0.0, 0.0)
+        print(f"frame check against the previous drawing: shift {shift[0]:.0f}, {shift[1]:.0f} mm (response {shift[2]:.2f})")
+        out_spaces = NL.spaces(tk, labels, COL, TYPE_CAP)
+        print(f"spaces: {len(out_spaces)}", collections.Counter(sp["type"] for sp in out_spaces).most_common())
+        types = NL.types(tk)
+        print("workstation types:", [(t["name"], len(t["uses"])) for t in types])
+        import faces as FC
+        check_spaces(FC.partition_lines(open(full, encoding="utf-8").read())[0], out_spaces, crop)
+    else:
+        # ---- spaces: each room label in the room its walls enclose ----
+        import faces as FC
+        from shapely.strtree import STRtree
+        svg = open(full, encoding="utf-8").read()
+        rings_of = lambda d: [pts for part in re.findall(r"M([^M]+)", d)
+                              for nums in [list(map(float, re.findall(r"-?\d+(?:\.\d+)?", part)))]
+                              for pts in [[(nums[i], nums[i + 1]) for i in range(0, len(nums) - 1, 2)]] if len(pts) > 2]
+        zone_polys = [Polygon(r).buffer(0) for t in json.load(open(os.path.join(tk, "teams.json")))["teams"] for r in rings_of(t["zone"])]
+        room_polys = [Polygon(r).buffer(0) for sp in json.load(open(os.path.join(tk, "rooms.json"), encoding="utf-8"))["spaces"]
+                      if sp["name"] != "Not in contract" for r in rings_of(sp["d"])]
+        plate = FC.floor_plate(zone_polys, room_polys)                    # the neighbourhoods and the toolkit's rooms: the floor
+        lines, ndoors = FC.partition_lines(svg, plate)                    # its outline as the outside wall
+        LV = FC.levels(lines)
+        ltree = STRtree(lines)
+        print(f"partition lines {len(lines)} ({ndoors} doorways shut, the floor plate {plate.area / 1e6:.0f} m2 as the outside wall); "
+              "faces " + ", ".join(f"{g} mm: {len(fs)}" for g, fs, _ in LV))
+        # the previous drawing's spaces (Option 02A, snapped to its walls), kept once in tools/_work/plan/prev-spaces.json so re-runs
+        # compare against the same reference: their areas cap a leaky face, their outlines stand in for open-plan labels with none
+        prev, keep = {}, os.path.join(WORK, "prev-spaces.json")
+        try:
+            if not os.path.exists(keep):
+                pj = open(os.path.join(ROOT, "data", "plan-dxf.js"), encoding="utf-8").read()
+                json.dump(json.loads(pj[pj.index("{"):pj.rindex("}") + 1])["spaces"], open(keep, "w", encoding="utf-8"))
+            for sp in json.load(open(keep, encoding="utf-8")):
+                prev.setdefault(sp["name"].upper(), []).append(sp)
+        except Exception:
+            pass
+        rooms, unplaced, carried = {}, [], []
+        for t, x, y, ins in labels:
+            typ = next((n for n, rx in BY_LABEL if re.search(rx, t, re.I)), None)
+            # the largest a room of its kind can be (m2), and no more than 1.6x what the same room measured in the previous build: a
+            # face bigger than that has leaked through a gap, so the next (wider-bridging) level is tried, else the previous outline
+            hi = TYPE_CAP.get(typ, 200) * 1e6
+            same = prev.get(re.sub(r"\s*-\s*", " - ", title(t)).upper(), [])
+            old = min(same, key=lambda q: (q["x"] - x) ** 2 + (q["y"] - y) ** 2) if same else None   # the same-named room nearest this label
+            if old is not None and ((old["x"] - x) ** 2 + (old["y"] - y) ** 2) > 15000 ** 2: old = None
+            if old is not None and old.get("m2", 0) >= TYPE_MIN.get(typ, 0.8): hi = min(hi, max(old["m2"] * 1.6, old["m2"] + 4) * 1e6)
+            pax = re.search(r"(\d+)\s*PAX", t, re.I)
+            lo = max(TYPE_MIN.get(typ, 0.8), 0.9 * int(pax.group(1)) if pax else 0) * 1e6     # a table is never the room
+            poly = gap = None
+            for pt in ((x, y), ins):
+                poly, gap = FC.room_at(pt, LV, lo=lo, hi=max(hi, lo * 1.5))
+                if poly is not None: break
+            if poly is None:
+                if old is not None:
+                    rings = [[tuple(map(float, q.split())) for q in part.split("L")] for part in re.findall(r"M([^Z]+)Z", old["d"])]
+                    poly = unary_union([Polygon(r).buffer(0) for r in rings if len(r) > 2]); gap = "prev"
+                    if not poly.buffer(300).contains(Point(x, y)):     # the same name somewhere else in the old plan: not this room
+                        unplaced.append(f"{t} (previous outline elsewhere)"); continue
+                    # how well the carried outline sits on the new drawing's walls: its vertices' median distance to a partition line
+                    ds = sorted(min((lines[j].distance(Point(c)) for j in ltree.query(Point(c).buffer(1500))), default=1500)
+                                for g_ in (poly.geoms if hasattr(poly, "geoms") else [poly]) for c in list(g_.exterior.coords)[::2])
+                    # an open-plan room has open sides with no wall near them: half its edge on the new walls is enough; less, and
+                    # that part of the plan changed (no outline beats a wrong one)
+                    on = sum(1 for v in ds if v <= 250) / max(len(ds), 1)
+                    if typ in OPEN_PLAN and on < 0.5:     # an open-plan area: its old outline, trimmed to the open floor it's in
+                        big = [fs[i] for g_, fs, tr_ in LV[:1] for i in tr_.query(Point(x, y)) if fs[i].contains(Point(x, y))]
+                        if big:
+                            poly = poly.intersection(big[0]).buffer(0); on = 1.0
+                    if on < 0.5:
+                        unplaced.append(f"{t} (previous outline: {on:.0%} of it on the new walls)"); continue
+                    carried.append(f"{t} ({on:.0%} on the walls)")
+            if poly is None:
+                unplaced.append(t); continue
+            key = (round(poly.area), round(poly.bounds[0]), round(poly.bounds[1]))
+            r = rooms.setdefault(key, dict(poly=poly, labels=[], gap=gap))
+            r["labels"].append((t, x, y))
+        for rj in json.load(open(os.path.join(tk, "rooms.json"), encoding="utf-8"))["spaces"]:
+            if rj["name"] == "Not in contract":
+                for part in re.findall(r"M([^M]+)", rj["d"]):
+                    nums = list(map(float, re.findall(r"-?\d+(?:\.\d+)?", part)))
+                    pts = [(nums[i], nums[i + 1]) for i in range(0, len(nums) - 1, 2)]
+                    if len(pts) > 2:
+                        g = Polygon(pts).buffer(0)
+                        rooms[("nic", round(g.area))] = dict(poly=g, labels=[], gap="nic", typ="Not in contract")
+        out_spaces = []
+        for i, r in enumerate(sorted(rooms.values(), key=lambda r: (r["poly"].centroid.x, r["poly"].centroid.y))):
+            names = list(dict.fromkeys(re.sub(r"\s*-\s*", " - ", title(t)) for t, x, y in r["labels"]))
+            typ = r.get("typ") or next((n for n, rx in BY_LABEL for t, x, y in r["labels"] if re.search(rx, t, re.I)), None) or "Room"
+            if typ == "Cafeteria" and not any(re.search(r"CAFE", t, re.I) for t, x, y in r["labels"]):
+                names = ["Cafeteria"]          # the dining floor, labelled only by its counters (heating station, waste disposal)
+            at = (r["labels"][0][1], r["labels"][0][2]) if r["labels"] else r["poly"].representative_point().coords[0]
+            if not r["poly"].buffer(300).contains(Point(at)): at = r["poly"].representative_point().coords[0]
+            g = r["poly"].simplify(10)
+            out_spaces.append(dict(id=f"r{i + 1}", type=typ, name=" / ".join(names) or typ, colour="#" + COL.get(typ, "E4E2DD"),
+                                   m2=round(g.area / 1e6, 1), x=round(at[0]), y=round(at[1]), d=d_of(g)))
+        print(f"spaces: {len(out_spaces)}", collections.Counter(s["type"] for s in out_spaces).most_common())
+        print(f"by gap: {collections.Counter(str(r['gap']) for r in rooms.values())}; carried from the previous build: {carried}")
+        print("labels not placed:", unplaced)
+        check_spaces(lines, out_spaces, crop)
 
-    # ---- neighbourhoods ----
-    tj = json.load(open(os.path.join(tk, "teams.json")))
-    zones = [dict(id=t["id"], n=re.sub(r"\D", "", t["name"]) or t["name"], name=t["name"], seats=t["seats"], m2=t["m2"],
-                  x=t["x"], y=t["y"], zone=t["zone"], desks=t["desks"]) for t in tj["teams"]]
-    zones.sort(key=lambda z: z["n"])
-    print("zones:", [(z["n"], z["seats"]) for z in zones], "total", sum(z["seats"] for z in zones))
-    # each neighbourhood's box (for the zoom) and its occupancy chart: the deck's slide-61 rows, for what lies inside it
-    for z in zones:
-        rings = [[tuple(map(float, q.split())) for q in part.split("L")] for part in re.findall(r"M([^Z]+)Z", z["zone"])]
-        g = unary_union([Polygon(r).buffer(0) for r in rings if len(r) > 2])
-        z["box"] = [round(v) for v in g.bounds]
-        z["occ"] = occupancy(z, g, out_spaces)
-        print(f"  {z['name']}: " + ", ".join(f"{a} {n}" for grp, a, n in z["occ"]))
+    if named:
+        zones = NL.zones(tk, prev_tk, shift, (OX, OY))
+        for z in zones:
+            g = NL.poly_of(z["zone"])
+            z["box"] = [round(v) for v in g.bounds]
+            z["occ"] = occupancy(z, g, out_spaces)
+            print(f"  {z['name']} (overlap with the old zone {z['overlap']:.0%}): {z['seats']} seats · " + ", ".join(f"{a} {n}" for grp, a, n in z["occ"][1:]))
+        print("zones total", sum(z["seats"] for z in zones))
+    else:
+        # ---- neighbourhoods ----
+        tj = json.load(open(os.path.join(tk, "teams.json")))
+        zones = [dict(id=t["id"], n=re.sub(r"\D", "", t["name"]) or t["name"], name=t["name"], seats=t["seats"], m2=t["m2"],
+                      x=t["x"], y=t["y"], zone=t["zone"], desks=t["desks"]) for t in tj["teams"]]
+        zones.sort(key=lambda z: z["n"])
+        print("zones:", [(z["n"], z["seats"]) for z in zones], "total", sum(z["seats"] for z in zones))
+        # each neighbourhood's box (for the zoom) and its occupancy chart: the deck's slide-61 rows, for what lies inside it
+        for z in zones:
+            rings = [[tuple(map(float, q.split())) for q in part.split("L")] for part in re.findall(r"M([^Z]+)Z", z["zone"])]
+            g = unary_union([Polygon(r).buffer(0) for r in rings if len(r) > 2])
+            z["box"] = [round(v) for v in g.bounds]
+            z["occ"] = occupancy(z, g, out_spaces)
+            print(f"  {z['name']}: " + ", ".join(f"{a} {n}" for grp, a, n in z["occ"]))
 
     # ---- the deck's own marks, onto the DXF ----
     dp = open(os.path.join(ROOT, "data", "deck-plan.js"), encoding="utf-8").read()
     D = json.loads(dp[dp.index("{"):dp.rindex("}") + 1])
-    f2s = lambda fx, fy: tuple(round(v) for v in world_to_svg(*frame_to_world(fx, fy)))
+    f2s = lambda fx, fy: (lambda w: tuple(round(v) for v in world_to_svg(w[0] + shift[0], w[1] + shift[1])))(frame_to_world(fx, fy))
     blow = {}
     for k, (x0, y0, x1, y1) in D["blow"].items():
         (ax, ay), (bx, by) = f2s(x0, y0), f2s(x1, y1)
@@ -342,9 +370,30 @@ def main(tk, dxf_path):
                     entry=[list(f2s(*e)) for e in D["entry"]],
                     arrival=["M" + "L".join(f"{x} {y}" for x, y in (f2s(*p) for p in n["pts"])) + "Z" for n in D["nb"] if n["c"].upper() == "#0000FF"])
 
+    if named:
+        # no egress layer in this drawing: the previous drawing's paths (kept once in world coordinates), when the frames line
+        # up (a clear wall match); the arrival zones are the drawing's own lift lobbies
+        keep = os.path.join(WORK, "prev-egress-world.json")
+        if not os.path.exists(keep):
+            pj = open(os.path.join(ROOT, "data", "plan-dxf.js"), encoding="utf-8").read()
+            old = json.loads(pj[pj.index("{"):pj.rindex("}") + 1])
+            head0 = open(os.path.join(prev_tk, "full.svg"), encoding="utf-8").read(600)
+            pox = float(re.search(r'data-ox="(-?[\d.]+)"', head0).group(1)); poy = float(re.search(r'data-oy="(-?[\d.]+)"', head0).group(1))
+            json.dump([dict(band=e["band"], m=e["m"], pts=[(x + pox, poy - y) for x, y in (tuple(map(float, q.split())) for q in e["d"][1:].split("L"))])
+                       for e in old.get("egress", [])], open(keep, "w"))
+        if not egress and shift[2] > 0.3:                  # a clear wall match: the two drawings line up (a CAD move is fine)
+            for e in json.load(open(keep)):
+                pts = [world_to_svg(x + shift[0], y + shift[1]) for x, y in e["pts"]]
+                egress.append(dict(band=e["band"], m=e["m"], d="M" + "L".join(f"{round(x)} {round(y)}" for x, y in pts)))
+            print(f"egress: {len(egress)} paths carried over from the previous drawing (shifted {shift[0]:.0f}, {shift[1]:.0f} mm)")
+        elif not egress:
+            print("egress: none (no egress layer, and the previous drawing doesn't line up)")
+        lobbies = [sp["d"] for sp in out_spaces if sp["type"] == "Lift lobby"]
+        if lobbies:
+            overlays["arrival"] = lobbies
     data = dict(source=os.path.basename(dxf_path), built=time.strftime("%Y-%m-%d %H:%M"), viewBox=crop,
                 levels=[dict(ppm=p, src=f"assets/img/plan-dxf-{p}.webp") for p in LEVELS], floor=None,
-                spaces=out_spaces, zones=zones, egress=egress, overlays=overlays)
+                spaces=out_spaces, zones=zones, egress=egress, overlays=overlays, types=types)
     with open(os.path.join(ROOT, "data", "plan-dxf.js"), "w", encoding="utf-8") as f:
         f.write(f"/* generated by tools/acko/plan_dxf.py from the DXF plan toolkit's output for {os.path.basename(dxf_path)}: don't hand-edit */\n")
         f.write("window.PLAN_DXF = " + json.dumps(data, separators=(",", ":"), ensure_ascii=False) + ";\n")
