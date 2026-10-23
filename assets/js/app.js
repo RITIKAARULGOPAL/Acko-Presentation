@@ -343,7 +343,7 @@
       `<g class="dx-fire">${O.fire.map((f) => `<line x1="${f[0]}" y1="${f[1]}" x2="${f[2]}" y2="${f[3]}"/>`).join("")}</g>` +
       `<g class="dx-entry">${O.entry.map((e) => `<path d="${tri(e[0], e[1])}"/>`).join("")}</g>` +
       `<g class="dx-blow">${Object.entries(O.blow).map(([k, r]) => `<text x="${r[0] + r[2] / 2}" y="${r[1] + r[3] + 2600}">Blown Up ${k}</text>`).join("")}</g>` +
-      `<g class="dx-lab">${P.zones.map((z) => `<text data-nb="${z.n}" x="${z.x}" y="${z.y}"><tspan class="n">${z.n}</tspan><tspan class="s" dx="500" dy="-1500">${z.seats}</tspan></text>`).join("")}</g>`);
+      `<g class="dx-lab">${P.zones.map((z) => `<text data-nb="${z.n}" x="${z.x}" y="${z.y}"><tspan class="n">${z.n}</tspan><tspan class="s" dx="500" dy="-1500">${z.seats}</tspan>${z.title ? `<tspan class="t" x="${z.x}" dy="4200">${z.title}</tspan>` : ""}</text>`).join("")}</g>`);
     // the picture sharp enough for the zoom (screen px per metre, times the device's pixel ratio)
     // the DXF's own linework (data/plan-vec.js) as vector tiles, just above the picture and under the hovers and marks: drawn
     // as the toolkit's viewer draws it (.ph-plan: non-scaling strokes, its colours) once the zoom is past the sharpest picture
@@ -441,7 +441,10 @@
   function planOff() {
     document.body.classList.remove("dp-on"); DP.onZone = null;
     if (DP.root) { PLAN_LAYERS.forEach((k) => DP.root.classList.remove("show-" + k)); markZone(null); DP.root.classList.remove("focus"); DP.ph.clear(); }
+    if (DP.layers) DP.layers.off();
   }
+  // the layout's value-addition layers (assets/js/plan-layers.js), mounted on the deck plan the first time a slide asks
+  function planLayers() { deckPlan(); return DP.layers || (DP.layers = window.PlanLayers ? window.PlanLayers.mount({ ph: DP.ph, host: DP.root, P: DP.P, A: window.AXO_DXF || { blocks: {}, plants: [] } }) : null); }
   // one neighbourhood picked out: the plan flies to it (inside disp, frame px), the others dim, its rooms can be hovered;
   // focusZone(null) flies back to the beat's view
   function markZone(z) {
@@ -621,8 +624,8 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planHover, planReset, planHome, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
-            get zone() { return DP.zone; }, get hoverOn() { return HOVER; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planHover, planReset, planHome, layers: planLayers, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
+            get zone() { return DP.zone; }, get view() { return DP.ph ? DP.ph.view : null; }, get hoverOn() { return HOVER; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {
     if (!document.getElementById(id)) continue;

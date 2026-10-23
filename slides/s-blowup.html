@@ -15,15 +15,22 @@
   data-notes="The same plan, closer. X: the west end — reception, the café for 178, training, the Acker Garden at the curved corner. Y: the middle — departmental rooms and huddles along the corridor, and the fire compartmentalisation line. Z: the east end — the neighbourhoods around the second arrival, executive cabins and the hatchery. Top right: Spaces shows the spaces in their legend colours, Neighbourhoods their outlines (hover one for its seats), Hover the names on hover (as on the layout), Fire egress the exit paths, Reset zoom flies back to the blow-up.">
   <div class="page">
     <div class="hdr"><b>Layout</b><span class="bl-sub">Space Planning - Option 02A | Blown Up X</span></div>
-    <img class="north" src="assets/img/north.webp" alt="North" style="left:89.5%;top:2.2%;width:2.6%">
-    <!-- the plan's tools, as on the layout: neighbourhoods on / off, fire egress on / off, reset zoom -->
-    <div class="ly-tools ui" style="right:11.5%;top:3.2%">
-      <button type="button" class="ly-tool ly-sp-btn"><i></i>Spaces</button>
-      <button type="button" class="ly-tool ly-nb-btn"><i></i>Neighbourhoods</button>
-      <button type="button" class="ly-tool ly-eg-btn"><i></i>Fire egress</button>
-      <button type="button" class="ly-tool ly-hv-btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5l8.5 5.2-3.9 1 2.3 3.9-1.6.9-2.3-3.9-2.8 2.8z"/></svg>Hover</button>
-      <button type="button" class="ly-tool ly-rs-btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset zoom</button>
+    <!-- the plan's tools, as on the layout (the shared template): measure, area, zoom, reset, hover; spaces, neighbourhoods, egress -->
+    <div class="lt-tools ui">
+      <button type="button" data-t="dist" title="Measure a distance (M)"><svg viewBox="0 0 16 16"><path d="M2 12L12 2M2 12l2 2M5 9l1.5 1.5M8 6l1.5 1.5M11 3l2 2"/></svg>Measure</button>
+      <button type="button" data-t="area" title="Measure an area (A)"><svg viewBox="0 0 16 16"><path d="M3 3h10v10H3z" stroke-dasharray="2 1.5"/></svg>Area</button>
+      <span class="sep"></span>
+      <button type="button" data-t="out" title="Zoom out">−</button>
+      <button type="button" data-t="in" title="Zoom in">+</button>
+      <button type="button" data-t="reset" title="Reset zoom"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset</button>
+      <span class="sep"></span>
+      <button type="button" data-t="hover" title="Names on hover"><svg viewBox="0 0 16 16"><path d="M4 2.5l8.5 5.2-3.9 1 2.3 3.9-1.6.9-2.3-3.9-2.8 2.8z" fill="currentColor" stroke="none"/></svg>Hover</button>
+      <button type="button" data-t="sp" title="Spaces in their colours"><svg viewBox="0 0 16 16"><path d="M2 3h5v5H2zM9 3h5v5H9zM2 10h12v3H2z"/></svg>Spaces</button>
+      <button type="button" data-t="nb" title="Neighbourhoods"><svg viewBox="0 0 16 16"><path d="M2 3h12v10H2z" stroke-dasharray="3 2"/></svg>Neighbourhoods</button>
+      <button type="button" data-t="eg" title="Fire egress"><svg viewBox="0 0 16 16"><path d="M2 12h5l3-8h4" stroke="#1c64b4"/></svg>Egress</button>
+      <img src="assets/img/north.webp" alt="North">
     </div>
+    <div class="lt-read"></div>
     <div class="bl-keys" style="left:1.8%;top:86%"><span data-k="X">Blown Up X</span><span data-k="Y">Blown Up Y</span><span data-k="Z">Blown Up Z</span></div>
     <div class="bl-fire" data-only="2" style="left:36%;top:86.4%"><i></i>Fire Compartmentalisation</div>
   </div>
@@ -34,43 +41,52 @@
 .bl-keys span.on { color: var(--purple); }
 .bl-fire { position: absolute; display: flex; align-items: center; gap: calc(var(--pt) * 6); font-size: calc(var(--pt) * 7); }
 .bl-fire i { width: calc(var(--pt) * 26); border-top: 2px dashed var(--maroon); }
-#s-blowup .ly-tools { display: flex; gap: calc(var(--pt) * 4); }
-#s-blowup .ly-tool { display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
-  border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
-  font: 600 calc(var(--pt) * 6.5) var(--body); white-space: nowrap; }
-#s-blowup .ly-tool i { width: calc(var(--pt) * 12); height: 3px; border-radius: 2px; }
-#s-blowup .ly-eg-btn i { background: linear-gradient(90deg, #2f9e44 50%, #f08c00 50%); }
-#s-blowup .ly-nb-btn i { background: linear-gradient(90deg, #B45F06 0 16.6%, #274E13 0 33.3%, #45818E 0 50%, #4A86E8 0 66.6%, #9900FF 0 83.3%, #FF00FF 0); }
-#s-blowup .ly-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-#s-blowup .ly-sp-btn i { width: calc(var(--pt) * 9); height: calc(var(--pt) * 6); border-radius: 1px; border: 1px solid rgba(0,0,0,.25);
-  background: linear-gradient(90deg, #D5CEED 0 33%, #CEDED1 0 66%, #C2BFBB 0); }
-#s-blowup .ly-tool:focus { outline: none; }   /* the arrow keys drive the slides, not these buttons */
-#s-blowup .ly-tool.on { background: #5222d0; color: #fff; border-color: #5222d0; }
-#s-blowup .ly-hv-btn svg { fill: currentColor; stroke: none; }
-#s-blowup .ly-rs-btn:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
 </style>
 <script>
 /* the blow-ups (deck slides 55–57): the same plan, the DXF's, flies into X, Y and Z (hover a space for its name and area);
-   the fire compartment line draws on Y; the tools, top right: Spaces (the legend colours), Neighbourhoods (outlines and seat hover; their big numbers stay
-   off at this zoom), Fire egress (the exit paths), Reset zoom (back to the blow-up) */
+   the fire compartment line draws on Y; the tools, top right, in the layout's template: Measure / Area (M, A, Esc), zoom, Reset,
+   Hover, Spaces (the legend colours), Neighbourhoods (outlines; their big numbers stay off at this zoom), Egress */
 ACKO.slide("s-blowup", ({ $, $$, plan }) => {
   const DISP = [38, 150, 1882, 880];
+  const zoomBy = (f) => { const v = plan.view; if (!v) return; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; plan.fitVb([cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f], 300); };
+  function measure(sc, m) {
+    const L = plan.layers(); if (!L) return;
+    const mode = L.measure.set(m, (t) => { $(".lt-read", sc).textContent = t; });
+    $$('.lt-tools [data-t="dist"], .lt-tools [data-t="area"]', sc).forEach((b) => b.classList.toggle("on", b.dataset.t === mode));
+  }
   return {
     enter(_, sc) {
-      const btn = $(".ly-eg-btn", sc); btn.onclick = () => btn.classList.toggle("on", plan.planEgress());
-      const nb = $(".ly-nb-btn", sc); nb.onclick = () => nb.classList.toggle("on", plan.planNb(undefined, false));
-      const sp = $(".ly-sp-btn", sc); sp.onclick = () => sp.classList.toggle("on", plan.planFill());
-      $(".ly-rs-btn", sc).onclick = () => plan.planReset();
-      const hv = $(".ly-hv-btn", sc); hv.classList.toggle("on", plan.hoverOn); hv.onclick = () => hv.classList.toggle("on", plan.planHover());
+      $$(".lt-tools button", sc).forEach((b) => (b.onclick = () => {
+        const t = b.dataset.t; b.blur();
+        if (t === "dist" || t === "area") measure(sc, t);
+        else if (t === "in") zoomBy(0.7); else if (t === "out") zoomBy(1 / 0.7);
+        else if (t === "reset") plan.planReset();
+        else if (t === "hover") b.classList.toggle("on", plan.planHover());
+        else if (t === "sp") b.classList.toggle("on", plan.planFill());
+        else if (t === "nb") b.classList.toggle("on", plan.planNb(undefined, false));
+        else if (t === "eg") b.classList.toggle("on", plan.planEgress());
+      }));
+      $('.lt-tools [data-t="hover"]', sc).classList.toggle("on", plan.hoverOn);
+      document.removeEventListener("keydown", sc._keys, true);
+      sc._keys = (e) => {
+        if (e.key === "m" || e.key === "M") { measure(sc, "dist"); e.stopImmediatePropagation(); return; }
+        if (e.key === "a" || e.key === "A") { measure(sc, "area"); e.stopImmediatePropagation(); return; }
+        const L = plan.layers();
+        if (e.key === "Escape" && L && L.measure.esc()) { if (!L.measure.mode) $$('.lt-tools [data-t="dist"], .lt-tools [data-t="area"]', sc).forEach((b) => b.classList.remove("on")); e.stopImmediatePropagation(); e.preventDefault(); }
+      };
+      document.addEventListener("keydown", sc._keys, true);
     },
     step(k, sc) {
       const key = ["X", "Y", "Z"][k - 1], b = plan.data.overlays.blow[key];
       plan.planOn(sc, { rooms: true, fire: key === "Y", entry: true, view: plan.vbFor([b[0], b[1], b[0] + b[2], b[1] + b[3]], DISP), ms: 1100 });
-      $(".ly-eg-btn", sc).classList.remove("on"); $(".ly-nb-btn", sc).classList.remove("on"); $(".ly-sp-btn", sc).classList.remove("on");
+      $$('.lt-tools [data-t="sp"], .lt-tools [data-t="nb"], .lt-tools [data-t="eg"]', sc).forEach((x) => x.classList.remove("on"));
       $(".bl-sub", sc).textContent = `Space Planning - Option 02A | Blown Up ${key}`;
-      $$(".bl-keys span", sc).forEach((b) => b.classList.toggle("on", b.dataset.k === key));
+      $$(".bl-keys span", sc).forEach((x) => x.classList.toggle("on", x.dataset.k === key));
     },
-    leave() { plan.planOff(); },
+    leave(_, sc) {
+      if (sc) { document.removeEventListener("keydown", sc._keys, true); $(".lt-read", sc).textContent = ""; $$('.lt-tools [data-t="dist"], .lt-tools [data-t="area"]', sc).forEach((b) => b.classList.remove("on")); }
+      plan.planOff();
+    },
   };
 });
 </script>
