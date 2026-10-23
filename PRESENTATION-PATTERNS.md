@@ -469,3 +469,60 @@ West, Middle and East fly an orthographic camera along it.
 - **Matching the PPT page:** screenshot headless Chrome at 1376×774 (`--virtual-time-budget=30000`), then compare ink boxes per region against her PPT screenshot (within 0.2%).
 - **Gotcha:** `tools/acko/make_value_slides.py` writes `slides/s-engage.html`; don't re-run it for s-engage.
 
+## 22. A dashed route drawn on, with marks that pop as it passes (slide 14 · Disorientation)
+**What (Ritika, 22 Oct):**
+- **The pick:** from `index-disorient.html` (six ways to show disorientation on the axo) she chose the Lost loop. From `index-lost.html` (six routes: zig-zag, knot, wrong turns, back and forth, meander, maze) she chose the **maze**.
+- **The beat:** from a desk at the far end, a maroon dashed route turns at right angles along the aisles into three dead ends (×) before the turn to the café, with a "?" at the middle turn and "≈ 230 m, and which way?".
+
+**How (`s-challenges.html`, beat 2):**
+- **A dashed line that stays dashed while it draws.** The kit's `drawPath` sets the dash array to the path's length, so a dashed style draws solid. Instead the dashed path sits under a mask holding the same path as a wide white stroke, and the mask's stroke is drawn on (dash offset per frame, sine in-out, 5.8 s).
+- **Marks timed by distance, not by clock:** each mark carries its share of the route (`data-at`), computed once from the route's polyline, and pops (`transform-box: fill-box` spring) when the eased draw passes it.
+- **The route and marks are fixed data.** Places were chosen in floor coordinates (u along the 245 m length, v across the ≈35 m width) and mapped with the slide's own frame: A 39,1029 · U 1359,−1014 · V 206,130. Corners are rounded 5 px, and the stubs run in and back on themselves.
+- **The comparison pages** are made by scratch `chl/make_dis.py` from `s-challenges.html`. They are one-beat slides joined with the deck's own `build(ids, out)`, so they use the same engine, axo and copy.
+- **The page as in the PPT** (Ritika: "for the slide's template follow the ppt"):
+  - **Each text and icon is placed at its own PPT box,** read from slide 14's XML (x, y, w, h; text centred in the box, 7.2 pt side inset). The italic Light body, bold numbers and bold italic title follow the PPT.
+  - **The header was hidden:** the axo is an opaque picture placed after `.hdr`, so the header gets `z-index: 2`.
+  - **No copyright on this page:** the PPT's picture covers that corner (`body[data-scene="s-challenges"] .hint`).
+  - **Removed at her mark:** the handwritten lines "≈ 230 m, and which way?" and "A campus that connects, not just accommodates."
+  - **Checked** by overlaying a PowerPoint COM export of slide 14.
+  - **Then only the PPT's words** (Ritika: "only retain the texts that is in the ppt"): the 245 m count-up and the maze's pin labels are gone (the pins stay as dots).
+  - **A fourth beat:** the PPT's own last line, "A campus that connects, not just accommodates.", in its box (Square Peg 24 pt, plum). Beat 4 keeps beat 3's route on screen: the b3 class is set for beats 3 and 4, and the route is drawn on 3 only.
+
+## 23. Matching a slide to its PPT page: wording, places, template
+**What (Ritika, 22 Oct):** "check if the template and alignment, wording of all these slides match the ppt slides" (slides 3, 4, 5, 10). Her rule on wording: **copy the PPT exactly**, slips included (for example "Workspace Aspiration", "in to", "That’s when i knew", "Strip,one").
+
+**How:**
+- **Read the PPT, not a picture of it** (scratch `chl/ppt_audit.py`): every text box's x, y, w, h, anchor and insets, and each run's text, size, bold/italic, colour and font, from `ppt/slides/slideN.xml`.
+  - **Mind groups:** a `grpSp` moves its children by `off − chOff`. On slide 5 the quote and its mark sit in a group 4.43% right and 1% down.
+  - **Mind defaults:** where a run has no `sz`, measure it in the export.
+- **Export the PPT page** with PowerPoint COM (`Slide.Export`, 1920 × 1080). Screenshot the HTML at the same size, and lay one over the other (HTML in red, PPT in green and blue): grey where they agree, yellow where only the HTML has ink, blue where only the PPT has.
+  - PowerPoint draws Figtree and Square Peg as Arial here (the fonts aren't installed for it), so compare positions, not glyphs.
+- **Place each text at its box:** absolute, `display: flex; flex-direction: column`, `justify-content` from the anchor (t / ctr / b), padding from the insets, size in `--pt`.
+  - Wrap mixed runs (`<b>`) in one `<span>`, or each run becomes its own flex item.
+  - Keep double spaces with `white-space: pre`.
+- **Template:** header words as on the page. The copyright or lockup is hidden where the page has none (slide 3 has no lockup, slide 14 no copyright), with `body[data-scene="<id>"] .lockup` or `.hint`.
+- **Check the wording mechanically:** every PPT text, whitespace-normalised, must appear in the slide's live text.
+- **Not done here:** the shared `.hdr` sits about 0.5% left of the PPT's header text box inset on every slide (`app.css`); a `Shared:` change if wanted.
+
+
+## 24. A floor built up in its renders' layers, straight from the DXF (slide 13 · Campus strategy)
+**What (Ritika, 22 Oct):** "use this layout to build the axo, also use these images as reference … do the layering of axos as per the images and ppt": the layout DXF `ACKO_BOUNDARY_HATCH_ALL_22_10_26.dxf` and twelve 3D renders (`axo_update/acko2A_model*.png`). Her answers: five clicks, one per caption; slide 13 only (58–60 stay on their model); the Loop's seven stops named on the employee's route.
+
+**The layering is the deck's GIF and the renders, one to one:**
+
+| Beat (the GIF's caption) | Renders | What happens |
+|---|---|---|
+| How it started | -02 | the whole floor as a white model; the entrances' maroon marks drop in |
+| Planning Acko's Neighbourhood | -01, 00 | six translucent volumes drop in, 01 Auto … 06 Home, with big numbers; the atriums (dark grey) and terraces; then their names along the edges |
+| Looping it all together | 01 → 07 | the volumes lift away, everything above the floor sinks and the model tints to colour (render 01: grey floor, lavender corridors, purple rooms, pale yellow café, olive terraces, columns, the grey band); then rooms, café, terraces, workstations, plants, façade rise in turn |
+| The Employee's Journey | 08 | red dashes grow out from both entrances (by distance along the route); each stop is named as they reach it |
+| The Client's Journey | 09 | workstations and plants sink, the red fades, blue dashes grow |
+
+**How:**
+- **Read the DXF directly** (`tools/acko/dxf_read.py`, a streaming group-code reader: blocks, nested inserts with their transforms, LWPOLYLINE bulges, arcs, circles, hatches, text). The drawing is made for this: each layer of the renders is one block, all inserted at one point; find each by what it holds, not by its random name.
+- **Furniture without the people:** furniture blocks draw seated people over chairs and desks. Table tops are the faces enclosed by the *straight* lines (a polyline mostly of long segments), bridging 110 mm breaks (CAD drops a desk's edge where a chair sits); closed outlines a table's size and shape count too. Chairs are the blobs of curvy drawing (a chair, or the person on it), one 0.56 m seat each, merged when closer than 0.42 m. Shapes once per block and scale, placed by each insert; each placement's group is the space it stands in.
+- **The routes come from the pictures:** fit the floor's affine (plan → render px) from the façade line to render 01's silhouette along each edge's normal (rms 5 px on a 19,942 px render); the same affine is an orthographic axo's, which gives the camera (θ −45°, 48° up). Dashes are the coloured blobs of dash size (people are bigger); chain each dash to the facing end of its nearest neighbour; join the chains where people break them; distance from the nearest entrance by Dijkstra; draw by that distance, so branches grow together.
+- **One model, two looks:** every material keeps a white and a colour; `M.tint(k)` lerps them. Each beat is a pure `pose(k, t)`: forward plays it, back shows its end, a click replays it.
+- **Labels stay off the copy:** stop names try above their dot (stepping past names already placed), then below, never over the title, paragraph or hand line (their text ranges, measured once fonts are in).
+- **Heights measured on the renders** (vertical px per mm from the camera): rooms' glass 2.45 m, columns 3.8, the grey band 3.7, façade 4.5.
+- **Marks where the deck's animation has them (her note, 23 Oct: "align the arrow and text like how it is placed in the ppt"):** the PPT's GIF is placed at its slide box (its picture box less the crop's padding), and each mark is measured on it in page px: the entrances (a maroon ▲, apex a little right of centre), the ten names (condensed bold italic capitals, each in its zone's tone), the numbers' centres and sizes. In the slide they're a table of page positions; at the home view each is back-projected along the camera's ray onto a level (names 3 m, atrium/terrace 1.5 m, arrows 4.5 m, numbers on the volumes' tops), so a drag or zoom still carries it with the model. Check by an overlay on the PPT frame (side-by-side crops at 2×): every mark within about 5 px.
