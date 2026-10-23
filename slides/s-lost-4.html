@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lost loop · 4 · Back and forth · ACKO slide s-lost-4</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-lost-4" data-part="2" data-title="Lost loop · 4 · Back and forth" data-steps="1" data-mins="0.5" data-beats="Disorientation"
+  data-notes="Path 4 of 6 for the Lost loop (slide 14, beat 2, Disorientation) — Back and forth: Ping-pong down the floor: on, back, on again, back again, on side-by-side aisles; a question at each turnaround.">
+  <div class="page">
+    <div class="hdr"><b>Design Strategy</b><span>What's our Challenge ?</span></div>
+    <div class="cl-axo" style="left:0;top:1%;width:89.8%;height:98.4%"></div>
+    <svg class="cl-svg at b2" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true" style="left:0;top:0;width:100%;height:100%">
+      <defs><clipPath id="cl-floors-lost-4"><path d="M39 1029L1398 15L1604 145L409 1053L39 1058Z"/></clipPath></defs>
+      <g class="cl-desks" clip-path="url(#cl-floors-lost-4)"></g>
+      <g class="cl-terrace"><path d="M566 856L628 811L670 841L608 886Z"/><path d="M1089 466L1154 417L1196 448L1130 495Z"/></g>
+      <defs class="dz-defs"></defs><g class="dz-paths"></g><g class="dz-marks"></g><g class="dz-pins"></g>
+    </svg>
+    <p class="cl-h">One vast floor. A thousand disconnected experiences.</p>
+    <div class="cl-c" data-step="1" style="left:1.8%;top:42.8%;width:30%"><b>Homogeneity</b><p>A repetitive, uninterrupted workstation layout creates a uniform environment with limited spatial identity.</p>
+      <span class="cl-n">01</span><img src="assets/img/chl-grid.webp" alt="" style="left:0;top:calc(var(--pt) * 46);height:calc(var(--pt) * 30)"></div>
+    <div class="cl-c" data-step="1" style="left:35.3%;top:73%;width:32%"><b>Disorientation</b><p>Amenities feel disconnected from work zones, increasing perceived distances and reducing spontaneous interaction.</p>
+      <span class="cl-n" style="left:calc(var(--pt) * 38);top:calc(var(--pt) * 44)">02</span><img src="assets/img/chl-compass.webp" alt="" style="left:0;top:calc(var(--pt) * 44);height:calc(var(--pt) * 28)"></div>
+    <div class="dz-chip">Path 4 of 6 · Back and forth</div>
+    <p class="dz-cap hand">≈ 230 m, and which way?</p>
+  </div>
+</section>
+<style>
+/* ---------- what's our challenge (slide 14) ---------- */
+.cl-axo { background: url(assets/img/challenge-axo.webp) 100% 0 / 111.4% 100% no-repeat; }
+.cl-svg { overflow: visible; }
+.cl-desks path { fill: #b9a6ea; opacity: 0; transition: opacity .5s var(--ease) var(--d); }
+.cl-svg.b1 .cl-desks path { opacity: .85; }
+.cl-svg.b2 .cl-desks path, .cl-svg.b3 .cl-desks path { opacity: .28; transition-delay: 0s; }
+.cl-terrace path { fill: #93c47d; opacity: .75; }
+.cl-far { opacity: 0; transition: opacity .6s var(--ease); }
+.cl-svg.b2 .cl-far { opacity: 1; }
+.cl-walk { fill: none; stroke: var(--maroon); stroke-width: 2.5; stroke-dasharray: 8 7; vector-effect: non-scaling-stroke; }
+.cl-pin circle { fill: var(--purple); stroke: #fff; stroke-width: 3; }
+.cl-pin.far circle { fill: var(--maroon); }
+.cl-pin text, .cl-km { font-family: var(--body); font-size: 20px; font-weight: 600; fill: #3b3550; paint-order: stroke; stroke: #fff; stroke-width: 5px; }
+.cl-km { font-size: 26px; fill: var(--maroon); }
+.cl-route { fill: none; stroke: var(--plum); stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; opacity: 0; }
+.cl-svg.b3 .cl-route { opacity: 1; }
+.cl-h { left: 1.8%; top: 14%; width: 63.5%; font-size: calc(var(--pt) * 16); font-style: italic; color: var(--mist); }
+.cl-c b { display: block; font-size: calc(var(--pt) * 9.5); font-weight: 600; color: var(--purple-2); }
+.cl-c p { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 8.2); font-weight: 300; line-height: 1.45; color: #555; }
+.cl-c img, .cl-n { position: absolute; }
+.cl-n { left: calc(var(--pt) * 52); top: calc(var(--pt) * 46); font-size: calc(var(--pt) * 32); font-weight: 400; color: var(--lavender); line-height: 1; }
+.cl-icons { display: flex; align-items: flex-end; gap: calc(var(--pt) * 10); margin-top: calc(var(--pt) * 8); }
+.cl-icons img { height: calc(var(--pt) * 24); width: auto; mix-blend-mode: multiply; }
+.cl-len { margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 9); color: var(--plum); font-weight: 600; }
+.cl-len span { font-family: var(--num); font-size: 1.6em; font-weight: 500; }
+.cl-hand { font-size: calc(var(--pt) * 26); color: var(--plum); }
+.cl-icons img { position: static; }
+/* ---------- Lost loop · 4 · Back and forth (a comparison slide, not in the deck) ---------- */
+#s-lost-4 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-lost-4 .dz-cap { left: 61%; top: 60%; width: 37%; font-size: calc(var(--pt) * 20); color: var(--plum); line-height: 1.1; }
+#s-lost-4 .dz-pin circle { fill: var(--purple); stroke: #fff; stroke-width: 3; }
+#s-lost-4 .dz-pin.far circle { fill: var(--maroon); }
+#s-lost-4 .dz-pin text { font-family: var(--body); font-size: 20px; font-weight: 600; fill: #3b3550; paint-order: stroke; stroke: #fff; stroke-width: 5px; }
+#s-lost-4 .dz-lost, #s-lost-4 .dz-mpath { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+#s-lost-4 .dz-lost { stroke: var(--maroon); stroke-width: 3; stroke-dasharray: 9 8; transition: opacity .7s var(--ease); }
+#s-lost-4 .dz-lost.try.faded { opacity: .3; }
+#s-lost-4 .dz-mpath { stroke: #fff; stroke-width: 14; }
+#s-lost-4 .dz-q circle { fill: #fff; stroke: var(--maroon); stroke-width: 2.5; }
+#s-lost-4 .dz-q text { font-family: var(--body); font-size: 26px; font-weight: 700; fill: var(--maroon); text-anchor: middle; }
+#s-lost-4 .dz-x path { stroke: var(--maroon); stroke-width: 3; stroke-linecap: round; }
+#s-lost-4 .dz-q { transform-box: fill-box; transform-origin: 50% 50%; transform: scale(0); opacity: 0; transition: transform .45s cubic-bezier(.3, 1.6, .5, 1), opacity .2s; }
+#s-lost-4 .dz-q.on { transform: none; opacity: 1; }
+#s-lost-4 .dz-q.on.faded { opacity: .45; }
+</style>
+<script>
+/* slide 14's beat 2, Disorientation: Lost loop · 4 · Back and forth. Path 4 of 6 for the Lost loop (slide 14, beat 2, Disorientation) — Back and forth: Ping-pong down the floor: on, back, on again, back again, on side-by-side aisles; a question at each turnaround. (A comparison slide; not in the deck.) */
+ACKO.slide("s-lost-4", ({ $, $$, plain, later, drawPath, inPoly, reduced }) => {
+  // the floor: the slide's own frame (u along the 245 m length, v across the ≈35 m width) → page px on the axo
+  const A = [39, 1029], U = [1359, -1014], V = [206, 130], LEN = 245, WID = 35, NS = "http://www.w3.org/2000/svg";
+  const F = (u, v) => [A[0] + U[0] * u + V[0] * v, A[1] + U[1] * u + V[1] * v];
+  const CORE = [[300, 842], [1095, 241], [1190, 303], [399, 916]];
+  const TERR = [[[556, 856], [628, 801], [680, 841], [608, 896]], [[1079, 466], [1154, 407], [1206, 448], [1130, 505]]];
+  const PLACE = { cafe: [0.172, 0.96], t1: [0.29, 0.88], t2: [0.678, 0.885], a1: [0.3, 0.671], a2: [0.683, 0.643], far: [0.963, 0.58] };
+  const S = { raf: [] };
+  const mk = (tag, at, parent) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (parent) parent.appendChild(e); return e; };
+  const stop = () => { S.raf.forEach(cancelAnimationFrame); S.raf = []; };
+  const loop = (fn) => { const t0 = performance.now(); const f = (now) => { if (fn(now - t0) !== false) S.raf.push(requestAnimationFrame(f)); }; S.raf.push(requestAnimationFrame(f)); };
+  const metres = (a, b) => Math.hypot((a[0] - b[0]) * LEN, (a[1] - b[1]) * WID);
+  // the desks, as on the slide: one uniform grid over the plate, minus the core and the terraces; each knows its floor place
+  function desks(g) {
+    if (g.childElementCount) return [...g.children];
+    const out = [], NU = 104, NV = 8, a = 0.62 / NU, b = 0.36 / NV;
+    for (let i = 0; i <= NU; i++) for (let j = 0; j < NV; j++) {
+      const u = i / NU, v = (j + 0.5) / NV, [x, y] = F(u, v);
+      if (inPoly([x, y], CORE) || TERR.some((t) => inPoly([x, y], t))) continue;
+      out.push(`<path data-u="${(u + a / 2).toFixed(4)}" data-v="${(v + b / 2).toFixed(4)}" style="--d:${Math.round(u * 1400)}ms" d="M${x.toFixed(1)} ${y.toFixed(1)}l${(U[0] * a).toFixed(1)} ${(U[1] * a).toFixed(1)}l${(V[0] * b).toFixed(1)} ${(V[1] * b).toFixed(1)}l${(-U[0] * a).toFixed(1)} ${(-U[1] * a).toFixed(1)}Z"/>`);
+    }
+    g.innerHTML = out.join(""); return [...g.children];
+  }
+  // a route through floor points, its corners rounded (r px)
+  function route(pts, r) {
+    const P = pts.map(([u, v]) => F(u, v)); let d = `M${P[0][0].toFixed(1)} ${P[0][1].toFixed(1)}`;
+    for (let i = 1; i < P.length; i++) {
+      if (i === P.length - 1) { d += `L${P[i][0].toFixed(1)} ${P[i][1].toFixed(1)}`; break; }
+      const [a, b, c] = [P[i - 1], P[i], P[i + 1]], la = Math.hypot(b[0] - a[0], b[1] - a[1]), lc = Math.hypot(c[0] - b[0], c[1] - b[1]);
+      const k1 = Math.min(r, la / 2) / la, k2 = Math.min(r, lc / 2) / lc;
+      d += `L${(b[0] - (b[0] - a[0]) * k1).toFixed(1)} ${(b[1] - (b[1] - a[1]) * k1).toFixed(1)}Q${b[0].toFixed(1)} ${b[1].toFixed(1)} ${(b[0] + (c[0] - b[0]) * k2).toFixed(1)} ${(b[1] + (c[1] - b[1]) * k2).toFixed(1)}`;
+    }
+    return d;
+  }
+  // a circle of m metres on the floor around (u, v): an ellipse on the axo
+  const ring = (u, v, m) => { let d = ""; for (let i = 0; i <= 72; i++) { const t = (i / 72) * 2 * Math.PI, [x, y] = F(u + (m / LEN) * Math.cos(t), v + (m / WID) * Math.sin(t)); d += (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1); } return d + "Z"; };
+  function pin(g, at, label, cls, dx, dy, anchor) {
+    const [x, y] = F(...at), p = mk("g", { class: "dz-pin " + (cls || ""), transform: `translate(${x.toFixed(1)} ${y.toFixed(1)})` }, g);
+    mk("circle", { r: 9 }, p); const t = mk("text", { x: dx || 16, y: dy || -8, "text-anchor": anchor || "start" }, p); t.textContent = label; return p;
+  }
+  // a path drawn on, by its length, over ms (sine in and out), through a mask so a dashed line stays dashed; onAt(i) fires as it passes marks[i] (a share of the way)
+  function drawOn(path, mask, ms, marks, onAt, done) {
+    const L = mask.getTotalLength(); mask.style.strokeDasharray = `${L} ${L}`; mask.style.strokeDashoffset = L;
+    if (reduced) { mask.style.strokeDashoffset = 0; (marks || []).forEach((_, i) => onAt(i)); if (done) done(); return; }
+    let next = 0;
+    loop((t) => {
+      const k = Math.min(1, t / ms), e = (1 - Math.cos(Math.PI * k)) / 2; mask.style.strokeDashoffset = L * (1 - e);
+      while (marks && next < marks.length && e >= marks[next]) onAt(next++);
+      if (k >= 1 && done) done();
+      return k < 1;
+    });
+  }
+  // the lost route's pieces: a "?" bubble above a floor place, a dead-end ×, the share of a path's length nearest a place
+  function qmark(g, u, v) { const [x, y] = F(u, v), m = mk("g", { class: "dz-q" }, g); mk("circle", { cx: x, cy: y - 34, r: 19 }, m); const t = mk("text", { x, y: y - 25 }, m); t.textContent = "?"; return m; }
+  function xmark(g, u, v) { const [x, y] = F(u, v), m = mk("g", { class: "dz-q dz-x" }, g); mk("circle", { cx: x, cy: y, r: 13 }, m); mk("path", { d: `M${x - 6} ${y - 6}L${x + 6} ${y + 6}M${x + 6} ${y - 6}L${x - 6} ${y + 6}` }, m); return m; }
+  function shareAt(path, u, v, from) {
+    const L = path.getTotalLength(), [x, y] = F(u, v); let best = 1, bd = 1e9;
+    for (let i = 0; i <= 400; i++) { const k = i / 400; if (k < (from || 0)) continue; const p = path.getPointAtLength(k * L), d = Math.hypot(p.x - x, p.y - y); if (d < bd - 0.5) { bd = d; best = k; } }
+    return best;
+  }
+  // a smooth curve through floor places (Catmull-Rom as cubic Béziers)
+  function smooth(pts) {
+    const P = pts.map(([u, v]) => F(u, v)); let d = `M${P[0][0].toFixed(1)} ${P[0][1].toFixed(1)}`;
+    for (let i = 0; i < P.length - 1; i++) {
+      const p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(P.length - 1, i + 2)];
+      d += `C${(p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+    }
+    return d;
+  }
+  // play the tries in turn: [{ d, ms, faint, marks: [[u, v, "q" | "x", from]] }]; a faint try fades once it has dead-ended
+  function play(sc, tries) {
+    const defs = $(".dz-defs", sc), paths = $(".dz-paths", sc), marks = $(".dz-marks", sc), pins = $(".dz-pins", sc);
+    defs.innerHTML = ""; paths.innerHTML = ""; marks.innerHTML = ""; pins.innerHTML = "";
+    pin(pins, PLACE.far, "a desk at the far end", "far", -16, -14, "end"); pin(pins, PLACE.cafe, "Café", "", 16, 5);
+    const items = tries.map((t, k) => {
+      const id = `${sc.id}-m${k}`, m = mk("mask", { id, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 1920, height: 1080 }, defs);
+      const mp = mk("path", { class: "dz-mpath", d: t.d }, m), p = mk("path", { class: "dz-lost" + (t.faint ? " try" : ""), d: t.d, mask: `url(#${id})` }, paths);
+      const ms = (t.marks || []).map(([u, v, kind, from]) => ({ at: shareAt(p, u, v, from), g: kind === "x" ? xmark(marks, u, v) : qmark(marks, u, v) })).sort((a, b) => a.at - b.at);
+      return { t, p, mp, ms };
+    });
+    const go = (k) => {
+      const it = items[k]; if (!it) return;
+      drawOn(it.p, it.mp, it.t.ms, it.ms.map((m) => m.at), (i) => it.ms[i].g.classList.add("on"), () => {
+        if (it.t.faint) { it.p.classList.add("faded"); it.ms.forEach((m) => m.g.classList.add("faded")); }
+        if (reduced) go(k + 1); else later(() => go(k + 1), 300);
+      });
+    };
+    go(0);
+  }
+  return {
+    enter(_, sc) {
+      plain(); stop(); desks($(".cl-desks", sc));
+      // the route, in floor places (u along, v across)
+      const W = [PLACE.far, [0.93, 0.6], [0.7, 0.6], [0.7, 0.66], [0.8, 0.66], [0.8, 0.72], [0.5, 0.72], [0.5, 0.6], [0.58, 0.6], [0.58, 0.66],
+                 [0.36, 0.66], [0.36, 0.72], [0.42, 0.72], [0.42, 0.6], [0.22, 0.6], [0.22, 0.86], PLACE.cafe];
+      play(sc, [{ d: route(W, 14), ms: 5600, marks: [[0.7, 0.63, "q"], [0.8, 0.69, "q"], [0.58, 0.63, "q", 0.45], [0.42, 0.66, "q", 0.7]] }]);
+    },
+    leave(_, sc) {
+      stop();
+
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>
