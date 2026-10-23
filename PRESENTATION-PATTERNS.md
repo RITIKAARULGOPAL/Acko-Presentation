@@ -469,3 +469,29 @@ West, Middle and East fly an orthographic camera along it.
 - **Matching the PPT page:** screenshot headless Chrome at 1376×774 (`--virtual-time-budget=30000`), then compare ink boxes per region against her PPT screenshot (within 0.2%).
 - **Gotcha:** `tools/acko/make_value_slides.py` writes `slides/s-engage.html`; don't re-run it for s-engage.
 
+## 22. Value-addition layers on the layout, from a drawing with named layers
+**What (Ritika, 22–23 Oct):** "add multiple layers on layout to show that we have done all the value addition in the layout and axo"; the layout as four layers (Spaces, Neighbourhoods, Biophilia, Acoustics), each a beat, from the approved mockup (`mockups/layout-layers.html`); then "use [the 22.10 DXF] now".
+
+**The data:**
+- **The drawing names its spaces:** one `AC_*` layer per kind of space (outline + hatch), `AC_AUTO … AC_TRAVEL` the six neighbourhoods, `AC_WS_TYPE01–04` the workstation types as block inserts. No snapping to walls is needed.
+- **Toolkit (general, documented in its README and DEBUGGING.md):** `insert_layer_regex` writes `inserts.json` (each matching INSERT's placement matrix in the plan frame); `corridor_cut_by_teams: false` keeps exact corridor outlines. Project `projects/acko-2210.json`, plan `bh2210`.
+- **`tools/acko/named_layers.py`** (used by `plan_dxf.py` when `rooms.json` comes from `AC_` layers): spaces typed by layer and named by the labels inside; outlines over 3× their type's cap (blocks' frames on a layer) dropped; neighbourhoods numbered by overlap with the previous drawing's `ak_zone_01–06` ("01 · Travel"); workstation types by matching each insert to its `<use>` in `instanced.svg` by translation; a frame check (phase correlation of the two drawings' walls) before carrying the old egress paths over.
+
+**The layers** (`assets/js/plan-layers.js`, mounted by the kit as `plan.layers()` on the deck plan; shown by the plan host's `data-pl` / `data-pb`):
+- **Types:** each typed insert's block shapes, placed; hover a chip → `layers.type(t)`.
+- **Biophilia:** a heat field on a 200 mm grid (desks by seats, rooms by people, the lift lobbies); the planting animated busiest-first with a Gaussian dip per plant (labelled conceptual; no CO₂ figures invented); views to green as sight lines from every chair to its nearest plant within 8 m not crossing a room outline.
+- **Acoustics:** four categories by space type; sound rings as SVG `<animate>`.
+- **Measure / Area:** points snap to the spaces' corners; labels keep their screen size (redrawn when the view changes); M, A, Esc; a click while measuring never opens a neighbourhood (`stopPropagation` in the capture phase).
+- **Palette rule (Ritika: "colors are not clashing"):** one meaning per colour: heat warm only, plants green, egress one blue (solid / dashed), service rooms slate grey, sight lines lilac, neighbourhoods outline only (never filled, even when open).
+
+**The template:** `.lt-pills`, `.lt-tools`, `.lt-read` in `app.css`, used by s-layout, s-blowup and s-axo (right 4.9%, clear of the topic mark).
+
+**Gotcha:** a slide's own markup may hold only one `<section>` (the build splits slides on it): panels are `<div>`s.
+
+**Addendum, the axo in three slides (23 Oct):** s-axo, s-strategy and s-wayday ("A day for a new Acker", Ritika: "add wayfinding html before the
+selected slide", before Thank you) share one model and one WebGL renderer (`AxoModel.get()`, `AxoModel.renderer()`); each moves the
+renderer's canvas into its own host on entering. A slide's own objects (s-wayday's walker, pins and trail; s-strategy's ribbons) sit in
+one `THREE.Group` added to `M.scene` on enter and removed (then `M.reset()`) on leave, so no other slide shows them. A frame loop runs
+only while its slide is on, and waits for a real size (a hidden pane reports 0 × 0: an aspect of NaN otherwise poisons the camera).
+Entering a stepped walk from either side jumps straight to that beat's stop; only the next beats walk.
+

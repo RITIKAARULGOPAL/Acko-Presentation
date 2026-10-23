@@ -147,7 +147,8 @@ button { font-family: inherit; }
 
   // ---- camera: the whole floor, or following the walker ----
   const S = { s: 0, stop: 0, walking: null, view: null, follow: true };
-  function resize() { const b = cv.getBoundingClientRect(); r.setSize(b.width, b.height, false); asp = b.width / b.height; home = AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, asp); if (!S.view) S.view = home; }
+  function resize() { const b = cv.getBoundingClientRect(); if (!b.width || !b.height) return;   // a hidden pane: wait for a real size
+    r.setSize(b.width, b.height, false); asp = b.width / b.height; home = AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, asp); if (!S.view || !isFinite(S.view.half)) S.view = home; }
   const followView = (p, half) => { const { right, up } = AxoModel.basis(VIEW), s = { theta: VIEW.theta, phi: VIEW.phi, half, t: [p.x, 0.8, p.z] };
     // the walker a little right of centre (the copy sits on the left)
     const off = right.clone().multiplyScalar(-half * asp * 0.18).add(up.clone().multiplyScalar(half * 0.05)); s.t = [p.x + off.x, 0.8 + off.y, p.z + off.z]; return s; };
@@ -183,6 +184,7 @@ button { font-family: inherit; }
     const p = posAt(S.s), d = dirAt(S.s); walker.position.copy(p); if (d.lengthSq() > 1e-6) walker.rotation.y = Math.atan2(d.x, d.z);
     walker.children[0].position.y = 0.75 + (S.walking ? Math.abs(Math.sin(now / 140)) * 0.06 : 0);
     const want = S.follow ? followView(p, S.walking ? 21 : 15) : home;
+    if (!home || !isFinite(asp)) { resize(); if (!home) { requestAnimationFrame(frame); return; } }
     S.view = mix(S.view, want, 0.07);
     AxoModel.apply(cam, S.view, asp); r.render(M.scene, cam);
     // the card beside the stop's pin, with a dashed leader

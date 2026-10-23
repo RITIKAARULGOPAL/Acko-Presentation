@@ -51,6 +51,7 @@ s-wayfinding
 s-layout
 s-blowup
 s-axo
+s-wayday
 s-thanks
 
 # APPENDIX · its own deck (the site, then deck 49–51)
