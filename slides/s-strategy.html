@@ -79,6 +79,8 @@
 #s-strategy .st-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 #s-strategy .st-tool:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
 #s-strategy .st-tool:focus { outline: none; }
+/* no copyright line on this page, as on slide 14: the floor covers that corner (Ritika, 26 Oct) */
+body[data-scene="s-strategy"] .hint { opacity: 0; }
 </style>
 <script>
 /* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), at the 3D renders' camera
@@ -98,7 +100,9 @@
    zooms, Reset view goes back. Without WebGL, the deck's GIF. */
 ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
-  const FIT = [0.161, 0.09, 0.811, 0.864];              // where the deck's animation has the floor on the page
+  // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
+  // tips on slide 14's (29.5, 1037) and (1606, 137) page px; the marks below were measured on the PPT's GIF, framed at FIT_MARKS
+  const FIT = [0.0134, 0.0028, 0.8385, 0.9852], FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
   const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
     "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
   // beat 2's marks where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model there
@@ -229,7 +233,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const pw = (x, y, z) => { const v = v3().set(x, y, z).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
   // a page point at the home view, back on the model: where the camera's ray through it meets the level h (m)
   function pin() {
-    window.AxoModel.apply(cam, S.home, asp); cam.updateMatrixWorld();
+    window.AxoModel.apply(cam, window.AxoLayers.frame(M, view, FIT_MARKS, asp), asp); cam.updateMatrixWorld();      // the marks' own frame
     const d = v3(); cam.getWorldDirection(d);
     const at = (x, y, h) => { const o = v3().set(x / 960 - 1, 1 - y / 540, -1).unproject(cam), t = (h - o.y) / d.y; return [o.x + d.x * t, h, o.z + d.z * t]; };
     S.entAt = MARKS.ent.map(([x, y]) => at(x, y, 4.5));
@@ -277,7 +281,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
     // the page's right edge hangs to the left
-    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand", sc).map((e) => {
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
       const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
       return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
     }).filter((b) => b[2] > b[0]);
@@ -292,7 +296,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       const { o, x, y } = it;
       const left = x + o.w / 2 > 1890 ? Math.min(x + 12, 1890) - o.w : x - o.w / 2;
       const tries = [0, 1, 2, 3, 4, 5].map((n) => y - 64 - n * (o.h + 4)).concat([0, 1, 2].map((n) => y + 40 + o.h + n * (o.h + 4)));
-      const ly = tries.find((b) => !hit(left, b - o.h, left + o.w, b)) || tries[0];      // the label's bottom (frame px)
+      const ly = tries.find((b) => b - o.h > 14 && b < 1066 && !hit(left, b - o.h, left + o.w, b)) || tries[0];   // on the page, clear of the copy and the tools      // the label's bottom (frame px)
       if (it.on) placed.push([left - 6, ly - o.h - 6, left + o.w + 6, ly + 6]);
       o.g.querySelector("path").setAttribute("d", `M${x} ${y}L${x} ${ly > y ? ly - o.h : ly}`);
       o.g.querySelector("circle").setAttribute("cx", x); o.g.querySelector("circle").setAttribute("cy", y);
