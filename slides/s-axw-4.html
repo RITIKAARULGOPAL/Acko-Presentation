@@ -85,8 +85,9 @@
    (walls and glass stop it, furniture only slows it; tools: the session's way_route.py). Whole floor shows the route at once;
    the strip along the bottom jumps to a stop. The walker, pins and trail are this slide's own group, added to the shared scene on
    entering and taken off on leaving, so the axo and the strategy slides never show them. Ritika, 26 Oct: "add zoom and pan feature
-   in this axo": a drag pans, the wheel (or a trackpad's pinch) zooms on the cursor, and the view is then hers until a double-click,
-   Reset view, Walk the day, Whole floor or the next beat gives it back to the walk. */
+   in this axo", "rotate also": as on the schematic axo, a drag turns it, a right-drag (or Shift) pans, the wheel (or a trackpad's
+   pinch) zooms on the cursor; the view is then hers until a double-click, Reset view, Walk the day, Whole floor or the next beat
+   gives it back to the walk (eased back to the deck's angle). */
 ACKO.slide("s-axw-4", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
   // the day's route (plan mm, y down): the stops and the legs between them
   const ROUTE = {"stops": [{"t": "09:00", "n": "Arrival", "s": "The east lift lobby", "at": [171525, 30275]}, {"t": "09:05", "n": "Reception", "s": "A welcome at reception", "at": [173025, 33125]}, {"t": "09:15", "n": "@NB", "s": "Finding the neighbourhood by its number and graphic wall", "at": [212475, 35075]}, {"t": "09:20", "n": "The desk", "s": "A Type 4 desk in @NB", "at": [228075, 24425]}, {"t": "11:00", "n": "First meeting", "s": "A huddle room, signed by its name", "at": [181725, 32375]}, {"t": "13:00", "n": "Lunch", "s": "The café", "at": [62025, 41075]}, {"t": "14:30", "n": "Coffee", "s": "The coffee point", "at": [94425, 31325]}, {"t": "16:00", "n": "A pause", "s": "Zen room 01", "at": [113925, 29825]}, {"t": "18:30", "n": "Home time", "s": "Out through the west lift lobby", "at": [80925, 30275]}],
@@ -156,7 +157,7 @@ ACKO.slide("s-axw-4", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
   const seg = (s) => { let k = 0; while (k < cum.length - 1 && cum[k] < s) k++; return k; };
   const followView = (p, half) => { const { right, up } = window.AxoModel.basis(VIEW), off = right.clone().multiplyScalar(-half * S.asp * 0.18).add(up.clone().multiplyScalar(half * 0.05));
     return { theta: VIEW.theta, phi: VIEW.phi, half, t: [p.x + off.x, 0.8 + off.y, p.z + off.z] }; };
-  const mix = (a, b, k) => ({ theta: a.theta, phi: a.phi, half: a.half + (b.half - a.half) * k, t: a.t.map((v, i) => v + (b.t[i] - v) * k) });
+  const mix = (a, b, k) => ({ theta: a.theta + (b.theta - a.theta) * k, phi: a.phi + (b.phi - a.phi) * k, half: a.half + (b.half - a.half) * k, t: a.t.map((v, i) => v + (b.t[i] - v) * k) });
   function sizeUp() {
     const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return false;           // a hidden pane: wait for a real size
     const pr = R.getPixelRatio();
@@ -210,8 +211,9 @@ ACKO.slide("s-axw-4", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
   const loop = () => { if (!S.raf) S.raf = requestAnimationFrame(frame); };
   // the view hers (panned or zoomed: the walk's camera stops) or the walk's again
   const user = (on) => { S.user = on; sc.classList.toggle("wd-user", on); };
-  // a drag pans (in the axo's right/up), the wheel zooms on the cursor (its point on the floor stays put, as on the schematic
-  // axo), a double-click gives the view back
+  // as on the schematic axo: a drag turns it (within 0.8 of the deck's angle, 0.35-1.22 from the vertical), a right-drag or
+  // Shift pans (in the axo's right/up), the wheel zooms on the cursor (its point on the floor stays put); a double-click gives
+  // the view back
   function wire() {
     S.wired = true; let drag = null;
     const ground = (e, v) => {
@@ -220,14 +222,17 @@ ACKO.slide("s-axw-4", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
       const o = cam.position.clone().add(right.multiplyScalar(nx * v.half * S.asp)).add(up.multiplyScalar(ny * v.half));
       return o.add(f.multiplyScalar(-o.y / f.y));
     };
-    host.addEventListener("pointerdown", (e) => { if (!S.view || e.button > 2) return; drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false }; try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ } });
+    host.addEventListener("pointerdown", (e) => { if (!S.view || e.button > 2) return; drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false, pan: e.button === 2 || e.shiftKey }; try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ } });
     host.addEventListener("pointermove", (e) => {
       if (!drag) return;
       if (!drag.on && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 3) return;        // a click, not a drag
       drag.on = true; host.classList.add("drag"); user(true);
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y, v = S.view; drag.x = e.clientX; drag.y = e.clientY;
-      const { right, up } = window.AxoModel.basis(v), k = (2 * v.half) / host.clientHeight, m = right.multiplyScalar(-dx * k).add(up.multiplyScalar(dy * k));
-      S.view = Object.assign({}, v, { t: [v.t[0] + m.x, v.t[1] + m.y, v.t[2] + m.z] }); loop();
+      if (drag.pan) {
+        const { right, up } = window.AxoModel.basis(v), k = (2 * v.half) / host.clientHeight, m = right.multiplyScalar(-dx * k).add(up.multiplyScalar(dy * k));
+        S.view = Object.assign({}, v, { t: [v.t[0] + m.x, v.t[1] + m.y, v.t[2] + m.z] });
+      } else S.view = Object.assign({}, v, { theta: Math.max(VIEW.theta - 0.8, Math.min(VIEW.theta + 0.8, v.theta - dx * 0.005)), phi: Math.max(0.35, Math.min(1.22, v.phi - dy * 0.004)) });
+      loop();
     });
     const up = () => { drag = null; host.classList.remove("drag"); };
     host.addEventListener("pointerup", up); host.addEventListener("pointercancel", up);
