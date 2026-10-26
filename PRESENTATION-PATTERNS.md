@@ -577,3 +577,32 @@ the plants and the grass keep their colour. Four samples to compare first: `inde
 **Gotcha:** put the sun well off the camera's azimuth. The deck's axo looks from θ ≈ −0.61; a sun at that azimuth (behind the camera)
 throws every shadow straight behind what casts it, so the floor shows none even though the shadow map is right. The looks' sun is 50°
 to the camera's left (65° and lower for the warm look), so shadows fall to the right and walls read in three tones.
+
+## 27. A SketchUp model in the deck, read headless (A day for a new Acker · samples)
+**What (Ritika, 26 Oct):** "build the axo based on this skp file" (`acko2A_model.skp`, 199 MB, saved by SketchUp 2026), for A day
+for a new Acker only, its look by samples again: `index-axowhite.html` (`s-axw-1 … 5`: Clay, Clay + textures, Crisp, Warm white,
+SketchUp colours). The deck's `s-wayday` stays on the DXF model until she picks.
+
+**Reading it:** SketchUp 2023's own C library (`SketchUpAPI.dll` in its install folder) opens newer files too, headless, through
+Python `ctypes` (`tools/acko/skp_read.py`: definitions, placements and transforms, faces triangulated by `SUMeshHelper`, materials with
+a texture's average colour, tags, a scene's hidden entities). No SketchUp window, nothing installed, nothing uploaded.
+
+**Making it light (`tools/acko/axo_skp.py` → `data/axo-skp.js`, 7 MB):** 101.7 M faces counted in full, but ~500 definitions.
+- **Units:** the highest definitions small enough (≤ 400 k faces in full, ≤ 8 m across: a whole chair, a desk cluster, a plant) are
+  flattened, simplified by vertex clustering and drawn once per placement (`InstancedMesh`); one used once joins the static mesh.
+- **Two levels:** 3.5 cm cells (about a pixel in the walk's close-ups, 4.7 M triangles) and 7 cm (Whole floor, 1.3 M), switched in
+  the scene's `onBeforeRender` by the camera's half-height. 60 fps on an Intel Iris Xe either way.
+- **Kinds per triangle** (glass by opacity, plants by tag and green, wood / soft / hard by material name, floor / wall / top / slab
+  by height and slope, the terrace's olive as grass) drive the looks: `AxoModel.looks` is now shared (`apply(registry, name)`), with
+  a `sketchup` look (own colours under the sun). The zones' floors lie in the base floor's plane: lifted 4 mm.
+- **Frame:** SketchUp metres onto the DXF slab (y flipped, shifted by FFT-matching the footprints; IoU 0.80, the model's floor also
+  runs under the band) and written in AxoModel's world frame, so the route, pins and walker sit where they did.
+
+**Gotchas:**
+- `InstancedMesh` in r147 is culled by its base geometry: `frustumCulled = false`.
+- Flat shading needs no normals, but the shadow lookup's normal bias does: without them it is NaN and nothing is in shadow.
+- The shadow map is drawn once per look (`shadowMap.autoUpdate = false` in AxoSkp's scene, `true` again in AxoModel's); the walker
+  doesn't cast (it moves), the pins do.
+- The model's café is closed off differently from the DXF's (a counter, planters, a curved bench round the terrace): legs that cross
+  walls or glass away from their ends (doors) are walked again by A* (corridor floor preferred; furniture, grass, planters avoided):
+  `AXO_SKP.route`, used through `AxoSkp.route(legs)`. Check pictures in `tools/_work/axo-skp/` (frame, route, crossings).

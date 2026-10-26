@@ -114,6 +114,7 @@
 
     const scene = new T.Scene(), G = {};
     for (const k of ["base", "walls", "glass", "facade", "furniture", "plants", "marks"]) { G[k] = new T.Group(); G[k].name = k; scene.add(G[k]); }
+    scene.onBeforeRender = (r) => { r.shadowMap.autoUpdate = true; };          // AxoSkp draws its shadows once; this model, live
     // the soft shadow under the slab (a blurred silhouette, down and to the right as in the deck's axo)
     {
       const [x0, x1, y0, y1] = [Math.min(...xs) - 6000, Math.max(...xs) + 6000, Math.min(...ys) - 6000, Math.max(...ys) + 6000];
@@ -213,12 +214,13 @@
     const gl = lines(GINK, 0x45367a, 0.7, "inkg"); gl.renderOrder = 4; G.glass.add(gl);
     const hemi = new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.78); scene.add(hemi);
     const key = new T.DirectionalLight(0xffffff, 0.5); key.position.set(-40, 90, 60); scene.add(key, key.target);
-    REG.hemi = hemi; REG.key = key; REG.slab = A.slab; REG.X = X; REG.Z = Z;
+    REG.hemi = hemi; REG.key = key; REG.drawing = AM.drawingMaterial;
+    REG.pts = []; for (const [x, y] of A.slab) for (const h of [0, H.top]) REG.pts.push(new T.Vector3(X(x), h, Z(y)));
 
     M = { scene, groups: G, X, Z, CX, CY, acc, quad, prism, mesh, lines, lam, segDist, slab: A.slab };
     // everything as built: every layer shown and full height (a slide that animates them puts them back on leaving)
     M.reset = () => { for (const k in G) { G[k].visible = true; G[k].scale.set(1, 1, 1); } if (AM.drawingMaterial) AM.drawingMaterial.opacity = LOOKS[LOOK] ? LOOKS[LOOK].drawing : 0.38; };
-    applyLook();
+    applyLook(REG, LOOK);
     return M;
   };
 
@@ -242,12 +244,15 @@
       desk: 0xfefbf5, chair: 0xf1ede5, store: 0xfbf8f2, mullion: 0xe0dbd0, glass: [0xfffcf6, 0.4], pane: [0xfdfaf4, 0.18],
       ink: [0xb3ab9c, 0.5], inkf: [0xc6beb0, 0.4], inkg: [0xbfb7a9, 0.55], sun: [-99, 78, -17], sunColor: 0xfff2e2, sunI: 1.0,
       sky: 0xfffbf4, ground: 0xdcd6cc, skyI: 0.52 }),
+    // each material's own colours (the PPT's here; SketchUp's in AxoSkp) under the white looks' sun, sky and shadows
+    sketchup: W({ own: true }),
   };
   AM.LOOKS = Object.keys(LOOKS);
   // each kind's colour key, texture and tile (m); the kinds that keep their PPT colour in every look
   const GROUP = { slab: "slab", floor: "floor", roomfloor: "floor", corridor: "floor", lobby: "floor", wash: "floor", collab: "floor",
     servfloor: "floor", cafe: "cafe", reception: "cafe", wall: "wall", edge: "wall", mass: "mass", service: "service", sill: "sill",
-    desk: "desk", chair: "chair", store: "store", mullion: "mullion", glass: "glass", pane: "pane", ink: "ink", inkf: "inkf", inkg: "inkg" };
+    desk: "desk", chair: "chair", store: "store", mullion: "mullion", glass: "glass", pane: "pane", ink: "ink", inkf: "inkf", inkg: "inkg",
+    top: "wall", wood: "desk", soft: "chair", hard: "store" };                          // the last four: AxoSkp's kinds
   const TEX = { slab: ["concrete", 4], floor: ["concrete", 4], cafe: ["terrazzo", 2], wall: ["plaster", 3], mass: ["concrete", 4],
     service: ["plaster", 3], sill: ["plaster", 3], desk: ["wood", 1.6], chair: ["fabric", 0.4], store: ["plaster", 2] };
   const CAST = new Set(["wall", "mass", "service", "sill", "desk", "chair", "store", "mullion", "plant"]);
@@ -281,13 +286,13 @@
     const t = new T.CanvasTexture(cv); t.wrapS = t.wrapT = T.RepeatWrapping; t.anisotropy = 8;
     return (texCache[key] = t);
   }
-  // the sun's shadow camera, fitted round the floor as the sun sees it
-  function fitSun(key) {
+  // the sun's shadow camera, fitted round a model's points (world, THREE.Vector3s) as the sun sees it
+  function fitSun(key, pts) {
     const d = key.position.clone().normalize(), up = Math.abs(d.y) > 0.99 ? new T.Vector3(0, 0, 1) : new T.Vector3(0, 1, 0);
     const right = new T.Vector3().crossVectors(up, d).normalize(), top = new T.Vector3().crossVectors(d, right).normalize();
     let a0 = 1e9, a1 = -1e9, b0 = 1e9, b1 = -1e9;
-    for (const [x, y] of REG.slab) for (const h of [0, H.top]) {
-      const v = new T.Vector3(REG.X(x), h, REG.Z(y)), a = v.dot(right), b = v.dot(top);
+    for (const v of pts) {
+      const a = v.dot(right), b = v.dot(top);
       a0 = Math.min(a0, a); a1 = Math.max(a1, a); b0 = Math.min(b0, b); b1 = Math.max(b1, b);
     }
     key.position.copy(d.multiplyScalar(200)); key.target.position.set(0, 0, 0); key.target.updateMatrixWorld();
@@ -295,12 +300,16 @@
     cam.updateProjectionMatrix(); key.shadow.mapSize.set(4096, 4096); key.shadow.bias = -0.0004; key.shadow.normalBias = 0.03;
     if (key.shadow.map) { key.shadow.map.dispose(); key.shadow.map = null; }
   }
-  function applyLook() {
-    if (!REG) return;
-    const L = LOOKS[LOOK];
-    for (const m of REG.mats) {
+  // a look on a model's registry {mats, meshes, hemi, key, pts, drawing}: "ppt" (none) puts back each material's own colour
+  // (userData.ppt; its vertex colours where userData.vc); "sketchup" keeps them under the white looks' light; the rest recolour
+  // by kind
+  function applyLook(reg, name) {
+    if (!reg) return;
+    const L = LOOKS[name];
+    for (const m of reg.mats) {
       const kind = m.userData.kind, g = GROUP[kind], p = m.userData.ppt;
-      if (!L || !g) { m.color.setHex(p.color); m.opacity = kind === "softshadow" && L ? L.soft : p.opacity; if (m.map && TEX[g]) m.map = null; m.needsUpdate = true; continue; }
+      if (!L || !g || L.own) { m.color.setHex(p.color); m.opacity = kind === "softshadow" && L ? L.soft : p.opacity; if (m.map && TEX[g]) m.map = null; m.vertexColors = !!m.userData.vc; m.needsUpdate = true; continue; }
+      m.vertexColors = false;
       const v = L[g];
       if (Array.isArray(v)) { m.color.setHex(v[0]); m.opacity = v[1]; } else m.color.setHex(v);
       const tx = TEX[g];
@@ -308,22 +317,24 @@
       if (m.map) m.map.repeat.set(1 / tx[1], 1 / tx[1]);
       m.needsUpdate = true;
     }
-    for (const [mesh, kind] of REG.meshes) { const g = GROUP[kind] || kind; mesh.castShadow = !!L && CAST.has(g); mesh.receiveShadow = !!L && !SEE.has(g); }
-    const { hemi, key } = REG;
+    for (const [mesh, kind] of reg.meshes) { const g = GROUP[kind] || kind; mesh.castShadow = !!L && CAST.has(g); mesh.receiveShadow = !!L && !SEE.has(g); }
+    const { hemi, key } = reg;
     if (L) {
       hemi.color.setHex(L.sky); hemi.groundColor.setHex(L.ground); hemi.intensity = L.skyI;
-      key.color.setHex(L.sunColor); key.intensity = L.sunI; key.position.set(...L.sun); key.castShadow = true; fitSun(key);
+      key.color.setHex(L.sunColor); key.intensity = L.sunI; key.position.set(...L.sun); key.castShadow = true; fitSun(key, reg.pts);
     } else {
       hemi.color.setHex(0xffffff); hemi.groundColor.setHex(0xb9b4c6); hemi.intensity = 0.78;
       key.color.setHex(0xffffff); key.intensity = 0.5; key.position.set(-40, 90, 60); key.castShadow = false;
     }
-    if (AM.drawingMaterial) AM.drawingMaterial.opacity = L ? L.drawing : 0.38;
+    if (reg.drawing) reg.drawing.opacity = L ? L.drawing : 0.38;
   }
+  // the looks, for another model on the same terms (AxoSkp): AxoModel.looks.apply(registry, name)
+  AM.looks = { LOOKS, apply: (reg, name) => { T = T || window.THREE; applyLook(reg, name); } };
   // the model's look: AxoModel.look() gives it, AxoModel.look(name) sets it ("ppt" or one of AxoModel.LOOKS) and redraws
   AM.look = function (name) {
     if (name === undefined) return LOOK;
     LOOK = LOOKS[name] ? name : "ppt"; T = T || window.THREE;
-    if (M) { applyLook(); changed(); }
+    if (M) { applyLook(REG, LOOK); changed(); }
     return LOOK;
   };
 
