@@ -44,12 +44,21 @@
   .hi:hover, .hi.on { background:#ece6fb; }
   .hi .k { font-size:10px; text-transform:uppercase; letter-spacing:.05em; font-weight:600; color:#c0392b; }
   .hi .k.note { color:#8a7a3a; }
+  .sel { padding:5px 0; border-top:1px solid #efece6; font-size:12px; cursor:pointer; }
+  .sel.on { background:#ece6fb; }
+  .sel b.n { display:inline-block; min-width:22px; color:#fff; background:#d0021b; border-radius:9px; text-align:center; font-size:11px; margin-right:6px; }
   @media (max-width:760px) { body { grid-template-columns:1fr; grid-template-rows:40vh 1fr; } aside { border-right:0; border-bottom:1px solid var(--line); } }
 </style>
 </head>
 <body>
 <aside>
   <header><h1>Plan viewer</h1><div class="muted" id="src">loading…</div></header>
+  <div class="sec">
+    <h2>Selections</h2>
+    <div class="muted" style="margin-bottom:6px">Click the plan to mark a spot (#1, #2, …), then tell Claude what's wrong with it. Shift-click to add without opening; Esc closes.</div>
+    <div class="row"><button id="sclear">Clear all</button><button id="scopy">Copy</button></div>
+    <div id="slist" style="margin-top:6px;max-height:26vh;overflow:auto"></div>
+  </div>
   <div class="sec"><h2>Check</h2><div id="check" class="muted"></div></div>
   <div class="sec" id="hsec" style="display:none">
     <h2>Hover rooms</h2>
@@ -98,6 +107,7 @@ let GROUP = "", hiddenG = new Set(), alpha = {};
   layerPanel();
   try { ROOMS = await fetch(DIR + "rooms.json").then(r => r.ok ? r.json() : null); } catch (e) { ROOMS = null; }
   if (ROOMS) hoverSetup();
+  selList(false);
   resize(); fit();
 })();
 
@@ -253,6 +263,7 @@ function draw() {
     ctx.restore();
   }
   hoverDraw(s);
+  selDraw(s);
   document.getElementById("hud").textContent = `${(performance.now() - t0).toFixed(0)} ms · ${drawn} runs · ${nt} texts · ${(1 / view.s).toFixed(0)} mm/px · loaded in ${(loadMs / 1000).toFixed(1)} s`;
 }
 // a style or inline font name -> the browser's nearest font (the CAD fonts aren't installed here)
@@ -361,6 +372,16 @@ function hoverDraw(s) {
 }
 
 // ---------------------------------------------------------------- what's under the cursor
+// ---------------------------------------------------------------- selections: what you clicked, numbered, for feedback
+// Every click records what's under the cursor: the room it would light, every group's layers hit there, the nearest
+// label, the hover issues nearby, and the DXF coordinates. window.SELECTIONS holds them (Claude reads it from the page);
+// they're kept in this browser across reloads.
+const SKEY = "plan-selections:" + DIR;
+let SELECTIONS = [], scur = null;
+try { SELECTIONS = JSON.parse(localStorage.getItem(SKEY) || "[]"); } catch (e) { SELECTIONS = []; }
+window.SELECTIONS = SELECTIONS;
+const saveSel = () => { try { localStorage.setItem(SKEY, JSON.stringify(SELECTIONS)); } catch (e) {} };
+
 function pick(e) {
   const r = cv.getBoundingClientRect(), mx = (e.clientX - r.left) * dpr, my = (e.clientY - r.top) * dpr;
   const wx = view.x + mx / (view.s * dpr), wy = view.y + my / (view.s * dpr), tol = 4 / view.s;
@@ -372,16 +393,61 @@ function pick(e) {
     if (p.kind === "f") hit = p.fills.some(f => ctx.isPointInPath(f, mx, my, "evenodd"));
     else if (p.kind === "m") hit = ctx.isPointInPath(p.path, mx, my);
     else { ctx.lineWidth = tol * 2; hit = ctx.isPointInStroke(p.path, mx, my); }
-    if (hit) found.set(p.key, (found.get(p.key) || []).concat({ f: "fill", m: "wipeout", s: "line", h: "pattern" }[p.kind]));
+    if (hit) found.set(p.key, (found.get(p.key) || new Set()).add({ f: "fill", m: "wipeout", s: "line", h: "pattern" }[p.kind]));
   }
-  const box = document.getElementById("pick");
+  const X_ = wx + frame.x0, Y_ = frame.y1 - wy;             // back to DXF mm
+  const sel = { n: (SELECTIONS.at(-1)?.n || 0) + 1, at: [Math.round(X_), Math.round(Y_)], cx: wx, cy: wy,
+                zoom_mm_per_px: Math.round(1 / view.s), time: new Date().toLocaleTimeString(),
+                hits: [...found].map(([k, kinds]) => ({ group: k.split("|")[0], layer: k.split("|").slice(1).join("|"), kinds: [...kinds] })) };
+  if (ROOMS) {
+    const under = ROOMS.rooms.filter(R => wx >= R.b[0] && wx <= R.b[2] && wy >= R.b[1] && wy <= R.b[3] && inPoly(wx, wy, R.pts)).sort((a, b) => a.m2 - b.m2);
+    sel.rooms = under.map(R => ({ id: R.id, type: R.type, m2: R.m2, labels: R.labels, zone: R.zone, outline_area_ratio: R.outline_area_ratio, issues: R.issues.map(i => i.what) }));
+    const near = ROOMS.issues.map(it => [Math.hypot(it.cx - wx, it.cy - wy), it]).filter(([d]) => d < 1500).sort((a, b) => a[0] - b[0]).slice(0, 3);
+    sel.issues_nearby = near.map(([d, it]) => ({ what: it.what, kind: it.kind, level: it.level, mm: Math.round(d) }));
+  }
+  const tn = texts.map(T => [Math.hypot(T.x - wx, T.y - wy), T]).sort((a, b) => a[0] - b[0])[0];
+  if (tn && tn[0] < 3000) sel.nearest_label = { text: String(tn[1].t[6]).replace(/\n/g, " "), group: tn[1].g, layer: tn[1].layer, mm: Math.round(tn[0]) };
+  SELECTIONS.push(sel); scur = sel.n; saveSel(); selList(!e.shiftKey);
   document.querySelectorAll(".lyr.hit").forEach(d => d.classList.remove("hit"));
-  if (!found.size) { box.style.display = "none"; return; }
-  box.style.display = "block";
-  box.innerHTML = [...found].map(([l, k]) => `<div><span class="muted">${esc(l.split("|")[0])}</span> <b>${esc(l.split("|").slice(1).join("|"))}</b> <span class="muted">${[...new Set(k)].join(", ")}</span></div>`).join("");
   for (const k of found.keys()) document.querySelector(`.lyr[data-k="${CSS.escape(k)}"]`)?.classList.add("hit");
   redraw();
 }
+function selSummary(x) {
+  const room = x.rooms?.[0] ? `${x.rooms[0].type.slice(3).replace(/_/g, " ")} ${x.rooms[0].m2} m²${x.rooms.length > 1 ? ` (+${x.rooms.length - 1} under)` : ""}` : "no room";
+  const lay = x.hits.length ? x.hits.slice(0, 3).map(h => `${h.group}: ${h.layer}`).join(" · ") + (x.hits.length > 3 ? ` · +${x.hits.length - 3}` : "") : "nothing drawn here";
+  return `${esc(room)}${x.nearest_label ? ` · “${esc(x.nearest_label.text.slice(0, 30))}”` : ""}<br><span class="muted">${esc(lay)}</span>`;
+}
+function selList(open = true) {
+  const box = document.getElementById("slist");
+  box.innerHTML = SELECTIONS.slice().reverse().map(x => `<div class="sel${x.n === scur ? " on" : ""}" data-n="${x.n}"><b class="n">#${x.n}</b>${selSummary(x)}</div>`).join("") || `<div class="muted">Nothing selected yet.</div>`;
+  box.querySelectorAll(".sel").forEach(d => d.onclick = () => {
+    const x = SELECTIONS.find(s => s.n === +d.dataset.n); scur = x.n;
+    const r = cv.getBoundingClientRect(); view.x = x.cx - r.width / view.s / 2; view.y = x.cy - r.height / view.s / 2; selList(); redraw();
+  });
+  const pk = document.getElementById("pick"), x = SELECTIONS.find(s => s.n === scur);
+  if (!open || !x) { pk.style.display = "none"; return; }
+  pk.style.display = "block";
+  pk.innerHTML = `<div><b class="n" style="background:#d0021b;color:#fff;border-radius:9px;padding:0 6px">#${x.n}</b> <span class="muted">at ${x.at.join(", ")}</span></div>` +
+    (x.rooms?.length ? x.rooms.map(R => `<div>Room: <b>${esc(R.type.slice(3).replace(/_/g, " "))}</b> ${R.m2} m²${R.zone ? " · " + esc(R.zone) : ""}${R.labels.length ? " · " + esc(R.labels.slice(0, 2).join(" · ")) : ""}</div>`).join("") : `<div class="muted">No hover room here</div>`) +
+    x.hits.map(h => `<div><span class="muted">${esc(h.group)}</span> <b>${esc(h.layer)}</b> <span class="muted">${h.kinds.join(", ")}</span></div>`).join("") +
+    (x.issues_nearby?.length ? `<div style="color:#c0392b">${esc(x.issues_nearby[0].what)}</div>` : "");
+}
+function selDraw(s) {
+  const px = dpr / s;
+  ctx.font = `600 ${11 * px}px system-ui, sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  for (const x of SELECTIONS) {
+    const on = x.n === scur, r = (on ? 11 : 9) * px;
+    ctx.fillStyle = on ? "#d0021b" : "rgba(208,2,27,.85)"; ctx.beginPath(); ctx.arc(x.cx, x.cy - r * 1.6, r, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x.cx, x.cy); ctx.lineTo(x.cx - r * .5, x.cy - r * 1.1); ctx.lineTo(x.cx + r * .5, x.cy - r * 1.1); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.fillText(String(x.n), x.cx, x.cy - r * 1.6);
+  }
+}
+document.getElementById("sclear").onclick = () => { SELECTIONS.length = 0; scur = null; saveSel(); selList(); redraw(); };
+document.getElementById("scopy").onclick = () => {
+  const t = SELECTIONS.map(x => `#${x.n} at ${x.at.join(", ")}: ${x.rooms?.[0] ? x.rooms[0].type + " " + x.rooms[0].m2 + " m²" : "no room"}; ${x.hits.map(h => h.group + "/" + h.layer).join(", ")}`).join("\n");
+  navigator.clipboard?.writeText(t);
+};
+addEventListener("keydown", e => { if (e.key === "Escape") { scur = null; selList(false); redraw(); } });
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 // ---------------------------------------------------------------- panels
