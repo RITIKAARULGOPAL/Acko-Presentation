@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan Viewer</title>
+<!-- the layout DXF's blocks as vectors (tools/acko/plan_vector.py), drawn on a canvas in AutoCAD's draw order and redrawn from the
+     vectors on every pan and zoom (no pictures). Serve the repo (python tools/serve.py) and open
+     /tools/acko/plan_view.html?dir=../_work/plan-base/ . Scroll zooms on the cursor, drag pans, double-click fits, click lists
+     the layers under the cursor. -->
+<style>
+  :root { --paper:#ffffff; --ink:#1d1d1d; --muted:#6b6b6b; --line:#e3e0da; --panel:#fbfaf7; --accent:#5222D0; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; color:var(--ink); font:13px/1.4 system-ui, "Segoe UI", sans-serif; background:var(--paper); }
+  body { display:grid; grid-template-columns:300px 1fr; }
+  aside { border-right:1px solid var(--line); background:var(--panel); display:flex; flex-direction:column; min-height:0; }
+  header { padding:12px 14px; border-bottom:1px solid var(--line); }
+  h1 { font-size:15px; margin:0 0 2px; }
+  .muted { color:var(--muted); font-size:12px; }
+  .sec { padding:10px 14px; border-bottom:1px solid var(--line); }
+  .sec h2 { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; font-weight:600; }
+  .row { display:flex; gap:6px; align-items:center; }
+  input[type=search] { flex:1; font:inherit; padding:5px 8px; border:1px solid var(--line); border-radius:6px; background:#fff; }
+  button { font:inherit; border:1px solid var(--line); background:#fff; border-radius:6px; padding:4px 9px; cursor:pointer; }
+  button:hover { border-color:#bbb; }
+  #layers { overflow:auto; flex:1; min-height:0; padding:4px 0; }
+  .blk { padding:6px 14px 2px; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:600; display:flex; gap:8px; align-items:center; }
+  .lyr { display:flex; align-items:center; gap:8px; padding:3px 14px; cursor:pointer; }
+  .lyr:hover { background:#f1eee8; }
+  .lyr.hit { background:#ece6fb; }
+  .sw { width:12px; height:12px; border-radius:2px; border:1px solid rgba(0,0,0,.2); flex:none; }
+  .lyr .n { margin-left:auto; color:var(--muted); font-size:11px; font-variant-numeric:tabular-nums; }
+  .lyr .nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  main { position:relative; overflow:hidden; }
+  canvas { position:absolute; inset:0; width:100%; height:100%; cursor:grab; touch-action:none; }
+  canvas.drag { cursor:grabbing; }
+  #hud { position:absolute; right:10px; bottom:10px; background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:6px; padding:4px 8px; font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  #pick { position:absolute; left:10px; top:10px; background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:6px; padding:6px 10px; font-size:12px; display:none; max-width:340px; }
+  #check div { display:flex; justify-content:space-between; gap:8px; }
+  #check .bad { color:#c0392b; }
+  @media (max-width:760px) { body { grid-template-columns:1fr; grid-template-rows:40vh 1fr; } aside { border-right:0; border-bottom:1px solid var(--line); } }
+</style>
+</head>
+<body>
+<aside>
+  <header><h1>Plan viewer</h1><div class="muted" id="src">loading…</div></header>
+  <div class="sec"><h2>Check</h2><div id="check" class="muted"></div></div>
+  <div class="sec">
+    <h2>Layers</h2>
+    <div class="row"><input type="search" id="q" placeholder="filter layers"><button id="all">All</button><button id="none">None</button></div>
+  </div>
+  <div id="layers"></div>
+</aside>
+<main>
+  <canvas id="cv"></canvas>
+  <div id="pick"></div>
+  <div id="hud"></div>
+</main>
+<script>
+const DIR = new URLSearchParams(location.search).get("dir") || "../_work/plan-base/";
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+const TILE = 10000;          // mm: runs are split into 10 m tiles, so a view draws only what's in it
+const FINE = 250;            // mm: pieces smaller than this are left out while they'd be under ~1 px
+let meta, frame, view = { s: 1, x: 0, y: 0 }, parts = [], texts = [], hidden = new Set(), dpr = 1, queued = false;
+
+// ---------------------------------------------------------------- load and decode
+(async () => {
+  meta = await fetch(DIR + "layers.json").then(r => r.json());
+  const [x0, y0, x1, y1] = meta.frame;
+  frame = { x0, y1, w: x1 - x0, h: y1 - y0 };
+  document.getElementById("src").textContent = `${meta.source} · built ${meta.built}`;
+  checkPanel();
+  const tl = performance.now();
+  for (const b of meta.blocks) {
+    const data = await fetch(DIR + b.file).then(r => r.json());
+    if (data.defs) expand(data); else decode(data);
+  }
+  parts.sort((a, b) => a.order - b.order);
+  loadMs = performance.now() - tl;
+  layerPanel();
+  resize(); fit();
+})();
+
+const X = x => x - frame.x0, Y = y => frame.y1 - y;      // DXF mm -> canvas world (y down)
+function pts(a) { const o = []; let x = a[0], y = a[1]; o.push(X(x), Y(y)); for (let i = 2; i < a.length; i += 2) { x += a[i]; y += a[i + 1]; o.push(X(x), Y(y)); } return o; }
+
+let ORDER = 0, loadMs = 0;
+// a flat block file: runs already in world mm
+function decode(data) {
+  for (const [layer, colour, lt, lw, kind, items] of data.runs) {
+    if (kind === "t") { ORDER++; for (const t of items) texts.push({ layer, colour, order: ORDER, t, x: X(t[0]), y: Y(t[1]), m: 1, ang: 0, k: 1 }); continue; }
+    ingest(layer, colour, lt, lw, kind, items.map(it => (kind === "f" ? it : [it]).map(pts)));
+  }
+}
+
+// an instanced block file: each definition once, placements by reference. Walk the placements from the root, carrying the
+// placement's transform and its resolved layer / colour / linetype / lineweight for the definition's inheriting runs,
+// and hand every run, placed, to ingest() in AutoCAD's draw order (consecutive runs with the same style are merged).
+function expand(data) {
+  const L = meta.layers, defs = data.defs;
+  const resolve = (spec, ctx) => {
+    const layer = spec[0] || ctx.layer;
+    const colour = spec[1] === "L" ? (L[layer]?.colour || "#000000") : spec[1] === "B" ? ctx.colour : spec[1];
+    const lt = spec[2] === "L" ? L[layer]?.lt : spec[2] === "B" ? ctx.lt : spec[2];
+    const lw = spec[3] === -1 ? (L[layer]?.lw ?? -3) : spec[3] === -2 ? ctx.lw : spec[3];
+    return { layer, colour, lt, lw };
+  };
+  const off = l => L[l] && (L[l].off || L[l].frozen);
+  let pend = null;      // the run being gathered: [layer, colour, lt, lw, kind, items]
+  const flush = () => { if (pend) { ingest(...pend); pend = null; } };
+  const push = (st, kind, item) => {
+    const key = [st.layer, st.colour, kind === "s" ? st.lt : "", kind === "s" || kind === "h" ? st.lw : 0, kind];
+    if (!pend || pend[0] !== key[0] || pend[1] !== key[1] || pend[2] !== key[2] || pend[3] !== key[3] || pend[4] !== key[4]) { flush(); pend = [...key, []]; }
+    pend[5].push(item);
+  };
+  const root = { layer: "0", colour: L["0"]?.colour || "#000000", lt: L["0"]?.lt || "Continuous", lw: L["0"]?.lw ?? -3 };
+  const rootCtx = resolve(data.place.spec, root);
+  const fx = frame.x0, fy = frame.y1;
+  (function walk(di, M, ctx, depth) {
+    const d = defs[di], k = Math.pow(10, -d.q);
+    const [a, b, c, e, f, g] = M;                 // world = (a x + c y + f, b x + e y + g); canvas = (wx - x0, y1 - wy)
+    const place = arr => {
+      const o = new Array(arr.length); let x = arr[0], y = arr[1];
+      for (let i = 0; i < arr.length; i += 2) {
+        if (i) { x += arr[i]; y += arr[i + 1]; }
+        const X0 = x * k, Y0 = y * k;
+        o[i] = a * X0 + c * Y0 + f - fx; o[i + 1] = fy - (b * X0 + e * Y0 + g);
+      }
+      return o;
+    };
+    for (const [l, col, lt, lw, kind, items] of d.runs) {
+      const st = resolve([l, col, lt, lw], ctx);
+      if (kind === "i") {
+        if (L[st.layer]?.frozen) continue;
+        for (const it of items) {
+          const [ci, ca, cb, cc, cd, ce, cf] = it;
+          walk(ci, [a * ca + c * cb, b * ca + e * cb, a * cc + c * cd, b * cc + e * cd, a * ce + c * cf + f, b * ce + e * cf + g], st, depth + 1);
+        }
+        continue;
+      }
+      if (off(st.layer)) continue;
+      if (kind === "t") {
+        flush(); ORDER++;
+        const det = a * e - b * c, sx = Math.hypot(a, b), sy = Math.abs(det) / (sx || 1);
+        for (const t of items) {
+          const X0 = t[0] * k, Y0 = t[1] * k, wx = a * X0 + c * Y0 + f, wy = b * X0 + e * Y0 + g;
+          texts.push({ layer: st.layer, colour: st.colour, order: ORDER, t, x: wx - fx, y: fy - wy,
+                       ang: Math.atan2(b, a) * 180 / Math.PI, k: sy, m: det < 0 ? -1 : 1 });
+        }
+        continue;
+      }
+      for (const it of items) push(st, kind, (kind === "f" ? it : [it]).map(place));
+    }
+  })(data.root, data.place.m, rootCtx, 0);
+  flush();
+}
+
+// one run, placed (arrays of canvas coordinates per loop), into tiled vector batches
+function ingest(layer, colour, lt, lw, kind, items) {
+  const order = ++ORDER;
+  {
+    const tiles = new Map();          // tile key -> {coarse, fine} pieces
+    for (const P of items) {
+      let bx0 = Infinity, by0 = Infinity, bx1 = -Infinity, by1 = -Infinity;
+      for (const p of P) for (let i = 0; i < p.length; i += 2) { const x = p[i], y = p[i + 1]; if (x < bx0) bx0 = x; if (x > bx1) bx1 = x; if (y < by0) by0 = y; if (y > by1) by1 = y; }
+      const key = Math.floor(bx0 / TILE) + "," + Math.floor(by0 / TILE), fine = Math.max(bx1 - bx0, by1 - by0) < FINE;
+      let t = tiles.get(key); if (!t) tiles.set(key, t = { c: [], f: [] });
+      (fine ? t.f : t.c).push({ P, b: [bx0, by0, bx1, by1] });
+    }
+    for (const t of tiles.values()) for (const [list, fine] of [[t.c, false], [t.f, true]]) {
+      if (!list.length) continue;
+      let b = [Infinity, Infinity, -Infinity, -Infinity];
+      const mk = () => new Path2D(); let path = mk(); const fills = [];
+      for (const { P, b: ib } of list) {
+        b = [Math.min(b[0], ib[0]), Math.min(b[1], ib[1]), Math.max(b[2], ib[2]), Math.max(b[3], ib[3])];
+        const target = kind === "f" ? new Path2D() : path;      // each hatch is its own path, so even-odd stays inside it
+        for (const p of P) {
+          target.moveTo(p[0], p[1]); for (let i = 2; i < p.length; i += 2) target.lineTo(p[i], p[i + 1]);
+          if (kind === "f" || kind === "m") target.closePath();
+        }
+        if (kind === "f") fills.push(target);
+      }
+      parts.push({ layer, colour, lt, lw, kind, order, fine, b, path, fills, n: list.length });
+    }
+  }
+  COUNT[layer] = (COUNT[layer] || 0) + items.length;
+}
+const COUNT = {};      // items per layer, as placed
+
+// ---------------------------------------------------------------- draw
+function draw() {
+  queued = false;
+  const t0 = performance.now(), W = cv.width, H = cv.height, s = view.s * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+  ctx.setTransform(s, 0, 0, s, -view.x * s, -view.y * s);
+  const vx0 = view.x, vy0 = view.y, vx1 = view.x + W / s, vy1 = view.y + H / s;
+  const hair = 1 / s, skipFine = FINE * s < 1.2;
+  let drawn = 0, segs = 0;
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  for (const p of parts) {
+    if (hidden.has(p.layer) || (p.fine && skipFine)) continue;
+    if (p.b[2] < vx0 || p.b[0] > vx1 || p.b[3] < vy0 || p.b[1] > vy1) continue;
+    drawn++; segs += p.n;
+    if (p.kind === "f") { ctx.fillStyle = p.colour; for (const f of p.fills) ctx.fill(f, "evenodd"); continue; }
+    if (p.kind === "m") { ctx.fillStyle = "#fff"; ctx.fill(p.path, "nonzero"); continue; }
+    ctx.strokeStyle = p.colour;
+    const w = p.lw > 0 ? Math.max(1, p.lw / 25) : 1;            // lineweight in 1/100 mm; 0.25 mm and under draw as a hairline
+    ctx.lineWidth = (p.kind === "h" ? 0.7 : w) * hair * Math.min(dpr, 1.5);
+    const dash = p.kind === "s" && p.lt ? meta.linetypes[p.lt] : null;
+    if (dash && dash.length && dash.some(v => v > 0) && Math.max(...dash) * meta.ltscale * s > 2) ctx.setLineDash(dash.map(v => Math.max(v, 0.5 / s / meta.ltscale) * meta.ltscale));
+    else ctx.setLineDash([]);
+    ctx.stroke(p.path);
+  }
+  ctx.setLineDash([]);
+  // text, as vector glyphs from the browser's fonts (the CAD fonts are stood in for)
+  let nt = 0;
+  for (const T of texts) {
+    if (hidden.has(T.layer)) continue;
+    // h is the capitals' height (AutoCAD's text height); a font's em is about h / 0.716 (Arial's cap height)
+    const [, , h0, rot, align, row, words, style, wf, ls, font] = T.t, h = h0 * (T.k || 1), fs = h / 0.716;
+    if (fs * s < 2.5 || T.x < vx0 - 20000 || T.x > vx1 + 20000 || T.y < vy0 - 20000 || T.y > vy1 + 20000) continue;
+    nt++;
+    // placed: the placement's rotation, then its mirror (a negative scale flips the text, as AutoCAD shows it), then the text's own
+    ctx.save(); ctx.translate(T.x, T.y); ctx.rotate(-(T.ang || 0) * Math.PI / 180); if (T.m < 0) ctx.scale(1, -1);
+    ctx.rotate(-rot * Math.PI / 180); ctx.scale(wf || 1, 1);
+    ctx.fillStyle = T.colour; ctx.font = `${fs}px ${FONT(font || style)}`;
+    ctx.textAlign = align; ctx.textBaseline = "alphabetic";
+    const lines = String(words).split("\n"), lh = h * 5 / 3 * (ls || 1);           // AutoCAD's line pitch: 5/3 of the height
+    const block = (lines.length - 1) * lh + h;                                       // first line's cap top to last baseline
+    let base = row === 0 ? h : row === 1 ? h - block / 2 : row === 2 ? -(lines.length - 1) * lh : 0;   // first baseline
+    for (const l of lines) { ctx.fillText(l, 0, base); base += lh; }
+    ctx.restore();
+  }
+  document.getElementById("hud").textContent = `${(performance.now() - t0).toFixed(0)} ms · ${drawn} runs · ${nt} texts · ${(1 / view.s).toFixed(0)} mm/px · loaded in ${(loadMs / 1000).toFixed(1)} s`;
+}
+// a style or inline font name -> the browser's nearest font (the CAD fonts aren't installed here)
+const FONT = name => /gothic/i.test(name) ? `"Century Gothic", "Futura", "Avenir", sans-serif` : /romans|txt|standard/i.test(name) ? `"Arial Narrow", Arial, sans-serif` : `${/^[\w ]+$/.test(name) && !/^(RD|STYLE\d*)$/i.test(name) ? `"${name}", ` : ""}Arial, Helvetica, sans-serif`;
+const redraw = () => { if (!queued) { queued = true; requestAnimationFrame(draw); } };
+
+// ---------------------------------------------------------------- view
+function resize() { dpr = devicePixelRatio || 1; const r = cv.getBoundingClientRect(); cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); redraw(); }
+function fit() {
+  const r = cv.getBoundingClientRect(), pad = 0.03;
+  view.s = Math.min(r.width / (frame.w * (1 + 2 * pad)), r.height / (frame.h * (1 + 2 * pad)));
+  view.x = frame.w / 2 - r.width / 2 / view.s; view.y = frame.h / 2 - r.height / 2 / view.s; redraw();
+}
+addEventListener("resize", resize);
+let drag = null, moved = false;
+cv.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y }; moved = false; cv.setPointerCapture(e.pointerId); cv.classList.add("drag"); });
+cv.addEventListener("pointermove", e => {
+  if (!drag) return;
+  if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 3) moved = true;
+  view.x = drag.vx - (e.clientX - drag.x) / view.s; view.y = drag.vy - (e.clientY - drag.y) / view.s; redraw();
+});
+cv.addEventListener("pointerup", e => { cv.classList.remove("drag"); if (drag && !moved) pick(e); drag = null; });
+cv.addEventListener("wheel", e => {
+  e.preventDefault();
+  const r = cv.getBoundingClientRect(), k = Math.exp(-e.deltaY * 0.0015), mx = e.clientX - r.left, my = e.clientY - r.top;
+  const wx = view.x + mx / view.s, wy = view.y + my / view.s;
+  view.s *= k; view.x = wx - mx / view.s; view.y = wy - my / view.s; redraw();
+}, { passive: false });
+cv.addEventListener("dblclick", fit);
+
+// ---------------------------------------------------------------- what's under the cursor
+function pick(e) {
+  const r = cv.getBoundingClientRect(), mx = (e.clientX - r.left) * dpr, my = (e.clientY - r.top) * dpr;
+  const wx = view.x + mx / (view.s * dpr), wy = view.y + my / (view.s * dpr), tol = 4 / view.s;
+  const found = new Map(), s = view.s * dpr;
+  ctx.setTransform(s, 0, 0, s, -view.x * s, -view.y * s);
+  for (const p of parts) {
+    if (hidden.has(p.layer) || p.b[2] < wx - tol || p.b[0] > wx + tol || p.b[3] < wy - tol || p.b[1] > wy + tol) continue;
+    let hit = false;
+    if (p.kind === "f") hit = p.fills.some(f => ctx.isPointInPath(f, mx, my, "evenodd"));
+    else if (p.kind === "m") hit = ctx.isPointInPath(p.path, mx, my);
+    else { ctx.lineWidth = tol * 2; hit = ctx.isPointInStroke(p.path, mx, my); }
+    if (hit) found.set(p.layer, (found.get(p.layer) || []).concat({ f: "fill", m: "wipeout", s: "line", h: "pattern" }[p.kind]));
+  }
+  const box = document.getElementById("pick");
+  document.querySelectorAll(".lyr.hit").forEach(d => d.classList.remove("hit"));
+  if (!found.size) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  box.innerHTML = [...found].map(([l, k]) => `<div><b>${esc(l)}</b> <span class="muted">${[...new Set(k)].join(", ")}</span></div>`).join("");
+  for (const l of found.keys()) document.querySelector(`.lyr[data-l="${CSS.escape(l)}"]`)?.classList.add("hit");
+  redraw();
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// ---------------------------------------------------------------- panels
+function checkPanel() {
+  const c = meta.check, rows = [];
+  const types = Object.keys(c.seen).sort((a, b) => c.seen[b] - c.seen[a]);
+  for (const t of types) {
+    const f = c.failed[t]?.[0] || 0, d = c.drawn[t] || 0;
+    rows.push(`<div class="${f ? "bad" : ""}"><span>${t}</span><span>${d.toLocaleString()} drawn${f ? ` · ${f} failed` : ""}</span></div>`);
+  }
+  const st = c.stats, notes = [];
+  if (st.skipped_layer_off) notes.push(`${st.skipped_layer_off} on layers that are off`);
+  if (st.invisible) notes.push(`${st.invisible} invisible`);
+  if (st.pattern_lines_outside) notes.push(`${st.pattern_lines_outside} stray pattern lines clipped`);
+  if (st.not_drawn_REGION) notes.push(`${st.not_drawn_REGION} regions not drawn`);
+  document.getElementById("check").innerHTML = (c.counted === "per definition" ? `<div style="display:block;margin-bottom:4px">Counted once per block definition (instanced file)</div>` : "") + rows.join("") + (notes.length ? `<div style="margin-top:6px;display:block">Skipped: ${notes.join(" · ")}</div>` : "");
+}
+function layerPanel() {
+  const box = document.getElementById("layers"), q = document.getElementById("q").value.toLowerCase();
+  const n = { ...COUNT }; texts.forEach(T => n[T.layer] = (n[T.layer] || 0) + 1);
+  const used = Object.keys(n).sort();
+  box.innerHTML = meta.blocks.map(b => `<div class="blk">${esc(b.block)} <span style="font-weight:400">· ${(b.bytes / 1e6).toFixed(1)} MB${b.instanced ? ` · ${b.defs} blocks, ${b.placements} placements` : ""}</span></div>` +
+    used.filter(l => l.toLowerCase().includes(q)).map(l => {
+      const L = meta.layers[l] || {}, cnt = n[l];
+      return `<label class="lyr" data-l="${esc(l)}"><input type="checkbox" ${hidden.has(l) ? "" : "checked"}><span class="sw" style="background:${L.colour}"></span><span class="nm" title="${esc(l)}">${esc(l)}</span><span class="n">${cnt.toLocaleString()}</span></label>`;
+    }).join("")).join("");
+  box.querySelectorAll(".lyr input").forEach(cb => cb.onchange = () => { const l = cb.closest(".lyr").dataset.l; cb.checked ? hidden.delete(l) : hidden.add(l); redraw(); });
+}
+document.getElementById("q").oninput = layerPanel;
+document.getElementById("all").onclick = () => { hidden.clear(); layerPanel(); redraw(); };
+document.getElementById("none").onclick = () => { Object.keys(meta.layers).concat(Object.keys(COUNT)).forEach(l => hidden.add(l)); layerPanel(); redraw(); };
+</script>
+</body>
+</html>
