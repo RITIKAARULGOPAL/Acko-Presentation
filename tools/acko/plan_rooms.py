@@ -212,6 +212,13 @@ def ring(p): return [[round(x), round(y)] for x, y in p.exterior.coords]
 # clear of a label is filled back (the cursor on a room's name should light the room), and specks under 0.02 m2 are dropped.
 label_pts = [Point(l["pt"]) for l in labels]
 room_pts = [(r, r["poly"].representative_point()) for r in rooms]
+def text_hole(hp):
+    """is this hole the box AutoCAD keeps clear around a label's text?"""
+    inside = [l for l in labels if hp.contains(Point(l["pt"]))]
+    if not inside: return False
+    if hp.area / hp.minimum_rotated_rectangle.area < 0.9: return False          # a box, not a round or angled object
+    box = sum(len(max(l["words"].split("  ") or [""], key=len)) * 0.75 * l["h"] * (l["words"].count("  ") + 1) * 1.8 * l["h"] for l in inside)
+    return hp.area < 4 * max(box, 1)                                             # no bigger than its words, give or take
 solid = unary_union([r["poly"] for r in rooms if r["type"] not in OPEN])     # every enclosed room's footprint
 def rings_of(g):
     """a (multi)polygon as [[exterior, hole, ...], ...] in whole mm"""
@@ -222,8 +229,9 @@ for r in rooms:
     for h in r["fill"].interiors:
         hp = Polygon(h)
         if hp.area < 2e4: continue
-        # a hole that only keeps the fill clear of a label: text-sized, with no room inside it
-        if hp.area < 1e7 and any(hp.contains(q) for q in label_pts) and not any(o is not r and hp.contains(q) for o, q in room_pts):
+        # a hole that only keeps the fill clear of a label: a rectangle about the size of the label's words, with no room
+        # in it. A labelled piece of furniture (a punch bag, a swing chair) is a hole of its own shape and stays cut out.
+        if text_hole(hp) and not any(o is not r and hp.contains(q) for o, q in room_pts):
             refilled += 1; continue
         holes.append(hp)
     hover = Polygon(r["poly"].exterior.coords, [h.exterior.coords for h in holes]).buffer(0)
