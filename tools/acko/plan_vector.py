@@ -1,7 +1,9 @@
 """The layout DXF as vector data, block by block, for the plan viewer (tools/acko/plan_view.html) and later the deck.
 
-The drawing keeps the plan as blocks stacked at one point in model space (the base plan first; outlines, fills,
-labels and the rest later). Each block placed in model space becomes its own file, never merged with the others.
+The plan comes as one DXF per layer of the drawing (the base plan, the room hatches, the space outlines, the labels,
+the neighbourhoods, the core, the vegetation, the egress), each holding its block placed at the same point. Every file
+is a group of its own, every block placed in its model space a file of its own, never merged with the others; all share
+one frame. A block placed twice at the same spot (a stacked duplicate) is drawn once and reported.
 
 Instanced (the default), as Mitigata's instanced.svg: every block definition the file uses is written once, in its own
 coordinates, and every placement of it is a reference with its 2D transform. Inside a definition everything AutoCAD
@@ -26,11 +28,11 @@ big definitions become definitions of their own. --no-shapes leaves that out (in
 --flat writes the previous form instead: every placement exploded into world coordinates (integer mm), as the check.
 
 Writes into <out_dir>:
-  layers.json            the blocks (draw order), the frame, every layer (colour, linetype, lineweight, on), linetypes,
-                         styles, and a check: every entity type, how many were drawn (in definitions and as placed)
-  layers/<block>.json    instanced: {"block", "root", "place", "defs": [{"name", "q", "runs"}]}; flat: {"block", "runs"}
+  layers.json            the groups and their blocks in draw order, the frame, every layer (colour, linetype, lineweight,
+                         on), linetypes, styles, and per file a check: every entity type, how many were drawn, what failed
+  layers/<group>__<block>.json   instanced: {"block", "root", "place", "defs": [{"name", "q", "runs"}]}; flat: {"block", "runs"}
 
-usage: python tools/acko/plan_vector.py <layout.dxf> <out_dir> [--no-shapes | --flat]
+usage: python tools/acko/plan_vector.py <out_dir> <layout.dxf> [<layer.dxf> ...] [--no-shapes | --flat]
 """
 import sys, os, re, json, math, time, collections
 import ezdxf
@@ -41,18 +43,32 @@ from shapely.prepared import prep
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from plan_reinstance import reinstance
 
-SRC, OUT = sys.argv[1], sys.argv[2]
-FLAT = "--flat" in sys.argv[3:]
-NO_SHAPES = "--no-shapes" in sys.argv[3:]      # instanced as the DXF has it, without re-instancing exploded geometry
+ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+if ARGS[0].lower().endswith(".dxf") and len(ARGS) == 2 and not ARGS[1].lower().endswith(".dxf"):
+    ARGS = [ARGS[1], ARGS[0]]                  # the older order: <layout.dxf> <out_dir>
+OUT, SOURCES = ARGS[0], ARGS[1:]
+FLAT = "--flat" in sys.argv[1:]
+NO_SHAPES = "--no-shapes" in sys.argv[1:]      # instanced as the DXF has it, without re-instancing exploded geometry
 t0 = time.time()
-doc = ezdxf.readfile(SRC)
-print(f"load {time.time() - t0:.0f}s", flush=True)
-msp = doc.modelspace()
 
-LAYERS = {l.dxf.name: l for l in doc.layers}
-OFF = {n for n, l in LAYERS.items() if not l.is_on()}
-FROZEN = {n for n, l in LAYERS.items() if l.is_frozen()}
-LTSCALE = doc.header.get("$LTSCALE", 1.0) or 1.0
+# draw order of the groups, bottom first: room hatches under the base plan's linework, labels on top
+GROUP_ORDER = ["rooms", "base", "vegetation", "dueDiligence", "zoneBoundaries", "neighbourhoods", "egress", "text"]
+def group_of(path):
+    """ACKO_HATCH_<name>_22_10_26.dxf -> <name>; the whole-plan file is the base, the bare one the room hatches"""
+    m = re.match(r"ACKO_HATCH_?(.*?)_?\d\d_\d\d_\d\d$", os.path.splitext(os.path.basename(path))[0], re.I)
+    g = m.group(1) if m else os.path.splitext(os.path.basename(path))[0]
+    return {"ALL": "base", "": "rooms", "dueDilgencei": "dueDiligence"}.get(g, g)
+
+doc = msp = None
+LAYERS, OFF, FROZEN, LTSCALE = {}, set(), set(), 1.0
+def open_doc(path):
+    global doc, msp, LAYERS, OFF, FROZEN, LTSCALE
+    doc = ezdxf.readfile(path)
+    msp = doc.modelspace()
+    LAYERS = {l.dxf.name: l for l in doc.layers}
+    OFF = {n for n, l in LAYERS.items() if not l.is_on()}
+    FROZEN = {n for n, l in LAYERS.items() if l.is_frozen()}
+    LTSCALE = doc.header.get("$LTSCALE", 1.0) or 1.0
 
 def layer_rgb(name):
     l = LAYERS.get(name)
@@ -400,33 +416,64 @@ def expand_pts(di, M, depth=0):
                 for i in range(2, len(l), 2):
                     x += l[i]; y += l[i + 1]; X, Y = x * k, y * k; yield a * X + c * Y + e, b * X + dd * Y + f
 
-for e in msp:
-    if e.dxftype() != "INSERT":
-        seen[e.dxftype()] += 1; stats["modelspace_loose_" + e.dxftype()] += 1      # only the stacked blocks are the plan
-        continue
-    name = e.dxf.name
-    fn = re.sub(r"[^A-Za-z0-9_-]", "_", name) + ".json"
-    path = os.path.join(OUT, "layers", fn)
-    lay = e.dxf.get("layer", "0")
-    if FLAT:
-        R = Runs(); flat_walk([e], R)
-        json.dump({"block": name, "runs": R.runs}, open(path, "w", encoding="utf-8"), separators=(",", ":"))
-        extents.append(list(runs_pts(R.runs)))
-        info = {"runs": len(R.runs)}
-    else:
-        DEFS.clear(); INDEX.clear(); MAXSCALE.clear(); USES.clear()
-        scales(name, max(abs(e.dxf.xscale), abs(e.dxf.yscale)))
-        placed, shared = sum(USES.values()) - 1, sum(1 for n in USES if USES[n] > 1)
-        root = define(name)
-        root = merge_duplicates(root)
-        if not NO_SHAPES: reinstance(DEFS, stats)       # repeated exploded furniture, stored once
-        place ={"m": affine(e.matrix44()), "spec": list(spec(e, lay))}
-        json.dump({"block": name, "root": root, "place": place, "defs": DEFS}, open(path, "w", encoding="utf-8"), separators=(",", ":"))
-        extents.append(list(expand_pts(root, place["m"])))
-        info = {"defs": len(DEFS), "placements": placed, "placed_more_than_once": shared,
-                "merged": stats["definitions_merged"], "shapes": stats["shapes"], "shape_placements": stats["occurrences"]}
-    manifest.append({"block": name, "file": "layers/" + fn, "bytes": os.path.getsize(path), "instanced": not FLAT, **info})
-    print(f"  {name}: {os.path.getsize(path) / 1e6:.1f} MB  {info}  {time.time() - t0:.0f}s", flush=True)
+def lt_pattern(name):
+    lt = doc.linetypes.get(name) if name in doc.linetypes else None
+    try: pat = list(lt.simplified_line_pattern()) if lt else []
+    except Exception: pat = []
+    return [round(abs(v), 2) for v in pat]
+
+LAYER_OUT, LT_OUT, STYLE_OUT, CHECK, clashes = {}, {}, {}, {}, []
+for src in sorted(SOURCES, key=lambda p: (GROUP_ORDER.index(group_of(p)) if group_of(p) in GROUP_ORDER else 99, p)):
+    group = group_of(src)
+    for c in (seen, drawn, stats): c.clear()
+    failed.clear(); ltypes_used.clear(); styles_used.clear()
+    open_doc(src)
+    print(f"{group}: {os.path.basename(src)} loaded {time.time() - t0:.0f}s", flush=True)
+    placed_here = set()
+    for e in msp:
+        if e.dxftype() != "INSERT":
+            seen[e.dxftype()] += 1; stats["modelspace_loose_" + e.dxftype()] += 1      # only the stacked blocks are the plan
+            continue
+        name = e.dxf.name
+        key = (name, tuple(affine(e.matrix44())))
+        if key in placed_here:
+            stats["duplicate_placement_skipped"] += 1
+            print(f"  {name}: placed again at the same spot, drawn once", flush=True)
+            continue
+        placed_here.add(key)
+        fn = re.sub(r"[^A-Za-z0-9_-]", "_", f"{group}__{name}") + ".json"
+        path = os.path.join(OUT, "layers", fn)
+        lay = e.dxf.get("layer", "0")
+        if FLAT:
+            R = Runs(); flat_walk([e], R)
+            json.dump({"block": name, "runs": R.runs}, open(path, "w", encoding="utf-8"), separators=(",", ":"))
+            extents.append(list(runs_pts(R.runs)))
+            info = {"runs": len(R.runs)}
+        else:
+            DEFS.clear(); INDEX.clear(); MAXSCALE.clear(); USES.clear()
+            scales(name, max(abs(e.dxf.xscale), abs(e.dxf.yscale)))
+            placed, shared = sum(USES.values()) - 1, sum(1 for n in USES if USES[n] > 1)
+            root = define(name)
+            root = merge_duplicates(root)
+            if not NO_SHAPES: reinstance(DEFS, stats)       # repeated exploded furniture, stored once
+            place = {"m": affine(e.matrix44()), "spec": list(spec(e, lay))}
+            json.dump({"block": name, "root": root, "place": place, "defs": DEFS}, open(path, "w", encoding="utf-8"), separators=(",", ":"))
+            extents.append(list(expand_pts(root, place["m"])))
+            info = {"defs": len(DEFS), "placements": placed, "placed_more_than_once": shared,
+                    "merged": stats["definitions_merged"], "shapes": stats["shapes"], "shape_placements": stats["occurrences"]}
+        manifest.append({"group": group, "source": os.path.basename(src), "block": name, "file": "layers/" + fn,
+                         "bytes": os.path.getsize(path), "instanced": not FLAT, "at": [round(v) for v in e.dxf.insert][:2], **info})
+        print(f"  {name}: {os.path.getsize(path) / 1e6:.2f} MB  {info}  {time.time() - t0:.0f}s", flush=True)
+    for n, l in LAYERS.items():
+        rec = {"colour": hexc(layer_rgb(n)), "lt": layer_lt(n), "lw": layer_lw(n), "off": n in OFF, "frozen": n in FROZEN}
+        if n in LAYER_OUT and LAYER_OUT[n] != rec: clashes.append(f"{n}: {group} has {rec}, kept {LAYER_OUT[n]}")
+        LAYER_OUT.setdefault(n, rec)
+        ltypes_used.add(layer_lt(n))
+    for n in ltypes_used: LT_OUT.setdefault(n, lt_pattern(n))
+    for st in styles_used: STYLE_OUT.setdefault(st, doc.styles.get(st).dxf.font if st in doc.styles else "")
+    CHECK[group] = {"source": os.path.basename(src), "seen": dict(seen), "drawn": dict(drawn),
+                    "failed": {k: [len(v), *sorted(set(v))[:5]] for k, v in failed.items()}, "stats": dict(stats),
+                    "counted": "per definition" if not FLAT else "as placed"}
 
 # ---------------------------------------------------------------- frame: the extent of what's drawn
 xs = sorted(p[0] for E in extents for p in E); ys = sorted(p[1] for E in extents for p in E)
@@ -437,23 +484,15 @@ far = sum(1 for x in xs if x < X0 - 20000 or x > X1 + 20000) + sum(1 for y in ys
 if not far: X0, Y0, X1, Y1 = full          # nothing stray: the frame is the whole drawing
 X0, Y0, X1, Y1 = map(round, (X0, Y0, X1, Y1))
 
-def lt_pattern(name):
-    lt = doc.linetypes.get(name) if name in doc.linetypes else None
-    try: pat = list(lt.simplified_line_pattern()) if lt else []
-    except Exception: pat = []
-    return [round(abs(v), 2) for v in pat]
-for n in LAYERS: ltypes_used.add(layer_lt(n))
 out = {
-    "source": os.path.basename(SRC), "built": time.strftime("%Y-%m-%d %H:%M"), "seconds": round(time.time() - t0),
+    "sources": [os.path.basename(p) for p in SOURCES], "built": time.strftime("%Y-%m-%d %H:%M"), "seconds": round(time.time() - t0),
     "instanced": not FLAT, "frame": [X0, Y0, X1, Y1], "extent_all": full, "points_far_off": far,
-    "blocks": manifest,
-    "layers": {n: {"colour": hexc(layer_rgb(n)), "lt": layer_lt(n), "lw": layer_lw(n), "off": n in OFF, "frozen": n in FROZEN}
-               for n in sorted(LAYERS)},
-    "linetypes": {n: lt_pattern(n) for n in sorted(ltypes_used)}, "ltscale": LTSCALE,
-    "styles": {s: (doc.styles.get(s).dxf.font if s in doc.styles else "") for s in styles_used},
-    "check": {"seen": dict(seen), "drawn": dict(drawn), "failed": {k: [len(v), *sorted(set(v))[:5]] for k, v in failed.items()},
-              "stats": dict(stats), "counted": "per definition" if not FLAT else "as placed"},
+    "groups": [g for g in GROUP_ORDER if any(m["group"] == g for m in manifest)] + sorted({m["group"] for m in manifest} - set(GROUP_ORDER)),
+    "blocks": manifest, "layers": dict(sorted(LAYER_OUT.items())), "layer_clashes": clashes,
+    "linetypes": dict(sorted(LT_OUT.items())), "ltscale": LTSCALE, "styles": STYLE_OUT, "check": CHECK,
 }
 json.dump(out, open(os.path.join(OUT, "layers.json"), "w", encoding="utf-8"), indent=1)
 print(f"done {time.time() - t0:.0f}s  frame {(X1 - X0) / 1000:.1f} x {(Y1 - Y0) / 1000:.1f} m, {far} points far off")
-print("drawn", dict(drawn)); print("failed", {k: len(v) for k, v in failed.items()}); print("stats", dict(stats))
+for g, c in CHECK.items():
+    print(f"  {g:15s} drawn {sum(c['drawn'].values()):7d}  failed {sum(v[0] for v in c['failed'].values())}  {c['stats']}")
+if clashes: print("layer clashes:", *clashes[:10], sep="\n  ")

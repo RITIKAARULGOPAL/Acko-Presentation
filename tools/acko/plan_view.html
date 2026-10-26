@@ -6,7 +6,7 @@
 <title>Plan Viewer</title>
 <!-- the layout DXF's blocks as vectors (tools/acko/plan_vector.py), drawn on a canvas in AutoCAD's draw order and redrawn from the
      vectors on every pan and zoom (no pictures). Serve the repo (python tools/serve.py) and open
-     /tools/acko/plan_view.html?dir=../_work/plan-base/ . Scroll zooms on the cursor, drag pans, double-click fits, click lists
+     /tools/acko/plan_view.html?dir=../_work/plan/ . Scroll zooms on the cursor, drag pans, double-click fits, click lists
      the layers under the cursor. -->
 <style>
   :root { --paper:#ffffff; --ink:#1d1d1d; --muted:#6b6b6b; --line:#e3e0da; --panel:#fbfaf7; --accent:#5222D0; }
@@ -38,6 +38,12 @@
   #pick { position:absolute; left:10px; top:10px; background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:6px; padding:6px 10px; font-size:12px; display:none; max-width:340px; }
   #check div { display:flex; justify-content:space-between; gap:8px; }
   #check .bad { color:#c0392b; }
+  .chip { border:1px solid var(--line); border-radius:999px; padding:2px 9px; cursor:pointer; background:#fff; font:inherit; font-size:12px; }
+  .chip.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .hi { padding:6px 14px; border-bottom:1px solid #efece6; cursor:pointer; font-size:12px; }
+  .hi:hover, .hi.on { background:#ece6fb; }
+  .hi .k { font-size:10px; text-transform:uppercase; letter-spacing:.05em; font-weight:600; color:#c0392b; }
+  .hi .k.note { color:#8a7a3a; }
   @media (max-width:760px) { body { grid-template-columns:1fr; grid-template-rows:40vh 1fr; } aside { border-right:0; border-bottom:1px solid var(--line); } }
 </style>
 </head>
@@ -45,6 +51,14 @@
 <aside>
   <header><h1>Plan viewer</h1><div class="muted" id="src">loading…</div></header>
   <div class="sec"><h2>Check</h2><div id="check" class="muted"></div></div>
+  <div class="sec" id="hsec" style="display:none">
+    <h2>Hover rooms</h2>
+    <label class="row" style="gap:6px;margin-bottom:4px"><input type="checkbox" id="hon" checked> hover test</label>
+    <label class="row" style="gap:6px;margin-bottom:6px"><input type="checkbox" id="hshapes"> show the hover shapes</label>
+    <div id="hsum" class="muted"></div>
+    <div class="row" id="hkinds" style="flex-wrap:wrap;margin-top:6px"></div>
+  </div>
+  <div id="hlist" style="max-height:30vh;overflow:auto;border-bottom:1px solid var(--line);display:none"></div>
   <div class="sec">
     <h2>Layers</h2>
     <div class="row"><input type="search" id="q" placeholder="filter layers"><button id="all">All</button><button id="none">None</button></div>
@@ -54,30 +68,36 @@
 <main>
   <canvas id="cv"></canvas>
   <div id="pick"></div>
+  <div id="tip" style="position:absolute;pointer-events:none;background:rgba(20,20,20,.9);color:#fff;padding:5px 9px;border-radius:5px;font-size:12px;display:none;max-width:320px"></div>
   <div id="hud"></div>
 </main>
 <script>
-const DIR = new URLSearchParams(location.search).get("dir") || "../_work/plan-base/";
+const DIR = new URLSearchParams(location.search).get("dir") || "../_work/plan/";
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const TILE = 10000;          // mm: runs are split into 10 m tiles, so a view draws only what's in it
 const FINE = 250;            // mm: pieces smaller than this are left out while they'd be under ~1 px
 let meta, frame, view = { s: 1, x: 0, y: 0 }, parts = [], texts = [], hidden = new Set(), dpr = 1, queued = false;
+// one group per source DXF (base plan, room hatches, outlines, labels, ...); a layer is keyed by its group, "group|layer"
+let GROUP = "", hiddenG = new Set(), alpha = {};
 
 // ---------------------------------------------------------------- load and decode
 (async () => {
   meta = await fetch(DIR + "layers.json").then(r => r.json());
   const [x0, y0, x1, y1] = meta.frame;
   frame = { x0, y1, w: x1 - x0, h: y1 - y0 };
-  document.getElementById("src").textContent = `${meta.source} · built ${meta.built}`;
+  document.getElementById("src").textContent = `${meta.sources ? meta.sources.length + " DXFs" : meta.source} · built ${meta.built}`;
   checkPanel();
   const tl = performance.now();
   for (const b of meta.blocks) {
     const data = await fetch(DIR + b.file).then(r => r.json());
+    GROUP = b.group || b.block;
     if (data.defs) expand(data); else decode(data);
   }
   parts.sort((a, b) => a.order - b.order);
   loadMs = performance.now() - tl;
   layerPanel();
+  try { ROOMS = await fetch(DIR + "rooms.json").then(r => r.ok ? r.json() : null); } catch (e) { ROOMS = null; }
+  if (ROOMS) hoverSetup();
   resize(); fit();
 })();
 
@@ -88,7 +108,7 @@ let ORDER = 0, loadMs = 0;
 // a flat block file: runs already in world mm
 function decode(data) {
   for (const [layer, colour, lt, lw, kind, items] of data.runs) {
-    if (kind === "t") { ORDER++; for (const t of items) texts.push({ layer, colour, order: ORDER, t, x: X(t[0]), y: Y(t[1]), m: 1, ang: 0, k: 1 }); continue; }
+    if (kind === "t") { ORDER++; for (const t of items) texts.push({ layer, g: GROUP, key: GROUP + "|" + layer, colour, order: ORDER, t, x: X(t[0]), y: Y(t[1]), m: 1, ang: 0, k: 1 }); continue; }
     ingest(layer, colour, lt, lw, kind, items.map(it => (kind === "f" ? it : [it]).map(pts)));
   }
 }
@@ -144,7 +164,7 @@ function expand(data) {
         const det = a * e - b * c, sx = Math.hypot(a, b), sy = Math.abs(det) / (sx || 1);
         for (const t of items) {
           const X0 = t[0] * k, Y0 = t[1] * k, wx = a * X0 + c * Y0 + f, wy = b * X0 + e * Y0 + g;
-          texts.push({ layer: st.layer, colour: st.colour, order: ORDER, t, x: wx - fx, y: fy - wy,
+          texts.push({ layer: st.layer, g: GROUP, key: GROUP + "|" + st.layer, colour: st.colour, order: ORDER, t, x: wx - fx, y: fy - wy,
                        ang: Math.atan2(b, a) * 180 / Math.PI, k: sy, m: det < 0 ? -1 : 1 });
         }
         continue;
@@ -180,12 +200,12 @@ function ingest(layer, colour, lt, lw, kind, items) {
         }
         if (kind === "f") fills.push(target);
       }
-      parts.push({ layer, colour, lt, lw, kind, order, fine, b, path, fills, n: list.length });
+      parts.push({ layer, g: GROUP, key: GROUP + "|" + layer, colour, lt, lw, kind, order, fine, b, path, fills, n: list.length });
     }
   }
-  COUNT[layer] = (COUNT[layer] || 0) + items.length;
+  COUNT[GROUP + "|" + layer] = (COUNT[GROUP + "|" + layer] || 0) + items.length;
 }
-const COUNT = {};      // items per layer, as placed
+const COUNT = {};      // items per group|layer, as placed
 
 // ---------------------------------------------------------------- draw
 function draw() {
@@ -198,9 +218,10 @@ function draw() {
   let drawn = 0, segs = 0;
   ctx.lineCap = "round"; ctx.lineJoin = "round";
   for (const p of parts) {
-    if (hidden.has(p.layer) || (p.fine && skipFine)) continue;
+    if (hidden.has(p.key) || hiddenG.has(p.g) || (p.fine && skipFine)) continue;
     if (p.b[2] < vx0 || p.b[0] > vx1 || p.b[3] < vy0 || p.b[1] > vy1) continue;
     drawn++; segs += p.n;
+    ctx.globalAlpha = alpha[p.g] ?? 1;
     if (p.kind === "f") { ctx.fillStyle = p.colour; for (const f of p.fills) ctx.fill(f, "evenodd"); continue; }
     if (p.kind === "m") { ctx.fillStyle = "#fff"; ctx.fill(p.path, "nonzero"); continue; }
     ctx.strokeStyle = p.colour;
@@ -211,11 +232,11 @@ function draw() {
     else ctx.setLineDash([]);
     ctx.stroke(p.path);
   }
-  ctx.setLineDash([]);
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
   // text, as vector glyphs from the browser's fonts (the CAD fonts are stood in for)
   let nt = 0;
   for (const T of texts) {
-    if (hidden.has(T.layer)) continue;
+    if (hidden.has(T.key) || hiddenG.has(T.g)) continue;
     // h is the capitals' height (AutoCAD's text height); a font's em is about h / 0.716 (Arial's cap height)
     const [, , h0, rot, align, row, words, style, wf, ls, font] = T.t, h = h0 * (T.k || 1), fs = h / 0.716;
     if (fs * s < 2.5 || T.x < vx0 - 20000 || T.x > vx1 + 20000 || T.y < vy0 - 20000 || T.y > vy1 + 20000) continue;
@@ -231,6 +252,7 @@ function draw() {
     for (const l of lines) { ctx.fillText(l, 0, base); base += lh; }
     ctx.restore();
   }
+  hoverDraw(s);
   document.getElementById("hud").textContent = `${(performance.now() - t0).toFixed(0)} ms · ${drawn} runs · ${nt} texts · ${(1 / view.s).toFixed(0)} mm/px · loaded in ${(loadMs / 1000).toFixed(1)} s`;
 }
 // a style or inline font name -> the browser's nearest font (the CAD fonts aren't installed here)
@@ -248,7 +270,7 @@ addEventListener("resize", resize);
 let drag = null, moved = false;
 cv.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y }; moved = false; cv.setPointerCapture(e.pointerId); cv.classList.add("drag"); });
 cv.addEventListener("pointermove", e => {
-  if (!drag) return;
+  if (!drag) { hoverMove(e); return; }
   if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 3) moved = true;
   view.x = drag.vx - (e.clientX - drag.x) / view.s; view.y = drag.vy - (e.clientY - drag.y) / view.s; redraw();
 });
@@ -261,6 +283,83 @@ cv.addEventListener("wheel", e => {
 }, { passive: false });
 cv.addEventListener("dblclick", fit);
 
+// ---------------------------------------------------------------- hover test (tools/acko/plan_rooms.py's rooms.json)
+// The deck lights a room when the cursor is over it. Here each room's hover shape (its hatch's outer edge, split per room)
+// is tested the same way: the smallest shape under the cursor wins, as a room drawn over an open area does in the deck.
+let ROOMS = null, hot = null, hkinds = new Set(), hsel = null;
+function hoverSetup() {
+  document.getElementById("hsec").style.display = "block"; document.getElementById("hlist").style.display = "block";
+  for (const r of ROOMS.rooms) {
+    r.pts = r.shape.map(([x, y]) => [X(x), Y(y)]);
+    const xs = r.pts.map(p => p[0]), ys = r.pts.map(p => p[1]);
+    r.b = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+    r.path = new Path2D(); r.pts.forEach(([x, y], i) => i ? r.path.lineTo(x, y) : r.path.moveTo(x, y)); r.path.closePath();
+    r.issues = [];
+  }
+  ROOMS.issues.forEach((it, i) => { it.i = i; it.cx = X(it.x); it.cy = Y(it.y); if (it.room != null) ROOMS.rooms[it.room].issues.push(it); });
+  const c = {}; ROOMS.issues.forEach(it => { const k = it.kind + ":" + it.level; c[k] = (c[k] || 0) + 1; });
+  Object.keys(c).filter(k => k.endsWith(":issue")).forEach(k => hkinds.add(k));
+  const by = {}; ROOMS.rooms.forEach(r => by[r.type] = (by[r.type] || 0) + 1);
+  const clean = ROOMS.rooms.filter(r => !r.issues.some(i => i.level === "issue")).length;
+  document.getElementById("hsum").innerHTML = `${ROOMS.rooms.length} rooms in ${Object.keys(by).length} types · <b>${clean}</b> with no issue`;
+  document.getElementById("hkinds").innerHTML = Object.entries(c).sort().map(([k, n]) => `<button class="chip${hkinds.has(k) ? " on" : ""}" data-k="${k}">${k.replace(":issue", "").replace(":note", " (note)")} ${n}</button>`).join("");
+  document.querySelectorAll("#hkinds .chip").forEach(b => b.onclick = () => { const k = b.dataset.k; hkinds.has(k) ? hkinds.delete(k) : hkinds.add(k); b.classList.toggle("on"); hoverList(); redraw(); });
+  document.getElementById("hon").onchange = () => { hot = null; document.getElementById("tip").style.display = "none"; redraw(); };
+  document.getElementById("hshapes").onchange = redraw;
+  hoverList();
+}
+function hoverList() {
+  const box = document.getElementById("hlist");
+  box.innerHTML = ROOMS.issues.filter(it => hkinds.has(it.kind + ":" + it.level)).map(it =>
+    `<div class="hi${hsel === it.i ? " on" : ""}" data-i="${it.i}"><div class="k ${it.level}">${it.kind}${it.level === "note" ? " · note" : ""}</div>${esc(it.what)}</div>`).join("");
+  box.querySelectorAll(".hi").forEach(d => d.onclick = () => {
+    const it = ROOMS.issues[+d.dataset.i]; hsel = it.i;
+    const r = cv.getBoundingClientRect(); view.s = r.width / 14000; view.x = it.cx - 7000; view.y = it.cy - r.height / view.s / 2;
+    hot = it.room != null ? ROOMS.rooms[it.room] : null; hoverList(); redraw();
+  });
+}
+function inPoly(x, y, pts) {
+  let inside = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i], [xj, yj] = pts[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+function hoverMove(e) {
+  if (!ROOMS || !document.getElementById("hon").checked) return;
+  const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+  const wx = view.x + mx / view.s, wy = view.y + my / view.s;
+  const under = ROOMS.rooms.filter(R => wx >= R.b[0] && wx <= R.b[2] && wy >= R.b[1] && wy <= R.b[3] && inPoly(wx, wy, R.pts));
+  under.sort((a, b) => a.m2 - b.m2);
+  const top = under[0] || null, tip = document.getElementById("tip");
+  if (top !== hot) { hot = top; redraw(); }
+  if (!top) { tip.style.display = "none"; return; }
+  const iss = top.issues.filter(i => i.level === "issue");
+  tip.style.display = "block"; tip.style.left = (mx + 14) + "px"; tip.style.top = (my + 14) + "px";
+  tip.innerHTML = `<b>${esc(top.type.slice(3).replace(/_/g, " "))}</b> · ${top.m2} m²` + (top.labels.length ? `<br>${esc(top.labels.slice(0, 2).join(" · "))}` : "") +
+    (top.zone ? `<br>Neighbourhood: ${esc(top.zone)}` : "") + (under.length > 1 ? `<br><span style="color:#ffd27a">${under.length} hover shapes under the cursor</span>` : "") +
+    (iss.length ? `<br><span style="color:#ff9b9b">${iss.length} issue${iss.length > 1 ? "s" : ""}: ${esc(iss[0].what)}</span>` : "");
+}
+function hoverDraw(s) {
+  if (!ROOMS) return;
+  const px = 1 / s;
+  if (document.getElementById("hshapes").checked) {
+    ctx.lineWidth = 1.5 * px * dpr; ctx.strokeStyle = "#d0021b"; ctx.setLineDash([]);
+    for (const r of ROOMS.rooms) ctx.stroke(r.path);
+  }
+  if (hot && document.getElementById("hon").checked) {
+    ctx.globalAlpha = .35; ctx.fillStyle = "#5222D0"; ctx.fill(hot.path); ctx.globalAlpha = 1;
+    ctx.lineWidth = 2.5 * px * dpr; ctx.strokeStyle = "#5222D0"; ctx.stroke(hot.path);
+  }
+  ctx.lineWidth = 2 * px * dpr;
+  for (const it of ROOMS.issues) {
+    if (!hkinds.has(it.kind + ":" + it.level)) continue;
+    ctx.strokeStyle = it.i === hsel ? "#d0021b" : "rgba(208,2,27,.6)";
+    ctx.beginPath(); ctx.arc(it.cx, it.cy, (it.i === hsel ? 14 : 9) * px * dpr, 0, Math.PI * 2); ctx.stroke();
+  }
+}
+
 // ---------------------------------------------------------------- what's under the cursor
 function pick(e) {
   const r = cv.getBoundingClientRect(), mx = (e.clientX - r.left) * dpr, my = (e.clientY - r.top) * dpr;
@@ -268,52 +367,62 @@ function pick(e) {
   const found = new Map(), s = view.s * dpr;
   ctx.setTransform(s, 0, 0, s, -view.x * s, -view.y * s);
   for (const p of parts) {
-    if (hidden.has(p.layer) || p.b[2] < wx - tol || p.b[0] > wx + tol || p.b[3] < wy - tol || p.b[1] > wy + tol) continue;
+    if (hidden.has(p.key) || hiddenG.has(p.g) || p.b[2] < wx - tol || p.b[0] > wx + tol || p.b[3] < wy - tol || p.b[1] > wy + tol) continue;
     let hit = false;
     if (p.kind === "f") hit = p.fills.some(f => ctx.isPointInPath(f, mx, my, "evenodd"));
     else if (p.kind === "m") hit = ctx.isPointInPath(p.path, mx, my);
     else { ctx.lineWidth = tol * 2; hit = ctx.isPointInStroke(p.path, mx, my); }
-    if (hit) found.set(p.layer, (found.get(p.layer) || []).concat({ f: "fill", m: "wipeout", s: "line", h: "pattern" }[p.kind]));
+    if (hit) found.set(p.key, (found.get(p.key) || []).concat({ f: "fill", m: "wipeout", s: "line", h: "pattern" }[p.kind]));
   }
   const box = document.getElementById("pick");
   document.querySelectorAll(".lyr.hit").forEach(d => d.classList.remove("hit"));
   if (!found.size) { box.style.display = "none"; return; }
   box.style.display = "block";
-  box.innerHTML = [...found].map(([l, k]) => `<div><b>${esc(l)}</b> <span class="muted">${[...new Set(k)].join(", ")}</span></div>`).join("");
-  for (const l of found.keys()) document.querySelector(`.lyr[data-l="${CSS.escape(l)}"]`)?.classList.add("hit");
+  box.innerHTML = [...found].map(([l, k]) => `<div><span class="muted">${esc(l.split("|")[0])}</span> <b>${esc(l.split("|").slice(1).join("|"))}</b> <span class="muted">${[...new Set(k)].join(", ")}</span></div>`).join("");
+  for (const k of found.keys()) document.querySelector(`.lyr[data-k="${CSS.escape(k)}"]`)?.classList.add("hit");
   redraw();
 }
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 // ---------------------------------------------------------------- panels
 function checkPanel() {
-  const c = meta.check, rows = [];
-  const types = Object.keys(c.seen).sort((a, b) => c.seen[b] - c.seen[a]);
-  for (const t of types) {
-    const f = c.failed[t]?.[0] || 0, d = c.drawn[t] || 0;
-    rows.push(`<div class="${f ? "bad" : ""}"><span>${t}</span><span>${d.toLocaleString()} drawn${f ? ` · ${f} failed` : ""}</span></div>`);
+  const groups = meta.check.seen ? { [meta.source || "plan"]: meta.check } : meta.check, rows = [];
+  for (const [g, c] of Object.entries(groups)) {
+    const d = Object.values(c.drawn).reduce((a, v) => a + v, 0), f = Object.values(c.failed).reduce((a, v) => a + v[0], 0);
+    const st = c.stats || {}, notes = [];
+    if (st.duplicate_placement_skipped) notes.push(`${st.duplicate_placement_skipped} duplicate placement skipped`);
+    if (st.hatch_textbox_loops_dropped) notes.push(`${st.hatch_textbox_loops_dropped} stale text-box loops dropped`);
+    if (st.skipped_layer_off) notes.push(`${st.skipped_layer_off} on layers off`);
+    if (st.pattern_lines_outside) notes.push(`${st.pattern_lines_outside} stray pattern lines clipped`);
+    const types = Object.entries(c.drawn).sort((a, b) => b[1] - a[1]).map(([t, n]) => `${t} ${n.toLocaleString()}`).join(" · ");
+    rows.push(`<details><summary class="${f ? "bad" : ""}"><b>${esc(g)}</b> · ${d.toLocaleString()} drawn${f ? ` · ${f} failed` : ""}</summary>` +
+      `<div style="display:block;padding:2px 0 6px 12px">${types}${notes.length ? "<br>" + notes.join(" · ") : ""}` +
+      `${f ? "<br>" + Object.entries(c.failed).map(([t, v]) => `${t}: ${esc(v.slice(1).join("; "))}`).join("<br>") : ""}</div></details>`);
   }
-  const st = c.stats, notes = [];
-  if (st.skipped_layer_off) notes.push(`${st.skipped_layer_off} on layers that are off`);
-  if (st.invisible) notes.push(`${st.invisible} invisible`);
-  if (st.pattern_lines_outside) notes.push(`${st.pattern_lines_outside} stray pattern lines clipped`);
-  if (st.not_drawn_REGION) notes.push(`${st.not_drawn_REGION} regions not drawn`);
-  document.getElementById("check").innerHTML = (c.counted === "per definition" ? `<div style="display:block;margin-bottom:4px">Counted once per block definition (instanced file)</div>` : "") + rows.join("") + (notes.length ? `<div style="margin-top:6px;display:block">Skipped: ${notes.join(" · ")}</div>` : "");
+  document.getElementById("check").innerHTML = (meta.instanced ? `<div style="display:block;margin-bottom:4px">Counted once per block definition</div>` : "") + rows.join("");
 }
 function layerPanel() {
   const box = document.getElementById("layers"), q = document.getElementById("q").value.toLowerCase();
-  const n = { ...COUNT }; texts.forEach(T => n[T.layer] = (n[T.layer] || 0) + 1);
-  const used = Object.keys(n).sort();
-  box.innerHTML = meta.blocks.map(b => `<div class="blk">${esc(b.block)} <span style="font-weight:400">· ${(b.bytes / 1e6).toFixed(1)} MB${b.instanced ? ` · ${b.defs} blocks, ${b.placements} placements` : ""}</span></div>` +
-    used.filter(l => l.toLowerCase().includes(q)).map(l => {
-      const L = meta.layers[l] || {}, cnt = n[l];
-      return `<label class="lyr" data-l="${esc(l)}"><input type="checkbox" ${hidden.has(l) ? "" : "checked"}><span class="sw" style="background:${L.colour}"></span><span class="nm" title="${esc(l)}">${esc(l)}</span><span class="n">${cnt.toLocaleString()}</span></label>`;
-    }).join("")).join("");
-  box.querySelectorAll(".lyr input").forEach(cb => cb.onchange = () => { const l = cb.closest(".lyr").dataset.l; cb.checked ? hidden.delete(l) : hidden.add(l); redraw(); });
+  const n = { ...COUNT }; texts.forEach(T => n[T.key] = (n[T.key] || 0) + 1);
+  const groups = meta.groups || [...new Set(meta.blocks.map(b => b.group || b.block))];
+  box.innerHTML = groups.map(g => {
+    const bl = meta.blocks.filter(b => (b.group || b.block) === g), mb = bl.reduce((a, b) => a + b.bytes, 0) / 1e6;
+    const keys = Object.keys(n).filter(k => k.startsWith(g + "|")).sort();
+    const rows = keys.filter(k => k.toLowerCase().includes(q)).map(k => {
+      const l = k.slice(g.length + 1), L = meta.layers[l] || {};
+      return `<label class="lyr" data-k="${esc(k)}"><input type="checkbox" ${hidden.has(k) ? "" : "checked"}><span class="sw" style="background:${L.colour}"></span><span class="nm" title="${esc(l)}">${esc(l)}</span><span class="n">${n[k].toLocaleString()}</span></label>`;
+    }).join("");
+    return `<div class="blk"><input type="checkbox" data-g="${esc(g)}" ${hiddenG.has(g) ? "" : "checked"}><span>${esc(g)}</span>` +
+      `<span style="font-weight:400;text-transform:none;letter-spacing:0">${mb.toFixed(2)} MB · ${bl.map(b => b.block).join(", ")}</span>` +
+      `<input type="range" data-a="${esc(g)}" min="0" max="1" step=".05" value="${alpha[g] ?? 1}" title="opacity" style="margin-left:auto;width:70px"></div>` + rows;
+  }).join("");
+  box.querySelectorAll(".lyr input").forEach(cb => cb.onchange = () => { const k = cb.closest(".lyr").dataset.k; cb.checked ? hidden.delete(k) : hidden.add(k); redraw(); });
+  box.querySelectorAll("input[data-g]").forEach(cb => cb.onchange = () => { cb.checked ? hiddenG.delete(cb.dataset.g) : hiddenG.add(cb.dataset.g); redraw(); });
+  box.querySelectorAll("input[data-a]").forEach(r => r.oninput = () => { alpha[r.dataset.a] = +r.value; redraw(); });
 }
 document.getElementById("q").oninput = layerPanel;
-document.getElementById("all").onclick = () => { hidden.clear(); layerPanel(); redraw(); };
-document.getElementById("none").onclick = () => { Object.keys(meta.layers).concat(Object.keys(COUNT)).forEach(l => hidden.add(l)); layerPanel(); redraw(); };
+document.getElementById("all").onclick = () => { hidden.clear(); hiddenG.clear(); layerPanel(); redraw(); };
+document.getElementById("none").onclick = () => { (meta.groups || []).forEach(g => hiddenG.add(g)); layerPanel(); redraw(); };
 </script>
 </body>
 </html>
