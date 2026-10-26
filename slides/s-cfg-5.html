@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuring · 5 · Cards · ACKO slide s-cfg-5</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-cfg-5" data-part="1" data-title="Configuring · 5 · Cards" data-steps="1" data-mins="0.4"
+  data-beats="Configuring the Neighbourhoods"
+  data-notes="Sample 5 of 6 for slide 13, beat 3 (Configuring the Neighbourhoods): Cards. The names leave the floor as coloured department cards under the text and the zones go white; the cards fly back one by one to new zones, each zone taking its colour as its card lands; then they glide back to the plan. Then two clicks on names swap them live.">
+  <div class="page">
+    <div class="cf-chip">Sample 5 of 6 · Cards</div>
+    <div class="st-anim"></div>
+    <div class="st-3d ui"></div>
+    <div class="st-ov"><svg viewBox="0 0 1920 1080" preserveAspectRatio="none"><g class="st-ent"></g><g class="st-legs"></g></svg></div>
+    <div class="st-veil"></div>
+    <div class="st-t rv">
+      <h3 style="--i:0">Understanding the Campus Strategy</h3>
+      <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
+      <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
+    </div>
+    <div class="st-cfg"><p>Every neighbourhood can take any department: who sits where is configured by each department’s <b>occupancy</b> and the <b>proximity</b> it needs to the others.</p><small>Click two names to swap them</small></div>
+    <p class="st-cap"></p>
+    <div class="st-tools ui" style="right:11.5%;top:3.2%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
+  </div>
+</section>
+<style>
+/* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
+/* without WebGL: the deck's animation, where the PPT has it (its picture box less the crop's padding) */
+#s-cfg-5 .st-anim { left: 7.62%; top: 9.07%; width: 78.04%; height: 78.04%; background: url(assets/img/strategy-anim.webp) center / 100% 100% no-repeat; }
+#s-cfg-5:not(.st-fallback) .st-anim { display: none; }
+#s-cfg-5.st-fallback .st-3d, #s-cfg-5.st-fallback .st-ov, #s-cfg-5.st-fallback .st-tools, #s-cfg-5.st-fallback .st-cap, #s-cfg-5.st-fallback .st-veil { display: none; }
+#s-cfg-5 .st-3d { left: 0; top: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+#s-cfg-5 .st-3d.drag { cursor: grabbing; }
+#s-cfg-5 .st-3d canvas { display: block; width: 100%; height: 100%; }
+/* a soft white wash behind the copy, where the floor's west end runs under it */
+#s-cfg-5 .st-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
+  background: radial-gradient(ellipse 30% 22% at 22% 40%, rgba(255,255,255,.92), rgba(255,255,255,.6) 60%, rgba(255,255,255,0)); }
+/* the copy at the PPT's boxes (its insets, anchors and sizes) */
+#s-cfg-5 .st-t { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-cfg-5 .st-t > * { position: absolute; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; margin: 0; padding: calc(var(--pt) * 7.2); }
+#s-cfg-5 .st-t h3 { left: 1.82%; top: 27.01%; width: 44.29%; height: 8.21%; font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); white-space: nowrap; }
+#s-cfg-5 .st-t p { left: 1.82%; top: 36.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.15; font-style: italic; font-weight: 300; color: #666; }
+#s-cfg-5 .st-t p b { font-weight: 500; }
+#s-cfg-5 .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1; font-style: normal; color: var(--hand-ink); }
+/* the beat's name, bottom right of the floor, as the deck's animation writes it */
+#s-cfg-5 .st-cap { right: 19.3%; top: 74.6%; font-size: calc(var(--pt) * 12); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: right; pointer-events: none;
+  opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+#s-cfg-5 .st-cap.on { opacity: 1; transform: none; }
+/* the overlay: the entrances' maroon marks, the neighbourhoods' names, the Loop's stops (a dot, a leader, the name and its words) */
+#s-cfg-5 .st-ov { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-cfg-5 .st-ov > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#s-cfg-5 .st-ent path { fill: var(--maroon, #980000); transition: opacity .4s var(--ease); }
+#s-cfg-5 .st-legs path { stroke: var(--purple); stroke-width: 1.2; fill: none; vector-effect: non-scaling-stroke; }
+#s-cfg-5 .st-legs circle { fill: var(--purple); stroke: #fff; stroke-width: 1.5; }
+#s-cfg-5 .st-legs g { opacity: 0; transition: opacity .45s var(--ease); }
+#s-cfg-5 .st-legs g.on { opacity: 1; }
+#s-cfg-5 .st-s { position: absolute; transform: translate(-50%, -100%); text-align: center; white-space: nowrap; opacity: 0; transition: opacity .45s var(--ease);
+  padding: calc(var(--pt) * 1.5) calc(var(--pt) * 4); background: rgba(255,255,255,.88); border-radius: 3px; }
+#s-cfg-5 .st-s.on { opacity: 1; }
+#s-cfg-5 .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
+#s-cfg-5 .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
+/* the names as the deck's animation writes them: condensed bold italic capitals along the floor, each in its own colour */
+#s-cfg-5 .st-z { position: absolute; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); user-select: none;
+  font-size: calc(var(--pt) * 12); font-style: italic; font-weight: 700; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
+#s-cfg-5 .st-z.small { font-size: calc(var(--pt) * 9); --sx: .72; }
+#s-cfg-5 .st-z.on { opacity: 1; }
+/* beat 3: the departments are configurable (Ritika, 23 Oct): the line under the copy, and the names clickable once it has played */
+#s-cfg-5 .st-cfg { left: 1.82%; top: 49.5%; width: 36%; pointer-events: none; opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+#s-cfg-5.st-cfg-on .st-cfg { opacity: 1; transform: none; }
+#s-cfg-5 .st-cfg p { margin: 0; padding: 0 calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 9); line-height: 1.15; font-style: italic; font-weight: 300; color: #666; }
+#s-cfg-5 .st-cfg b { font-weight: 600; color: var(--purple-2); }
+#s-cfg-5 .st-cfg small { display: block; margin-top: calc(var(--pt) * 5); padding: 0 calc(var(--pt) * 7.2); font: 600 calc(var(--pt) * 6.5) var(--body); color: #5222d0; opacity: 0; transition: opacity .4s var(--ease); }
+#s-cfg-5.st-cfg-live .st-cfg small { opacity: .85; }
+#s-cfg-5.st-cfg-live .st-z.dept.on { pointer-events: auto; cursor: pointer; }
+#s-cfg-5 .st-z.picked { text-decoration: underline; text-decoration-color: #5222d0; text-decoration-thickness: .12em; text-underline-offset: .14em; }
+#s-cfg-5 .st-tools { display: flex; gap: calc(var(--pt) * 4); }
+#s-cfg-5 .st-tool { display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
+  border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
+  font: 600 calc(var(--pt) * 6.5) var(--body); white-space: nowrap; }
+#s-cfg-5 .st-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#s-cfg-5 .st-tool:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
+#s-cfg-5 .st-tool:focus { outline: none; }
+/* sample 5 of 6 (scratchpad cfg/make_cfg.py): names that flip (--fy) or turn into cards (background, padding) */
+#s-cfg-5 .st-z { transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scaleX(var(--sx, .66)) scaleY(var(--fy, 1)); padding: calc(var(--pt) * 1.6) calc(var(--pt) * 4); border-radius: calc(var(--pt) * 2.5); }
+#s-cfg-5 .st-z.ovr { transition: none; }
+#s-cfg-5 .cf-chip { left: 1.82%; top: 4.2%; padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7); border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px;
+  background: rgba(255, 255, 255, .92); color: #5222d0; font: 600 calc(var(--pt) * 7) var(--body); white-space: nowrap; }
+</style>
+<script>
+/* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), built up in six beats as the
+   3D renders (axo_update/acko2A_model*.png) and the deck's animation build it, at the renders' camera:
+     1 How it started                 the whole floor as a white model; the two entrances
+     2 Planning Acko's Neighbourhood  the six neighbourhoods drop in, 01 to 06, with their numbers, then the atriums, terraces and
+                                      the café's zone; their names (the boundaries from ACKO_NEI.dxf)
+     3 Configuring the Neighbourhoods the departments are configurable (Ritika): the line under the copy; a department's name and
+                                      colour travel together (the numbers stay), swapping round and back; then two clicks swap them
+     4 Looping it all together        the volumes lift away and the floor goes to colour (render 01), then the rooms (02), the café
+                                      (03), the terraces (04), the workstations (05), the plants (06) and the façade (07) rise
+     5 The Employee's Journey         the red route draws from the entrances (render 08); the Loop's seven stops are named as it
+                                      reaches them
+     6 The Client's Journey           the workstations and plants go, and the blue route draws (render 09)
+   Each beat plays forward; going back shows a beat as it ends. A click (not a drag) plays the beat again; drag turns, the wheel
+   zooms, Reset view goes back. Without WebGL, the deck's GIF. */
+ACKO.slide("s-cfg-5", ({ $, $$, reduced, plain, reveal }) => {
+  const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
+  const FIT = [0.161, 0.09, 0.811, 0.864];              // where the deck's animation has the floor on the page
+  const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
+    "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
+  // beat 2's marks where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model there
+  // so a drag or zoom carries it: the entrances (maroon ▲), the names (the deck's colours), the numbers' centres
+  const MARKS = {
+    ent: [[686, 714], [1094, 408]],
+    // Drive, Travel and the café where ACKO_NEI.dxf has them (23 Oct): Drive east of the west atrium, the café in Drive's old place
+    names: [["ACKO Auto", 1516, 268, "#8d9aab"], ["ACKO Life", 1208, 220, "#9f88d9"], ["ACKO Health", 1193, 330, "#5e68c4"], ["ACKO Travel", 1105, 556, "#c9a7b1"],
+      ["ACKO Home", 380, 840, "#a68bd6"], ["ACKO Drive", 960, 653, "#a8aa8f"], ["Atrium", 1045, 448, "#737373", 1], ["Atrium", 732, 685, "#737373", 1],
+      ["Terrace", 1220, 485, "#6f7356", 1], ["Terrace", 804, 797, "#6f7356", 1], ["Café", 669, 817, "#8f8a5c", 1]],
+    nums: { "01": [1441, 166, 16.3], "02": [1340, 262, 16.3], "03": [1279, 372, 19], "04": [1045, 524, 16.1], "05": [910, 617, 16.6], "06": [500, 845, 16.5] },   // centre, height (m)
+    rot: -4,            // the names lean this much steeper than the floor's long axis (deg)
+  };
+  const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all together", "The Employee’s Journey", "The Client’s Journey"];
+  const DUR = [0, 2.4, 4.4, 6.4, 6.4, 6.0, 5.2];        // each beat's play (s)
+  // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play swaps
+  // Drive/Travel and Life/Health, then Home/Auto across the floor, then back to the plan; then two clicks on names swap them live
+  const DEPTS = ["AUTO", "LIFE", "HEALTH", "TRAVEL", "DRIVE", "HOME"];
+  const PLAN = Object.fromEntries(DEPTS.map((d) => [d, d]));                  // department -> the zone (its key) it sits in
+  const swapped = (A, pairs) => { const B = Object.assign({}, A); for (const [a, b] of pairs) [B[a], B[b]] = [A[b], A[a]]; return B; };
+  const CFG1 = swapped(PLAN, [["DRIVE", "TRAVEL"], ["LIFE", "HEALTH"]]), CFG2 = swapped(CFG1, [["HOME", "AUTO"]]);
+  const SCRIPT = [[0.8, 2.0, PLAN, CFG1], [2.6, 3.8, CFG1, CFG2], [4.6, 6.0, CFG2, PLAN]];
+  const SWAP_MS = 900;
+  const RISE = { rooms: [1.3, 2.2], cafe: [2.1, 2.9], terrace: [2.7, 3.5], work: [3.3, 4.4], plants: [4.2, 5.0], facade: [4.9, 6.1] };
+  let T, M, cam, r, asp = 16 / 9, host, sc, view;
+
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+  const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  const win = (t, a, b) => ease(clamp01((t - a) / (b - a)));
+  const grow = (g, k) => { g.visible = k > 0.002; g.scale.set(1, Math.max(0.001, k), 1); };
+
+  // ---------- the scene at beat k, t seconds in (the same t always gives the same picture) ----------
+  function pose(k, t) {
+    const G = M.groups, up = ["mass", "rooms", "cafe", "terrace", "work", "plants", "facade"];
+    M.tint(k <= 3 ? 0 : k === 4 ? win(t, 0.35, 1.0) : 1);
+    for (const g of up) {
+      let s = 1;
+      if (k === 1) s = win(t, 0.1, 1.5);
+      if (k === 4 && g !== "mass") s = t < 1.0 ? 1 - win(t, 0, 0.6) : win(t, RISE[g][0], RISE[g][1]);
+      if (k === 6 && (g === "work" || g === "plants")) s = 1 - win(t, 0, 0.8);
+      grow(G[g], s);
+    }
+    // beat 3: who sits where (the script while it plays, then the live arrangement); any other beat: the plan
+    const live = k === 3 && t >= DUR[3];
+    if (k !== 3) { S.cur = PLAN; S.swap = null; pick(null); }
+    S.ov = null; S.zs = null; S.zy = null;
+    sc.classList.toggle("st-cfg-on", k === 3); sc.classList.toggle("st-cfg-live", live);
+    for (const z of S.zl) if (z.dept) z.d.classList.toggle("click", live);
+    // the neighbourhoods: drop in one by one, 01 to 06; the atriums and terraces after; they stay for the configuring; they lift
+    // away as the colour comes
+    M.zones.forEach((v, i) => {
+      let y = 0, f = 0;
+      if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
+      if (k === 3) f = 1;
+      if (k === 4) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }
+      v.position.y = y; M.fade(v, f);
+    });
+    M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
+      let f = 0;
+      if (k === 2) f = win(t, 2.3, 3.0);
+      if (k === 3) f = 1;
+      if (k === 4) f = 1 - win(t, 0, 0.6);
+      M.fade(v, f);
+    });
+    if (k === 3 && !live) VARIANT(t); else arrange(liveAt(performance.now()));
+    for (const v of M.zones) {
+      const key = v.userData.zone.key;
+      v.scale.y = k === 3 && S.zs && S.zs[key] != null ? Math.max(0.02, S.zs[key]) : 1;
+      if (k === 3) { v.position.y = (S.zy && S.zy[key]) || 0; M.fade(v, 1); }
+    }
+    S.names = (k === 2 && t >= 3.0) || k === 3;
+    S.ent = k === 1 ? win(t, 1.4, 2.0) : 1;
+    // the routes: drawn on by distance from the entrances
+    const R = M.routes, emp = R.employee, cli = R.client;
+    emp.visible = k >= 5; cli.visible = k >= 6;
+    S.d = k === 5 ? emp.userData.max * win(t, 0.3, DUR[5] - 0.3) : k > 5 ? emp.userData.max : 0;
+    emp.userData.to(S.d); emp.material.opacity = k === 6 ? 1 - win(t, 0, 0.6) : 1;
+    cli.userData.to(k === 6 ? cli.userData.max * win(t, 0.7, DUR[6] - 0.2) : 0);
+    S.lit = M.data.stops.map((s) => k === 5 && S.d >= s.d - 0.5);
+    caption(NAMES[k]);
+  }
+
+  // ---------- beat 3: configuring the neighbourhoods ----------
+  // the arrangement at t into the play: from A to B, e of the way
+  function scriptAt(t) {
+    let c = { A: PLAN, B: PLAN, e: 1 };
+    for (const [a, b, A, B] of SCRIPT) if (t >= a) c = { A, B, e: win(t, a, b) };
+    return c;
+  }
+  function liveAt(now) {
+    const w = S.swap;
+    return w ? { A: w.A, B: w.B, e: ease(clamp01((now - w.t0) / SWAP_MS)) } : { A: S.cur || PLAN, B: S.cur || PLAN, e: 1 };
+  }
+  // each department's name on a low arc between its zones' anchors; each zone in the colour of the department in it
+  function arrange(c) {
+    if (!S.anchor) return;
+    const e = c.e, inA = {}, inB = {};
+    S.np = {};
+    for (const d of DEPTS) {
+      const p0 = S.anchor[c.A[d]], p1 = S.anchor[c.B[d]], lift = c.A[d] !== c.B[d] ? 5 * Math.sin(Math.PI * e) : 0;
+      S.np[d] = [p0[0] + (p1[0] - p0[0]) * e, p0[1] + (p1[1] - p0[1]) * e + lift, p0[2] + (p1[2] - p0[2]) * e];
+      inA[c.A[d]] = d; inB[c.B[d]] = d;
+    }
+    for (const v of M.zones) {
+      const z = v.userData.zone.key, a = S.look[inA[z]], b = S.look[inB[z]], [m, lm] = [v.userData.mats[0][0], v.userData.mats[1][0]];
+      m.color.lerpColors(a.col, b.col, e); lm.color.copy(m.color).multiplyScalar(0.7);
+      v.userData.mats[0][1] = a.op + (b.op - a.op) * e;
+    }
+  }
+  // two clicks on names swap them; a click on the marked name unmarks it
+  function pick(d) {
+    if (!S.zl) return;
+    if (d && (!sc.classList.contains("st-cfg-live") || S.swap)) return;
+    if (d && S.pick && S.pick !== d) { S.swap = { A: S.cur, B: swapped(S.cur, [[S.pick, d]]), t0: performance.now() }; d = null; need(); }
+    else if (d && S.pick === d) d = null;
+    S.pick = d;
+    for (const z of S.zl) if (z.dept) z.d.classList.toggle("picked", z.dept === d);
+  }
+
+  // ---------- the sample's play (beat 3) ----------
+  const FLOOR = ["HOME", "DRIVE", "TRAVEL", "HEALTH", "LIFE", "AUTO"];        // the zones, west to east
+  const WHITE = () => new T.Color("#f2f2f2");
+  const title = (d) => "ACKO " + d.charAt(0) + d.slice(1).toLowerCase();
+  const nameCol = (d) => (S.zl.find((z) => z.dept === d) || {}).col;
+  const vol = (key) => M.zones.find((v) => v.userData.zone.key === key);
+  const mix = (a, b, e) => new T.Color().lerpColors(a, b, e);
+  const lerp2 = (a, b, e) => [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e];
+  const page = (key, lift) => { const p = S.anchor[key]; return pw(p[0], p[1] + (lift || 0), p[2]); };
+  const scriptOf = (SC) => (t) => { let c = { A: PLAN, B: PLAN, e: 1 }; for (const [a, b, A, B] of SC) if (t >= a) c = { A, B, e: win(t, a, b) }; return c; };
+  const inv = (A) => { const o = {}; for (const d of DEPTS) o[A[d]] = d; return o; };
+  function paint(key, col, op) {
+    const v = vol(key), [m, lm] = [v.userData.mats[0][0], v.userData.mats[1][0]];
+    m.color.copy(col); lm.color.copy(col).multiplyScalar(0.7); v.userData.mats[0][1] = op;
+  }
+  const ink = (d) => { const c = S.look[d].col; return 0.299 * c.r + 0.587 * c.g + 0.114 * c.b < 0.55 ? "#ffffff" : "#2e2556"; };   // a card's text
+  function cardBg(d, a) { const c = S.look[d].col; return `rgba(${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)},${(a * 0.95).toFixed(3)})`; }
+
+  const NEXT = CFG2;
+  const DOCK = { AUTO: [150, 700], LIFE: [335, 700], HEALTH: [150, 764], TRAVEL: [335, 764], DRIVE: [150, 828], HOME: [335, 828] };   // page px
+  function VARIANT(t) {
+    const W = WHITE(), inN = inv(NEXT);
+    arrange({ A: PLAN, B: PLAN, e: 1 });
+    S.ov = {};
+    DEPTS.forEach((d, i) => {
+      const out = win(t, 0.4 + 0.12 * i, 1.0 + 0.12 * i), land = win(t, 1.9 + 0.4 * i, 2.6 + 0.4 * i), home = win(t, 4.8, 6.0);
+      let p, card;
+      if (land <= 0) { p = lerp2(page(d), DOCK[d], out); card = out; }
+      else if (home <= 0) { p = lerp2(DOCK[d], page(NEXT[d]), land); p[1] -= 50 * Math.sin(Math.PI * land); card = 1 - land; }
+      else { p = lerp2(page(NEXT[d]), page(d), home); p[1] -= 30 * Math.sin(Math.PI * home); card = 0; }
+      S.ov[d] = { page: p, card };
+    });
+    for (const key of FLOOR) {
+      const dn = inN[key], i = DEPTS.indexOf(dn), own = S.look[key], nw = S.look[dn];
+      const out = win(t, 0.4, 1.4), land = win(t, 1.9 + 0.4 * i, 2.6 + 0.4 * i), home = win(t, 4.8, 6.0);
+      if (land <= 0) paint(key, mix(own.col, W, out), own.op + (0.3 - own.op) * out);
+      else if (home <= 0) paint(key, mix(W, nw.col, land), 0.3 + (nw.op - 0.3) * land);
+      else paint(key, mix(nw.col, own.col, home), nw.op + (own.op - nw.op) * home);
+    }
+  }
+  function caption(txt) {
+    const cap = $(".st-cap", sc);
+    if (cap.dataset.t === txt) return;
+    cap.classList.remove("on"); cap.dataset.t = txt; setTimeout(() => { cap.textContent = txt; cap.classList.add("on"); }, 120);
+  }
+  function play(k) {
+    S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
+    pose(k, reduced ? DUR[k] : 0); need();
+  }
+  function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
+
+  // ---------- the overlay: entrances, neighbourhood names, the Loop's stops ----------
+  const v3 = () => new T.Vector3();
+  const px = (x, y, h) => { const v = v3().set(M.X(x), h, M.Z(y)).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
+  const pw = (x, y, z) => { const v = v3().set(x, y, z).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
+  // a page point at the home view, back on the model: where the camera's ray through it meets the level h (m)
+  function pin() {
+    window.AxoModel.apply(cam, S.home, asp); cam.updateMatrixWorld();
+    const d = v3(); cam.getWorldDirection(d);
+    const at = (x, y, h) => { const o = v3().set(x / 960 - 1, 1 - y / 540, -1).unproject(cam), t = (h - o.y) / d.y; return [o.x + d.x * t, h, o.z + d.z * t]; };
+    S.entAt = MARKS.ent.map(([x, y]) => at(x, y, 4.5));
+    for (const z of S.zl) z.p = at(z.px, z.py, z.h);
+    S.anchor = {}; for (const z of S.zl) if (z.dept) S.anchor[z.dept] = z.p;      // each zone's name point: where the deck names its own department
+    for (const v of M.zones) {
+      const q = MARKS.nums[v.userData.zone.n], num = v.userData.num; if (!q || !num) continue;
+      const p = at(q[0], q[1], num.position.y); num.position.x = p[0]; num.position.z = p[2]; num.scale.setScalar(q[2] / v.userData.numH);
+    }
+  }
+  function overlayBuild() {
+    const box = $(".st-ov", sc), A = M.data;
+    $$(".st-s, .st-z", box).forEach((e) => e.remove());
+    // the entrances: the deck's maroon ▲ (its apex a little right of centre)
+    $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
+    // the names, as the deck's animation sets them
+    S.zl = MARKS.names.map(([txt, x, y, col, small]) => {
+      const d = document.createElement("div"); d.className = "st-z" + (small ? " small" : ""); d.textContent = txt; d.style.color = col; box.appendChild(d);
+      const dept = DEPTS.find((k) => txt.toUpperCase() === "ACKO " + k);
+      if (dept) { d.classList.add("dept"); d.addEventListener("click", () => pick(dept)); }
+      return { d, px: x, py: y, h: small ? 1.5 : 3, dept, txt, col };
+    });
+    // the Loop's stops
+    const svg = $(".st-legs", sc); svg.innerHTML = "";
+    S.labs = A.stops.map((s) => {
+      const d = document.createElement("div"); d.className = "st-s"; d.innerHTML = `<b>${s.name}</b><span>${STOPS[s.name] || ""}</span>`; box.appendChild(d);
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.innerHTML = '<path/><circle r="5"/>'; svg.appendChild(g);
+      return { s, d, g };
+    });
+  }
+  function overlay() {
+    const A = M.data, k = 1920 / (host.clientWidth || 1920);
+    // entrances
+    $$(".st-ent path", sc).forEach((p, i) => {
+      const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]);
+      p.setAttribute("transform", `translate(${x} ${y})`); p.style.opacity = S.ent;
+    });
+    // names: turned along the floor's east or south axis as it shows on the page
+    const ang = (dx, dz) => { const o = v3().project(cam), b = v3().set(dx, 0, dz).project(cam); return Math.atan2((o.y - b.y) * 540, (b.x - o.x) * 960) * 180 / Math.PI; };
+    const rx = ang(1, 0) + MARKS.rot;
+    for (const z of S.zl) {
+      const o = z.dept && S.ov ? S.ov[z.dept] : null, card = (o && o.card) || 0;
+      const [x, y] = o && o.page ? o.page : pw(...(z.dept && S.np && S.np[z.dept] ? S.np[z.dept] : z.p));
+      z.d.style.left = (x / 19.2) + "%"; z.d.style.top = (y / 10.8) + "%"; z.d.style.setProperty("--r", (rx * (1 - card)) + "deg");
+      z.d.style.setProperty("--fy", o && o.fy != null ? o.fy : 1);
+      if (z.dept) {
+        const txt = (o && o.text) || z.txt; if (z.d.textContent !== txt) z.d.textContent = txt;
+        z.d.style.color = card > 0.5 ? ink(z.dept) : (o && o.col) || z.col;
+        z.d.style.background = card > 0 ? cardBg(z.dept, card) : "";
+        z.d.classList.toggle("ovr", !!o);
+        z.d.style.opacity = o && o.op != null && S.names ? o.op : "";
+      }
+      z.d.classList.toggle("on", !!S.names);
+    }
+    // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
+    // the page's right edge hangs to the left
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand", sc).map((e) => {
+      const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
+      return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
+    }).filter((b) => b[2] > b[0]);
+    const placed = [];
+    const hit = (L, top, R, bot) => placed.concat(S.obs).some((b) => L < b[2] && R > b[0] && top < b[3] && bot > b[1]);
+    const items = S.labs.map((o, i) => {
+      const [x, y] = px(o.s.x, o.s.y, 0.6);
+      if (!o.w) { o.w = (o.d.offsetWidth || 150) * k; o.h = (o.d.offsetHeight || 44) * k; }
+      return { o, x, y, on: !!(S.lit && S.lit[i]) && x > 20 && x < 1900 && y > 60 && y < 1060 };
+    }).sort((p1, p2) => p2.y - p1.y);
+    for (const it of items) {
+      const { o, x, y } = it;
+      const left = x + o.w / 2 > 1890 ? Math.min(x + 12, 1890) - o.w : x - o.w / 2;
+      const tries = [0, 1, 2, 3, 4, 5].map((n) => y - 64 - n * (o.h + 4)).concat([0, 1, 2].map((n) => y + 40 + o.h + n * (o.h + 4)));
+      const ly = tries.find((b) => !hit(left, b - o.h, left + o.w, b)) || tries[0];      // the label's bottom (frame px)
+      if (it.on) placed.push([left - 6, ly - o.h - 6, left + o.w + 6, ly + 6]);
+      o.g.querySelector("path").setAttribute("d", `M${x} ${y}L${x} ${ly > y ? ly - o.h : ly}`);
+      o.g.querySelector("circle").setAttribute("cx", x); o.g.querySelector("circle").setAttribute("cy", y);
+      o.d.style.left = ((left + o.w / 2) / 19.2) + "%"; o.d.style.top = (ly / 10.8) + "%";
+      o.d.classList.toggle("on", it.on); o.g.classList.toggle("on", it.on);
+    }
+  }
+
+  // ---------- drawing on demand ----------
+  function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
+  function draw(now) {
+    S.raf = 0;
+    if (document.body.dataset.scene !== "s-cfg-5" || !r) return;
+    const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
+    const pr = r.getPixelRatio();
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(Hh * pr)) {
+      r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
+    }
+    if (S.playing) { const t = (now - S.t0) / 1000; pose(S.k, Math.min(t, DUR[S.k])); if (t >= DUR[S.k]) S.playing = false; }
+    if (S.swap) {                                       // a live swap on beat 3
+      arrange(liveAt(now)); for (const v of M.zones) M.fade(v, 1);
+      if (now - S.swap.t0 >= SWAP_MS) { S.cur = S.swap.B; S.swap = null; }
+    }
+    if (S.tween) {
+      const tw = S.tween, k = Math.min(1, (now - tw.t0) / tw.ms), e = ease(k), L = (a, b) => a + (b - a) * e;
+      S.state = { theta: L(tw.from.theta, tw.to.theta), phi: L(tw.from.phi, tw.to.phi), half: L(tw.from.half, tw.to.half), t: tw.from.t.map((x, i) => L(x, tw.to.t[i])) };
+      if (k >= 1) S.tween = null;
+    }
+    window.AxoModel.apply(cam, S.state, asp);
+    r.render(M.scene, cam);
+    overlay();
+    if (S.playing || S.tween || S.swap) need();
+  }
+
+  // ---------- turning, zooming, a click to replay ----------
+  function wire() {
+    let drag = null;
+    host.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY }; host.setPointerCapture(e.pointerId); host.classList.add("drag"); });
+    host.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+      if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4) return;
+      S.moved = true; S.tween = null;
+      S.state = Object.assign({}, S.state, { theta: Math.max(view.theta - 0.8, Math.min(view.theta + 0.8, S.state.theta - dx * 0.005)), phi: Math.max(0.35, Math.min(1.22, S.state.phi - dy * 0.004)) });
+      need();
+    });
+    const up = (e) => {
+      if (!drag) return;
+      const click = Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4; drag = null; host.classList.remove("drag");
+      if (click) play(S.k || 1);
+    };
+    host.addEventListener("pointerup", up); host.addEventListener("pointercancel", () => { drag = null; host.classList.remove("drag"); });
+    host.addEventListener("wheel", (e) => { e.preventDefault(); S.moved = true; S.tween = null; S.state = Object.assign({}, S.state, { half: Math.max(4, Math.min(140, S.state.half * Math.exp(e.deltaY * 0.0012))) }); need(); }, { passive: false });
+  }
+
+  function start() {
+    host = $(".st-3d", sc);
+    if (!window.AxoLayers || !window.AxoLayers.available()) return false;
+    r = window.AxoModel.renderer(); if (!r) return false;
+    T = window.THREE;
+    if (!M) {
+      M = window.AxoLayers.get(); view = M.data.view;
+      cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+      // each department's look: its own zone's colour and opacity as built
+      S.look = Object.fromEntries(M.zones.map((v) => [v.userData.zone.key, { col: new T.Color(v.userData.zone.colour), op: v.userData.mats[0][1] }]));
+      overlayBuild(); wire();
+      // the names' sizes once their fonts are in
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { S.obs = null; S.labs.forEach((o) => { o.w = 0; }); need(); });
+      window.AxoLayers.listeners.add(() => { if (document.body.dataset.scene === "s-cfg-5") need(); });
+      const again = () => { if (document.body.dataset.scene === "s-cfg-5") need(); };
+      addEventListener("resize", again); document.addEventListener("visibilitychange", again);
+      sc._strategy = () => ({ k: S.k, playing: S.playing, cap: $(".st-cap", sc).textContent, lit: (S.lit || []).filter(Boolean).length,
+        stops: M.data.stops.map((s) => s.name), d: S.d, state: S.state, home: S.home, names: !!S.names, cur: Object.assign({}, S.cur || PLAN), pick: S.pick || null,
+        employee: M.routes.employee.geometry.drawRange.count, client: M.routes.client.geometry.drawRange.count });
+    }
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    asp = (host.clientWidth || 16) / (host.clientHeight || 9);
+    S.home = window.AxoLayers.frame(M, view, FIT, asp); S.state = S.home; S.moved = false; S.tween = null;
+    if (!S.entAt) pin();
+    return true;
+  }
+
+  return {
+    enter(_, s) {
+      sc = s; plain(); reveal($(".page", sc), 100);
+      S.fresh = true; S.k = 0;
+      const ok = start();
+      sc.classList.toggle("st-fallback", !ok);
+      if (!ok) return;
+      $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); S.moved = false; S.tween = { from: S.state, to: S.home, t0: performance.now(), ms: 900 }; need(); };
+    },
+    step() {
+      if (!M || sc.classList.contains("st-fallback")) return;
+      S.fresh = false; play(3);                        // the sample's one beat: slide 13's beat 3
+    },
+    leave() {
+      cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false;
+      if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); for (const v of M.zones) { v.scale.y = 1; v.position.y = 0; } }   // the shared model leaves as the plan
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

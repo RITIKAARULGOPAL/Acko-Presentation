@@ -66,7 +66,7 @@
 #s-strategy .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
 #s-strategy .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
 /* the names as the deck's animation writes them: condensed bold italic capitals along the floor, each in its own colour */
-#s-strategy .st-z { position: absolute; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease);
+#s-strategy .st-z { position: absolute; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); user-select: none;
   font-size: calc(var(--pt) * 12); font-style: italic; font-weight: 700; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
 #s-strategy .st-z.small { font-size: calc(var(--pt) * 9); --sx: .72; }
 #s-strategy .st-z.on { opacity: 1; }
@@ -396,7 +396,10 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       if (k > S.k && !(fresh && k > 1)) play(k);      // forward: the beat plays
       else show(k);                                    // back, or arriving from the next slide: the beat as it ends
     },
-    leave() { cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; },
+    leave() {
+      cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false;
+      if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
+    },
   };
 });
 </script>
