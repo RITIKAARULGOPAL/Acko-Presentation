@@ -13,7 +13,7 @@
 <!-- slide:start -->
 <section class="scene" id="s-strategy" data-part="1" data-title="Campus strategy" data-steps="6" data-mins="1.8"
   data-beats="How it started,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all together,The Employee’s Journey,The Client’s Journey"
-  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, as the 3D renders build it. 1 How it started: the whole floor, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the café, the two atriums and terraces. 3 Configuring the neighbourhoods: every neighbourhood can take any department; who sits where is set by each department's occupancy and the proximity it needs to the others. The names swap round and settle back; then a click on two names swaps them live. 4 Looping it all together: the floor in colour, then the rooms, the café, the terraces, the workstations, the plants and the façade. 5 The employee's journey: from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. 6 The client's journey. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, as the 3D renders build it. 1 How it started: the whole floor, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: the floor in colour, then the rooms, the café, the terraces, the workstations, the plants and the façade. 5 The employee's journey: from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. 6 The client's journey. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
   <div class="page">
     <div class="st-anim"></div>
     <div class="st-3d ui"></div>
@@ -24,7 +24,6 @@
       <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
-    <div class="st-cfg"><p>Every neighbourhood can take any department: who sits where is configured by each department’s <b>occupancy</b> and the <b>proximity</b> it needs to the others.</p><small>Click two names to swap them</small></div>
     <p class="st-cap"></p>
     <div class="st-tools ui" style="right:11.5%;top:3.2%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
   </div>
@@ -70,13 +69,7 @@
   font-size: calc(var(--pt) * 12); font-style: italic; font-weight: 700; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
 #s-strategy .st-z.small { font-size: calc(var(--pt) * 9); --sx: .72; }
 #s-strategy .st-z.on { opacity: 1; }
-/* beat 3: the departments are configurable (Ritika, 23 Oct): the line under the copy, and the names clickable once it has played */
-#s-strategy .st-cfg { left: 1.82%; top: 49.5%; width: 36%; pointer-events: none; opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
-#s-strategy.st-cfg-on .st-cfg { opacity: 1; transform: none; }
-#s-strategy .st-cfg p { margin: 0; padding: 0 calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 9); line-height: 1.15; font-style: italic; font-weight: 300; color: #666; }
-#s-strategy .st-cfg b { font-weight: 600; color: var(--purple-2); }
-#s-strategy .st-cfg small { display: block; margin-top: calc(var(--pt) * 5); padding: 0 calc(var(--pt) * 7.2); font: 600 calc(var(--pt) * 6.5) var(--body); color: #5222d0; opacity: 0; transition: opacity .4s var(--ease); }
-#s-strategy.st-cfg-live .st-cfg small { opacity: .85; }
+/* beat 3: the departments are configurable (Ritika, 23 Oct; no text, her note 26 Oct): the names clickable once it has played */
 #s-strategy.st-cfg-live .st-z.dept.on { pointer-events: auto; cursor: pointer; }
 #s-strategy .st-z.picked { text-decoration: underline; text-decoration-color: #5222d0; text-decoration-thickness: .12em; text-underline-offset: .14em; }
 #s-strategy .st-tools { display: flex; gap: calc(var(--pt) * 4); }
@@ -93,8 +86,8 @@
      1 How it started                 the whole floor as a white model; the two entrances
      2 Planning Acko's Neighbourhood  the six neighbourhoods drop in, 01 to 06, with their numbers, then the atriums, terraces and
                                       the café's zone; their names (the boundaries from ACKO_NEI.dxf)
-     3 Configuring the Neighbourhoods the departments are configurable (Ritika): the line under the copy; a department's name and
-                                      colour travel together (the numbers stay), swapping round and back; then two clicks swap them
+     3 Configuring the Neighbourhoods the departments are configurable (Ritika; no text, 26 Oct): a department's name and
+                                      colour travel together (the numbers stay), stepping along the floor and back (the carousel); then two clicks swap them
      4 Looping it all together        the volumes lift away and the floor goes to colour (render 01), then the rooms (02), the café
                                       (03), the terraces (04), the workstations (05), the plants (06) and the façade (07) rise
      5 The Employee's Journey         the red route draws from the entrances (render 08); the Loop's seven stops are named as it
@@ -120,13 +113,16 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   };
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all together", "The Employee’s Journey", "The Client’s Journey"];
   const DUR = [0, 2.4, 4.4, 6.4, 6.4, 6.0, 5.2];        // each beat's play (s)
-  // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play swaps
-  // Drive/Travel and Life/Health, then Home/Auto across the floor, then back to the plan; then two clicks on names swap them live
+  // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
+  // carousel (Ritika's pick of six, index-configure.html): every department steps one zone along the floor, west to east, twice,
+  // then steps back home; then two clicks on names swap them live
   const DEPTS = ["AUTO", "LIFE", "HEALTH", "TRAVEL", "DRIVE", "HOME"];
+  const FLOOR = ["HOME", "DRIVE", "TRAVEL", "HEALTH", "LIFE", "AUTO"];        // the zones, west to east
   const PLAN = Object.fromEntries(DEPTS.map((d) => [d, d]));                  // department -> the zone (its key) it sits in
   const swapped = (A, pairs) => { const B = Object.assign({}, A); for (const [a, b] of pairs) [B[a], B[b]] = [A[b], A[a]]; return B; };
-  const CFG1 = swapped(PLAN, [["DRIVE", "TRAVEL"], ["LIFE", "HEALTH"]]), CFG2 = swapped(CFG1, [["HOME", "AUTO"]]);
-  const SCRIPT = [[0.8, 2.0, PLAN, CFG1], [2.6, 3.8, CFG1, CFG2], [4.6, 6.0, CFG2, PLAN]];
+  const shift = (A, n) => Object.fromEntries(DEPTS.map((d) => [d, FLOOR[(FLOOR.indexOf(A[d]) + n + 6) % 6]]));
+  const STEP1 = shift(PLAN, 1), STEP2 = shift(PLAN, 2);
+  const SCRIPT = [[0.6, 1.8, PLAN, STEP1], [2.4, 3.6, STEP1, STEP2], [4.4, 6.0, STEP2, PLAN]];
   const SWAP_MS = 900;
   const RISE = { rooms: [1.3, 2.2], cafe: [2.1, 2.9], terrace: [2.7, 3.5], work: [3.3, 4.4], plants: [4.2, 5.0], facade: [4.9, 6.1] };
   let T, M, cam, r, asp = 16 / 9, host, sc, view;
