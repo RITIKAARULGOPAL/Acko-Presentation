@@ -34,6 +34,14 @@
   main { position:relative; overflow:hidden; }
   canvas { position:absolute; inset:0; width:100%; height:100%; cursor:grab; touch-action:none; }
   canvas.drag { cursor:grabbing; }
+  /* the files as pills along the top: one per source DXF (base plan, room hatches, outlines, ...) */
+  #pills { position:absolute; left:10px; right:10px; top:10px; display:flex; flex-wrap:wrap; gap:6px; z-index:2; pointer-events:none; }
+  #pills button { pointer-events:auto; border:1px solid #cfcac1; background:rgba(255,255,255,.95); color:var(--muted); border-radius:999px;
+    padding:5px 13px; font:500 13px/1 system-ui, "Segoe UI", sans-serif; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+  #pills button.on { background:var(--ink); border-color:var(--ink); color:#fff; }
+  #pills button:hover { border-color:#999; }
+  #pills .all { background:transparent; box-shadow:none; border-style:dashed; }
+  #pick { top:52px !important; }
   #hud { position:absolute; right:10px; bottom:10px; background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:6px; padding:4px 8px; font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; }
   #pick { position:absolute; left:10px; top:10px; background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:6px; padding:6px 10px; font-size:12px; display:none; max-width:340px; }
   #check div { display:flex; justify-content:space-between; gap:8px; }
@@ -76,6 +84,7 @@
 </aside>
 <main>
   <canvas id="cv"></canvas>
+  <div id="pills"></div>
   <div id="pick"></div>
   <div id="tip" style="position:absolute;pointer-events:none;background:rgba(20,20,20,.9);color:#fff;padding:5px 9px;border-radius:5px;font-size:12px;display:none;max-width:320px"></div>
   <div id="hud"></div>
@@ -483,10 +492,22 @@ function layerPanel() {
       `<input type="range" data-a="${esc(g)}" min="0" max="1" step=".05" value="${alpha[g] ?? 1}" title="opacity" style="margin-left:auto;width:70px"></div>` + rows;
   }).join("");
   box.querySelectorAll(".lyr input").forEach(cb => cb.onchange = () => { const k = cb.closest(".lyr").dataset.k; cb.checked ? hidden.delete(k) : hidden.add(k); redraw(); });
-  box.querySelectorAll("input[data-g]").forEach(cb => cb.onchange = () => { cb.checked ? hiddenG.delete(cb.dataset.g) : hiddenG.add(cb.dataset.g); redraw(); });
+  box.querySelectorAll("input[data-g]").forEach(cb => cb.onchange = () => setGroup(cb.dataset.g, cb.checked));
+  pills();
   box.querySelectorAll("input[data-a]").forEach(r => r.oninput = () => { alpha[r.dataset.a] = +r.value; redraw(); });
 }
 document.getElementById("q").oninput = layerPanel;
+const GROUP_NAME = { rooms: "Room hatches", base: "Base plan", vegetation: "Vegetation", dueDiligence: "Due diligence",
+  zoneBoundaries: "Zone boundaries", neighbourhoods: "Neighbourhoods", egress: "Egress", text: "Text" };
+function setGroup(g, on) { on ? hiddenG.delete(g) : hiddenG.add(g); layerPanel(); redraw(); }
+function pills() {
+  const groups = meta.groups || [...new Set(meta.blocks.map(b => b.group || b.block))];
+  const box = document.getElementById("pills");
+  box.innerHTML = groups.map(g => `<button class="${hiddenG.has(g) ? "" : "on"}" data-g="${esc(g)}" title="${esc(meta.blocks.filter(b => (b.group || b.block) === g).map(b => b.source || b.block).join(", "))}">${esc(GROUP_NAME[g] || g)}</button>`).join("") +
+    `<button class="all" data-all="1">${hiddenG.size ? "Show all" : "Hide all"}</button>`;
+  box.querySelectorAll("button[data-g]").forEach(b => b.onclick = () => setGroup(b.dataset.g, hiddenG.has(b.dataset.g)));
+  box.querySelector("button[data-all]").onclick = () => { if (hiddenG.size) hiddenG.clear(); else groups.forEach(g => hiddenG.add(g)); layerPanel(); redraw(); };
+}
 document.getElementById("all").onclick = () => { hidden.clear(); hiddenG.clear(); layerPanel(); redraw(); };
 document.getElementById("none").onclick = () => { (meta.groups || []).forEach(g => hiddenG.add(g)); layerPanel(); redraw(); };
 </script>
