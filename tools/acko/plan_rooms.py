@@ -104,7 +104,20 @@ for r in rooms:
     if host: host["nested"] = host.get("nested", 0) + 1
     else: kept.append(r)
 nested = len(rooms) - len(kept); rooms = kept
-print(f"{len(rooms)} rooms from {sum(1 for x in expand('rooms') if x[2] == 'f')} hatches ({nested} nested pieces folded into their rooms)")
+# an open area's hatch can come as loops that only share an edge (a corridor in pieces): touching pieces of one open
+# type are one hover shape
+joined = 0
+for t in sorted({r["type"] for r in rooms if r["type"] in OPEN}):
+    group = [r for r in rooms if r["type"] == t]
+    while True:
+        pair = next(((a, b) for i, a in enumerate(group) for b in group[i + 1:] if a["poly"].distance(b["poly"]) < 50), None)
+        if not pair: break
+        a, b = pair
+        fill = unary_union([a["fill"].buffer(5), b["fill"].buffer(5)]).buffer(-5)
+        fill = max(parts(fill), key=lambda p: p.area)
+        a.update(poly=Polygon(fill.exterior), fill=fill, islands=len(fill.interiors), joined=a.get("joined", 0) + 1 + b.get("joined", 0))
+        group.remove(b); rooms.remove(b); joined += 1
+print(f"{len(rooms)} rooms from {sum(1 for x in expand('rooms') if x[2] == 'f')} hatches ({nested} nested pieces folded into their rooms, {joined} touching open-area pieces joined)")
 
 # ---------------------------------------------------------------- the other layers
 outlines = []
@@ -198,15 +211,27 @@ def ring(p): return [[round(x), round(y)] for x, y in p.exterior.coords]
 # the hover shape: the room with its furniture cut out, as the hatch's islands have it. A hole that only keeps the fill
 # clear of a label is filled back (the cursor on a room's name should light the room), and specks under 0.02 m2 are dropped.
 label_pts = [Point(l["pt"]) for l in labels]
+room_pts = [(r, r["poly"].representative_point()) for r in rooms]
+solid = unary_union([r["poly"] for r in rooms if r["type"] not in OPEN])     # every enclosed room's footprint
+def rings_of(g):
+    """a (multi)polygon as [[exterior, hole, ...], ...] in whole mm"""
+    rd = lambda c: [[round(x), round(y)] for x, y in c]
+    return [[rd(p.exterior.coords)] + [rd(h.coords) for h in p.interiors] for p in parts(g) if p.area > 2e4]
 for r in rooms:
     holes, refilled = [], 0
     for h in r["fill"].interiors:
         hp = Polygon(h)
         if hp.area < 2e4: continue
-        if any(hp.contains(q) for q in label_pts): refilled += 1; continue
+        # a hole that only keeps the fill clear of a label: text-sized, with no room inside it
+        if hp.area < 1e7 and any(hp.contains(q) for q in label_pts) and not any(o is not r and hp.contains(q) for o, q in room_pts):
+            refilled += 1; continue
         holes.append(hp)
+    hover = Polygon(r["poly"].exterior.coords, [h.exterior.coords for h in holes]).buffer(0)
+    if r["type"] in OPEN:
+        hover = hover.difference(solid)          # an open area never lights over a room, even where their hatches overlap
+    r["rings"] = rings_of(hover)
     r["holes"] = [[[round(x), round(y)] for x, y in h.exterior.coords] for h in holes]
-    r["hover_m2"] = round((r["poly"].area - sum(h.area for h in holes)) / 1e6, 2)
+    r["hover_m2"] = round(hover.area / 1e6, 2)
     r["label_holes_refilled"] = refilled
 out = {
     "rooms": [{k: v for k, v in r.items() if k not in ("poly", "fill")} | {"shape": ring(r["poly"])} for r in rooms],

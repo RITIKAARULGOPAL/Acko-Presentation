@@ -317,10 +317,12 @@ function hoverSetup() {
     r.pts = r.shape.map(([x, y]) => [X(x), Y(y)]);
     const xs = r.pts.map(p => p[0]), ys = r.pts.map(p => p[1]);
     r.b = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
-    // the room with its furniture cut out: holes drawn into the same path, filled even-odd
-    r.holePts = (r.holes || []).map(h => h.map(([x, y]) => [X(x), Y(y)]));
+    // the hover shape: one or more parts, each an outline with holes (furniture, and for open areas the rooms in them),
+    // all in one path filled even-odd
+    r.polys = (r.rings || [[r.shape, ...(r.holes || [])]]).map(p => p.map(ring => ring.map(([x, y]) => [X(x), Y(y)])));
+    r.holePts = r.polys.flatMap(p => p.slice(1));
     r.path = new Path2D();
-    for (const ring of [r.pts, ...r.holePts]) { ring.forEach(([x, y], i) => i ? r.path.lineTo(x, y) : r.path.moveTo(x, y)); r.path.closePath(); }
+    for (const ring of r.polys.flat()) { ring.forEach(([x, y], i) => i ? r.path.lineTo(x, y) : r.path.moveTo(x, y)); r.path.closePath(); }
     r.issues = [];
   }
   ROOMS.issues.forEach((it, i) => { it.i = i; it.cx = X(it.x); it.cy = Y(it.y); if (it.room != null) ROOMS.rooms[it.room].issues.push(it); });
@@ -345,7 +347,7 @@ function hoverList() {
     hot = it.room != null ? ROOMS.rooms[it.room] : null; hoverList(); redraw();
   });
 }
-const inRoom = (R, x, y) => inPoly(x, y, R.pts) && !R.holePts.some(h => inPoly(x, y, h));     // not over its furniture
+const inRoom = (R, x, y) => R.polys.some(([outer, ...holes]) => inPoly(x, y, outer) && !holes.some(h => inPoly(x, y, h)));   // not over its furniture
 function inPoly(x, y, pts) {
   let inside = false;
   for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
