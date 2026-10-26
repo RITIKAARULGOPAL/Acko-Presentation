@@ -113,6 +113,9 @@ let GROUP = "", hiddenG = new Set(), alpha = {};
   }
   parts.sort((a, b) => a.order - b.order);
   loadMs = performance.now() - tl;
+  // every load starts with the base plan alone; ?on=base,rooms,... picks others
+  const on = (new URLSearchParams(location.search).get("on") || "base").split(",");
+  (meta.groups || []).forEach(g => { if (!on.includes(g)) hiddenG.add(g); });
   layerPanel();
   try { ROOMS = await fetch(DIR + "rooms.json").then(r => r.ok ? r.json() : null); } catch (e) { ROOMS = null; }
   if (ROOMS) hoverSetup();
