@@ -381,6 +381,32 @@ def merge_duplicates(root):
     DEFS[:] = merged
     return remap[root]
 
+VEG_NAME = re.compile(r"(?<!WITH )(PLANT|TREE|SHRUB|GRASS|FOLIAGE|VEGETATION)", re.I)
+def mark_vegetation(defs, stats):
+    """flag definitions that draw plants ("veg": 1; the viewer paints them, and all they place, as vegetation):
+    a block named for a plant, and inside a planter block (a table "WITH PLANTER" too) a child that is only a scatter
+    of small marks, the foliage, whatever its (often anonymous, imported) name"""
+    def marks(d):
+        k, sizes = 10 ** -d["q"], []
+        for r in d["runs"]:
+            if r[4] not in ("s", "h"): return None
+            for it in r[5]:
+                xs, ys, x, y = [it[0]], [it[1]], it[0], it[1]
+                for i in range(2, len(it), 2): x += it[i]; y += it[i + 1]; xs.append(x); ys.append(y)
+                sizes.append(max(max(xs) - min(xs), max(ys) - min(ys)) * k)
+        return sorted(sizes)[len(sizes) // 2] if sizes else None
+    for d in defs:
+        if VEG_NAME.search(d["name"]): d["veg"] = 1; stats["vegetation_blocks"] += 1
+    for d in defs:
+        if not re.search(r"PLANT", d["name"], re.I): continue
+        for r in d["runs"]:
+            if r[4] != "i": continue
+            for it in r[5]:
+                child = defs[it[0]]
+                m = marks(child)
+                if not child.get("veg") and m is not None and m < 60:
+                    child["veg"] = 1; stats["vegetation_blocks"] += 1
+
 # ================================================================ export each block placed in model space
 os.makedirs(os.path.join(OUT, "layers"), exist_ok=True)
 manifest, extents = [], []
@@ -456,6 +482,7 @@ for src in sorted(SOURCES, key=lambda p: (GROUP_ORDER.index(group_of(p)) if grou
             root = define(name)
             root = merge_duplicates(root)
             if not NO_SHAPES: reinstance(DEFS, stats)       # repeated exploded furniture, stored once
+            mark_vegetation(DEFS, stats)
             place = {"m": affine(e.matrix44()), "spec": list(spec(e, lay))}
             json.dump({"block": name, "root": root, "place": place, "defs": DEFS}, open(path, "w", encoding="utf-8"), separators=(",", ":"))
             extents.append(list(expand_pts(root, place["m"])))
