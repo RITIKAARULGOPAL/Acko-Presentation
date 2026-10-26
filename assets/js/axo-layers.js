@@ -4,7 +4,7 @@
      base      the slab and its floors in the renders' colours (render 01): grey floor, lavender corridors, purple rooms,
                pale yellow café, olive terraces
      mass      the columns and the building's middle band (grey blocks)
-     rooms     the rooms' purple glass and their furniture (render 02)
+     partitions  the rooms' purple glass (render 02)    rooms     the furniture in the rooms (render 02)
      cafe      the café's and training room's furniture (03)       terrace   the terraces' furniture (04)
      work      the workstations and the open floor's furniture (05) plants    the plants (06)
      facade    mullions, rails and pale glass round the floor (07)
@@ -77,7 +77,7 @@
     }
 
     const scene = new T.Scene(), G = {};
-    for (const k of ["base", "mass", "rooms", "cafe", "terrace", "work", "plants", "facade", "zones", "routes"]) { G[k] = new T.Group(); G[k].name = k; scene.add(G[k]); }
+    for (const k of ["base", "mass", "partitions", "rooms", "cafe", "terrace", "work", "plants", "facade", "zones", "routes"]) { G[k] = new T.Group(); G[k].name = k; scene.add(G[k]); }
     const C = A.colours, WHITE = 0xfbfbfa;
 
     // ---------- the slab and its floors (render 01) ----------
@@ -112,8 +112,8 @@
     gmat.userData.col = new T.Color(0x6f5d85); gmat.userData.white = new T.Color(0xd9d9d9); gmat.userData.op = [0.22, 0.42]; tinted.push(gmat);
     const gm = new T.Mesh(new T.BufferGeometry(), gmat);
     gm.geometry.setAttribute("position", new T.Float32BufferAttribute(glass.p, 3)); gm.geometry.setAttribute("normal", new T.Float32BufferAttribute(glass.n, 3));
-    gm.renderOrder = 3; G.rooms.add(gm);
-    const gl = lines(GINK, 0x2d2340, 0x8f8f8f, 0.75); gl.renderOrder = 4; G.rooms.add(gl);
+    gm.renderOrder = 3; G.partitions.add(gm);
+    const gl = lines(GINK, 0x2d2340, 0x8f8f8f, 0.75); gl.renderOrder = 4; G.partitions.add(gl);
 
     // ---------- furniture by group: each block's shapes once, placed by its uses; the loose ones as drawn ----------
     const KIND = { desk: [0xdcc6a4, 0xf3f3f1], chair: [0x77767c, 0xdedede], store: [0xeeebe4, 0xf6f6f4], sofa: [0x9a999e, 0xe6e6e6] };
