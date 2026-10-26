@@ -39,12 +39,13 @@
 #s-strategy .st-3d canvas { display: block; width: 100%; height: 100%; }
 /* a soft white wash behind the copy, where the floor's west end runs under it */
 #s-strategy .st-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
-  background: radial-gradient(ellipse 30% 22% at 22% 40%, rgba(255,255,255,.92), rgba(255,255,255,.6) 60%, rgba(255,255,255,0)); }
-/* the copy at the PPT's boxes (its insets, anchors and sizes) */
+  background: radial-gradient(ellipse 30% 22% at 22% 30%, rgba(255,255,255,.92), rgba(255,255,255,.6) 60%, rgba(255,255,255,0)); }
+/* the copy at the PPT's boxes (its insets, anchors and sizes), the title and paragraph 10 % higher so they clear the floor at
+   slide 14's size (Ritika, 26 Oct: "move the text") */
 #s-strategy .st-t { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
 #s-strategy .st-t > * { position: absolute; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; margin: 0; padding: calc(var(--pt) * 7.2); }
-#s-strategy .st-t h3 { left: 1.82%; top: 27.01%; width: 44.29%; height: 8.21%; font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); white-space: nowrap; }
-#s-strategy .st-t p { left: 1.82%; top: 36.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.15; font-style: italic; font-weight: 300; color: #666; }
+#s-strategy .st-t h3 { left: 1.82%; top: 17.01%; width: 44.29%; height: 8.21%; font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); white-space: nowrap; }
+#s-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.15; font-style: italic; font-weight: 300; color: #666; }
 #s-strategy .st-t p b { font-weight: 500; }
 #s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1; font-style: normal; color: var(--hand-ink); }
 /* the beat's name, bottom right of the floor, as the deck's animation writes it */
