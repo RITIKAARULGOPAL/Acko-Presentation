@@ -595,6 +595,10 @@ a texture's average colour, tags, a scene's hidden entities). No SketchUp window
 - **Kinds per triangle** (glass by opacity, plants by tag and green, wood / soft / hard by material name, floor / wall / top / slab
   by height and slope, the terrace's olive as grass) drive the looks: `AxoModel.looks` is now shared (`apply(registry, name)`), with
   a `sketchup` look (own colours under the sun). The zones' floors lie in the base floor's plane: lifted 4 mm.
+- **Massing, not glass (Ritika, 26 Oct: "The Not in contract should be a solid white mass and not translucent"):** the band is a
+  box in a see-through grey (`M03_Pewter_Shine`), so it read as glass. A see-through material with a large top that is mostly top
+  (over 20 m², over 30% of its area) is a massing material: every face in it becomes the kind `mass`, solid white in every look,
+  casting, edged, and an obstacle for the route. Glass panes (upright, whatever their tops) stay glass.
 - **Frame:** SketchUp metres onto the DXF slab (y flipped, shifted by FFT-matching the footprints; IoU 0.80, the model's floor also
   runs under the band) and written in AxoModel's world frame, so the route, pins and walker sit where they did.
 

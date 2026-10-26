@@ -3,7 +3,7 @@
    desk and plant simplified and drawn once per placement), in AxoModel's world frame (the DXF slab's centre; x east, y up,
    z south), so the day's route, pins and walker sit where they did. Same shape as AxoModel.get(): { scene, groups, X, Z, CX, CY,
    slab, reset }, on the same renderer (AxoModel.renderer()) and camera helpers (AxoModel.apply / basis / frame). Layers:
-     base       the slab, the floors, grass   walls      walls, partitions, the band's mass, tops
+     base       the slab, the floors, grass   walls      walls, partitions, tops, the band "Not in contract" (a solid mass)
      glass      see-through surfaces          facade     metal (mullions, frames)
      furniture  wood, soft, hard              plants     the plants, in their own green
      marks      the entrances (red triangles)
@@ -14,7 +14,7 @@
 (function () {
   const AS = {}, LOD_HALF = 32;
   const GROUP_OF = { floor: "base", slab: "base", wall: "walls", top: "walls", glass: "glass", mullion: "facade", wood: "furniture",
-    soft: "furniture", hard: "furniture", plant: "plants", grass: "base" };
+    soft: "furniture", hard: "furniture", plant: "plants", grass: "base", mass: "walls" };
   let T, M = null, REG = null, LOOK = "ppt", shadowDue = true;
 
   AS.available = () => !!(window.THREE && window.AXO_SKP && window.AXO_DXF && window.AxoModel);

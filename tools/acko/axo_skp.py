@@ -16,7 +16,8 @@ is ~45 k faces (×638), the plants ~15 M. So:
   - kinds        per triangle, for the looks (assets/js/axo-model.js AxoModel.looks): glass (see-through materials), plant
                  (green ones under a plant tag or a plant-like name), wood / soft / hard (furniture, by material name), floor /
                  wall / slab / mullion / top / grass (the rest, by height, slope and material; the terrace's olive floor is grass,
-                 kept in its colour); down-facing faces above CEIL m dropped; the zones' floors lifted 4 mm off the base floor
+                 kept in its colour; a see-through material with a large top, the band "Not in contract", is a solid white mass,
+                 Ritika 26 Oct); down-facing faces above CEIL m dropped; the zones' floors lifted 4 mm off the base floor
   - colours      each triangle its material's colour (a texture's average colour), the faces painted by their placement inherited
   - registration SketchUp metres onto the DXF's slab (data/axo-dxf.js, plan mm, y down): y flipped (or turned half round),
                  shifted by matching the two footprints at 10 cm; the overlap (IoU) is reported
@@ -40,7 +41,7 @@ INCH = skp_read.INCH
 UNIT_FACES, UNIT_SIZE, CEIL = 400_000, 8.0, 2.6
 FLOOR_BOX = (-10, 260, -10, 50)                               # SketchUp metres: what counts as on the floor
 FINE, COARSE = 0.035, 0.07                                     # the two levels' cells (m)
-KINDS = ["floor", "slab", "wall", "top", "mullion", "glass", "wood", "soft", "hard", "plant", "grass"]
+KINDS = ["floor", "slab", "wall", "top", "mullion", "glass", "wood", "soft", "hard", "plant", "grass", "mass"]
 K = {k: i for i, k in enumerate(KINDS)}
 PLANT_TAG = re.compile(r"plant", re.I)
 PLANTISH = re.compile(r"leaf|leaves|leav|foliage|plant|palm|banana|grass|fern|ivy|monstera|ficus|tree|bush|shrub|flower|succul|cactus|vase", re.I)
@@ -48,6 +49,7 @@ WOOD = re.compile(r"wood|oak|walnut|ply|lamin|madera|veneer|timber|teak|birch|ma
 SOFT = re.compile(r"fabric|uphol|tapi|textil|kvadrat|jeans|leather|cushion|seat|sofa|velvet|wool|felt|carpet|rug|cloth|linen|boucle|hermes|clay\b", re.I)
 METAL = re.compile(r"metal|chrome|steel|alum|pewter|iron|brass|copper|nickel|zinc|black", re.I)
 DEFAULT_RGB = (236, 236, 234)
+MASS_RGB, MASS_TOP = (244, 244, 242), 20.0                     # a see-through massing material: solid white (m² of see-through top)
 
 
 def log(*a):
@@ -362,7 +364,7 @@ def main():
     if a.stats: m.close(); return
 
     # ---- static geometry (SketchUp metres, z up): the architecture (both levels), and the units used once (one per level) ----
-    t2 = time.time(); pieces = {0: [], 1: [], 2: []}                               # level 0: both; 1 fine; 2 coarse
+    t2 = time.time(); pieces = {0: [], 1: [], 2: []}; massmats = set()          # level 0: both; 1 fine; 2 coarse
     for (k, W, tag, paint, pl) in static:
         P, T, mat, fidx, fent = m.mesh(k)
         if not len(T): continue
@@ -374,7 +376,17 @@ def main():
         if len(Tr) > 5000:                                                        # a heavy definition: simplified like the units
             for lv, c in ((1, a.fine), (2, a.coarse)):
                 P2, T2, idx = cluster(Pw, Tr, c); pieces[lv].append((P2, T2, mk[idx], tag, pl))
-        else: pieces[0].append((Pw, Tr, mk, tag, pl))
+        else:
+            # a see-through material with a large top, mostly top (the band "Not in contract", in a see-through grey), is a massing
+            # material: every face in it is a solid mass; glass panes (upright, whatever their tops) stay glass
+            a_, b_, c_ = Pw[Tr[:, 0]], Pw[Tr[:, 1]], Pw[Tr[:, 2]]; n_ = np.cross(b_ - a_, c_ - a_); ar = np.linalg.norm(n_, axis=1)
+            top = (np.abs(n_[:, 2]) > 0.9 * np.maximum(ar, 1e-12)) & (np.minimum(np.minimum(a_[:, 2], b_[:, 2]), c_[:, 2]) > 2.0)
+            for q in np.unique(mk[top]):
+                mm = m.material(skp_read.Ref(int(q))) if q else None
+                area, whole = float(ar[top & (mk == q)].sum() / 2), float(ar[mk == q].sum() / 2)
+                if mm and mm[2] < 0.9 and area > MASS_TOP and area > 0.3 * whole:          # a box, mostly top; not panes
+                    massmats.add(int(q)); log(f"  a massing material, not glass: {mm[0]} ({area:,.0f} m2 of see-through top in {m.defs[k]['name'] or k})")
+            pieces[0].append((Pw, Tr, mk, tag, pl))
     for k, pls in units.items():
         if len(pls) != 1: continue
         Wm = A_SKP @ pls[0][0] @ iA
@@ -386,6 +398,9 @@ def main():
     for lv in (0, 1, 2):
         SP, ST, SM, SPL = merge(pieces[lv])
         rgb, kind, drop = colours_kinds(m, SP, ST, SM, SPL, lv == 0) if len(ST) else (np.zeros((0, 3), np.uint8), np.zeros(0, np.int16), np.zeros(0, bool))
+        if lv == 0 and massmats:                                                  # that material, wherever it is, is the mass
+            mf = np.isin(SM, np.array(sorted(massmats), dtype=np.uint64)); kind[mf] = K["mass"]; rgb[mf] = MASS_RGB; drop &= ~mf
+            log(f"  the mass: {int(mf.sum())} triangles")
         stat[lv] = (SP, ST[~drop], rgb[~drop], kind[~drop])
         log(f"static level {lv}: {len(ST):,} triangles ({int(drop.sum()):,} ceiling dropped); kinds {dict((KINDS[i], int(n)) for i, n in zip(*np.unique(kind[~drop], return_counts=True)))}")
     log(f"  in {time.time() - t2:.1f} s")
@@ -443,7 +458,7 @@ def main():
         from PIL import Image, ImageDraw
         segs = []
         def add_segs(Pw, T, kind):
-            wall = np.isin(kind, [K["wall"], K["glass"], K["mullion"]])
+            wall = np.isin(kind, [K["wall"], K["glass"], K["mullion"], K["mass"]])
             a_, b_, c_ = Pw[T[wall][:, 0]], Pw[T[wall][:, 1]], Pw[T[wall][:, 2]]
             low = np.minimum(np.minimum(a_[:, 1], b_[:, 1]), c_[:, 1]) < 1.2
             for (p, q) in ((a_, b_), (b_, c_), (c_, a_)): segs.append(np.c_[p[low][:, [0, 2]], q[low][:, [0, 2]]])
