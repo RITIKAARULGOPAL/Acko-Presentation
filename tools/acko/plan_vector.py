@@ -21,6 +21,8 @@ layer; placements on frozen layers are dropped; invisible entities and attribute
 Coordinates are integers, each run of points as its first point then deltas, in units of 10^-q of the definition's
 own units, q chosen per definition so the rounding stays under 0.5 mm on the plan however it's scaled.
 
+Exploded furniture (loose lines where CAD had blocks) is re-instanced by plan_reinstance.py: repeated shapes found in the
+big definitions become definitions of their own. --no-shapes leaves that out (instanced as the DXF has it).
 --flat writes the previous form instead: every placement exploded into world coordinates (integer mm), as the check.
 
 Writes into <out_dir>:
@@ -28,7 +30,7 @@ Writes into <out_dir>:
                          styles, and a check: every entity type, how many were drawn (in definitions and as placed)
   layers/<block>.json    instanced: {"block", "root", "place", "defs": [{"name", "q", "runs"}]}; flat: {"block", "runs"}
 
-usage: python tools/acko/plan_vector.py <layout.dxf> <out_dir> [--flat]
+usage: python tools/acko/plan_vector.py <layout.dxf> <out_dir> [--no-shapes | --flat]
 """
 import sys, os, re, json, math, time, collections
 import ezdxf
@@ -36,9 +38,12 @@ from ezdxf import path as zpath, colors as zcolors
 from ezdxf.render import hatching
 from shapely.geometry import Polygon, LineString
 from shapely.prepared import prep
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from plan_reinstance import reinstance
 
 SRC, OUT = sys.argv[1], sys.argv[2]
 FLAT = "--flat" in sys.argv[3:]
+NO_SHAPES = "--no-shapes" in sys.argv[3:]      # instanced as the DXF has it, without re-instancing exploded geometry
 t0 = time.time()
 doc = ezdxf.readfile(SRC)
 print(f"load {time.time() - t0:.0f}s", flush=True)
@@ -414,11 +419,12 @@ for e in msp:
         placed, shared = sum(USES.values()) - 1, sum(1 for n in USES if USES[n] > 1)
         root = define(name)
         root = merge_duplicates(root)
+        if not NO_SHAPES: reinstance(DEFS, stats)       # repeated exploded furniture, stored once
         place ={"m": affine(e.matrix44()), "spec": list(spec(e, lay))}
         json.dump({"block": name, "root": root, "place": place, "defs": DEFS}, open(path, "w", encoding="utf-8"), separators=(",", ":"))
         extents.append(list(expand_pts(root, place["m"])))
         info = {"defs": len(DEFS), "placements": placed, "placed_more_than_once": shared,
-                "merged": stats["definitions_merged"]}
+                "merged": stats["definitions_merged"], "shapes": stats["shapes"], "shape_placements": stats["occurrences"]}
     manifest.append({"block": name, "file": "layers/" + fn, "bytes": os.path.getsize(path), "instanced": not FLAT, **info})
     print(f"  {name}: {os.path.getsize(path) / 1e6:.1f} MB  {info}  {time.time() - t0:.0f}s", flush=True)
 
