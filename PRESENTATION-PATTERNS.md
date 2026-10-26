@@ -557,3 +557,23 @@ slide's own objects in the shared model (s-wayday's walker, pins and trail) sit 
 removed (then `M.reset()`) on leave, so s-axo never shows them. A frame loop runs only while its slide is on, and waits for a real size
 (a hidden pane reports 0 × 0: an aspect of NaN otherwise poisons the camera). Entering a stepped walk from either side jumps straight
 to that beat's stop; only the next beats walk.
+
+## 26. Looks for the shared axo: the PPT's colours, or white with cast shadows and textures (s-axo · s-wayday)
+**What (Ritika, 26 Oct):** "make this axo completely plain white with shadows and depth and textures", for both axos (s-wayday is a
+wayfinding slide; she will colour the wayfinding elements alone later). The day's story (walker, pins, trail, the red entrance marks),
+the plants and the grass keep their colour. Four samples to compare first: `index-axowhite.html` (`s-axw-1 … 4`, not in `order.txt`).
+
+**How (`assets/js/axo-model.js`):**
+- **Kinds:** every material is tagged with a kind when made (slab, the floor types, wall, mass, service, sill, desk, chair, store,
+  mullion, glass, pane, the inks) and keeps its PPT colour in `userData.ppt`; `AxoModel.look(name)` recolours by kind and redraws,
+  `AxoModel.look()` gives the current one. `"ppt"` (as built) stays the default until she picks; `AxoModel.LOOKS` lists the others
+  (`clay`, `clay-tex`, `crisp`, `warm`).
+- **UVs and textures:** every box gets box-mapped UVs in metres (tops x/z, sides z/y or x/y), so the procedural near-white canvas
+  textures (concrete, terrazzo, plaster, wood grain, fabric; drawn once, no files) tile at real scale.
+- **Shadows:** the shared renderer has its shadow map on; only the white looks' sun casts (a 4096 map fitted round the slab as the sun
+  sees it), so the PPT look and slide 13 cost nothing. Walls, mass, furniture and plants cast; everything but glass receives. A sample
+  slide also sets its walker and pins to cast.
+
+**Gotcha:** put the sun well off the camera's azimuth. The deck's axo looks from θ ≈ −0.61; a sun at that azimuth (behind the camera)
+throws every shadow straight behind what casts it, so the floor shows none even though the shadow map is right. The looks' sun is 50°
+to the camera's left (65° and lower for the warm look), so shadows fall to the right and walls read in three tones.

@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-axw-1">
+/* ---------- a day for a new Acker: wayfinding on the live axo (the shared model) ---------- */
+#s-axw-1 .wd-gl { left: 0; top: 0; width: 100%; height: 100%; }
+#s-axw-1 .wd-gl canvas { display: block; width: 100%; height: 100%; }
+#s-axw-1 .wd-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .5s;
+  background: linear-gradient(90deg, rgba(255,255,255,.96) 0, rgba(255,255,255,.9) 24%, rgba(255,255,255,0) 40%), linear-gradient(0deg, rgba(255,255,255,.97) 0, rgba(255,255,255,.92) 17%, rgba(255,255,255,0) 26%), linear-gradient(180deg, rgba(255,255,255,.95) 0, rgba(255,255,255,0) 12%); }
+#s-axw-1.wd-whole .wd-veil { opacity: 0; }
+#s-axw-1 .wd-title { left: 1.8%; top: 13%; max-width: 30%; pointer-events: none; }
+#s-axw-1 .wd-title small { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+#s-axw-1 .wd-title h1 { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 17); font-weight: 600; font-style: italic; color: var(--purple-2); line-height: 1.1; }
+#s-axw-1 .wd-title p { margin: calc(var(--pt) * 3) 0 0; font-size: calc(var(--pt) * 6.4); line-height: 1.5; color: var(--soft); }
+#s-axw-1 .wd-now { left: 1.8%; top: 62%; pointer-events: none; }
+#s-axw-1 .wd-now .t { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 26); color: var(--purple); line-height: 1; }
+#s-axw-1 .wd-now b { display: block; font-size: calc(var(--pt) * 10); margin-top: calc(var(--pt) * 2); }
+#s-axw-1 .wd-now span { display: block; font-size: calc(var(--pt) * 6.2); color: var(--soft); margin-top: calc(var(--pt) * 1); }
+#s-axw-1 .wd-now q { display: block; quotes: none; font-style: italic; font-weight: 600; color: var(--plum); font-size: calc(var(--pt) * 7.4); margin-top: calc(var(--pt) * 3); }
+#s-axw-1 .wd-now q:not(:empty)::before { content: "\201C "; } #s-axw-1 .wd-now q:not(:empty)::after { content: " \201D"; }
+/* the signage card at the marked spot: Ritika's concept sketch goes in the frame */
+#s-axw-1 .wd-card { width: calc(var(--pt) * 120); background: #fff; border-radius: calc(var(--pt) * 5); box-shadow: 0 12px 32px rgba(40, 20, 90, .2); padding: calc(var(--pt) * 5);
+  opacity: 0; transform: translateY(6px); transition: opacity .35s var(--ease), transform .35s var(--ease); pointer-events: none; }
+#s-axw-1 .wd-card.on { opacity: 1; transform: none; }
+#s-axw-1 .wd-card .sk { height: calc(var(--pt) * 62); border: 1.5px dashed rgba(82, 34, 208, .45); border-radius: calc(var(--pt) * 3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 2);
+  background: repeating-linear-gradient(135deg, #faf8ff 0 calc(var(--pt) * 4), #f3effd calc(var(--pt) * 4) calc(var(--pt) * 8)); color: var(--purple); text-align: center; font-size: calc(var(--pt) * 5.6); }
+#s-axw-1 .wd-card .sk em { font-family: var(--hand); font-style: normal; font-size: calc(var(--pt) * 13); color: var(--plum); }
+#s-axw-1 .wd-card b { display: block; margin-top: calc(var(--pt) * 3.5); font-size: calc(var(--pt) * 7); }
+#s-axw-1 .wd-card p { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); line-height: 1.4; }
+#s-axw-1 .wd-lead { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-axw-1 .wd-lead line { stroke: var(--maroon); stroke-width: 1.2; stroke-dasharray: 3 3; transition: opacity .3s; }
+/* the day, along the bottom: each stop a button */
+#s-axw-1 .wd-day { left: 1.8%; right: 1.8%; top: 84.5%; display: flex; gap: calc(var(--pt) * 2); }
+#s-axw-1 .wd-day button { flex: 1; text-align: left; border: 0; border-top: 2px solid #e2ddf0; background: none; padding: calc(var(--pt) * 2.5) 0 0; cursor: pointer; color: var(--mute); font-family: var(--body); transition: color .25s, border-color .25s; }
+#s-axw-1 .wd-day button:focus { outline: none; }
+#s-axw-1 .wd-day button b { display: block; font-family: var(--num); font-weight: 400; font-size: calc(var(--pt) * 6.2); color: inherit; }
+#s-axw-1 .wd-day button span { display: block; font-size: calc(var(--pt) * 5.2); margin-top: calc(var(--pt) * .8); }
+#s-axw-1 .wd-day button.done { border-color: var(--lilac); color: #3b3550; }
+#s-axw-1 .wd-day button.on { border-color: var(--purple); color: var(--purple); }
+#s-axw-1 .lt-tools button { text-transform: none; letter-spacing: 0; font-size: calc(var(--pt) * 6); font-weight: 600; color: var(--purple); }
+#s-axw-1 .lt-tools button.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+#s-axw-1 .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
+#s-axw-1.wd-fallback .wd-nogl { display: block; }
+#s-axw-1.wd-fallback .wd-gl, #s-axw-1.wd-fallback .wd-card, #s-axw-1.wd-fallback .wd-lead, #s-axw-1.wd-fallback .lt-tools { display: none; }
+/* sample 1 of 4 (scratchpad axw/make_axw.py) */
+#s-axw-1 .axw-chip { position: absolute; left: 38%; top: 3.6%; padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7); border: 1px solid rgba(82, 34, 208, .35);
+  border-radius: 99px; background: rgba(255, 255, 255, .92); color: #5222d0; font: 600 calc(var(--pt) * 7) var(--body); white-space: nowrap; z-index: 3; }
+</style>
+<style data-slide="s-axw-2">
+/* ---------- a day for a new Acker: wayfinding on the live axo (the shared model) ---------- */
+#s-axw-2 .wd-gl { left: 0; top: 0; width: 100%; height: 100%; }
+#s-axw-2 .wd-gl canvas { display: block; width: 100%; height: 100%; }
+#s-axw-2 .wd-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .5s;
+  background: linear-gradient(90deg, rgba(255,255,255,.96) 0, rgba(255,255,255,.9) 24%, rgba(255,255,255,0) 40%), linear-gradient(0deg, rgba(255,255,255,.97) 0, rgba(255,255,255,.92) 17%, rgba(255,255,255,0) 26%), linear-gradient(180deg, rgba(255,255,255,.95) 0, rgba(255,255,255,0) 12%); }
+#s-axw-2.wd-whole .wd-veil { opacity: 0; }
+#s-axw-2 .wd-title { left: 1.8%; top: 13%; max-width: 30%; pointer-events: none; }
+#s-axw-2 .wd-title small { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+#s-axw-2 .wd-title h1 { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 17); font-weight: 600; font-style: italic; color: var(--purple-2); line-height: 1.1; }
+#s-axw-2 .wd-title p { margin: calc(var(--pt) * 3) 0 0; font-size: calc(var(--pt) * 6.4); line-height: 1.5; color: var(--soft); }
+#s-axw-2 .wd-now { left: 1.8%; top: 62%; pointer-events: none; }
+#s-axw-2 .wd-now .t { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 26); color: var(--purple); line-height: 1; }
+#s-axw-2 .wd-now b { display: block; font-size: calc(var(--pt) * 10); margin-top: calc(var(--pt) * 2); }
+#s-axw-2 .wd-now span { display: block; font-size: calc(var(--pt) * 6.2); color: var(--soft); margin-top: calc(var(--pt) * 1); }
+#s-axw-2 .wd-now q { display: block; quotes: none; font-style: italic; font-weight: 600; color: var(--plum); font-size: calc(var(--pt) * 7.4); margin-top: calc(var(--pt) * 3); }
+#s-axw-2 .wd-now q:not(:empty)::before { content: "\201C "; } #s-axw-2 .wd-now q:not(:empty)::after { content: " \201D"; }
+/* the signage card at the marked spot: Ritika's concept sketch goes in the frame */
+#s-axw-2 .wd-card { width: calc(var(--pt) * 120); background: #fff; border-radius: calc(var(--pt) * 5); box-shadow: 0 12px 32px rgba(40, 20, 90, .2); padding: calc(var(--pt) * 5);
+  opacity: 0; transform: translateY(6px); transition: opacity .35s var(--ease), transform .35s var(--ease); pointer-events: none; }
+#s-axw-2 .wd-card.on { opacity: 1; transform: none; }
+#s-axw-2 .wd-card .sk { height: calc(var(--pt) * 62); border: 1.5px dashed rgba(82, 34, 208, .45); border-radius: calc(var(--pt) * 3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 2);
+  background: repeating-linear-gradient(135deg, #faf8ff 0 calc(var(--pt) * 4), #f3effd calc(var(--pt) * 4) calc(var(--pt) * 8)); color: var(--purple); text-align: center; font-size: calc(var(--pt) * 5.6); }
+#s-axw-2 .wd-card .sk em { font-family: var(--hand); font-style: normal; font-size: calc(var(--pt) * 13); color: var(--plum); }
+#s-axw-2 .wd-card b { display: block; margin-top: calc(var(--pt) * 3.5); font-size: calc(var(--pt) * 7); }
+#s-axw-2 .wd-card p { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); line-height: 1.4; }
+#s-axw-2 .wd-lead { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-axw-2 .wd-lead line { stroke: var(--maroon); stroke-width: 1.2; stroke-dasharray: 3 3; transition: opacity .3s; }
+/* the day, along the bottom: each stop a button */
+#s-axw-2 .wd-day { left: 1.8%; right: 1.8%; top: 84.5%; display: flex; gap: calc(var(--pt) * 2); }
+#s-axw-2 .wd-day button { flex: 1; text-align: left; border: 0; border-top: 2px solid #e2ddf0; background: none; padding: calc(var(--pt) * 2.5) 0 0; cursor: pointer; color: var(--mute); font-family: var(--body); transition: color .25s, border-color .25s; }
+#s-axw-2 .wd-day button:focus { outline: none; }
+#s-axw-2 .wd-day button b { display: block; font-family: var(--num); font-weight: 400; font-size: calc(var(--pt) * 6.2); color: inherit; }
+#s-axw-2 .wd-day button span { display: block; font-size: calc(var(--pt) * 5.2); margin-top: calc(var(--pt) * .8); }
+#s-axw-2 .wd-day button.done { border-color: var(--lilac); color: #3b3550; }
+#s-axw-2 .wd-day button.on { border-color: var(--purple); color: var(--purple); }
+#s-axw-2 .lt-tools button { text-transform: none; letter-spacing: 0; font-size: calc(var(--pt) * 6); font-weight: 600; color: var(--purple); }
+#s-axw-2 .lt-tools button.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+#s-axw-2 .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
+#s-axw-2.wd-fallback .wd-nogl { display: block; }
+#s-axw-2.wd-fallback .wd-gl, #s-axw-2.wd-fallback .wd-card, #s-axw-2.wd-fallback .wd-lead, #s-axw-2.wd-fallback .lt-tools { display: none; }
+/* sample 2 of 4 (scratchpad axw/make_axw.py) */
+#s-axw-2 .axw-chip { position: absolute; left: 38%; top: 3.6%; padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7); border: 1px solid rgba(82, 34, 208, .35);
+  border-radius: 99px; background: rgba(255, 255, 255, .92); color: #5222d0; font: 600 calc(var(--pt) * 7) var(--body); white-space: nowrap; z-index: 3; }
+</style>
+<style data-slide="s-axw-3">
+/* ---------- a day for a new Acker: wayfinding on the live axo (the shared model) ---------- */
+#s-axw-3 .wd-gl { left: 0; top: 0; width: 100%; height: 100%; }
+#s-axw-3 .wd-gl canvas { display: block; width: 100%; height: 100%; }
+#s-axw-3 .wd-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .5s;
+  background: linear-gradient(90deg, rgba(255,255,255,.96) 0, rgba(255,255,255,.9) 24%, rgba(255,255,255,0) 40%), linear-gradient(0deg, rgba(255,255,255,.97) 0, rgba(255,255,255,.92) 17%, rgba(255,255,255,0) 26%), linear-gradient(180deg, rgba(255,255,255,.95) 0, rgba(255,255,255,0) 12%); }
+#s-axw-3.wd-whole .wd-veil { opacity: 0; }
+#s-axw-3 .wd-title { left: 1.8%; top: 13%; max-width: 30%; pointer-events: none; }
+#s-axw-3 .wd-title small { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+#s-axw-3 .wd-title h1 { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 17); font-weight: 600; font-style: italic; color: var(--purple-2); line-height: 1.1; }
+#s-axw-3 .wd-title p { margin: calc(var(--pt) * 3) 0 0; font-size: calc(var(--pt) * 6.4); line-height: 1.5; color: var(--soft); }
+#s-axw-3 .wd-now { left: 1.8%; top: 62%; pointer-events: none; }
+#s-axw-3 .wd-now .t { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 26); color: var(--purple); line-height: 1; }
+#s-axw-3 .wd-now b { display: block; font-size: calc(var(--pt) * 10); margin-top: calc(var(--pt) * 2); }
+#s-axw-3 .wd-now span { display: block; font-size: calc(var(--pt) * 6.2); color: var(--soft); margin-top: calc(var(--pt) * 1); }
+#s-axw-3 .wd-now q { display: block; quotes: none; font-style: italic; font-weight: 600; color: var(--plum); font-size: calc(var(--pt) * 7.4); margin-top: calc(var(--pt) * 3); }
+#s-axw-3 .wd-now q:not(:empty)::before { content: "\201C "; } #s-axw-3 .wd-now q:not(:empty)::after { content: " \201D"; }
+/* the signage card at the marked spot: Ritika's concept sketch goes in the frame */
+#s-axw-3 .wd-card { width: calc(var(--pt) * 120); background: #fff; border-radius: calc(var(--pt) * 5); box-shadow: 0 12px 32px rgba(40, 20, 90, .2); padding: calc(var(--pt) * 5);
+  opacity: 0; transform: translateY(6px); transition: opacity .35s var(--ease), transform .35s var(--ease); pointer-events: none; }
+#s-axw-3 .wd-card.on { opacity: 1; transform: none; }
+#s-axw-3 .wd-card .sk { height: calc(var(--pt) * 62); border: 1.5px dashed rgba(82, 34, 208, .45); border-radius: calc(var(--pt) * 3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 2);
+  background: repeating-linear-gradient(135deg, #faf8ff 0 calc(var(--pt) * 4), #f3effd calc(var(--pt) * 4) calc(var(--pt) * 8)); color: var(--purple); text-align: center; font-size: calc(var(--pt) * 5.6); }
+#s-axw-3 .wd-card .sk em { font-family: var(--hand); font-style: normal; font-size: calc(var(--pt) * 13); color: var(--plum); }
+#s-axw-3 .wd-card b { display: block; margin-top: calc(var(--pt) * 3.5); font-size: calc(var(--pt) * 7); }
+#s-axw-3 .wd-card p { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); line-height: 1.4; }
+#s-axw-3 .wd-lead { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-axw-3 .wd-lead line { stroke: var(--maroon); stroke-width: 1.2; stroke-dasharray: 3 3; transition: opacity .3s; }
+/* the day, along the bottom: each stop a button */
+#s-axw-3 .wd-day { left: 1.8%; right: 1.8%; top: 84.5%; display: flex; gap: calc(var(--pt) * 2); }
+#s-axw-3 .wd-day button { flex: 1; text-align: left; border: 0; border-top: 2px solid #e2ddf0; background: none; padding: calc(var(--pt) * 2.5) 0 0; cursor: pointer; color: var(--mute); font-family: var(--body); transition: color .25s, border-color .25s; }
+#s-axw-3 .wd-day button:focus { outline: none; }
+#s-axw-3 .wd-day button b { display: block; font-family: var(--num); font-weight: 400; font-size: calc(var(--pt) * 6.2); color: inherit; }
+#s-axw-3 .wd-day button span { display: block; font-size: calc(var(--pt) * 5.2); margin-top: calc(var(--pt) * .8); }
+#s-axw-3 .wd-day button.done { border-color: var(--lilac); color: #3b3550; }
+#s-axw-3 .wd-day button.on { border-color: var(--purple); color: var(--purple); }
+#s-axw-3 .lt-tools button { text-transform: none; letter-spacing: 0; font-size: calc(var(--pt) * 6); font-weight: 600; color: var(--purple); }
+#s-axw-3 .lt-tools button.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+#s-axw-3 .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
+#s-axw-3.wd-fallback .wd-nogl { display: block; }
+#s-axw-3.wd-fallback .wd-gl, #s-axw-3.wd-fallback .wd-card, #s-axw-3.wd-fallback .wd-lead, #s-axw-3.wd-fallback .lt-tools { display: none; }
+/* sample 3 of 4 (scratchpad axw/make_axw.py) */
+#s-axw-3 .axw-chip { position: absolute; left: 38%; top: 3.6%; padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7); border: 1px solid rgba(82, 34, 208, .35);
+  border-radius: 99px; background: rgba(255, 255, 255, .92); color: #5222d0; font: 600 calc(var(--pt) * 7) var(--body); white-space: nowrap; z-index: 3; }
+</style>
+<style data-slide="s-axw-4">
+/* ---------- a day for a new Acker: wayfinding on the live axo (the shared model) ---------- */
+#s-axw-4 .wd-gl { left: 0; top: 0; width: 100%; height: 100%; }
+#s-axw-4 .wd-gl canvas { display: block; width: 100%; height: 100%; }
+#s-axw-4 .wd-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .5s;
+  background: linear-gradient(90deg, rgba(255,255,255,.96) 0, rgba(255,255,255,.9) 24%, rgba(255,255,255,0) 40%), linear-gradient(0deg, rgba(255,255,255,.97) 0, rgba(255,255,255,.92) 17%, rgba(255,255,255,0) 26%), linear-gradient(180deg, rgba(255,255,255,.95) 0, rgba(255,255,255,0) 12%); }
+#s-axw-4.wd-whole .wd-veil { opacity: 0; }
+#s-axw-4 .wd-title { left: 1.8%; top: 13%; max-width: 30%; pointer-events: none; }
+#s-axw-4 .wd-title small { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+#s-axw-4 .wd-title h1 { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 17); font-weight: 600; font-style: italic; color: var(--purple-2); line-height: 1.1; }
+#s-axw-4 .wd-title p { margin: calc(var(--pt) * 3) 0 0; font-size: calc(var(--pt) * 6.4); line-height: 1.5; color: var(--soft); }
+#s-axw-4 .wd-now { left: 1.8%; top: 62%; pointer-events: none; }
+#s-axw-4 .wd-now .t { font-family: var(--num); font-weight: 300; font-size: calc(var(--pt) * 26); color: var(--purple); line-height: 1; }
+#s-axw-4 .wd-now b { display: block; font-size: calc(var(--pt) * 10); margin-top: calc(var(--pt) * 2); }
+#s-axw-4 .wd-now span { display: block; font-size: calc(var(--pt) * 6.2); color: var(--soft); margin-top: calc(var(--pt) * 1); }
+#s-axw-4 .wd-now q { display: block; quotes: none; font-style: italic; font-weight: 600; color: var(--plum); font-size: calc(var(--pt) * 7.4); margin-top: calc(var(--pt) * 3); }
+#s-axw-4 .wd-now q:not(:empty)::before { content: "\201C "; } #s-axw-4 .wd-now q:not(:empty)::after { content: " \201D"; }
+/* the signage card at the marked spot: Ritika's concept sketch goes in the frame */
+#s-axw-4 .wd-card { width: calc(var(--pt) * 120); background: #fff; border-radius: calc(var(--pt) * 5); box-shadow: 0 12px 32px rgba(40, 20, 90, .2); padding: calc(var(--pt) * 5);
+  opacity: 0; transform: translateY(6px); transition: opacity .35s var(--ease), transform .35s var(--ease); pointer-events: none; }
+#s-axw-4 .wd-card.on { opacity: 1; transform: none; }
+#s-axw-4 .wd-card .sk { height: calc(var(--pt) * 62); border: 1.5px dashed rgba(82, 34, 208, .45); border-radius: calc(var(--pt) * 3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 2);
+  background: repeating-linear-gradient(135deg, #faf8ff 0 calc(var(--pt) * 4), #f3effd calc(var(--pt) * 4) calc(var(--pt) * 8)); color: var(--purple); text-align: center; font-size: calc(var(--pt) * 5.6); }
+#s-axw-4 .wd-card .sk em { font-family: var(--hand); font-style: normal; font-size: calc(var(--pt) * 13); color: var(--plum); }
+#s-axw-4 .wd-card b { display: block; margin-top: calc(var(--pt) * 3.5); font-size: calc(var(--pt) * 7); }
+#s-axw-4 .wd-card p { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); line-height: 1.4; }
+#s-axw-4 .wd-lead { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-axw-4 .wd-lead line { stroke: var(--maroon); stroke-width: 1.2; stroke-dasharray: 3 3; transition: opacity .3s; }
+/* the day, along the bottom: each stop a button */
+#s-axw-4 .wd-day { left: 1.8%; right: 1.8%; top: 84.5%; display: flex; gap: calc(var(--pt) * 2); }
+#s-axw-4 .wd-day button { flex: 1; text-align: left; border: 0; border-top: 2px solid #e2ddf0; background: none; padding: calc(var(--pt) * 2.5) 0 0; cursor: pointer; color: var(--mute); font-family: var(--body); transition: color .25s, border-color .25s; }
+#s-axw-4 .wd-day button:focus { outline: none; }
+#s-axw-4 .wd-day button b { display: block; font-family: var(--num); font-weight: 400; font-size: calc(var(--pt) * 6.2); color: inherit; }
+#s-axw-4 .wd-day button span { display: block; font-size: calc(var(--pt) * 5.2); margin-top: calc(var(--pt) * .8); }
+#s-axw-4 .wd-day button.done { border-color: var(--lilac); color: #3b3550; }
+#s-axw-4 .wd-day button.on { border-color: var(--purple); color: var(--purple); }
+#s-axw-4 .lt-tools button { text-transform: none; letter-spacing: 0; font-size: calc(var(--pt) * 6); font-weight: 600; color: var(--purple); }
+#s-axw-4 .lt-tools button.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+#s-axw-4 .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
+#s-axw-4.wd-fallback .wd-nogl { display: block; }
+#s-axw-4.wd-fallback .wd-gl, #s-axw-4.wd-fallback .wd-card, #s-axw-4.wd-fallback .wd-lead, #s-axw-4.wd-fallback .lt-tools { display: none; }
+/* sample 4 of 4 (scratchpad axw/make_axw.py) */
+#s-axw-4 .axw-chip { position: absolute; left: 38%; top: 3.6%; padding: calc(var(--pt) * 2.5) calc(var(--pt) * 7); border: 1px solid rgba(82, 34, 208, .35);
+  border-radius: 99px; background: rgba(255, 255, 255, .92); color: #5222d0; font: 600 calc(var(--pt) * 7) var(--body); white-space: nowrap; z-index: 3; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg></button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg></button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<section class="scene" id="s-axw-1" data-part="5" data-title="Axo look · 1 · Clay" data-steps="9" data-mins="1.5"
+  data-beats="Arrival,Reception,Neighbourhood,The desk,First meeting,Lunch,Coffee,A pause,Home time"
+  data-notes="Sample 1 of 4 for the white axo (both axos; the day's story and the plants keep their colour): Clay: pure white, soft cast shadows from a high sun, a gentle sky fill, thin light-grey edges: depth from light alone.">
+  <div class="page">
+    <div class="axw-chip">Sample 1 of 4 · Clay</div>
+    <div class="wd-gl ui"></div>
+    <div class="wd-veil"></div>
+    <svg class="wd-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"/></svg>
+    <div class="hdr"><b>Schematic Axonometric</b><span>Space Planning &nbsp;| Wayfinding</span></div>
+    <div class="lt-tools ui"><button type="button" class="wd-play on">Walk the day</button><button type="button" class="wd-all">Whole floor</button></div>
+    <div class="wd-title"><small>Wayfinding</small><h1>A day for a new Acker</h1><p>Their first day, from the lift lobby to home time. At each marked spot, the sign that shows them the way.</p></div>
+    <div class="wd-now"><div class="t"></div><b></b><span></span><q></q></div>
+    <div class="wd-card"><div class="sk"><em>Signage concept</em><span>Ritika's sketch here</span></div><b></b><p></p></div>
+    <div class="wd-day ui"></div>
+    <p class="wd-nogl">The live model needs WebGL on this machine.</p>
+  </div>
+</section>
+<section class="scene" id="s-axw-2" data-part="5" data-title="Axo look · 2 · Clay + textures" data-steps="9" data-mins="1.5"
+  data-beats="Arrival,Reception,Neighbourhood,The desk,First meeting,Lunch,Coffee,A pause,Home time"
+  data-notes="Sample 2 of 4 for the white axo (both axos; the day's story and the plants keep their colour): Clay + textures: the clay with near-white textures: concrete floors, terrazzo café, plaster walls, wood-grain desks, fabric seats.">
+  <div class="page">
+    <div class="axw-chip">Sample 2 of 4 · Clay + textures</div>
+    <div class="wd-gl ui"></div>
+    <div class="wd-veil"></div>
+    <svg class="wd-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"/></svg>
+    <div class="hdr"><b>Schematic Axonometric</b><span>Space Planning &nbsp;| Wayfinding</span></div>
+    <div class="lt-tools ui"><button type="button" class="wd-play on">Walk the day</button><button type="button" class="wd-all">Whole floor</button></div>
+    <div class="wd-title"><small>Wayfinding</small><h1>A day for a new Acker</h1><p>Their first day, from the lift lobby to home time. At each marked spot, the sign that shows them the way.</p></div>
+    <div class="wd-now"><div class="t"></div><b></b><span></span><q></q></div>
+    <div class="wd-card"><div class="sk"><em>Signage concept</em><span>Ritika's sketch here</span></div><b></b><p></p></div>
+    <div class="wd-day ui"></div>
+    <p class="wd-nogl">The live model needs WebGL on this machine.</p>
+  </div>
+</section>
+<section class="scene" id="s-axw-3" data-part="5" data-title="Axo look · 3 · Crisp" data-steps="9" data-mins="1.5"
+  data-beats="Arrival,Reception,Neighbourhood,The desk,First meeting,Lunch,Coffee,A pause,Home time"
+  data-notes="Sample 3 of 4 for the white axo (both axos; the day's story and the plants keep their colour): Crisp: the textures a touch stronger, darker edges, deeper shadows and frosted-white glass: more drawn, more depth.">
+  <div class="page">
+    <div class="axw-chip">Sample 3 of 4 · Crisp</div>
+    <div class="wd-gl ui"></div>
+    <div class="wd-veil"></div>
+    <svg class="wd-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"/></svg>
+    <div class="hdr"><b>Schematic Axonometric</b><span>Space Planning &nbsp;| Wayfinding</span></div>
+    <div class="lt-tools ui"><button type="button" class="wd-play on">Walk the day</button><button type="button" class="wd-all">Whole floor</button></div>
+    <div class="wd-title"><small>Wayfinding</small><h1>A day for a new Acker</h1><p>Their first day, from the lift lobby to home time. At each marked spot, the sign that shows them the way.</p></div>
+    <div class="wd-now"><div class="t"></div><b></b><span></span><q></q></div>
+    <div class="wd-card"><div class="sk"><em>Signage concept</em><span>Ritika's sketch here</span></div><b></b><p></p></div>
+    <div class="wd-day ui"></div>
+    <p class="wd-nogl">The live model needs WebGL on this machine.</p>
+  </div>
+</section>
+<section class="scene" id="s-axw-4" data-part="5" data-title="Axo look · 4 · Warm white" data-steps="9" data-mins="1.5"
+  data-beats="Arrival,Reception,Neighbourhood,The desk,First meeting,Lunch,Coffee,A pause,Home time"
+  data-notes="Sample 4 of 4 for the white axo (both axos; the day's story and the plants keep their colour): Warm white: ivory whites under a low warm sun with long shadows, the textures subtle: softer, more atmospheric.">
+  <div class="page">
+    <div class="axw-chip">Sample 4 of 4 · Warm white</div>
+    <div class="wd-gl ui"></div>
+    <div class="wd-veil"></div>
+    <svg class="wd-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"/></svg>
+    <div class="hdr"><b>Schematic Axonometric</b><span>Space Planning &nbsp;| Wayfinding</span></div>
+    <div class="lt-tools ui"><button type="button" class="wd-play on">Walk the day</button><button type="button" class="wd-all">Whole floor</button></div>
+    <div class="wd-title"><small>Wayfinding</small><h1>A day for a new Acker</h1><p>Their first day, from the lift lobby to home time. At each marked spot, the sign that shows them the way.</p></div>
+    <div class="wd-now"><div class="t"></div><b></b><span></span><q></q></div>
+    <div class="wd-card"><div class="sk"><em>Signage concept</em><span>Ritika's sketch here</span></div><b></b><p></p></div>
+    <div class="wd-day ui"></div>
+    <p class="wd-nogl">The live model needs WebGL on this machine.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-vec.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-axw-1">
+/* a day for a new Acker (Ritika, 22–23 Oct: "wayfinding will be in axo - like a day for a new employee in acko … a guy walks through
+   the axo and at certain marked areas i'll give conceptualised sketches of how the signage would be dealt"): on the shared live
+   model (assets/js/axo-model.js, its one renderer), a figure walks the day's route along the corridors, a beat per stop; at each
+   marked spot (a maroon pin) a signage card opens, a placeholder until her sketches arrive. The route was found on the plan
+   (walls and glass stop it, furniture only slows it; tools: the session's way_route.py). Whole floor shows the route at once;
+   the strip along the bottom jumps to a stop. The walker, pins and trail are this slide's own group, added to the shared scene on
+   entering and taken off on leaving, so the axo and the strategy slides never show them. */
+ACKO.slide("s-axw-1", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
+  // the day's route (plan mm, y down): the stops and the legs between them
+  const ROUTE = {"stops": [{"t": "09:00", "n": "Arrival", "s": "The east lift lobby", "at": [171525, 30275]}, {"t": "09:05", "n": "Reception", "s": "A welcome at reception", "at": [173025, 33125]}, {"t": "09:15", "n": "@NB", "s": "Finding the neighbourhood by its number and graphic wall", "at": [212475, 35075]}, {"t": "09:20", "n": "The desk", "s": "A Type 4 desk in @NB", "at": [228075, 24425]}, {"t": "11:00", "n": "First meeting", "s": "A huddle room, signed by its name", "at": [181725, 32375]}, {"t": "13:00", "n": "Lunch", "s": "The café", "at": [62025, 41075]}, {"t": "14:30", "n": "Coffee", "s": "The coffee point", "at": [94425, 31325]}, {"t": "16:00", "n": "A pause", "s": "Zen room 01", "at": [113925, 29825]}, {"t": "18:30", "n": "Home time", "s": "Out through the west lift lobby", "at": [80925, 30275]}],
+    "legs": [[[171525, 30275], [171675, 31025], [173025, 32525], [173025, 33125]], [[173025, 33125], [175725, 31175], [177225, 30575], [186375, 30725], [187575, 31475], [187575, 33575], [188925, 34925], [190575, 34925], [192675, 37025], [193875, 37025], [202725, 29675], [205425, 26825], [207825, 26825], [210225, 29225], [210525, 30275], [212625, 32225], [212925, 33275], [213975, 34325], [213975, 35075], [213525, 35525], [212475, 35075]], [[212475, 35075], [213075, 35525], [215925, 35675], [217125, 34925], [218325, 34925], [219375, 35975], [221025, 35975], [229575, 28325], [229425, 26675], [227775, 25475], [228075, 24425]], [[228075, 24425], [227775, 25475], [229425, 26675], [229575, 28325], [221025, 35975], [219375, 35975], [218325, 34925], [217125, 34925], [215925, 35675], [215025, 35675], [212775, 32975], [212625, 32225], [210525, 30275], [210225, 29225], [207825, 26825], [205425, 26825], [202725, 29675], [193875, 37025], [192675, 37025], [190575, 34925], [188925, 34925], [187575, 33575], [187575, 31475], [186975, 30875], [180975, 30725], [180525, 31175], [180525, 32075], [180975, 32525], [181725, 32375]], [[181725, 32375], [180975, 32525], [179925, 30725], [177225, 30575], [174375, 32225], [173475, 32375], [172425, 33425], [159075, 33575], [157425, 33275], [154875, 35225], [149175, 35675], [141825, 35675], [139425, 33875], [139125, 32675], [137925, 31475], [135675, 31175], [120375, 31175], [116625, 34625], [114975, 35225], [92175, 34625], [90225, 36425], [88725, 36575], [87825, 37325], [83625, 37325], [81675, 38075], [81225, 38525], [81075, 40925], [80325, 41675], [79125, 41675], [77925, 42425], [77175, 42425], [75825, 40925], [62175, 40775], [62025, 41075]], [[62025, 41075], [62175, 40775], [75825, 40925], [77175, 42425], [77925, 42425], [79125, 41675], [80325, 41675], [81075, 40925], [81225, 38525], [81675, 38075], [83625, 37325], [87825, 37325], [88725, 36575], [90075, 36425], [92175, 34325], [92175, 31925], [92775, 31325], [94425, 31325]], [[94425, 31325], [96375, 31325], [97425, 32375], [97425, 33425], [98925, 34925], [110175, 34925], [111225, 35375], [113475, 35375], [115575, 35075], [116325, 34325], [116175, 30275], [115725, 29825], [113925, 29825]], [[113925, 29825], [115725, 29825], [116175, 30275], [116325, 34325], [115575, 35075], [113475, 35375], [90975, 34625], [90225, 33875], [83625, 33875], [81525, 31775], [81525, 30875], [80925, 30275]]]};
+  // at each spot: what the sign does (the card), and the Loop's words where they fit
+  const SIGN = [
+    ["Arrival zone at the lift lobby", "The ACKO welcome and the floor directory: six neighbourhoods, the café, the rooms.", "I feel welcomed"],
+    ["Reception backdrop", "A welcome, and the way to each neighbourhood from here.", "I feel welcomed"],
+    ["@NB, by its number", "The neighbourhood's number and its graphic wall, seen from the corridor.", "These are my folks!"],
+    ["Desk and locker numbers", "The desk found by its cluster and number.", "These are my folks!"],
+    ["Room name: Nalanda", "A named room (Nalanda, Sabha, Takshashila), with braille on the sign.", "My impact"],
+    ["Café", "The café's sign and menu wall, seen down the corridor.", "Hey, we finally meet!"],
+    ["Coffee point", "A marker for the coffee point.", "Hey, we finally meet!"],
+    ["Zen room", "A quiet-room sign, with braille.", "They thought of me too!"],
+    ["Exit and lift lobby", "The way out and the lift lobby, with the fire-exit signs.", ""],
+  ];
+  const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
+  const S = { built: false, s: 0, stop: 0, walking: null, view: null, follow: true, raf: 0, fresh: true, asp: 1, home: null };
+  let T, M, R, cam, host, sc, group, tg, pins = [], walker, pts = [], cum = [], at = [0];
+  const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
+  const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
+  // the neighbourhood the day's desk is in, by the drawing's own name ("02 · Life")
+  const nbName = () => { const p = ROUTE.stops[2].at, z = (plan.data.zones || []).find((q) => ringsOf(q.zone).filter((r) => inRing(p, r)).length % 2 === 1); return z ? z.name : "The neighbourhood"; };
+  function build() {
+    T = window.THREE; M = window.AxoModel.get(asset);
+    cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+    const NB = nbName();
+    ROUTE.stops.forEach((s) => { s.n = s.n.replace("@NB", NB); s.s = s.s.replace("@NB", NB); });
+    SIGN.forEach((g) => { g[0] = g[0].replace("@NB", NB); });
+    group = new T.Group(); group.name = "wayday";
+    // the route: points every 0.4 m, their distance along it, and where each stop falls
+    const W = (p) => new T.Vector3(M.X(p[0]), 0, M.Z(p[1]));
+    ROUTE.legs.forEach((leg) => {
+      for (let i = 0; i < leg.length - 1; i++) {
+        const a = W(leg[i]), b = W(leg[i + 1]), n = Math.max(1, Math.ceil(a.distanceTo(b) / 0.4));
+        for (let k = 0; k <= n; k++) { if (pts.length && k === 0) continue; const p = a.clone().lerp(b, k / n); cum.push(pts.length ? cum[cum.length - 1] + p.distanceTo(pts[pts.length - 1]) : 0); pts.push(p); }
+      }
+      at.push(cum[cum.length - 1]);
+    });
+    // the trail: a flat lavender ribbon on the floor, drawn as the walker goes
+    const tri = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1], d = b.clone().sub(a).normalize(), n = new T.Vector3(-d.z, 0, d.x).multiplyScalar(0.28);
+      for (const v of [a.clone().add(n), a.clone().sub(n), b.clone().add(n), a.clone().sub(n), b.clone().sub(n), b.clone().add(n)]) tri.push(v.x, 0.05, v.z);
+    }
+    tg = new T.BufferGeometry(); tg.setAttribute("position", new T.Float32BufferAttribute(tri, 3)); tg.setDrawRange(0, 0);
+    const trail = new T.Mesh(tg, new T.MeshBasicMaterial({ color: 0x926ff3, transparent: true, opacity: 0.85, side: T.DoubleSide, depthWrite: false }));
+    trail.renderOrder = 5; group.add(trail);
+    // the marked spots: maroon pins
+    const pm = new T.MeshLambertMaterial({ color: 0x980000 });
+    pins = ROUTE.stops.map((s) => { const g = new T.Group(), head = new T.Mesh(new T.SphereGeometry(0.32, 16, 12), pm), stem = new T.Mesh(new T.CylinderGeometry(0.05, 0.05, 2.4, 6), pm);
+      head.position.y = 2.6; stem.position.y = 1.3; g.add(head, stem); g.position.copy(W(s.at)); group.add(g); return g; });
+    // the walker: a simple figure in the deck's purple
+    walker = new T.Group();
+    const body = new T.Mesh(new T.CylinderGeometry(0.2, 0.26, 1.05, 14), new T.MeshLambertMaterial({ color: 0x5222d0 })); body.position.y = 0.75;
+    const head = new T.Mesh(new T.SphereGeometry(0.17, 16, 12), new T.MeshLambertMaterial({ color: 0xf0d2b8 })); head.position.y = 1.47;
+    const ring = new T.Mesh(new T.RingGeometry(0.42, 0.55, 28), new T.MeshBasicMaterial({ color: 0x5222d0, transparent: true, opacity: 0.35, side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06;
+    walker.add(body, head, ring); group.add(walker);
+    // the strip of stops
+    $(".wd-day", sc).innerHTML = ROUTE.stops.map((s, i) => `<button type="button" data-k="${i + 1}"><b>${s.t}</b><span>${s.n}</span></button>`).join("");
+    $$(".wd-day button", sc).forEach((b) => (b.onclick = () => { b.blur(); go(sceneIx("s-axw-1"), +b.dataset.k); }));
+    S.built = true;
+  }
+  const posAt = (s) => { let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const f = (s - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); return pts[i - 1].clone().lerp(pts[i], Math.max(0, Math.min(1, f))); };
+  const dirAt = (s) => posAt(Math.min(cum[cum.length - 1], s + 0.6)).sub(posAt(Math.max(0, s - 0.6)));
+  const seg = (s) => { let k = 0; while (k < cum.length - 1 && cum[k] < s) k++; return k; };
+  const followView = (p, half) => { const { right, up } = window.AxoModel.basis(VIEW), off = right.clone().multiplyScalar(-half * S.asp * 0.18).add(up.clone().multiplyScalar(half * 0.05));
+    return { theta: VIEW.theta, phi: VIEW.phi, half, t: [p.x + off.x, 0.8 + off.y, p.z + off.z] }; };
+  const mix = (a, b, k) => ({ theta: a.theta, phi: a.phi, half: a.half + (b.half - a.half) * k, t: a.t.map((v, i) => v + (b.t[i] - v) * k) });
+  function sizeUp() {
+    const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return false;           // a hidden pane: wait for a real size
+    const pr = R.getPixelRatio();
+    if (R.domElement.width !== Math.round(W * pr) || R.domElement.height !== Math.round(H * pr) || !S.home) {
+      R.setSize(W, H, false); S.asp = W / H; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
+    }
+    if (!S.view || !isFinite(S.view.half)) S.view = S.home;
+    return true;
+  }
+  function setNow(i) {
+    const s = ROUTE.stops[i], now = $(".wd-now", sc), card = $(".wd-card", sc);
+    $(".t", now).textContent = s.t; $("b", now).textContent = s.n; $("span", now).textContent = s.s; $("q", now).textContent = SIGN[i][2];
+    $("b", card).textContent = SIGN[i][0]; $("p", card).textContent = SIGN[i][1];
+    $$(".wd-day button", sc).forEach((b, k) => { b.classList.toggle("on", k === i); b.classList.toggle("done", k < i); });
+  }
+  const cardOn = (on) => $(".wd-card", sc).classList.toggle("on", on);
+  // to stop i: walked from where the figure is (forward), or there at once (back, a jump, the first beat, reduced motion)
+  function goStop(i, jump) {
+    i = Math.max(0, Math.min(ROUTE.stops.length - 1, i));
+    cardOn(false);
+    const from = S.s, to = at[i], len = Math.abs(to - from);
+    setNow(i);
+    if (jump || reduced || i <= S.stop || len < 0.5) { S.s = to; S.stop = i; S.walking = null; tg.setDrawRange(0, seg(to) * 6); setTimeout(() => cardOn(true), 250); return; }
+    S.stop = i;
+    S.walking = { from, to, t0: performance.now(), dur: Math.max(2400, Math.min(9000, (len / 14) * 1000)) };
+  }
+  function frame(now) {
+    S.raf = 0;
+    if (document.body.dataset.scene !== "s-axw-1" || !R) return;
+    if (!sizeUp()) { S.raf = requestAnimationFrame(frame); return; }
+    if (S.walking) {
+      const w = S.walking, k = Math.min(1, (now - w.t0) / w.dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      S.s = w.from + (w.to - w.from) * e; tg.setDrawRange(0, seg(S.s) * 6);
+      if (k >= 1) { S.walking = null; setTimeout(() => cardOn(true), 250); }
+    }
+    const p = posAt(S.s), d = dirAt(S.s);
+    walker.position.copy(p); if (d.lengthSq() > 1e-6) walker.rotation.y = Math.atan2(d.x, d.z);
+    walker.children[0].position.y = 0.75 + (S.walking ? Math.abs(Math.sin(now / 140)) * 0.06 : 0);
+    S.view = mix(S.view, S.follow ? followView(p, S.walking ? 21 : 15) : S.home, reduced ? 1 : 0.07);
+    window.AxoModel.apply(cam, S.view, S.asp); R.render(M.scene, cam);
+    // the card beside the stop's pin, with a dashed leader to it
+    const card = $(".wd-card", sc), v = pins[S.stop].position.clone(); v.y = 2.6; v.project(cam);
+    const bw = host.clientWidth, bh = host.clientHeight, sx = ((v.x + 1) / 2) * bw, sy = ((1 - v.y) / 2) * bh, cw = card.offsetWidth, ch = card.offsetHeight;
+    const cx = Math.min(bw - cw - 12, sx + bw * 0.06), cy = Math.max(bh * 0.15, Math.min(bh * 0.8 - ch, sy - ch - bh * 0.04));
+    card.style.left = cx + "px"; card.style.top = cy + "px";
+    const ln = $(".wd-lead line", sc); ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", cx); ln.setAttribute("y2", cy + ch * 0.6);
+    ln.style.opacity = card.classList.contains("on") && S.follow ? 1 : 0;
+    S.raf = requestAnimationFrame(frame);
+  }
+  const loop = () => { if (!S.raf) S.raf = requestAnimationFrame(frame); };
+  function whole(on) {
+    S.follow = !on; sc.classList.toggle("wd-whole", on);
+    $(".wd-play", sc).classList.toggle("on", !on); $(".wd-all", sc).classList.toggle("on", on);
+    if (on) cardOn(false); else if (!S.walking) cardOn(true);
+  }
+  return {
+    enter(_, s) {
+      sc = s; host = $(".wd-gl", sc); plain();
+      const ok = !!(window.AxoModel && window.AxoModel.available() && (R = window.AxoModel.renderer()));
+      sc.classList.toggle("wd-fallback", !ok);
+      if (!ok) return;
+      if (!S.built) build();
+      if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
+      M.reset(); M.scene.add(group);
+      window.AxoModel.look("clay");
+      group.traverse((o) => { if (o.isMesh && o.material && o.material.isMeshLambertMaterial) o.castShadow = true; });
+      S.fresh = true; whole(false);
+      $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
+      $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };
+      loop();
+    },
+    step(k, s) {
+      if (!S.built || sc.classList.contains("wd-fallback")) return;
+      const jump = S.fresh; S.fresh = false;              // entering (from either side): straight to that stop; then each beat walks on
+      if (!S.follow) whole(false);
+      goStop(k - 1, jump); loop();
+    },
+    leave() {
+      cancelAnimationFrame(S.raf); S.raf = 0; S.walking = null;
+      if (M && group) { M.scene.remove(group); M.reset(); window.AxoModel.look("ppt"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-axw-2">
+/* a day for a new Acker (Ritika, 22–23 Oct: "wayfinding will be in axo - like a day for a new employee in acko … a guy walks through
+   the axo and at certain marked areas i'll give conceptualised sketches of how the signage would be dealt"): on the shared live
+   model (assets/js/axo-model.js, its one renderer), a figure walks the day's route along the corridors, a beat per stop; at each
+   marked spot (a maroon pin) a signage card opens, a placeholder until her sketches arrive. The route was found on the plan
+   (walls and glass stop it, furniture only slows it; tools: the session's way_route.py). Whole floor shows the route at once;
+   the strip along the bottom jumps to a stop. The walker, pins and trail are this slide's own group, added to the shared scene on
+   entering and taken off on leaving, so the axo and the strategy slides never show them. */
+ACKO.slide("s-axw-2", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
+  // the day's route (plan mm, y down): the stops and the legs between them
+  const ROUTE = {"stops": [{"t": "09:00", "n": "Arrival", "s": "The east lift lobby", "at": [171525, 30275]}, {"t": "09:05", "n": "Reception", "s": "A welcome at reception", "at": [173025, 33125]}, {"t": "09:15", "n": "@NB", "s": "Finding the neighbourhood by its number and graphic wall", "at": [212475, 35075]}, {"t": "09:20", "n": "The desk", "s": "A Type 4 desk in @NB", "at": [228075, 24425]}, {"t": "11:00", "n": "First meeting", "s": "A huddle room, signed by its name", "at": [181725, 32375]}, {"t": "13:00", "n": "Lunch", "s": "The café", "at": [62025, 41075]}, {"t": "14:30", "n": "Coffee", "s": "The coffee point", "at": [94425, 31325]}, {"t": "16:00", "n": "A pause", "s": "Zen room 01", "at": [113925, 29825]}, {"t": "18:30", "n": "Home time", "s": "Out through the west lift lobby", "at": [80925, 30275]}],
+    "legs": [[[171525, 30275], [171675, 31025], [173025, 32525], [173025, 33125]], [[173025, 33125], [175725, 31175], [177225, 30575], [186375, 30725], [187575, 31475], [187575, 33575], [188925, 34925], [190575, 34925], [192675, 37025], [193875, 37025], [202725, 29675], [205425, 26825], [207825, 26825], [210225, 29225], [210525, 30275], [212625, 32225], [212925, 33275], [213975, 34325], [213975, 35075], [213525, 35525], [212475, 35075]], [[212475, 35075], [213075, 35525], [215925, 35675], [217125, 34925], [218325, 34925], [219375, 35975], [221025, 35975], [229575, 28325], [229425, 26675], [227775, 25475], [228075, 24425]], [[228075, 24425], [227775, 25475], [229425, 26675], [229575, 28325], [221025, 35975], [219375, 35975], [218325, 34925], [217125, 34925], [215925, 35675], [215025, 35675], [212775, 32975], [212625, 32225], [210525, 30275], [210225, 29225], [207825, 26825], [205425, 26825], [202725, 29675], [193875, 37025], [192675, 37025], [190575, 34925], [188925, 34925], [187575, 33575], [187575, 31475], [186975, 30875], [180975, 30725], [180525, 31175], [180525, 32075], [180975, 32525], [181725, 32375]], [[181725, 32375], [180975, 32525], [179925, 30725], [177225, 30575], [174375, 32225], [173475, 32375], [172425, 33425], [159075, 33575], [157425, 33275], [154875, 35225], [149175, 35675], [141825, 35675], [139425, 33875], [139125, 32675], [137925, 31475], [135675, 31175], [120375, 31175], [116625, 34625], [114975, 35225], [92175, 34625], [90225, 36425], [88725, 36575], [87825, 37325], [83625, 37325], [81675, 38075], [81225, 38525], [81075, 40925], [80325, 41675], [79125, 41675], [77925, 42425], [77175, 42425], [75825, 40925], [62175, 40775], [62025, 41075]], [[62025, 41075], [62175, 40775], [75825, 40925], [77175, 42425], [77925, 42425], [79125, 41675], [80325, 41675], [81075, 40925], [81225, 38525], [81675, 38075], [83625, 37325], [87825, 37325], [88725, 36575], [90075, 36425], [92175, 34325], [92175, 31925], [92775, 31325], [94425, 31325]], [[94425, 31325], [96375, 31325], [97425, 32375], [97425, 33425], [98925, 34925], [110175, 34925], [111225, 35375], [113475, 35375], [115575, 35075], [116325, 34325], [116175, 30275], [115725, 29825], [113925, 29825]], [[113925, 29825], [115725, 29825], [116175, 30275], [116325, 34325], [115575, 35075], [113475, 35375], [90975, 34625], [90225, 33875], [83625, 33875], [81525, 31775], [81525, 30875], [80925, 30275]]]};
+  // at each spot: what the sign does (the card), and the Loop's words where they fit
+  const SIGN = [
+    ["Arrival zone at the lift lobby", "The ACKO welcome and the floor directory: six neighbourhoods, the café, the rooms.", "I feel welcomed"],
+    ["Reception backdrop", "A welcome, and the way to each neighbourhood from here.", "I feel welcomed"],
+    ["@NB, by its number", "The neighbourhood's number and its graphic wall, seen from the corridor.", "These are my folks!"],
+    ["Desk and locker numbers", "The desk found by its cluster and number.", "These are my folks!"],
+    ["Room name: Nalanda", "A named room (Nalanda, Sabha, Takshashila), with braille on the sign.", "My impact"],
+    ["Café", "The café's sign and menu wall, seen down the corridor.", "Hey, we finally meet!"],
+    ["Coffee point", "A marker for the coffee point.", "Hey, we finally meet!"],
+    ["Zen room", "A quiet-room sign, with braille.", "They thought of me too!"],
+    ["Exit and lift lobby", "The way out and the lift lobby, with the fire-exit signs.", ""],
+  ];
+  const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
+  const S = { built: false, s: 0, stop: 0, walking: null, view: null, follow: true, raf: 0, fresh: true, asp: 1, home: null };
+  let T, M, R, cam, host, sc, group, tg, pins = [], walker, pts = [], cum = [], at = [0];
+  const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
+  const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
+  // the neighbourhood the day's desk is in, by the drawing's own name ("02 · Life")
+  const nbName = () => { const p = ROUTE.stops[2].at, z = (plan.data.zones || []).find((q) => ringsOf(q.zone).filter((r) => inRing(p, r)).length % 2 === 1); return z ? z.name : "The neighbourhood"; };
+  function build() {
+    T = window.THREE; M = window.AxoModel.get(asset);
+    cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+    const NB = nbName();
+    ROUTE.stops.forEach((s) => { s.n = s.n.replace("@NB", NB); s.s = s.s.replace("@NB", NB); });
+    SIGN.forEach((g) => { g[0] = g[0].replace("@NB", NB); });
+    group = new T.Group(); group.name = "wayday";
+    // the route: points every 0.4 m, their distance along it, and where each stop falls
+    const W = (p) => new T.Vector3(M.X(p[0]), 0, M.Z(p[1]));
+    ROUTE.legs.forEach((leg) => {
+      for (let i = 0; i < leg.length - 1; i++) {
+        const a = W(leg[i]), b = W(leg[i + 1]), n = Math.max(1, Math.ceil(a.distanceTo(b) / 0.4));
+        for (let k = 0; k <= n; k++) { if (pts.length && k === 0) continue; const p = a.clone().lerp(b, k / n); cum.push(pts.length ? cum[cum.length - 1] + p.distanceTo(pts[pts.length - 1]) : 0); pts.push(p); }
+      }
+      at.push(cum[cum.length - 1]);
+    });
+    // the trail: a flat lavender ribbon on the floor, drawn as the walker goes
+    const tri = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1], d = b.clone().sub(a).normalize(), n = new T.Vector3(-d.z, 0, d.x).multiplyScalar(0.28);
+      for (const v of [a.clone().add(n), a.clone().sub(n), b.clone().add(n), a.clone().sub(n), b.clone().sub(n), b.clone().add(n)]) tri.push(v.x, 0.05, v.z);
+    }
+    tg = new T.BufferGeometry(); tg.setAttribute("position", new T.Float32BufferAttribute(tri, 3)); tg.setDrawRange(0, 0);
+    const trail = new T.Mesh(tg, new T.MeshBasicMaterial({ color: 0x926ff3, transparent: true, opacity: 0.85, side: T.DoubleSide, depthWrite: false }));
+    trail.renderOrder = 5; group.add(trail);
+    // the marked spots: maroon pins
+    const pm = new T.MeshLambertMaterial({ color: 0x980000 });
+    pins = ROUTE.stops.map((s) => { const g = new T.Group(), head = new T.Mesh(new T.SphereGeometry(0.32, 16, 12), pm), stem = new T.Mesh(new T.CylinderGeometry(0.05, 0.05, 2.4, 6), pm);
+      head.position.y = 2.6; stem.position.y = 1.3; g.add(head, stem); g.position.copy(W(s.at)); group.add(g); return g; });
+    // the walker: a simple figure in the deck's purple
+    walker = new T.Group();
+    const body = new T.Mesh(new T.CylinderGeometry(0.2, 0.26, 1.05, 14), new T.MeshLambertMaterial({ color: 0x5222d0 })); body.position.y = 0.75;
+    const head = new T.Mesh(new T.SphereGeometry(0.17, 16, 12), new T.MeshLambertMaterial({ color: 0xf0d2b8 })); head.position.y = 1.47;
+    const ring = new T.Mesh(new T.RingGeometry(0.42, 0.55, 28), new T.MeshBasicMaterial({ color: 0x5222d0, transparent: true, opacity: 0.35, side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06;
+    walker.add(body, head, ring); group.add(walker);
+    // the strip of stops
+    $(".wd-day", sc).innerHTML = ROUTE.stops.map((s, i) => `<button type="button" data-k="${i + 1}"><b>${s.t}</b><span>${s.n}</span></button>`).join("");
+    $$(".wd-day button", sc).forEach((b) => (b.onclick = () => { b.blur(); go(sceneIx("s-axw-2"), +b.dataset.k); }));
+    S.built = true;
+  }
+  const posAt = (s) => { let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const f = (s - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); return pts[i - 1].clone().lerp(pts[i], Math.max(0, Math.min(1, f))); };
+  const dirAt = (s) => posAt(Math.min(cum[cum.length - 1], s + 0.6)).sub(posAt(Math.max(0, s - 0.6)));
+  const seg = (s) => { let k = 0; while (k < cum.length - 1 && cum[k] < s) k++; return k; };
+  const followView = (p, half) => { const { right, up } = window.AxoModel.basis(VIEW), off = right.clone().multiplyScalar(-half * S.asp * 0.18).add(up.clone().multiplyScalar(half * 0.05));
+    return { theta: VIEW.theta, phi: VIEW.phi, half, t: [p.x + off.x, 0.8 + off.y, p.z + off.z] }; };
+  const mix = (a, b, k) => ({ theta: a.theta, phi: a.phi, half: a.half + (b.half - a.half) * k, t: a.t.map((v, i) => v + (b.t[i] - v) * k) });
+  function sizeUp() {
+    const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return false;           // a hidden pane: wait for a real size
+    const pr = R.getPixelRatio();
+    if (R.domElement.width !== Math.round(W * pr) || R.domElement.height !== Math.round(H * pr) || !S.home) {
+      R.setSize(W, H, false); S.asp = W / H; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
+    }
+    if (!S.view || !isFinite(S.view.half)) S.view = S.home;
+    return true;
+  }
+  function setNow(i) {
+    const s = ROUTE.stops[i], now = $(".wd-now", sc), card = $(".wd-card", sc);
+    $(".t", now).textContent = s.t; $("b", now).textContent = s.n; $("span", now).textContent = s.s; $("q", now).textContent = SIGN[i][2];
+    $("b", card).textContent = SIGN[i][0]; $("p", card).textContent = SIGN[i][1];
+    $$(".wd-day button", sc).forEach((b, k) => { b.classList.toggle("on", k === i); b.classList.toggle("done", k < i); });
+  }
+  const cardOn = (on) => $(".wd-card", sc).classList.toggle("on", on);
+  // to stop i: walked from where the figure is (forward), or there at once (back, a jump, the first beat, reduced motion)
+  function goStop(i, jump) {
+    i = Math.max(0, Math.min(ROUTE.stops.length - 1, i));
+    cardOn(false);
+    const from = S.s, to = at[i], len = Math.abs(to - from);
+    setNow(i);
+    if (jump || reduced || i <= S.stop || len < 0.5) { S.s = to; S.stop = i; S.walking = null; tg.setDrawRange(0, seg(to) * 6); setTimeout(() => cardOn(true), 250); return; }
+    S.stop = i;
+    S.walking = { from, to, t0: performance.now(), dur: Math.max(2400, Math.min(9000, (len / 14) * 1000)) };
+  }
+  function frame(now) {
+    S.raf = 0;
+    if (document.body.dataset.scene !== "s-axw-2" || !R) return;
+    if (!sizeUp()) { S.raf = requestAnimationFrame(frame); return; }
+    if (S.walking) {
+      const w = S.walking, k = Math.min(1, (now - w.t0) / w.dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      S.s = w.from + (w.to - w.from) * e; tg.setDrawRange(0, seg(S.s) * 6);
+      if (k >= 1) { S.walking = null; setTimeout(() => cardOn(true), 250); }
+    }
+    const p = posAt(S.s), d = dirAt(S.s);
+    walker.position.copy(p); if (d.lengthSq() > 1e-6) walker.rotation.y = Math.atan2(d.x, d.z);
+    walker.children[0].position.y = 0.75 + (S.walking ? Math.abs(Math.sin(now / 140)) * 0.06 : 0);
+    S.view = mix(S.view, S.follow ? followView(p, S.walking ? 21 : 15) : S.home, reduced ? 1 : 0.07);
+    window.AxoModel.apply(cam, S.view, S.asp); R.render(M.scene, cam);
+    // the card beside the stop's pin, with a dashed leader to it
+    const card = $(".wd-card", sc), v = pins[S.stop].position.clone(); v.y = 2.6; v.project(cam);
+    const bw = host.clientWidth, bh = host.clientHeight, sx = ((v.x + 1) / 2) * bw, sy = ((1 - v.y) / 2) * bh, cw = card.offsetWidth, ch = card.offsetHeight;
+    const cx = Math.min(bw - cw - 12, sx + bw * 0.06), cy = Math.max(bh * 0.15, Math.min(bh * 0.8 - ch, sy - ch - bh * 0.04));
+    card.style.left = cx + "px"; card.style.top = cy + "px";
+    const ln = $(".wd-lead line", sc); ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", cx); ln.setAttribute("y2", cy + ch * 0.6);
+    ln.style.opacity = card.classList.contains("on") && S.follow ? 1 : 0;
+    S.raf = requestAnimationFrame(frame);
+  }
+  const loop = () => { if (!S.raf) S.raf = requestAnimationFrame(frame); };
+  function whole(on) {
+    S.follow = !on; sc.classList.toggle("wd-whole", on);
+    $(".wd-play", sc).classList.toggle("on", !on); $(".wd-all", sc).classList.toggle("on", on);
+    if (on) cardOn(false); else if (!S.walking) cardOn(true);
+  }
+  return {
+    enter(_, s) {
+      sc = s; host = $(".wd-gl", sc); plain();
+      const ok = !!(window.AxoModel && window.AxoModel.available() && (R = window.AxoModel.renderer()));
+      sc.classList.toggle("wd-fallback", !ok);
+      if (!ok) return;
+      if (!S.built) build();
+      if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
+      M.reset(); M.scene.add(group);
+      window.AxoModel.look("clay-tex");
+      group.traverse((o) => { if (o.isMesh && o.material && o.material.isMeshLambertMaterial) o.castShadow = true; });
+      S.fresh = true; whole(false);
+      $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
+      $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };
+      loop();
+    },
+    step(k, s) {
+      if (!S.built || sc.classList.contains("wd-fallback")) return;
+      const jump = S.fresh; S.fresh = false;              // entering (from either side): straight to that stop; then each beat walks on
+      if (!S.follow) whole(false);
+      goStop(k - 1, jump); loop();
+    },
+    leave() {
+      cancelAnimationFrame(S.raf); S.raf = 0; S.walking = null;
+      if (M && group) { M.scene.remove(group); M.reset(); window.AxoModel.look("ppt"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-axw-3">
+/* a day for a new Acker (Ritika, 22–23 Oct: "wayfinding will be in axo - like a day for a new employee in acko … a guy walks through
+   the axo and at certain marked areas i'll give conceptualised sketches of how the signage would be dealt"): on the shared live
+   model (assets/js/axo-model.js, its one renderer), a figure walks the day's route along the corridors, a beat per stop; at each
+   marked spot (a maroon pin) a signage card opens, a placeholder until her sketches arrive. The route was found on the plan
+   (walls and glass stop it, furniture only slows it; tools: the session's way_route.py). Whole floor shows the route at once;
+   the strip along the bottom jumps to a stop. The walker, pins and trail are this slide's own group, added to the shared scene on
+   entering and taken off on leaving, so the axo and the strategy slides never show them. */
+ACKO.slide("s-axw-3", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
+  // the day's route (plan mm, y down): the stops and the legs between them
+  const ROUTE = {"stops": [{"t": "09:00", "n": "Arrival", "s": "The east lift lobby", "at": [171525, 30275]}, {"t": "09:05", "n": "Reception", "s": "A welcome at reception", "at": [173025, 33125]}, {"t": "09:15", "n": "@NB", "s": "Finding the neighbourhood by its number and graphic wall", "at": [212475, 35075]}, {"t": "09:20", "n": "The desk", "s": "A Type 4 desk in @NB", "at": [228075, 24425]}, {"t": "11:00", "n": "First meeting", "s": "A huddle room, signed by its name", "at": [181725, 32375]}, {"t": "13:00", "n": "Lunch", "s": "The café", "at": [62025, 41075]}, {"t": "14:30", "n": "Coffee", "s": "The coffee point", "at": [94425, 31325]}, {"t": "16:00", "n": "A pause", "s": "Zen room 01", "at": [113925, 29825]}, {"t": "18:30", "n": "Home time", "s": "Out through the west lift lobby", "at": [80925, 30275]}],
+    "legs": [[[171525, 30275], [171675, 31025], [173025, 32525], [173025, 33125]], [[173025, 33125], [175725, 31175], [177225, 30575], [186375, 30725], [187575, 31475], [187575, 33575], [188925, 34925], [190575, 34925], [192675, 37025], [193875, 37025], [202725, 29675], [205425, 26825], [207825, 26825], [210225, 29225], [210525, 30275], [212625, 32225], [212925, 33275], [213975, 34325], [213975, 35075], [213525, 35525], [212475, 35075]], [[212475, 35075], [213075, 35525], [215925, 35675], [217125, 34925], [218325, 34925], [219375, 35975], [221025, 35975], [229575, 28325], [229425, 26675], [227775, 25475], [228075, 24425]], [[228075, 24425], [227775, 25475], [229425, 26675], [229575, 28325], [221025, 35975], [219375, 35975], [218325, 34925], [217125, 34925], [215925, 35675], [215025, 35675], [212775, 32975], [212625, 32225], [210525, 30275], [210225, 29225], [207825, 26825], [205425, 26825], [202725, 29675], [193875, 37025], [192675, 37025], [190575, 34925], [188925, 34925], [187575, 33575], [187575, 31475], [186975, 30875], [180975, 30725], [180525, 31175], [180525, 32075], [180975, 32525], [181725, 32375]], [[181725, 32375], [180975, 32525], [179925, 30725], [177225, 30575], [174375, 32225], [173475, 32375], [172425, 33425], [159075, 33575], [157425, 33275], [154875, 35225], [149175, 35675], [141825, 35675], [139425, 33875], [139125, 32675], [137925, 31475], [135675, 31175], [120375, 31175], [116625, 34625], [114975, 35225], [92175, 34625], [90225, 36425], [88725, 36575], [87825, 37325], [83625, 37325], [81675, 38075], [81225, 38525], [81075, 40925], [80325, 41675], [79125, 41675], [77925, 42425], [77175, 42425], [75825, 40925], [62175, 40775], [62025, 41075]], [[62025, 41075], [62175, 40775], [75825, 40925], [77175, 42425], [77925, 42425], [79125, 41675], [80325, 41675], [81075, 40925], [81225, 38525], [81675, 38075], [83625, 37325], [87825, 37325], [88725, 36575], [90075, 36425], [92175, 34325], [92175, 31925], [92775, 31325], [94425, 31325]], [[94425, 31325], [96375, 31325], [97425, 32375], [97425, 33425], [98925, 34925], [110175, 34925], [111225, 35375], [113475, 35375], [115575, 35075], [116325, 34325], [116175, 30275], [115725, 29825], [113925, 29825]], [[113925, 29825], [115725, 29825], [116175, 30275], [116325, 34325], [115575, 35075], [113475, 35375], [90975, 34625], [90225, 33875], [83625, 33875], [81525, 31775], [81525, 30875], [80925, 30275]]]};
+  // at each spot: what the sign does (the card), and the Loop's words where they fit
+  const SIGN = [
+    ["Arrival zone at the lift lobby", "The ACKO welcome and the floor directory: six neighbourhoods, the café, the rooms.", "I feel welcomed"],
+    ["Reception backdrop", "A welcome, and the way to each neighbourhood from here.", "I feel welcomed"],
+    ["@NB, by its number", "The neighbourhood's number and its graphic wall, seen from the corridor.", "These are my folks!"],
+    ["Desk and locker numbers", "The desk found by its cluster and number.", "These are my folks!"],
+    ["Room name: Nalanda", "A named room (Nalanda, Sabha, Takshashila), with braille on the sign.", "My impact"],
+    ["Café", "The café's sign and menu wall, seen down the corridor.", "Hey, we finally meet!"],
+    ["Coffee point", "A marker for the coffee point.", "Hey, we finally meet!"],
+    ["Zen room", "A quiet-room sign, with braille.", "They thought of me too!"],
+    ["Exit and lift lobby", "The way out and the lift lobby, with the fire-exit signs.", ""],
+  ];
+  const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
+  const S = { built: false, s: 0, stop: 0, walking: null, view: null, follow: true, raf: 0, fresh: true, asp: 1, home: null };
+  let T, M, R, cam, host, sc, group, tg, pins = [], walker, pts = [], cum = [], at = [0];
+  const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
+  const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
+  // the neighbourhood the day's desk is in, by the drawing's own name ("02 · Life")
+  const nbName = () => { const p = ROUTE.stops[2].at, z = (plan.data.zones || []).find((q) => ringsOf(q.zone).filter((r) => inRing(p, r)).length % 2 === 1); return z ? z.name : "The neighbourhood"; };
+  function build() {
+    T = window.THREE; M = window.AxoModel.get(asset);
+    cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+    const NB = nbName();
+    ROUTE.stops.forEach((s) => { s.n = s.n.replace("@NB", NB); s.s = s.s.replace("@NB", NB); });
+    SIGN.forEach((g) => { g[0] = g[0].replace("@NB", NB); });
+    group = new T.Group(); group.name = "wayday";
+    // the route: points every 0.4 m, their distance along it, and where each stop falls
+    const W = (p) => new T.Vector3(M.X(p[0]), 0, M.Z(p[1]));
+    ROUTE.legs.forEach((leg) => {
+      for (let i = 0; i < leg.length - 1; i++) {
+        const a = W(leg[i]), b = W(leg[i + 1]), n = Math.max(1, Math.ceil(a.distanceTo(b) / 0.4));
+        for (let k = 0; k <= n; k++) { if (pts.length && k === 0) continue; const p = a.clone().lerp(b, k / n); cum.push(pts.length ? cum[cum.length - 1] + p.distanceTo(pts[pts.length - 1]) : 0); pts.push(p); }
+      }
+      at.push(cum[cum.length - 1]);
+    });
+    // the trail: a flat lavender ribbon on the floor, drawn as the walker goes
+    const tri = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1], d = b.clone().sub(a).normalize(), n = new T.Vector3(-d.z, 0, d.x).multiplyScalar(0.28);
+      for (const v of [a.clone().add(n), a.clone().sub(n), b.clone().add(n), a.clone().sub(n), b.clone().sub(n), b.clone().add(n)]) tri.push(v.x, 0.05, v.z);
+    }
+    tg = new T.BufferGeometry(); tg.setAttribute("position", new T.Float32BufferAttribute(tri, 3)); tg.setDrawRange(0, 0);
+    const trail = new T.Mesh(tg, new T.MeshBasicMaterial({ color: 0x926ff3, transparent: true, opacity: 0.85, side: T.DoubleSide, depthWrite: false }));
+    trail.renderOrder = 5; group.add(trail);
+    // the marked spots: maroon pins
+    const pm = new T.MeshLambertMaterial({ color: 0x980000 });
+    pins = ROUTE.stops.map((s) => { const g = new T.Group(), head = new T.Mesh(new T.SphereGeometry(0.32, 16, 12), pm), stem = new T.Mesh(new T.CylinderGeometry(0.05, 0.05, 2.4, 6), pm);
+      head.position.y = 2.6; stem.position.y = 1.3; g.add(head, stem); g.position.copy(W(s.at)); group.add(g); return g; });
+    // the walker: a simple figure in the deck's purple
+    walker = new T.Group();
+    const body = new T.Mesh(new T.CylinderGeometry(0.2, 0.26, 1.05, 14), new T.MeshLambertMaterial({ color: 0x5222d0 })); body.position.y = 0.75;
+    const head = new T.Mesh(new T.SphereGeometry(0.17, 16, 12), new T.MeshLambertMaterial({ color: 0xf0d2b8 })); head.position.y = 1.47;
+    const ring = new T.Mesh(new T.RingGeometry(0.42, 0.55, 28), new T.MeshBasicMaterial({ color: 0x5222d0, transparent: true, opacity: 0.35, side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06;
+    walker.add(body, head, ring); group.add(walker);
+    // the strip of stops
+    $(".wd-day", sc).innerHTML = ROUTE.stops.map((s, i) => `<button type="button" data-k="${i + 1}"><b>${s.t}</b><span>${s.n}</span></button>`).join("");
+    $$(".wd-day button", sc).forEach((b) => (b.onclick = () => { b.blur(); go(sceneIx("s-axw-3"), +b.dataset.k); }));
+    S.built = true;
+  }
+  const posAt = (s) => { let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const f = (s - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); return pts[i - 1].clone().lerp(pts[i], Math.max(0, Math.min(1, f))); };
+  const dirAt = (s) => posAt(Math.min(cum[cum.length - 1], s + 0.6)).sub(posAt(Math.max(0, s - 0.6)));
+  const seg = (s) => { let k = 0; while (k < cum.length - 1 && cum[k] < s) k++; return k; };
+  const followView = (p, half) => { const { right, up } = window.AxoModel.basis(VIEW), off = right.clone().multiplyScalar(-half * S.asp * 0.18).add(up.clone().multiplyScalar(half * 0.05));
+    return { theta: VIEW.theta, phi: VIEW.phi, half, t: [p.x + off.x, 0.8 + off.y, p.z + off.z] }; };
+  const mix = (a, b, k) => ({ theta: a.theta, phi: a.phi, half: a.half + (b.half - a.half) * k, t: a.t.map((v, i) => v + (b.t[i] - v) * k) });
+  function sizeUp() {
+    const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return false;           // a hidden pane: wait for a real size
+    const pr = R.getPixelRatio();
+    if (R.domElement.width !== Math.round(W * pr) || R.domElement.height !== Math.round(H * pr) || !S.home) {
+      R.setSize(W, H, false); S.asp = W / H; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
+    }
+    if (!S.view || !isFinite(S.view.half)) S.view = S.home;
+    return true;
+  }
+  function setNow(i) {
+    const s = ROUTE.stops[i], now = $(".wd-now", sc), card = $(".wd-card", sc);
+    $(".t", now).textContent = s.t; $("b", now).textContent = s.n; $("span", now).textContent = s.s; $("q", now).textContent = SIGN[i][2];
+    $("b", card).textContent = SIGN[i][0]; $("p", card).textContent = SIGN[i][1];
+    $$(".wd-day button", sc).forEach((b, k) => { b.classList.toggle("on", k === i); b.classList.toggle("done", k < i); });
+  }
+  const cardOn = (on) => $(".wd-card", sc).classList.toggle("on", on);
+  // to stop i: walked from where the figure is (forward), or there at once (back, a jump, the first beat, reduced motion)
+  function goStop(i, jump) {
+    i = Math.max(0, Math.min(ROUTE.stops.length - 1, i));
+    cardOn(false);
+    const from = S.s, to = at[i], len = Math.abs(to - from);
+    setNow(i);
+    if (jump || reduced || i <= S.stop || len < 0.5) { S.s = to; S.stop = i; S.walking = null; tg.setDrawRange(0, seg(to) * 6); setTimeout(() => cardOn(true), 250); return; }
+    S.stop = i;
+    S.walking = { from, to, t0: performance.now(), dur: Math.max(2400, Math.min(9000, (len / 14) * 1000)) };
+  }
+  function frame(now) {
+    S.raf = 0;
+    if (document.body.dataset.scene !== "s-axw-3" || !R) return;
+    if (!sizeUp()) { S.raf = requestAnimationFrame(frame); return; }
+    if (S.walking) {
+      const w = S.walking, k = Math.min(1, (now - w.t0) / w.dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      S.s = w.from + (w.to - w.from) * e; tg.setDrawRange(0, seg(S.s) * 6);
+      if (k >= 1) { S.walking = null; setTimeout(() => cardOn(true), 250); }
+    }
+    const p = posAt(S.s), d = dirAt(S.s);
+    walker.position.copy(p); if (d.lengthSq() > 1e-6) walker.rotation.y = Math.atan2(d.x, d.z);
+    walker.children[0].position.y = 0.75 + (S.walking ? Math.abs(Math.sin(now / 140)) * 0.06 : 0);
+    S.view = mix(S.view, S.follow ? followView(p, S.walking ? 21 : 15) : S.home, reduced ? 1 : 0.07);
+    window.AxoModel.apply(cam, S.view, S.asp); R.render(M.scene, cam);
+    // the card beside the stop's pin, with a dashed leader to it
+    const card = $(".wd-card", sc), v = pins[S.stop].position.clone(); v.y = 2.6; v.project(cam);
+    const bw = host.clientWidth, bh = host.clientHeight, sx = ((v.x + 1) / 2) * bw, sy = ((1 - v.y) / 2) * bh, cw = card.offsetWidth, ch = card.offsetHeight;
+    const cx = Math.min(bw - cw - 12, sx + bw * 0.06), cy = Math.max(bh * 0.15, Math.min(bh * 0.8 - ch, sy - ch - bh * 0.04));
+    card.style.left = cx + "px"; card.style.top = cy + "px";
+    const ln = $(".wd-lead line", sc); ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", cx); ln.setAttribute("y2", cy + ch * 0.6);
+    ln.style.opacity = card.classList.contains("on") && S.follow ? 1 : 0;
+    S.raf = requestAnimationFrame(frame);
+  }
+  const loop = () => { if (!S.raf) S.raf = requestAnimationFrame(frame); };
+  function whole(on) {
+    S.follow = !on; sc.classList.toggle("wd-whole", on);
+    $(".wd-play", sc).classList.toggle("on", !on); $(".wd-all", sc).classList.toggle("on", on);
+    if (on) cardOn(false); else if (!S.walking) cardOn(true);
+  }
+  return {
+    enter(_, s) {
+      sc = s; host = $(".wd-gl", sc); plain();
+      const ok = !!(window.AxoModel && window.AxoModel.available() && (R = window.AxoModel.renderer()));
+      sc.classList.toggle("wd-fallback", !ok);
+      if (!ok) return;
+      if (!S.built) build();
+      if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
+      M.reset(); M.scene.add(group);
+      window.AxoModel.look("crisp");
+      group.traverse((o) => { if (o.isMesh && o.material && o.material.isMeshLambertMaterial) o.castShadow = true; });
+      S.fresh = true; whole(false);
+      $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
+      $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };
+      loop();
+    },
+    step(k, s) {
+      if (!S.built || sc.classList.contains("wd-fallback")) return;
+      const jump = S.fresh; S.fresh = false;              // entering (from either side): straight to that stop; then each beat walks on
+      if (!S.follow) whole(false);
+      goStop(k - 1, jump); loop();
+    },
+    leave() {
+      cancelAnimationFrame(S.raf); S.raf = 0; S.walking = null;
+      if (M && group) { M.scene.remove(group); M.reset(); window.AxoModel.look("ppt"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-axw-4">
+/* a day for a new Acker (Ritika, 22–23 Oct: "wayfinding will be in axo - like a day for a new employee in acko … a guy walks through
+   the axo and at certain marked areas i'll give conceptualised sketches of how the signage would be dealt"): on the shared live
+   model (assets/js/axo-model.js, its one renderer), a figure walks the day's route along the corridors, a beat per stop; at each
+   marked spot (a maroon pin) a signage card opens, a placeholder until her sketches arrive. The route was found on the plan
+   (walls and glass stop it, furniture only slows it; tools: the session's way_route.py). Whole floor shows the route at once;
+   the strip along the bottom jumps to a stop. The walker, pins and trail are this slide's own group, added to the shared scene on
+   entering and taken off on leaving, so the axo and the strategy slides never show them. */
+ACKO.slide("s-axw-4", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
+  // the day's route (plan mm, y down): the stops and the legs between them
+  const ROUTE = {"stops": [{"t": "09:00", "n": "Arrival", "s": "The east lift lobby", "at": [171525, 30275]}, {"t": "09:05", "n": "Reception", "s": "A welcome at reception", "at": [173025, 33125]}, {"t": "09:15", "n": "@NB", "s": "Finding the neighbourhood by its number and graphic wall", "at": [212475, 35075]}, {"t": "09:20", "n": "The desk", "s": "A Type 4 desk in @NB", "at": [228075, 24425]}, {"t": "11:00", "n": "First meeting", "s": "A huddle room, signed by its name", "at": [181725, 32375]}, {"t": "13:00", "n": "Lunch", "s": "The café", "at": [62025, 41075]}, {"t": "14:30", "n": "Coffee", "s": "The coffee point", "at": [94425, 31325]}, {"t": "16:00", "n": "A pause", "s": "Zen room 01", "at": [113925, 29825]}, {"t": "18:30", "n": "Home time", "s": "Out through the west lift lobby", "at": [80925, 30275]}],
+    "legs": [[[171525, 30275], [171675, 31025], [173025, 32525], [173025, 33125]], [[173025, 33125], [175725, 31175], [177225, 30575], [186375, 30725], [187575, 31475], [187575, 33575], [188925, 34925], [190575, 34925], [192675, 37025], [193875, 37025], [202725, 29675], [205425, 26825], [207825, 26825], [210225, 29225], [210525, 30275], [212625, 32225], [212925, 33275], [213975, 34325], [213975, 35075], [213525, 35525], [212475, 35075]], [[212475, 35075], [213075, 35525], [215925, 35675], [217125, 34925], [218325, 34925], [219375, 35975], [221025, 35975], [229575, 28325], [229425, 26675], [227775, 25475], [228075, 24425]], [[228075, 24425], [227775, 25475], [229425, 26675], [229575, 28325], [221025, 35975], [219375, 35975], [218325, 34925], [217125, 34925], [215925, 35675], [215025, 35675], [212775, 32975], [212625, 32225], [210525, 30275], [210225, 29225], [207825, 26825], [205425, 26825], [202725, 29675], [193875, 37025], [192675, 37025], [190575, 34925], [188925, 34925], [187575, 33575], [187575, 31475], [186975, 30875], [180975, 30725], [180525, 31175], [180525, 32075], [180975, 32525], [181725, 32375]], [[181725, 32375], [180975, 32525], [179925, 30725], [177225, 30575], [174375, 32225], [173475, 32375], [172425, 33425], [159075, 33575], [157425, 33275], [154875, 35225], [149175, 35675], [141825, 35675], [139425, 33875], [139125, 32675], [137925, 31475], [135675, 31175], [120375, 31175], [116625, 34625], [114975, 35225], [92175, 34625], [90225, 36425], [88725, 36575], [87825, 37325], [83625, 37325], [81675, 38075], [81225, 38525], [81075, 40925], [80325, 41675], [79125, 41675], [77925, 42425], [77175, 42425], [75825, 40925], [62175, 40775], [62025, 41075]], [[62025, 41075], [62175, 40775], [75825, 40925], [77175, 42425], [77925, 42425], [79125, 41675], [80325, 41675], [81075, 40925], [81225, 38525], [81675, 38075], [83625, 37325], [87825, 37325], [88725, 36575], [90075, 36425], [92175, 34325], [92175, 31925], [92775, 31325], [94425, 31325]], [[94425, 31325], [96375, 31325], [97425, 32375], [97425, 33425], [98925, 34925], [110175, 34925], [111225, 35375], [113475, 35375], [115575, 35075], [116325, 34325], [116175, 30275], [115725, 29825], [113925, 29825]], [[113925, 29825], [115725, 29825], [116175, 30275], [116325, 34325], [115575, 35075], [113475, 35375], [90975, 34625], [90225, 33875], [83625, 33875], [81525, 31775], [81525, 30875], [80925, 30275]]]};
+  // at each spot: what the sign does (the card), and the Loop's words where they fit
+  const SIGN = [
+    ["Arrival zone at the lift lobby", "The ACKO welcome and the floor directory: six neighbourhoods, the café, the rooms.", "I feel welcomed"],
+    ["Reception backdrop", "A welcome, and the way to each neighbourhood from here.", "I feel welcomed"],
+    ["@NB, by its number", "The neighbourhood's number and its graphic wall, seen from the corridor.", "These are my folks!"],
+    ["Desk and locker numbers", "The desk found by its cluster and number.", "These are my folks!"],
+    ["Room name: Nalanda", "A named room (Nalanda, Sabha, Takshashila), with braille on the sign.", "My impact"],
+    ["Café", "The café's sign and menu wall, seen down the corridor.", "Hey, we finally meet!"],
+    ["Coffee point", "A marker for the coffee point.", "Hey, we finally meet!"],
+    ["Zen room", "A quiet-room sign, with braille.", "They thought of me too!"],
+    ["Exit and lift lobby", "The way out and the lift lobby, with the fire-exit signs.", ""],
+  ];
+  const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
+  const S = { built: false, s: 0, stop: 0, walking: null, view: null, follow: true, raf: 0, fresh: true, asp: 1, home: null };
+  let T, M, R, cam, host, sc, group, tg, pins = [], walker, pts = [], cum = [], at = [0];
+  const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
+  const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
+  // the neighbourhood the day's desk is in, by the drawing's own name ("02 · Life")
+  const nbName = () => { const p = ROUTE.stops[2].at, z = (plan.data.zones || []).find((q) => ringsOf(q.zone).filter((r) => inRing(p, r)).length % 2 === 1); return z ? z.name : "The neighbourhood"; };
+  function build() {
+    T = window.THREE; M = window.AxoModel.get(asset);
+    cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+    const NB = nbName();
+    ROUTE.stops.forEach((s) => { s.n = s.n.replace("@NB", NB); s.s = s.s.replace("@NB", NB); });
+    SIGN.forEach((g) => { g[0] = g[0].replace("@NB", NB); });
+    group = new T.Group(); group.name = "wayday";
+    // the route: points every 0.4 m, their distance along it, and where each stop falls
+    const W = (p) => new T.Vector3(M.X(p[0]), 0, M.Z(p[1]));
+    ROUTE.legs.forEach((leg) => {
+      for (let i = 0; i < leg.length - 1; i++) {
+        const a = W(leg[i]), b = W(leg[i + 1]), n = Math.max(1, Math.ceil(a.distanceTo(b) / 0.4));
+        for (let k = 0; k <= n; k++) { if (pts.length && k === 0) continue; const p = a.clone().lerp(b, k / n); cum.push(pts.length ? cum[cum.length - 1] + p.distanceTo(pts[pts.length - 1]) : 0); pts.push(p); }
+      }
+      at.push(cum[cum.length - 1]);
+    });
+    // the trail: a flat lavender ribbon on the floor, drawn as the walker goes
+    const tri = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1], d = b.clone().sub(a).normalize(), n = new T.Vector3(-d.z, 0, d.x).multiplyScalar(0.28);
+      for (const v of [a.clone().add(n), a.clone().sub(n), b.clone().add(n), a.clone().sub(n), b.clone().sub(n), b.clone().add(n)]) tri.push(v.x, 0.05, v.z);
+    }
+    tg = new T.BufferGeometry(); tg.setAttribute("position", new T.Float32BufferAttribute(tri, 3)); tg.setDrawRange(0, 0);
+    const trail = new T.Mesh(tg, new T.MeshBasicMaterial({ color: 0x926ff3, transparent: true, opacity: 0.85, side: T.DoubleSide, depthWrite: false }));
+    trail.renderOrder = 5; group.add(trail);
+    // the marked spots: maroon pins
+    const pm = new T.MeshLambertMaterial({ color: 0x980000 });
+    pins = ROUTE.stops.map((s) => { const g = new T.Group(), head = new T.Mesh(new T.SphereGeometry(0.32, 16, 12), pm), stem = new T.Mesh(new T.CylinderGeometry(0.05, 0.05, 2.4, 6), pm);
+      head.position.y = 2.6; stem.position.y = 1.3; g.add(head, stem); g.position.copy(W(s.at)); group.add(g); return g; });
+    // the walker: a simple figure in the deck's purple
+    walker = new T.Group();
+    const body = new T.Mesh(new T.CylinderGeometry(0.2, 0.26, 1.05, 14), new T.MeshLambertMaterial({ color: 0x5222d0 })); body.position.y = 0.75;
+    const head = new T.Mesh(new T.SphereGeometry(0.17, 16, 12), new T.MeshLambertMaterial({ color: 0xf0d2b8 })); head.position.y = 1.47;
+    const ring = new T.Mesh(new T.RingGeometry(0.42, 0.55, 28), new T.MeshBasicMaterial({ color: 0x5222d0, transparent: true, opacity: 0.35, side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06;
+    walker.add(body, head, ring); group.add(walker);
+    // the strip of stops
+    $(".wd-day", sc).innerHTML = ROUTE.stops.map((s, i) => `<button type="button" data-k="${i + 1}"><b>${s.t}</b><span>${s.n}</span></button>`).join("");
+    $$(".wd-day button", sc).forEach((b) => (b.onclick = () => { b.blur(); go(sceneIx("s-axw-4"), +b.dataset.k); }));
+    S.built = true;
+  }
+  const posAt = (s) => { let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const f = (s - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); return pts[i - 1].clone().lerp(pts[i], Math.max(0, Math.min(1, f))); };
+  const dirAt = (s) => posAt(Math.min(cum[cum.length - 1], s + 0.6)).sub(posAt(Math.max(0, s - 0.6)));
+  const seg = (s) => { let k = 0; while (k < cum.length - 1 && cum[k] < s) k++; return k; };
+  const followView = (p, half) => { const { right, up } = window.AxoModel.basis(VIEW), off = right.clone().multiplyScalar(-half * S.asp * 0.18).add(up.clone().multiplyScalar(half * 0.05));
+    return { theta: VIEW.theta, phi: VIEW.phi, half, t: [p.x + off.x, 0.8 + off.y, p.z + off.z] }; };
+  const mix = (a, b, k) => ({ theta: a.theta, phi: a.phi, half: a.half + (b.half - a.half) * k, t: a.t.map((v, i) => v + (b.t[i] - v) * k) });
+  function sizeUp() {
+    const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return false;           // a hidden pane: wait for a real size
+    const pr = R.getPixelRatio();
+    if (R.domElement.width !== Math.round(W * pr) || R.domElement.height !== Math.round(H * pr) || !S.home) {
+      R.setSize(W, H, false); S.asp = W / H; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
+    }
+    if (!S.view || !isFinite(S.view.half)) S.view = S.home;
+    return true;
+  }
+  function setNow(i) {
+    const s = ROUTE.stops[i], now = $(".wd-now", sc), card = $(".wd-card", sc);
+    $(".t", now).textContent = s.t; $("b", now).textContent = s.n; $("span", now).textContent = s.s; $("q", now).textContent = SIGN[i][2];
+    $("b", card).textContent = SIGN[i][0]; $("p", card).textContent = SIGN[i][1];
+    $$(".wd-day button", sc).forEach((b, k) => { b.classList.toggle("on", k === i); b.classList.toggle("done", k < i); });
+  }
+  const cardOn = (on) => $(".wd-card", sc).classList.toggle("on", on);
+  // to stop i: walked from where the figure is (forward), or there at once (back, a jump, the first beat, reduced motion)
+  function goStop(i, jump) {
+    i = Math.max(0, Math.min(ROUTE.stops.length - 1, i));
+    cardOn(false);
+    const from = S.s, to = at[i], len = Math.abs(to - from);
+    setNow(i);
+    if (jump || reduced || i <= S.stop || len < 0.5) { S.s = to; S.stop = i; S.walking = null; tg.setDrawRange(0, seg(to) * 6); setTimeout(() => cardOn(true), 250); return; }
+    S.stop = i;
+    S.walking = { from, to, t0: performance.now(), dur: Math.max(2400, Math.min(9000, (len / 14) * 1000)) };
+  }
+  function frame(now) {
+    S.raf = 0;
+    if (document.body.dataset.scene !== "s-axw-4" || !R) return;
+    if (!sizeUp()) { S.raf = requestAnimationFrame(frame); return; }
+    if (S.walking) {
+      const w = S.walking, k = Math.min(1, (now - w.t0) / w.dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      S.s = w.from + (w.to - w.from) * e; tg.setDrawRange(0, seg(S.s) * 6);
+      if (k >= 1) { S.walking = null; setTimeout(() => cardOn(true), 250); }
+    }
+    const p = posAt(S.s), d = dirAt(S.s);
+    walker.position.copy(p); if (d.lengthSq() > 1e-6) walker.rotation.y = Math.atan2(d.x, d.z);
+    walker.children[0].position.y = 0.75 + (S.walking ? Math.abs(Math.sin(now / 140)) * 0.06 : 0);
+    S.view = mix(S.view, S.follow ? followView(p, S.walking ? 21 : 15) : S.home, reduced ? 1 : 0.07);
+    window.AxoModel.apply(cam, S.view, S.asp); R.render(M.scene, cam);
+    // the card beside the stop's pin, with a dashed leader to it
+    const card = $(".wd-card", sc), v = pins[S.stop].position.clone(); v.y = 2.6; v.project(cam);
+    const bw = host.clientWidth, bh = host.clientHeight, sx = ((v.x + 1) / 2) * bw, sy = ((1 - v.y) / 2) * bh, cw = card.offsetWidth, ch = card.offsetHeight;
+    const cx = Math.min(bw - cw - 12, sx + bw * 0.06), cy = Math.max(bh * 0.15, Math.min(bh * 0.8 - ch, sy - ch - bh * 0.04));
+    card.style.left = cx + "px"; card.style.top = cy + "px";
+    const ln = $(".wd-lead line", sc); ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", cx); ln.setAttribute("y2", cy + ch * 0.6);
+    ln.style.opacity = card.classList.contains("on") && S.follow ? 1 : 0;
+    S.raf = requestAnimationFrame(frame);
+  }
+  const loop = () => { if (!S.raf) S.raf = requestAnimationFrame(frame); };
+  function whole(on) {
+    S.follow = !on; sc.classList.toggle("wd-whole", on);
+    $(".wd-play", sc).classList.toggle("on", !on); $(".wd-all", sc).classList.toggle("on", on);
+    if (on) cardOn(false); else if (!S.walking) cardOn(true);
+  }
+  return {
+    enter(_, s) {
+      sc = s; host = $(".wd-gl", sc); plain();
+      const ok = !!(window.AxoModel && window.AxoModel.available() && (R = window.AxoModel.renderer()));
+      sc.classList.toggle("wd-fallback", !ok);
+      if (!ok) return;
+      if (!S.built) build();
+      if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
+      M.reset(); M.scene.add(group);
+      window.AxoModel.look("warm");
+      group.traverse((o) => { if (o.isMesh && o.material && o.material.isMeshLambertMaterial) o.castShadow = true; });
+      S.fresh = true; whole(false);
+      $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
+      $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };
+      loop();
+    },
+    step(k, s) {
+      if (!S.built || sc.classList.contains("wd-fallback")) return;
+      const jump = S.fresh; S.fresh = false;              // entering (from either side): straight to that stop; then each beat walks on
+      if (!S.follow) whole(false);
+      goStop(k - 1, jump); loop();
+    },
+    leave() {
+      cancelAnimationFrame(S.raf); S.raf = 0; S.walking = null;
+      if (M && group) { M.scene.remove(group); M.reset(); window.AxoModel.look("ppt"); }
+    },
+  };
+});
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>
