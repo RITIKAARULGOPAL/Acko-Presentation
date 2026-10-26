@@ -59,6 +59,10 @@
 /* ---------- what's our challenge (slide 14) ---------- */
 .cl-axo { background: url(assets/img/challenge-axo.webp) 100% 0 / 111.4% 100% no-repeat; }
 .cl-svg { overflow: visible; }
+/* the floor (picture and overlay together) at 95% about its top-right, page (1606, 10.8), so the copyright line clears it
+   (Ritika, 26 Oct: "back on both, axos made smaller"); slide 13's live axo is framed the same way */
+.cl-axo { transform-origin: 93.15% 0; transform: scale(.95); }
+.cl-svg { transform-origin: 83.65% 1%; transform: scale(.95); }
 .cl-desks path { fill: #b9a6ea; opacity: 0; transition: opacity .5s var(--ease) var(--d); }
 .cl-svg.b1 .cl-desks path { opacity: .85; }
 .cl-svg.b2 .cl-desks path, .cl-svg.b3 .cl-desks path { opacity: .28; transition-delay: 0s; }
@@ -86,8 +90,6 @@
 .cl-n { font-size: calc(var(--pt) * 32); font-weight: 700; color: var(--lavender); line-height: 1; }
 .cl-i { object-fit: contain; mix-blend-mode: multiply; }
 .cl-end { display: flex; align-items: center; box-sizing: border-box; margin: 0; padding: 0 calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 24); line-height: 1.05; color: var(--plum); }
-/* no copyright line on this page: in the PPT the axo covers that corner */
-body[data-scene="s-challenges"] .hint { opacity: 0; }
 </style>
 <script>
 /* what's our challenge (deck slide 14), on the deck's axo of the bare floor: 1 homogeneity — one uniform grid of desks floods the

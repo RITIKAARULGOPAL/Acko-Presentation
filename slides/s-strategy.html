@@ -79,8 +79,6 @@
 #s-strategy .st-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 #s-strategy .st-tool:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
 #s-strategy .st-tool:focus { outline: none; }
-/* no copyright line on this page, as on slide 14: the floor covers that corner (Ritika, 26 Oct) */
-body[data-scene="s-strategy"] .hint { opacity: 0; }
 </style>
 <script>
 /* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), at the 3D renders' camera
@@ -101,8 +99,10 @@ body[data-scene="s-strategy"] .hint { opacity: 0; }
 ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
   // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
-  // tips on slide 14's (29.5, 1037) and (1606, 137) page px; the marks below were measured on the PPT's GIF, framed at FIT_MARKS
-  const FIT = [0.0134, 0.0028, 0.8385, 0.9852], FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
+  // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
+  // copyright line clears them ("back on both, axos made smaller"). The marks below were measured on the PPT's GIF, at FIT_MARKS
+  const FIT14 = [0.0134, 0.0028, 0.8385, 0.9852], SHRINK = 0.95, AT = [1606 / 1920, 10.8 / 1080];
+  const FIT = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2])), FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
   const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
     "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
   // beat 2's marks where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model there
