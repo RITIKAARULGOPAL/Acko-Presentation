@@ -241,9 +241,9 @@ function draw() {
     if (p.b[2] < vx0 || p.b[0] > vx1 || p.b[3] < vy0 || p.b[1] > vy1) continue;
     drawn++; segs += p.n;
     ctx.globalAlpha = alpha[p.g] ?? 1;
-    if (p.kind === "f") { ctx.fillStyle = p.colour; for (const f of p.fills) ctx.fill(f, "evenodd"); continue; }
+    if (p.kind === "f") { ctx.fillStyle = paint(p.colour, p.layer, p.g, "f"); for (const f of p.fills) ctx.fill(f, "evenodd"); continue; }
     if (p.kind === "m") { ctx.fillStyle = "#fff"; ctx.fill(p.path, "nonzero"); continue; }
-    ctx.strokeStyle = p.colour;
+    ctx.strokeStyle = paint(p.colour, p.layer, p.g, p.kind);
     const w = p.lw > 0 ? Math.max(1, p.lw / 25) : 1;            // lineweight in 1/100 mm; 0.25 mm and under draw as a hairline
     ctx.lineWidth = (p.kind === "h" ? 0.7 : w) * hair * Math.min(dpr, 1.5);
     const dash = p.kind === "s" && p.lt ? meta.linetypes[p.lt] : null;
@@ -263,7 +263,7 @@ function draw() {
     // placed: the placement's rotation, then its mirror (a negative scale flips the text, as AutoCAD shows it), then the text's own
     ctx.save(); ctx.translate(T.x, T.y); ctx.rotate(-(T.ang || 0) * Math.PI / 180); if (T.m < 0) ctx.scale(1, -1);
     ctx.rotate(-rot * Math.PI / 180); ctx.scale(wf || 1, 1);
-    ctx.fillStyle = T.colour; ctx.font = `${fs}px ${FONT(font || style)}`;
+    ctx.fillStyle = paint(T.colour, T.layer, T.g, "t"); ctx.font = `${fs}px ${FONT(font || style)}`;
     ctx.textAlign = align; ctx.textBaseline = "alphabetic";
     const lines = String(words).split("\n"), lh = h * 5 / 3 * (ls || 1);           // AutoCAD's line pitch: 5/3 of the height
     const block = (lines.length - 1) * lh + h;                                       // first line's cap top to last baseline
@@ -497,6 +497,29 @@ function layerPanel() {
   box.querySelectorAll("input[data-a]").forEach(r => r.oninput = () => { alpha[r.dataset.a] = +r.value; redraw(); });
 }
 document.getElementById("q").oninput = layerPanel;
+// ---------------------------------------------------------------- colours: greyscale, but vegetation green and glass blue
+// The drawing's own colours stay in the data (the CAD colours pill shows them). Here a colour's brightness picks a grey:
+// lines dark (so yellow and cyan lines still read on white), fills light, pattern lines in between, text near black.
+let CAD = false;
+const PAINT = new Map();
+const GLASS = /GLASS|GLSS|GLS|GLAZ|_IN_GL\b/i, GREEN = /PLANT|PLNT|GRASS|LANDSCAP|TREE|SHRUB/i;
+function paint(hex, layer, group, kind) {
+  if (CAD) return hex;
+  const key = hex + "|" + layer + "|" + group + "|" + kind;
+  let c = PAINT.get(key);
+  if (c) return c;
+  const n = parseInt((hex || "#000000").slice(1), 16), r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
+  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  if (group === "vegetation" || GREEN.test(layer)) c = kind === "f" ? "#cfe3c7" : kind === "h" ? "#8fbf84" : "#4f8a43";
+  else if (GLASS.test(layer)) c = kind === "f" ? "#d4e4f4" : kind === "h" ? "#8db3db" : "#2f74c0";
+  else {
+    const v = kind === "f" ? 196 + lum * 46 : kind === "h" ? 140 + lum * 60 : kind === "t" ? 40 + lum * 30 : 34 + lum * 96;
+    const h = Math.round(v).toString(16).padStart(2, "0"); c = "#" + h + h + h;
+  }
+  PAINT.set(key, c);
+  return c;
+}
+
 const GROUP_NAME = { rooms: "Room hatches", base: "Base plan", vegetation: "Vegetation", dueDiligence: "Due diligence",
   zoneBoundaries: "Zone boundaries", neighbourhoods: "Neighbourhoods", egress: "Egress", text: "Text" };
 function setGroup(g, on) { on ? hiddenG.delete(g) : hiddenG.add(g); layerPanel(); redraw(); }
@@ -504,7 +527,9 @@ function pills() {
   const groups = meta.groups || [...new Set(meta.blocks.map(b => b.group || b.block))];
   const box = document.getElementById("pills");
   box.innerHTML = groups.map(g => `<button class="${hiddenG.has(g) ? "" : "on"}" data-g="${esc(g)}" title="${esc(meta.blocks.filter(b => (b.group || b.block) === g).map(b => b.source || b.block).join(", "))}">${esc(GROUP_NAME[g] || g)}</button>`).join("") +
-    `<button class="all" data-all="1">${hiddenG.size ? "Show all" : "Hide all"}</button>`;
+    `<button class="all" data-all="1">${hiddenG.size ? "Show all" : "Hide all"}</button>` +
+    `<button class="${CAD ? "on" : ""}" data-cad="1" style="margin-left:auto" title="the drawing's own colours">CAD colours</button>`;
+  box.querySelector("button[data-cad]").onclick = () => { CAD = !CAD; PAINT.clear(); pills(); redraw(); };
   box.querySelectorAll("button[data-g]").forEach(b => b.onclick = () => setGroup(b.dataset.g, hiddenG.has(b.dataset.g)));
   box.querySelector("button[data-all]").onclick = () => { if (hiddenG.size) hiddenG.clear(); else groups.forEach(g => hiddenG.add(g)); layerPanel(); redraw(); };
 }
