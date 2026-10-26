@@ -314,7 +314,10 @@ function hoverSetup() {
     r.pts = r.shape.map(([x, y]) => [X(x), Y(y)]);
     const xs = r.pts.map(p => p[0]), ys = r.pts.map(p => p[1]);
     r.b = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
-    r.path = new Path2D(); r.pts.forEach(([x, y], i) => i ? r.path.lineTo(x, y) : r.path.moveTo(x, y)); r.path.closePath();
+    // the room with its furniture cut out: holes drawn into the same path, filled even-odd
+    r.holePts = (r.holes || []).map(h => h.map(([x, y]) => [X(x), Y(y)]));
+    r.path = new Path2D();
+    for (const ring of [r.pts, ...r.holePts]) { ring.forEach(([x, y], i) => i ? r.path.lineTo(x, y) : r.path.moveTo(x, y)); r.path.closePath(); }
     r.issues = [];
   }
   ROOMS.issues.forEach((it, i) => { it.i = i; it.cx = X(it.x); it.cy = Y(it.y); if (it.room != null) ROOMS.rooms[it.room].issues.push(it); });
@@ -339,6 +342,7 @@ function hoverList() {
     hot = it.room != null ? ROOMS.rooms[it.room] : null; hoverList(); redraw();
   });
 }
+const inRoom = (R, x, y) => inPoly(x, y, R.pts) && !R.holePts.some(h => inPoly(x, y, h));     // not over its furniture
 function inPoly(x, y, pts) {
   let inside = false;
   for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
@@ -351,14 +355,14 @@ function hoverMove(e) {
   if (!ROOMS || !document.getElementById("hon").checked) return;
   const r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
   const wx = view.x + mx / view.s, wy = view.y + my / view.s;
-  const under = ROOMS.rooms.filter(R => wx >= R.b[0] && wx <= R.b[2] && wy >= R.b[1] && wy <= R.b[3] && inPoly(wx, wy, R.pts));
+  const under = ROOMS.rooms.filter(R => wx >= R.b[0] && wx <= R.b[2] && wy >= R.b[1] && wy <= R.b[3] && inRoom(R, wx, wy));
   under.sort((a, b) => a.m2 - b.m2);
   const top = under[0] || null, tip = document.getElementById("tip");
   if (top !== hot) { hot = top; redraw(); }
   if (!top) { tip.style.display = "none"; return; }
   const iss = top.issues.filter(i => i.level === "issue");
   tip.style.display = "block"; tip.style.left = (mx + 14) + "px"; tip.style.top = (my + 14) + "px";
-  tip.innerHTML = `<b>${esc(top.type.slice(3).replace(/_/g, " "))}</b> · ${top.m2} m²` + (top.labels.length ? `<br>${esc(top.labels.slice(0, 2).join(" · "))}` : "") +
+  tip.innerHTML = `<b>${esc(top.type.slice(3).replace(/_/g, " "))}</b> · ${top.m2} m²${top.hover_m2 != null && top.hover_m2 < top.m2 ? ` <span style="opacity:.7">(${top.hover_m2} m² clear of furniture)</span>` : ""}` + (top.labels.length ? `<br>${esc(top.labels.slice(0, 2).join(" · "))}` : "") +
     (top.zone ? `<br>Neighbourhood: ${esc(top.zone)}` : "") + (under.length > 1 ? `<br><span style="color:#ffd27a">${under.length} hover shapes under the cursor</span>` : "") +
     (iss.length ? `<br><span style="color:#ff9b9b">${iss.length} issue${iss.length > 1 ? "s" : ""}: ${esc(iss[0].what)}</span>` : "");
 }
@@ -370,7 +374,7 @@ function hoverDraw(s) {
     for (const r of ROOMS.rooms) ctx.stroke(r.path);
   }
   if (hot && document.getElementById("hon").checked) {
-    ctx.globalAlpha = .35; ctx.fillStyle = "#5222D0"; ctx.fill(hot.path); ctx.globalAlpha = 1;
+    ctx.globalAlpha = .35; ctx.fillStyle = "#5222D0"; ctx.fill(hot.path, "evenodd"); ctx.globalAlpha = 1;
     ctx.lineWidth = 2.5 * px * dpr; ctx.strokeStyle = "#5222D0"; ctx.stroke(hot.path);
   }
   ctx.lineWidth = 2 * px * dpr;
@@ -410,7 +414,7 @@ function pick(e) {
                 zoom_mm_per_px: Math.round(1 / view.s), time: new Date().toLocaleTimeString(),
                 hits: [...found].map(([k, kinds]) => ({ group: k.split("|")[0], layer: k.split("|").slice(1).join("|"), kinds: [...kinds] })) };
   if (ROOMS) {
-    const under = ROOMS.rooms.filter(R => wx >= R.b[0] && wx <= R.b[2] && wy >= R.b[1] && wy <= R.b[3] && inPoly(wx, wy, R.pts)).sort((a, b) => a.m2 - b.m2);
+    const under = ROOMS.rooms.filter(R => wx >= R.b[0] && wx <= R.b[2] && wy >= R.b[1] && wy <= R.b[3] && inRoom(R, wx, wy)).sort((a, b) => a.m2 - b.m2);
     sel.rooms = under.map(R => ({ id: R.id, type: R.type, m2: R.m2, labels: R.labels, zone: R.zone, outline_area_ratio: R.outline_area_ratio, issues: R.issues.map(i => i.what) }));
     const near = ROOMS.issues.map(it => [Math.hypot(it.cx - wx, it.cy - wy), it]).filter(([d]) => d < 1500).sort((a, b) => a[0] - b[0]).slice(0, 3);
     sel.issues_nearby = near.map(([d, it]) => ({ what: it.what, kind: it.kind, level: it.level, mm: Math.round(d) }));

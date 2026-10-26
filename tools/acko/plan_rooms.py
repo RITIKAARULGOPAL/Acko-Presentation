@@ -194,6 +194,20 @@ for l in labels:
 
 # ---------------------------------------------------------------- write
 def ring(p): return [[round(x), round(y)] for x, y in p.exterior.coords]
+
+# the hover shape: the room with its furniture cut out, as the hatch's islands have it. A hole that only keeps the fill
+# clear of a label is filled back (the cursor on a room's name should light the room), and specks under 0.02 m2 are dropped.
+label_pts = [Point(l["pt"]) for l in labels]
+for r in rooms:
+    holes, refilled = [], 0
+    for h in r["fill"].interiors:
+        hp = Polygon(h)
+        if hp.area < 2e4: continue
+        if any(hp.contains(q) for q in label_pts): refilled += 1; continue
+        holes.append(hp)
+    r["holes"] = [[[round(x), round(y)] for x, y in h.exterior.coords] for h in holes]
+    r["hover_m2"] = round((r["poly"].area - sum(h.area for h in holes)) / 1e6, 2)
+    r["label_holes_refilled"] = refilled
 out = {
     "rooms": [{k: v for k, v in r.items() if k not in ("poly", "fill")} | {"shape": ring(r["poly"])} for r in rooms],
     "issues": issues,
