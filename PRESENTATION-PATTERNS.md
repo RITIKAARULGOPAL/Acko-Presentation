@@ -606,3 +606,10 @@ a texture's average colour, tags, a scene's hidden entities). No SketchUp window
 - The model's café is closed off differently from the DXF's (a counter, planters, a curved bench round the terrace): legs that cross
   walls or glass away from their ends (doors) are walked again by A* (corridor floor preferred; furniture, grass, planters avoided):
   `AXO_SKP.route`, used through `AxoSkp.route(legs)`. Check pictures in `tools/_work/axo-skp/` (frame, route, crossings).
+
+**Zoom and pan (Ritika, 26 Oct: "add zoom and pan feature in this axo"; in `s-wayday`, so the samples have it too):** a drag pans in
+the axo's right/up basis, the wheel (or a trackpad's pinch, ctrl+wheel) zooms on the cursor with its floor point kept fixed (as on the
+schematic axo), 4–90 m half-height. The view is then hers (`S.user`): the walk's camera stops easing, the signage card fades while
+its pin is out of the open part of the view, and a double-click, Reset view (shown only then), Walk the day, Whole floor or the
+next beat gives the view back to the walk. `touch-action: none` on the canvas; beats advance from the keyboard, so a drag never
+skips one.
