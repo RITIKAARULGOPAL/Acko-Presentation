@@ -633,3 +633,15 @@ fixed, 4–90 m half-height. `mix()` eases the angles too, so going back swings 
 its pin is out of the open part of the view, and a double-click, Reset view (shown only then), Walk the day, Whole floor or the
 next beat gives the view back to the walk. `touch-action: none` on the canvas; beats advance from the keyboard, so a drag never
 skips one.
+
+**The hotspot pin, six samples (Ritika, 27 Oct: "give different variations for the hotspot pin in different html"):** `index-pins.html`
+(`s-pin-1 … 6`, each also a page of its own; not in `order.txt`; made by the session's scratch `pin/make_pin.py` from `s-wayday`):
+1 Map pin (a 3D teardrop over the walker, its white dot turned to the viewer), 2 Floor beacon (dot and ring on the floor, rings
+pulsing out), 3 Numbered badge and 4 Time tag (labels facing the viewer on a hairline, the same size on screen at any zoom),
+5 Light column (a beam fading upward), 6 Flat hotspot (HTML over the model, like the keyplan's camera mark). All maroon; the current
+stop strongest, the stops done quieter, the ones to come lighter. In each, `PIN` replaces the slide's pin: `state(i)` from
+`setNow`, `tick(now, view)` before each render, `anchor(i)` / `lift()` for the card's leader, `cast` for the shadow map.
+- **The same size on screen** in the orthographic view: scale by `2 · view.half` (world per page height); a stem of p px stands
+  `p / sin(phi)` tall (a vertical projects by sin phi). Sprites ignore `sizeAttenuation` under an orthographic camera.
+- **Project before the render:** `cam.updateMatrixWorld()` after `AxoModel.apply`, or what is placed from `project()` lags a frame.
+- **Her pick (27 Oct):** 5, the light column, in the amber of her text image (`#F2A33A`); see §28.
