@@ -673,3 +673,15 @@ amber `#F2A33A`; "A day in ACKO".
 - **Soft shadows (axo-model.js, Shared):** a look key `blur` (texels): with it the renderer uses `PCFShadowMap` and
   `shadow.radius = blur` (PCFSoft ignores the radius; r147 rebuilds programs when the type changes). The sketchup look: sun 0.7,
   sky 0.8, ground `#e4e4e8`, blur 5.
+- **The Acker Garden at the Collab (Ritika, 27 Oct: "for collab area, do the exact furniture and raised flooring that's there in
+  the skp ... add punch bags and all", with `r-garden-op2` and her SketchUp view):** the 26 Oct file had none of it; her
+  `workhall 2.skp` has the deck, swing, punch bag, lounge chairs and chess, pouf, rug, side table, planters, pendants and the
+  purple tube lights. Converting that file whole broke the floor (its partitions are typed as furniture: 0.4% of the walking
+  grid read as wall, no corridor; marks and walkers lost), and its footprint fit came 2.4 m off. So `axo_skp.py --graft`: the
+  26 Oct model as before (`--shift` keeps its registration), its furniture inside a SketchUp-metre box at the west tip taken out,
+  the newer save's furniture in the same box put in (same axes: fixed pieces agree within 0.1-0.3 m), coloured and typed by its
+  own materials; a placement counts as furniture if its middle is in the box, it is under 12 m, more than 8 faces, not on a
+  wall's tag, above the floor (triangles under it dropped: a copy of the bag 3 m down), and not an upright roller blind (thin,
+  high, 0.3 m+ tall: from above they stood between the view and the room). The foosball in her view is not in that file: the
+  slide draws a white one (`PEOPLE.props`). People there come from the pieces (in the swing, in the chairs over the chess, on
+  the pouf, at the bag, two at the foosball), raised onto the deck by a 4th value (mm).

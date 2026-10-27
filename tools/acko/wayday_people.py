@@ -13,9 +13,12 @@ Usage:  python -I tools/acko/wayday_people.py
           empty; the boardroom in session; the cafeteria 45% with pairs standing; Reception a receptionist and visitors at
           the desk; the open Collabs a standing huddle; Zen rooms one person on the floor; the terraces pairs; phone booths
           half; cabins one. A fixed seed, so a build repeats.
+  garden  the Acker Garden on the west tip's deck (from her workhall 2.skp): one in the swing, two in the chairs over the chess,
+          one on the pouf, one at the punching bag, two at the foosball (drawn by the slide: not in that file), all on the deck
   walk    about 40 people walking the corridors, each an A* path (axo_skp.Walker) there and back
 Writes the `const PEOPLE = {...};` line in slides/s-wayday.html (plan mm, y down; angles in centiradians, plan frame:
-{sit, stand, present, yoga: [[x, y, a]], walk: [[[x, y], ...]]}) and tools/_work/wayday/people.png to check.
+{sit, stand, present, yoga: [[x, y, a(, h)]], walk: [[[x, y], ...]], props: {foosball: [x, y, a, h]}}; h, what they sit or
+stand on, mm) and tools/_work/wayday/people.png to check.
 """
 import json, math, os, re, sys
 
@@ -31,6 +34,12 @@ WORK = os.path.join(ROOT, "tools", "_work", "wayday")
 SLIDE = os.path.join(ROOT, "slides", "s-wayday.html")
 IN_SESSION = {"Departmental Rooms 18 PAX - 01", "Boardroom 35 PAX"}      # the day's own meeting rooms: always in use
 ROOMS = ("Departmental room", "Quick sprint", "Collaboration huddle", "Visitor hub", "Training room", "Boardroom")
+# the Acker Garden on the west tip's raised deck (Ritika, 27 Oct: "for collab area, do the exact furniture and raised flooring
+# that's there in the skp ... add punch bags and all"; her workhall 2.skp): its pieces in SketchUp metres (x, y), and who uses
+# them; the foosball is in her view of the model but not in that file, so the slide draws one where it stands (PEOPLE.props)
+DECK = 130                                                            # the deck's top, mm over the floor
+GARDEN = {"swing": (7.72, 29.87), "bag": (7.78, 31.44), "chairs": [(7.71, 32.05), (8.90, 33.15)], "chess": (8.23, 32.70),
+          "pouf": (8.01, 30.74), "foosball": (9.90, 32.50), "inside": (9.80, 31.00)}
 
 
 def js(name, var):
@@ -93,6 +102,8 @@ def main():
     shift, after, before = wayday_marks.refine([r for w in A["walls"] for r in w], (0.0, 0.0), z)      # each wall: its rings
     print(f"onto the SketchUp walls: shift {shift.round(0).tolist()} mm, walls within 10 cm {before:.0%} -> {after:.0%}")
 
+    reg = js("axo-skp.js", "AXO_SKP")["registration"]; RA, RS = np.array(reg["A"], float), np.array(reg["shift_m"], float)
+    skp = lambda q: 1000 * (RA @ np.asarray(q, float) + RS)           # SketchUp metres -> plan mm, on the model
     SP = spaces()
     def space_of(p):
         return next((s for s in SP if s[5][0] <= p[0] <= s[5][2] and s[5][1] <= p[1] <= s[5][3] and sum(inring(p, r) for r in s[2]) % 2), None)
@@ -121,6 +132,8 @@ def main():
         return None
 
     P = {"sit": [], "stand": [], "present": [], "yoga": []}
+    gs = space_of(skp(GARDEN["swing"]) - shift); garden = gs[1] if gs else None
+    print("the Acker Garden is in:", gs[0] if gs else "-", garden)
     add = lambda k, p, a: P[k].append([int(round(p[0] + shift[0])), int(round(p[1] + shift[1])), int(round(a * 100))])
 
     # rooms in session (and which are not)
@@ -132,6 +145,7 @@ def main():
         if t in ROOMS: session[name] = name in IN_SESSION or (t == "Training room") or rng.random() < 0.5
     for name, ss in by_space.items():
         sp = ss[0][2]; t = sp[0] if sp else None
+        if name == garden: continue                                   # the drawing's chairs are not the garden's: below
         if t in ROOMS: p_take = 0.9 if session[name] else 0.0
         elif t == "Workhall": p_take = 0.6
         elif t == "Cafeteria": p_take = 0.45
@@ -160,7 +174,7 @@ def main():
                 for _ in range(int(rng.integers(3, 5))):
                     q = free_near(c, 1300, 2600)
                     if q is not None: add("stand", q, math.atan2(c[1] - q[1], c[0] - q[0]))
-        elif t == "Collab" and area > 10:                             # a standing huddle where there is room for one
+        elif t == "Collab" and area > 10 and name != garden:          # a standing huddle where there is room for one
             best = None
             for _ in range(150):
                 c = m + rng.normal(0, 1, 2) * math.sqrt(area) * 200
@@ -197,6 +211,21 @@ def main():
             q = free_near(m, 200, 1200)
             if q is not None: add("stand", q, rng.uniform(-math.pi, math.pi))
 
+    # the Acker Garden: in the swing, in the two chairs over the chess, on the pouf, at the punching bag, at the foosball; on the
+    # deck (a 4th value: what they sit or stand on, mm)
+    props = {}
+    if garden:
+        G = {k: (skp(v) if isinstance(v, tuple) else [skp(q) for q in v]) for k, v in GARDEN.items()}
+        face = lambda p, q: math.atan2(q[1] - p[1], q[0] - p[0])
+        put = lambda k, p, a, h: P[k].append([int(round(p[0])), int(round(p[1])), int(round(a * 100)), int(h)])
+        put("sit", G["swing"], face(G["swing"], G["inside"]), 150)
+        for c in G["chairs"]: put("sit", c, face(c, G["chess"]), 30)
+        put("sit", G["pouf"], face(G["pouf"], G["chess"]), DECK)
+        d = G["inside"] - G["bag"]; q = G["bag"] + d / np.linalg.norm(d) * 650; put("present", q, face(q, G["bag"]), DECK)
+        f = G["foosball"]; ax = skp(np.array(GARDEN["foosball"]) + [0.0, 1.0]) - f; ax /= np.linalg.norm(ax); nx = np.array([-ax[1], ax[0]])
+        for sg in (-1, 1): q = f + nx * sg * 750; put("stand", q, face(q, f), DECK)
+        props["foosball"] = [int(round(f[0])), int(round(f[1])), int(round(math.atan2(ax[1], ax[0]) * 100)), DECK]
+
     # walkers: corridor to corridor, 10-25 m, there and back
     corr = np.argwhere(wk.corr & ~wk.block & ~wk.furn)
     walks = []
@@ -212,7 +241,7 @@ def main():
         plen = sum(float(np.linalg.norm(path[i] - path[i - 1])) for i in range(1, len(path)))
         if plen > 1.6 * L: continue
         walks.append([[int(round(v)) for v in wk.to_mm(q)] for q in path])
-    out = dict(P, walk=walks)
+    out = dict(P, walk=walks, props=props)
     print("people:", {k: len(v) for k, v in out.items()}, "walking", sum(len(w) for w in walks), "points")
 
     # the slide's generated line
@@ -234,7 +263,7 @@ def main():
         if x0 < q[0] < x1 and y0 < q[1] < y1: dr.point(W(np.array(q) - shift), fill=col)
     for r in chairs: dr.polygon([W(q) for q in r], outline=(150, 150, 170))
     for kk, col in (("sit", (40, 90, 220)), ("stand", (30, 160, 60)), ("present", (220, 30, 30)), ("yoga", (140, 40, 200))):
-        for x, y, a in out[kk]:
+        for x, y, a, *_ in out[kk]:
             p = np.array([x, y], float) - shift; q = W(p); dr.ellipse([q[0] - 4, q[1] - 4, q[0] + 4, q[1] + 4], fill=col)
             dr.line([q, W(p + np.array([math.cos(a / 100), math.sin(a / 100)]) * 450)], fill=col, width=2)
     for w in walks: dr.line([W(np.array(q, float) - shift) for q in w], fill=(240, 140, 0), width=2)

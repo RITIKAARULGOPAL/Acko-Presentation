@@ -1,6 +1,10 @@
 """A day for a new Acker's live model, straight from the SketchUp model (Ritika, 26 Oct: "build the axo based on this skp file").
 
-Usage:  python -I tools/acko/axo_skp.py "<model>.skp" [--scene "Scene 1"] [--fine 0.035] [--coarse 0.07] [--stats]
+Usage:  python -I tools/acko/axo_skp.py "<model>.skp" [--scene "Scene 1"] [--fine 0.035] [--coarse 0.07] [--stats] [--shift x,y]
+                [--graft "<newer save>.skp" --graft-scene "Scene 11" --graft-box x0,x1,y0,y1]
+        As built (27 Oct): acko2A_model.skp, Scene 1, --shift 9.639,49.638 (its own footprint fit), with the Acker Garden grafted from
+        Ritika's workhall 2.skp (Scene 11) in the box 3.5,12.6,27,35: that save's walls and corridors are typed differently (its
+        partitions read as furniture), so only the west tip's furniture, deck and lights come from it.
 
 The model (acko2A_model.skp, saved by SketchUp 2026) is read through SketchUp 2023's own C library (skp_read.py), headless.
 What it holds: 101.7 M faces when every copy is counted, but only ~500 definitions with faces of their own; a whole office chair
@@ -350,17 +354,82 @@ def reroute(legs, layers, lo, res, CX, CY, door=3.5):
     return new, changes
 
 
+# ---------- a graft: one corner's furniture from a newer save of the same model ----------
+WALLISH = re.compile(r"WALL|Untagged", re.I)                    # the drawing's walls (A-WALL-*, the imported partitions)
+
+
+def furnishing(m, g, k, W, tag, box):
+    """a placement (definition k at W, SketchUp inches) that is the box's furniture: its middle inside the box (SketchUp metres
+    x0, x1, y0, y1), small, more than a pane (8 faces), not on a wall's tag, above the floor, below the ceiling; not a roller
+    blind (thin and wide in its own axes, high up): from above they stand between the view and the room"""
+    b = m.defs[k]["bbox"]; lo = (W @ np.r_[b[0], 1.0])[:3] * INCH; hi = (W @ np.r_[b[1], 1.0])[:3] * INCH
+    L, H = np.minimum(lo, hi), np.maximum(lo, hi); c = (L + H) / 2; d = np.sort(np.abs(b[1] - b[0]) * INCH)
+    blind = L[2] >= 1.8 and H[2] - L[2] >= 0.3 and d[0] <= 0.12 and d[2] >= 1.0               # upright: not the tube lights
+    return (box[0] <= c[0] <= box[1] and box[2] <= c[1] <= box[3] and g.size[k] <= 12 and g.E.get(k, 0) > 8
+            and not WALLISH.search(tag or "") and H[2] > -0.2 and L[2] < 3.9 and not blind)
+
+
+def split_box(m, g, units, static, box):
+    """a walk's units and static definitions: (outside the box's furniture, inside it)"""
+    uo, ui, so, si = defaultdict(list), defaultdict(list), [], []
+    for k, pls in units.items():
+        for q in pls: (ui if furnishing(m, g, k, q[0], q[1], box) else uo)[k].append(q)
+    for e in static: (si if e[0] != "top" and furnishing(m, g, e[0], e[1], e[2], box) else so).append(e)
+    return uo, so, ui, si
+
+
+def graft_pieces(path, scene, box, fine, coarse):
+    """the box's furniture from another save (same axes): its pieces by level as the static geometry takes them (SketchUp
+    metres, z up; level 0 the light definitions, 1 and 2 the heavy ones and every unit placed, simplified), the triangles under
+    the floor dropped; with that model (its materials) for the colours"""
+    m2 = skp_read.Model(path); hidden2 = m2.scene_hidden(scene); g2 = Graph(m2, hidden2); u2, s2 = g2.walk()
+    _, _, ui, si = split_box(m2, g2, u2, s2, box)
+    log(f"graft: {os.path.basename(path)} ({scene}): {sum(len(v) for v in ui.values())} placements of {len(ui)} units, {len(si)} static definitions in the box")
+    A_SKP = np.diag([INCH, INCH, INCH, 1.0]); iA = np.linalg.inv(A_SKP); pieces = {0: [], 1: [], 2: []}
+    def add(lv, Pw, T, mk, tag, pl):
+        keep = np.maximum(np.maximum(Pw[T[:, 0], 2], Pw[T[:, 1], 2]), Pw[T[:, 2], 2]) > -0.05
+        if keep.any(): pieces[lv].append((Pw, T[keep], mk[keep], tag, pl[keep] if isinstance(pl, np.ndarray) else pl))
+    for (k, W, tag, paint, pl) in si:
+        P, T, mat, fidx, fent = m2.mesh(k)
+        if not len(T): continue
+        vis = np.array([fe[0] not in hidden2 for fe in fent], dtype=bool); keep = vis[fidx]
+        if not keep.any(): continue
+        Tk = T[keep]; used = np.unique(Tk); remap = np.full(len(P), -1, np.int64); remap[used] = np.arange(len(used))
+        Pw = (np.c_[P[used], np.ones(len(used))] @ (A_SKP @ W).T)[:, :3]; mk = mat[keep].astype(np.uint64); mk[mk == 0] = paint or 0
+        Tr = remap[Tk]
+        if len(Tr) > 5000:
+            for lv, c in ((1, fine), (2, coarse)): P2, T2, idx = cluster(Pw, Tr, c); add(lv, P2, T2, mk[idx], tag, pl)
+        else: add(0, Pw, Tr, mk, tag, pl)
+    for k, pls in ui.items():
+        P, T, M, PL = merge(g2.flatten(k, A_SKP, "Layer0", 0, False, [])); lim = max(0.004, g2.size[k] / 10)
+        for lv, c in ((1, fine), (2, coarse)):
+            P2, T2, idx = cluster(P, T, min(c, lim)) if len(T) else (P, T, np.arange(0))
+            if not len(T2): continue
+            for (W, tag, paint, pl) in pls:
+                Pw = (np.c_[P2, np.ones(len(P2))] @ (A_SKP @ W @ iA).T)[:, :3]; add(lv, Pw, T2, M[idx], tag, PL[idx] | pl)
+    return m2, pieces
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("skp"); ap.add_argument("--scene", default="Scene 1")
     ap.add_argument("--fine", type=float, default=FINE); ap.add_argument("--coarse", type=float, default=COARSE)
     ap.add_argument("--stats", action="store_true")
+    ap.add_argument("--shift", help="x,y (m): a newer save of the same model keeps the earlier registration (flip y, this shift)"
+                    " instead of fitting the footprints again (Ritika's workhall 2.skp, 27 Oct: its footprint fit came 2.4 m off)")
+    ap.add_argument("--graft", help="another .skp, a newer save of the same model (same axes): its furniture inside --graft-box"
+                    " replaces this one's (Ritika, 27 Oct: the Acker Garden on the west tip's deck, from her workhall 2.skp)")
+    ap.add_argument("--graft-scene", default="Scene 1"); ap.add_argument("--graft-box", help="x0,x1,y0,y1 (SketchUp metres)")
     a = ap.parse_args()
     os.makedirs(WORK, exist_ok=True)
     t0 = time.time(); m = skp_read.Model(a.skp)
     log(f"opened {os.path.basename(a.skp)} (status {m.status}) in {time.time() - t0:.1f} s: {len(m.defs)} definitions")
     hidden = m.scene_hidden(a.scene); log(f"{a.scene} hides {len(hidden)} entities")
     g = Graph(m, hidden); units, static = g.walk()
+    box = [float(v) for v in a.graft_box.split(",")] if a.graft else None
+    if box:
+        units, static, ui, si = split_box(m, g, units, static, box)
+        log(f"graft box {box}: this model's {sum(len(v) for v in ui.values())} furniture placements and {len(si)} static definitions in it taken out")
     mult = {k: len(v) for k, v in units.items()}
     log(f"units {len(units)} ({sum(mult.values()):,} placements; {sum(1 for v in mult.values() if v == 1)} used once), static definitions {len(static)}")
 
@@ -420,13 +489,24 @@ def main():
             mf = np.isin(SM, np.array(sorted(massmats), dtype=np.uint64)); kind[mf] = K["mass"]; rgb[mf] = MASS_RGB; drop &= ~mf
             log(f"  the mass: {int(mf.sum())} triangles")
         stat[lv] = (SP, ST[~drop], rgb[~drop], kind[~drop])
+        if box:
+            if lv == 0: m2, gp = graft_pieces(a.graft, a.graft_scene, box, a.fine, a.coarse)
+            GP, GT, GM, GPL = merge(gp[lv])
+            if len(GT):
+                grgb, gkind, gdrop = colours_kinds(m2, GP, GT, GM, GPL, lv == 0); SP, ST2, rgb2, kind2 = stat[lv]
+                stat[lv] = (np.concatenate([SP, GP]), np.concatenate([ST2, GT[~gdrop] + len(SP)]), np.concatenate([rgb2, grgb[~gdrop]]), np.concatenate([kind2, gkind[~gdrop]]))
+                log(f"  the graft at level {lv}: {int((~gdrop).sum()):,} triangles; kinds {dict((KINDS[i], int(n)) for i, n in zip(*np.unique(gkind[~gdrop], return_counts=True)))}")
         log(f"static level {lv}: {len(ST):,} triangles ({int(drop.sum()):,} ceiling dropped); kinds {dict((KINDS[i], int(n)) for i, n in zip(*np.unique(kind[~drop], return_counts=True)))}")
     log(f"  in {time.time() - t2:.1f} s")
 
     # ---- registration: the floor's footprint onto the DXF slab ----
     SP0, ST0, _, K0 = stat[0]; ftri = SP0[ST0[K0 == K["floor"]]][:, :, :2]
     dxf = read_js(os.path.join(ROOT, "data", "axo-dxf.js"), "AXO_DXF"); slab = dxf["slab"]
-    reg = register(ftri, slab); log(f"registration: {reg}")
+    if a.shift:
+        sx, sy = (float(v) for v in a.shift.split(","))
+        reg = {"iou": None, "how": "given (flip y)", "A": [[1, 0], [0, -1]], "shift_m": [sx, sy]}
+    else: reg = register(ftri, slab)
+    log(f"registration: {reg}")
     xs, ys = [p[0] for p in slab], [p[1] for p in slab]; CX, CY = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
     A2 = np.array(reg["A"], float); sh = np.array(reg["shift_m"])
     # SketchUp metres (x, y, z up) -> world metres (x east, y up, z south): plan mm = 1000 (A2 [x, y] + shift); world = plan / 1000 - centre
@@ -555,7 +635,7 @@ def main():
                 sheet.paste(crop, ((j % cols) * cw * z, (j // cols) * ch * z)); ds.text(((j % cols) * cw * z + 8, (j // cols) * ch * z + 6), f"{j}: leg {c['leg']} seg {c['seg']}", fill=(0, 0, 255))
             sheet.save(os.path.join(WORK, "crossings.png"))
 
-    out = {"source": os.path.basename(a.skp), "scene": a.scene, "built": time.strftime("%Y-%m-%d"), "kinds": KINDS, "cells": [a.fine, a.coarse],
+    out = {"source": os.path.basename(a.skp) + (f" + {os.path.basename(a.graft)} in {box}" if box else ""), "scene": a.scene, "built": time.strftime("%Y-%m-%d"), "kinds": KINDS, "cells": [a.fine, a.coarse],
            "registration": reg, "drawn": drawn, "parts": parts, "units": unit_out, "crossings": crossings,
            "route": R["legs"], "rerouted": changes}
     js = ("/* A day for a new Acker's model, made by tools/acko/axo_skp.py from the SketchUp model; world metres about the DXF slab's "
@@ -563,6 +643,7 @@ def main():
     with open(os.path.join(ROOT, "data", "axo-skp.js"), "w", encoding="utf-8", newline="\n") as f: f.write(js)
     log(f"data/axo-skp.js: {len(js) / 1e6:.1f} MB in {time.time() - t0:.0f} s")
     m.close()
+    if box: m2.close()
 
 
 if __name__ == "__main__":
