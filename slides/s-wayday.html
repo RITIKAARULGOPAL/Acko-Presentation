@@ -13,7 +13,7 @@
 <!-- slide:start -->
 <section class="scene" id="s-wayday" data-part="5" data-title="A day for a new Acker" data-steps="9" data-mins="1.5"
   data-beats="Arrival,Reception,Neighbourhood,The desk,First meeting,Lunch,Coffee,A pause,Home time"
-  data-notes="Wayfinding as a day for a new Acker, their first day from the lift lobby to home time; each click walks them to the next stop, and at each marked spot the sign that shows them the way (signage concepts to come). 09:00 arrival at the east lift lobby, the ACKO welcome and the floor directory. 09:05 reception. 09:15 their neighbourhood, found by its number and graphic wall. 09:20 the desk, by its cluster and number. 11:00 the first meeting, in a room signed by its name, with braille. 13:00 lunch at the café. 14:30 the coffee point. 16:00 a pause in the zen room. 18:30 home, out through the west lift lobby. Whole floor shows the day's route at once; the strip along the bottom jumps to any stop. Drag to turn it, right-drag (or Shift) to pan, scroll to zoom; a double-click (or Reset view) goes back to the walk.">
+  data-notes="Wayfinding as a day for a new Acker on the SketchUp model (acko2A_model, in its own colours under the sun, with shadows), their first day from the lift lobby to home time; each click walks them to the next stop, and at each marked spot the sign that shows them the way (signage concepts to come). 09:00 arrival at the east lift lobby, the ACKO welcome and the floor directory. 09:05 reception. 09:15 their neighbourhood, found by its number and graphic wall. 09:20 the desk, by its cluster and number. 11:00 the first meeting, in a room signed by its name, with braille. 13:00 lunch at the café. 14:30 the coffee point. 16:00 a pause in the zen room. 18:30 home, out through the west lift lobby. Whole floor shows the day's route at once; the strip along the bottom jumps to any stop. Drag to turn it, right-drag (or Shift) to pan, scroll to zoom; a double-click (or Reset view) goes back to the walk.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
@@ -75,8 +75,10 @@
 </style>
 <script>
 /* a day for a new Acker (Ritika, 22–23 Oct: "wayfinding will be in axo - like a day for a new employee in acko … a guy walks through
-   the axo and at certain marked areas i'll give conceptualised sketches of how the signage would be dealt"): on the shared live
-   model (assets/js/axo-model.js, its one renderer), a figure walks the day's route along the corridors, a beat per stop; at each
+   the axo and at certain marked areas i'll give conceptualised sketches of how the signage would be dealt"): on the SketchUp model
+   (Ritika, 26 Oct: "build the axo based on this skp file", then "go with sample 5": assets/js/axo-skp.js, data/axo-skp.js, in
+   SketchUp's colours under the sun with shadows; the DXF model, assets/js/axo-model.js, if that data is missing), on the deck's one
+   renderer, a figure walks the day's route along the corridors (as walked on the SketchUp model), a beat per stop; at each
    marked spot (a maroon pin) a signage card opens, a placeholder until her sketches arrive. The route was found on the plan
    (walls and glass stop it, furniture only slows it; tools: the session's way_route.py). Whole floor shows the route at once;
    the strip along the bottom jumps to a stop. The walker, pins and trail are this slide's own group, added to the shared scene on
@@ -88,6 +90,9 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   // the day's route (plan mm, y down): the stops and the legs between them
   const ROUTE = {"stops": [{"t": "09:00", "n": "Arrival", "s": "The east lift lobby", "at": [171525, 30275]}, {"t": "09:05", "n": "Reception", "s": "A welcome at reception", "at": [173025, 33125]}, {"t": "09:15", "n": "@NB", "s": "Finding the neighbourhood by its number and graphic wall", "at": [212475, 35075]}, {"t": "09:20", "n": "The desk", "s": "A Type 4 desk in @NB", "at": [228075, 24425]}, {"t": "11:00", "n": "First meeting", "s": "A huddle room, signed by its name", "at": [181725, 32375]}, {"t": "13:00", "n": "Lunch", "s": "The café", "at": [62025, 41075]}, {"t": "14:30", "n": "Coffee", "s": "The coffee point", "at": [94425, 31325]}, {"t": "16:00", "n": "A pause", "s": "Zen room 01", "at": [113925, 29825]}, {"t": "18:30", "n": "Home time", "s": "Out through the west lift lobby", "at": [80925, 30275]}],
     "legs": [[[171525, 30275], [171675, 31025], [173025, 32525], [173025, 33125]], [[173025, 33125], [175725, 31175], [177225, 30575], [186375, 30725], [187575, 31475], [187575, 33575], [188925, 34925], [190575, 34925], [192675, 37025], [193875, 37025], [202725, 29675], [205425, 26825], [207825, 26825], [210225, 29225], [210525, 30275], [212625, 32225], [212925, 33275], [213975, 34325], [213975, 35075], [213525, 35525], [212475, 35075]], [[212475, 35075], [213075, 35525], [215925, 35675], [217125, 34925], [218325, 34925], [219375, 35975], [221025, 35975], [229575, 28325], [229425, 26675], [227775, 25475], [228075, 24425]], [[228075, 24425], [227775, 25475], [229425, 26675], [229575, 28325], [221025, 35975], [219375, 35975], [218325, 34925], [217125, 34925], [215925, 35675], [215025, 35675], [212775, 32975], [212625, 32225], [210525, 30275], [210225, 29225], [207825, 26825], [205425, 26825], [202725, 29675], [193875, 37025], [192675, 37025], [190575, 34925], [188925, 34925], [187575, 33575], [187575, 31475], [186975, 30875], [180975, 30725], [180525, 31175], [180525, 32075], [180975, 32525], [181725, 32375]], [[181725, 32375], [180975, 32525], [179925, 30725], [177225, 30575], [174375, 32225], [173475, 32375], [172425, 33425], [159075, 33575], [157425, 33275], [154875, 35225], [149175, 35675], [141825, 35675], [139425, 33875], [139125, 32675], [137925, 31475], [135675, 31175], [120375, 31175], [116625, 34625], [114975, 35225], [92175, 34625], [90225, 36425], [88725, 36575], [87825, 37325], [83625, 37325], [81675, 38075], [81225, 38525], [81075, 40925], [80325, 41675], [79125, 41675], [77925, 42425], [77175, 42425], [75825, 40925], [62175, 40775], [62025, 41075]], [[62025, 41075], [62175, 40775], [75825, 40925], [77175, 42425], [77925, 42425], [79125, 41675], [80325, 41675], [81075, 40925], [81225, 38525], [81675, 38075], [83625, 37325], [87825, 37325], [88725, 36575], [90075, 36425], [92175, 34325], [92175, 31925], [92775, 31325], [94425, 31325]], [[94425, 31325], [96375, 31325], [97425, 32375], [97425, 33425], [98925, 34925], [110175, 34925], [111225, 35375], [113475, 35375], [115575, 35075], [116325, 34325], [116175, 30275], [115725, 29825], [113925, 29825]], [[113925, 29825], [115725, 29825], [116175, 30275], [116325, 34325], [115575, 35075], [113475, 35375], [90975, 34625], [90225, 33875], [83625, 33875], [81525, 31775], [81525, 30875], [80925, 30275]]]};
+  // the SketchUp model when its data is in (the route as walked on it), else the DXF model
+  const SKP = !!(window.AxoSkp && window.AxoSkp.available()), MODEL = SKP ? window.AxoSkp : window.AxoModel;
+  if (SKP) ROUTE.legs = window.AxoSkp.route(ROUTE.legs);
   // at each spot: what the sign does (the card), and the Loop's words where they fit
   const SIGN = [
     ["Arrival zone at the lift lobby", "The ACKO welcome and the floor directory: six neighbourhoods, the café, the rooms.", "I feel welcomed"],
@@ -108,7 +113,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   // the neighbourhood the day's desk is in, by the drawing's own name ("02 · Life")
   const nbName = () => { const p = ROUTE.stops[2].at, z = (plan.data.zones || []).find((q) => ringsOf(q.zone).filter((r) => inRing(p, r)).length % 2 === 1); return z ? z.name : "The neighbourhood"; };
   function build() {
-    T = window.THREE; M = window.AxoModel.get(asset);
+    T = window.THREE; M = MODEL.get(asset);
     cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
     const NB = nbName();
     ROUTE.stops.forEach((s) => { s.n = s.n.replace("@NB", NB); s.s = s.s.replace("@NB", NB); });
@@ -247,12 +252,13 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   return {
     enter(_, s) {
       sc = s; host = $(".wd-gl", sc); plain();
-      const ok = !!(window.AxoModel && window.AxoModel.available() && (R = window.AxoModel.renderer()));
+      const ok = !!(window.AxoModel && (SKP || window.AxoModel.available()) && (R = window.AxoModel.renderer()));
       sc.classList.toggle("wd-fallback", !ok);
       if (!ok) return;
       if (!S.built) build();
       if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
       M.reset(); M.scene.add(group);
+      if (SKP) { window.AxoSkp.look("sketchup"); pins.forEach((g) => g.traverse((o) => { if (o.isMesh) o.castShadow = true; })); }
       S.fresh = true; whole(false);
       $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
       $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };

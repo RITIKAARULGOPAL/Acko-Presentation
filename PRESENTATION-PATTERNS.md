@@ -611,6 +611,10 @@ a texture's average colour, tags, a scene's hidden entities). No SketchUp window
   walls or glass away from their ends (doors) are walked again by A* (corridor floor preferred; furniture, grass, planters avoided):
   `AXO_SKP.route`, used through `AxoSkp.route(legs)`. Check pictures in `tools/_work/axo-skp/` (frame, route, crossings).
 
+**Her pick (26 Oct: "go with sample 5"):** the deck's `s-wayday` runs on `AxoSkp` in the `sketchup` look (SketchUp's colours under the
+sun, with shadows), the route as walked on that model; the DXF model (`AxoModel`) only if `data/axo-skp.js` is missing. The
+comparison page stays as it was (its generator worked from the older s-wayday).
+
 **Zoom, pan and turn (Ritika, 26 Oct: "add zoom and pan feature in this axo", "rotate also"; in `s-wayday`, so the samples have it
 too):** the schematic axo's gestures: a drag turns it (within 0.8 of the deck's angle, 0.35–1.22 from the vertical), a right-drag (or
 Shift) pans in the axo's right/up basis, the wheel (or a trackpad's pinch, ctrl+wheel) zooms on the cursor with its floor point kept
