@@ -645,3 +645,31 @@ stop strongest, the stops done quieter, the ones to come lighter. In each, `PIN`
   `p / sin(phi)` tall (a vertical projects by sin phi). Sprites ignore `sizeAttenuation` under an orthographic camera.
 - **Project before the render:** `cam.updateMatrixWorld()` after `AxoModel.apply`, or what is placed from `project()` lags a frame.
 - **Her pick (27 Oct):** 5, the light column, in the amber of her text image (`#F2A33A`); see §28.
+
+## 28. A day in ACKO: people in the spaces, light-column hotspots, a free turn, soft shadows (s-wayday)
+**What (Ritika, 27 Oct, picking the light column):** "use the yellow in the text for light column ... model should rotate 360 degs
+... the light column hotspot would have pop up ... tiny humans doing activity in each space when we zoom to that particular space
+... one guy walking throughout is not required, instead we'll have a day in acko ... humans can be in monochromatic dark grey ...
+the shadow is too harsh, make it soft." Her answers: the Loop's seven stops by the clock; hotspots always there, a pop-up on click;
+amber `#F2A33A`; "A day in ACKO".
+- **The day:** `BEATS` (time, stop, line, the Loop's words from `s-loop`, the space's plan point, a half-height); each beat eases the
+  camera to its space, offset right of the copy. Entering jumps there once the view has a size (`S.jump`, set in `step`, done in
+  the frame after `sizeUp`), since `step` runs before the first frame.
+- **People from the drawing's chairs** (`tools/acko/wayday_people.py` → the slide's generated `PEOPLE` line): AXO_DXF's chairs
+  (blocks by their uses, and loose), each facing the nearest desk edge within 1.2 m (a KD-tree of desk edges every 50 mm), shifted
+  onto the SketchUp model's walls (`wayday_marks.refine` of AXO_DXF's wall rings: 0.45 / 0.40 m). Who sits where goes by the plan's
+  space types (meeting rooms half in session, a presenter past the end of the room's seats; workhalls 60%; the café 45%), plus
+  standing scenes (Reception visitors, a Collab huddle, pairs talking, waiting at the lifts) on free cells of the route grid
+  (the terraces' grass allowed) and 40 walkers on A* corridor paths there and back. The SketchUp data's own chairs could not be
+  found (furniture is typed by material; seat-height blobs too sparse), so the drawing's are used.
+- **Figures:** one merged low-poly figure per pose (sit, stand, present, yoga, walk) from cylinders, a sphere and a box, facing +z,
+  in `0x4a4a4a`; an `InstancedMesh` per pose with `frustumCulled = false` (r147 culls instances by the base geometry), a faint
+  disc under each. Shown below a half-height of 30 m (every beat), hidden on Whole floor.
+- **Hotspots:** the pin samples' light column in amber, at `WAY.stops`; the whole column (height too) scales by `max(1, half/15)` so
+  it reads on Whole floor. A click (a pointerup with no drag) picks the nearest light on screen (its base-to-top line, within its
+  width or 14 px); hovering shows a pointer; Esc (a capture listener, before the deck's keys), a click elsewhere or the next beat
+  closes it. Her purple marks: the open spot's strongest.
+- **A free turn:** the drag's theta unclamped; `mix()` eases theta by its difference wrapped to ±π, so the way back is the short one.
+- **Soft shadows (axo-model.js, Shared):** a look key `blur` (texels): with it the renderer uses `PCFShadowMap` and
+  `shadow.radius = blur` (PCFSoft ignores the radius; r147 rebuilds programs when the type changes). The sketchup look: sun 0.7,
+  sky 0.8, ground `#e4e4e8`, blur 5.

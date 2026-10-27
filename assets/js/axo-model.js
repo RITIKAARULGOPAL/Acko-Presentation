@@ -234,6 +234,7 @@
     // the sun 50° to the left of the deck's view (azimuth θ ≈ -0.61), 52° up: shadows fall to the right where they show, not
     // behind what casts them; left faces lit, fronts half, right faces in shade
     sun: [-100, 128, 9], sunColor: 0xffffff, sunI: 0.95, sky: 0xffffff, ground: 0xd8d8dd, skyI: 0.55,
+    blur: 0,                                                         // a shadow edge blur (texels; 0: PCFSoft's own)
   }, o);
   const LOOKS = {
     clay: W({}),
@@ -244,8 +245,9 @@
       desk: 0xfefbf5, chair: 0xf1ede5, store: 0xfbf8f2, mullion: 0xe0dbd0, glass: [0xfffcf6, 0.4], pane: [0xfdfaf4, 0.18],
       ink: [0xb3ab9c, 0.5], inkf: [0xc6beb0, 0.4], inkg: [0xbfb7a9, 0.55], sun: [-99, 78, -17], sunColor: 0xfff2e2, sunI: 1.0,
       sky: 0xfffbf4, ground: 0xdcd6cc, skyI: 0.52 }),
-    // each material's own colours (the PPT's here; SketchUp's in AxoSkp) under the white looks' sun, sky and shadows
-    sketchup: W({ own: true }),
+    // each material's own colours (the PPT's here; SketchUp's in AxoSkp) under a soft sun (Ritika, 27 Oct: "in the model the
+    // shadow is too harsh, make it soft"): less sun, more sky in the shade, the shadows' edges blurred
+    sketchup: W({ own: true, sunI: 0.7, skyI: 0.8, ground: 0xe4e4e8, blur: 5 }),
   };
   AM.LOOKS = Object.keys(LOOKS);
   // each kind's colour key, texture and tile (m); the kinds that keep their PPT colour in every look
@@ -322,6 +324,7 @@
     if (L) {
       hemi.color.setHex(L.sky); hemi.groundColor.setHex(L.ground); hemi.intensity = L.skyI;
       key.color.setHex(L.sunColor); key.intensity = L.sunI; key.position.set(...L.sun); key.castShadow = true; fitSun(key, reg.pts);
+      key.shadow.radius = L.blur || 1; if (R) R.shadowMap.type = L.blur ? T.PCFShadowMap : T.PCFSoftShadowMap;   // PCFSoft ignores the radius
     } else {
       hemi.color.setHex(0xffffff); hemi.groundColor.setHex(0xb9b4c6); hemi.intensity = 0.78;
       key.color.setHex(0xffffff); key.intensity = 0.5; key.position.set(-40, 90, 60); key.castShadow = false;
