@@ -63,8 +63,9 @@ def read_js(path, name):
 
 
 def day_route():
+    """the day's route in slides/s-wayday.html: its generated WAY (tools/acko/wayday_marks.py), or the older ROUTE"""
     s = open(os.path.join(ROOT, "slides", "s-wayday.html"), encoding="utf-8").read()
-    m = re.search(r"const ROUTE = (\{.*?\});\n", s, re.S)
+    m = re.search(r"const (?:WAY|ROUTE) = (\{.*?\});\n", s, re.S)
     return json.loads(m.group(1)) if m else None
 
 
@@ -257,35 +258,46 @@ def pack_part(P, T, rgb, kind, unit, lift=None):
 CORRIDOR_RGB = (188, 172, 198)                                   # the renders' corridor lavender (#b9a9c3 in their palette)
 
 
-def reroute(legs, layers, lo, res, CX, CY, door=3.5):
-    """legs (plan mm) that cross the walls or glass away from their ends (a crossing within `door` m of a leg's start or end is a
-    door) walked again by A* on a 10 cm grid, start to end: the corridor floor preferred, furniture costly, the terrace's grass
-    and the planters avoided, walls impassable but near the leg's ends (its doors), their 0.3 m clearance costly; the path
-    string-pulled. A leg whose new way is over 3 times as long is kept as it was. Returns new legs and what changed."""
-    import heapq
-    from scipy import ndimage
-    g = 0.1; f = int(round(g / res)); mask = layers["wall"]
-    H, W = mask.shape[0] // f, mask.shape[1] // f
-    down = lambda m: m[:H * f, :W * f].reshape(H, f, W, f).any(axis=(1, 3))
-    wall = down(mask); yy, xx = np.mgrid[-3:4, -3:4]; disk = xx * xx + yy * yy <= 9
-    block = ndimage.binary_dilation(wall, structure=disk)
-    furn = ndimage.binary_dilation(down(layers["furn"]), structure=disk[1:-1, 1:-1])
-    plant = ndimage.binary_dilation(down(layers["plant"]), structure=disk[1:-1, 1:-1])
-    grass, corr = down(layers["grass"]), down(layers["corridor"])
-    cost = np.where(corr, 0.8, 1.0); cost[furn] = 6.0; cost[grass] = 8.0; cost[plant] = 30.0; cost[block] = np.maximum(cost[block], 25.0)
-    cell = lambda p: (int((p[1] - lo[1]) / g), int((p[0] - lo[0]) / g))                  # (row, col) of a world (x, z)
-    world = lambda rc: np.array([lo[0] + (rc[1] + 0.5) * g, lo[1] + (rc[0] + 0.5) * g])
-    to_w = lambda q: np.array([(q[0] - CX) / 1000, (q[1] - CY) / 1000]); to_mm = lambda w: [int(round(w[0] * 1000 + CX)), int(round(w[1] * 1000 + CY))]
+class Walker:
+    """walking on the floor: the route check's layers (route.npz: walls and glass, furniture, plants, grass, the corridor's floor)
+    on a 10 cm grid; A* that prefers the corridor floor, finds furniture costly, avoids the terrace's grass and the planters, and
+    takes walls only within `door` m of its ends (their doors), their 0.3 m clearance costly; the path string-pulled. World metres
+    (x, z) about the DXF slab's centre; to_w / to_mm convert plan mm."""
 
-    def clear(a, b):
-        n = max(2, int(np.linalg.norm(b - a) / (g / 2)))
+    def __init__(self, layers, lo, res, CX, CY):
+        from scipy import ndimage
+        self.g = g = 0.1; f = int(round(g / res)); mask = layers["wall"]; self.lo, self.CX, self.CY = lo, CX, CY
+        H, W = self.H, self.W = mask.shape[0] // f, mask.shape[1] // f
+        down = lambda m: m[:H * f, :W * f].reshape(H, f, W, f).any(axis=(1, 3))
+        self.wall = wall = down(mask); yy, xx = np.mgrid[-3:4, -3:4]; disk = xx * xx + yy * yy <= 9
+        self.block = ndimage.binary_dilation(wall, structure=disk)
+        self.furn = ndimage.binary_dilation(down(layers["furn"]), structure=disk[1:-1, 1:-1])
+        self.plant = ndimage.binary_dilation(down(layers["plant"]), structure=disk[1:-1, 1:-1])
+        self.grass, self.corr = down(layers["grass"]), down(layers["corridor"])
+        cost = np.where(self.corr, 0.8, 1.0); cost[self.furn] = 6.0; cost[self.grass] = 8.0; cost[self.plant] = 30.0
+        cost[self.block] = np.maximum(cost[self.block], 25.0); self.cost = cost
+
+    def cell(self, p): return (int((p[1] - self.lo[1]) / self.g), int((p[0] - self.lo[0]) / self.g))      # (row, col) of (x, z)
+    def world(self, rc): return np.array([self.lo[0] + (rc[1] + 0.5) * self.g, self.lo[1] + (rc[0] + 0.5) * self.g])
+    def to_w(self, q): return np.array([(q[0] - self.CX) / 1000, (q[1] - self.CY) / 1000])
+    def to_mm(self, w): return [int(round(w[0] * 1000 + self.CX)), int(round(w[1] * 1000 + self.CY))]
+    def inside(self, rc): return 0 <= rc[0] < self.H and 0 <= rc[1] < self.W
+
+    def free(self, rc):
+        """a cell a person can stand in: clear of the walls' clearance, furniture, plants and grass"""
+        return self.inside(rc) and not (self.block[rc] or self.furn[rc] or self.plant[rc] or self.grass[rc])
+
+    def clear(self, a, b):
+        n = max(2, int(np.linalg.norm(b - a) / (self.g / 2)))
         for t in np.linspace(0, 1, n):
-            r, c = cell(a + (b - a) * t)
-            if not (0 <= r < H and 0 <= c < W) or block[r, c] or furn[r, c] or plant[r, c] or grass[r, c]: return False
+            if not self.free(self.cell(a + (b - a) * t)): return False
         return True
 
-    def astar(a, b, box):
-        r0, c0, r1, c1 = box; s, t = cell(a), cell(b)
+    def astar(self, a, b, box=None, door=3.5):
+        """world (x, z) a to b: the string-pulled path, or None if there is no way within box (r0, c0, r1, c1; default all)"""
+        import heapq
+        g, wall, cost = self.g, self.wall, self.cost
+        r0, c0, r1, c1 = box or (0, 0, self.H, self.W); s, t = self.cell(a), self.cell(b)
         near = lambda v: math.hypot(v[0] - s[0], v[1] - s[1]) * g < door or math.hypot(v[0] - t[0], v[1] - t[1]) * g < door
         D = {s: 0.0}; prev = {}; pq = [(0.0, 0.0, s)]
         steps = [(1, 0, 1), (-1, 0, 1), (0, 1, 1), (0, -1, 1), (1, 1, 1.414), (1, -1, 1.414), (-1, 1, 1.414), (-1, -1, 1.414)]
@@ -303,32 +315,38 @@ def reroute(legs, layers, lo, res, CX, CY, door=3.5):
         if t not in prev: return None
         path = [t]
         while path[-1] != s: path.append(prev[path[-1]])
-        pts = [world(rc) for rc in path[::-1]]; pts[0], pts[-1] = a, b
-        out = [pts[0]]; i = 0                                                                # string-pulling
+        pts = [self.world(rc) for rc in path[::-1]]; pts[0], pts[-1] = a, b
+        out = [pts[0]]; i = 0                                                                    # string-pulling
         while i < len(pts) - 1:
             j = len(pts) - 1
-            while j > i + 1 and not clear(pts[i], pts[j]): j -= 1
+            while j > i + 1 and not self.clear(pts[i], pts[j]): j -= 1
             out.append(pts[j]); i = j
         return out
 
+
+def reroute(legs, layers, lo, res, CX, CY, door=3.5):
+    """legs (plan mm) that cross the walls or glass away from their ends (a crossing within `door` m of a leg's start or end is a
+    door) walked again by A* (Walker), start to end. A leg whose new way is over 3 times as long is kept as it was. Returns new
+    legs and what changed."""
+    wk = Walker(layers, lo, res, CX, CY); g = wk.g
     new, changes = [], []
     for li, leg in enumerate(legs):
-        P = [to_w(q) for q in leg]; cum = [0.0]
+        P = [wk.to_w(q) for q in leg]; cum = [0.0]
         for i in range(1, len(P)): cum.append(cum[-1] + float(np.linalg.norm(P[i] - P[i - 1])))
         L = cum[-1]; hit = False
         for i in range(len(P) - 1):
             for t in np.linspace(0, 1, max(2, int((cum[i + 1] - cum[i]) / 0.05))):
-                sd = cum[i] + (cum[i + 1] - cum[i]) * t; r, c = cell(P[i] + (P[i + 1] - P[i]) * t)
-                if 0 <= r < H and 0 <= c < W and wall[r, c] and door < sd < L - door: hit = True; break
+                sd = cum[i] + (cum[i + 1] - cum[i]) * t; rc = wk.cell(P[i] + (P[i + 1] - P[i]) * t)
+                if wk.inside(rc) and wk.wall[rc] and door < sd < L - door: hit = True; break
             if hit: break
         if not hit: new.append(leg); continue
-        ps = np.array(P); m_ = int(15 / g); rr = [cell(q) for q in P]
-        box = (max(0, min(r for r, c in rr) - m_), max(0, min(c for r, c in rr) - m_), min(H, max(r for r, c in rr) + m_), min(W, max(c for r, c in rr) + m_))
-        path = astar(P[0], P[-1], box)
+        m_ = int(15 / g); rr = [wk.cell(q) for q in P]
+        box = (max(0, min(r for r, c in rr) - m_), max(0, min(c for r, c in rr) - m_), min(wk.H, max(r for r, c in rr) + m_), min(wk.W, max(c for r, c in rr) + m_))
+        path = wk.astar(P[0], P[-1], box, door)
         plen = sum(float(np.linalg.norm(path[i] - path[i - 1])) for i in range(1, len(path))) if path else 0
         if path is None or plen > 3 * L: changes.append({"leg": li, "ok": False, "m": round(L, 1)}); new.append(leg); continue
         changes.append({"leg": li, "ok": True, "was_m": round(L, 1), "m": round(plen, 1)})
-        new.append([to_mm(q) for q in path])
+        new.append([wk.to_mm(q) for q in path])
     return new, changes
 
 
@@ -453,8 +471,9 @@ def main():
     log(f"parts {len(parts)} ({sum(1 for p in parts if p['u'] < 0)} static, {len(unit_out)} instanced units); drawn fine {drawn[0]:,}, coarse {drawn[1]:,}")
 
     # ---- the route against the walls and glass (fine level) ----
-    R = day_route(); crossings = []
-    if R:
+    # (the layers are saved even without a route yet: tools/acko/wayday_marks.py walks the day's legs on them)
+    R = day_route() or {}; R = {"stops": R.get("stops", []), "legs": R.get("legs", [])}; crossings = []
+    if True:
         from PIL import Image, ImageDraw
         segs = []
         def add_segs(Pw, T, kind):
@@ -538,7 +557,7 @@ def main():
 
     out = {"source": os.path.basename(a.skp), "scene": a.scene, "built": time.strftime("%Y-%m-%d"), "kinds": KINDS, "cells": [a.fine, a.coarse],
            "registration": reg, "drawn": drawn, "parts": parts, "units": unit_out, "crossings": crossings,
-           "route": R["legs"] if R else None, "rerouted": changes if R else []}
+           "route": R["legs"], "rerouted": changes}
     js = ("/* A day for a new Acker's model, made by tools/acko/axo_skp.py from the SketchUp model; world metres about the DXF slab's "
           "centre (x east, y up, z south) */\nwindow.AXO_SKP = " + json.dumps(out, separators=(",", ":")) + ";\n")
     with open(os.path.join(ROOT, "data", "axo-skp.js"), "w", encoding="utf-8", newline="\n") as f: f.write(js)

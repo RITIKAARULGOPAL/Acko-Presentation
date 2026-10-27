@@ -615,6 +615,17 @@ a texture's average colour, tags, a scene's hidden entities). No SketchUp window
 sun, with shadows), the route as walked on that model; the DXF model (`AxoModel`) only if `data/axo-skp.js` is missing. The
 comparison page stays as it was (its generator worked from the older s-wayday).
 
+**Her marked spots (27 Oct: "I've marked certain blocks as Wayfinding-Signage, -Graphics, -Artwork, -Collab, -Workhall … these are the
+spots I want to show … it should still sound like a day for a new Acker"):** `tools/acko/wayday_marks.py` reads the blocks' inserts
+from the boundary DXF and writes the slide's generated `WAY` line (stops, legs, marks); the words are the slide's own `DAY`.
+- **Frame, in two fits:** the layout block's `A-WALL` lines onto `AXO_DXF`'s walls (FFT, 50 mm), then a fine shift (here 0.4 / 0.5 m)
+  onto the SketchUp model's own walls (route.npz): the model was registered by its floor's footprint and sits a little off.
+- **Where to stand:** a wall mark from 1.2 m in front, along the wall if furniture is in the way (Reception's lounge), on the side
+  it is read from (a sign from its own space; art and the graphic from the corridor); the workhall's desk 40% of the way on to the
+  Collab (its patches lie either side of a corridor, so their middle is the corridor); legs by `axo_skp.Walker`'s A*.
+- **Drawn:** signs as standing panels, artworks as wall panels, the graphic as a wall wrap, the Collab and workhall as tinted floor;
+  purple until her colours, the current stop's strongest.
+
 **Zoom, pan and turn (Ritika, 26 Oct: "add zoom and pan feature in this axo", "rotate also"; in `s-wayday`, so the samples have it
 too):** the schematic axo's gestures: a drag turns it (within 0.8 of the deck's angle, 0.35–1.22 from the vertical), a right-drag (or
 Shift) pans in the axo's right/up basis, the wheel (or a trackpad's pinch, ctrl+wheel) zooms on the cursor with its floor point kept
