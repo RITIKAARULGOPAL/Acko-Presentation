@@ -1,6 +1,14 @@
 """The campus strategy's layered axo (deck slide 13), straight from the layout DXF and the 3D renders.
 
 Usage:  python tools/acko/axo_layers.py "<layout>.dxf" [--renders "<dir of acko2A_model*.png>"] [--zones "<neighbourhoods>.dxf"]
+          [--layout "<base plan>.dxf"] [--plants "<vegetation>.dxf"] [--shift DY] [--dy DY] [--rooms rooms.json --scopes scopes.json]
+
+A newer layout (28.10) comes as separate files: --layout takes the furniture, partitions and columns from its base plan,
+--plants the plants from its vegetation drawing, each block placed at the layout's point moved by --shift (mm in y: the 28.10
+set sits 80058 mm below the 22.10 one). The spaces stay the first drawing's, except inside the changed areas (--scopes, the
+outlines of changes.dxf in the 22.10 frame), where they are the checked plan's rooms (--rooms: plan_rooms.py's rooms.json).
+--dy moves everything by that much in y into the frame the renders were fitted in (the affine, routes and mass are kept from
+the last build): the 22.10 DXF re-saved on 26 Oct sits 28582 mm below the one built on 23 Oct.
 
 --zones takes the neighbourhoods, atriums, terraces and the café's zone (AC_CAFETERIA) from a second drawing (ACKO_NEI.dxf,
 23 Oct): its zone block shares the layout's block frame, so it is placed by the layout's zone insert (the drawings were moved
@@ -51,7 +59,9 @@ TYPES = {"WORKHALL": "Workhall", "CORRIDOR": "Corridor", "PHONE_BOOTH": "Phone b
          "RECEPTION": "Reception", "DEPARTMENTAL_ROOMS": "Departmental room", "THE_HATCHERY": "The Hatchery", "NAP_ROOM": "Nap room",
          "BOARD_ROOM": "Boardroom", "PRAYER_ROOM": "Prayer room", "EXECUTIVE_CORNER_CABIN": "Executive corner cabin",
          "HUB_ROOM": "Hub room", "MOTHER'S_ROOM": "Mother's room", "VISITOR_HUB": "Visitor hub", "TERRACE": "Terrace",
-         "MAIL_ROOM": "Mail room", "ZEN_ROOM": "Zen room", "MEDICAL_ROOM": "Medical room"}
+         "MAIL_ROOM": "Mail room", "ZEN_ROOM": "Zen room", "MEDICAL_ROOM": "Medical room",
+         # the 28.10 layout's new rooms (drawn from its walls in plan_rooms.py)
+         "DEALER_ROOM": "Dealer room", "GREEN_ROOM": "Green room", "STORE_ROOM": "Store room"}
 # the neighbourhoods as the renders number them (render -01) and the deck's GIF names them; colours sampled from render -01
 ZONES = [("01", "AUTO", "ACKO Auto", "#c9eaf3"), ("02", "LIFE", "ACKO Life", "#cec1ec"), ("03", "HEALTH", "ACKO Health", "#576cbd"),
          ("04", "TRAVEL", "ACKO Travel", "#e0d3d3"), ("05", "DRIVE", "ACKO Drive", "#ebedd6"), ("06", "HOME", "ACKO Home", "#f0d8e2")]
@@ -347,6 +357,9 @@ def zones_from(path, blocks, ins, grab):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("dxf"); ap.add_argument("--renders"); ap.add_argument("--zones")
+    ap.add_argument("--layout"); ap.add_argument("--plants"); ap.add_argument("--shift", type=float, default=0)
+    ap.add_argument("--dy", type=float, default=0)
+    ap.add_argument("--rooms"); ap.add_argument("--scopes")
     a = ap.parse_args()
     t0 = time.time()
     blocks, model = D.read(a.dxf)
@@ -364,6 +377,27 @@ def main():
          "services": find(lambda L, e: "AC_OUT_OF_SCOPE" in L),
          "plants": find(lambda L, e: sum(v for k, v in L.items() if re.search("PLANT", k, re.I)) > 50),
          "layout": max(placed, key=lambda e: len(blocks[e["n"]]["ents"]) if any(x["t"] == "INSERT" and x["n"] == "base" for x in blocks[e["n"]]["ents"]) else 0)}
+    # a newer layout's base plan and plants, from their own drawings: their blocks join this one's, their insert moved by --shift
+    def take(path, test, what):
+        nb, nm = D.read(path)
+        e = next((x for x in nm if x["t"] == "INSERT" and x["n"] in nb and test(nb, x)), None)
+        if not e: sys.exit(f"--{what}: no such block in {os.path.basename(path)}")
+        # its blocks under their own names: the drawings come from one master, so the same names hold other geometry here
+        ren = lambda n: f"{what}|{n}" if n in nb else n
+        for k, v in nb.items():
+            blocks[ren(k)] = dict(v, ents=[dict(x, n=ren(x["n"])) if x["t"] == "INSERT" else x for x in v["ents"]])
+        m = list(e["m"]); m[5] += a.shift + a.dy
+        print(f"{what} from {os.path.basename(path)} (block {e['n']}), moved {a.shift:.0f} mm")
+        return dict(e, n=ren(e["n"]), m=tuple(m))
+    if a.layout:
+        B["layout"] = take(a.layout, lambda nb, x: any(y["t"] == "INSERT" and y["n"] == "base" for y in nb[x["n"]]["ents"]), "layout")
+    if a.plants:
+        B["plants"] = take(a.plants, lambda nb, x: sum(1 for y in nb[x["n"]]["ents"] if re.search("PLANT", y["l"], re.I)) > 50, "plants")
+    if a.dy:
+        # the drawing back into the frame the renders were fitted in (data's affine, routes, mass): the 22.10 DXF was re-saved
+        # on 26 Oct with everything 28582 mm lower than the 23 Oct build
+        for k in ("zones", "spaces", "services"):
+            if B[k]: m = list(B[k]["m"]); m[5] += a.dy; B[k] = dict(B[k], m=tuple(m))
     print("blocks:", {k: (v["n"] if v else None) for k, v in B.items()})
 
     def world(key, fn):
@@ -396,12 +430,30 @@ def main():
         for p in lst:
             q = ring_of(p)
             if q and 0.3e6 < q.area < 5000e6: spaces.append((t, q))
+    if a.rooms and a.scopes:
+        # inside the changed areas the spaces are the checked plan's rooms (their outlines, in the 22.10 frame, y flipped)
+        sc = unary_union([Polygon([(x, -y - a.dy) for x, y in p]).buffer(0) for p in json.load(open(a.scopes, encoding="utf-8"))])
+        small = lambda q: q.area < 200e6                     # the corridors and workhalls run on outside: kept
+        before = len(spaces)
+        spaces = [(t, q) for t, q in spaces if not (small(q) and sc.contains(q.representative_point()))]
+        dropped, added = before - len(spaces), 0
+        for r in json.load(open(a.rooms, encoding="utf-8"))["rooms"]:
+            t = TYPES.get(r["type"][3:])
+            if not t or not r.get("shape"): continue
+            q = ring_of([(x, y + a.dy) for x, y in r["shape"]])
+            if q and small(q) and 0.3e6 < q.area and sc.contains(q.representative_point()): spaces.append((t, q)); added += 1
+        print(f"spaces in the changed areas: {dropped} of the drawing's out, {added} of the checked plan's in")
     entries = []
     for p in sl.get("AC_ENTRY", []):
         q = ring_of(p)
         if q and all(math.dist((q.centroid.x, q.centroid.y), e) > 2000 for e in entries): entries.append((q.centroid.x, q.centroid.y))
     entries.sort()
     mass = [q for q in (ring_of(p) for p in vl.get("AC_OUT_OF_SCOPE", [])) if q]
+    if not mass and os.path.exists(os.path.join(ROOT, "data", "axo-layers.js")):
+        # no out-of-scope block in the drawing (it has been trimmed): the band is the building's, kept from the last build
+        js = open(os.path.join(ROOT, "data", "axo-layers.js"), encoding="utf-8").read()
+        mass = [Polygon(r).buffer(0) for r in json.loads(js[js.index("{"):js.rindex("}") + 1]).get("mass", [])]
+        print(f"mass: kept from the last build ({len(mass)})")
     print(f"slab {slab.area / 1e6:.0f} m2; zones {len(zones)}, atrium {len(atrium)}, terrace {len(terrace)}, café {len(cafezone)}; spaces {len(spaces)} "
           f"{dict(Counter(t for t, _ in spaces))}; entries {len(entries)}; mass {len(mass)}")
 
@@ -426,7 +478,7 @@ def main():
         return best[0] if best else None
     WALLED = {"Phone booth", "Quick sprint", "Collaboration huddle", "Departmental room", "Boardroom", "Visitor hub", "The Hatchery",
               "Studio", "Zen room", "Mother's room", "Prayer room", "Executive corner cabin", "Hub room", "Server, UPS & battery",
-              "Mail room", "Nap room"}
+              "Mail room", "Nap room", "Dealer room", "Green room", "Store room"}
     def group_at(x, y):
         t = space_at(x, y)
         if t in WALLED: return "rooms"
@@ -437,7 +489,7 @@ def main():
     cache, uses, kinds = {}, [], Counter()
     bid = {}
     for e in lay:
-        if e["t"] != "INSERT" or e["n"] == "base" or SKIP_INS.search(e["l"]) or e["n"] not in blocks: continue
+        if e["t"] != "INSERT" or e["n"].split("|")[-1] == "base" or SKIP_INS.search(e["l"]) or e["n"] not in blocks: continue
         m = D.mul(Mlay, D.insert_m(blocks, e))
         sx = math.hypot(m[0], m[1]); det = m[0] * m[3] - m[1] * m[2]; sy = det / sx if sx else 1
         key = (e["n"], round(sx, 3), round(sy, 3))
@@ -539,7 +591,9 @@ def main():
     colours = dict(PALETTE)
     floors = [[t, ring_out(q, 15), FLOOR_OF.get(t, "room" if t in WALLED else "floor")] for t, q in spaces]
     data = {
-        "source": os.path.basename(a.dxf) + (" (neighbourhoods: " + os.path.basename(a.zones) + ")" if a.zones else "") + " + axo_update renders (acko2A_model*.png)",
+        "source": os.path.basename(a.dxf) + (" (neighbourhoods: " + os.path.basename(a.zones) + ")" if a.zones else "")
+                  + (f"; layout {os.path.basename(a.layout)}" if a.layout else "") + (f", plants {os.path.basename(a.plants)}" if a.plants else "")
+                  + ("; spaces in the changed areas from the checked plan" if a.rooms else "") + " + axo_update renders (acko2A_model*.png)",
         "built": time.strftime("%Y-%m-%d %H:%M"),
         "view": view, "affine": affine, "heights": HEIGHTS, "colours": colours,
         "slab": ring_out(slab, 20), "mass": [ring_out(q, 20) for q in mass], "columns": [ring_out(q, 10) for q in columns],

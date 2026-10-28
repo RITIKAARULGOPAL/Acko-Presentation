@@ -95,7 +95,7 @@
      5 The Employee's Journey         the furniture rises: the rooms' (02), the café (03), the terraces (04), the workstations (05),
                                       the plants (06); the red route draws from the entrances (render 08), the Loop's seven stops
                                       named as it reaches them; the blue route fades
-   Each beat plays forward; going back shows a beat as it ends. A click (not a drag) plays the beat again; drag turns, the wheel
+   Each beat plays going forward and going back, and only then (a click does not replay it); drag turns, the wheel
    zooms, Reset view goes back. Without WebGL, the deck's GIF. */
 ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
@@ -333,7 +333,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     if (S.playing || S.tween || S.swap) need();
   }
 
-  // ---------- turning, zooming, a click to replay ----------
+  // ---------- turning, zooming ----------
   function wire() {
     let drag = null;
     host.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY }; host.setPointerCapture(e.pointerId); host.classList.add("drag"); });
@@ -347,8 +347,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     });
     const up = (e) => {
       if (!drag) return;
-      const click = Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4; drag = null; host.classList.remove("drag");
-      if (click) play(S.k || 1);
+      drag = null; host.classList.remove("drag");
     };
     host.addEventListener("pointerup", up); host.addEventListener("pointercancel", () => { drag = null; host.classList.remove("drag"); });
     host.addEventListener("wheel", (e) => { e.preventDefault(); S.moved = true; S.tween = null; S.state = Object.assign({}, S.state, { half: Math.max(4, Math.min(140, S.state.half * Math.exp(e.deltaY * 0.0012))) }); need(); }, { passive: false });
