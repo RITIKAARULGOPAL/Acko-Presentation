@@ -12,7 +12,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-mobius" data-part="1" data-title="The Möbius" data-steps="1" data-mins="0.4"
-  data-notes="A workplace inspired by the Möbius strip: one continuous surface, one continuous journey, where every connection leads to another. It is ACKO's own mark. So, let's embrace what's next: bold, fresh, fearless. The line runs twice round the strip before it meets itself, lighter where it passes behind: one surface, one side. The ribbon runs twice round the strip, narrow at both ends, softly lighter where it passes behind; without stopping it unwraps: its head runs on along the path and out flat at the right, at the Loop's height, its tail unwinding it off the strip, and the Loop page opens by itself, no click (also when come back to).">
+  data-notes="A workplace inspired by the Möbius strip: one continuous surface, one continuous journey, where every connection leads to another. It is ACKO's own mark. So, let's embrace what's next: bold, fresh, fearless. The line runs twice round the strip before it meets itself, lighter where it passes behind: one surface, one side. The ribbon runs twice round the strip, narrow at both ends, softly lighter where it passes behind; without stopping it unwraps: its head runs on along the path and out flat at the right, at the Loop's height, its tail unwinding it off the strip; the page then stays until you move on.">
   <div class="page">
     <div class="mb-art">
       <img src="assets/img/mobius.webp" alt="">
@@ -54,12 +54,12 @@
 </style>
 <script>
 /* the Möbius (deck slide 10), ribbon version (Ritika, 22 Oct): on the deck's own photo, a ribbon (the Loop's lavender) runs
-   along Ritika's path in a single stroke (5 s, after the copy) from her path's left-most point, twice round the strip and
+   along Ritika's path in a single stroke (1 s, 0.3 s after the copy; 28 Oct: faster) from her path's left-most point, twice round the strip and
    back to it: narrow at both ends, softly lighter where it passes behind. It doesn't stop as it closes ("the ribbon should
    unwrap and go to next slide without beat"): its head runs straight on along the path, up over the top and down the strip's
    right side, and out flat off the right edge at the height where the Loop begins on the next page (her green line), while
-   its tail unwraps it off the strip, faster, and leaves last; as the tail leaves, the next page (s-loop) opens and
-   draws the Loop. It always moves on by itself, also when come back to. Reduced motion: drawn at once, then the next page. */
+   its tail unwraps it off the strip (1 s, after a 0.5 s hold once closed; 28 Oct) and leaves last. Since 28 Oct the page then stays: the presenter moves on to the
+   Loop (it no longer opens by itself). Reduced motion: drawn at once, and stays. */
 ACKO.slide("s-mobius", ({ $, plain, reveal, later, reduced, next }) => {
   const S = { raf: 0, R: null };
   // the strip: a stretch [tail, head] of a route, drawn as filled polygons so that both ends narrow to a point (an SVG
@@ -149,7 +149,7 @@ ACKO.slide("s-mobius", ({ $, plain, reveal, later, reduced, next }) => {
     return [{ pts: sample(bk, toPage, c), back: true }, { pts: sample(f2, toPage), back: false }, { pts: sample(f1, toPage), back: false },
             { pts: sample(bk, toPage, 0, c), back: true }];
   }
-  const MS = 5000, OUT = 4000, ACC = 0.3, TACC = 0.35;      // ms: the draw · the unwrap; the share of each spent speeding up
+  const MS = 1000, HOLD = 500, OUT = 1000, ACC = 0.3, TACC = 0.35;   // ms: the draw · held closed · the unwrap; the share of each spent speeding up
   const XPT = [1612.57, 405.38];                         // where the exit leaves her path (page px)
   const run = (a) => { const v = 1 / (1 - a / 2); return (k) => (k < a ? v * k * k / (2 * a) : v * (a / 2 + k - a)); };   // speeds up, then steady
   const drawn = run(ACC), unwrap = run(TACC), V = 1 / (1 - ACC / 2);    // V: the draw's steady speed, as a share of L per MS
@@ -167,16 +167,18 @@ ACKO.slide("s-mobius", ({ $, plain, reveal, later, reduced, next }) => {
     return (S.R = R);
   }
   // one motion: the draw (the head speeds up, then runs steadily round to the close); then, without a stop, the head carries
-  // on at that speed and out, while the tail unwraps from rest, speeding up past it, and leaves; then the next page
+  // on at that speed and out, while the tail unwraps from rest, speeding up past it, and leaves; the page then stays
+  // (the presenter moves on)
   function play(sc, cv, R) {
     const t0 = performance.now(), v0 = (R.L * V) / MS;      // the head's speed at the close (px/ms)
     const frame = (now) => {
       if (document.body.dataset.scene !== sc.id) return;
       const t = now - t0;
       if (t < MS) { strip(cv, R, 0, R.L * drawn(t / MS), 1); S.raf = requestAnimationFrame(frame); return; }
-      const u = t - MS, k = Math.min(1, u / OUT), tail = R.out * unwrap(k);
+      if (t < MS + HOLD) { strip(cv, R, 0, R.L, 1); S.raf = requestAnimationFrame(frame); return; }     // closed, held
+      const u = t - MS - HOLD, k = Math.min(1, u / OUT), tail = R.out * unwrap(k);
       strip(cv, R, tail, Math.max(R.L + v0 * u, tail), 1);
-      if (k < 1) S.raf = requestAnimationFrame(frame); else next();
+      if (k < 1) S.raf = requestAnimationFrame(frame);
     };
     S.raf = requestAnimationFrame(frame);
   }
@@ -185,9 +187,9 @@ ACKO.slide("s-mobius", ({ $, plain, reveal, later, reduced, next }) => {
       plain(); reveal($(".mb-copy", sc), 600);
       const cv = $(".mr-strip", sc), R = path(sc);
       cancelAnimationFrame(S.raf);
-      if (reduced) { strip(cv, R, 0, R.L, 1); later(() => next(), 1000 + MS); return; }
+      if (reduced) { strip(cv, R, 0, R.L, 1); return; }
       strip(cv, R, 0, 0, 1);
-      later(() => play(sc, cv, R), 1000);
+      later(() => play(sc, cv, R), 300);
     },
     leave() { cancelAnimationFrame(S.raf); },
   };

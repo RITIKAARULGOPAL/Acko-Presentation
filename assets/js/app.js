@@ -10,9 +10,25 @@
   const FACTORIES = {};
   let booted = false;
   const asset = (p) => (window.ASSET_URLS && window.ASSET_URLS[p]) || p;   // an embedded copy in the single file, else the path
+  // ?pick (editing only): the slide in view takes the pointer element by element, so an element picker can select what is
+  // seen. What isn't seen (opacity 0: a later beat's chip or note) and page-size wrappers (a layer the size of the slide,
+  // its children still picked) let it through to what lies beneath; re-checked as the beats change
+  function pickMode() {
+    document.body.classList.add("pick");
+    const tick = () => {
+      const sc = document.querySelector(".scene.active"); if (!sc) return;
+      const S = sc.getBoundingClientRect(), seen = new Map([[sc, 1]]);
+      for (const e of sc.querySelectorAll("*")) {
+        const cs = getComputedStyle(e), op = (seen.get(e.parentElement) ?? 1) * +cs.opacity; seen.set(e, op);
+        const r = e.getBoundingClientRect(), page = e.children.length && r.width * r.height > 0.6 * S.width * S.height;
+        e.classList.toggle("pk-off", op < 0.05 || cs.visibility === "hidden" || page);
+      }
+    };
+    setInterval(tick, 500);
+  }
   window.ACKO = {
     slide(id, factory) { FACTORIES[id] = factory; },
-    start() { if (!booted) { booted = true; boot(); } },
+    start() { if (!booted) { booted = true; if (/[?&]pick\b/.test(location.search)) pickMode(); boot(); } },
     asset,
   };
 

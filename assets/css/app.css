@@ -126,6 +126,12 @@ body.on-photo .lockup i { background: rgba(255,255,255,.6); }
 .scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .7s var(--ease), visibility 0s linear .7s; }
 .scene.active { opacity: 1; visibility: visible; transition: opacity .7s var(--ease) .15s, visibility 0s; }
 .scene.active .ui, .scene.active button, .scene.active a, .scene.active .click, .scene.active [role=button] { pointer-events: auto; }
+/* ?pick in the URL (editing only): every element of the slide in view takes the pointer, so an element picker can select it
+   (the stage normally lets the pointer through to the map and plan beneath) */
+body.pick .scene.active, body.pick .scene.active * { pointer-events: auto !important; }
+body.pick .scene.active .pk-off { pointer-events: none !important; }       /* see-through: unseen, or a page-size wrapper (app.js) */
+html.cx body.pick, html.cx body.pick * { cursor: default !important; }     /* the system pointer, not the presenter's */
+body.pick .cur { display: none !important; }
 .page { position: absolute; left: var(--pl); top: var(--ptop); width: var(--pw); height: var(--ph); font-size: calc(var(--pt) * 8); }
 .page > * { position: absolute; }
 .at { position: absolute; }
