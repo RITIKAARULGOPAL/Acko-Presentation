@@ -155,7 +155,7 @@ ACKO.slide("s-challenges", ({ $, $$, plain, inPoly, reduced }) => {
       stop();
       ["b1", "b2", "b3"].forEach((c, i) => svg.classList.toggle(c, Math.min(k, 3) === i + 1));   // beat 4 keeps beat 3 on screen
       // Distance (02) when the dashed line ends; Disorientation (03) after the "?"; a beat that's past, at once
-      const fwd = k > S.k; S.k = k;                    // forward, the beat plays; back, it shows as it ends
+      const fwd = true; S.k = k;                       // the beat plays, forward or back (28 Oct)
       go(sc, ".cl-dist", k >= 3); go(sc, ".cl-dis", k >= 4);
       if (k >= 2) maze(sc, k === 2 && fwd, () => go(sc, ".cl-dist", true));
       if (k >= 2) marks(sc, k === 3 && fwd, k >= 3 ? () => go(sc, ".cl-dis", true) : null);

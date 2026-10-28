@@ -180,6 +180,11 @@
       state.track = trackOf(next); document.body.dataset.track = state.track;
       state.idx = i; state.chapterT0 = Date.now();
       applyMode(next);
+      // a slide met again (going back to it, or coming round once more) starts from scratch, as the first time: its beats'
+      // and reveals' classes come off, so setting them again plays their entrances (they'd stay shown, and nothing would move)
+      $$("[data-step].shown, [data-only].shown", next).forEach((e) => e.classList.remove("shown"));
+      $$(".go", next).forEach((e) => e.classList.remove("go"));
+      void next.offsetWidth;
       next.classList.add("active"); document.body.dataset.scene = next.id;
       layoutCovers();
       hook(next, "enter");

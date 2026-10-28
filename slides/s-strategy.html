@@ -392,9 +392,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
-      const fresh = S.fresh; S.fresh = false;
-      if (k > S.k && !(fresh && k > 1)) play(k);      // forward: the beat plays
-      else show(k);                                    // back, or arriving from the next slide: the beat as it ends
+      S.fresh = false;
+      play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
     leave() {
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false;

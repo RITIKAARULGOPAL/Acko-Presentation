@@ -114,12 +114,10 @@
 /* the journey (deck slide 5): 1 why an insurance, over five faces of protection; 2 we respect the journey — played as the deck
    plays its one click: collage out, the journey in, the milestones, the timeline flying in, the wordmarks (timings in the CSS) */
 ACKO.slide("s-journey", ({ plain, reduced, raf2 }) => {
-  let fresh = false;  // just arrived: going back lands on beat 2, shown settled rather than replayed
   return {
-    enter() { plain(); fresh = true; },
+    enter() { plain(); },
     step(k, sc) {
-      const instant = reduced || (fresh && k === 2);
-      fresh = false;
+      const instant = reduced;                            // going back plays too (28 Oct), arriving at beat 2 included
       sc.classList.add("rm"); sc.classList.remove("b2");  // back to beat 1 at once
       void sc.offsetWidth;
       if (!instant) sc.classList.remove("rm");

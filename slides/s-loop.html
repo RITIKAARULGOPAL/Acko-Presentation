@@ -100,7 +100,8 @@
    ribbon animation's order, sharper than the GIF's frames; it stops whole, no unwind). As it passes, the title and
    paragraph slide in from the left, and at mid-way the welcome line from the right; then the people and trees come in.
    2 · where emotions matter: the seven stops come up, left to right.
-   Back to beat 1, entering at beat 2 (going backwards) and reduced motion show it all at once. */
+   Going back plays too (28 Oct): back to beat 1 redraws the Loop; coming back to beat 2 draws it, then the stops. Reduced
+   motion shows it all at once. */
 ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset }) => {
   // the ribbon (Sathwick, 28 Oct: the GIF's frames looked soft): the full-colour artwork, 2000 × 780, and its draw order, as the
   // Loop ribbon animation made them (29 Sep): per pixel, R·G its place along the ribbon (16-bit; each crossing belongs to the
@@ -191,7 +192,7 @@ ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset
   // the draw's pace: it comes in at speed (carrying on from the Möbius ribbon going out), runs steadily and slows at the end
   const pace = (k) => { const v = 1 / (1 - DEC / 2); return k > 1 - DEC ? 1 - v * (1 - k) * (1 - k) / (2 * DEC) : v * k; };
   // beat 1, fresh: the Loop drawn from Arrival to its right end, the words sliding in as it passes, then the people
-  function draw(sc) {
+  function draw(sc, then) {
     const T = track(sc), t0 = performance.now();
     paint(sc, 0); sc.classList.add("lp-laid");              // the ribbon's canvas shows from the start, empty, and fills as it is drawn
     const frame = (now) => {
@@ -200,29 +201,32 @@ ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset
       if (h > WORDS_A) sc.classList.remove("lr-hold-a");
       if (h > WORDS_B * T.end) sc.classList.remove("lr-hold-b");
       paint(sc, f);
-      if (k < 1) S.raf = requestAnimationFrame(frame); else { lay(sc); settle(sc); }
+      if (k < 1) S.raf = requestAnimationFrame(frame); else { lay(sc); settle(sc); if (then) then(); }
     };
     S.raf = requestAnimationFrame(frame);
   }
+  // the page as it opens: the ribbon, the words (held off to the sides) and the people wait
+  function empty(sc) {
+    cancelAnimationFrame(S.raf);
+    sc.classList.add("lp-now", "lp-wait", "lr-hold-a", "lr-hold-b"); sc.classList.remove("lp-laid"); paint(sc, 0);
+    $$(".lp-cuts", sc).forEach((c) => c.classList.remove("go"));
+    void sc.offsetWidth; sc.classList.remove("lp-now");
+  }
   const stopOn = (sc, i) => { $$(".lp-stop", sc)[i].classList.add("on"); const l = $(`.lp-leads [data-k="${i}"]`, sc); if (l) l.classList.add("on"); };
   return {
-    enter(_, sc) {
-      plain(); build(sc); cancelAnimationFrame(S.raf); S.fresh = true;
-      // an empty page: the ribbon, the words (held off to the sides) and the people wait
-      sc.classList.add("lp-now", "lp-wait", "lr-hold-a", "lr-hold-b"); sc.classList.remove("lp-laid"); paint(sc, 0);
-      $$(".lp-cuts", sc).forEach((c) => c.classList.remove("go"));
-      void sc.offsetWidth; sc.classList.remove("lp-now");
-    },
+    enter(_, sc) { plain(); build(sc); cancelAnimationFrame(S.raf); S.fresh = true; empty(sc); },
     step(k, sc) {
       clearTimers(); cancelAnimationFrame(S.raf);
       $$(".lp-stop", sc).forEach((s) => s.classList.remove("on"));
       $$(".lp-leads path", sc).forEach((l) => l.classList.remove("on"));
       const fresh = S.fresh; S.fresh = false;
-      if (k === 1) { if (fresh && !reduced) draw(sc); else laid(sc); return; }
-      laid(sc);
-      // the seven stops, left to right, each with its dotted leader (all at once when entering at beat 2, or reduced motion)
-      if (fresh || reduced) { STOPS.forEach((_, i) => stopOn(sc, i)); return; }
-      STOPS.map(([, , d], i) => [d[0], i]).sort((a, b) => a[0] - b[0]).forEach(([, i], m) => later(() => stopOn(sc, i), 250 + m * 320));
+      const stops = () => STOPS.map(([, , d], i) => [d[0], i]).sort((a, b) => a[0] - b[0]).forEach(([, i], m) => later(() => stopOn(sc, i), 250 + m * 320));
+      if (reduced) { laid(sc); if (k === 2) STOPS.forEach((_, i) => stopOn(sc, i)); return; }
+      // every arrival plays (28 Oct, forward or back): beat 1 draws the Loop (from empty when come back to); beat 2 brings the
+      // stops in, after the Loop is drawn when the page has just opened on it (coming back from the next slide)
+      if (k === 1) { if (!fresh) empty(sc); draw(sc); return; }
+      if (fresh) { draw(sc, stops); return; }
+      laid(sc); stops();
     },
     leave() { cancelAnimationFrame(S.raf); S.fresh = false; },
   };

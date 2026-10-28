@@ -389,7 +389,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       if (!S.built || sc.classList.contains("wd-fallback")) return;
       if (!S.follow) whole(false); else user(false);
       S.beat = Math.max(0, Math.min(BEATS.length - 1, k - 1)); setNow(S.beat); shine(-1);
-      S.jump = S.fresh; S.fresh = false; loop();                     // entering (from either side): straight to that part of the day
+      S.jump = false; S.fresh = false; loop();                       // entering (from either side) moves to that part of the day, as a step does (28 Oct)
     },
     leave() {
       cancelAnimationFrame(S.raf); S.raf = 0; shine(-1);
