@@ -325,7 +325,9 @@
   function deckPlan() {
     if (DP.ph) return DP;
     const P = (DP.P = window.PLAN_DXF), host = $("#world-plan"), [vx, vy, vw, vh] = P.viewBox, vb = P.viewBox.join(" ");
-    const imgs = P.levels.map((l) => `<image class="lv lv-${l.ppm}" href="${asset(l.src)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>`).join("");
+    // with the plan's own drawing (data/plan-base.js) it is drawn as vector on a canvas (below); the pictures are the fallback
+    const BASE = window.PLAN_BASE && window.PlanCanvas;
+    const imgs = BASE ? "" : P.levels.map((l) => `<image class="lv lv-${l.ppm}" href="${asset(l.src)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>`).join("");
     const data = { options: { plan: { label: "Layout", viewBox: vb, svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}">${imgs}</svg>`,
       rooms: P.spaces.map((r) => ({ id: r.id, name: r.name, m2: r.m2, x: r.x, y: r.y, d: r.d })),
       teams: P.zones.map((z) => ({ id: z.id, name: z.name, pax: null, seats: z.seats, hot_desks: 0, x: z.x, y: z.y, zone: z.zone, desks: z.desks })) } } };
@@ -350,7 +352,14 @@
     // a hovered room tints its floor under the drawing, as in Mitigata (its "hoverfloor"): the component's rooms layer goes
     // beneath the picture and the vector, which take no pointer events, so the hover still reaches it; teams stay on top
     { const st = host.querySelector(".ph-stage"); st.insertBefore(st.querySelector(".ph-rooms"), st.querySelector(".ph-plan")); }
-    if (window.PLAN_VEC) {
+    if (BASE) {
+      // the plan's drawing on a canvas where the picture was (over the fills and the rooms' hover tint, under the rest),
+      // redrawn whenever the plan's view moves (every SVG layer shares one viewBox)
+      const st = host.querySelector(".ph-stage"), rooms = st.querySelector(".ph-rooms");
+      DP.base = PlanCanvas.mount(st, window.PLAN_BASE, { before: st.querySelector(".ph-plan") });
+      new MutationObserver(() => DP.base.draw(DP.ph.view)).observe(rooms, { attributes: true, attributeFilter: ["viewBox"] });
+      DP.base.draw(DP.ph.view);
+    } else if (window.PLAN_VEC) {
       const svg = DP.ph.addLayer("ph-plan dx-vec", ""), st = host.querySelector(".ph-stage");
       st.insertBefore(svg, st.querySelector(".ph-teams"));
       DP.vec = { svg, g: [] };
