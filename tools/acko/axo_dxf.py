@@ -259,7 +259,9 @@ def main(out_dir):
     b = unary_union([q.buffer(2000) for q in struct + [slab]]).buffer(-2000)
     building = max((b.geoms if isinstance(b, MultiPolygon) else [b]), key=lambda q: q.area)
     rest = Polygon(building.exterior).difference(slab.buffer(100))
-    context = [q.simplify(60) for q in (rest.geoms if isinstance(rest, MultiPolygon) else [rest]) if q.area > 40e6]
+    # the thin rim left between the shell and the slab is no mass: drawn by its outline it would roof the whole floor
+    rest = rest.buffer(-1500).buffer(1500)
+    context = [Polygon(q.exterior).simplify(60) for q in (rest.geoms if isinstance(rest, MultiPolygon) else [rest]) if q.area > 40e6 and not q.interiors]
     near = slab.buffer(300)
     walls = [w for w in (near.intersection(q) for q in walls) for w in (w.geoms if hasattr(w, "geoms") else [w]) if w.geom_type == "Polygon" and w.area > 2e4]
     glass = [g for g in glass if g.intersects(slab)]
@@ -296,8 +298,11 @@ def main(out_dir):
     # floors: the deck's spaces, as the legend colours them
     floors = []
     for s in [s for s in P["spaces"] if s["type"] != "Not in contract"]:      # the hotel band: grey masses already
-        for r in rings_of_d(s["d"]):
-            for q in valid(r): floors.append([s["type"], ring_out(q.simplify(20))])
+        rs = [q for r in rings_of_d(s["d"]) for q in valid(r)]
+        # a space's holes (its furniture, cut out for hover) are not floors of their own: its outer rings only
+        for q in rs:
+            if not any(o is not q and o.area > q.area and o.contains(q.representative_point()) for o in rs):
+                floors.append([s["type"], ring_out(q.simplify(20))])
 
     # walls that border the legend's glass rooms are those rooms' partitions: the axo shows them as the rooms' purple glass
     # (as the deck's axo does), so only the rest stand solid (cores, services, the shell)
