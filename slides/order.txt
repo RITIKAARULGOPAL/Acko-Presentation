@@ -47,9 +47,8 @@ s-material
 s-acoustic
 s-wayfinding
 
-# 5 · SPACE PLANNING (deck 53–60; 61, the occupancy chart, is the layout's Occupancy panel)
+# 5 · SPACE PLANNING (deck 53–54, 58–60: the blow-ups 55–57 removed 28 Oct; 61, the occupancy chart, is the layout's Occupancy panel)
 s-layout
-s-blowup
 s-axo
 s-wayday
 s-thanks
