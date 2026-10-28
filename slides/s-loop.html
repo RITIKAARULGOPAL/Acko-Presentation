@@ -26,9 +26,9 @@
       <i class="lp-cut" style="--i:8;left:78.6%;top:39.0%;width:8.7%;height:21.5%;background-image:url(assets/img/mem-trees.webp);background-size:537.6% 259.1%;background-position:72.0% 8.5%"></i>
       <i class="lp-cut" style="--i:9;left:82.9%;top:48.4%;width:4.4%;height:11.3%;background-image:url(assets/img/mem-trees.webp);background-size:694.4% 321.5%;background-position:47.0% 13.4%"></i>
     </div>
-    <!-- the ribbon: the last frame of the deck's GIF (slide 11), fitted onto the slide-12 ribbon; it passes in front of the trees
-         and people (their white backgrounds vanish under it) at the deck's 75%, as on slide 12. On beat 1 it is drawn along its line from Arrival. -->
-    <canvas class="lp-draw" width="1600" height="671" style="left:0.05%;top:6.75%;width:100.14%;height:74.19%"></canvas>
+    <!-- the ribbon: the full-colour ribbon artwork (2000 × 780, the slide-12 ribbon's own colour), where slide 12 has it; it passes
+         in front of the trees and people (their white backgrounds vanish under it). On beat 1 it is drawn along its line from Arrival. -->
+    <canvas class="lp-draw" width="2000" height="780" style="left:0%;top:9.113%;width:100.028%;height:69.353%"></canvas>
     <!-- the Work figures stay above the ribbon, as in the deck -->
     <div class="lp-cuts lp-top rv" style="left:0;top:0;width:100%;height:100%">
       <i class="lp-cut" style="--i:10;left:91.1%;top:44.9%;width:8.7%;height:10.9%;background-image:url(assets/img/loop-people-6.webp);background-size:211.0% 100.0%;background-position:49.0% 0.0%"></i>
@@ -95,31 +95,20 @@
 <script>
 /* the Loop (deck slides 11–12), ribbon version, after s-mobius (Ritika, 22 Oct).
    1 · the Loop is drawn at once (Ritika: "directly draw the loop - when drawing the loop the text should slide and move in"):
-   the page opens empty, just as the Möbius ribbon has gone out at the right, and the deck's own ribbon is revealed from
-   Arrival along its line to the right end, with a narrow leading end, so the Loop is the deck's artwork from the first pixel
-   (ten pieces, cut where the ribbon comes back near itself, each uncovered along the Loop's line). As it passes, the title and
+   the page opens empty, just as the Möbius ribbon has gone out at the right, and the ribbon artwork is revealed from
+   Arrival along the ribbon to its right end, pixel by pixel in its draw order (28 Oct: the full-colour artwork and the Loop
+   ribbon animation's order, sharper than the GIF's frames; it stops whole, no unwind). As it passes, the title and
    paragraph slide in from the left, and at mid-way the welcome line from the right; then the people and trees come in.
    2 · where emotions matter: the seven stops come up, left to right.
    Back to beat 1, entering at beat 2 (going backwards) and reduced motion show it all at once. */
 ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset }) => {
-  const ALPHA = 0.75;                                       // the deck's slide-12 ribbon opacity
-  const ribbon = new Image(); ribbon.src = asset("assets/img/s-loop/draw-78.webp");
-  // the deck's ribbon in pieces: each one's file, its place in the ribbon's frame (1600 × 671) and its stretch of the Loop's line (page px)
-  const PARTS = [
-    { src: "assets/img/s-loop/ribbon-01.webp", x: 0, y: 24, a: -40.0, b: 906.2 },
-    { src: "assets/img/s-loop/ribbon-02.webp", x: 231, y: 25, a: 906.2, b: 1154.0 },
-    { src: "assets/img/s-loop/ribbon-03.webp", x: 250, y: 227, a: 1154.0, b: 2042.5 },
-    { src: "assets/img/s-loop/ribbon-04.webp", x: 557, y: 339, a: 2042.5, b: 2364.0 },
-    { src: "assets/img/s-loop/ribbon-05.webp", x: 485, y: 236, a: 2364.0, b: 2842.0 },
-    { src: "assets/img/s-loop/ribbon-06.webp", x: 727, y: 235, a: 2842.0, b: 3886.0 },
-    { src: "assets/img/s-loop/ribbon-07.webp", x: 782, y: 245, a: 3886.0, b: 4258.0 },
-    { src: "assets/img/s-loop/ribbon-08.webp", x: 1020, y: 225, a: 4258.0, b: 5610.0 },
-    { src: "assets/img/s-loop/ribbon-09.webp", x: 1108, y: 401, a: 5610.0, b: 5904.0 },
-    { src: "assets/img/s-loop/ribbon-10.webp", x: 1337, y: 432, a: 5904.0, b: 6320.1 },
-  ].map((p) => Object.assign(p, { im: Object.assign(new Image(), { src: asset(p.src) }) }));
-  // the reveal's mask along the Loop's line: narrow at the head, as wide as the band (HWB) TAP behind it, then wide enough
-  // (HM) for the band's widest twist; it starts MARG before each piece's stretch and runs on EXT past the line's ends
-  const HWB = 38.0, TAP = 220.0, TW = 50.0, HM = 100.0, MARG = 24.0, EXT = 40, STEP = 6;
+  // the ribbon (Sathwick, 28 Oct: the GIF's frames looked soft): the full-colour artwork, 2000 × 780, and its draw order, as the
+  // Loop ribbon animation made them (29 Sep): per pixel, R·G its place along the ribbon (16-bit; each crossing belongs to the
+  // strand that reaches it first). The draw shows the pixels in that order and stops with the ribbon whole (no unwind).
+  const ALPHA = 0.75;                                       // the deck's slide-12 ribbon opacity: the people and trees show through
+  const SRC = new Image(), ORD = new Image();
+  SRC.src = asset("assets/img/s-loop/loop-source.webp"); ORD.src = asset("assets/img/s-loop/loop-order.png");
+  const EXT = 40, STEP = 6;                                 // the Loop's line (page px): run on this far past its ends, sampled this often
   const DRAW = [0, 3300], DEC = 0.3;                        // ms: the draw (entering at about the speed the Möbius ribbon left at); its share slowing down at the end
   const WORDS_A = 300, WORDS_B = 0.5;                       // the title and paragraph once the head is this far in (px); the welcome line at this share of the line
   const S = { raf: 0, fresh: false, T: null };
@@ -139,11 +128,39 @@ ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset
       return `<path data-k="${i}" d="M${x1} ${y1}Q${x1} ${(y1 + y2) / 2} ${x2} ${y2}"/>`;
     }).join("");
   }
-  function lay(sc) {                                        // the deck's ribbon on its canvas, whole, once it has loaded
-    const cv = $(".lp-draw", sc);
-    const go = () => { const x = cv.getContext("2d"); x.clearRect(0, 0, cv.width, cv.height); x.globalAlpha = ALPHA; x.drawImage(ribbon, 0, 0, cv.width, cv.height); x.globalAlpha = 1; };
-    if (ribbon.complete && ribbon.naturalWidth) go(); else ribbon.addEventListener("load", go, { once: true });
+  // the artwork's pixels sorted by their place along the ribbon (once both images have loaded): R.sorted[i] is the i-th
+  // pixel drawn; R.out the frame, its colour set and its alpha switched on as the draw passes
+  let R = null;
+  function prep(cv) {
+    if (R) return R;
+    if (!(SRC.complete && SRC.naturalWidth && ORD.complete && ORD.naturalWidth)) return null;
+    const W = cv.width, H = cv.height, px = (im) => {
+      const c = document.createElement("canvas"); c.width = W; c.height = H;
+      const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(im, 0, 0, W, H); return x.getImageData(0, 0, W, H).data;
+    };
+    const art = px(SRC), ord = px(ORD), counts = new Uint32Array(65537);
+    for (let p = 3; p < art.length; p += 4) art[p] = Math.round(art[p] * ALPHA);
+    let total = 0;
+    for (let p = 0; p < W * H; p++) if (art[p * 4 + 3]) { counts[((ord[p * 4] << 8) | ord[p * 4 + 1]) + 1]++; total++; }
+    for (let k = 1; k <= 65536; k++) counts[k] += counts[k - 1];
+    const sorted = new Uint32Array(total);
+    for (let p = 0; p < W * H; p++) if (art[p * 4 + 3]) sorted[counts[(ord[p * 4] << 8) | ord[p * 4 + 1]]++] = p;
+    const frame = new ImageData(W, H), out = frame.data;
+    for (let p = 0; p < W * H * 4; p += 4) { out[p] = art[p]; out[p + 1] = art[p + 1]; out[p + 2] = art[p + 2]; }
+    return (R = { art, sorted, total, frame, out, hi: 0 });
   }
+  // the ribbon drawn up to share f of its pixels (0: empty, 1: whole)
+  function paint(sc, f) {
+    const cv = $(".lp-draw", sc), r = prep(cv);
+    if (!r) { const again = () => paint(sc, f); SRC.addEventListener("load", again, { once: true }); ORD.addEventListener("load", again, { once: true }); return; }
+    const n = Math.round(Math.max(0, Math.min(1, f)) * r.total);
+    if (n === r.hi && cv.dataset.f !== undefined) return;
+    if (n > r.hi) for (let i = r.hi; i < n; i++) { const p = r.sorted[i] * 4 + 3; r.out[p] = r.art[p]; }
+    else for (let i = n; i < r.hi; i++) r.out[r.sorted[i] * 4 + 3] = 0;
+    r.hi = n; cv.dataset.f = f;
+    cv.getContext("2d").putImageData(r.frame, 0, 0);
+  }
+  const lay = (sc) => paint(sc, 1);                         // the ribbon whole
   function norm(a, b) { const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; }
   // the Loop's line (page px, about every STEP, with normals), run on straight for EXT past both ends; 0 where it enters the page
   function track(sc) {
@@ -157,42 +174,8 @@ ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset
     T.pts.forEach((p, i) => T.ss.push(i ? T.ss[i - 1] + Math.hypot(p[0] - T.pts[i - 1][0], p[1] - T.pts[i - 1][1]) : 0));
     const z = T.ss[Math.ceil(EXT / STEP)]; T.ss = T.ss.map((v) => v - z);
     T.nn = T.pts.map((_, i) => { const u = norm(T.pts[Math.max(0, i - 1)], T.pts[Math.min(T.pts.length - 1, i + 1)]); return [-u[1], u[0]]; });
-    T.end = T.ss[T.ss.length - 1]; T.done = T.end + MARG + TAP + TW;
+    T.end = T.ss[T.ss.length - 1];
     return (S.T = T);
-  }
-  const hw = (dl) => {                                      // the mask's half-width at dl behind the head
-    if (dl <= 0) return 0;
-    if (dl <= TAP) { const u = dl / TAP; return HWB * (0.08 + 0.92 * u * u * (3 - 2 * u)); }
-    return HWB + (HM - HWB) * Math.min(1, (dl - TAP) / TW);
-  };
-  const tmp = document.createElement("canvas");
-  // the deck's ribbon revealed along the Loop's line up to h (page px along it): each piece through the mask, or whole once
-  // the mask has passed all of it. At the end it is the ribbon, pixel for pixel, as lay() draws it.
-  function unveil(sc, h) {
-    const cv = $(".lp-draw", sc), x = cv.getContext("2d"), T = track(sc);
-    if (tmp.width !== cv.width || tmp.height !== cv.height) { tmp.width = cv.width; tmp.height = cv.height; }
-    const t = tmp.getContext("2d"), ax = (p) => [(p[0] - 0.96) / 1.20168, (p[1] - 72.9) / 1.19412];   // page px → the ribbon's frame
-    x.clearRect(0, 0, cv.width, cv.height); x.globalAlpha = ALPHA;
-    PARTS.forEach((p) => {
-      if (!p.im.complete || !p.im.naturalWidth || h <= p.a - MARG) return;
-      if (h >= p.b + MARG + TAP + TW) { x.drawImage(p.im, p.x, p.y); return; }
-      const w = p.im.naturalWidth, ht = p.im.naturalHeight, s1 = Math.min(h, p.b + MARG);
-      const Q = []; T.ss.forEach((s, i) => { if (s >= p.a - MARG && s < s1) Q.push([T.pts[i], T.nn[i], s]); });
-      let i = T.ss.findIndex((s) => s >= s1); i = i < 0 ? T.ss.length - 1 : Math.max(1, i);
-      const f = Math.max(0, Math.min(1, (s1 - T.ss[i - 1]) / ((T.ss[i] - T.ss[i - 1]) || 1))), L = (u, v) => u + (v - u) * f;
-      Q.push([[L(T.pts[i - 1][0], T.pts[i][0]), L(T.pts[i - 1][1], T.pts[i][1])], [L(T.nn[i - 1][0], T.nn[i][0]), L(T.nn[i - 1][1], T.nn[i][1])], s1]);
-      const E = Q.map(([q, n, s]) => { const r = hw(h - s); return [ax([q[0] + n[0] * r, q[1] + n[1] * r]), ax([q[0] - n[0] * r, q[1] - n[1] * r])]; });
-      t.globalCompositeOperation = "source-over"; t.clearRect(p.x, p.y, w, ht); t.beginPath();
-      for (let j = 0; j + 1 < E.length; j++) {              // one quad per step, all turned the same way so that they join
-        const [a, b] = E[j], [c, d] = E[j + 1], q = [a, c, d, b];
-        const area = q.reduce((sum, v, m) => sum + v[0] * q[(m + 1) % 4][1] - q[(m + 1) % 4][0] * v[1], 0);
-        (area < 0 ? q.reverse() : q).forEach((v, m) => (m ? t.lineTo(v[0], v[1]) : t.moveTo(v[0], v[1]))); t.closePath();
-      }
-      t.fillStyle = "#000"; t.fill();
-      t.globalCompositeOperation = "source-in"; t.drawImage(p.im, p.x, p.y); t.globalCompositeOperation = "source-over";
-      x.drawImage(tmp, p.x, p.y, w, ht, p.x, p.y, w, ht);
-    });
-    x.globalAlpha = 1;
   }
   // the people and trees come in (once)
   function settle(sc) {
@@ -210,13 +193,13 @@ ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset
   // beat 1, fresh: the Loop drawn from Arrival to its right end, the words sliding in as it passes, then the people
   function draw(sc) {
     const T = track(sc), t0 = performance.now();
-    unveil(sc, -1e9); sc.classList.add("lp-laid");          // the ribbon's canvas shows from the start, empty, and fills as it is drawn
+    paint(sc, 0); sc.classList.add("lp-laid");              // the ribbon's canvas shows from the start, empty, and fills as it is drawn
     const frame = (now) => {
       if (document.body.dataset.scene !== sc.id) return;
-      const k = Math.min(1, Math.max(0, (now - t0 - DRAW[0]) / (DRAW[1] - DRAW[0]))), h = T.done * pace(k);
+      const k = Math.min(1, Math.max(0, (now - t0 - DRAW[0]) / (DRAW[1] - DRAW[0]))), f = pace(k), h = f * T.end;   // h: about where along the line
       if (h > WORDS_A) sc.classList.remove("lr-hold-a");
       if (h > WORDS_B * T.end) sc.classList.remove("lr-hold-b");
-      unveil(sc, h);
+      paint(sc, f);
       if (k < 1) S.raf = requestAnimationFrame(frame); else { lay(sc); settle(sc); }
     };
     S.raf = requestAnimationFrame(frame);
@@ -226,7 +209,7 @@ ACKO.slide("s-loop", ({ $, $$, plain, reveal, later, clearTimers, reduced, asset
     enter(_, sc) {
       plain(); build(sc); cancelAnimationFrame(S.raf); S.fresh = true;
       // an empty page: the ribbon, the words (held off to the sides) and the people wait
-      sc.classList.add("lp-now", "lp-wait", "lr-hold-a", "lr-hold-b"); sc.classList.remove("lp-laid"); unveil(sc, -1e9);
+      sc.classList.add("lp-now", "lp-wait", "lr-hold-a", "lr-hold-b"); sc.classList.remove("lp-laid"); paint(sc, 0);
       $$(".lp-cuts", sc).forEach((c) => c.classList.remove("go"));
       void sc.offsetWidth; sc.classList.remove("lp-now");
     },
