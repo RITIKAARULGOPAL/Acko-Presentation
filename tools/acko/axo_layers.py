@@ -1,6 +1,10 @@
 """The campus strategy's layered axo (deck slide 13), straight from the layout DXF and the 3D renders.
 
-Usage:  python tools/acko/axo_layers.py "<layout>.dxf" [--renders "<dir of acko2A_model*.png>"]
+Usage:  python tools/acko/axo_layers.py "<layout>.dxf" [--renders "<dir of acko2A_model*.png>"] [--zones "<neighbourhoods>.dxf"]
+
+--zones takes the neighbourhoods, atriums, terraces and the café's zone (AC_CAFETERIA) from a second drawing (ACKO_NEI.dxf,
+23 Oct): its zone block shares the layout's block frame, so it is placed by the layout's zone insert (the drawings were moved
+apart in CAD).
 
 The DXF (ACKO_BOUNDARY_HATCH_ALL_22_10_26.dxf) is drawn in the renders' layers: one block each, all inserted at one point.
 They are found by what they hold, not by their (random) names:
@@ -17,7 +21,7 @@ in the last data/axo-layers.js are reused.
 Writes data/axo-layers.js (window.AXO_LAYERS), plan mm with y down (the DXF's y negated), and check pictures in
 tools/_work/axo-layers/:
   slab      the façade line (the floor)              mass      the out-of-scope band (grey blocks)
-  columns   rings                                    zones     [{n, key, name, colour, ring}]; atrium, terrace: rings
+  columns   rings                                    zones     [{n, key, name, colour, ring}]; atrium, terrace, cafezone: rings
   spaces    [[type, ring], ...]                      walled    the space types with glass walls (rooms)
   entries   [[x, y], ...]                            blocks / uses   furniture shapes per block and their placements:
   plants    [[x, y, r], ...]                                   uses: [block, a, b, c, d, e, f, group]
@@ -320,8 +324,29 @@ def network(lines, sources, gap=9000):
     return runs
 
 
+def zones_from(path, blocks, ins, grab):
+    """the neighbourhoods from a second drawing (ACKO_NEI.dxf): its zone block (AC_AUTO and AC_HOME) is drawn in the same frame
+    as the layout's, the frame being the block's largest outline; placed by the layout's zone insert, so it lands on the floor
+    wherever that drawing was moved to. -> {layer: [points]}"""
+    nb, nm = D.read(path)
+    found = [e for e in nm if e["t"] == "INSERT" and e["n"] in nb and {"AC_AUTO", "AC_HOME"} <= {x["l"] for x in nb[e["n"]]["ents"]}]
+    if not found or not ins: sys.exit(f"--zones: no neighbourhood block (AC_AUTO and AC_HOME) in {os.path.basename(path)}")
+    def frame(bl, name):
+        loops = [p for x in bl[name]["ents"] for p in x.get("p", []) if len(p) >= 4]
+        p = max(loops, key=lambda q: Polygon(q).area)
+        return [min(x for x, y in p), min(y for x, y in p), max(x for x, y in p), max(y for x, y in p)]
+    f0, f1 = frame(blocks, ins["n"]), frame(nb, found[0]["n"])
+    if max(abs(u - v) for u, v in zip(f0, f1)) > 1:
+        sys.exit(f"--zones: the block's frame {[round(v) for v in f1]} is not the layout's {[round(v) for v in f0]}")
+    zl = defaultdict(list)
+    D.walk(nb, nb[found[0]["n"]]["ents"], grab(zl), m=D.insert_m(blocks, ins))
+    print(f"neighbourhoods from {os.path.basename(path)} (block {found[0]['n']}, framed as {ins['n']}): "
+          + ", ".join(f"{k} {len(v)}" for k, v in sorted(zl.items())))
+    return zl
+
+
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("dxf"); ap.add_argument("--renders")
+    ap = argparse.ArgumentParser(); ap.add_argument("dxf"); ap.add_argument("--renders"); ap.add_argument("--zones")
     a = ap.parse_args()
     t0 = time.time()
     blocks, model = D.read(a.dxf)
@@ -354,6 +379,8 @@ def main():
         return fn
     zl, sl, vl = defaultdict(list), defaultdict(list), defaultdict(list)
     world("zones", grab(zl)); world("spaces", grab(sl)); world("services", grab(vl))
+    if a.zones:
+        zl = zones_from(a.zones, blocks, B["zones"], grab)
     slab = ring_of(max(sl["AC_GLAZING"], key=lambda p: Polygon(p).area))
     zones = []
     for n, key, name, col in ZONES:
@@ -361,6 +388,7 @@ def main():
         if r: zones.append({"n": n, "key": key, "name": name, "colour": col, "ring": ring_out(max(r, key=lambda q: q.area), 20)})
     atrium = [ring_out(q, 20) for q in (ring_of(p) for p in zl.get("AC_ATRIUM", [])) if q and q.area > 20e6]
     terrace = [ring_out(q, 20) for q in (ring_of(p) for p in zl.get("AC_TERRACE", [])) if q and q.area > 20e6]
+    cafezone = [ring_out(q, 20) for q in (ring_of(p) for p in zl.get("AC_CAFETERIA", [])) if q and q.area > 20e6]
     spaces = []
     for L, lst in sl.items():
         t = TYPES.get(L[3:])
@@ -374,7 +402,7 @@ def main():
         if q and all(math.dist((q.centroid.x, q.centroid.y), e) > 2000 for e in entries): entries.append((q.centroid.x, q.centroid.y))
     entries.sort()
     mass = [q for q in (ring_of(p) for p in vl.get("AC_OUT_OF_SCOPE", [])) if q]
-    print(f"slab {slab.area / 1e6:.0f} m2; zones {len(zones)}, atrium {len(atrium)}, terrace {len(terrace)}; spaces {len(spaces)} "
+    print(f"slab {slab.area / 1e6:.0f} m2; zones {len(zones)}, atrium {len(atrium)}, terrace {len(terrace)}, café {len(cafezone)}; spaces {len(spaces)} "
           f"{dict(Counter(t for t, _ in spaces))}; entries {len(entries)}; mass {len(mass)}")
 
     # columns: the layout's S-COLS outlines, one per column
@@ -511,11 +539,11 @@ def main():
     colours = dict(PALETTE)
     floors = [[t, ring_out(q, 15), FLOOR_OF.get(t, "room" if t in WALLED else "floor")] for t, q in spaces]
     data = {
-        "source": os.path.basename(a.dxf) + " + axo_update renders (acko2A_model*.png)",
+        "source": os.path.basename(a.dxf) + (" (neighbourhoods: " + os.path.basename(a.zones) + ")" if a.zones else "") + " + axo_update renders (acko2A_model*.png)",
         "built": time.strftime("%Y-%m-%d %H:%M"),
         "view": view, "affine": affine, "heights": HEIGHTS, "colours": colours,
         "slab": ring_out(slab, 20), "mass": [ring_out(q, 20) for q in mass], "columns": [ring_out(q, 10) for q in columns],
-        "zones": zones, "atrium": atrium, "terrace": terrace,
+        "zones": zones, "atrium": atrium, "terrace": terrace, "cafezone": cafezone,
         "floors": floors, "walled": sorted(WALLED), "entries": [[round(x), round(y)] for x, y in entries],
         "blocks": blk, "uses": uses, "loose": loose, "plants": plants,
         "routes": routes, "stops": stops,

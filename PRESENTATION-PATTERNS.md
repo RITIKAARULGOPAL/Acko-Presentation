@@ -526,6 +526,10 @@ West, Middle and East fly an orthographic camera along it.
 - **Labels stay off the copy:** stop names try above their dot (stepping past names already placed), then below, never over the title, paragraph or hand line (their text ranges, measured once fonts are in).
 - **Heights measured on the renders** (vertical px per mm from the camera): rooms' glass 2.45 m, columns 3.8, the grey band 3.7, façade 4.5.
 - **Marks where the deck's animation has them (her note, 23 Oct: "align the arrow and text like how it is placed in the ppt"):** the PPT's GIF is placed at its slide box (its picture box less the crop's padding), and each mark is measured on it in page px: the entrances (a maroon ▲, apex a little right of centre), the ten names (condensed bold italic capitals, each in its zone's tone), the numbers' centres and sizes. In the slide they're a table of page positions; at the home view each is back-projected along the camera's ray onto a level (names 3 m, atrium/terrace 1.5 m, arrows 4.5 m, numbers on the volumes' tops), so a drag or zoom still carries it with the model. Check by an overlay on the PPT frame (side-by-side crops at 2×): every mark within about 5 px.
+- **New boundaries from a second drawing (her note, 23 Oct: "use these boundaries for the selected slide", `ACKO_NEI.dxf`):** a drawing that holds only the neighbourhoods, moved elsewhere in CAD, is placed by its block's frame: the zone block's largest outline (its `OUTLINE`) is the same rectangle as the layout's zone block's, so its shapes go through the layout's own zone insert (`axo_layers.py --zones`; it stops if the frames differ by more than 1 mm). Only the zones, atriums, terraces and the new café zone change (diff the data); the marks of the zones that moved (05 Drive, 04 Travel, the café) are re-measured by projecting each new outline at the home view (numbers at the centroid on the volume's top, names along the zone's south edge at 3 m), the rest kept.
+- **Configurable names (her note, 23 Oct: "show the names of neighbourhoods can be configured based on the occupancy … and proximity"; "no need to show definite count or proximity, just add text"; then, 26 Oct, "remove the text": the beat has none):** a beat of its own after the neighbourhoods. The zones are places (their numbers stay); a department is its name plus its colour, and the two travel together: the name on a low arc between the zones' name points (each zone's point is where the deck names its own department), the slab cross-fading to the department's colour and opacity (Health's deeper blue goes with Health). The play is a pure function of t: the carousel, her pick of six (`index-configure.html`), every department stepping one zone along the floor, twice, then back; after it, two clicks on names swap them (`.click` toggled on only then, so the names never block a drag); any other beat, or coming back, resets to the plan.
+- **An evolution of planning and massing (her note, 26 Oct: "remove furniture and partitions … only the bare shell … so it should look like a complete evolution of planning and massing"):** five beats, each adding one layer: the bare shell (slab, core, columns, façade) → the neighbourhoods → configuring them → the partitions with the floor's colour and the client's route → the furniture with the employee's route and the Loop's stops. The model's `partitions` group (the rooms' glass) is split from `rooms` (the furniture in them) so each can come on its own; each beat's `pose()` sets every group from the beat alone, so going back shows a beat exactly as it ends.
+- **The same axo size on two slides (her note, 26 Oct: "size of axo should be same in both the slides", 13 and 14):** the live model's frame (`FIT`, the box `AxoLayers.frame` contains the floor in) is moved and scaled so its west and east tips land on the tips of slide 14's picture (measured on the image's non-white pixels through its CSS placement), checked by blending the two screenshots. The marks measured on the PPT's GIF keep the old box: `pin()` back-projects them with a home view framed at `FIT_MARKS`, so each stays on its place on the model. Stop labels keep on the page and off the tools as well as the copy. Then (her pick, 26 Oct: "copyright back on both, axos made smaller") both floors at 95% about page (1606, 10.8), the picture's top edge at the east tip: slide 14's picture and SVG overlay by a CSS `scale(.95)` with each box's own transform-origin for that point, slide 13 by the same similarity applied to its `FIT`; the floor's lowest point goes from y 1065 to 1012, clear of the copyright line (y 1040-1056).
 
 ## 25. Value-addition layers on the layout, from a drawing with named layers
 **What (Ritika, 22–23 Oct):** "add multiple layers on layout to show that we have done all the value addition in the layout and axo"; the layout as four layers (Spaces, Neighbourhoods, Biophilia, Acoustics), each a beat, from the approved mockup (`mockups/layout-layers.html`); then "use [the 22.10 DXF] now".
@@ -553,3 +557,131 @@ slide's own objects in the shared model (s-wayday's walker, pins and trail) sit 
 removed (then `M.reset()`) on leave, so s-axo never shows them. A frame loop runs only while its slide is on, and waits for a real size
 (a hidden pane reports 0 × 0: an aspect of NaN otherwise poisons the camera). Entering a stepped walk from either side jumps straight
 to that beat's stop; only the next beats walk.
+
+## 26. Looks for the shared axo: the PPT's colours, or white with cast shadows and textures (s-axo · s-wayday)
+**What (Ritika, 26 Oct):** "make this axo completely plain white with shadows and depth and textures", for both axos (s-wayday is a
+wayfinding slide; she will colour the wayfinding elements alone later). The day's story (walker, pins, trail, the red entrance marks),
+the plants and the grass keep their colour. Four samples to compare first: `index-axowhite.html` (`s-axw-1 … 4`, not in `order.txt`).
+
+**How (`assets/js/axo-model.js`):**
+- **Kinds:** every material is tagged with a kind when made (slab, the floor types, wall, mass, service, sill, desk, chair, store,
+  mullion, glass, pane, the inks) and keeps its PPT colour in `userData.ppt`; `AxoModel.look(name)` recolours by kind and redraws,
+  `AxoModel.look()` gives the current one. `"ppt"` (as built) stays the default until she picks; `AxoModel.LOOKS` lists the others
+  (`clay`, `clay-tex`, `crisp`, `warm`).
+- **UVs and textures:** every box gets box-mapped UVs in metres (tops x/z, sides z/y or x/y), so the procedural near-white canvas
+  textures (concrete, terrazzo, plaster, wood grain, fabric; drawn once, no files) tile at real scale.
+- **Shadows:** the shared renderer has its shadow map on; only the white looks' sun casts (a 4096 map fitted round the slab as the sun
+  sees it), so the PPT look and slide 13 cost nothing. Walls, mass, furniture and plants cast; everything but glass receives. A sample
+  slide also sets its walker and pins to cast.
+
+**Gotcha:** put the sun well off the camera's azimuth. The deck's axo looks from θ ≈ −0.61; a sun at that azimuth (behind the camera)
+throws every shadow straight behind what casts it, so the floor shows none even though the shadow map is right. The looks' sun is 50°
+to the camera's left (65° and lower for the warm look), so shadows fall to the right and walls read in three tones.
+
+## 27. A SketchUp model in the deck, read headless (A day for a new Acker · samples)
+**What (Ritika, 26 Oct):** "build the axo based on this skp file" (`acko2A_model.skp`, 199 MB, saved by SketchUp 2026), for A day
+for a new Acker only, its look by samples again: `index-axowhite.html` (`s-axw-1 … 5`: Clay, Clay + textures, Crisp, Warm white,
+SketchUp colours). The deck's `s-wayday` stays on the DXF model until she picks.
+
+**Reading it:** SketchUp 2023's own C library (`SketchUpAPI.dll` in its install folder) opens newer files too, headless, through
+Python `ctypes` (`tools/acko/skp_read.py`: definitions, placements and transforms, faces triangulated by `SUMeshHelper`, materials with
+a texture's average colour, tags, a scene's hidden entities). No SketchUp window, nothing installed, nothing uploaded.
+
+**Making it light (`tools/acko/axo_skp.py` → `data/axo-skp.js`, 7 MB):** 101.7 M faces counted in full, but ~500 definitions.
+- **Units:** the highest definitions small enough (≤ 400 k faces in full, ≤ 8 m across: a whole chair, a desk cluster, a plant) are
+  flattened, simplified by vertex clustering and drawn once per placement (`InstancedMesh`); one used once joins the static mesh.
+- **Two levels:** 3.5 cm cells (about a pixel in the walk's close-ups, 4.7 M triangles) and 7 cm (Whole floor, 1.3 M), switched in
+  the scene's `onBeforeRender` by the camera's half-height. 60 fps on an Intel Iris Xe either way.
+- **Kinds per triangle** (glass by opacity, plants by tag and green, wood / soft / hard by material name, floor / wall / top / slab
+  by height and slope, the terrace's olive as grass) drive the looks: `AxoModel.looks` is now shared (`apply(registry, name)`), with
+  a `sketchup` look (own colours under the sun). The zones' floors lie in the base floor's plane: lifted 4 mm.
+- **Massing, not glass (Ritika, 26 Oct: "The Not in contract should be a solid white mass and not translucent"):** the band is a
+  box in a see-through grey (`M03_Pewter_Shine`), so it read as glass. A see-through material with a large top that is mostly top
+  (over 20 m², over 30% of its area) is a massing material: every face in it becomes the kind `mass`, solid white in every look,
+  casting, edged, and an obstacle for the route. Glass panes (upright, whatever their tops) stay glass.
+- **Frame:** SketchUp metres onto the DXF slab (y flipped, shifted by FFT-matching the footprints; IoU 0.80, the model's floor also
+  runs under the band) and written in AxoModel's world frame, so the route, pins and walker sit where they did.
+
+**Gotchas:**
+- `InstancedMesh` in r147 is culled by its base geometry: `frustumCulled = false`.
+- Flat shading needs no normals, but the shadow lookup's normal bias does: without them it is NaN and nothing is in shadow.
+- The shadow map is drawn once per look (`shadowMap.autoUpdate = false` in AxoSkp's scene, `true` again in AxoModel's); the walker
+  doesn't cast (it moves), the pins do.
+- The model's café is closed off differently from the DXF's (a counter, planters, a curved bench round the terrace): legs that cross
+  walls or glass away from their ends (doors) are walked again by A* (corridor floor preferred; furniture, grass, planters avoided):
+  `AXO_SKP.route`, used through `AxoSkp.route(legs)`. Check pictures in `tools/_work/axo-skp/` (frame, route, crossings).
+
+**Her pick (26 Oct: "go with sample 5"):** the deck's `s-wayday` runs on `AxoSkp` in the `sketchup` look (SketchUp's colours under the
+sun, with shadows), the route as walked on that model; the DXF model (`AxoModel`) only if `data/axo-skp.js` is missing. The
+comparison page stays as it was (its generator worked from the older s-wayday).
+
+**Her marked spots (27 Oct: "I've marked certain blocks as Wayfinding-Signage, -Graphics, -Artwork, -Collab, -Workhall … these are the
+spots I want to show … it should still sound like a day for a new Acker"):** `tools/acko/wayday_marks.py` reads the blocks' inserts
+from the boundary DXF and writes the slide's generated `WAY` line (stops, legs, marks); the words are the slide's own `DAY`.
+- **Frame, in two fits:** the layout block's `A-WALL` lines onto `AXO_DXF`'s walls (FFT, 50 mm), then a fine shift (here 0.4 / 0.5 m)
+  onto the SketchUp model's own walls (route.npz): the model was registered by its floor's footprint and sits a little off.
+- **Where to stand:** a wall mark from 1.2 m in front, along the wall if furniture is in the way (Reception's lounge), on the side
+  it is read from (a sign from its own space; art and the graphic from the corridor); the workhall's desk 40% of the way on to the
+  Collab (its patches lie either side of a corridor, so their middle is the corridor); legs by `axo_skp.Walker`'s A*.
+- **Drawn:** signs as standing panels, artworks as wall panels, the graphic as a wall wrap, the Collab and workhall as tinted floor;
+  purple until her colours, the current stop's strongest.
+
+**Zoom, pan and turn (Ritika, 26 Oct: "add zoom and pan feature in this axo", "rotate also"; in `s-wayday`, so the samples have it
+too):** the schematic axo's gestures: a drag turns it (within 0.8 of the deck's angle, 0.35–1.22 from the vertical), a right-drag (or
+Shift) pans in the axo's right/up basis, the wheel (or a trackpad's pinch, ctrl+wheel) zooms on the cursor with its floor point kept
+fixed, 4–90 m half-height. `mix()` eases the angles too, so going back swings to the deck's angle. The view is then hers (`S.user`): the walk's camera stops easing, the signage card fades while
+its pin is out of the open part of the view, and a double-click, Reset view (shown only then), Walk the day, Whole floor or the
+next beat gives the view back to the walk. `touch-action: none` on the canvas; beats advance from the keyboard, so a drag never
+skips one.
+
+**The hotspot pin, six samples (Ritika, 27 Oct: "give different variations for the hotspot pin in different html"):** `index-pins.html`
+(`s-pin-1 … 6`, each also a page of its own; not in `order.txt`; made by the session's scratch `pin/make_pin.py` from `s-wayday`):
+1 Map pin (a 3D teardrop over the walker, its white dot turned to the viewer), 2 Floor beacon (dot and ring on the floor, rings
+pulsing out), 3 Numbered badge and 4 Time tag (labels facing the viewer on a hairline, the same size on screen at any zoom),
+5 Light column (a beam fading upward), 6 Flat hotspot (HTML over the model, like the keyplan's camera mark). All maroon; the current
+stop strongest, the stops done quieter, the ones to come lighter. In each, `PIN` replaces the slide's pin: `state(i)` from
+`setNow`, `tick(now, view)` before each render, `anchor(i)` / `lift()` for the card's leader, `cast` for the shadow map.
+- **The same size on screen** in the orthographic view: scale by `2 · view.half` (world per page height); a stem of p px stands
+  `p / sin(phi)` tall (a vertical projects by sin phi). Sprites ignore `sizeAttenuation` under an orthographic camera.
+- **Project before the render:** `cam.updateMatrixWorld()` after `AxoModel.apply`, or what is placed from `project()` lags a frame.
+- **Her pick (27 Oct):** 5, the light column, in the amber of her text image (`#F2A33A`); see §28.
+
+## 28. A day in ACKO: people in the spaces, light-column hotspots, a free turn, soft shadows (s-wayday)
+**What (Ritika, 27 Oct, picking the light column):** "use the yellow in the text for light column ... model should rotate 360 degs
+... the light column hotspot would have pop up ... tiny humans doing activity in each space when we zoom to that particular space
+... one guy walking throughout is not required, instead we'll have a day in acko ... humans can be in monochromatic dark grey ...
+the shadow is too harsh, make it soft." Her answers: the Loop's seven stops by the clock; hotspots always there, a pop-up on click;
+amber `#F2A33A`; "A day in ACKO".
+- **The day:** `BEATS` (time, stop, line, the Loop's words from `s-loop`, the space's plan point, a half-height); each beat eases the
+  camera to its space, offset right of the copy. Entering jumps there once the view has a size (`S.jump`, set in `step`, done in
+  the frame after `sizeUp`), since `step` runs before the first frame.
+- **People from the drawing's chairs** (`tools/acko/wayday_people.py` → the slide's generated `PEOPLE` line): AXO_DXF's chairs
+  (blocks by their uses, and loose), each facing the nearest desk edge within 1.2 m (a KD-tree of desk edges every 50 mm), shifted
+  onto the SketchUp model's walls (`wayday_marks.refine` of AXO_DXF's wall rings: 0.45 / 0.40 m). Who sits where goes by the plan's
+  space types (meeting rooms half in session, a presenter past the end of the room's seats; workhalls 60%; the café 45%), plus
+  standing scenes (Reception visitors, a Collab huddle, pairs talking, waiting at the lifts) on free cells of the route grid
+  (the terraces' grass allowed) and 40 walkers on A* corridor paths there and back. The SketchUp data's own chairs could not be
+  found (furniture is typed by material; seat-height blobs too sparse), so the drawing's are used.
+- **Figures:** one merged low-poly figure per pose (sit, stand, present, yoga, walk) from cylinders, a sphere and a box, facing +z,
+  in `0x4a4a4a`; an `InstancedMesh` per pose with `frustumCulled = false` (r147 culls instances by the base geometry), a faint
+  disc under each. Shown below a half-height of 30 m (every beat), hidden on Whole floor.
+- **Hotspots:** the pin samples' light column in amber, at `WAY.stops`; the whole column (height too) scales by `max(1, half/15)` so
+  it reads on Whole floor. A click (a pointerup with no drag) picks the nearest light on screen (its base-to-top line, within its
+  width or 14 px); hovering shows a pointer; Esc (a capture listener, before the deck's keys), a click elsewhere or the next beat
+  closes it. Her purple marks: the open spot's strongest.
+- **A free turn:** the drag's theta unclamped; `mix()` eases theta by its difference wrapped to ±π, so the way back is the short one.
+- **Soft shadows (axo-model.js, Shared):** a look key `blur` (texels): with it the renderer uses `PCFShadowMap` and
+  `shadow.radius = blur` (PCFSoft ignores the radius; r147 rebuilds programs when the type changes). The sketchup look: sun 0.7,
+  sky 0.8, ground `#e4e4e8`, blur 5.
+- **The Acker Garden at the Collab (Ritika, 27 Oct: "for collab area, do the exact furniture and raised flooring that's there in
+  the skp ... add punch bags and all", with `r-garden-op2` and her SketchUp view):** the 26 Oct file had none of it; her
+  `workhall 2.skp` has the deck, swing, punch bag, lounge chairs and chess, pouf, rug, side table, planters, pendants and the
+  purple tube lights. Converting that file whole broke the floor (its partitions are typed as furniture: 0.4% of the walking
+  grid read as wall, no corridor; marks and walkers lost), and its footprint fit came 2.4 m off. So `axo_skp.py --graft`: the
+  26 Oct model as before (`--shift` keeps its registration), its furniture inside a SketchUp-metre box at the west tip taken out,
+  the newer save's furniture in the same box put in (same axes: fixed pieces agree within 0.1-0.3 m), coloured and typed by its
+  own materials; a placement counts as furniture if its middle is in the box, it is under 12 m, more than 8 faces, not on a
+  wall's tag, above the floor (triangles under it dropped: a copy of the bag 3 m down), and not an upright roller blind (thin,
+  high, 0.3 m+ tall: from above they stood between the view and the room). The foosball in her view is not in that file: the
+  slide draws a white one (`PEOPLE.props`). People there come from the pieces (in the swing, in the chairs over the chess, on
+  the pouf, at the bag, two at the foosball), raised onto the deck by a 4th value (mm).
