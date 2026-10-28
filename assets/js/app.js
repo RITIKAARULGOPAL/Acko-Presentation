@@ -13,8 +13,22 @@
   // ?pick (editing only): the slide in view takes the pointer element by element, so an element picker can select what is
   // seen. What isn't seen (opacity 0: a later beat's chip or note) and page-size wrappers (a layer the size of the slide,
   // its children still picked) let it through to what lies beneath; re-checked as the beats change
+  // on with ?pick, and it stays on in this tab across reloads; Shift+P switches it on or off
+  const PICK_KEY = "acko-pick";
+  function pickWanted() {
+    if (/[?&]pick\b/.test(location.search)) { try { sessionStorage.setItem(PICK_KEY, "1"); } catch (e) {} return true; }
+    try { return sessionStorage.getItem(PICK_KEY) === "1"; } catch (e) { return false; }
+  }
+  document.addEventListener("keydown", (e) => {
+    if (!e.shiftKey || (e.key !== "P" && e.key !== "p") || (e.target.closest && e.target.closest("input, textarea"))) return;
+    const on = !document.body.classList.contains("pick");
+    try { sessionStorage.setItem(PICK_KEY, on ? "1" : "0"); } catch (err) {}
+    if (on) pickMode(); else { document.body.classList.remove("pick"); document.querySelectorAll(".pk-off").forEach((x) => x.classList.remove("pk-off")); }
+  });
+  let pickTick = 0;
   function pickMode() {
     document.body.classList.add("pick");
+    if (pickTick) return;
     const tick = () => {
       const sc = document.querySelector(".scene.active"); if (!sc) return;
       const S = sc.getBoundingClientRect(), seen = new Map([[sc, 1]]);
@@ -24,11 +38,11 @@
         e.classList.toggle("pk-off", op < 0.05 || cs.visibility === "hidden" || page);
       }
     };
-    setInterval(tick, 500);
+    pickTick = setInterval(() => { if (document.body.classList.contains("pick")) tick(); }, 500);
   }
   window.ACKO = {
     slide(id, factory) { FACTORIES[id] = factory; },
-    start() { if (!booted) { booted = true; if (/[?&]pick\b/.test(location.search)) pickMode(); boot(); } },
+    start() { if (!booted) { booted = true; if (pickWanted()) pickMode(); boot(); } },
     asset,
   };
 

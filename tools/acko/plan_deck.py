@@ -60,6 +60,23 @@ def d_of(geom):
             out.append("M" + "L".join("%d %d" % tuple(round(v) for v in deck(x, y)) for x, y in list(r.coords)[:-1]) + "Z")
     return "".join(out)
 
+def drop_frame(data, size):
+    """each DXF block carries a rectangle round the whole drawing (its alignment frame, on OUTLINE): not part of the plan.
+    Dropped from the block's own lines: a closed four-sided line at least 95% of the drawing's width and height"""
+    d = data["defs"][data["root"]]; m = data["place"]["m"]; k = 10 ** -d["q"]
+    sx, sy = abs(m[0]) or 1, abs(m[3]) or 1
+    for run in d["runs"]:
+        if run[4] != "s": continue
+        keep = []
+        for it in run[5]:
+            if len(it) == 10:
+                xs, ys, x, y = [it[0]], [it[1]], it[0], it[1]
+                for i in range(2, 10, 2): x += it[i]; y += it[i + 1]; xs.append(x); ys.append(y)
+                if (max(xs) - min(xs)) * k * sx > 0.95 * size[0] and (max(ys) - min(ys)) * k * sy > 0.95 * size[1]: continue
+            keep.append(it)
+        run[5] = keep
+    d["runs"] = [r for r in d["runs"] if r[4] != "s" or r[5]]
+
 def texts(meta, src):
     """every label of the text group: (words, x, y) in the DXF's mm"""
     out = []
@@ -89,9 +106,11 @@ def main(src):
 
     # ---- the base plan, as exported (instanced), with the layers it uses
     blocks, used = [], set()
+    fx0, fy0, fx1, fy1 = meta["frame"]
     for b in meta["blocks"]:
         if b["group"] not in GROUPS: continue
         data = json.load(open(os.path.join(src, b["file"]), encoding="utf-8"))
+        drop_frame(data, (fx1 - fx0, fy1 - fy0))
         blocks.append({"group": b["group"], "block": b["block"], "data": data})
         for d in data["defs"]:
             for run in d["runs"]: used.add(run[0])
