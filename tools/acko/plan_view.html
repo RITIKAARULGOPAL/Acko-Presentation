@@ -120,7 +120,7 @@ let GROUP = "", hiddenG = new Set(), alpha = {};
   try { ROOMS = await fetch(DIR + "rooms.json").then(r => r.ok ? r.json() : null); } catch (e) { ROOMS = null; }
   if (ROOMS) {
     // shapes already confirmed fine (checked.json, kept with the checklist): they light green on hover
-    try { const c = await fetch(DIR + "checked.json").then(r => r.ok ? r.json() : null); SORTED = new Set(c?.fine || []); } catch (e) {}
+    try { const c = await fetch(DIR + "checked.json").then(r => r.ok ? r.json() : null); SORTED = new Set(c?.fine || []); REWORK = new Set(c?.rework || []); } catch (e) {}
     hoverSetup();
   }
   selList(false);
@@ -314,7 +314,7 @@ cv.addEventListener("dblclick", fit);
 // ---------------------------------------------------------------- hover test (tools/acko/plan_rooms.py's rooms.json)
 // The deck lights a room when the cursor is over it. Here each room's hover shape (its hatch's outer edge, split per room)
 // is tested the same way: the smallest shape under the cursor wins, as a room drawn over an open area does in the deck.
-let ROOMS = null, hot = null, hkinds = new Set(), hsel = null, SORTED = new Set();
+let ROOMS = null, hot = null, hkinds = new Set(), hsel = null, SORTED = new Set(), REWORK = new Set();     // REWORK: off the checklist, redrawn with the new layout
 function hoverSetup() {
   document.getElementById("hsec").style.display = "block"; document.getElementById("hlist").style.display = "block";
   for (const r of ROOMS.rooms) {
@@ -386,9 +386,10 @@ function hoverDraw(s) {
   }
   // shapes still to check, always in red
   ctx.globalAlpha = .3; ctx.fillStyle = "#d0021b";
-  for (const r of ROOMS.rooms) if (!SORTED.has(r.id) && r !== hot) ctx.fill(r.path, "evenodd");
+  const todo = r => !SORTED.has(r.id) && !REWORK.has(r.id) && r !== hot;
+  for (const r of ROOMS.rooms) if (todo(r)) ctx.fill(r.path, "evenodd");
   ctx.globalAlpha = 1; ctx.lineWidth = 1.5 * px * dpr; ctx.strokeStyle = "#d0021b";
-  for (const r of ROOMS.rooms) if (!SORTED.has(r.id) && r !== hot) ctx.stroke(r.path);
+  for (const r of ROOMS.rooms) if (todo(r)) ctx.stroke(r.path);
   if (hot && document.getElementById("hon").checked) {
     const hc = SORTED.has(hot.id) ? "#1f9d55" : "#5222D0";        // green: already sorted
     ctx.globalAlpha = .35; ctx.fillStyle = hc; ctx.fill(hot.path, "evenodd"); ctx.globalAlpha = 1;
@@ -543,7 +544,8 @@ function paint(hex, layer, group, kind, veg) {
 }
 
 const GROUP_NAME = { rooms: "Room hatches", base: "Base plan", vegetation: "Vegetation", dueDiligence: "Due diligence",
-  zoneBoundaries: "Zone boundaries", neighbourhoods: "Neighbourhoods", egress: "Egress", text: "Text" };
+  zoneBoundaries: "Zone boundaries", neighbourhoods: "Neighbourhoods", egress: "Egress", text: "Text",
+  trainingRoom: "Training room", changes: "Change areas" };
 function setGroup(g, on) { on ? hiddenG.delete(g) : hiddenG.add(g); layerPanel(); redraw(); }
 function pills() {
   const groups = meta.groups || [...new Set(meta.blocks.map(b => b.group || b.block))];

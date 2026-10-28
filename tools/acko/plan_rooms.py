@@ -135,6 +135,14 @@ for b in sorted([r for r in rooms if r["type"] not in OPEN], key=lambda r: r["po
     if host: merge_into(host, b); slivers += 1
 print(f"{len(rooms)} rooms from {sum(1 for x in expand('rooms') if x[2] == 'f')} hatches ({nested} nested pieces folded into their rooms, "
       f"{joined} touching open-area pieces joined, {slivers} slivers merged into their rooms)")
+# rooms drawn from the walls where the layout changed and the hatches weren't redrawn (checked.json "wall_rooms":
+# [{"type", "ring", "colour"}]): each joins as if hatched, a plain fill to the walls' inner faces, and takes the place
+# of the old hatch piece of its type it covers (a room whose walls moved), which hands it its number
+_ck0 = os.path.join(DIR, "checked.json")
+for w in (json.load(open(_ck0, encoding="utf-8")).get("wall_rooms", []) if os.path.exists(_ck0) else []):
+    _p = Polygon(w["ring"]).buffer(0)
+    rooms = [r for r in rooms if r.get("from_walls") or r["type"] != w["type"] or r["poly"].intersection(_p).area < 0.5 * r["poly"].area]
+    rooms.append({"type": w["type"], "colour": w.get("colour", "#bfbfbf"), "poly": _p, "fill": _p, "islands": 0, "from_walls": True})
 
 # stable numbers: a shape keeps the number it had in the last run (the checklist and the viewer's fine list use them);
 # matched by type and overlap, new shapes numbered after the highest
@@ -370,7 +378,7 @@ def text_hole(hp):
     return hp.area < 4 * max(box, 1)                                             # no bigger than its words, give or take
 DROP = set(CHECKED.get("drop", []))       # shapes that aren't in the design (a booth drawn twice): no hover at all
 _drop_at = [(Point(q[0], q[1]), q[2]) for q in CHECKED.get("drop_at", [])]   # remembered by place and type, so a renumbered shape stays dropped
-DROP |= {r["id"] for r in rooms if any(r["type"] == t and r["poly"].contains(q) for q, t in _drop_at)}
+DROP |= {r["id"] for r in rooms if not r.get("from_walls") and any(r["type"] == t and r["poly"].contains(q) for q, t in _drop_at)}
 dropped = [r["poly"] for r in rooms if r["id"] in DROP]      # ... but still not the open area's floor around them
 rooms = [r for r in rooms if r["id"] not in DROP]
 solid = unary_union([r["poly"] for r in rooms if r["type"] not in OPEN])     # every enclosed room's footprint (a dropped shape's spot is the open area's floor)
@@ -408,7 +416,8 @@ for r in rooms:
         if r["id"] in HATCH_EDGE: continue     # its furniture comes from the base plan; the hatch's islands (a table's slot) aren't trusted
         holes.append(hp)
     hover = Polygon(r["poly"].exterior.coords, [h.exterior.coords for h in holes]).buffer(0)
-    if (r["type"] not in OPEN or r["type"] == "AC_WORKHALL") and r.get("outline_poly") is not None and r["id"] not in FROZEN             and r["id"] not in HATCH_EDGE:
+    if (r["type"] not in OPEN or r["type"] == "AC_WORKHALL") and r.get("outline_poly") is not None and r["id"] not in FROZEN \
+            and r["id"] not in HATCH_EDGE and not r.get("from_walls"):      # a room drawn from the new walls: the old outlines don't apply
         # the hatch stops at the walls' inner face, the outline runs outside them. Keep the hatch's edge, add back the
         # parts of the outline it missed that are wider than a wall (a corner behind a door, a notch where furniture
         # meets the wall) and drop its holes: text boxes stay in, the furniture is cut from the base plan below

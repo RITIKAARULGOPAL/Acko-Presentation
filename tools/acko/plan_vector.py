@@ -32,7 +32,8 @@ Writes into <out_dir>:
                          on), linetypes, styles, and per file a check: every entity type, how many were drawn, what failed
   layers/<group>__<block>.json   instanced: {"block", "root", "place", "defs": [{"name", "q", "runs"}]}; flat: {"block", "runs"}
 
-usage: python tools/acko/plan_vector.py <out_dir> <layout.dxf> [<layer.dxf> ...] [--no-shapes | --flat]
+usage: python tools/acko/plan_vector.py <out_dir> <layout.dxf> [<layer.dxf> ...] [--no-shapes | --flat] [--shift=dx,dy <dxf> ...]
+--shift=dx,dy moves every placement in the files after it (mm), to bring a set drawn elsewhere onto the others
 """
 import sys, os, re, json, math, time, collections
 import ezdxf
@@ -47,17 +48,22 @@ ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 if ARGS[0].lower().endswith(".dxf") and len(ARGS) == 2 and not ARGS[1].lower().endswith(".dxf"):
     ARGS = [ARGS[1], ARGS[0]]                  # the older order: <layout.dxf> <out_dir>
 OUT, SOURCES = ARGS[0], ARGS[1:]
+SHIFTS, _s = {}, [0.0, 0.0]
+for a in sys.argv[1:]:
+    if a.startswith("--shift="): _s = [float(v) for v in a.split("=", 1)[1].split(",")]
+    elif not a.startswith("--"): SHIFTS[a] = _s
 FLAT = "--flat" in sys.argv[1:]
 NO_SHAPES = "--no-shapes" in sys.argv[1:]      # instanced as the DXF has it, without re-instancing exploded geometry
 t0 = time.time()
 
 # draw order of the groups, bottom first: room hatches under the base plan's linework, labels on top
-GROUP_ORDER = ["rooms", "base", "vegetation", "dueDiligence", "zoneBoundaries", "neighbourhoods", "egress", "text"]
+GROUP_ORDER = ["rooms", "base", "trainingRoom", "vegetation", "dueDiligence", "zoneBoundaries", "neighbourhoods", "egress", "text", "changes"]
 def group_of(path):
-    """ACKO_HATCH_<name>_22_10_26.dxf -> <name>; the whole-plan file is the base, the bare one the room hatches"""
+    """ACKO_HATCH_<name>_22_10_26.dxf -> <name>; the whole-plan file is the base, the bare one the room hatches
+    (the 28.10 set is named by group alone: basePlan.dxf, egress.dxf, ...)"""
     m = re.match(r"ACKO_HATCH_?(.*?)_?\d\d_\d\d_\d\d$", os.path.splitext(os.path.basename(path))[0], re.I)
     g = m.group(1) if m else os.path.splitext(os.path.basename(path))[0]
-    return {"ALL": "base", "": "rooms", "dueDilgencei": "dueDiligence"}.get(g, g)
+    return {"ALL": "base", "basePlan": "base", "": "rooms", "dueDilgencei": "dueDiligence", "training room": "trainingRoom"}.get(g, g)
 
 doc = msp = None
 LAYERS, OFF, FROZEN, LTSCALE = {}, set(), set(), 1.0
@@ -483,7 +489,8 @@ for src in sorted(SOURCES, key=lambda p: (GROUP_ORDER.index(group_of(p)) if grou
             root = merge_duplicates(root)
             if not NO_SHAPES: reinstance(DEFS, stats)       # repeated exploded furniture, stored once
             mark_vegetation(DEFS, stats)
-            place = {"m": affine(e.matrix44()), "spec": list(spec(e, lay))}
+            m = list(affine(e.matrix44())); m[4] += SHIFTS[src][0]; m[5] += SHIFTS[src][1]
+            place = {"m": m, "spec": list(spec(e, lay))}
             json.dump({"block": name, "root": root, "place": place, "defs": DEFS}, open(path, "w", encoding="utf-8"), separators=(",", ":"))
             extents.append(list(expand_pts(root, place["m"])))
             info = {"defs": len(DEFS), "placements": placed, "placed_more_than_once": shared,

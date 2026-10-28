@@ -81,6 +81,26 @@ def canonical(polys):
     aff = [c, s, -s * m, c * m, cx, cy]
     return json.dumps(out, separators=(",", ":")), out, aff
 
+def coalesce(runs, stats):
+    """within a stretch of plain stroke runs, one run per style (in order of first appearance): two layers whose lines
+    alternate one by one (a façade drawn on A-GENM with an elevation layer threaded through it) otherwise leave a run
+    per fragment, and no shape can form. Only which of two overlapping strokes draws on top can change; fills, hatches,
+    text and placements keep their place in the draw order"""
+    out, stretch = [], collections.OrderedDict()
+    def flush():
+        for k, items in stretch.items(): out.append(list(k) + ["s", items])
+        stretch.clear()
+    for r in runs:
+        if r[4] == "s":
+            k = (r[0], r[1], r[2], r[3])
+            if k not in stretch: stretch[k] = []
+            stretch[k].extend(r[5])
+        else:
+            flush(); out.append(r)
+    flush()
+    stats["runs_coalesced"] += len(runs) - len(out)
+    return out
+
 def reinstance(defs, stats=None):
     """rewrite big definitions in place: repeated exploded shapes become definitions of their own"""
     stats = stats if stats is not None else collections.Counter()
@@ -88,6 +108,7 @@ def reinstance(defs, stats=None):
         d = defs[di]
         if d.get("q", 0) != 0: continue
         if len(json.dumps(d["runs"], separators=(",", ":"))) < BIG_DEF: continue
+        d["runs"] = coalesce(d["runs"], stats)
         # pass 1: every candidate shape, by run
         found = []          # (run index, member item indices, key, canonical, affine)
         count = collections.Counter()
