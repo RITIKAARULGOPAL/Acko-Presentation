@@ -118,7 +118,11 @@ let GROUP = "", hiddenG = new Set(), alpha = {};
   (meta.groups || []).forEach(g => { if (!on.includes(g)) hiddenG.add(g); });
   layerPanel();
   try { ROOMS = await fetch(DIR + "rooms.json").then(r => r.ok ? r.json() : null); } catch (e) { ROOMS = null; }
-  if (ROOMS) hoverSetup();
+  if (ROOMS) {
+    // shapes already confirmed fine (checked.json, kept with the checklist): they light green on hover
+    try { const c = await fetch(DIR + "checked.json").then(r => r.ok ? r.json() : null); SORTED = new Set(c?.fine || []); } catch (e) {}
+    hoverSetup();
+  }
   selList(false);
   resize(); fit();
 })();
@@ -310,7 +314,7 @@ cv.addEventListener("dblclick", fit);
 // ---------------------------------------------------------------- hover test (tools/acko/plan_rooms.py's rooms.json)
 // The deck lights a room when the cursor is over it. Here each room's hover shape (its hatch's outer edge, split per room)
 // is tested the same way: the smallest shape under the cursor wins, as a room drawn over an open area does in the deck.
-let ROOMS = null, hot = null, hkinds = new Set(), hsel = null;
+let ROOMS = null, hot = null, hkinds = new Set(), hsel = null, SORTED = new Set();
 function hoverSetup() {
   document.getElementById("hsec").style.display = "block"; document.getElementById("hlist").style.display = "block";
   for (const r of ROOMS.rooms) {
@@ -325,7 +329,9 @@ function hoverSetup() {
     for (const ring of r.polys.flat()) { ring.forEach(([x, y], i) => i ? r.path.lineTo(x, y) : r.path.moveTo(x, y)); r.path.closePath(); }
     r.issues = [];
   }
-  ROOMS.issues.forEach((it, i) => { it.i = i; it.cx = X(it.x); it.cy = Y(it.y); if (it.room != null) ROOMS.rooms[it.room].issues.push(it); });
+  const byId = new Map(ROOMS.rooms.map(r => [r.id, r]));      // shape numbers are stable across runs, not array positions
+  ROOMS.byId = byId;
+  ROOMS.issues.forEach((it, i) => { it.i = i; it.cx = X(it.x); it.cy = Y(it.y); if (it.room != null) byId.get(it.room)?.issues.push(it); });
   const c = {}; ROOMS.issues.forEach(it => { const k = it.kind + ":" + it.level; c[k] = (c[k] || 0) + 1; });
   Object.keys(c).filter(k => k.endsWith(":issue")).forEach(k => hkinds.add(k));
   const by = {}; ROOMS.rooms.forEach(r => by[r.type] = (by[r.type] || 0) + 1);
@@ -344,7 +350,7 @@ function hoverList() {
   box.querySelectorAll(".hi").forEach(d => d.onclick = () => {
     const it = ROOMS.issues[+d.dataset.i]; hsel = it.i;
     const r = cv.getBoundingClientRect(); view.s = r.width / 14000; view.x = it.cx - 7000; view.y = it.cy - r.height / view.s / 2;
-    hot = it.room != null ? ROOMS.rooms[it.room] : null; hoverList(); redraw();
+    hot = it.room != null ? ROOMS.byId.get(it.room) || null : null; hoverList(); redraw();
   });
 }
 const inRoom = (R, x, y) => R.polys.some(([outer, ...holes]) => inPoly(x, y, outer) && !holes.some(h => inPoly(x, y, h)));   // not over its furniture
@@ -367,7 +373,7 @@ function hoverMove(e) {
   if (!top) { tip.style.display = "none"; return; }
   const iss = top.issues.filter(i => i.level === "issue");
   tip.style.display = "block"; tip.style.left = (mx + 14) + "px"; tip.style.top = (my + 14) + "px";
-  tip.innerHTML = `<b>${esc(top.type.slice(3).replace(/_/g, " "))}</b> · ${top.m2} m²${top.hover_m2 != null && top.hover_m2 < top.m2 ? ` <span style="opacity:.7">(${top.hover_m2} m² clear of furniture)</span>` : ""}` + (top.labels.length ? `<br>${esc(top.labels.slice(0, 2).join(" · "))}` : "") +
+  tip.innerHTML = `${SORTED.has(top.id) ? '<span style="color:#7be0a4">✓ Fine</span> · ' : ""}<b>${esc(top.type.slice(3).replace(/_/g, " "))}</b> · ${top.m2} m²${top.hover_m2 != null && top.hover_m2 < top.m2 ? ` <span style="opacity:.7">(${top.hover_m2} m² clear of furniture)</span>` : ""}` + (top.labels.length ? `<br>${esc(top.labels.slice(0, 2).join(" · "))}` : "") +
     (top.zone ? `<br>Neighbourhood: ${esc(top.zone)}` : "") + (under.length > 1 ? `<br><span style="color:#ffd27a">${under.length} hover shapes under the cursor</span>` : "") +
     (iss.length ? `<br><span style="color:#ff9b9b">${iss.length} issue${iss.length > 1 ? "s" : ""}: ${esc(iss[0].what)}</span>` : "");
 }
@@ -378,9 +384,15 @@ function hoverDraw(s) {
     ctx.lineWidth = 1.5 * px * dpr; ctx.strokeStyle = "#d0021b"; ctx.setLineDash([]);
     for (const r of ROOMS.rooms) ctx.stroke(r.path);
   }
+  // shapes still to check, always in red
+  ctx.globalAlpha = .3; ctx.fillStyle = "#d0021b";
+  for (const r of ROOMS.rooms) if (!SORTED.has(r.id) && r !== hot) ctx.fill(r.path, "evenodd");
+  ctx.globalAlpha = 1; ctx.lineWidth = 1.5 * px * dpr; ctx.strokeStyle = "#d0021b";
+  for (const r of ROOMS.rooms) if (!SORTED.has(r.id) && r !== hot) ctx.stroke(r.path);
   if (hot && document.getElementById("hon").checked) {
-    ctx.globalAlpha = .35; ctx.fillStyle = "#5222D0"; ctx.fill(hot.path, "evenodd"); ctx.globalAlpha = 1;
-    ctx.lineWidth = 2.5 * px * dpr; ctx.strokeStyle = "#5222D0"; ctx.stroke(hot.path);
+    const hc = SORTED.has(hot.id) ? "#1f9d55" : "#5222D0";        // green: already sorted
+    ctx.globalAlpha = .35; ctx.fillStyle = hc; ctx.fill(hot.path, "evenodd"); ctx.globalAlpha = 1;
+    ctx.lineWidth = 2.5 * px * dpr; ctx.strokeStyle = hc; ctx.stroke(hot.path);
   }
   ctx.lineWidth = 2 * px * dpr;
   for (const it of ROOMS.issues) {
