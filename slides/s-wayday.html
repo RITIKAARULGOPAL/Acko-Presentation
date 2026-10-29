@@ -356,7 +356,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   const user = (on) => { S.user = on; sc.classList.toggle("wd-user", on); };
   // the light under the pointer (on screen: each beam's line from the floor to its top, within its width or 14 px), or -1
   function pick(e) {
-    if (!cam || !lights.length) return -1;
+    if (!cam || !lights.length || !S.view) return -1;                // (not before the first view)
     const r = host.getBoundingClientRect(), bw = host.clientWidth, bh = host.clientHeight, px = ((e.clientX - r.left) / r.width) * bw, py = ((e.clientY - r.top) / r.height) * bh;
     const sp = (v) => { v.project(cam); return [((v.x + 1) / 2) * bw, ((1 - v.y) / 2) * bh]; };
     let best = -1, bd = 1e9;

@@ -50,7 +50,12 @@
       FOCUS.u.uFocusMap.value = new T.CanvasTexture(cv); FOCUS.u.uFocusMap.value.flipY = false;     // row 0 is the plan's least y
       FOCUS.u.uFocusBox.value = new T.Vector4(X(x0), Z(y0), 1000 / (x1 - x0), 1000 / (y1 - y0));
     }
-    const focusable = (m) => {
+    // the walls, their tops, the glass and the frames grey their purples everywhere while a focus is on, in it too (29 Oct, on
+    // the neighbourhood's lavender walls: walls and glass grey, only the floor and the wayfinding marks purple); "hard" too, as
+    // SketchUp has the rooms' full-height panels in it (29 Oct: "still few walls are getting highlighted")
+    const FLAT = ["wall", "top", "glass", "mullion", "mass", "hard"];
+    const focusable = (m, k) => {
+      if (FLAT.includes(k)) m.defines = { ...(m.defines || {}), FOCUS_GREY: "" };
       m.onBeforeCompile = (sh) => {
         Object.assign(sh.uniforms, FOCUS.u);
         sh.vertexShader = "varying vec2 vFocusXZ;\n" + sh.vertexShader.replace("#include <project_vertex>", `#include <project_vertex>
@@ -64,6 +69,9 @@
             vec3 c = diffuseColor.rgb;
             float purple = smoothstep(0.015, 0.06, c.b - c.g) * smoothstep(-0.04, 0.0, c.r - c.g);
             float inside = texture2D(uFocusMap, (vFocusXZ - uFocusBox.xy) * uFocusBox.zw).r;
+            #ifdef FOCUS_GREY
+            inside = 0.0;
+            #endif
             float l = mix(dot(c, vec3(0.299, 0.587, 0.114)), max(c.r, max(c.g, c.b)), 0.4);
             diffuseColor.rgb = mix(c, vec3(l), purple * (1.0 - inside));
           }`);
@@ -75,7 +83,7 @@
     const matOf = (k) => mats[k] || (mats[k] = reg(focusable(k === "glass"
       ? new T.MeshLambertMaterial({ color: 0xffffff, vertexColors: true, flatShading: true, transparent: true, opacity: 0.35, depthWrite: false, side: T.DoubleSide })
       : new T.MeshLambertMaterial({ color: 0xffffff, vertexColors: true, flatShading: true, side: T.DoubleSide,
-          polygonOffset: k === "floor" || k === "slab" || k === "grass", polygonOffsetFactor: 1, polygonOffsetUnits: 2 })), k, true));
+          polygonOffset: k === "floor" || k === "slab" || k === "grass", polygonOffsetFactor: 1, polygonOffsetUnits: 2 }), k), k, true));
     // a part's geometry: int16 positions over its box, RGB per vertex, indices; UVs box-mapped in metres (for the looks' textures)
     function geometry(p) {
       const q = new Int16Array(bytes(p.p)), pos = new Float32Array(q.length);
