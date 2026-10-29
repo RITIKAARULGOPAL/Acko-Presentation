@@ -20,8 +20,8 @@
     <div class="st-ov"><svg viewBox="0 0 1920 1080" preserveAspectRatio="none"><g class="st-ent"></g><g class="st-legs"></g></svg></div>
     <div class="st-veil"></div>
     <div class="st-t rv">
-      <h3 style="--i:0" data-only="1">Understanding the Campus Strategy</h3>   <!-- the title and its words on beat 1 only (29 Oct) -->
-      <p style="--i:1" data-only="1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
+      <h3 style="--i:0">Understanding the Campus Strategy</h3>
+      <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
@@ -327,7 +327,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
     // the page's right edge hangs to the left
-    if (!S.obs) S.obs = $$(".st-t .st-hand, .st-tools", sc).map((e) => {          // (the title and its words show on beat 1 only, before the stops)
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
       const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
       return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
     }).filter((b) => b[2] > b[0]);
