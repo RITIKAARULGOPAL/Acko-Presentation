@@ -47,9 +47,9 @@
 #s-strategy .st-t h3 { left: 1.82%; top: 17.01%; width: 44.29%; height: 8.21%; font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); white-space: nowrap; }
 #s-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.4;   /* 29 Oct: "the line spacing is off" */ font-style: italic; font-weight: 300; color: #666; }
 #s-strategy .st-t p b { font-weight: 500; }
-#s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); }   /* 29 Oct: "use 1.2 spacing" */
+#s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); justify-content: flex-start; }   /* rows from the top: placed under the name (placeLine) */   /* 29 Oct: "use 1.2 spacing" */
 /* the beat's name, bottom right of the floor, as the deck's animation writes it */
-#s-strategy .st-cap { left: 47.62%; top: 71.09%;   /* on the handwritten line's left edge, 12 pt above its first line (29 Oct: "change the alignment", "16", padding "12") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
+#s-strategy .st-cap { left: 47.62%; top: 68.32%;   /* on the handwritten line's left edge; the same place on every beat, where The Client's journey had it (29 Oct: "keep this position as constant") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
   opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
 #s-strategy .st-cap.on { opacity: 1; transform: none; }
 /* the overlay: the entrances' maroon marks, the neighbourhoods' names, the Loop's stops (a dot, a leader, the name and its words) */
@@ -125,7 +125,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
   const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
   // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1, 2,
-  // 5 and 6); the name GAP pt above the line's first row as it lands, however many rows the line runs to (placeName)
+  // 5 and 6); the name stays put, and the line's first row lands GAP pt under it, however many rows it runs to (placeLine)
   const GAP = 12;
   const HAND = ["", "Every journey begins with a thought. Ours began with reimagining what a workplace could feel like.",
     "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.",
@@ -240,18 +240,17 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     cap.classList.remove("on"); cap.dataset.t = txt;
     setTimeout(() => {
       if (hand.textContent !== line) { hand.textContent = line; S.obs = null; need(); }
-      cap.textContent = txt; placeName(); cap.classList.add("on");
+      cap.textContent = txt; placeLine(); cap.classList.add("on");
     }, 120);
   }
-  // the name's top (% of the page) so its letters end GAP pt above the top of the line's first row, both measured as laid out
-  // (each against its own box, so a reveal's or the name's own slide-in doesn't count)
-  function placeName() {
+  // the line's top (% of the page) so its first row starts GAP pt under the name's letters, both measured as laid out (each
+  // against its own box, so a reveal's or the name's own slide-in doesn't count)
+  function placeLine() {
     const cap = $(".st-cap", sc), hand = $(".st-hand", sc), page = $(".page", sc), H = page.clientHeight, pt = page.clientWidth / 720;
     const first = (e) => { const rg = document.createRange(); rg.selectNodeContents(e); const r = rg.getClientRects(); return r.length ? r : null; };
     const hr = first(hand), cr = first(cap); if (!hr || !cr || !H) return;
-    const rowTop = hand.offsetTop + hand.offsetParent.offsetTop + (hr[0].top - hand.getBoundingClientRect().top);
-    const capBottom = cr[cr.length - 1].bottom - cap.getBoundingClientRect().top;
-    cap.style.top = ((rowTop - GAP * pt - capBottom) / H) * 100 + "%";
+    const capBottom = cap.offsetTop + (cr[cr.length - 1].bottom - cap.getBoundingClientRect().top), rowOff = hr[0].top - hand.getBoundingClientRect().top;
+    hand.style.top = ((capBottom + GAP * pt - rowOff - hand.offsetParent.offsetTop) / H) * 100 + "%";
   }
   function play(k) {
     S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
@@ -463,10 +462,10 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       S.look = Object.fromEntries(M.zones.map((v) => [v.userData.zone.key, { col: new T.Color(v.userData.zone.colour), op: v.userData.mats[0][1] }]));
       overlayBuild(); wire();
       // the names' sizes once their fonts are in
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { S.obs = null; S.labs.forEach((o) => { o.w = 0; }); placeName(); need(); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { S.obs = null; S.labs.forEach((o) => { o.w = 0; }); placeLine(); need(); });
       window.AxoLayers.listeners.add(() => { if (document.body.dataset.scene === "s-strategy") need(); });
       const again = () => { if (document.body.dataset.scene === "s-strategy") need(); };
-      addEventListener("resize", () => { placeName(); again(); }); document.addEventListener("visibilitychange", again);
+      addEventListener("resize", () => { placeLine(); again(); }); document.addEventListener("visibilitychange", again);
       sc._strategy = () => ({ k: S.k, playing: S.playing, cap: $(".st-cap", sc).textContent, lit: (S.lit || []).filter(Boolean).length,
         stops: M.data.stops.map((s) => s.name), d: S.d, state: S.state, home: S.home, names: !!S.names, cur: Object.assign({}, S.cur || PLAN), pick: S.pick || null,
         employee: M.routes.employee.geometry.drawRange.count, client: M.routes.client.geometry.drawRange.count });
