@@ -100,6 +100,41 @@
         out.push(new T.Matrix4().set(m[0], m[3], m[6], m[9], m[1], m[4], m[7], m[10], m[2], m[5], m[8], m[11], 0, 0, 0, 1)); }
       return out;
     });
+    // the terraces' open edges are parapets, not glazing (29 Oct: "the marked walls should be parapets"): the facade's glass
+    // panels and fins on a terrace's south edge and its two sides are taken out (scaled to nothing), and each edge gets one
+    // solid parapet, PARAPET m high, along the panels' line (drawn after the parts, below)
+    const PARAPET = 1.1, edges = {};
+    {
+      const ringOf = (d) => d.split("M")[1].replace(/Z/g, "").split("L").map((t) => t.trim().split(/\s+/).map(Number));
+      const decks = ((P && P.spaces) || []).filter((s) => s.type === "Terrace").map((s) => {
+        const r = ringOf(s.d).map(([x, y]) => [X(x), Z(y)]), xs = r.map((q) => q[0]), zs = r.map((q) => q[1]);
+        return [Math.min(...xs), Math.min(...zs), Math.max(...xs), Math.max(...zs)];
+      });
+      const zero = new T.Matrix4().makeScale(0, 0, 0), done = new Set(), v = new T.Vector3();
+      for (const p of D.parts) {
+        if (p.k !== "glass" || p.u < 0 || done.has(p.u)) continue;
+        done.add(p.u);
+        placements[p.u].forEach((m4, i) => {
+          const lo = [1e9, 1e9, 1e9], hi = [-1e9, -1e9, -1e9];
+          for (const a of [p.lo[0], p.hi[0]]) for (const b of [p.lo[1], p.hi[1]]) for (const c of [p.lo[2], p.hi[2]]) {
+            v.set(a, b, c).applyMatrix4(m4); [v.x, v.y, v.z].forEach((w, k) => { lo[k] = Math.min(lo[k], w); hi[k] = Math.max(hi[k], w); });
+          }
+          if (hi[1] < 2) return;
+          const dx = hi[0] - lo[0], dz = hi[2] - lo[2], cx = (lo[0] + hi[0]) / 2;
+          decks.forEach(([x0, z0, x1, z1], d) => {
+            let side = null;
+            if (lo[2] > z1 - 0.2 && cx > x0 - 0.8 && cx < x1 + 0.8) side = dx > 0.3 && dz < 0.3 ? "S" : "fin";
+            else if (dx < 0.3 && dz > 0.3 && lo[2] > z0 - 0.2 && hi[2] < z1 + 1) side = Math.abs(cx - x0) < 0.8 ? "W" : Math.abs(cx - x1) < 0.8 ? "E" : null;
+            if (!side) return;
+            placements[p.u][i] = zero;
+            if (side === "fin") return;
+            const e = edges[d + side] || (edges[d + side] = { side, lo: [1e9, 1e9], hi: [-1e9, -1e9], at: [] });
+            e.lo = [Math.min(e.lo[0], lo[0]), Math.min(e.lo[1], lo[2])]; e.hi = [Math.max(e.hi[0], hi[0]), Math.max(e.hi[1], hi[2])];
+            e.at.push(side === "S" ? (lo[2] + hi[2]) / 2 : cx);
+          });
+        });
+      }
+    }
     const fine = [], coarse = [], lo = new T.Vector3(1e9, 1e9, 1e9), hi = new T.Vector3(-1e9, -1e9, -1e9), ink = [];
     for (const p of D.parts) {
       const g = geometry(p), mat = matOf(p.k);
@@ -116,6 +151,15 @@
       if (p.k === "glass") mesh.renderOrder = 2;
       G[GROUP_OF[p.k] || "furniture"].add(mesh); REG.meshes.push([mesh, p.k]);
       if (p.lv === 1) fine.push(mesh); else if (p.lv === 2) coarse.push(mesh);
+    }
+    // the terraces' parapets: one solid wall, 0.2 m thick, the length of each edge's panels, in a wall's white
+    for (const k in edges) {
+      const e = edges[k], at = e.at.reduce((s, a) => s + a, 0) / e.at.length, t = 0.1;
+      const g = e.side === "S" ? new T.BoxGeometry(e.hi[0] - e.lo[0], PARAPET, 2 * t) : new T.BoxGeometry(2 * t, PARAPET, e.hi[1] - e.lo[1]);
+      g.translate(e.side === "S" ? (e.lo[0] + e.hi[0]) / 2 : at, PARAPET / 2, e.side === "S" ? at : (e.lo[1] + e.hi[1]) / 2);
+      g.setAttribute("color", new T.BufferAttribute(new Uint8Array(g.getAttribute("position").count * 3).fill(236), 3, true));
+      const mesh = new T.Mesh(g, matOf("wall"));
+      G.walls.add(mesh); REG.meshes.push([mesh, "wall"]); ink.push(new T.EdgesGeometry(g, 30));
     }
     // the architecture's edges, thin, in the looks' ink
     if (ink.length) {
