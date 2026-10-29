@@ -171,23 +171,37 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   }
   // facing: a plan angle (centiradians) to a turn about y for a figure facing +z
   const turn = (x, y, a) => { const d = W([x + Math.cos(a / 100) * 1000, y + Math.sin(a / 100) * 1000]).sub(W([x, y])); return Math.atan2(d.x, d.z); };
+  // who shows (29 Oct: "the people have to be translucent ... too many humans ... and some outside the building"): only those on
+  // the floor, and none standing within EDGE mm of its edge (outside the façade's glass); of the rest a share by kind (KEEP),
+  // picked by their place, so it is the same people every time and every room keeps some
+  const KEEP = { sit: 0.35, stand: 0.6, present: 1, yoga: 1, walk: 0.5 }, EDGE = 1500, SEE = 0.65;    // SEE: their opacity
+  const onFloor = (p, standing) => {
+    const r = M.slab; if (!inRing(p, r)) return false; if (!standing) return true;
+    for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
+      const [x0, y0] = r[j], [x1, y1] = r[i], ux = x1 - x0, uy = y1 - y0, t = Math.max(0, Math.min(1, ((p[0] - x0) * ux + (p[1] - y0) * uy) / (ux * ux + uy * uy || 1)));
+      if (Math.hypot(p[0] - x0 - t * ux, p[1] - y0 - t * uy) < EDGE) return false;
+    }
+    return true;
+  };
+  const picked = (p, k) => { const h = Math.sin(p[0] * 12.9898 + p[1] * 78.233) * 43758.5453; return h - Math.floor(h) < KEEP[k]; };
   function people() {
     crowd = new T.Group(); crowd.name = "people";
-    const mat = new T.MeshLambertMaterial({ color: GREY }), disc = new T.CircleGeometry(0.3, 14).rotateX(-Math.PI / 2);
+    const who = Object.fromEntries(["sit", "stand", "present", "yoga"].map((k) => [k, (PEOPLE[k] || []).filter((q) => onFloor(q, k !== "sit") && picked(q, k))]));
+    const mat = new T.MeshLambertMaterial({ color: GREY, transparent: true, opacity: SEE }), disc = new T.CircleGeometry(0.3, 14).rotateX(-Math.PI / 2);
     const dmat = new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.12, depthWrite: false });
     const m4 = new T.Matrix4(), q = new T.Quaternion(), one = new T.Vector3(1, 1, 1), Y = new T.Vector3(0, 1, 0);
-    const stills = ["sit", "stand", "present", "yoga"].filter((k) => (PEOPLE[k] || []).length);
-    const all = stills.reduce((a, k) => a + PEOPLE[k].length, 0), discs = new T.InstancedMesh(disc, dmat, Math.max(1, all)); let d = 0;
+    const stills = ["sit", "stand", "present", "yoga"].filter((k) => who[k].length);
+    const all = stills.reduce((a, k) => a + who[k].length, 0), discs = new T.InstancedMesh(disc, dmat, Math.max(1, all)); let d = 0;
     for (const k of stills) {
-      const im = new T.InstancedMesh(figure(k), mat, PEOPLE[k].length);
-      PEOPLE[k].forEach(([x, y, a, h = 0], i) => { const p = W([x, y]); p.y = h / 1000;             // h: what they stand or sit on (mm; the garden's deck)
+      const im = new T.InstancedMesh(figure(k), mat, who[k].length);
+      who[k].forEach(([x, y, a, h = 0], i) => { const p = W([x, y]); p.y = h / 1000;             // h: what they stand or sit on (mm; the garden's deck)
         m4.compose(p, q.setFromAxisAngle(Y, turn(x, y, a)), one); im.setMatrixAt(i, m4);
         p.y += 0.03; m4.compose(p, q.identity(), one); discs.setMatrixAt(d++, m4); });
       im.receiveShadow = true; im.frustumCulled = false; crowd.add(im);
     }
     discs.count = d; discs.renderOrder = 3; discs.frustumCulled = false; crowd.add(discs);
     // the walkers: there and back along their paths, 1.2 m/s
-    const paths = PEOPLE.walk || [];
+    const paths = (PEOPLE.walk || []).filter((path) => path.every((q) => onFloor(q, true)) && picked(path[0], "walk"));
     if (paths.length) {
       const wm = new T.InstancedMesh(figure("walk"), mat, paths.length), wd = new T.InstancedMesh(disc, dmat, paths.length);
       walkers = paths.map((path, i) => { const pts = path.map((p) => W(p)), cum = [0]; for (let j = 1; j < pts.length; j++) cum.push(cum[j - 1] + pts[j].distanceTo(pts[j - 1])); return { pts, cum, L: cum[cum.length - 1], ph: i * 7.3 }; });
