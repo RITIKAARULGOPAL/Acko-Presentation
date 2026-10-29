@@ -95,8 +95,8 @@
      5 The Employee's Journey         the furniture rises: the rooms' (02), the café (03), the terraces (04), the workstations (05),
                                       the plants (06); the red route draws from the entrances (render 08), the Loop's seven stops
                                       named as it reaches them; the blue route fades
-   Each beat plays going forward and going back, and only then (a click does not replay it); drag turns, the wheel
-   zooms, Reset view goes back. Without WebGL, the deck's GIF. */
+   Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
+   right-drag turns, the wheel zooms on the cursor, Reset view goes back. Without WebGL, the deck's GIF. */
 ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
   // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
@@ -333,16 +333,34 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     if (S.playing || S.tween || S.swap) need();
   }
 
-  // ---------- turning, zooming ----------
+  // ---------- panning, turning, zooming ----------
+  // the same mouse on every axo (29 Oct: "LMB for pan, mouse wheel for zoom in zoom out and RMB for rotate"): a left-drag pans (in the axo's right/up), a right-drag (or Shift-drag, for a
+  // trackpad) turns it, the wheel zooms on the cursor (its point on the floor stays put)
   function wire() {
     let drag = null;
-    host.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY }; host.setPointerCapture(e.pointerId); host.classList.add("drag"); });
+    const ground = (e, v) => {
+      const b = host.getBoundingClientRect(), nx = ((e.clientX - b.left) / b.width) * 2 - 1, ny = -((e.clientY - b.top) / b.height) * 2 + 1;
+      window.AxoModel.apply(cam, v, asp); const { f, right, up } = window.AxoModel.basis(v);
+      const o = cam.position.clone().add(right.multiplyScalar(nx * v.half * asp)).add(up.multiplyScalar(ny * v.half));
+      return o.add(f.multiplyScalar(-o.y / f.y));
+    };
+    host.addEventListener("pointerdown", (e) => {
+      if (e.button > 2) return;
+      drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, turn: e.button === 2 || e.shiftKey };
+      try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ }
+      host.classList.add("drag");
+    });
     host.addEventListener("pointermove", (e) => {
       if (!drag) return;
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
       if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4) return;
       S.moved = true; S.tween = null;
-      S.state = Object.assign({}, S.state, { theta: Math.max(view.theta - 0.8, Math.min(view.theta + 0.8, S.state.theta - dx * 0.005)), phi: Math.max(0.35, Math.min(1.22, S.state.phi - dy * 0.004)) });
+      const v = S.state;
+      if (drag.turn) S.state = Object.assign({}, v, { theta: Math.max(view.theta - 0.8, Math.min(view.theta + 0.8, v.theta - dx * 0.005)), phi: Math.max(0.35, Math.min(1.22, v.phi - dy * 0.004)) });
+      else {
+        const { right, up } = window.AxoModel.basis(v), k = (2 * v.half) / host.clientHeight, m = right.multiplyScalar(-dx * k).add(up.multiplyScalar(dy * k));
+        S.state = Object.assign({}, v, { t: [v.t[0] + m.x, v.t[1] + m.y, v.t[2] + m.z] });
+      }
       need();
     });
     const up = (e) => {
@@ -350,7 +368,12 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       drag = null; host.classList.remove("drag");
     };
     host.addEventListener("pointerup", up); host.addEventListener("pointercancel", () => { drag = null; host.classList.remove("drag"); });
-    host.addEventListener("wheel", (e) => { e.preventDefault(); S.moved = true; S.tween = null; S.state = Object.assign({}, S.state, { half: Math.max(4, Math.min(140, S.state.half * Math.exp(e.deltaY * 0.0012))) }); need(); }, { passive: false });
+    host.addEventListener("contextmenu", (e) => e.preventDefault());
+    host.addEventListener("wheel", (e) => {
+      e.preventDefault(); S.moved = true; S.tween = null;
+      const v = S.state, before = ground(e, v), w = Object.assign({}, v, { half: Math.max(4, Math.min(140, v.half * Math.exp(e.deltaY * 0.0012))) });
+      const after = ground(e, w); w.t = [w.t[0] + before.x - after.x, w.t[1], w.t[2] + before.z - after.z]; S.state = w; need();
+    }, { passive: false });
   }
 
   function start() {

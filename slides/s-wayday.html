@@ -13,7 +13,7 @@
 <!-- slide:start -->
 <section class="scene" id="s-wayday" data-part="5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
   data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Board Room,Wellness"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop's seven stops by the clock, each a space in use, its people small and in grey. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The amber light columns are the wayfinding hotspots at Ritika's marked spots (the Reception sign, the corridor sign, the neighbourhood's graphic, the workhall, the Collab, the art wall): click one for its pop-up (signage concepts to come). Whole floor shows the whole campus; the strip along the bottom jumps to any part of the day. Drag to turn it all the way round, right-drag (or Shift) to pan, scroll to zoom; a double-click (or Reset view) goes back to the day.">
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop's seven stops by the clock, each a space in use, its people small and in grey. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The amber light columns are the wayfinding hotspots at Ritika's marked spots (the Reception sign, the corridor sign, the neighbourhood's graphic, the workhall, the Collab, the art wall): click one for its pop-up (signage concepts to come). Whole floor shows the whole campus; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
@@ -87,8 +87,8 @@
    there, amber light columns at her six marked spots (WAY, from tools/acko/wayday_marks.py), a click opening its pop-up;
    "A day in ACKO". The people (PEOPLE, from tools/acko/wayday_people.py: the layout's chairs, each space's scene, walkers on
    the corridors) show once the view is close. The lights, her marks and the people are this slide's own group, added to the
-   shared scene on entering and taken off on leaving. A drag turns it (all the way round), a right-drag (or Shift) pans, the
-   wheel (or a trackpad's pinch) zooms on the cursor; the view is then hers until a double-click, Reset view, The day, Whole
+   shared scene on entering and taken off on leaving. A left-drag pans, a right-drag (or Shift-drag) turns it (all the way
+   round), the wheel (or a trackpad's pinch) zooms on the cursor; the view is then hers until a double-click, Reset view, The day, Whole
    floor or the next beat gives it back (eased the short way round to the deck's angle). */
 ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
   // the day (Ritika, 27 Oct: the Loop's seven stops by the clock): per beat the time, the stop and its line, the Loop's words,
@@ -326,9 +326,10 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     });
     return best;
   }
-  // as on the schematic axo: a drag turns it (all the way round; 0.35-1.22 from the vertical), a right-drag or Shift pans (in
-  // the axo's right/up), the wheel zooms on the cursor (its point on the floor stays put); a click on a light opens its pop-up
-  // (elsewhere, closes it); a double-click gives the view back
+  // the same mouse on every axo (29 Oct: "LMB for pan, mouse wheel for zoom in zoom out and RMB for rotate"): a left-drag pans
+  // (in the axo's right/up), a right-drag (or Shift-drag, for a trackpad) turns it (all the way round; 0.35-1.22 from the
+  // vertical), the wheel zooms on the cursor (its point on the floor stays put); a click on a light opens its pop-up (elsewhere,
+  // closes it); a double-click gives the view back
   function wire() {
     S.wired = true; let drag = null;
     const ground = (e, v) => {
@@ -337,16 +338,17 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       const o = cam.position.clone().add(right.multiplyScalar(nx * v.half * S.asp)).add(up.multiplyScalar(ny * v.half));
       return o.add(f.multiplyScalar(-o.y / f.y));
     };
-    host.addEventListener("pointerdown", (e) => { if (!S.view || e.button > 2) return; drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false, pan: e.button === 2 || e.shiftKey, b: e.button }; try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ } });
+    host.addEventListener("pointerdown", (e) => { if (!S.view || e.button > 2) return; drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false, turn: e.button === 2 || e.shiftKey, b: e.button }; try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ } });
     host.addEventListener("pointermove", (e) => {
       if (!drag) { host.classList.toggle("hot", pick(e) >= 0); return; }
       if (!drag.on && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 3) return;        // a click, not a drag
       drag.on = true; host.classList.add("drag"); user(true);
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y, v = S.view; drag.x = e.clientX; drag.y = e.clientY;
-      if (drag.pan) {
+      if (drag.turn) S.view = Object.assign({}, v, { theta: v.theta - dx * 0.005, phi: Math.max(0.35, Math.min(1.22, v.phi - dy * 0.004)) });
+      else {
         const { right, up } = window.AxoModel.basis(v), k = (2 * v.half) / host.clientHeight, m = right.multiplyScalar(-dx * k).add(up.multiplyScalar(dy * k));
         S.view = Object.assign({}, v, { t: [v.t[0] + m.x, v.t[1] + m.y, v.t[2] + m.z] });
-      } else S.view = Object.assign({}, v, { theta: v.theta - dx * 0.005, phi: Math.max(0.35, Math.min(1.22, v.phi - dy * 0.004)) });
+      }
       loop();
     });
     const up = (e) => { if (drag && !drag.on && drag.b === 0 && e.type === "pointerup") { const i = pick(e); shine(i === S.open ? -1 : i); loop(); } drag = null; host.classList.remove("drag"); };

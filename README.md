@@ -85,7 +85,7 @@ Every slide is **its own HTML page**, `slides/<id>.html`:
     - **Hover** switches the names on hover on or off. It's one setting for the layout, the blow-ups and the axo, and it stays as set (as in Mitigata). A neighbourhood still opens on a click with Hover off.
     - **Reset zoom** flies back to the beat's view, or to the open neighbourhood's.
   - **Occupancy** (bottom left, beside the Legend tab) opens the floor's occupancy chart beneath the plan, the plan moving up. It shows the brief against Option 2A (deck slide 61, which is no longer a slide of its own: its table lives in the layout slide) in Mitigata's chart look: hairlines, the zones in small purple capitals, a mark before each count (✓ meets, ▲ above, + not asked, ▼ short) and a summary line. ⤢ opens it centred and larger; ✕, Esc or a click outside closes it. Each neighbourhood's chart has the same look.
-- **The axo:** with Hover on, the space under the cursor lights up with its name and area. Drag to turn it, scroll to zoom on the cursor, right-drag (or Shift-drag) to pan; **Reset view** (or a double-click) goes back to the beat. Without WebGL, it shows the deck's own axo pictures.
+- **The axo:** with Hover on, the space under the cursor lights up with its name and area. Drag to pan, scroll to zoom on the cursor, right-drag (or Shift-drag) to turn it (the same on every axo); **Reset view** (or a double-click) goes back to the beat. Without WebGL, it shows the deck's own axo pictures.
 - **The walk:** music on or off, pan mode (drag the render), and keyplan on or off.
 
 ## The journey (≈ 20 min, 66 beats)
