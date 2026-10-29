@@ -20,8 +20,8 @@
     <div class="st-ov"><svg viewBox="0 0 1920 1080" preserveAspectRatio="none"><g class="st-ent"></g><g class="st-legs"></g></svg></div>
     <div class="st-veil"></div>
     <div class="st-t rv">
-      <h3 style="--i:0">Understanding the Campus Strategy</h3>
-      <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
+      <h3 style="--i:0" data-only="1">Understanding the Campus Strategy</h3>   <!-- the title and its words on beat 1 only (29 Oct) -->
+      <p style="--i:1" data-only="1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
@@ -123,9 +123,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     ["Atrium", "atrium", "N", "#737373", 1, [4000, 9000]], ["Terrace", "terrace", "S", "#6f7356", 2], ["Café", "cafezone", "S", "#8f8a5c", 2]];
   const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
   const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
-  // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beat 1)
+  // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1 and 2)
   const HAND = ["", "Every journey begins with a thought. Ours began with reimagining what a workplace could feel like.",
-    "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity."];
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity."];
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "The Client’s Journey", "The Employee’s Journey"];
   const DUR = [0, 2.4, 4.4, 6.4, 5.6, 7.0];             // each beat's play (s)
   // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
@@ -327,7 +327,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
     // the page's right edge hangs to the left
-    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
+    if (!S.obs) S.obs = $$(".st-t .st-hand, .st-tools", sc).map((e) => {          // (the title and its words show on beat 1 only, before the stops)
       const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
       return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
     }).filter((b) => b[2] > b[0]);
