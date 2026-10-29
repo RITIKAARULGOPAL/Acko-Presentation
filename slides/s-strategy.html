@@ -45,11 +45,11 @@
 #s-strategy .st-t { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
 #s-strategy .st-t > * { position: absolute; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; margin: 0; padding: calc(var(--pt) * 7.2); }
 #s-strategy .st-t h3 { left: 1.82%; top: 17.01%; width: 44.29%; height: 8.21%; font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); white-space: nowrap; }
-#s-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.15; font-style: italic; font-weight: 300; color: #666; }
+#s-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.4;   /* 29 Oct: "the line spacing is off" */ font-style: italic; font-weight: 300; color: #666; }
 #s-strategy .st-t p b { font-weight: 500; }
-#s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1; font-style: normal; color: var(--hand-ink); }
+#s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); }   /* 29 Oct: "use 1.2 spacing" */
 /* the beat's name, bottom right of the floor, as the deck's animation writes it */
-#s-strategy .st-cap { right: 19.3%; top: 74.6%; font-size: calc(var(--pt) * 12); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: right; pointer-events: none;
+#s-strategy .st-cap { left: 47.62%; top: 71.09%;   /* on the handwritten line's left edge, 12 pt above its first line (29 Oct: "change the alignment", "16", padding "12") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
   opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
 #s-strategy .st-cap.on { opacity: 1; transform: none; }
 /* the overlay: the entrances' maroon marks, the neighbourhoods' names, the Loop's stops (a dot, a leader, the name and its words) */
@@ -123,6 +123,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     ["Atrium", "atrium", "N", "#737373", 1, [4000, 9000]], ["Terrace", "terrace", "S", "#6f7356", 2], ["Café", "cafezone", "S", "#8f8a5c", 2]];
   const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
   const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
+  // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beat 1)
+  const HAND = ["", "Every journey begins with a thought. Ours began with reimagining what a workplace could feel like.",
+    "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity."];
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "The Client’s Journey", "The Employee’s Journey"];
   const DUR = [0, 2.4, 4.4, 6.4, 5.6, 7.0];             // each beat's play (s)
   // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
@@ -224,9 +227,10 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     for (const z of S.zl) if (z.dept) z.d.classList.toggle("picked", z.dept === d);
   }
   function caption(txt) {
-    const cap = $(".st-cap", sc);
+    const cap = $(".st-cap", sc), hand = $(".st-hand", sc), line = HAND[NAMES.indexOf(txt)] || hand.textContent;
     if (cap.dataset.t === txt) return;
-    cap.classList.remove("on"); cap.dataset.t = txt; setTimeout(() => { cap.textContent = txt; cap.classList.add("on"); }, 120);
+    cap.classList.remove("on"); cap.dataset.t = txt;
+    setTimeout(() => { cap.textContent = txt; cap.classList.add("on"); if (hand.textContent !== line) { hand.textContent = line; S.obs = null; need(); } }, 120);
   }
   function play(k) {
     S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
