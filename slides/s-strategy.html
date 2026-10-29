@@ -11,9 +11,9 @@
 </head>
 <body>
 <!-- slide:start -->
-<section class="scene" id="s-strategy" data-part="1" data-title="Campus strategy" data-steps="5" data-mins="1.8"
-  data-beats="How it started,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,The Client’s Journey,The Employee’s Journey"
-  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Five beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 How it started: the bare shell, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 The client's journey: the floor in colour and the partitions rise; the client's route from the entrance. 5 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
+<section class="scene" id="s-strategy" data-part="1" data-title="Campus strategy" data-steps="6" data-mins="1.9"
+  data-beats="How it started,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together,The Client’s Journey,The Employee’s Journey"
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 How it started: the bare shell, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: the floor in colour and the partitions rise. 5 The client's journey: the client's route from the entrance. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
   <div class="page">
     <div class="st-anim"></div>
     <div class="st-3d ui"></div>
@@ -91,9 +91,10 @@
                                       the café's zone; their names (the boundaries from ACKO_NEI.dxf)
      3 Configuring the Neighbourhoods the departments are configurable (Ritika; no text, 26 Oct): a department's name and
                                       colour travel together (the numbers stay), stepping along the floor and back (the carousel); then two clicks swap them
-     4 The Client's Journey           the volumes lift away, the floor goes to colour (render 01), the partitions rise (02); the blue
-                                      route draws (render 09)
-     5 The Employee's Journey         the furniture rises: the rooms' (02), the café (03), the terraces (04), the workstations (05),
+     4 Looping it all Together        the volumes lift away, the floor goes to colour (render 01), the partitions rise (02) (beat 4
+                                      without its route, 29 Oct)
+     5 The Client's Journey           on that floor, the blue route draws (render 09)
+     6 The Employee's Journey         the furniture rises: the rooms' (02), the café (03), the terraces (04), the workstations (05),
                                       the plants (06); the red route draws from the entrances (render 08), the Loop's seven stops
                                       named as it reaches them; the blue route fades
    Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
@@ -125,9 +126,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
   // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1 and 2)
   const HAND = ["", "Every journey begins with a thought. Ours began with reimagining what a workplace could feel like.",
-    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity."];
-  const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "The Client’s Journey", "The Employee’s Journey"];
-  const DUR = [0, 2.4, 4.4, 6.4, 5.6, 7.0];             // each beat's play (s)
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity."];
+  const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s Journey", "The Employee’s Journey"];
+  const DUR = [0, 2.4, 4.4, 6.4, 2.4, 4.2, 7.0];             // each beat's play (s)
   // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
   // carousel (Ritika's pick of six, index-configure.html): every department steps one zone along the floor, west to east, twice,
   // then steps back home; then two clicks on names swap them live
@@ -154,7 +155,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     M.tint(k <= 3 ? 0 : k === 4 ? win(t, 0.3, 1.0) : 1);
     for (const g of SHELL) grow(G[g], k === 1 ? win(t, 0.1, 1.5) : 1);
     grow(G.partitions, k <= 3 ? 0 : k === 4 ? win(t, 1.0, 2.0) : 1);
-    for (const g in FURNITURE) grow(G[g], k <= 4 ? 0 : win(t, FURNITURE[g][0], FURNITURE[g][1]));
+    for (const g in FURNITURE) grow(G[g], k <= 5 ? 0 : win(t, FURNITURE[g][0], FURNITURE[g][1]));
     // beat 3: who sits where (the script while it plays, then the live arrangement); any other beat: the plan
     const live = k === 3 && t >= DUR[3];
     if (k !== 3) { S.cur = PLAN; S.swap = null; pick(null); }
@@ -179,14 +180,14 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     });
     S.names = (k === 2 && t >= 3.0) || k === 3;
     S.ent = k === 1 ? win(t, 1.4, 2.0) : 1;
-    // the routes: drawn on by distance from the entrances; the client's on 4 (fading on 5), the employee's on 5
+    // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
     const R = M.routes, emp = R.employee, cli = R.client;
-    cli.visible = k === 4 || (k === 5 && t < 1.0); emp.visible = k === 5;
-    cli.userData.to(k === 4 ? cli.userData.max * win(t, 1.6, DUR[4] - 0.2) : k > 4 ? cli.userData.max : 0);
-    cli.material.opacity = k === 5 ? 1 - win(t, 0.2, 1.0) : 1;
-    S.d = k === 5 ? emp.userData.max * win(t, 1.0, DUR[5] - 0.3) : 0;
+    cli.visible = k === 5 || (k === 6 && t < 1.0); emp.visible = k === 6;
+    cli.userData.to(k === 5 ? cli.userData.max * win(t, 0.3, DUR[5] - 0.2) : k > 5 ? cli.userData.max : 0);
+    cli.material.opacity = k === 6 ? 1 - win(t, 0.2, 1.0) : 1;
+    S.d = k === 6 ? emp.userData.max * win(t, 1.0, DUR[6] - 0.3) : 0;
     emp.userData.to(S.d); emp.material.opacity = 1;
-    S.lit = M.data.stops.map((s) => k === 5 && S.d >= s.d - 0.5);
+    S.lit = M.data.stops.map((s) => k === 6 && S.d >= s.d - 0.5);
     caption(NAMES[k]);
   }
 
