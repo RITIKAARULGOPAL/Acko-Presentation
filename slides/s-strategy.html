@@ -65,8 +65,9 @@
 #s-strategy .st-s.on { opacity: 1; }
 #s-strategy .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
 #s-strategy .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
-/* the names as the deck's animation writes them: condensed bold italic capitals along the floor, each in its own colour */
-#s-strategy .st-z { position: absolute; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); user-select: none;
+/* the names as the deck's animation writes them: condensed bold italic capitals, each in its own colour, laid on the floor in
+   the axo (--m: the floor's east and south axes as the page shows them), zooming with it (29 Oct) */
+#s-strategy .st-z { position: absolute; transform: translate(-50%, -50%) matrix(var(--m, 1, 0, 0, 1, 0, 0)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); user-select: none;
   font-size: calc(var(--pt) * 12); font-style: italic; font-weight: 700; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
 #s-strategy .st-z.small { font-size: calc(var(--pt) * 9); --sx: .72; }
 #s-strategy .st-z.on { opacity: 1; }
@@ -115,7 +116,6 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       ["ACKO Home", 380, 840, "#a68bd6"], ["ACKO Drive", 960, 653, "#a8aa8f"], ["Atrium", 1045, 448, "#737373", 1], ["Atrium", 732, 685, "#737373", 1],
       ["Terrace", 1220, 485, "#6f7356", 1], ["Terrace", 804, 797, "#6f7356", 1], ["Café", 669, 817, "#8f8a5c", 1]],
     nums: { "01": [1441, 166, 16.3], "02": [1340, 262, 16.3], "03": [1279, 372, 19], "04": [1045, 524, 16.1], "05": [910, 617, 16.6], "06": [500, 845, 16.5] },   // centre, height (m)
-    rot: -4,            // the names lean this much steeper than the floor's long axis (deg)
   };
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "The Client’s Journey", "The Employee’s Journey"];
   const DUR = [0, 2.4, 4.4, 6.4, 5.6, 7.0];             // each beat's play (s)
@@ -272,12 +272,15 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]);
       p.setAttribute("transform", `translate(${x} ${y})`); p.style.opacity = S.ent;
     });
-    // names: turned along the floor's east or south axis as it shows on the page
-    const ang = (dx, dz) => { const o = v3().project(cam), b = v3().set(dx, 0, dz).project(cam); return Math.atan2((o.y - b.y) * 540, (b.x - o.x) * 960) * 180 / Math.PI; };
-    const rx = ang(1, 0) + MARKS.rot;
+    // names: on the floor, reading along its east axis, their south down the page, as the axo shows them (one matrix: the camera
+    // is orthographic), and of a size on the floor, so they grow and shrink with it as the numbers do: their CSS size at the home
+    // view (29 Oct: "it should be in a fixed axo angle", "the text size ... should be constant")
+    const hb = window.AxoModel.basis(S.home), L = (540 / S.home.half) * Math.hypot(hb.right.x, hb.up.x) || 1;     // the east axis at home (frame px)
+    const [ox, oy] = pw(0, 0, 0), [ex, ey] = pw(1, 0, 0), [sx, sy] = pw(0, 0, 1);
+    const mx = [ex - ox, ey - oy, sx - ox, sy - oy].map((v) => (v / L).toFixed(4)).join(", ") + ", 0, 0";
     for (const z of S.zl) {
       const [x, y] = pw(...(z.dept && S.np && S.np[z.dept] ? S.np[z.dept] : z.p));
-      z.d.style.left = (x / 19.2) + "%"; z.d.style.top = (y / 10.8) + "%"; z.d.style.setProperty("--r", rx + "deg");
+      z.d.style.left = (x / 19.2) + "%"; z.d.style.top = (y / 10.8) + "%"; z.d.style.setProperty("--m", mx);
       z.d.classList.toggle("on", !!S.names);
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
