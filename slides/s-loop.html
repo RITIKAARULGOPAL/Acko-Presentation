@@ -66,9 +66,11 @@
 .lp-stop .lab q::after { content: "  \201D"; }
 .lp-title { left: 2.8%; top: 66.6%; display: flex; align-items: center; gap: calc(var(--pt) * 10); }
 .lp-title img { height: calc(var(--pt) * 15); width: auto; }
+#s-loop .lp-title[data-only="1"] { gap: calc(var(--pt) * 1.5); }   /* "ACKO’s": the ’s against the logo (29 Oct: "this gap is off") */
 .lp-title span { font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); }
-.lp-p { left: 2.9%; top: 73.4%; width: 40%; font-size: calc(var(--pt) * 9.6); line-height: 1.45; font-style: italic; text-align: justify; }
+.lp-p { left: 2.9%; top: 73.4%; width: 50.71%; font-size: calc(var(--pt) * 9.6); line-height: 1.45; font-style: italic; text-align: justify; }   /* to the title's right edge (29 Oct: "increase text box width") */
 .lp-p b { font-weight: 700; }
+#s-loop .lp-p[data-only="2"] { width: 41.69%; }   /* beat 2's words to its own title's right edge (29 Oct: "reduce text box width") */
 .lp-welcome { left: 49%; top: 10.5%; width: 46%; font-size: calc(var(--pt) * 13); line-height: 1.35; font-weight: 400; }
 .lp-welcome b { font-size: .62em; font-weight: 500; color: var(--purple); }
 .lp-leads path { fill: none; stroke: var(--purple); stroke-width: 1.2; stroke-dasharray: 2 4; opacity: 0; transition: opacity .5s; vector-effect: non-scaling-stroke; }
