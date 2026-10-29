@@ -299,10 +299,11 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   }
   function overlay() {
     const A = M.data, k = 1920 / (host.clientWidth || 1920);
-    // entrances
+    // entrances: of a size in the model, so they zoom with it as the names do (29 Oct: "the 2 arrows should also be constant size")
+    const ek = S.home.half / S.state.half;
     $$(".st-ent path", sc).forEach((p, i) => {
       const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]);
-      p.setAttribute("transform", `translate(${x} ${y})`); p.style.opacity = S.ent;
+      p.setAttribute("transform", `translate(${x} ${y}) scale(${ek.toFixed(4)})`); p.style.opacity = S.ent;
     });
     // names: standing upright on the floor along its east (long) axis, as the axo shows such a wall (one matrix: the camera is
     // orthographic; seen from the other side they turn round, so they never read backwards), CAP m tall in the model, so they
