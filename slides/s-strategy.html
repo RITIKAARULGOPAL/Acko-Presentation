@@ -12,7 +12,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-strategy" data-part="1" data-title="Campus strategy" data-steps="6" data-mins="1.9"
-  data-beats="How it started,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together,The Client’s Journey,The Employee’s Journey"
+  data-beats="How it started,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together,The Client’s journey,The Employees Journey"
   data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 How it started: the bare shell, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: the floor in colour and the partitions rise. 5 The client's journey: the client's route from the entrance. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
   <div class="page">
     <div class="st-anim"></div>
@@ -93,7 +93,7 @@
                                       colour travel together (the numbers stay), stepping along the floor and back (the carousel); then two clicks swap them
      4 Looping it all Together        the volumes lift away, the floor goes to colour (render 01), the partitions rise (02) (beat 4
                                       without its route, 29 Oct)
-     5 The Client's Journey           on that floor, the blue route draws (render 09)
+     5 The Client's Journey           on that floor, the model dimmed a little, the blue route draws (render 09)
      6 The Employee's Journey         the furniture rises: the rooms' (02), the café (03), the terraces (04), the workstations (05),
                                       the plants (06); the red route draws from the entrances (render 08), the Loop's seven stops
                                       named as it reaches them; the blue route fades
@@ -124,11 +124,16 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     ["Atrium", "atrium", "N", "#737373", 1, [4000, 9000]], ["Terrace", "terrace", "S", "#6f7356", 2], ["Café", "cafezone", "S", "#8f8a5c", 2]];
   const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
   const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
-  // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1 and 2)
+  // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1, 2,
+  // 5 and 6); the name GAP pt above the line's first row as it lands, however many rows the line runs to (placeName)
+  const GAP = 12;
   const HAND = ["", "Every journey begins with a thought. Ours began with reimagining what a workplace could feel like.",
-    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity."];
-  const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s Journey", "The Employee’s Journey"];
-  const DUR = [0, 2.4, 4.4, 6.4, 2.4, 4.2, 7.0];             // each beat's play (s)
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.",
+    "The client journey is envisioned as a seamless transition through ACKO’s neighbourhood, where each touchpoint unfolds a distinct experience while maintaining a continuous sense of connection, discovery, and belonging.",
+    "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
+  const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
+  const DUR = [0, 2.4, 4.4, 6.4, 2.4, 4.2, 7.0];
+  const DIM = 0.45;                                    // the model's dimming under a route (the veil's opacity)             // each beat's play (s)
   // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
   // carousel (Ritika's pick of six, index-configure.html): every department steps one zone along the floor, west to east, twice,
   // then steps back home; then two clicks on names swap them live
@@ -188,6 +193,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     S.d = k === 6 ? emp.userData.max * win(t, 1.0, DUR[6] - 0.3) : 0;
     emp.userData.to(S.d); emp.material.opacity = 1;
     S.lit = M.data.stops.map((s) => k === 6 && S.d >= s.d - 0.5);
+    // while a route draws (5, 6), the model a little dimmed under it (29 Oct): fading in on 5, held on 6
+    S.dim = k === 5 ? DIM * win(t, 0, 0.6) : k === 6 ? DIM : 0;
     caption(NAMES[k]);
   }
 
@@ -231,7 +238,20 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     const cap = $(".st-cap", sc), hand = $(".st-hand", sc), line = HAND[NAMES.indexOf(txt)] || hand.textContent;
     if (cap.dataset.t === txt) return;
     cap.classList.remove("on"); cap.dataset.t = txt;
-    setTimeout(() => { cap.textContent = txt; cap.classList.add("on"); if (hand.textContent !== line) { hand.textContent = line; S.obs = null; need(); } }, 120);
+    setTimeout(() => {
+      if (hand.textContent !== line) { hand.textContent = line; S.obs = null; need(); }
+      cap.textContent = txt; placeName(); cap.classList.add("on");
+    }, 120);
+  }
+  // the name's top (% of the page) so its letters end GAP pt above the top of the line's first row, both measured as laid out
+  // (each against its own box, so a reveal's or the name's own slide-in doesn't count)
+  function placeName() {
+    const cap = $(".st-cap", sc), hand = $(".st-hand", sc), page = $(".page", sc), H = page.clientHeight, pt = page.clientWidth / 720;
+    const first = (e) => { const rg = document.createRange(); rg.selectNodeContents(e); const r = rg.getClientRects(); return r.length ? r : null; };
+    const hr = first(hand), cr = first(cap); if (!hr || !cr || !H) return;
+    const rowTop = hand.offsetTop + hand.offsetParent.offsetTop + (hr[0].top - hand.getBoundingClientRect().top);
+    const capBottom = cr[cr.length - 1].bottom - cap.getBoundingClientRect().top;
+    cap.style.top = ((rowTop - GAP * pt - capBottom) / H) * 100 + "%";
   }
   function play(k) {
     S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
@@ -374,6 +394,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       if (k >= 1) S.tween = null;
     }
     window.AxoModel.apply(cam, S.state, asp);
+    // the dimming: a white veil just in front of the camera, over all it has drawn, under the routes (renderOrder 9)
+    S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
+    if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
     r.render(M.scene, cam);
     overlay();
     if (S.playing || S.tween || S.swap) need();
@@ -434,14 +457,16 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     if (!M) {
       M = window.AxoLayers.get(); view = M.data.view;
       cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+      S.veil = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthTest: false, depthWrite: false }));
+      S.veil.renderOrder = 8; S.veil.frustumCulled = false; S.veil.visible = false; M.scene.add(S.veil);
       // each department's look: its own zone's colour and opacity as built
       S.look = Object.fromEntries(M.zones.map((v) => [v.userData.zone.key, { col: new T.Color(v.userData.zone.colour), op: v.userData.mats[0][1] }]));
       overlayBuild(); wire();
       // the names' sizes once their fonts are in
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { S.obs = null; S.labs.forEach((o) => { o.w = 0; }); need(); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { S.obs = null; S.labs.forEach((o) => { o.w = 0; }); placeName(); need(); });
       window.AxoLayers.listeners.add(() => { if (document.body.dataset.scene === "s-strategy") need(); });
       const again = () => { if (document.body.dataset.scene === "s-strategy") need(); };
-      addEventListener("resize", again); document.addEventListener("visibilitychange", again);
+      addEventListener("resize", () => { placeName(); again(); }); document.addEventListener("visibilitychange", again);
       sc._strategy = () => ({ k: S.k, playing: S.playing, cap: $(".st-cap", sc).textContent, lit: (S.lit || []).filter(Boolean).length,
         stops: M.data.stops.map((s) => s.name), d: S.d, state: S.state, home: S.home, names: !!S.names, cur: Object.assign({}, S.cur || PLAN), pick: S.pick || null,
         employee: M.routes.employee.geometry.drawRange.count, client: M.routes.client.geometry.drawRange.count });
