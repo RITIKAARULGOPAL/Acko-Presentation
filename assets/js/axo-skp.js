@@ -10,12 +10,13 @@
    Two levels of detail: fine (3.5 cm) in the walk's close-ups, coarse (7 cm) when the view is wider than LOD_HALF m. Looks as
    AxoModel's (AxoModel.looks): "ppt" (as built: SketchUp's colours, no cast shadows), "sketchup" (SketchUp's colours with sun
    and shadows), "clay", "clay-tex", "crisp", "warm". The shadow map is drawn once per look (the floor stands still; the walker
-   keeps its ring), not every frame. three.js r147. */
+   keeps its ring), not every frame. AxoSkp.focus(rings) keeps the purples in one space and greys them elsewhere. three.js r147. */
 (function () {
   const AS = {}, LOD_HALF = 32;
   const GROUP_OF = { floor: "base", slab: "base", wall: "walls", top: "walls", glass: "glass", mullion: "facade", wood: "furniture",
     soft: "furniture", hard: "furniture", plant: "plants", grass: "base", mass: "walls" };
   let T, M = null, REG = null, LOOK = "ppt", shadowDue = true;
+  const FOCUS = { u: { uFocusMap: { value: null }, uFocusBox: { value: null }, uFocusOn: { value: 0 } }, cv: null, box: null };
 
   AS.available = () => !!(window.THREE && window.AXO_SKP && window.AXO_DXF && window.AxoModel);
   const bytes = (b64) => { const s = atob(b64), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u.buffer; };
@@ -41,12 +42,40 @@
       const pl = new T.Mesh(new T.PlaneGeometry((x1 - x0) / 1000, (y1 - y0) / 1000), reg(new T.MeshBasicMaterial({ map: new T.CanvasTexture(cv), transparent: true, opacity: 0.5, depthWrite: false }), "softshadow"));
       pl.rotation.x = -Math.PI / 2; pl.position.set(X((x0 + x1) / 2) + 1.6, -0.6, Z((y0 + y1) / 2) + 2.4); G.base.add(pl);
     }
+    // the focus (AS.focus): a mask over the slab, white in the space in focus; outside it the model's purples go grey
+    {
+      const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+      const cv = document.createElement("canvas"); cv.width = 2048; cv.height = Math.max(64, Math.round(((y1 - y0) / (x1 - x0)) * 2048));
+      FOCUS.cv = cv; FOCUS.box = [x0, y0, x1, y1];
+      FOCUS.u.uFocusMap.value = new T.CanvasTexture(cv); FOCUS.u.uFocusMap.value.flipY = false;     // row 0 is the plan's least y
+      FOCUS.u.uFocusBox.value = new T.Vector4(X(x0), Z(y0), 1000 / (x1 - x0), 1000 / (y1 - y0));
+    }
+    const focusable = (m) => {
+      m.onBeforeCompile = (sh) => {
+        Object.assign(sh.uniforms, FOCUS.u);
+        sh.vertexShader = "varying vec2 vFocusXZ;\n" + sh.vertexShader.replace("#include <project_vertex>", `#include <project_vertex>
+          vec4 fcW = vec4(transformed, 1.0);
+          #ifdef USE_INSTANCING
+            fcW = instanceMatrix * fcW;
+          #endif
+          vFocusXZ = (modelMatrix * fcW).xz;`);
+        sh.fragmentShader = "uniform sampler2D uFocusMap;\nuniform vec4 uFocusBox;\nuniform float uFocusOn;\nvarying vec2 vFocusXZ;\n" + sh.fragmentShader.replace("#include <color_fragment>", `#include <color_fragment>
+          if (uFocusOn > 0.5) {                                     // a purple (blue over green, red not under it) outside the focus goes grey
+            vec3 c = diffuseColor.rgb;
+            float purple = smoothstep(0.015, 0.06, c.b - c.g) * smoothstep(-0.04, 0.0, c.r - c.g);
+            float inside = texture2D(uFocusMap, (vFocusXZ - uFocusBox.xy) * uFocusBox.zw).r;
+            float l = mix(dot(c, vec3(0.299, 0.587, 0.114)), max(c.r, max(c.g, c.b)), 0.4);
+            diffuseColor.rgb = mix(c, vec3(l), purple * (1.0 - inside));
+          }`);
+      };
+      return m;
+    };
     // one material per kind, white over the vertices' SketchUp colours (a look recolours it); flat-shaded, both sides
     const mats = {};
-    const matOf = (k) => mats[k] || (mats[k] = reg(k === "glass"
+    const matOf = (k) => mats[k] || (mats[k] = reg(focusable(k === "glass"
       ? new T.MeshLambertMaterial({ color: 0xffffff, vertexColors: true, flatShading: true, transparent: true, opacity: 0.35, depthWrite: false, side: T.DoubleSide })
       : new T.MeshLambertMaterial({ color: 0xffffff, vertexColors: true, flatShading: true, side: T.DoubleSide,
-          polygonOffset: k === "floor" || k === "slab" || k === "grass", polygonOffsetFactor: 1, polygonOffsetUnits: 2 }), k, true));
+          polygonOffset: k === "floor" || k === "slab" || k === "grass", polygonOffsetFactor: 1, polygonOffsetUnits: 2 })), k, true));
     // a part's geometry: int16 positions over its box, RGB per vertex, indices; UVs box-mapped in metres (for the looks' textures)
     function geometry(p) {
       const q = new Int16Array(bytes(p.p)), pos = new Float32Array(q.length);
@@ -127,6 +156,20 @@
     LOOK = window.AxoModel.LOOKS.includes(name) ? name : "ppt";
     if (M) { window.AxoModel.looks.apply(REG, LOOK); shadowDue = true; }
     return LOOK;
+  };
+  // the focus: AxoSkp.focus(rings) keeps the model's purples in those outlines (plan mm, y down; holes by even-odd) and turns the
+  // rest of them grey (29 Oct: "the only purple theme elements in this axo should be highlighted at each time interval");
+  // AxoSkp.focus(null) gives every purple back
+  AS.focus = function (rings) {
+    if (!M) return;
+    FOCUS.u.uFocusOn.value = rings && rings.length ? 1 : 0;
+    if (!FOCUS.u.uFocusOn.value) return;
+    const cv = FOCUS.cv, c = cv.getContext("2d"), [x0, y0, x1, y1] = FOCUS.box, kx = cv.width / (x1 - x0), ky = cv.height / (y1 - y0);
+    c.clearRect(0, 0, cv.width, cv.height); c.fillStyle = "#000"; c.fillRect(0, 0, cv.width, cv.height);
+    c.filter = "blur(2px)"; c.fillStyle = "#fff"; c.beginPath();
+    for (const r of rings) r.forEach(([x, y], i) => c[i ? "lineTo" : "moveTo"]((x - x0) * kx, (y - y0) * ky));
+    c.fill("evenodd"); c.filter = "none";
+    FOCUS.u.uFocusMap.value.needsUpdate = true;
   };
   // the day's route as walked on this model (legs re-routed round what the SketchUp model has in the way), or the slide's own
   AS.route = (legs) => (window.AXO_SKP && window.AXO_SKP.route) || legs;

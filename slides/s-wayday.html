@@ -83,8 +83,8 @@
    activity in each space when we zoom to that particular space ... one guy walking throughout is not required, instead we'll
    have a day in acko and only show spaces with human activity in it and hotspots for way finding ... humans can be in
    monochromatic dark grey ... the shadow is too harsh, make it soft" (the sketchup look's soft sun, axo-model.js), and by her
-   answers: the Loop's seven stops by the clock, a beat each (BEATS), the camera easing to each space; the hotspots always
-   there, amber light columns at her six marked spots (WAY, from tools/acko/wayday_marks.py), a click opening its pop-up;
+   answers: the Loop's seven stops by the clock, a beat each (BEATS), the camera easing to each space; the hotspots,
+   amber light columns at her six marked spots (WAY, from tools/acko/wayday_marks.py), one a beat (29 Oct), a click opening its pop-up;
    "A day in ACKO". The people (PEOPLE, from tools/acko/wayday_people.py: the layout's chairs, each space's scene, walkers on
    the corridors) show once the view is close. The lights, her marks and the people are this slide's own group, added to the
    shared scene on entering and taken off on leaving. A left-drag pans, a right-drag (or Shift-drag) turns it (all the way
@@ -93,15 +93,19 @@
 ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
   // the day (Ritika, 27 Oct: the Loop's seven stops by the clock): per beat the time, the stop and its line, the Loop's words,
   // the space it frames (plan mm: the room's middle, not its label's point), how much of it (half the view's height, m) and, for the
-  // Acker Garden, its own angle (Ritika, 27 Oct: "do it like the render"); @NB is the neighbourhood's name
+  // Acker Garden, its own angle (Ritika, 27 Oct: "do it like the render"); @NB is the neighbourhood's name. sp: the space in focus,
+  // the only one in purple (29 Oct: "the only purple theme elements in this axo should be highlighted at each time interval"):
+  // the plan's room of that type at the beat's point (or nearest it), or the beat's neighbourhood (@NB). spot: the one hotspot
+  // that shows on the beat (SPOTS / WAY.stops, by its place; none on Board Room and Wellness), 29 Oct: "only show the
+  // corresponding one"
   const BEATS = [
-    { t: "09:00", n: "Arrival", s: "Through the lift lobby to Reception", q: "I feel welcomed", at: [85500, 31500], half: 14 },
-    { t: "09:30", n: "Work", s: "At their desks in @NB", q: "These are my folks!", at: [33300, 33500], half: 14 },
-    { t: "11:00", n: "Meeting Rooms", s: "A team review in the departmental room", q: "My impact", at: [36745, 24148], half: 11 },
-    { t: "12:00", n: "Collab", s: "In the Acker Garden: the swing, a punch bag and foosball", q: "Wow, worth the commute", at: [18279, 18618], half: 6.5, theta: 1.68 },
-    { t: "13:00", n: "Café", s: "Lunch together in the café", q: "Hey, we finally meet!", at: [67562, 40539], half: 15 },
-    { t: "15:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11 },
-    { t: "17:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12 },
+    { t: "09:00", n: "Arrival", s: "Through the lift lobby to Reception", q: "I feel welcomed", at: [85500, 31500], half: 14, sp: "Reception", spot: 0 },
+    { t: "09:30", n: "Work", s: "At their desks in @NB", q: "These are my folks!", at: [33300, 33500], half: 14, sp: "@NB", spot: 3 },
+    { t: "11:00", n: "Meeting Rooms", s: "A team review in the departmental room", q: "My impact", at: [36745, 24148], half: 11, sp: "Departmental room", spot: 2 },
+    { t: "12:00", n: "Collab", s: "In the Acker Garden: the swing, a punch bag and foosball", q: "Wow, worth the commute", at: [18279, 18618], half: 6.5, theta: 1.68, sp: "Collab", spot: 4 },
+    { t: "13:00", n: "Café", s: "Lunch together in the café", q: "Hey, we finally meet!", at: [67562, 40539], half: 15, sp: "Cafeteria", spot: 5 },
+    { t: "15:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
+    { t: "17:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: -1 },
   ];
   // the wayfinding hotspots: her marked spots (WAY.stops, in her order), each a light column; a click opens its pop-up (title,
   // what the sign does; her sketch to come)
@@ -129,6 +133,17 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
   // the neighbourhood of the day's desks, by the drawing's own name ("06 · Home")
   const nbName = () => { const p = BEATS[1].at, z = (plan.data.zones || []).find((q) => ringsOf(q.zone).filter((r) => inRing(p, r)).length % 2 === 1); return z ? z.name : "The neighbourhood"; };
+  // a beat's space in focus (its outlines, plan mm): the neighbourhood its point is in, or the room of its type holding the point,
+  // else the one whose box is nearest it
+  const spaceOf = (b) => {
+    const p = b.at, holds = (d) => ringsOf(d).filter((r) => inRing(p, r)).length % 2 === 1;
+    if (b.sp === "@NB") { const z = (plan.data.zones || []).find((q) => holds(q.zone)); return z ? ringsOf(z.zone) : null; }
+    const off = (d) => { const q = ringsOf(d).flat(), xs = q.map((v) => v[0]), ys = q.map((v) => v[1]);
+      return Math.hypot(Math.max(Math.min(...xs) - p[0], 0, p[0] - Math.max(...xs)), Math.max(Math.min(...ys) - p[1], 0, p[1] - Math.max(...ys))); };
+    const rooms = (plan.data.spaces || []).filter((r) => r.type === b.sp && r.d);
+    const r = rooms.find((q) => holds(q.d)) || rooms.sort((a, c) => off(a.d) - off(c.d))[0];
+    return r ? ringsOf(r.d) : null;
+  };
 
   // the people: one low-poly figure per pose, merged from simple solids, facing +z, about 1.7 m standing (a seated one's origin
   // the seat), all in one dark grey
@@ -242,7 +257,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(tri, 3)); geo.computeVertexNormals();
       const mat = new T.MeshLambertMaterial({ color: 0x5222d0, transparent: true, side: T.DoubleSide, depthWrite: solid });
       const mesh = new T.Mesh(geo, mat); mesh.castShadow = solid; if (!solid) mesh.renderOrder = 4; g.add(mesh, ...lines); group.add(g);
-      return { stop: mk.stop, solid, mat, lines };
+      return { stop: mk.stop, solid, mat, lines, pts: mk.shape === "wrap" ? mk.line : mk.rings.flat() };
     });
     people();
     // the strip of the day
@@ -271,18 +286,28 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const b = BEATS[i], now = $(".wd-now", sc);
     $(".t", now).textContent = b.t; $("b", now).textContent = b.n; $("span", now).textContent = b.s; $("q", now).textContent = b.q;
     $$(".wd-day button", sc).forEach((el, k) => { el.classList.toggle("on", k === i); el.classList.toggle("done", k < i); });
+    if (MODEL.focus) { if (b.ring === undefined) b.ring = spaceOf(b); MODEL.focus(b.ring); }
   }
   // a hotspot's pop-up: open (its light taller and brighter, its mark strongest), or none (-1)
   function shine(i) {
     S.open = i; const card = $(".wd-card", sc);
     if (i >= 0) { $("b", card).textContent = SPOTS[i][0]; $("p", card).textContent = SPOTS[i][1]; }
     card.classList.toggle("on", i >= 0);
-    marks.forEach((m) => { const on = m.stop === i; m.mat.opacity = m.solid ? (on ? 1 : 0.5) : (on ? 0.38 : 0.16); m.lines.forEach((l) => (l.material.opacity = on ? 0.9 : 0.4)); });
+    // her marks in purple only in the beat's space, at its hotspot or while their own pop-up is open, grey elsewhere (29 Oct:
+    // "too much purple")
+    const rings = BEATS[S.beat].ring || [], held = (m) => m.pts.some((q) => rings.filter((r) => inRing(q, r)).length % 2 === 1);
+    marks.forEach((m) => {
+      const on = m.stop === i, col = on || shown(m.stop) || held(m) ? 0x5222d0 : 0x8f8f8f;
+      m.mat.color.setHex(col); m.mat.opacity = m.solid ? (on ? 1 : 0.5) : (on ? 0.38 : 0.16);
+      m.lines.forEach((l) => { l.material.color.setHex(col); l.material.opacity = on ? 0.9 : 0.4; });
+    });
   }
-  // each frame: the lights breathe (scaled up with the view, so they read on the whole floor), the people show once close
+  // each frame: the beat's light breathes, of one size in the model whatever the zoom (29 Oct: "it has to be constant"); the
+  // others hidden; the people show once close
+  const shown = (i) => BEATS[S.beat].spot === i;
   function tick(now) {
-    const z = Math.max(1, S.view.half / 15), b = reduced ? 0 : Math.sin(now / 600);
-    lights.forEach((l, i) => { const on = i === S.open; l.g.scale.setScalar(z); l.beam.scale.y = on ? 4.6 : 3.2;
+    const b = reduced ? 0 : Math.sin(now / 600);
+    lights.forEach((l, i) => { const on = i === S.open; l.g.visible = shown(i); l.g.scale.setScalar(1); l.beam.scale.y = on ? 4.6 : 3.2;
       l.beam.material.opacity = (on ? 0.85 : 0.58) + (on ? 0.1 : 0.08) * b; l.glow.material.opacity = (on ? 0.38 : 0.24) + 0.08 * b; l.ring.material.opacity = on ? 1 : 0.75; });
     crowd.visible = S.view.half < CLOSE;
     if (crowd.visible && walkers.length && !reduced) walk(now);
@@ -319,6 +344,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const sp = (v) => { v.project(cam); return [((v.x + 1) / 2) * bw, ((1 - v.y) / 2) * bh]; };
     let best = -1, bd = 1e9;
     lights.forEach((l, i) => {
+      if (!shown(i)) return;
       const [ax, ay] = sp(l.g.position.clone()), [tx, ty] = sp(top(i)), dx = tx - ax, dy = ty - ay, L2 = dx * dx + dy * dy || 1;
       const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)), d = Math.hypot(px - ax - t * dx, py - ay - t * dy);
       const w = Math.max(14, ((0.42 * l.g.scale.x) / (2 * S.view.half)) * bh);
@@ -396,6 +422,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     leave() {
       cancelAnimationFrame(S.raf); S.raf = 0; shine(-1);
       if (M && group) { M.scene.remove(group); M.reset(); }
+      if (MODEL.focus) MODEL.focus(null);
     },
   };
 });
