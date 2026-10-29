@@ -53,7 +53,7 @@
   opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
 #s-strategy .st-cap.on { opacity: 1; transform: none; }
 /* the overlay: the entrances' maroon marks, the neighbourhoods' names, the Loop's stops (a dot, a leader, the name and its words) */
-#s-strategy .st-ov { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-strategy .st-ov { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }   /* the names stop at the page's edge, as the model does */
 #s-strategy .st-ov > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 #s-strategy .st-ent path { fill: var(--maroon, #980000); transition: opacity .4s var(--ease); }
 #s-strategy .st-legs path { stroke: var(--purple); stroke-width: 1.2; fill: none; vector-effect: non-scaling-stroke; }
@@ -65,10 +65,10 @@
 #s-strategy .st-s.on { opacity: 1; }
 #s-strategy .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
 #s-strategy .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
-/* the names as the deck's animation writes them: condensed bold italic capitals, each in its own colour, laid on the floor in
-   the axo (--m: the floor's east and south axes as the page shows them), zooming with it (29 Oct) */
+/* the names as the reference axo has them (29 Oct): condensed bold capitals, each in its own colour, standing upright on the floor
+   along its long axis (--m: the floor's east axis and the vertical as the page shows them), zooming with it */
 #s-strategy .st-z { position: absolute; transform: translate(-50%, -50%) matrix(var(--m, 1, 0, 0, 1, 0, 0)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); user-select: none;
-  font-size: calc(var(--pt) * 12); font-style: italic; font-weight: 700; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
+  font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 800; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
 #s-strategy .st-z.small { font-size: calc(var(--pt) * 9); --sx: .72; }
 #s-strategy .st-z.on { opacity: 1; }
 /* beat 3: the departments are configurable (Ritika, 23 Oct; no text, her note 26 Oct): the names clickable once it has played */
@@ -97,26 +97,32 @@
                                       the plants (06); the red route draws from the entrances (render 08), the Loop's seven stops
                                       named as it reaches them; the blue route fades
    Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
-   right-drag turns, the wheel zooms on the cursor, Reset view goes back. Without WebGL, the deck's GIF. */
+   right-drag turns, the wheel zooms on the cursor, Reset view or a double-click goes back. Without WebGL, the deck's GIF. */
 ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
   // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
   // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
-  // copyright line clears them ("back on both, axos made smaller"). The marks below were measured on the PPT's GIF, at FIT_MARKS
+  // copyright line clears them ("back on both, axos made smaller"). The entrances below were measured on the PPT's GIF, at FIT_MARKS
   const FIT14 = [0.0134, 0.0028, 0.8385, 0.9852], SHRINK = 0.95, AT = [1606 / 1920, 10.8 / 1080];
   const FIT = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2])), FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
   const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
     "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
-  // beat 2's marks where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model there
-  // so a drag or zoom carries it: the entrances (maroon ▲), the names (the deck's colours), the numbers' centres
-  const MARKS = {
-    ent: [[686, 714], [1094, 408]],
-    // Drive, Travel and the café where ACKO_NEI.dxf has them (23 Oct): Drive east of the west atrium, the café in Drive's old place
-    names: [["ACKO Auto", 1516, 268, "#8d9aab"], ["ACKO Life", 1208, 220, "#9f88d9"], ["ACKO Health", 1193, 330, "#5e68c4"], ["ACKO Travel", 1105, 556, "#c9a7b1"],
-      ["ACKO Home", 380, 840, "#a68bd6"], ["ACKO Drive", 960, 653, "#a8aa8f"], ["Atrium", 1045, 448, "#737373", 1], ["Atrium", 732, 685, "#737373", 1],
-      ["Terrace", 1220, 485, "#6f7356", 1], ["Terrace", 804, 797, "#6f7356", 1], ["Café", 669, 817, "#8f8a5c", 1]],
-    nums: { "01": [1441, 166, 16.3], "02": [1340, 262, 16.3], "03": [1279, 372, 19], "04": [1045, 524, 16.1], "05": [910, 617, 16.6], "06": [500, 845, 16.5] },   // centre, height (m)
-  };
+  // beat 2's entrances where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model
+  // there so a drag or zoom carries it (the maroon ▲)
+  const MARKS = { ent: [[686, 714], [1094, 408]] };
+  // beat 2's names and numbers as the reference axo has them (29 Oct), worked out from the zones, so they follow the drawing. Each
+  // name runs along the long axis at the middle of its zone's outermost north or south edge (moved along it by dx mm, or per ring, clear
+  // of its neighbours), its capitals CAP[size] m tall, in its zone's
+  // colour made deeper (tone(); "acko home ... the pink of 06"): on a north (N) edge it stands up just outside the edge, on a
+  // south (S) edge it hangs from it, below the floor, clear of the façade (as the reference's Drive and Terrace). Health hangs
+  // from its south edge (here Life wraps round its north); the atriums are named on their north edge, east of their middle (clear
+  // of the entrances), the terraces and the café on their south edge. Each number lies on the floor at its zone's middle (the
+  // point farthest from its edge), NUM_H m (its plane's height)
+  const LABELS = [["ACKO Auto", "AUTO", "S"], ["ACKO Life", "LIFE", "N"], ["ACKO Health", "HEALTH", "S", null, 0, 7000],
+    ["ACKO Travel", "TRAVEL", "N", null, 0, -6000], ["ACKO Drive", "DRIVE", "S"], ["ACKO Home", "HOME", "N"],
+    ["Atrium", "atrium", "N", "#737373", 1, [4000, 9000]], ["Terrace", "terrace", "S", "#6f7356", 2], ["Café", "cafezone", "S", "#8f8a5c", 2]];
+  const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
+  const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "The Client’s Journey", "The Employee’s Journey"];
   const DUR = [0, 2.4, 4.4, 6.4, 5.6, 7.0];             // each beat's play (s)
   // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
@@ -238,25 +244,51 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     const d = v3(); cam.getWorldDirection(d);
     const at = (x, y, h) => { const o = v3().set(x / 960 - 1, 1 - y / 540, -1).unproject(cam), t = (h - o.y) / d.y; return [o.x + d.x * t, h, o.z + d.z * t]; };
     S.entAt = MARKS.ent.map(([x, y]) => at(x, y, 4.5));
-    for (const z of S.zl) z.p = at(z.px, z.py, z.h);
-    S.anchor = {}; for (const z of S.zl) if (z.dept) S.anchor[z.dept] = z.p;      // each zone's name point: where the deck names its own department
+    for (const z of S.zl) z.p = [M.X(z.at[0]), (z.side === "N" ? 1 : -1) * (CAP[z.size] * 0.55 + 0.4 + LIFT[z.size]), M.Z(z.at[1])];   // standing on the floor, or hanging below it
+    S.anchor = {}; for (const z of S.zl) if (z.dept) S.anchor[z.dept] = z.p;      // each zone's name point: where its own department is named
     for (const v of M.zones) {
-      const q = MARKS.nums[v.userData.zone.n], num = v.userData.num; if (!q || !num) continue;
-      const p = at(q[0], q[1], num.position.y); num.position.x = p[0]; num.position.z = p[2]; num.scale.setScalar(q[2] / v.userData.numH);
+      const num = v.userData.num; if (!num) continue;
+      const [x, y] = middle(v.userData.zone.ring); num.position.x = M.X(x); num.position.z = M.Z(y); num.scale.setScalar(NUM_H / v.userData.numH);
     }
   }
+  // a ring's middle (plan mm): its point farthest from its edge, on a 1 m grid, then a 0.1 m one round the best
+  function middle(ring) {
+    const n = ring.length, xs = ring.map((q) => q[0]), ys = ring.map((q) => q[1]);
+    const inside = (x, y) => { let c = false; for (let i = 0, j = n - 1; i < n; j = i++) { const [x0, y0] = ring[i], [x1, y1] = ring[j]; if ((y0 > y) !== (y1 > y) && x < x0 + ((y - y0) * (x1 - x0)) / (y1 - y0)) c = !c; } return c; };
+    const edge = (x, y) => {
+      let d = Infinity;
+      for (let i = 0, j = n - 1; i < n; j = i++) {
+        const [x0, y0] = ring[j], [x1, y1] = ring[i], ux = x1 - x0, uy = y1 - y0, t = Math.max(0, Math.min(1, ((x - x0) * ux + (y - y0) * uy) / (ux * ux + uy * uy || 1)));
+        d = Math.min(d, Math.hypot(x - x0 - t * ux, y - y0 - t * uy));
+      }
+      return d;
+    };
+    let best = [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2], bd = -1;
+    const scan = (x0, x1, y0, y1, st) => { for (let x = x0; x <= x1; x += st) for (let y = y0; y <= y1; y += st) if (inside(x, y)) { const d = edge(x, y); if (d > bd) { bd = d; best = [x, y]; } } };
+    scan(Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys), 1000);
+    const [bx, by] = best; scan(bx - 1000, bx + 1000, by - 1000, by + 1000, 100);
+    return best;
+  }
+
   function overlayBuild() {
     const box = $(".st-ov", sc), A = M.data;
     $$(".st-s, .st-z", box).forEach((e) => e.remove());
     // the entrances: the deck's maroon ▲ (its apex a little right of centre)
     $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
-    // the names, as the deck's animation sets them
-    S.zl = MARKS.names.map(([txt, x, y, col, small]) => {
-      const d = document.createElement("div"); d.className = "st-z" + (small ? " small" : ""); d.textContent = txt; d.style.color = col; box.appendChild(d);
-      const dept = DEPTS.find((k) => txt.toUpperCase() === "ACKO " + k);
-      if (dept) { d.classList.add("dept"); d.addEventListener("click", () => pick(dept)); }
-      return { d, px: x, py: y, h: small ? 1.5 : 3, dept };
-    });
+    // the names (LABELS), each at the middle of its zone's (or atrium's, terrace's, café's) outermost edge on its side
+    S.zl = [];
+    const tone = (hex) => { const c = new T.Color(hex), h = {}; c.getHSL(h); return "#" + c.setHSL(h.h, Math.min(0.35, h.s) * 0.7, 0.55).getHexString(); };
+    for (const [txt, where, side, col, size, dx] of LABELS) {
+      const zone = A.zones.find((z) => z.key === where), rings = zone ? [zone.ring] : A[where] || [];
+      rings.forEach((ring, i) => {
+        const ys = ring.map((q) => q[1]), e = side === "N" ? Math.min(...ys) : Math.max(...ys), xs = ring.filter((q) => Math.abs(q[1] - e) < 300).map((q) => q[0]);
+        const x = (Math.min(...xs) + Math.max(...xs)) / 2 + ((Array.isArray(dx) ? dx[i] : dx) || 0), y = e + (side === "N" ? -OUT.N : OUT.S);
+        const d = document.createElement("div"); d.className = "st-z" + (size ? " small" : ""); d.textContent = txt; d.style.color = col || tone(zone.colour); box.appendChild(d);
+        const dept = zone ? where : null;
+        if (dept) { d.classList.add("dept"); d.addEventListener("click", () => pick(dept)); }
+        S.zl.push({ d, at: [x, y], size: size || 0, side, dept });
+      });
+    }
     // the Loop's stops
     const svg = $(".st-legs", sc); svg.innerHTML = "";
     S.labs = A.stops.map((s) => {
@@ -272,15 +304,20 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]);
       p.setAttribute("transform", `translate(${x} ${y})`); p.style.opacity = S.ent;
     });
-    // names: on the floor, reading along its east axis, their south down the page, as the axo shows them (one matrix: the camera
-    // is orthographic), and of a size on the floor, so they grow and shrink with it as the numbers do: their CSS size at the home
-    // view (29 Oct: "it should be in a fixed axo angle", "the text size ... should be constant")
-    const hb = window.AxoModel.basis(S.home), L = (540 / S.home.half) * Math.hypot(hb.right.x, hb.up.x) || 1;     // the east axis at home (frame px)
-    const [ox, oy] = pw(0, 0, 0), [ex, ey] = pw(1, 0, 0), [sx, sy] = pw(0, 0, 1);
-    const mx = [ex - ox, ey - oy, sx - ox, sy - oy].map((v) => (v / L).toFixed(4)).join(", ") + ", 0, 0";
+    // names: standing upright on the floor along its east (long) axis, as the axo shows such a wall (one matrix: the camera is
+    // orthographic; seen from the other side they turn round, so they never read backwards), CAP m tall in the model, so they
+    // zoom with it as the numbers do (29 Oct: "it should be in a fixed axo angle", "the text size ... should be constant", and
+    // the reference axo)
+    const [ox, oy] = pw(0, 0, 0), [ex, ey] = pw(1, 0, 0), [dx, dy] = pw(0, -1, 0), D = [dx - ox, dy - oy];
+    let E = [ex - ox, ey - oy]; if (E[0] * D[1] - E[1] * D[0] < 0) E = [-E[0], -E[1]];
+    const fs = S.zl.map((z) => parseFloat(getComputedStyle(z.d).fontSize) || 16);
+    S.zl.forEach((z, i) => {
+      const u = CAP[z.size] / (0.72 * fs[i]) / k;                      // m per CSS px of the name's type; frame px to CSS px
+      z.mx = [E[0], E[1], D[0], D[1]].map((v) => (v * u).toFixed(4)).join(", ") + ", 0, 0";
+    });
     for (const z of S.zl) {
       const [x, y] = pw(...(z.dept && S.np && S.np[z.dept] ? S.np[z.dept] : z.p));
-      z.d.style.left = (x / 19.2) + "%"; z.d.style.top = (y / 10.8) + "%"; z.d.style.setProperty("--m", mx);
+      z.d.style.left = (x / 19.2) + "%"; z.d.style.top = (y / 10.8) + "%"; z.d.style.setProperty("--m", z.mx);
       z.d.classList.toggle("on", !!S.names);
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
@@ -338,7 +375,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
 
   // ---------- panning, turning, zooming ----------
   // the same mouse on every axo (29 Oct: "LMB for pan, mouse wheel for zoom in zoom out and RMB for rotate"): a left-drag pans (in the axo's right/up), a right-drag (or Shift-drag, for a
-  // trackpad) turns it, the wheel zooms on the cursor (its point on the floor stays put)
+  // trackpad) turns it, the wheel zooms on the cursor (its point on the floor stays put), a double-click goes back to the beat's view
   function wire() {
     let drag = null;
     const ground = (e, v) => {
@@ -372,12 +409,16 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     };
     host.addEventListener("pointerup", up); host.addEventListener("pointercancel", () => { drag = null; host.classList.remove("drag"); });
     host.addEventListener("contextmenu", (e) => e.preventDefault());
+    host.addEventListener("dblclick", home);
     host.addEventListener("wheel", (e) => {
       e.preventDefault(); S.moved = true; S.tween = null;
       const v = S.state, before = ground(e, v), w = Object.assign({}, v, { half: Math.max(4, Math.min(140, v.half * Math.exp(e.deltaY * 0.0012))) });
       const after = ground(e, w); w.t = [w.t[0] + before.x - after.x, w.t[1], w.t[2] + before.z - after.z]; S.state = w; need();
     }, { passive: false });
   }
+
+  // back to the beat's view, eased (Reset view, or a double-click as on the plans)
+  function home() { S.moved = false; S.tween = { from: S.state, to: S.home, t0: performance.now(), ms: 900 }; need(); }
 
   function start() {
     host = $(".st-3d", sc);
@@ -413,7 +454,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
-      $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); S.moved = false; S.tween = { from: S.state, to: S.home, t0: performance.now(), ms: 900 }; need(); };
+      $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
