@@ -189,7 +189,10 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   const picked = (p, k) => { const h = Math.sin(p[0] * 12.9898 + p[1] * 78.233) * 43758.5453; return h - Math.floor(h) < KEEP[k]; };
   function people() {
     crowd = new T.Group(); crowd.name = "people";
-    const who = Object.fromEntries(["sit", "stand", "present", "yoga"].map((k) => [k, (PEOPLE[k] || []).filter((q) => onFloor(q, k !== "sit") && picked(q, k))]));
+    // in the areas the 28.10 plan changed (the model's furniture there is that plan's, AXO_SKP.changes): its seats, not the old ones
+    const CHG = SKP && window.AXO_SKP.changes, old = (q) => !CHG || !CHG.areas.some((r) => inRing(q, r));
+    const who = Object.fromEntries(["sit", "stand", "present", "yoga"].map((k) => [k, (PEOPLE[k] || []).filter((q) => old(q) && onFloor(q, k !== "sit") && picked(q, k))]));
+    if (CHG) who.sit.push(...CHG.seats.filter((q) => picked(q, "sit")));
     const mat = new T.MeshLambertMaterial({ color: GREY, transparent: true, opacity: SEE }), disc = new T.CircleGeometry(0.3, 14).rotateX(-Math.PI / 2);
     const dmat = new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.12, depthWrite: false });
     const m4 = new T.Matrix4(), q = new T.Quaternion(), one = new T.Vector3(1, 1, 1), Y = new T.Vector3(0, 1, 0);

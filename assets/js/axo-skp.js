@@ -143,9 +143,61 @@
         });
       }
     }
+    // the 28.10 plan in the areas its drawings mark as changed (D.changes, tools/acko/axo_skp_28.py; 30 Oct: "this entire portion
+    // is wrong.. not as per the latest plan"): the model's furniture in them left out (a component's placements scaled to nothing,
+    // a merged part's low pieces cut from its triangles; plants, glass and anything taller than LOW m stay), and the 28.10 pieces
+    // added as placements of the model's own components
+    const CHG = D.changes, LOW = 1.3, FURN = ["wood", "soft", "hard"];
+    const areas = CHG ? CHG.areas.map((r) => r.map(([x, y]) => [X(x), Z(y)])) : [];
+    const inArea = (x, z) => areas.some((r) => { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
+      const [x1, z1] = r[i], [x2, z2] = r[j]; if ((z1 > z) !== (z2 > z) && x < ((x2 - x1) * (z - z1)) / (z2 - z1) + x1) c = !c; } return c; });
+    if (CHG) {
+      const box = {}, kinds = {};
+      for (const p of D.parts) if (p.u >= 0) {
+        const b = box[p.u] || (box[p.u] = [[1e9, 1e9, 1e9], [-1e9, -1e9, -1e9]]); (kinds[p.u] = kinds[p.u] || new Set()).add(p.k);
+        for (let a = 0; a < 3; a++) { b[0][a] = Math.min(b[0][a], p.lo[a]); b[1][a] = Math.max(b[1][a], p.hi[a]); }
+      }
+      const zero = new T.Matrix4().makeScale(0, 0, 0), v = new T.Vector3();
+      for (const u in box) {
+        const ks = [...kinds[u]], [blo, bhi] = box[u];
+        if (!ks.every((k) => FURN.includes(k)) || bhi[1] - blo[1] > LOW + 0.3) continue;
+        placements[u].forEach((m4, i) => { v.set((blo[0] + bhi[0]) / 2, 0, (blo[2] + bhi[2]) / 2).applyMatrix4(m4); if (inArea(v.x, v.z)) placements[u][i] = zero; });
+      }
+      for (const [u, i] of CHG.hide || []) placements[u][i] = zero;                 // walls 28.10 doesn't have
+      for (const { u, m } of CHG.place) placements[u].push(new T.Matrix4().set(m[0], m[3], m[6], m[9], m[1], m[4], m[7], m[10], m[2], m[5], m[8], m[11], 0, 0, 0, 1));
+    }
+    // a merged part's furniture in the areas: its pieces (triangles joined where they share a corner) that stay under LOW m, have
+    // their middle in one and are under BIG m across; a longer one is millwork (the café's counter) and stays
+    const BIG = 3.2;
+    const cut = (g) => {
+      const pos = g.getAttribute("position").array, ix = g.getIndex().array, n = ix.length / 3, cand = [], up = new Int32Array(n).fill(-1);
+      const find = (a) => { while (up[a] >= 0 && up[up[a]] >= 0) { up[a] = up[up[a]]; a = up[a]; } return up[a] >= 0 ? up[a] : a; };
+      const at = new Map(), key = (v) => Math.round(pos[v] * 200) + "," + Math.round(pos[v + 1] * 200) + "," + Math.round(pos[v + 2] * 200);
+      for (let t = 0; t < n; t++) {
+        const a = ix[3 * t] * 3, b = ix[3 * t + 1] * 3, c = ix[3 * t + 2] * 3;
+        if (Math.max(pos[a + 1], pos[b + 1], pos[c + 1]) >= LOW) continue;
+        if (!inArea((pos[a] + pos[b] + pos[c]) / 3, (pos[a + 2] + pos[b + 2] + pos[c + 2]) / 3)) continue;
+        cand.push(t);
+        for (const v of [a, b, c]) { const k = key(v), o = at.get(k); if (o === undefined) at.set(k, t); else { const r1 = find(o), r2 = find(t); if (r1 !== r2) up[r2] = r1; } }
+      }
+      const box = new Map();
+      for (const t of cand) { const r = find(t), b = box.get(r) || [1e9, 1e9, -1e9, -1e9];
+        for (let j = 0; j < 3; j++) { const v = ix[3 * t + j] * 3; b[0] = Math.min(b[0], pos[v]); b[1] = Math.min(b[1], pos[v + 2]); b[2] = Math.max(b[2], pos[v]); b[3] = Math.max(b[3], pos[v + 2]); }
+        box.set(r, b); }
+      const drop = new Uint8Array(n);
+      for (const t of cand) { const b = box.get(find(t)); if (Math.max(b[2] - b[0], b[3] - b[1]) < BIG) drop[t] = 1; }
+      const keep = []; for (let t = 0; t < n; t++) if (!drop[t]) keep.push(ix[3 * t], ix[3 * t + 1], ix[3 * t + 2]);
+      if (keep.length < ix.length) g.setIndex(new T.BufferAttribute(new ix.constructor(keep), 1));
+    };
     const fine = [], coarse = [], lo = new T.Vector3(1e9, 1e9, 1e9), hi = new T.Vector3(-1e9, -1e9, -1e9), ink = [];
-    for (const p of D.parts) {
+    for (const [pi, p] of D.parts.entries()) {
       const g = geometry(p), mat = matOf(p.k);
+      if (CHG && p.u < 0 && FURN.includes(p.k)) cut(g);
+      if (CHG && p.u < 0 && CHG.drop && CHG.drop[pi]) {                        // walls 28.10 doesn't have
+        const ix = g.getIndex().array, out = new Uint8Array(ix.length / 3); for (const [t0, t1] of CHG.drop[pi]) out.fill(1, t0, t1);
+        const keep = []; for (let t = 0; t < out.length; t++) if (!out[t]) keep.push(ix[3 * t], ix[3 * t + 1], ix[3 * t + 2]);
+        g.setIndex(new T.BufferAttribute(new ix.constructor(keep), 1));
+      }
       let mesh;
       if (p.u >= 0) {
         const ms = placements[p.u]; mesh = new T.InstancedMesh(g, mat, ms.length);
@@ -168,6 +220,45 @@
       g.setAttribute("color", new T.BufferAttribute(new Uint8Array(g.getAttribute("position").count * 3).fill(236), 3, true));
       const mesh = new T.Mesh(g, matOf("wall"));
       G.walls.add(mesh); REG.meshes.push([mesh, "wall"]); ink.push(new T.EdgesGeometry(g, 30));
+    }
+    // the 28.10 plan's plain tables (CHG.tables: the model has none): a 40 mm top at 0.75 m on four legs, white
+    if (CHG && CHG.tables && CHG.tables.length) {
+      const pos = [], m4 = new T.Matrix4(), q = new T.Quaternion(), Y = new T.Vector3(0, 1, 0);
+      const box = (w, h, d, x, y, z, M4) => { const b = new T.BoxGeometry(w, h, d).toNonIndexed(); b.translate(x, y, z); b.applyMatrix4(M4); pos.push(...b.getAttribute("position").array); };
+      for (const [x, y, w, d, a] of CHG.tables) {
+        const W_ = w / 1000, D_ = d / 1000; m4.compose(new T.Vector3(X(x), 0, Z(y)), q.setFromAxisAngle(Y, -a * Math.PI / 180), new T.Vector3(1, 1, 1));
+        box(W_, 0.04, D_, 0, 0.73, 0, m4);
+        for (const sx of [-1, 1]) for (const sz of [-1, 1]) box(0.05, 0.71, 0.05, sx * (W_ / 2 - 0.06), 0.355, sz * (D_ / 2 - 0.06), m4);
+      }
+      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+      g.setAttribute("color", new T.BufferAttribute(new Uint8Array(pos.length).fill(240), 3, true)); g.computeVertexNormals();
+      const uv = new Float32Array((pos.length / 3) * 2); for (let i = 0, j = 0; i < pos.length; i += 3, j += 2) { uv[j] = pos[i]; uv[j + 1] = pos[i + 2]; }
+      g.setAttribute("uv", new T.BufferAttribute(uv, 2));
+      const mesh = new T.Mesh(g, matOf("wood")); G.furniture.add(mesh); REG.meshes.push([mesh, "wood"]);
+    }
+    // the 28.10 plan's fit-out walls, in place of the model's (CHG.walls, plan mm: outlines with their holes; 30 Oct: "wall
+    // terminations are not fine// also z fighting is happening"): walls and partitions in a wall's white, glass in the model's
+    // glass, each to its height (CHG.heights), edged in the ink
+    if (CHG && CHG.walls) {
+      const HT = CHG.heights || { wall: 3.7, solid: 2.4, glass: 2.4 };
+      for (const [ty, rgb] of [["wall", [232, 230, 226]], ["solid", [232, 230, 226]], ["glass", [95, 78, 107]]]) {
+        const h = HT[ty];
+        const geos = [];
+        for (const poly of CHG.walls[ty] || []) {
+          const sh = new T.Shape(poly[0].map(([x, y]) => new T.Vector2(X(x), -Z(y))));
+          for (const hole of poly.slice(1)) sh.holes.push(new T.Path(hole.map(([x, y]) => new T.Vector2(X(x), -Z(y)))));
+          const e = new T.ExtrudeGeometry(sh, { depth: h, bevelEnabled: false }); e.rotateX(-Math.PI / 2); geos.push(e);
+        }
+        if (!geos.length) continue;
+        const pos = []; for (const e of geos) { const q = e.index ? e.toNonIndexed() : e; pos.push(...q.getAttribute("position").array); }
+        const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
+        const col = new Uint8Array(pos.length); for (let i = 0; i < col.length; i += 3) col.set(rgb, i);
+        g.setAttribute("color", new T.BufferAttribute(col, 3, true));
+        const uv = new Float32Array((pos.length / 3) * 2); for (let i = 0, j = 0; i < pos.length; i += 3, j += 2) { uv[j] = pos[i]; uv[j + 1] = pos[i + 1]; }
+        g.setAttribute("uv", new T.BufferAttribute(uv, 2));
+        const mesh = new T.Mesh(g, matOf(ty === "glass" ? "glass" : "wall")); if (ty === "glass") mesh.renderOrder = 2;
+        (ty === "glass" ? G.glass : G.walls).add(mesh); REG.meshes.push([mesh, ty === "glass" ? "glass" : "wall"]); ink.push(new T.EdgesGeometry(g, 30));
+      }
     }
     // the architecture's edges, thin, in the looks' ink
     if (ink.length) {
