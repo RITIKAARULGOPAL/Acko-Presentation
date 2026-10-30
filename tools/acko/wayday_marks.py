@@ -15,6 +15,9 @@ Usage:  python -I tools/acko/wayday_marks.py "<ACKO_BOUNDARY_HATCH_ALL_22_10_26 
           the art wall (its middle artwork);
           a mark on a wall is visited 1.2 m in front of it, on the free side (if both are: a sign from its own space, an artwork
           or the graphic from the corridor)
+  floors  the Collab's and the workhall's hatches as one even area each (30 Oct: "Fill it, no cut-outs"): the hatch's furniture
+          cut-outs are the 22.10 layout's, off the SketchUp model's desks, so its outlines are merged and the cut-outs and the
+          notches walled in on most of their edge filled (solid); the gaps between its patches (a corridor) stay open
   legs    walked on the SketchUp model (axo_skp.Walker: the corridor floor preferred; furniture, grass and planters avoided)
 Writes the `const WAY = {...};` line in slides/s-wayday.html (plan mm, y down: stops, legs, marks [{k, stop, shape, rings | line,
 h}]) and tools/_work/wayday/way.png to check.
@@ -115,6 +118,23 @@ def refine(walls, off, z, reach=1500):
             if v > best[0]: best = (v, dx, dy)
     d = np.array([best[1], best[2]], float) * res * 1000
     return d, share(draw(d)), share(a)
+
+
+def solid(rings, R=1500, rim=0.85, keep=15e6):
+    """a floor mark's rings (plan mm) as one even area: merged (60 mm closes the seams between patches), the furniture cut-outs
+    and holes under keep mm2 dropped, and the notches a closing of R would fill added where the area walls in more than rim of
+    their edge (a desk cut into the hatch's edge; not a corridor between two patches)"""
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+    u = unary_union([Polygon(r).buffer(0) for r in rings if len(r) >= 3]).buffer(60, join_style=2).buffer(-60, join_style=2)
+    gap = u.buffer(R, join_style=2).buffer(-R, join_style=2).difference(u); edge = u.buffer(30)
+    add = [g for g in getattr(gap, "geoms", [gap]) if g.area > 0 and g.boundary.intersection(edge).length > rim * g.length]
+    u = unary_union([u] + add).buffer(30, join_style=2).buffer(-30, join_style=2)
+    out = []
+    for p in getattr(u, "geoms", [u]):
+        if p.area < 1e6: continue
+        out += [p.exterior] + [h for h in p.interiors if Polygon(h).area > keep]
+    return [[[int(round(x)), int(round(y))] for x, y in r.simplify(20).coords[:-1]] for r in out]
 
 
 def spaces_at():
@@ -248,6 +268,7 @@ def main():
             r = np.array(m["rings"][0][0], float) + m["n"] * 30; o["line"] = [[int(round(x)), int(round(y))] for x, y in r]; o["h"] = m["h"]
         else:
             o["rings"] = [r for r, closed, _ in m["rings"] if closed and len(r) >= 3]
+            if m["shape"] == "floor": o["rings"] = solid(o["rings"])
             if m["h"]: o["h"] = m["h"]
         out_marks.append(o)
     out_marks.sort(key=lambda o: o["stop"])
