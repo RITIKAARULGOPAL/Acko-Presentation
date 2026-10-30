@@ -424,7 +424,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       if (!ok) return;
       if (!S.built) build();
       if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
-      M.reset(); M.scene.add(group);
+      M.reset(); M.scene.add(group); group.visible = false;      // the axo debug branch: no people, lights or marks
       if (SKP) window.AxoSkp.look("sketchup");
       S.fresh = true; whole(false); shine(-1);
       $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };

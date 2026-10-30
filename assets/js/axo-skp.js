@@ -297,7 +297,11 @@
       if (shadowDue) { r.shadowMap.needsUpdate = true; shadowDue = false; }
     };
     M = { scene, groups: G, X, Z, CX, CY, slab: A.slab, source: D.source };
-    M.reset = () => { for (const k in G) { G[k].visible = true; G[k].scale.set(1, 1, 1); } shadowDue = true; };
+    // the axo debug branch (claude/axo-debug): the walls extruded from the floor plan with the model's shell (its core block,
+    // façade and floor) and nothing else: no furniture, doors, cabinets, plants or marks
+    const DEBUG_HIDE = new Set(["furniture", "plants", "marks"]);
+    M.reset = () => { for (const k in G) { G[k].visible = !DEBUG_HIDE.has(k); G[k].scale.set(1, 1, 1); } shadowDue = true; };
+    for (const k of DEBUG_HIDE) G[k].visible = false;
     window.AxoModel.looks.apply(REG, LOOK);
     return M;
   };
