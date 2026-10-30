@@ -2,7 +2,7 @@
    The data is plan_vector.py's instanced export: each block definition once, placements by reference. It is walked once,
    placed into the deck's plan frame (x - origin[0], origin[1] - y, mm) and kept as Path2D batches in 10 m tiles; a draw
    strokes what is in view. Colours and line weights are the deck's plan theme (plan-hover.css, --ph-*), by what a layer
-   draws: walls, glass, doors, furniture, plants, shading, annotation, the rest; fills light, pattern lines faint.
+   draws: walls, glass, doors, furniture, plants, shading, annotation, the rest; fills light (the columns dark grey), pattern lines faint.
 
    PlanCanvas.mount(stage, data, { before }) -> { el, draw([x, y, w, h]) }
      stage   the element the canvas fills (PlanHover's .ph-stage); before: the child it goes in front of
@@ -10,14 +10,14 @@
 (function () {
   const TILE = 10000, FINE = 250;
   const GLASS = /GLASS|GLSS|GLS|GLAZ|_IN_GL\b/i, GREEN = /PLANT|PLNT|GRASS|LANDSCAP|TREE|SHRUB|VEG/i;
-  const DOOR = /DOOR|_DOR_|DOR-/i, WALL = /WALL|PART|PRTN|COLS|S-COL|CORE|STRU/i;
+  const DOOR = /DOOR|_DOR_|DOR-/i, COL = /COLS|S-COL/i, WALL = /WALL|PART|PRTN|COLS|S-COL|CORE|STRU/i;
   const FURN = /FURN|\bFUR\b|_FUR_|CHAIR|TABLE|SEAT|SOFA|STORAGE|TV UNIT|^AC_WS_|EQPM|MLWK|FIXT|PLBG|ELEV/i;
   const SHADE = /SHADE|PATT|HATCH/i, ANNO = /ANNO|TEXT|DIM|TAG|IDEN/i;
   // class -> [colour variable, line width in CSS px]
-  const STROKE = { wall: ["--ph-wall", 1.4], glass: ["--ph-glass", 1], door: ["--ph-door", 0.7], furn: ["--ph-furniture", 0.6],
+  const STROKE = { wall: ["--ph-wall", 1.4], col: ["--ph-wall", 1.4], glass: ["--ph-glass", 1], door: ["--ph-door", 0.7], furn: ["--ph-furniture", 0.6],
                    green: ["--ph-plant", 0.5], shade: ["--ph-shade", 0.4], anno: ["--ph-door", 0.5], base: ["--ph-line", 0.9] };
   const cls = (layer, group, veg) => veg || group === "vegetation" || GREEN.test(layer) ? "green" : GLASS.test(layer) ? "glass"
-    : DOOR.test(layer) ? "door" : WALL.test(layer) ? "wall" : FURN.test(layer) ? "furn" : SHADE.test(layer) ? "shade"
+    : DOOR.test(layer) ? "door" : COL.test(layer) ? "col" : WALL.test(layer) ? "wall" : FURN.test(layer) ? "furn" : SHADE.test(layer) ? "shade"
     : ANNO.test(layer) ? "anno" : "base";
   const FONT = (name) => /gothic/i.test(name) ? `"Century Gothic", "Futura", "Avenir", sans-serif`
     : /romans|txt|standard/i.test(name) ? `"Arial Narrow", Arial, sans-serif` : `Arial, Helvetica, sans-serif`;
@@ -112,7 +112,7 @@
     const colours = () => {
       const cs = getComputedStyle(cv), v = (n) => cs.getPropertyValue(n).trim();
       const o = {}; for (const k in STROKE) o[k] = v(STROKE[k][0]);
-      Object.assign(o, { paper: v("--ph-paper"), fill: v("--ph-fill"), fillGreen: v("--ph-fill-green"), fillGlass: v("--ph-fill-glass"),
+      Object.assign(o, { paper: v("--ph-paper"), fill: v("--ph-fill"), fillGreen: v("--ph-fill-green"), fillGlass: v("--ph-fill-glass"), fillCol: v("--ph-fill-col"),
                          hatch: v("--ph-hatch"), text: v("--ph-text") });
       return o;
     };
@@ -128,9 +128,11 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
       ctx.setTransform(s, 0, 0, s, -x0 * s, -y0 * s);
       ctx.lineCap = "round"; ctx.lineJoin = "round";
+      const cols = [];                                // the columns, last: solid over whatever line runs into them
       for (const p of M.parts) {
         if (p.fine && skipFine) continue;
         if (p.b[2] < x0 || p.b[0] > vx1 || p.b[3] < y0 || p.b[1] > vy1) continue;
+        if (p.c === "col") { cols.push(p); continue; }
         if (p.kind === "f") { ctx.fillStyle = p.c === "green" ? theme.fillGreen : p.c === "glass" ? theme.fillGlass : theme.fill; ctx.fill(p.path, "evenodd"); continue; }
         if (p.kind === "m") { ctx.fillStyle = theme.paper; ctx.fill(p.path, "nonzero"); continue; }
         if (p.kind === "h") { ctx.globalAlpha = p.c === "green" ? 0.6 : 1; ctx.strokeStyle = p.c === "green" ? theme.green : theme.hatch; ctx.lineWidth = 0.3 * dpr * hair; ctx.setLineDash([]); ctx.stroke(p.path); ctx.globalAlpha = 1; continue; }
@@ -142,6 +144,10 @@
         ctx.stroke(p.path);
       }
       ctx.setLineDash([]);
+      ctx.fillStyle = theme.fillCol;
+      for (const p of cols) if (p.kind === "f") ctx.fill(p.path, "evenodd");
+      ctx.strokeStyle = theme.col; ctx.lineWidth = STROKE.col[1] * dpr * hair;
+      for (const p of cols) if (p.kind === "s") ctx.stroke(p.path);
       ctx.fillStyle = theme.text;
       for (const T of M.texts) {
         const [, , h0, rot, align, row, words, style, wf, ls, font] = T.t, h = h0 * (T.k || 1), fs = h / 0.716;

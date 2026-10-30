@@ -123,6 +123,8 @@ body.on-photo .lockup i { background: rgba(255,255,255,.6); }
 #shade.bottom { opacity: 1; background: var(--shade-b); }
 /* ---------- slides: each a 16:9 page in deck points ---------- */
 #stage { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+/* the window outside the 16:9 page, black: what a window of another shape adds around the deck (under the progress bar) */
+body::after { content: ""; position: fixed; left: var(--pl); top: var(--ptop); width: var(--pw); height: var(--ph); box-shadow: 0 0 0 100vmax #000; z-index: 55; pointer-events: none; }
 .scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .7s var(--ease), visibility 0s linear .7s; }
 .scene.active { opacity: 1; visibility: visible; transition: opacity .7s var(--ease) .15s, visibility 0s; }
 .scene.active .ui, .scene.active button, .scene.active a, .scene.active .click, .scene.active [role=button] { pointer-events: auto; }
@@ -298,7 +300,10 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .dxplan.show-nb .dx-nb path { opacity: 1; }
 .dxplan.focus .dx-nb path { opacity: .2; transition-delay: 0s; }
 .dxplan.focus .dx-nb path.hi { opacity: 1; stroke-width: 4; }          /* outlines only, never a fill (Ritika) */
-.dx-arrival path { stroke: #0000ff; stroke-width: 2; stroke-dasharray: 6 4; fill: rgba(0, 0, 255, .06); opacity: 0; transition: opacity .6s; }
+/* the two arrival zones (the receptions at the lift lobbies), in the brand purple, on the neighbourhoods beat */
+.dx-arrival path { opacity: 0; transition: opacity .6s; }
+.dx-arrival .f { fill: rgba(82, 34, 208, .14); fill-rule: evenodd; stroke: none; }                  /* the furniture cut out, unlined */
+.dx-arrival .e { fill: none; stroke: #5222d0; stroke-width: 2; vector-effect: non-scaling-stroke; }   /* the outer edge alone */
 .dxplan.show-nb .dx-arrival path { opacity: 1; }
 .dx-egress path { stroke: #1c64b4; stroke-width: 2.6; opacity: 0; transition: opacity .6s; }   /* one blue, no clash with the heat or the plants */
 .dx-egress .b60 { stroke-dasharray: 7 4; }
@@ -309,11 +314,10 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .dxplan.show-entry .dx-entry path { opacity: 1; }
 .dx-blow text { font-family: var(--body); font-weight: 700; font-size: 2600px; fill: #5222d0; text-anchor: middle; opacity: 0; transition: opacity .6s; }
 .dxplan.show-blow .dx-blow text { opacity: 1; }
-.dx-lab text { font-family: var(--body); font-weight: 600; paint-order: stroke; stroke: #fff; stroke-width: 260px; opacity: 0; transition: opacity .6s .8s; }
-.dxplan.show-lab .dx-lab text { opacity: 1; }
-.dx-lab .n { font-size: 5200px; fill: #777; }
-.dx-lab .s { font-size: 1900px; fill: #6f2f9f; }
-.dx-lab .t { font-size: 2300px; font-weight: 600; fill: #444; text-anchor: middle; }
+.dx-lab text { font-family: var(--body); font-weight: 600; stroke: none; opacity: 0; transition: opacity .6s .8s; }
+.dx-lab { display: none; }   /* the neighbourhoods' numbers are not drawn on the plan (29 Oct: too little contrast on the fills); the key plan keeps its own */
+.dx-lab text { text-anchor: middle; dominant-baseline: central; }
+.dx-lab .n { font-size: 5200px; font-weight: 700; fill: #1a1a1a; }          /* the number alone, in ink, no halo (no seats, no name) */
 .dxplan.focus .dx-lab text { opacity: .25; transition-delay: 0s; }
 .dxplan.focus .dx-lab text.hi { opacity: 1; }
 /* one neighbourhood picked out (focusZone): the others dim, its rooms take the hover, the big numbers step aside */
@@ -336,7 +340,7 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .dxplan:not([data-pl="bio"]) .pl-heatg, .dxplan:not([data-pl="bio"]) .pl-bio { display: none; }
 .pl-heat, .pl-glow { transition: opacity .7s; }
 .dxplan[data-pb="3"] .pl-heat, .dxplan:not([data-pb="2"]) .pl-glow { opacity: 0; }
-.pl-pl { fill: #3f8f3a; opacity: 0; transition: opacity .3s; } .pl-pl.in { opacity: .95; }
+.pl-pl { fill: #8fbf84; opacity: 0; transition: opacity .3s; } .pl-pl.in { opacity: .95; }   /* a soft sage, the plan's planting tone (not a dark green) */
 .pl-svc { fill: rgba(92, 99, 110, .14); stroke: #5c636e; stroke-width: 1.3; stroke-dasharray: 4 3; }
 .dxplan[data-pb="3"] .pl-svc { display: none; }
 .dxplan:not([data-pb="3"]) .pl-views { display: none; }
@@ -349,7 +353,26 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .pl-m-lab { font-family: var(--num); fill: #2a1680; paint-order: stroke; stroke: #fff; stroke-linejoin: round; text-anchor: middle; font-weight: 500; }
 .dxplan.measuring .ph-stage { cursor: crosshair; }
 .dxplan.measuring .ph-room, .dxplan.measuring .ph-seats { pointer-events: none !important; }
-.dxplan[data-pl="nb"] .dx-fill { opacity: .45; }
+.dxplan[data-pl="nb"] .dx-fill { opacity: 0; }
+/* the neighbourhoods' floors, each in its colour as Campus strategy has it (app.js nbFill), with the outlines */
+.dx-nbfill { opacity: 0; transition: opacity .9s var(--ease); }
+.dxplan.show-nb .dx-nbfill { opacity: 1; }
+.dx-nic path { fill: var(--bg); fill-opacity: .93; stroke: none; }   /* not in contract: washed out, its lines a pale grey (as the PPT's blow-ups) */
+.dx-furn path { fill: var(--bg); fill-rule: nonzero; }               /* the page white (the plan's own paper is see-through here) */
+.dx-furn { opacity: 0; transition: opacity .9s var(--ease); }
+.dxplan.show-nb .dx-furn { opacity: 1; }
+/* due diligence: what the building brings, outlined over the plan in its own colour (hover a card: that kind alone) */
+.dxplan:not([data-pl="dd"]) .pl-dd { display: none; }
+.dxplan[data-pl="dd"] .dx-fill { opacity: .35; }
+.pl-dd path { vector-effect: non-scaling-stroke; stroke-width: 2; transition: opacity .25s; }
+.pl-dd [data-k="stair"] { fill: rgba(152, 0, 0, .22); stroke: #980000; }
+.pl-dd [data-k="ahu"] { fill: rgba(28, 100, 180, .2); stroke: #1c64b4; }
+.pl-dd [data-k="wash"] { fill: rgba(47, 143, 157, .2); stroke: #2f8f9d; }
+.pl-dd [data-k="slab"] { fill: rgba(82, 34, 208, .16); stroke: #5222d0; stroke-dasharray: 6 4; }
+.pl-dd [data-k="lift"] { fill: rgba(201, 138, 26, .22); stroke: #c98a1a; }
+.dxplan.pl-dd-hi .pl-dd path:not(.hi) { opacity: .15; }
+/* spaces picked out from the occupancy chart (plan-layers.js mark) */
+.pl-mark path { fill: rgba(82, 34, 208, .32); fill-rule: evenodd; stroke: #5222d0; stroke-width: 2; vector-effect: non-scaling-stroke; }
 /* the layout template, shared by s-layout, s-blowup and s-axo (Ritika: "the entire layout template should be uniform"):
    layer pills top right, the plan's tools in a row beneath them, a readout under the tools */
 .lt-pills { right: 4.9%; top: 3%; display: flex; gap: calc(var(--pt) * 3); }

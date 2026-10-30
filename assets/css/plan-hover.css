@@ -15,6 +15,7 @@
   --ph-fill: #e8e6e1;
   --ph-fill-green: #cfe3cb;
   --ph-fill-glass: #d6e6f5;
+  --ph-fill-col: #4a4a4a;                      /* the columns, solid */
   --ph-text: #2b2b2b;
   --ph-hover: rgba(255, 64, 64, 0.5);          /* coral red at 50% */
   --ph-hover-line: rgb(255, 64, 64);
@@ -42,6 +43,7 @@ html[data-theme="dark"] .ph-root, .ph-root.ph-dark {
   --ph-fill: #2a2c2f;
   --ph-fill-green: #23362a;
   --ph-fill-glass: #1e2c3a;
+  --ph-fill-col: #8c8a86;
   --ph-text: #e8e6e1;
   --ph-label-bg: rgba(24, 26, 29, 0.94);
   --ph-label-ink: #f2f0ec;

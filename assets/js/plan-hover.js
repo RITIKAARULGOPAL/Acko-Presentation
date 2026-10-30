@@ -56,7 +56,7 @@
     el.innerHTML = '<div class="ph-stage"></div><div class="ph-label" aria-live="polite"></div>';
     const stage = el.querySelector(".ph-stage");
     const label = el.querySelector(".ph-label");
-    let vb, home, svgs = [], current = null, labelAt = null, labelEl = null, drag = null;
+    let vb, home, maxW = Infinity, svgs = [], current = null, labelAt = null, labelEl = null, drag = null;
     const extras = [];                      // layers added with addLayer(): kept across setOption()
 
     function load(key) {
@@ -153,7 +153,7 @@
     // ---- pan / zoom ----
     const onWheel = e => {
       e.preventDefault();
-      const f = Math.exp(e.deltaY * 0.0015), [px, py] = toPlan(e.clientX, e.clientY);
+      const f = Math.min(Math.exp(e.deltaY * 0.0015), maxW / vb[2]), [px, py] = toPlan(e.clientX, e.clientY);   // no wider than maxW
       vb = [px - (px - vb[0]) * f, py - (py - vb[1]) * f, vb[2] * f, vb[3] * f]; apply();
     };
     const onDown = e => { drag = [e.clientX, e.clientY, false]; stage.setPointerCapture(e.pointerId); };
@@ -221,6 +221,7 @@
       zoomTo,                                   // plan units are mm in the SVG frame
       get view() { return vb.slice(); },        // the current viewBox [x, y, w, h]
       setHome(x, y, w, h) { home = [x, y, w, h]; },   // where fit() and a double-click return to
+      setMaxWidth(w) { maxW = w || Infinity; },        // the widest view (plan mm) the wheel zooms out to
       addLayer,                                 // addLayer(cls, svgInner, { below }) -> the layer's <svg>
       highlight,                                // highlight("room"|"team", id): as if hovered
       clear: clearOn,

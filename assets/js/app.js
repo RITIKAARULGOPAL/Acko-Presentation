@@ -355,6 +355,11 @@
      compartment line, entrances, arrival zones). Wheel zooms on the cursor, drag pans, a double-click returns to the beat's
      view. Used by s-layout and s-blowup. */
   const NB_COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
+  // a neighbourhood's colour as Campus strategy builds it (data/axo-layers.js), by its number (the same in both); filled as the
+  // axo reads, 03 lighter than its 0.78 there (the plan's linework darkens it), its outline the same colour, solid
+  const nbAxo = (z) => ((window.AXO_LAYERS && window.AXO_LAYERS.zones) || []).find((q) => q.n === z.n);
+  const nbFill = (z) => { const a = nbAxo(z); return a ? a.colour : NB_COL[z.n] || "#888"; };
+  const nbLine = nbFill;
   let HOVER = true;                                   // the Hover pill's state, deck-wide (planHover)
   const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, cur: null, P: null, onZone: null, zone: null };   // home: the beat's view; cur: what Reset returns to
   function deckPlan() {
@@ -372,15 +377,23 @@
     DP.ph = PlanHover.mount(host, { data, labelPlacement: "above" });     // the label above a space, never on it
     DP.ph.addLayer("dx-fill", (P.floor ? `<image href="${asset(P.floor)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>` : "") +
       P.spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join(""), { below: true });
+    // the furniture cut out of the neighbourhoods' fills: every placed block's desks, chairs, sofas and storage (data/axo-dxf.js), in
+    // the paper's colour over the fills (the later "below" layers go under the earlier ones: this one sits over dx-nbfill)
+    const AX = window.AXO_DXF, at = (u, q) => (u[1] * q[0] + u[3] * q[1] + u[5]).toFixed(0) + " " + (u[2] * q[0] + u[4] * q[1] + u[6]).toFixed(0);
+    DP.ph.addLayer("dx-furn", AX ? `<path d="${AX.uses.map((u) => (AX.blocks[u[0]] || []).map(([, r]) => "M" + r.map((q) => at(u, q)).join("L") + "Z").join("")).join("")}"/>` : "", { below: true });
+    DP.ph.addLayer("dx-nbfill", P.zones.map((z) => `<path d="${z.zone}" style="fill:${nbFill(z)};fill-opacity:${z.n === "03" ? 0.55 : 0.62}"/>`).join(""), { below: true });
     const O = P.overlays, tri = (x, y) => `M${x - 900} ${y - 600}L${x + 900} ${y - 600}L${x} ${y + 900}Z`;
+    // the floor outside the contract (the hotel band, its cores), dulled under a veil of the page's white, over the plan's drawing
+    DP.ph.addLayer("dx-nic", (O.nic || []).map((d) => `<path d="${d}"/>`).join(""));
     DP.ph.addLayer("dx-marks",
-      `<g class="dx-arrival">${O.arrival.map((d) => `<path d="${d}"/>`).join("")}</g>` +
-      `<g class="dx-nb">${P.zones.map((z) => `<path data-nb="${z.n}" d="${z.zone}" style="--c:${NB_COL[z.n] || "#888"}"/>`).join("")}</g>` +
+      // the two arrival zones: the receptions in front of the lift lobbies, the west one merged with its coffee point (plan_deck.py)
+      `<g class="dx-arrival">${(O.arrive || []).map((a) => `<path class="f" d="${a.fill}"/><path class="e" d="${a.edge}"/>`).join("")}</g>` +
+      `<g class="dx-nb">${P.zones.map((z) => `<path data-nb="${z.n}" d="${z.zone}" style="--c:${nbLine(z)}"/>`).join("")}</g>` +
       `<g class="dx-egress">${P.egress.map((e) => `<path class="${e.band === "lt50" ? "b50" : "b60"}" d="${e.d}"/>`).join("")}</g>` +
       `<g class="dx-fire">${O.fire.map((f) => `<line x1="${f[0]}" y1="${f[1]}" x2="${f[2]}" y2="${f[3]}"/>`).join("")}</g>` +
       `<g class="dx-entry">${O.entry.map((e) => `<path d="${tri(e[0], e[1])}"/>`).join("")}</g>` +
       `<g class="dx-blow">${Object.entries(O.blow).map(([k, r]) => `<text x="${r[0] + r[2] / 2}" y="${r[1] + r[3] + 2600}">Blown Up ${k}</text>`).join("")}</g>` +
-      `<g class="dx-lab">${P.zones.map((z) => `<text data-nb="${z.n}" x="${z.x}" y="${z.y}"><tspan class="n">${z.n}</tspan><tspan class="s" dx="500" dy="-1500">${z.seats}</tspan>${z.title ? `<tspan class="t" x="${z.x}" dy="4200">${z.title}</tspan>` : ""}</text>`).join("")}</g>`);
+      `<g class="dx-lab">${P.zones.map((z) => `<text data-nb="${z.n}" x="${z.x}" y="${z.y}"><tspan class="n">${z.n}</tspan></text>`).join("")}</g>`);
     // the picture sharp enough for the zoom (screen px per metre, times the device's pixel ratio)
     // the DXF's own linework (data/plan-vec.js) as vector tiles, just above the picture and under the hovers and marks: drawn
     // as the toolkit's viewer draws it (.ph-plan: non-scaling strokes, its colours) once the zoom is past the sharpest picture
@@ -417,9 +430,11 @@
     let down = null;
     host.addEventListener("pointerdown", (e) => { down = [e.clientX, e.clientY]; });
     host.addEventListener("click", (e) => {
-      if (!DP.onZone || !down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return;
+      if (!(DP.onZone || DP.onPoint) || !down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return;
       const r = host.getBoundingClientRect(), v = DP.ph.view, k = Math.max(v[2] / r.width, v[3] / r.height);
       const pt = [v[0] + v[2] / 2 - (r.width * k) / 2 + (e.clientX - r.left) * k, v[1] + v[3] / 2 - (r.height * k) / 2 + (e.clientY - r.top) * k];
+      if (DP.onPoint && DP.onPoint(pt)) return;                     // a slide's own use of the click (s-layout's occupancy chart)
+      if (!DP.onZone) return;
       const i = rings.findIndex((rs) => rs.filter((ring) => inPoly(pt, ring)).length % 2 === 1);
       if (i >= 0) DP.onZone(P.zones[i]);
     });
@@ -480,7 +495,7 @@
     PLAN_LAYERS.forEach((k) => DP.root.classList.toggle("show-" + k, !!opts[k]));
     DP.ph.clear();
     const v = opts.view || planView();
-    DP.home = DP.cur = v; DP.ph.setHome(...v); fitVb(v, opts.ms === undefined ? 900 : opts.ms);
+    DP.home = DP.cur = v; DP.ph.setHome(...v); DP.ph.setMaxWidth(v[2]); fitVb(v, opts.ms === undefined ? 900 : opts.ms);   // never zoomed out past the beat's view
   }
   function planOff() {
     document.body.classList.remove("dp-on"); DP.onZone = null;
@@ -513,8 +528,8 @@
     const sel = P.zones.find((q) => q.id === id);
     return `<svg class="dx-key" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet">` +
       `<image href="${asset(l.src)}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" opacity=".5"/>` +
-      P.zones.map((z) => `<path class="${z.id === id ? "sel" : ""}" d="${z.zone}" style="--c:${NB_COL[z.n] || "#888"}"/>`).join("") +
-      (sel ? `<text x="${sel.x}" y="${sel.y}" style="fill:${NB_COL[sel.n] || "#555"}">${sel.n}</text>` : "") + `</svg>`;
+      P.zones.map((z) => `<path class="${z.id === id ? "sel" : ""}" d="${z.zone}" style="--c:${nbLine(z)}"/>`).join("") +
+      (sel ? `<text x="${sel.x}" y="${sel.y}" style="fill:${nbLine(sel)}">${sel.n}</text>` : "") + `</svg>`;
   }
   // the fire egress layer, switched by a button on the slide (on top of whatever the beat shows)
   function planEgress(on) { deckPlan(); return DP.root.classList.toggle("show-egress", on); }
@@ -668,7 +683,7 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planHover, planReset, planHome, layers: planLayers, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planHover, planReset, planHome, layers: planLayers, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; }, onPlanClick: (fn) => { deckPlan(); DP.onPoint = fn || null; },
             get zone() { return DP.zone; }, get view() { return DP.ph ? DP.ph.view : null; }, get hoverOn() { return HOVER; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {

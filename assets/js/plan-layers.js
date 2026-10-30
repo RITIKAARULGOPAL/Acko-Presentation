@@ -1,8 +1,9 @@
 /* PlanLayers: the layout's value-addition layers on the deck plan (the PlanHover mounted by app.js deckPlan()): the
-   workstation types, biophilia (1 heat, 2 planting, 3 views to green), acoustics (four levels, sound rings) and a measure /
+   workstation types, biophilia (1 heat, 2 planting, 3 views to green), acoustics (four levels, sound rings), due diligence
+   (what the building brings: fire stairs, AHUs, washrooms, the slab to strengthen, lift lobbies) and a measure /
    area tool. Mounted once by the kit (plan.layers()); s-layout drives it. Data: window.PLAN_DXF (spaces, zones, types,
    egress, overlays) and window.AXO_DXF (the blocks behind the desks and chairs, the plants). Plan mm, y down.
-   What shows is set on the plan host: data-pl = "spaces" | "nb" | "bio" | "ac" (none: off), data-pb = the biophilia step. */
+   What shows is set on the plan host: data-pl = "spaces" | "nb" | "bio" | "ac" | "dd" (none: off), data-pb = the biophilia step. */
 (function () {
   "use strict";
   const rings = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
@@ -11,7 +12,7 @@
   const dpath = (pts, close) => "M" + pts.map((q) => q[0].toFixed(0) + " " + q[1].toFixed(0)).join("L") + (close ? "Z" : "");
   const place = (u, q) => [u[1] * q[0] + u[3] * q[1] + u[5], u[2] * q[0] + u[4] * q[1] + u[6]];
   const PPT = { T1: 73, T2: 14, T3: 36, T4: 525 };                       // the PPT legend's seats per type (slide 53)
-  const CAT = { "Quick sprint": 2, "Collaboration huddle": 2, "Visitor hub": 2, "The Hatchery": 2, "Departmental room": 3, "Boardroom": 3, "Phone booth": 4, "Studio": 4 };
+  const CAT = { "Quick sprint": 2, "Collaboration huddle": 2, "Visitor hub": 2, "Dealer room": 2, "The Hatchery": 2, "Departmental room": 3, "Boardroom": 3, "Phone booth": 4, "Studio": 4 };
   const PEOPLE = { "Cafeteria": 178, "Reception": 18, "Coffee corner": 10, "Visitor hub": 4, "Collaboration huddle": 6, "Departmental room": 10, "Boardroom": 16, "The Hatchery": 8, "Pantry": 4, "Training room": 20 };
 
   function mount(o) {
@@ -44,7 +45,9 @@
     ph.addLayer("pl-types", tyLayer);
     ph.addLayer("pl-bio", `<g class="pl-views"></g><g class="pl-plants"></g>`);
     const waves = ph.addLayer("pl-waves", "");
+    ph.addLayer("pl-dd", ((P.overlays && P.overlays.dd) || []).map((o) => `<path data-k="${o.k}" d="${o.d}"/>`).join(""));
     const measureSvg = ph.addLayer("pl-measure", "");
+    const markSvg = ph.addLayer("pl-mark", "");                        // a set of spaces picked out (s-layout's occupancy chart)
 
     // ---- biophilia: the heat field (where people breathe out), the planting softening it (conceptual), views to green ----
     const BIO = { built: false, raf: 0, show: null, stats: {} };
@@ -63,7 +66,7 @@
       (P.overlays.arrival || []).forEach((d) => spread(d, 30, 3600));
       const id = g.getImageData(0, 0, W, H); let mx = 0; for (let i = 3; i < id.data.length; i += 4) mx = Math.max(mx, id.data[i]);
       const raw = new Float32Array(W * H); for (let i = 0; i < W * H; i++) raw[i] = id.data[i * 4 + 3] / (mx || 1);
-      const out = g.createImageData(W, H), ramp = [[0, [255, 236, 170]], [0.5, [251, 146, 60]], [1, [220, 38, 38]]];
+      const out = g.createImageData(W, H), ramp = [[0, [59, 111, 216]], [0.5, [255, 255, 255]], [1, [255, 200, 0]]];   // quieter to busiest: blue, white, yellow (no green)
       const heatImg = $(".pl-heat"), glowImg = $(".pl-glow");
       [heatImg, glowImg].forEach((im) => { im.setAttribute("width", W * S); im.setAttribute("height", H * S); });
       const paint = (f) => {
@@ -75,12 +78,13 @@
         }
         g.putImageData(out, 0, 0); heatImg.setAttribute("href", c.toDataURL());
       };
-      // the planting, busiest spots first; each plant softens the heat within 3 m (a Gaussian dip, up to 45%: conceptual)
+      // the planting, busiest spots first; each plant softens the heat within 4 m (a Gaussian dip, up to 60%: conceptual), so the
+      // yellow of the busiest spots gives way where plants stand
       const at = (x, y) => raw[Math.min(H - 1, Math.max(0, Math.floor((y - vy) / S))) * W + Math.min(W - 1, Math.max(0, Math.floor((x - vx) / S)))];
       const order = A.plants.map((p, i) => [at(p[0], p[1]), i]).sort((a, b) => b[0] - a[0]).map((q) => A.plants[q[1]]);
-      const dips = order.map(([x, y]) => { const ci = (x - vx) / S, cj = (y - vy) / S, R = 3000 / S, cells = [], f = [];
+      const dips = order.map(([x, y]) => { const ci = (x - vx) / S, cj = (y - vy) / S, R = 4000 / S, cells = [], f = [];
         for (let j = Math.max(0, Math.floor(cj - R)); j <= Math.min(H - 1, Math.ceil(cj + R)); j++) for (let i = Math.max(0, Math.floor(ci - R)); i <= Math.min(W - 1, Math.ceil(ci + R)); i++) {
-          const d = Math.hypot(i + 0.5 - ci, j + 0.5 - cj) * S; if (d > 3000) continue; cells.push(j * W + i); f.push(1 - 0.45 * Math.exp(-(d * d) / (2 * 1500 * 1500))); }
+          const d = Math.hypot(i + 0.5 - ci, j + 0.5 - cj) * S; if (d > 4000) continue; cells.push(j * W + i); f.push(1 - 0.6 * Math.exp(-(d * d) / (2 * 2000 * 2000))); }
         return [cells, f]; });
       // the busiest floor (cells at 40%+ of the peak) and, for each, the first plant (in planting order) within 3 m
       const hot = [], first = [], cz = 3000, grid = new Map();
@@ -93,7 +97,7 @@
       const covAt = (n) => (hot.length ? Math.round((100 * first.filter((k) => k < n).length) / hot.length) : 0);
       const gc = document.createElement("canvas"); gc.width = W; gc.height = H; const gg = gc.getContext("2d");
       const glow = (n) => { gg.clearRect(0, 0, W, H); for (let k = 0; k < n; k++) { const [x, y, r] = order[k], px = (x - vx) / S, py = (y - vy) / S, pr = (r + 2600) / S, gr = gg.createRadialGradient(px, py, 0, px, py, pr);
-        gr.addColorStop(0, "rgba(63,143,58,.38)"); gr.addColorStop(1, "rgba(63,143,58,0)"); gg.fillStyle = gr; gg.fillRect(px - pr, py - pr, pr * 2, pr * 2); } glowImg.setAttribute("href", gc.toDataURL()); };
+        gr.addColorStop(0, "rgba(143,191,132,.34)"); gr.addColorStop(1, "rgba(143,191,132,0)"); gg.fillStyle = gr; gg.fillRect(px - pr, py - pr, pr * 2, pr * 2); } glowImg.setAttribute("href", gc.toDataURL()); };
       $(".pl-plants").innerHTML = spaces.filter((s) => /Server|UPS/.test(s.type)).map((s) => `<path class="pl-svc" d="${s.d}"/>`).join("") +
         order.map(([x, y, r], k) => `<circle class="pl-pl" data-k="${k}" cx="${x}" cy="${y}" r="${Math.max(r, 380)}"/>`).join("");
       const plEls = $$(".pl-pl"), cool = new Float32Array(raw);
@@ -149,10 +153,20 @@
     function buildWaves() {
       if (wavesBuilt) return; wavesBuilt = true;
       const ring = (x, y, R, dur, n, cls, op) => Array.from({ length: n }, (_, i) => `<circle class="pl-wv ${cls}" cx="${x}" cy="${y}" r="0"><animate attributeName="r" values="0;${R}" dur="${dur}s" begin="${-(i * dur) / n}s" repeatCount="indefinite"/><animate attributeName="opacity" values="${op};0" dur="${dur}s" begin="${-(i * dur) / n}s" repeatCount="indefinite"/></circle>`).join("");
-      const loud = [...spaces.filter((s) => /Cafeteria|Reception|Coffee/.test(s.type)).map((s) => [s.x, s.y]), ...P.zones.map((z) => [z.x, z.y])];
-      const quiet = spaces.filter((s) => /Departmental|Boardroom|Studio/.test(s.type) || (s.type === "Phone booth" && +s.id.slice(1) % 6 === 0));
-      waves.innerHTML = loud.map(([x, y]) => ring(x, y, 15000, 3.6, 3, "", 0.9)).join("") +
-        quiet.map((s) => { const R = rings(s.d)[0], w = Math.max(...R.map((q) => q[0])) - Math.min(...R.map((q) => q[0])), h = Math.max(...R.map((q) => q[1])) - Math.min(...R.map((q) => q[1])); return ring(s.x, s.y, Math.min(w, h) * 0.42, 1.3, 2, "d", 0.6); }).join("");
+      // rings only from spaces the layer colours (30 Oct: the café, receptions, coffee corners and the neighbourhoods' label
+      // points had none, or fell in a corridor): the open workhall (category 1), one per stretch of 40 m2 or more, from a point
+      // inside it; the treated rooms (categories 3 and 4) as before
+      const within = (s) => { if (inside([s.x, s.y], s.d)) return [s.x, s.y];
+        const R = rings(s.d).flat(), xs = R.map((q) => q[0]), ys = R.map((q) => q[1]); let best = null, bd = Infinity;
+        for (let x = Math.min(...xs) + 500; x < Math.max(...xs); x += 1000) for (let y = Math.min(...ys) + 500; y < Math.max(...ys); y += 1000) {
+          const d = Math.hypot(x - s.x, y - s.y); if (d < bd && inside([x, y], s.d)) { bd = d; best = [x, y]; } }
+        return best; };
+      const loud = spaces.filter((s) => s.type === "Workhall" && s.m2 >= 40).map(within).filter(Boolean);
+      const quiet = spaces.filter((s) => /Departmental|Boardroom|Studio|Phone booth/.test(s.type));
+      // one beat for all (30 Oct: they read as random on two clocks): every 1.8 s each source sends a ring together; in the open
+      // a ring lives two beats and reaches 15 m, in a treated room one beat and dies at its walls
+      waves.innerHTML = loud.map(([x, y]) => ring(x, y, 15000, 3.6, 2, "", 0.9)).join("") +
+        quiet.map((s) => { const R = rings(s.d)[0], w = Math.max(...R.map((q) => q[0])) - Math.min(...R.map((q) => q[0])), h = Math.max(...R.map((q) => q[1])) - Math.min(...R.map((q) => q[1])); return ring(s.x, s.y, Math.min(w, h) * 0.42, 1.8, 1, "d", 0.6); }).join("");
     }
 
     // ---- measure / area: points snap to the spaces' corners; lengths in m, areas in m² ----
@@ -208,13 +222,15 @@
       bio(step, animate, onCov) { buildBio(); host.dataset.pb = step || ""; BIO.show(step, animate, onCov); },
       get bioStats() { buildBio(); return BIO.stats; },
       acHi(c) { [1, 2, 3, 4].forEach((x) => host.classList.toggle("pl-ac-" + x, +c === x)); $$(".pl-ac path").forEach((p) => p.classList.toggle("hi", +p.dataset.c === +c)); },
+      mark(ds) { markSvg.innerHTML = (ds || []).map((d) => `<path d="${d}"/>`).join(""); },
+      ddHi(k) { host.classList.toggle("pl-dd-hi", !!k); $$(".pl-dd path").forEach((p) => p.classList.toggle("hi", p.dataset.k === k)); },
       measure: {
         get mode() { return MS.mode; },
         set(m, onRead) { MS.mode = MS.mode === m ? null : m; MS.cur = null; MS.live = null; if (!MS.mode) MS.shapes = []; if (onRead) MS.read = onRead; host.classList.toggle("measuring", !!MS.mode); ph.clear(); drawMeasure(); return MS.mode; },
         esc() { if (!MS.mode) return false; if (MS.cur) { MS.cur = null; MS.live = null; } else if (MS.shapes.length) MS.shapes = []; else { MS.mode = null; host.classList.remove("measuring"); } drawMeasure(); return true; },
         off() { MS.mode = null; MS.shapes = []; MS.cur = null; MS.live = null; host.classList.remove("measuring"); drawMeasure(); },
       },
-      off() { api.set(""); api.type(null); api.acHi(null); api.measure.off(); host.dataset.pb = ""; },
+      off() { api.set(""); api.type(null); api.acHi(null); api.ddHi(null); api.mark(null); api.measure.off(); host.dataset.pb = ""; },
     };
     return api;
   }
