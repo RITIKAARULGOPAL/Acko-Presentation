@@ -102,6 +102,8 @@
       g.computeBoundingSphere();
       return g;
     }
+    // the 28.10 changes' own components (the café chair) and their parts, as the model's own
+    if (D.changes && D.changes.units && !D.changes.merged) { D.units.push(...D.changes.units); D.parts.push(...D.changes.parts); D.changes.merged = true; }
     const placements = D.units.map((u) => {
       const f = new Float32Array(bytes(u.m)), out = [];
       for (let i = 0; i < u.n; i++) { const m = f.subarray(i * 12, i * 12 + 12);
@@ -256,7 +258,13 @@
         g.setAttribute("color", new T.BufferAttribute(col, 3, true));
         const uv = new Float32Array((pos.length / 3) * 2); for (let i = 0, j = 0; i < pos.length; i += 3, j += 2) { uv[j] = pos[i]; uv[j + 1] = pos[i + 1]; }
         g.setAttribute("uv", new T.BufferAttribute(uv, 2));
-        const mesh = new T.Mesh(g, matOf(ty === "glass" ? "glass" : "wall")); if (ty === "glass") mesh.renderOrder = 2;
+        // their own material, as the kind's, casting from the back faces only: closed solids, so the faces the sun meets don't
+        // shade themselves (30 Oct: the stripes on the new walls)
+        const kind = ty === "glass" ? "glass" : "wall";
+        const own = mats[kind + "28"] || (mats[kind + "28"] = reg(focusable(new T.MeshLambertMaterial(kind === "glass"
+          ? { color: 0xffffff, vertexColors: true, flatShading: true, transparent: true, opacity: 0.35, depthWrite: false, side: T.DoubleSide, shadowSide: T.BackSide }
+          : { color: 0xffffff, vertexColors: true, flatShading: true, side: T.DoubleSide, shadowSide: T.BackSide }), kind), kind, true));
+        const mesh = new T.Mesh(g, own); if (ty === "glass") mesh.renderOrder = 2;
         (ty === "glass" ? G.glass : G.walls).add(mesh); REG.meshes.push([mesh, ty === "glass" ? "glass" : "wall"]); ink.push(new T.EdgesGeometry(g, 30));
       }
     }

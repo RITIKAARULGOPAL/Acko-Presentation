@@ -19,7 +19,7 @@ Usage:  python -I tools/acko/axo_skp_28.py "<28.10 folder with basePlan.dxf and 
 Writes "changes": {source, areas, place: [{u, m (12 floats, as the units' m)}], seats} into data/axo-skp.js and
 tools/_work/axo-skp-28/check.png (the pieces' lines, red, over the components' footprints, grey).
 """
-import argparse, base64, json, math, os, sys
+import argparse, base64, json, math, os, re, sys
 
 import numpy as np
 from PIL import Image, ImageDraw
@@ -46,9 +46,10 @@ CHAIRS = ("CH_CF_PC_01", "Chair_Cafe-Generic - CH-23-V289", "chair-flat9", "*U73
           "A$C1AF9623F", "Bench - Day Dinning-V295")
 SETS = ("SE_CF_04_0900_01", "SE_CF_04_1200X0750_01", "es", "*U834", "ratghag")
 SEAT_H = {"A$C1AF9623F": 650}
+CAFE_CHAIRS = ("Chair_Cafe-Generic - CH-23-V289", "chair-flat9", "*U738", "*U1159")   # drawn with the café chair (cafe_chair)
 # the drawing's walls and partitions (the frame's fine fit onto the model's own)
-WALLS = {"A-WALL", "I-PART-GYP-100MM", "I-PART-GYP", "OB-I-PART-GYP", "OB-I-PART-GLS", "I_PAR_PA_IN_GL", "I-PART-GLSS", "SKV_GLASS PARTITION"}
-TABLES = ("zw$3543",)                                             # plain tables: the model has none, so the loader draws them
+WALLS = {"A-WALL", "I-PART-GYP-100MM", "I-PART-GYP", "OB-I-PART-GYP", "OB-I-PART-GLS", "I_PAR_PA_IN_GL", "I-PART-GLSS", "SKV_GLASS PARTITION", "OB-I-PART-SOF"}
+TABLES = ("zw$3543", "@table")                                    # (@table: one drawn straight in the plan)                                             # plain tables: the model has none, so the loader draws them
 # a component whose front its footprint can't tell (a chair): turned by the block's rotation plus this, as all the model's own
 # placements of it are (30 Oct: "the training room chairs are wrong"; the model's 42 training chairs: the block's turn + 180)
 TURN = {"Traning room seating": 180}                                      # a stool's seat (mm); the rest sit at chair height (0)
@@ -125,6 +126,16 @@ def read_plan(folder, off):
 
     for e in blocks[top["n"]]["ents"]:
         if e["t"] == "INSERT": visit(e, m0, top["l"], 1)
+        elif e["l"] in FURN and e["t"] in ("LWPOLYLINE", "POLYLINE"):   # a table drawn straight in the plan, not as a block
+            for r in e.get("p", []):
+                q = [pt(x, y) for x, y in D.tf(m0, r)]
+                if len(q) < 4: continue
+                from shapely.geometry import Polygon as _P
+                g = _P(q).buffer(0); rr = g.minimum_rotated_rectangle; c = np.array(g.centroid.coords[0])
+                ex = np.array(rr.exterior.coords[:-1]); e1, e2 = ex[1] - ex[0], ex[2] - ex[1]
+                long_ = e1 if np.linalg.norm(e1) >= np.linalg.norm(e2) else e2
+                if np.linalg.norm(long_) < 2500 or g.area < 8e5 or not any(inring(c, a) for a in areas): continue
+                pieces.append({"n": "@table", "rings": [q], "c": c.tolist(), "rot": math.atan2(long_[1], long_[0]), "chairs": []})
     walls = []
     def fn(e, m, L, p):
         if L in WALLS and e["t"] != "HATCH":
@@ -160,6 +171,69 @@ def onto_model(S, walls, off, CX, CY, reach=1500, res=50.0):
         for dx in range(-win, win + 1):
             if F[dy % H, dx % W] > best[0]: best = (F[dy % H, dx % W], dx, dy)
     return np.array([best[1], best[2]], float) * res, best[0] / max(1, a.sum()), float((a * tgt).sum() / max(1, a.sum()))
+
+
+def cafe_chair(S, new_u, src=69):
+    """a café chair on its own: one of the 4-seat set's chairs (SE_CF_04_1200X0750_, the set's top-left chair: x < 0, z < -0.45 m
+    in its frame), as new parts of a new component new_u, centred on the chair, its front along +z (30 Oct: "the chair are
+    wrong.. use cafe chairs")"""
+    parts = []
+    sel_all = []
+    for p in S["parts"]:
+        if p["u"] != src: continue
+        q = b64(p["p"], np.int16).astype(np.float64).reshape(-1, 3); lo, hi = np.array(p["lo"]), np.array(p["hi"]); v = lo + (q + 32768) / 65535 * (hi - lo)
+        idx = b64(p["i"], np.uint32 if p.get("i32") else np.uint16).reshape(-1, 3).astype(np.int64)
+        cen = v[idx].mean(1); keep = (cen[:, 0] < 0) & (cen[:, 2] < -0.45)
+        if keep.any(): sel_all.append((p, v, idx[keep]))
+    allv = np.concatenate([v[np.unique(ix)] for _, v, ix in sel_all]); mid = (allv.min(0) + allv.max(0)) / 2; mid[1] = 0
+    for p, v, ix in sel_all:
+        used = np.unique(ix); remap = -np.ones(len(v), np.int64); remap[used] = np.arange(len(used))
+        vv = v[used] - mid; lo, hi = vv.min(0), vv.max(0); span = np.where(hi - lo > 1e-6, hi - lo, 1e-6)
+        q = np.round((vv - lo) / span * 65535 - 32768).astype(np.int16)
+        col = b64(p["c"], np.uint8).reshape(-1, 3)[used]
+        tri = remap[ix].astype(np.uint16 if len(used) < 65536 else np.uint32)
+        parts.append({"k": p["k"], "u": new_u, "n": int(len(used)), "t": int(len(tri)), "lo": [round(float(a), 4) for a in lo], "hi": [round(float(a), 4) for a in hi],
+                      "p": base64.b64encode(q.tobytes()).decode(), "c": base64.b64encode(col.tobytes()).decode(),
+                      "i": base64.b64encode(tri.tobytes()).decode(), "i32": tri.dtype == np.uint32, "lv": p["lv"]})
+    return parts
+
+
+def facing_m(cx, cy, phi, CX, CY):
+    """a placement (12 floats, as the units' m) at plan (cx, cy) mm with the component's +z front turned to plan angle phi"""
+    al = phi - math.pi / 2; ca, sa = math.cos(al), math.sin(al)
+    return [round(v, 5) for v in (ca, 0, sa, 0, 1, 0, -sa, 0, ca, (cx - CX) / 1000, 0, (cy - CY) / 1000)]
+
+
+def old_furniture(S, areas, keep_lines, CX, CY, big=3.2, near=300.0):
+    """the model's merged furniture in the change areas that 28.10 doesn't keep: each piece (triangles joined where they share a
+    corner) with its middle in an area, under 2.6 m, and not along the 28.10 millwork (keep_lines) for most of it; the loader
+    leaves pieces under big m out itself, so these are the long ones (the old café's L counter and its panel: 30 Oct, "this
+    table is not as per the layout"). {part: [[t0, t1], ...]}"""
+    from scipy import sparse
+    from scipy.sparse.csgraph import connected_components
+    from shapely.geometry import LineString, Point, Polygon
+    from shapely.ops import unary_union
+    from shapely.prepared import prep
+    zone = prep(unary_union([Polygon(r) for r in areas]))
+    mill = prep(unary_union([LineString(q).buffer(near) for q in keep_lines if len(q) > 1] or [Point(0, 0).buffer(1)]))
+    drop = {}
+    for pi, p in enumerate(S["parts"]):
+        if p["u"] >= 0 or p["k"] not in ("wood", "soft", "hard"): continue
+        q = b64(p["p"], np.int16).astype(np.float64).reshape(-1, 3); lo, hi = np.array(p["lo"]), np.array(p["hi"]); v = lo + (q + 32768) / 65535 * (hi - lo)
+        idx = b64(p["i"], np.uint32 if p.get("i32") else np.uint16).reshape(-1, 3).astype(np.int64)
+        key = np.round(v * 200).astype(np.int64); _, vid = np.unique(key, axis=0, return_inverse=True); vid = vid.ravel(); n = len(idx)
+        G = sparse.coo_matrix((np.ones(3 * n), (np.repeat(np.arange(n), 3), n + vid[idx].ravel())), shape=(n + vid.max() + 1,) * 2)
+        _, lab = connected_components(G, directed=False); lab = lab[:n]
+        T = v[idx]
+        for c in np.unique(lab):
+            sel = np.nonzero(lab == c)[0]; P = T[sel].reshape(-1, 3)
+            xz = P[:, [0, 2]] * 1000 + (CX, CY); mid = (xz.min(0) + xz.max(0)) / 2
+            if P[:, 1].max() > 2.6 or max(np.ptp(xz, 0)) < big * 1000 or not zone.contains(Point(*mid)): continue
+            smp = xz[:: max(1, len(xz) // 40)]
+            if np.mean([mill.contains(Point(*a)) for a in smp]) > 0.5: continue
+            t = np.sort(sel); br = np.nonzero(np.diff(t) > 1)[0]
+            drop.setdefault(str(pi), []).extend([[int(a), int(b) + 1] for a, b in zip(np.r_[t[0], t[br + 1]], np.r_[t[br], t[-1]])])
+    return drop
 
 
 def fit(piece, U, uid, scale, CX, CY, turn=None):
@@ -210,13 +284,22 @@ def main():
     d, after, before = onto_model(S, walls, off, CX, CY); off = off + d
     log(f"  then onto the SketchUp model's own walls: {[round(v) for v in d]} mm more ({before:.0%} -> {after:.0%} of the lines on them)")
     areas, pieces, _, (blocks, model) = read_plan(a.folder, (float(off[0]), float(off[1])))
-    WR = WALLS28.rebuild(S, blocks, model, lambda x, y: (x + off[0], -y + off[1]), A["slab"], CX, CY, log)
+    PL = WALLS28.plan_base_lines(ROOT)                              # the floor plan as it draws, in the deck's plan frame
+    pw = [q for L, k, q in PL if L in WALLS and k == "s" and len(q) > 1]
+    pd, after, before = onto_model(S, pw, np.zeros(2), CX, CY)
+    log(f"the floor plan's walls onto the model's: {[round(v) for v in pd]} mm ({before:.0%} -> {after:.0%} of the lines on them)")
+    WR = WALLS28.rebuild(S, PL, lambda x, y: (x + pd[0], y + pd[1]), A["slab"], CX, CY, log)
+    # a table drawn straight in the plan is one only with chairs round it (four within 900 mm of it): the rest are counters, storage
+    from shapely.geometry import Point as _Pt, Polygon as _Pg
+    chairs_at = [_Pt(*q["c"]) for q in pieces if q["n"] in CAFE_CHAIRS or q["n"] in CHAIRS]
+    pieces = [q for q in pieces if q["n"] != "@table" or sum(_Pg(q["rings"][0]).buffer(900).contains(c) for c in chairs_at) >= 4]
     log(f"{len(areas)} change areas, {len(pieces)} furniture blocks in them")
     U = unit_shapes(S); names = {i: (u.get("name") or "").rsplit("#", 1)[0] for i, u in enumerate(S["units"])}
     byname = {}
     for i, n in names.items():
         if n and i in U: byname.setdefault(n, i)
     place, seats, report = [], [], {}
+    CHAIR_U = len(S["units"]); chair_parts = cafe_chair(S, CHAIR_U)
     tables = []
     for pc in pieces:
         n = pc["n"]
@@ -226,6 +309,12 @@ def main():
             c = P.mean(0) + np.array([[ca, -sa], [sa, ca]]) @ ((lo + hi) / 2)
             tables.append([round(c[0]), round(c[1]), round(hi[0] - lo[0]), round(hi[1] - lo[1]), round(math.degrees(al), 2)])
             report.setdefault(n, ["(a plain table)", 0])[1] += 1; continue
+        if n in CAFE_CHAIRS:                                         # the café chair, its front to the nearest table
+            tabs = [q for q in pieces if q["n"] in SETS + TABLES]
+            near = min(tabs, key=lambda q: math.dist(q["c"], pc["c"])) if tabs else None
+            phi = math.atan2(near["c"][1] - pc["c"][1], near["c"][0] - pc["c"][0]) if near else pc["rot"]
+            place.append({"u": CHAIR_U, "m": facing_m(pc["c"][0], pc["c"][1], phi, CX, CY)}); report.setdefault(n, ["(the café chair)", 0])[1] += 1
+            seats.append([round(pc["c"][0]), round(pc["c"][1]), round(100 * phi), 0]); continue
         own = next((i for nm, i in byname.items() if nm and (n == nm or (n.startswith(nm) and len(nm) > 4))), None)
         uid = own if own is not None else (SUBST_ID.get(n) if n in SUBST_ID else byname.get(SUBST.get(n, "\0")))
         if uid is None: report.setdefault(n, ["-", 0])[1] += 1; continue
@@ -236,7 +325,7 @@ def main():
             for ch in pc["chairs"]:
                 seats.append([round(ch[0]), round(ch[1]), round(100 * math.atan2(pc["c"][1] - ch[1], pc["c"][0] - ch[0])), SEAT_H.get(n, 0)])
         elif n in CHAIRS or n in SUBST and SUBST[n] == "*U734" or n in ("Bench - Day Dinning-V295", "A$C1AF9623F"):
-            tabs = [q for q in pieces if q["n"] in SETS + ("zw$3543",)]
+            tabs = [q for q in pieces if q["n"] in SETS + TABLES]
             near = min(tabs, key=lambda q: math.dist(q["c"], pc["c"])) if tabs else None
             if near and math.dist(near["c"], pc["c"]) < 1600:
                 c = pc["c"]
@@ -250,7 +339,13 @@ def main():
     for n, (u, k) in sorted(report.items(), key=lambda kv: -kv[1][1]): log(f"  {k:4d}  {n[:40]:40s} -> {u}")
     log(f"{len(place)} placements, {len(seats)} seats")
     out = {"source": f"{os.path.basename(a.folder.rstrip('/\\'))}: basePlan.dxf in changes.dxf's areas", "areas": [[[round(x), round(y)] for x, y in r] for r in areas],
-           "place": place, "tables": tables, "seats": seats, "walls": WR["walls"], "heights": WR["heights"], "drop": WR["drop"], "hide": WR["hide"]}
+           "place": place, "tables": tables, "seats": seats, "walls": WR["walls"], "heights": WR["heights"], "drop": WR["drop"], "hide": WR["hide"],
+           "units": [{"name": "cafe chair (SE_CF_04_1200X0750_'s)", "n": 0, "m": ""}], "parts": chair_parts}
+    # the old furniture 28.10 doesn't keep (the long pieces the loader would leave), with the walls' drops
+    mill = [[(x + pd[0], y + pd[1]) for x, y in q] for L, k, q in PL if re.search(r"MLWK|EQPM|KTCH|COUNTER", L) and len(q) > 1]
+    OF = old_furniture(S, areas, mill, CX, CY)
+    for k, v in OF.items(): out["drop"].setdefault(k, []).extend(v)
+    log(f"old long furniture out: {sum(len(v) for v in OF.values())} runs in {len(OF)} parts")
     # into data/axo-skp.js as its last key (the rest of the file as built)
     s = open(path, encoding="utf-8").read(); body = s.rstrip().rstrip(";")
     cut = body.rfind(',"changes":')
@@ -263,6 +358,7 @@ def main():
     allp = np.array([p for r in areas for p in r]); x0, y0 = allp.min(0) - 1000; x1, y1 = allp.max(0) + 1000; k = 0.04
     im = Image.new("RGB", (int((x1 - x0) * k), int((y1 - y0) * k)), "white"); dr = ImageDraw.Draw(im)
     for pl in place:
+        if pl["u"] not in U: continue
         m = pl["m"]; u = U[pl["u"]]; T3 = u["tri"][u["tri"][:, :, 1].max(1) > 0.05]
         wx = m[0] * T3[:, :, 0] + m[6] * T3[:, :, 2] + m[9]; wz = m[2] * T3[:, :, 0] + m[8] * T3[:, :, 2] + m[11]
         for i in range(len(wx)): dr.polygon([((wx[i, j] * 1000 + CX - x0) * k, (wz[i, j] * 1000 + CY - y0) * k) for j in range(3)], fill=(190, 190, 190))
