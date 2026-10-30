@@ -14,6 +14,7 @@ data-oy) for the 22.10 drawing, which the export keeps its coordinates in (28.10
 usage: python tools/acko/plan_deck.py <export dir>
 """
 import sys, os, re, ast, json, time
+from collections import Counter
 from shapely.geometry import Polygon
 from shapely.geometry.polygon import orient
 from shapely.ops import unary_union
@@ -96,6 +97,36 @@ def texts(meta, src):
                         X, Y = t[0] * q, t[1] * q
                         out.append((" ".join(str(t[6]).split()), m[0] * X + m[2] * Y + m[4], m[1] * X + m[3] * Y + m[5]))
         walk(data["root"], data["place"]["m"])
+    return out
+
+# the due diligence drawing's outlines, by layer: what the building brings that the layout works around (Layout's beat 7)
+DD = {"AC_FIRE_EXIT_STAIRCASE": "stair", "AC_AHU": "ahu", "AC_WASHROOM": "wash", "AC_STRENGTHEN_SLAB": "slab", "AC_LIFT_LOBBY": "lift"}
+
+def outlines(meta, src, group):
+    """every line of a group's drawing as (layer, [(x, y), ...]) in the deck's frame"""
+    out = []
+    for b in meta["blocks"]:
+        if b["group"] != group: continue
+        data = json.load(open(os.path.join(src, b["file"]), encoding="utf-8"))
+        defs = data["defs"]
+        def walk(di, m, layer):
+            d = defs[di]; q = 10 ** -d["q"]
+            for run in d["runs"]:
+                l = run[0] or layer
+                if run[4] == "i":
+                    for ci, ca, cb, cc, cd, ce, cf in run[5]:
+                        walk(ci, [m[0] * ca + m[2] * cb, m[1] * ca + m[3] * cb, m[0] * cc + m[2] * cd, m[1] * cc + m[3] * cd,
+                                  m[0] * ce + m[2] * cf + m[4], m[1] * ce + m[3] * cf + m[5]], l)
+                elif run[4] in ("s", "f"):
+                    for it in run[5]:
+                        for r in ([it] if run[4] == "s" else it):
+                            x, y, pts = r[0], r[1], []
+                            for i in range(0, len(r), 2):
+                                if i: x += r[i]; y += r[i + 1]
+                                X, Y = x * q, y * q
+                                pts.append(deck(m[0] * X + m[2] * Y + m[4], m[1] * X + m[3] * Y + m[5]))
+                            out.append((l, pts))
+        walk(data["root"], data["place"]["m"], data["place"]["spec"][0] or "0")
     return out
 
 def main(src):
@@ -196,6 +227,13 @@ def main(src):
             c = polylabel(max(getattr(g, "geoms", [g]), key=lambda q: q.area), 50)
             z["x"], z["y"] = (round(v) for v in deck(c.x, c.y))
             print(f"  {z['name']}: label moved into its outline")
+    # their numbers as the neighbourhoods drawing and Campus strategy's axo have them (29 Oct: 04 Travel, 05 Drive; the plan
+    # had the two the other way round), in that order
+    NUM = {"Auto": "01", "Life": "02", "Health": "03", "Travel": "04", "Drive": "05", "Home": "06"}
+    for z in P["zones"]:
+        key = z["name"].split("·")[-1].strip()
+        if key in NUM: z["n"] = NUM[key]; z["name"] = f"{z['n']} · {key}"
+    P["zones"].sort(key=lambda z: z["n"])
     new_polys = polys(P["zones"])
     def tally(PP):
         out = {k: {} for k in PP}
@@ -222,6 +260,28 @@ def main(src):
             if n: occ.append([grp, area, n])
         z["occ"] = occ
     print("  seats:", ", ".join(f"{z['name']} {z['seats']}" for z in P["zones"]), "=", sum(z["seats"] for z in P["zones"]))
+
+    dd = [{"k": DD[l], "d": "M" + "L".join(f"{x:.0f} {y:.0f}" for x, y in pts) + "Z"} for l, pts in outlines(meta, src, "dueDiligence") if l in DD and len(pts) > 2]
+    P.setdefault("overlays", {})["dd"] = dd
+    # the two arrival zones (Layout's neighbourhoods beat): each reception at a lift lobby, merged with the coffee point inside
+    # it into one shape (for that beat alone: the spaces stay as they are), in the deck's frame
+    arrive = []
+    for r in (sp for sp in spaces if sp["type"] == "Reception"):
+        g = poly_of(r["d"]); x0, y0, x1, y1 = g.bounds
+        g = unary_union([g] + [poly_of(c["d"]) for c in spaces if c["type"] == "Coffee corner" and x0 < c["x"] < x1 and y0 < c["y"] < y1])
+        g = g.buffer(150, join_style=2).buffer(-150, join_style=2)              # fused across the line between them
+        dr = lambda rings: "".join("M" + "L".join(f"{x:.0f} {y:.0f}" for x, y in list(ring.coords)[:-1]) + "Z" for ring in rings)
+        qs = getattr(g, "geoms", [g])
+        # the fill keeps the furniture out; the outline is the outer edge alone (no line round the furniture)
+        arrive.append({"fill": dr(r for q in qs for r in [q.exterior] + list(q.interiors)), "edge": dr(q.exterior for q in qs)})
+    P["overlays"]["arrive"] = arrive
+    # the floor outside the contract (the hotel band and its cores: the drawing's AC_OUT_OF_ZONE), dulled on the plan: its outer
+    # outlines closed over the walls that cut into them (the hotel rooms' partitions, 0.8 m), then grown 0.25 m to take the walls
+    # along its edges too, so no wall of it stays dark
+    nic = unary_union([Polygon(ring[0]).buffer(0) for r in rooms if r["type"] == "AC_OUT_OF_ZONE" for ring in r["rings"]])
+    nic = nic.buffer(400, join_style=2).buffer(-400, join_style=2).buffer(250, join_style=2)
+    P["overlays"]["nic"] = ["M" + "L".join(f"{x:.0f} {y:.0f}" for x, y in (deck(*q) for q in g.exterior.coords[:-1])) + "Z" for g in getattr(nic, "geoms", [nic])]
+    print("  due diligence:", dict(Counter(o["k"] for o in dd)))
 
     P["spaces"], P["built"] = spaces, time.strftime("%Y-%m-%d %H:%M")
     P["source"] = "plan export " + os.path.basename(os.path.normpath(src)) + " (" + ", ".join(meta.get("sources") or []) + ")"

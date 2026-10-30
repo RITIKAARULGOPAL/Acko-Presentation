@@ -46,9 +46,9 @@ def frame_to_world(fx, fy):
 
 
 LEGEND = [("Reception", "EAE6DF"), ("Departmental room", "DDDBD4"), ("Visitor hub", "C3CBBC"), ("Collaboration huddle", "C2BFBB"),
-          ("Quick sprint", "CED2CF"), ("Cafeteria", "CEDED1"), ("Training room", "B6AFAF"), ("The Hatchery", "CCD5CB"),
+          ("Quick sprint", "CED2CF"), ("Cafeteria", "CEDED1"), ("Training room", "B6AFAF"), ("The Hatchery", "DFE4DE"),
           ("Studio", "E5DEDE"), ("Phone booth", "D5CEED"), ("Collab", "A5B0AB"), ("Executive corner cabin", "D3D9C5"),
-          ("Prayer room", "A19DAD"), ("Coffee corner", "BAB0C1"), ("Hub room", "EAE8F1"), ("Mother's room", "E0DFDD"),
+          ("Prayer room", "A19DAD"), ("Coffee corner", "BAB0C1"), ("Hub room", "F0EFF5"), ("Mother's room", "E0DFDD"),
           ("Zen room", "F4F3EF"), ("Server, UPS & battery", "929292")]
 BY_LABEL = [("Boardroom", r"BOARD"), ("Departmental room", r"DEPARTMENTAL"), ("Collaboration huddle", r"HUDDLE"),
             ("Quick sprint", r"SPRINT|^\d+ PAX"), ("Visitor hub", r"VISITOR"), ("Phone booth", r"^PB\b"), ("Zen room", r"ZEN"),
@@ -99,6 +99,7 @@ OCC_ROWS = [
     ("Meeting room", "Board room", r"BOARD"),
     ("Meeting room", "Focus room - 2 pax", r"^2 PAX\b"),
     ("Meeting room", "Visitor Hub", r"VISITOR HUB \d"),
+    ("Meeting room", "Dealer Room - 4 pax", r"DEALER"),
     ("Meeting room", "Quick Sprint Room - 3 pax", r"SPRINT 3 PAX"),
     ("Meeting room", "Quick Sprint Room - 4 pax", r"SPRINT 4 PAX"),
     ("Meeting room", "Quick Sprint Room - 6 pax", r"SPRINT 6 PAX"),
@@ -113,6 +114,8 @@ OCC_ROWS = [
     ("Recreational area / wellness", "Cafeteria", r"CAFE|HEATING STATION"),
     ("Recreational area / wellness", "Mother's Room", r"MOTHER"),
     ("Recreational area / wellness", "Zen Room", r"ZEN"),
+    ("Recreational area / wellness", "Nap Room", r"\bNAP\b"),
+    ("Recreational area / wellness", "Medical Room", r"MEDICAL"),
     ("Recreational area / wellness", "Prayer Room", r"PRAYER"),
     ("Recreational area / wellness", "Coffee corner", r"COFFEE"),
     ("Services", "UPS / Electrical", r"UPS|ELECTRICAL"),
