@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Axo Debug</title>
+<!-- the axo's walls, one object at a time (Ritika, 30 Oct: "remove all walls apart from the core walls of sketchup.. i want the
+     debug to be like the plan hover debug wher i can selecct each object", then "have it as layer so i can turn on and off the
+     objects./.. alos show the vector plan so i can select the objects", "now extrude all columns alone.. have a separate layer", "now the external glazing").
+     Open it beside tools/_work/axo-debug/ (python -I
+     tools/acko/axo_debug.py, python tools/serve.py 8774, then /tools/acko/axo_debug.html).
+     The SketchUp model's core alone (its "mass" part, data/axo-skp.js), every wall piece A day in ACKO extrudes from the floor
+     plan as its own object, and the floor plan itself (data/plan-base.js, walked as assets/js/plan-canvas.js walks it, in the
+     Layout slide's colours or its layers') flat on the floor under them. A joined run of walls is its segments, each its own
+     object, and each can be called wall, solid, glass or door (W S G D; Shift-click selects more): the calls stay in this
+     browser and download as axo-debug-calls.json. Hover for what a piece or a plan line is; click a piece
+     to select it (purple; its plan lines in red), click a plan line or fill to select it (the pieces it makes in purple). Each
+     floor plan layer can be turned off: its lines, and the pieces made from it. The deck's axo mouse: drag pans, right-drag (or
+     Shift-drag) turns, scroll zooms on the cursor, double-click fits the floor; Esc lets go. -->
+<style>
+  :root { --paper:#fbfaf7; --ink:#1d1d1d; --muted:#6b6b6b; --line:#dedbd4; --panel:#fff; --accent:#5222D0; --bad:#d0021b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--paper); color:var(--ink); font:13px/1.4 system-ui, "Segoe UI", sans-serif; }
+  body { display:grid; grid-template-columns:380px 1fr; }
+  aside { border-right:1px solid var(--line); background:var(--panel); display:flex; flex-direction:column; min-height:0; }
+  aside header { padding:10px 14px; border-bottom:1px solid var(--line); }
+  h1 { font-size:15px; margin:0 0 2px; }
+  .src { color:var(--muted); font-size:12px; word-break:break-word; }
+  .sec { padding:8px 14px; border-bottom:1px solid var(--line); }
+  .sec h2 { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; font-weight:600; }
+  .chips { display:flex; flex-wrap:wrap; gap:5px; }
+  .chips + .chips { margin-top:6px; }
+  .chip { border:1px solid var(--line); border-radius:999px; padding:2px 9px; cursor:pointer; background:#fff; font:inherit; font-size:12px; display:inline-flex; align-items:center; gap:5px; }
+  .chip.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .chip b { font-weight:600; }
+  .chips .lab { color:var(--muted); font-size:12px; align-self:center; }
+  .sw { width:10px; height:10px; border-radius:2px; display:inline-block; flex:none; border:1px solid rgba(0,0,0,.15); }
+  #sum { font-size:12px; }
+  #sum .bad { color:var(--bad); }
+  #info { display:none; max-height:42vh; overflow:auto; }
+  #info.on { display:block; }
+  #info .hd { display:flex; align-items:baseline; gap:8px; }
+  #info .hd b { font-size:14px; }
+  .calls { display:flex; flex-wrap:wrap; gap:5px; align-items:center; margin:6px 0 4px; }
+  .tagd { color:#fff; border-radius:999px; padding:0 8px; font-size:11px; font-weight:600; }
+  .pc .t { font-size:10px; color:#fff; border-radius:999px; padding:0 6px; margin-left:4px; font-weight:600; text-transform:none; letter-spacing:0; }
+  #calls .bad { color:var(--bad); }
+  #info .x { margin-left:auto; border:0; background:none; cursor:pointer; color:var(--muted); font-size:16px; line-height:1; }
+  .kv { display:grid; grid-template-columns:auto 1fr; gap:1px 10px; margin:6px 0 8px; }
+  .kv span:nth-child(odd) { color:var(--muted); }
+  .kv .p { font-family:ui-monospace, Consolas, monospace; font-size:11px; word-break:break-all; }
+  .cut { color:#b35c00; font-weight:600; }
+  table.sl { width:100%; border-collapse:collapse; font-size:11px; }
+  table.sl th { text-align:left; color:var(--muted); font-weight:600; padding:2px 4px; border-bottom:1px solid var(--line); position:sticky; top:0; background:#fff; }
+  table.sl td { padding:3px 4px; border-bottom:1px solid #f0eee9; vertical-align:top; }
+  table.sl tr[data-j], table.sl tr[data-p] { cursor:pointer; }
+  table.sl tr:hover td { background:#fff1f0; }
+  table.sl tr.no td { color:#9a9a9a; }
+  table.sl .p { font-family:ui-monospace, Consolas, monospace; word-break:break-all; }
+  .tabs { display:flex; border-bottom:1px solid var(--line); }
+  .tabs button { flex:1; border:0; border-bottom:2px solid transparent; background:none; padding:7px 0; font:inherit; font-weight:600; color:var(--muted); cursor:pointer; }
+  .tabs button.on { color:var(--accent); border-bottom-color:var(--accent); }
+  .pane { display:none; flex:1; min-height:0; flex-direction:column; }
+  .pane.on { display:flex; }
+  .filter { display:flex; gap:6px; padding:8px 14px; border-bottom:1px solid var(--line); align-items:center; }
+  .filter input { flex:1; min-width:0; font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:4px; }
+  .filter .chip { flex:none; }
+  .scroll { overflow:auto; flex:1; min-height:0; }
+  .pc { padding:6px 14px; border-bottom:1px solid #f0eee9; cursor:pointer; display:grid; grid-template-columns:auto 1fr auto; gap:0 8px; align-items:baseline; }
+  .pc:hover, .pc.hov { background:#f7f5fc; }
+  .pc.on { background:#ece6fb; }
+  .pc .k { font-size:11px; text-transform:uppercase; letter-spacing:.05em; font-weight:600; }
+  .pc .a { font-variant-numeric:tabular-nums; color:var(--muted); font-size:12px; }
+  .pc .l { grid-column:1 / -1; font-family:ui-monospace, Consolas, monospace; font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .lh { padding:6px 14px 3px; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:600; background:#faf9f6; border-bottom:1px solid #f0eee9; }
+  .ly { display:flex; align-items:center; gap:7px; padding:3px 14px; border-bottom:1px solid #f4f2ee; cursor:pointer; }
+  .ly:hover { background:#f7f5fc; }
+  .ly.off { color:#9a9a9a; }
+  .ly .n { font-family:ui-monospace, Consolas, monospace; font-size:11px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ly .c { font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .ly .only { border:1px solid var(--line); background:#fff; border-radius:4px; font:inherit; font-size:10px; padding:0 5px; cursor:pointer; visibility:hidden; color:var(--muted); }
+  .ly:hover .only { visibility:visible; }
+  main { position:relative; overflow:hidden; background:#fff; }
+  #stage { position:absolute; inset:0; width:100%; height:100%; cursor:grab; touch-action:none; display:block; }
+  #stage.hot { cursor:pointer; }
+  #stage.drag { cursor:grabbing; }
+  #tip { position:absolute; pointer-events:none; background:rgba(20,20,20,.88); color:#fff; padding:4px 8px; border-radius:4px; font-size:12px; display:none; max-width:400px; }
+  #hud { position:absolute; right:12px; bottom:12px; background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:6px; padding:4px 8px; font-size:12px; color:var(--muted); }
+  #msg { position:absolute; left:50%; top:40%; transform:translate(-50%,-50%); color:var(--muted); }
+  @media (max-width:760px) { body { grid-template-columns:1fr; grid-template-rows:50vh 1fr; } aside { border-right:0; border-bottom:1px solid var(--line); } }
+</style>
+</head>
+<body>
+<aside>
+  <header><h1>Axo debug</h1><div class="src" id="src">loading…</div></header>
+  <div class="sec"><h2>Show</h2><div class="chips" id="show"></div><div class="chips" id="opts"></div></div>
+  <div class="sec"><div id="sum"></div></div>
+  <div class="sec" id="calls"></div>
+  <div class="sec" id="info"></div>
+  <div class="tabs"><button class="on" data-t="pieces">Pieces</button><button data-t="layers">Layers</button></div>
+  <div class="pane on" id="p-pieces">
+    <div class="filter"><input id="q" type="search" placeholder="filter by layer or block name…" autocomplete="off"></div>
+    <div class="scroll" id="list"></div>
+  </div>
+  <div class="pane" id="p-layers">
+    <div class="filter"><input id="lq" type="search" placeholder="filter layers…" autocomplete="off">
+      <button class="chip" data-a="all">all</button><button class="chip" data-a="none">none</button><button class="chip" data-a="walls">wall layers</button></div>
+    <div class="scroll" id="layers"></div>
+  </div>
+</aside>
+<main>
+  <canvas id="stage"></canvas>
+  <div id="tip"></div>
+  <div id="msg">loading the model and the floor plan…</div>
+  <div id="hud">drag to pan · right-drag to turn · scroll to zoom · double-click to fit · Shift-click to select more · W S G D to call · Esc to let go</div>
+</main>
+<script src="../../assets/vendor/three.min.js"></script>
+<script>
+const BASE = new URLSearchParams(location.search).get("dir") || "../_work/axo-debug/";
+const T = THREE, $ = (s) => document.querySelector(s);
+const COL = { wall: 0x77716a, solid: 0xd9cbb0, glass: 0x52b6d1, door: 0xd97706, column: 0x5b6770, facade: 0x2fa58c, booth: 0x9a7650, cut: 0xff9f1c, core: 0xbdb8b0, pick: 0x5222d0, src: 0xd0021b, hot: 0xff4040 };
+// the Layout slide's plan theme (assets/css/plan-hover.css, --ph-*) and its classes (assets/js/plan-canvas.js)
+const PH = { wall: 0x1a1a1a, glass: 0x3a7bbf, door: 0x555555, furn: 0x5d5d5d, green: 0x4c8a46, shade: 0xa3a3a3, anno: 0x555555, base: 0x2a2a2a,
+  hatch: 0xc4c4c4, fill: 0xe8e6e1, fillGreen: 0xcfe3cb, fillGlass: 0xd6e6f5 };
+const GLASS = /GLASS|GLSS|GLS|GLAZ|_IN_GL\b/i, GREEN = /PLANT|PLNT|GRASS|LANDSCAP|TREE|SHRUB|VEG/i, DOORS = /DOOR|_DOR_|DOR-/i, WALL = /WALL|PART|PRTN|COLS|S-COL|CORE|STRU/i;
+const FURN = /FURN|\bFUR\b|_FUR_|CHAIR|TABLE|SEAT|SOFA|STORAGE|TV UNIT|^AC_WS_|EQPM|MLWK|FIXT|PLBG|ELEV/i, SHADE = /SHADE|PATT|HATCH/i, ANNO = /ANNO|TEXT|DIM|TAG|IDEN/i;
+const cls = (layer, group, veg) => veg || group === "vegetation" || GREEN.test(layer) ? "green" : GLASS.test(layer) ? "glass"
+  : DOORS.test(layer) ? "door" : WALL.test(layer) ? "wall" : FURN.test(layer) ? "furn" : SHADE.test(layer) ? "shade" : ANNO.test(layer) ? "anno" : "base";
+const KINDS = ["line", "fill", "hatch", "mask"], KIND = { s: 0, f: 1, h: 2, m: 3 };
+const show = { wall: true, solid: true, glass: true, door: true, column: true, facade: true, booth: true, cut: false, core: true, plan: true };
+const opt = { colour: "plan", ghost: false, through: false };
+let D, P, cam, renderer, scene, view, touched = false, asp = 1, X, Z, query = "", lquery = "", tab = "pieces";
+let sel = null, hovered = -1, hotItem = -1, linked = new Set(), picked = new Set(), onlyCalled = false;   // sel: {piece: id} or {item: i}
+// Ritika's calls on the segments ("so i can say which is glass and which are doors"): {segment key: wall|solid|glass|door}
+const TAGS = { wall: 0x77716a, solid: 0xd9cbb0, glass: 0x52b6d1, door: 0xd97706 }, TKEY = { w: "wall", s: "solid", g: "glass", d: "door" };
+let tags = {}; try { tags = JSON.parse(localStorage.getItem("axo-debug-calls") || "{}") || {}; } catch (_) { tags = {}; }
+const saveTags = () => { try { localStorage.setItem("axo-debug-calls", JSON.stringify(tags)); } catch (_) { /* private window: this session only */ } };
+const meshes = [], G = {}, layerOn = {}, layerObj = {};
+const stage = $("#stage"), tip = $("#tip");
+
+const script = (src) => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => no(new Error(src)); document.head.appendChild(s); });
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hex = (n) => "#" + n.toString(16).padStart(6, "0");
+
+(async () => {
+  try {
+    [D] = await Promise.all([fetch(BASE + "debug.json").then((r) => { if (!r.ok) throw new Error(BASE + "debug.json: " + r.status + " (run python -I tools/acko/axo_debug.py)"); return r.json(); }),
+      script("../../data/axo-skp.js"), script("../../data/plan-base.js")]);
+  } catch (e) { $("#msg").textContent = e.message; $("#src").textContent = "not loaded"; return; }
+  X = (x) => (x - D.CX) / 1000; Z = (y) => (y - D.CY) / 1000;
+  $("#src").textContent = `floor plan (data/plan-base.js) shifted ${D.shift.join(", ")} mm onto ${window.AXO_SKP.source || "the SketchUp model"}`;
+  P = walkPlan(); link(); heal();
+  build(); chips(); summary(); list(); layers(); callsBox();
+  addEventListener("resize", resize); resize(); fit(); $("#msg").remove();
+})();
+
+// ---------- the floor plan: data/plan-base.js walked as tools/acko/axo_skp_28_walls.plan_base_lines walks it (its "base" group
+// in that order, so item k there is item k here; the other groups after it), as plan-canvas.js: an insert on a frozen layer and
+// anything on an off one left out; in plan mm, shifted onto the model as the axo's walls are ----------
+function walkPlan() {
+  const PB = window.PLAN_BASE, LY = PB.layers, [ox, oy] = PB.origin, [sx, sy] = D.shift;
+  const pts = [], start = [], n = [], lay = [], kind = [], path = [], py = [], cl = [], grp = [], names = [], nameIx = new Map(), paths = [], pathIx = new Map();
+  const id = (map, list, s) => { let i = map.get(s); if (i === undefined) { i = list.length; map.set(s, i); list.push(s); } return i; };
+  let k0 = 0, g0 = 0;
+  for (const blk of PB.blocks) {
+    const base = blk.group === "base", Dd = blk.data, defs = Dd.defs, lay_ = (l, ctx) => (l === "" || l === "0" ? ctx : l);
+    const walk = (di, M, ctx, pth, veg) => {
+      const d = defs[di], k = Math.pow(10, -d.q), [a, b, c, e, f, g] = M, pid = id(pathIx, paths, pth || "(the plan itself)"); veg = veg || !!d.veg;
+      for (const [l, , , , kd, items] of d.runs) {
+        const st = lay_(l, ctx);
+        if (kd === "i") {
+          if (LY[st] && LY[st].frozen) continue;
+          for (const [ci, ca, cb, cc, cd, ce, cf] of items) {
+            const nm = defs[ci].name;
+            walk(ci, [a * ca + c * cb, b * ca + e * cb, a * cc + c * cd, b * cc + e * cd, a * ce + c * cf + f, b * ce + e * cf + g], st, nm ? (pth ? pth + " > " + nm : nm) : pth, veg);
+          }
+          continue;
+        }
+        if (kd === "t" || (LY[st] && (LY[st].off || LY[st].frozen))) continue;
+        const li = id(nameIx, names, st), cs = cls(st, blk.group, veg);
+        for (const item of items) {
+          g0++;
+          for (const arr of kd === "f" ? item : [item]) {
+            start.push(pts.length / 2); let x = arr[0], y = arr[1];
+            for (let i = 0; i < arr.length; i += 2) { if (i) { x += arr[i]; y += arr[i + 1]; } const XX = x * k, YY = y * k; pts.push(a * XX + c * YY + f - ox + sx, oy - (b * XX + e * YY + g) + sy); }
+            n.push(arr.length / 2); lay.push(li); kind.push(KIND[kd] ?? 0); path.push(pid); py.push(base ? k0++ : -1); cl.push(cs); grp.push(g0);
+          }
+        }
+      }
+    };
+    walk(Dd.root, Dd.place.m, lay_(Dd.place.spec[0], "0"), "", false);
+  }
+  const N = start.length, I = { pts: new Float64Array(pts), start: Uint32Array.from(start), n: Uint32Array.from(n), lay: Uint16Array.from(lay), kind: Uint8Array.from(kind),
+    path: Uint32Array.from(path), py: Int32Array.from(py), cls: cl, grp: Uint32Array.from(grp), names, paths, N, colours: Object.fromEntries(names.map((L) => [L, (LY[L] && LY[L].colour) || "#000000"])) };
+  I.byPy = new Int32Array(k0).fill(-1); for (let i = 0; i < N; i++) if (I.py[i] >= 0) I.byPy[I.py[i]] = i;
+  // a grid of the items' boxes (CELL mm) to find what is under the cursor
+  const CELL = 2000; I.box = new Float64Array(N * 4); I.grid = new Map(); I.CELL = CELL;
+  for (let i = 0; i < N; i++) {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; const s = I.start[i] * 2;
+    for (let j = 0; j < I.n[i]; j++) { const x = I.pts[s + 2 * j], y = I.pts[s + 2 * j + 1]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    I.box.set([x0, y0, x1, y1], i * 4);
+    for (let cx = Math.floor(x0 / CELL); cx <= Math.floor(x1 / CELL); cx++) for (let cy = Math.floor(y0 / CELL); cy <= Math.floor(y1 / CELL); cy++) {
+      const key = cx * 100000 + cy, c = I.grid.get(key); if (c) c.push(i); else I.grid.set(key, [i]);
+    }
+  }
+  return I;
+}
+const ptsOf = (i) => { const s = P.start[i] * 2, out = []; for (let j = 0; j < P.n[i]; j++) out.push([P.pts[s + 2 * j], P.pts[s + 2 * j + 1]]); return out; };
+const layerOf = (i) => P.names[P.lay[i]];
+const lenOf = (i) => { const q = ptsOf(i); let m = 0; for (let j = 1; j < q.length; j++) m += Math.hypot(q[j][0] - q[j - 1][0], q[j][1] - q[j - 1][1]); if (P.kind[i] === 1 && q.length > 2) m += Math.hypot(q[0][0] - q.at(-1)[0], q[0][1] - q.at(-1)[1]); return m; };
+const areaOf = (q) => { let s = 0; for (let j = 0, k = q.length - 1; j < q.length; k = j++) s += q[k][0] * q[j][1] - q[j][0] * q[k][1]; return Math.abs(s) / 2; };
+
+// the debug.json's wall lines onto the plan's items (their place in plan_base_lines), and each line's pieces
+function link() {
+  D.item = new Int32Array(D.lines.length).fill(-1); let bad = 0;
+  D.lines.forEach((l, j) => {
+    const i = l.i !== undefined && l.i < P.byPy.length ? P.byPy[l.i] : -1;
+    if (i < 0 || layerOf(i) !== l.L || Math.hypot(P.pts[P.start[i] * 2] - l.pts[0][0], P.pts[P.start[i] * 2 + 1] - l.pts[0][1]) > 2) { bad++; return; }
+    D.item[j] = i;
+  });
+  D.unmatched = bad;
+  P.line = new Int32Array(P.N).fill(-1); D.item.forEach((i, j) => i >= 0 && (P.line[i] = j));
+  D.ofLine = D.lines.map(() => []);
+  D.pieces.forEach((pc) => {
+    const feeds = new Set(D.feeds[pc.ty]); pc.feedL = [...new Set(pc.src.map(([j]) => D.lines[j].L).filter((L) => feeds.has(L)))];
+    pc.src.forEach(([j, m]) => D.ofLine[j].push([pc.id, m, feeds.has(D.lines[j].L)]));
+  });
+}
+
+// ---------- the scene ----------
+function build() {
+  renderer = new T.WebGLRenderer({ canvas: stage, antialias: true }); renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.setClearColor(0xffffff);
+  scene = new T.Scene(); cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+  for (const k of ["floor", "plan", "core", "wall", "solid", "glass", "column", "facade", "booth", "cut", "src", "hot", "pick"]) { G[k] = new T.Group(); scene.add(G[k]); }
+  scene.add(new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.8));
+  const key = new T.DirectionalLight(0xffffff, 0.55); key.position.set(-40, 90, 60); scene.add(key);
+  // the slab, a pale floor with its outline
+  const slab = new T.Shape(D.slab.map(([x, y]) => new T.Vector2(X(x), -Z(y))));
+  const fl = new T.Mesh(new T.ShapeGeometry(slab), new T.MeshBasicMaterial({ color: 0xfbfaf7, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: 4, polygonOffsetUnits: 4 }));
+  fl.rotation.x = -Math.PI / 2; G.floor.add(fl);
+  G.floor.add(flat([D.slab.concat([D.slab[0]])], 0x9a958c, 0.001));
+  // the SketchUp core: the model's "mass" parts only, decoded as assets/js/axo-skp.js decodes them
+  const S = window.AXO_SKP, bytes = (b64) => { const s = atob(b64), u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u.buffer; };
+  const coreMat = new T.MeshLambertMaterial({ color: COL.core, flatShading: true, side: T.DoubleSide });
+  for (const p of S.parts) {
+    if (p.k !== "mass" || p.lv === 2) continue;
+    const q = new Int16Array(bytes(p.p)), pos = new Float32Array(q.length);
+    for (let i = 0; i < q.length; i += 3) for (let a = 0; a < 3; a++) pos[i + a] = p.lo[a] + ((q[i + a] + 32768) / 65535) * (p.hi[a] - p.lo[a]);
+    const g = new T.BufferGeometry(); g.setAttribute("position", new T.BufferAttribute(pos, 3));
+    g.setIndex(new T.BufferAttribute(p.i32 ? new Uint32Array(bytes(p.i)) : new Uint16Array(bytes(p.i)), 1)); g.computeVertexNormals();
+    const ms = p.u >= 0 ? (() => { const u = S.units[p.u], f = new Float32Array(bytes(u.m)), out = [];
+      for (let i = 0; i < u.n; i++) { const m = f.subarray(i * 12, i * 12 + 12); out.push(new T.Matrix4().set(m[0], m[3], m[6], m[9], m[1], m[4], m[7], m[10], m[2], m[5], m[8], m[11], 0, 0, 0, 1)); }
+      return out; })() : [new T.Matrix4()];
+    const ed = new T.EdgesGeometry(g, 30);
+    for (const m4 of ms) {
+      const mesh = new T.Mesh(g, coreMat); mesh.applyMatrix4(m4); G.core.add(mesh);
+      const e = new T.LineSegments(ed, new T.LineBasicMaterial({ color: 0x6b665e, transparent: true, opacity: 0.6 })); e.applyMatrix4(m4); G.core.add(e);
+    }
+  }
+  G.core.userData.mat = coreMat;
+  // every piece the axo extrudes, its own mesh (its rings in (X, -Z), turned up, to its height), edged
+  for (const pc of D.pieces) {
+    const sh = new T.Shape(pc.rings[0].map(([x, y]) => new T.Vector2(X(x), -Z(y))));
+    for (const h of pc.rings.slice(1)) sh.holes.push(new T.Path(h.map(([x, y]) => new T.Vector2(X(x), -Z(y)))));
+    const g = new T.ExtrudeGeometry(sh, { depth: pc.h, bevelEnabled: false }); g.rotateX(-Math.PI / 2);
+    const k = pc.cut ? "cut" : pc.ty;
+    const mesh = new T.Mesh(g, new T.MeshLambertMaterial({ color: COL[k], side: T.DoubleSide, emissive: 0x000000 })); mesh.userData.id = pc.id;
+    mesh.add(new T.LineSegments(new T.EdgesGeometry(g, 30), new T.LineBasicMaterial({ color: 0x2a2a2a, transparent: true, opacity: 0.55 })));
+    G[k].add(mesh); meshes[pc.id] = mesh; restyle(pc.id, true);
+  }
+  buildPlan();
+  ghost();
+}
+// the plan flat on the floor: per layer, its lines, its hatch lines and its fills (the fills' rings as one shape, even-odd as
+// plan-canvas fills them: the largest ring, the others holes in it)
+function buildPlan() {
+  const per = {};
+  for (let i = 0; i < P.N; i++) {
+    const L = layerOf(i), c = P.cls[i], kd = P.kind[i], key = kd === 1 ? "f" : kd === 2 ? "h" : "s";
+    const o = (per[L] = per[L] || {}), b = (o[key + "|" + c] = o[key + "|" + c] || { kind: key, cls: c, items: [] }); b.items.push(i);
+  }
+  for (const L in per) {
+    const g = new T.Group(); g.userData.L = L; layerObj[L] = g; layerOn[L] = true; G.plan.add(g);
+    for (const b of Object.values(per[L])) {
+      if (b.kind === "f") {
+        const byGrp = new Map(); b.items.forEach((i) => { const k = P.grp[i]; (byGrp.get(k) || byGrp.set(k, []).get(k)).push(i); });
+        const pos = [];
+        for (const rings of byGrp.values()) {
+          const rs = rings.map((i) => ptsOf(i).map(([x, y]) => new T.Vector2(X(x), Z(y)))).filter((r) => r.length > 2).sort((a, b) => Math.abs(T.ShapeUtils.area(b)) - Math.abs(T.ShapeUtils.area(a)));
+          if (!rs.length) continue;
+          const outer = rs[0], holes = rs.slice(1);
+          if (!T.ShapeUtils.isClockWise(outer)) outer.reverse(); holes.forEach((h) => T.ShapeUtils.isClockWise(h) && h.reverse());
+          const tris = T.ShapeUtils.triangulateShape(outer, holes), all = outer.concat(...holes);     // (it drops each ring's repeated end first)
+          for (const [a, b2, c] of tris) for (const v of [all[a], all[b2], all[c]]) pos.push(v.x, 0.002, v.y);
+        }
+        const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+        const m = new T.Mesh(geo, new T.MeshBasicMaterial({ side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 2 })); m.userData.b = b; g.add(m);
+      } else {
+        const ls = flat(b.items.map(ptsOf), 0, b.kind === "h" ? 0.003 : 0.004); ls.material.transparent = true; ls.userData.b = b; g.add(ls);
+      }
+    }
+  }
+  recolour();
+}
+// the plan's colours: the Layout slide's (by what a layer draws) or each layer's own
+function recolour() {
+  for (const L in layerObj) for (const o of layerObj[L].children) {
+    const b = o.userData.b, own = layerCol(L);
+    if (b.kind === "f") { o.material.color.setHex(opt.colour === "plan" ? (b.cls === "green" ? PH.fillGreen : b.cls === "glass" ? PH.fillGlass : PH.fill) : new T.Color(own).lerp(new T.Color(0xffffff), 0.75).getHex()); }
+    else if (b.kind === "h") { o.material.color.setHex(opt.colour === "plan" ? (b.cls === "green" ? PH.green : PH.hatch) : new T.Color(own).lerp(new T.Color(0xffffff), 0.45).getHex()); o.material.opacity = 0.8; }
+    else { o.material.color.setHex(opt.colour === "plan" ? PH[b.cls] : own); o.material.opacity = 1; }
+  }
+  draw();
+}
+// lines on the floor (plan mm polylines) as one LineSegments, at y metres; over: drawn through everything
+function flat(polys, color, y, over) {
+  const a = [];
+  for (const p of polys) for (let i = 1; i < p.length; i++) a.push(X(p[i - 1][0]), y, Z(p[i - 1][1]), X(p[i][0]), y, Z(p[i][1]));
+  const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(a, 3));
+  const m = new T.LineBasicMaterial({ color, depthTest: !over, transparent: !!over });
+  const ls = new T.LineSegments(g, m); if (over) ls.renderOrder = 10; return ls;
+}
+function fillOver(rings, color) {
+  const rs = rings.map((q) => q.map(([x, y]) => new T.Vector2(X(x), Z(y)))).filter((r) => r.length > 2).sort((a, b) => Math.abs(T.ShapeUtils.area(b)) - Math.abs(T.ShapeUtils.area(a)));
+  if (!rs.length) return null;
+  const tris = T.ShapeUtils.triangulateShape(rs[0], rs.slice(1)), all = rs[0].concat(...rs.slice(1)), pos = [];
+  for (const t of tris) for (const v of t) pos.push(all[v].x, 0.006, all[v].y);
+  const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+  const m = new T.Mesh(geo, new T.MeshBasicMaterial({ color, transparent: true, opacity: 0.35, depthTest: false, side: T.DoubleSide })); m.renderOrder = 9; return m;
+}
+function layerCol(L) {
+  const c = new T.Color((P && P.colours[L]) || D.colours[L] || "#000000"), hsl = {}; c.getHSL(hsl);
+  if (hsl.l > 0.45 && hsl.s > 0.2) c.setHSL(hsl.h, hsl.s, 0.4);              // yellow, cyan: darker on white
+  if (hsl.s < 0.1 && hsl.l > 0.8) c.setHex(0x8a8a8a);                       // white: grey
+  return c.getHex();
+}
+// a piece's colour and see-through: its call's, else its type's (glass, the façade and the left-out ones see-through)
+function restyle(id, quiet) {
+  const m = meshes[id], pc = D.pieces[id]; if (!m) return;
+  const t = tags[pc.key];
+  m.userData.base = t ? TAGS[t] : pc.door && !pc.cut ? TAGS.door : COL[pc.cut ? "cut" : pc.ty];
+  m.userData.glassy = t ? t === "glass" : pc.ty === "glass" || pc.ty === "facade" || !!pc.cut;
+  // a glass partition (called glass, or the plan's glass): drawn as one, its block kept only to pick and to show it picked
+  // (3 Nov: "make look like a glass partition")
+  if (m.userData.glz) { m.remove(m.userData.glz); m.userData.glz = null; }
+  const as = t || (pc.cut ? "" : pc.door ? "door" : pc.ty);         // (the plan's own doors are doors till called otherwise)
+  if (as === "glass" || as === "door" || as === "booth") { m.userData.glz = as === "glass" ? partition(pc) : as === "door" ? door(pc) : booth(pc); m.add(m.userData.glz); }   // ("now do the doors like this")
+  m.children[0].visible = !m.userData.glz;                            // (its block's edges)
+  if (!quiet) { look(m); paint(id); }
+}
+const look = (m) => {
+  const t = opt.ghost || m.userData.glassy || !!m.userData.glz; m.material.transparent = t; m.material.depthWrite = !t; m.renderOrder = t ? 2 : 0;
+  m.material.opacity = opt.ghost ? 0.22 : t ? 0.55 : 1; m.material.needsUpdate = true;
+};
+// a glass partition: a 12 mm pane in an aluminium frame (rails top and bottom, posts at its ends and every PANEL m or less) on a
+// straight segment; a curved or odd one, its own shape in glass between rails of its shape
+const GLZ = { pane: new T.MeshLambertMaterial({ color: 0x9fd4e4, transparent: true, opacity: 0.38, depthWrite: false, side: T.DoubleSide }),
+  frame: new T.MeshLambertMaterial({ color: 0x4a4d52 }), PANE: 0.012, RAIL: 0.05, POST: 0.05, PANEL: 1.2 };
+function partition(pc) {
+  const grp = new T.Group(), h = pc.h, r = oriented(pc.rings[0]);
+  const box = (w, hh, d, x, y, z, ang, mat) => { const b = new T.Mesh(new T.BoxGeometry(w, hh, d), mat); b.position.set(x, y, z); b.rotation.y = ang; b.renderOrder = mat === GLZ.pane ? 3 : 0; grp.add(b); };
+  if (r && r.fill > 0.8 && pc.rings.length === 1) {
+    const L = r.L / 1000, W = r.W / 1000, x = X(r.c[0]), z = Z(r.c[1]), ang = -Math.atan2(r.u[1], r.u[0]), d = Math.min(W, 0.06);
+    const along = (s) => [x + Math.cos(ang) * s, z - Math.sin(ang) * s];
+    box(L, h - 2 * GLZ.RAIL, GLZ.PANE, x, h / 2, z, ang, GLZ.pane);
+    box(L, GLZ.RAIL, d, x, GLZ.RAIL / 2, z, ang, GLZ.frame); box(L, GLZ.RAIL, d, x, h - GLZ.RAIL / 2, z, ang, GLZ.frame);
+    const n = Math.max(1, Math.ceil(L / GLZ.PANEL));
+    for (let k = 0; k <= n; k++) { const s = -L / 2 + GLZ.POST / 2 + (k / n) * (L - GLZ.POST), [px, pz] = along(s); box(GLZ.POST, h, d, px, h / 2, pz, ang, GLZ.frame); }
+  } else {
+    const sh = new T.Shape(pc.rings[0].map(([x, y]) => new T.Vector2(X(x), -Z(y))));
+    for (const hole of pc.rings.slice(1)) sh.holes.push(new T.Path(hole.map(([x, y]) => new T.Vector2(X(x), -Z(y)))));
+    const slab = (y0, y1, mat) => { const g = new T.ExtrudeGeometry(sh, { depth: y1 - y0, bevelEnabled: false }); g.rotateX(-Math.PI / 2); g.translate(0, y0, 0); const m = new T.Mesh(g, mat); m.renderOrder = mat === GLZ.pane ? 3 : 0; grp.add(m); };
+    slab(GLZ.RAIL, h - GLZ.RAIL, GLZ.pane); slab(0, GLZ.RAIL, GLZ.frame); slab(h - GLZ.RAIL, h, GLZ.frame);
+  }
+  return grp;
+}
+// a door: a glass door, full height as the partitions (3 Nov: "make it glass doors.. and remove the bit on top"): its opening
+// framed (a jamb each side, rails top and bottom, aluminium as the partitions'), a 12 mm glass leaf filling it, a pull handle
+// on each face by its free edge; a curved or odd one, glass of its shape between rails of its shape
+const DOOR = { handle: new T.MeshLambertMaterial({ color: 0xc9c9c9 }), JAMB: 0.05, PULL: 0.6 };
+function door(pc) {
+  const grp = new T.Group(), h = pc.h, r = oriented(pc.rings[0]), R = GLZ.RAIL;
+  const add = (geo, mat, x, y, z, ang) => { const b = new T.Mesh(geo, mat); b.position.set(x, y, z); b.rotation.y = ang; b.renderOrder = mat === GLZ.pane ? 3 : 0; grp.add(b); };
+  if (r && r.fill > 0.8 && pc.rings.length === 1) {
+    const L = r.L / 1000, W = r.W / 1000, x = X(r.c[0]), z = Z(r.c[1]), ang = -Math.atan2(r.u[1], r.u[0]), d = Math.min(W, 0.06);
+    const at = (s, n = 0) => [x + Math.cos(ang) * s + Math.sin(ang) * n, z - Math.sin(ang) * s + Math.cos(ang) * n];   // (along it, across it)
+    const J = DOOR.JAMB, leafL = Math.max(0.1, L - 2 * J);
+    for (const s of [-L / 2 + J / 2, L / 2 - J / 2]) { const [px, pz] = at(s); add(new T.BoxGeometry(J, h, d), GLZ.frame, px, h / 2, pz, ang); }
+    add(new T.BoxGeometry(L, R, d), GLZ.frame, x, R / 2, z, ang); add(new T.BoxGeometry(L, R, d), GLZ.frame, x, h - R / 2, z, ang);
+    add(new T.BoxGeometry(leafL, h - 2 * R, GLZ.PANE), GLZ.pane, x, h / 2, z, ang);
+    for (const side of [-1, 1]) { const [px, pz] = at(leafL / 2 - 0.1, side * (GLZ.PANE / 2 + 0.03)); add(new T.BoxGeometry(0.025, DOOR.PULL, 0.025), DOOR.handle, px, 1.05, pz, ang); }
+  } else {
+    const sh = new T.Shape(pc.rings[0].map(([x, y]) => new T.Vector2(X(x), -Z(y))));
+    for (const hole of pc.rings.slice(1)) sh.holes.push(new T.Path(hole.map(([x, y]) => new T.Vector2(X(x), -Z(y)))));
+    const slab = (y0, y1, mat) => { const g = new T.ExtrudeGeometry(sh, { depth: y1 - y0, bevelEnabled: false }); g.rotateX(-Math.PI / 2); g.translate(0, y0, 0); const m = new T.Mesh(g, mat); m.renderOrder = mat === GLZ.pane ? 3 : 0; grp.add(m); };
+    slab(R, h - R, GLZ.pane); slab(0, R, GLZ.frame); slab(h - R, h, GLZ.frame);
+  }
+  return grp;
+}
+// a phone booth: the SketchUp model's own (its component's fine parts, in their own colours, at its placement), as the axo
+// draws it; the parts decoded once, as assets/js/axo-skp.js decodes them (3 Nov: "add in the phone booths")
+const BOOTH = { parts: {}, mats: {} };
+function booth(pc) {
+  const S = window.AXO_SKP, [u, i] = pc.unit, grp = new T.Group();
+  const bytes = (b64) => { const s = atob(b64), a = new Uint8Array(s.length); for (let k = 0; k < s.length; k++) a[k] = s.charCodeAt(k); return a.buffer; };
+  const parts = BOOTH.parts[u] || (BOOTH.parts[u] = S.parts.filter((p) => p.u === u && p.lv !== 2).map((p) => {
+    const q = new Int16Array(bytes(p.p)), pos = new Float32Array(q.length);
+    for (let k = 0; k < q.length; k += 3) for (let a = 0; a < 3; a++) pos[k + a] = p.lo[a] + ((q[k + a] + 32768) / 65535) * (p.hi[a] - p.lo[a]);
+    const g = new T.BufferGeometry(); g.setAttribute("position", new T.BufferAttribute(pos, 3));
+    g.setAttribute("color", new T.BufferAttribute(new Uint8Array(bytes(p.c)), 3, true));
+    g.setIndex(new T.BufferAttribute(p.i32 ? new Uint32Array(bytes(p.i)) : new Uint16Array(bytes(p.i)), 1)); g.computeVertexNormals();
+    return { g, k: p.k };
+  }));
+  const f = pc.m || new Float32Array(bytes(S.units[u].m)).subarray(i * 12, i * 12 + 12);   // (where the plan draws it, or the model's own)
+  const m4 = new T.Matrix4().set(f[0], f[3], f[6], f[9], f[1], f[4], f[7], f[10], f[2], f[5], f[8], f[11], 0, 0, 0, 1);
+  for (const { g, k } of parts) {
+    const mat = BOOTH.mats[k] || (BOOTH.mats[k] = k === "glass"
+      ? new T.MeshLambertMaterial({ vertexColors: true, transparent: true, opacity: 0.4, depthWrite: false, side: T.DoubleSide })
+      : new T.MeshLambertMaterial({ vertexColors: true, flatShading: true, side: T.DoubleSide }));
+    const mesh = new T.Mesh(g, mat); mesh.applyMatrix4(m4); if (k === "glass") mesh.renderOrder = 3; grp.add(mesh);
+  }
+  return grp;
+}
+// a ring's smallest rectangle round it (plan mm): its centre c, its long direction u, its length L and width W, and how much of
+// it the ring fills
+function oriented(ring) {
+  const p = ring.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]), cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lo = [], hi = []; for (const q of p) { while (lo.length > 1 && cr(lo.at(-2), lo.at(-1), q) <= 0) lo.pop(); lo.push(q); }
+  for (const q of p.reverse()) { while (hi.length > 1 && cr(hi.at(-2), hi.at(-1), q) <= 0) hi.pop(); hi.push(q); }
+  const hull = lo.slice(0, -1).concat(hi.slice(0, -1)); if (hull.length < 3) return null;
+  let best = null;
+  for (let i = 0; i < hull.length; i++) {
+    const a = hull[i], b = hull[(i + 1) % hull.length], l = Math.hypot(b[0] - a[0], b[1] - a[1]); if (l < 1) continue;
+    const u = [(b[0] - a[0]) / l, (b[1] - a[1]) / l], v = [-u[1], u[0]]; let s0 = 1e18, s1 = -1e18, t0 = 1e18, t1 = -1e18;
+    for (const q of hull) { const s = q[0] * u[0] + q[1] * u[1], t = q[0] * v[0] + q[1] * v[1]; s0 = Math.min(s0, s); s1 = Math.max(s1, s); t0 = Math.min(t0, t); t1 = Math.max(t1, t); }
+    const A = (s1 - s0) * (t1 - t0);
+    if (!best || A < best.A) { const sm = (s0 + s1) / 2, tm = (t0 + t1) / 2; best = { A, s: s1 - s0, t: t1 - t0, u, v, c: [u[0] * sm + v[0] * tm, u[1] * sm + v[1] * tm] }; }
+  }
+  if (!best) return null;
+  const long = best.s >= best.t, area = Math.abs(ring.reduce((s, q, i) => { const n = ring[(i + 1) % ring.length]; return s + q[0] * n[1] - n[0] * q[1]; }, 0)) / 2;
+  return { c: best.c, u: long ? best.u : best.v, L: long ? best.s : best.t, W: long ? best.t : best.s, fill: area / best.A };
+}
+// the pieces faint, to see the plan through them
+function ghost() {
+  for (const m of meshes) if (m) look(m);
+  const cm = G.core.userData.mat; cm.transparent = opt.ghost; cm.opacity = opt.ghost ? 0.3 : 1; cm.depthWrite = !opt.ghost; cm.needsUpdate = true;
+  meshes.forEach((m, id) => m && paint(id)); draw();
+}
+
+// ---------- the camera: the deck's orthographic axo {theta, phi, t, half} ----------
+function basis(s) {
+  const d = new T.Vector3(Math.sin(s.phi) * Math.sin(s.theta), Math.cos(s.phi), Math.sin(s.phi) * Math.cos(s.theta));
+  const f = d.clone().negate(), right = new T.Vector3(-f.z, 0, f.x).normalize(), up = new T.Vector3().crossVectors(right, f).normalize();
+  return { d, f, right, up };
+}
+function apply(s) {
+  const { d } = basis(s);
+  cam.position.set(s.t[0] + d.x * 300, s.t[1] + d.y * 300, s.t[2] + d.z * 300); cam.up.set(0, 1, 0); cam.lookAt(s.t[0], s.t[1], s.t[2]);
+  cam.top = s.half; cam.bottom = -s.half; cam.left = -s.half * asp; cam.right = s.half * asp; cam.near = 1; cam.far = 900; cam.updateProjectionMatrix();
+}
+// the view {theta, phi} that fits these plan-mm points (from 0 to top metres up), with a margin
+function frame(pts, theta, phi, top, pad) {
+  const s = { theta, phi, t: [0, 0, 0], half: 1 }, { right, up } = basis(s); let a0 = 1e9, a1 = -1e9, b0 = 1e9, b1 = -1e9;
+  for (const [x, y] of pts) for (const h of [0, top]) {
+    const v = new T.Vector3(X(x), h, Z(y)), a = v.dot(right), b = v.dot(up);
+    a0 = Math.min(a0, a); a1 = Math.max(a1, a); b0 = Math.min(b0, b); b1 = Math.max(b1, b);
+  }
+  s.half = Math.max(1.5, Math.max((b1 - b0) / 2, (a1 - a0) / 2 / asp) * (1 + pad));
+  const c = right.clone().multiplyScalar((a0 + a1) / 2).add(up.clone().multiplyScalar((b0 + b1) / 2)); s.t = [c.x, c.y, c.z];
+  return s;
+}
+// (the floor is 240 m long and 34 m deep: it opens turned a little from square on, its length across the screen)
+const VIEW = { theta: -0.3, phi: 0.9 };
+function fit() { view = frame(D.slab, view ? view.theta : VIEW.theta, view ? view.phi : VIEW.phi, 3.5, 0.04); draw(); }
+function resize() { const r = stage.getBoundingClientRect(); asp = r.width / r.height; renderer.setSize(r.width, r.height, false); if (view && !touched) fit(); else if (view) draw(); }
+let due = false;
+function draw() { if (due || !renderer) return; due = true; requestAnimationFrame(() => { due = false; apply(view); renderer.render(scene, cam); }); }
+let fly = null;
+function flyTo(to, ms = 450) {
+  const from = view, t0 = performance.now(); fly = { to }; touched = true;
+  const step = (now) => {
+    if (!fly || fly.to !== to) return;
+    const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    view = { theta: from.theta + (to.theta - from.theta) * e, phi: from.phi + (to.phi - from.phi) * e, half: from.half + (to.half - from.half) * e, t: from.t.map((v, i) => v + (to.t[i] - v) * e) };
+    apply(view); renderer.render(scene, cam); if (k < 1) requestAnimationFrame(step); else fly = null;
+  };
+  requestAnimationFrame(step);
+}
+
+// ---------- the sidebar ----------
+// a piece's type as it stands: Ritika's call, else the plan's door, else what the plan makes it (3 Nov: "why aren't all the glass
+// partitions in the glass layer?": the chips, their counts and the list go by it)
+const eff = (pc) => pc.cut ? "cut" : tags[pc.key] || (pc.door ? "door" : pc.ty);
+const pieceOn = (pc) => show[eff(pc)] !== false && (!pc.feedL.length || pc.feedL.some((L) => layerOn[L] !== false));
+function chips() {
+  const n = (f) => D.pieces.filter(f).length;
+  const e = (k) => n((p) => eff(p) === k);
+  const C = [["wall", "walls", e("wall"), COL.wall], ["solid", "solid partitions", e("solid"), COL.solid],
+    ["glass", "glass partitions", e("glass"), COL.glass], ["door", "doors", e("door"), COL.door], ["column", "columns", e("column"), COL.column],
+    ["facade", "external glazing", e("facade"), COL.facade],
+    ["booth", "phone booths", e("booth"), COL.booth],
+    ["cut", "left out by the axo", e("cut"), COL.cut],
+    ["core", "SketchUp core", null, COL.core], ["plan", "vector plan", P.N, null]];
+  $("#show").innerHTML = C.map(([k, t, c, col]) => `<button class="chip${show[k] ? " on" : ""}" data-k="${k}">${col !== null ? `<i class="sw" style="background:${hex(col)}"></i>` : ""}${t}${c !== null ? `<b>${c}</b>` : ""}</button>`).join("");
+  $("#show").querySelectorAll(".chip").forEach((b) => (b.onclick = () => { const k = b.dataset.k; show[k] = !show[k]; b.classList.toggle("on", show[k]); vis(); list(); }));
+  const O = () => `<span class="lab">plan colours</span><button class="chip${opt.colour === "plan" ? " on" : ""}" data-o="plan">Layout slide</button><button class="chip${opt.colour === "layer" ? " on" : ""}" data-o="layer">layers'</button>` +
+    `<button class="chip${opt.ghost ? " on" : ""}" data-o="ghost" title="the pieces and the core faint, to see the plan under them">faint pieces</button>` +
+    `<button class="chip${opt.through ? " on" : ""}" data-o="through" title="clicks pick the plan's lines even under a piece">pick the plan through pieces</button>`;
+  const wire = () => $("#opts").querySelectorAll(".chip").forEach((b) => (b.onclick = () => {
+    const o = b.dataset.o;
+    if (o === "plan" || o === "layer") { opt.colour = o; recolour(); layers(); } else if (o === "ghost") { opt.ghost = !opt.ghost; ghost(); } else opt.through = !opt.through;
+    $("#opts").innerHTML = O(); wire();
+  }));
+  $("#opts").innerHTML = O(); wire();
+  vis();
+}
+function vis() {
+  for (const k of ["core", "plan"]) G[k].visible = show[k];          // (the pieces each by its own type as it stands: pieceOn)
+  for (const k of ["wall", "solid", "glass", "column", "facade", "booth", "cut"]) G[k].visible = true;
+  D.pieces.forEach((pc) => (meshes[pc.id].visible = pieceOn(pc)));
+  for (const L in layerObj) layerObj[L].visible = layerOn[L];
+  draw();
+}
+function summary() {
+  const t = (ty) => D.pieces.filter((p) => p.ty === ty && !p.cut), m2 = (a) => a.reduce((s, p) => s + p.area, 0).toFixed(1);
+  const runs = (k) => new Set(t(k).map((p) => p.run)).size, ok = ["wall", "solid", "glass"].every((k) => (D.axo_runs || {})[k] === (D.axo[k] ?? (D.axo_runs || {})[k]));
+  $("#sum").innerHTML = `<div>${t("wall").length} wall, ${t("solid").length} solid and ${t("glass").length} glass segments (${m2(t("wall"))}, ${m2(t("solid"))}, ${m2(t("glass"))} m²) in ${runs("wall") + runs("solid") + runs("glass")} joined runs, all to ${D.heights.wall} m; ` +
+    `${D.pieces.filter((p) => p.cut).length} more the axo leaves out</div>` +
+    `<div>${t("column").length} columns from S-COLS, to ${D.heights.column} m (${t("column").filter((p) => p.core).length} of them in the SketchUp core; the axo itself keeps the model's)</div>` +
+    `<div>${D.pieces.filter((p) => p.ty === "booth").length} phone booths, the SketchUp model's own, as the axo draws them</div>` +
+    `<div>${t("facade").length} external glazing runs from ${new Set(t("facade").map((p) => p.block)).size} façade blocks, to ${D.heights.facade} m (the axo keeps the model's façade)</div>` +
+    `<div class="${ok ? "src" : "bad"}">${ok ? "the same pieces data/axo-skp.js draws" + (D.pieces.some((p) => p.outline) ? `, and ${D.pieces.filter((p) => p.outline).length} curved walls on OUTLINE it doesn't yet` : "") + (D.pieces.some((p) => p.core_box) ? `; ${D.pieces.filter((p) => p.core_box).length} segments by the core it clips away (it takes the core as its box)` : "") : "data/axo-skp.js draws " + JSON.stringify(D.axo) + ": rerun tools/acko/axo_skp_28.py"}</div>` +
+    `<div class="${D.unmatched ? "bad" : "src"}">plan: ${P.N.toLocaleString()} items on ${P.names.length} layers; ${D.unmatched ? D.unmatched + " of the wall lines not found in it: rerun tools/acko/axo_debug.py" : "every wall line found in it"}</div>`;
+}
+const srcLines = (pc) => pc.src.map(([i, m]) => [D.lines[i], m, i]);
+function matches(pc) {
+  if (!pieceOn(pc)) return false;
+  if (onlyCalled && !tags[pc.key]) return false;
+  if (!query) return true;
+  return srcLines(pc).some(([l]) => l.L.toLowerCase().includes(query) || l.path.toLowerCase().includes(query));
+}
+function layersOf(pc) { const c = {}; srcLines(pc).forEach(([l]) => (c[l.L] = (c[l.L] || 0) + 1)); return Object.entries(c).sort((a, b) => b[1] - a[1]); }
+const selPiece = () => (sel && sel.piece !== undefined ? sel.piece : -1);
+function list() {
+  const box = $("#list");
+  box.innerHTML = D.pieces.filter(matches).map((pc) => `<div class="pc${picked.has(pc.id) || linked.has(pc.id) ? " on" : ""}" data-i="${pc.id}">` +
+    `<span class="k" style="color:${hex(pc.cut ? 0xb35c00 : eff(pc) === "solid" ? 0x9a7f4c : COL[eff(pc)])}">#${pc.id} ${pc.cut ? pc.ty + " · cut" : eff(pc)}${tags[pc.key] ? `<span class="t" style="background:${hex(TAGS[tags[pc.key]])}">${tags[pc.key]}</span>` : pc.door ? `<span class="t" style="background:${hex(TAGS.door)}">door (plan)</span>` : ""}</span><span>${pc.width} mm wide</span><span class="a">${pc.area} m²</span>` +
+    `<span class="l">${esc(pc.name || layersOf(pc).map(([L, n]) => L + " ×" + n).join(" · ") || "(no plan lines)")}</span></div>`).join("") || `<div class="pc"><span class="l">nothing matches</span></div>`;
+  box.querySelectorAll(".pc[data-i]").forEach((d) => {
+    d.onclick = (e) => selectPiece(+d.dataset.i, !e.shiftKey, e.shiftKey);
+    d.onmouseenter = () => hover(+d.dataset.i); d.onmouseleave = () => hover(-1);
+  });
+}
+$("#q").oninput = (e) => { query = e.target.value.trim().toLowerCase(); list(); $("#list").scrollTop = 0; };
+document.querySelectorAll(".tabs button").forEach((b) => (b.onclick = () => {
+  tab = b.dataset.t; document.querySelectorAll(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === "p-" + tab));
+}));
+// the layers: each floor plan layer's lines and the pieces made from it, on and off; the axo's wall layers first
+function layers() {
+  const count = {}; for (let i = 0; i < P.N; i++) count[P.names[P.lay[i]]] = (count[P.names[P.lay[i]]] || 0) + 1;
+  const made = {}; D.pieces.forEach((pc) => pc.feedL.forEach((L) => (made[L] = (made[L] || 0) + 1)));
+  const wallL = new Set(Object.values(D.feeds).flat()), near = new Set(D.lines.map((l) => l.L));
+  const all = Object.keys(layerObj), f = (L) => !lquery || L.toLowerCase().includes(lquery);
+  const row = (L) => `<div class="ly${layerOn[L] ? "" : " off"}" data-l="${esc(L)}"><input type="checkbox"${layerOn[L] ? " checked" : ""}><i class="sw" style="background:${hex(opt.colour === "plan" ? PH[cls(L, "base", false)] : layerCol(L))}"></i>` +
+    `<span class="n" title="${esc(L)}">${esc(L)}</span><span class="c">${(count[L] || 0).toLocaleString()}${made[L] ? ` · ${made[L]} piece${made[L] > 1 ? "s" : ""}` : ""}</span><button class="only" title="this layer alone">only</button></div>`;
+  const grp = [["layers the walls and columns come from", all.filter((L) => wallL.has(L))], ["doors and the other wall layers", all.filter((L) => !wallL.has(L) && near.has(L))],
+    ["the rest of the plan", all.filter((L) => !wallL.has(L) && !near.has(L))]];
+  $("#layers").innerHTML = grp.map(([h, ls]) => { ls = ls.filter(f).sort((a, b) => (made[b] || 0) - (made[a] || 0) || a.localeCompare(b)); return ls.length ? `<div class="lh">${h}</div>` + ls.map(row).join("") : ""; }).join("");
+  $("#layers").querySelectorAll(".ly").forEach((d) => {
+    const L = d.dataset.l;
+    d.onclick = (e) => { if (e.target.classList.contains("only")) { for (const k in layerOn) layerOn[k] = k === L; } else layerOn[L] = !layerOn[L]; after(); };
+  });
+  const after = () => { vis(); list(); layers(); };
+  document.querySelectorAll("[data-a]").forEach((b) => (b.onclick = () => { const a = b.dataset.a; for (const k in layerOn) layerOn[k] = a === "all" || (a === "walls" && (wallL.has(k) || near.has(k))); after(); }));
+}
+$("#lq").oninput = (e) => { lquery = e.target.value.trim().toLowerCase(); layers(); };
+
+// ---------- select, hover ----------
+function paint(id) {
+  const m = meshes[id]; if (!m) return;
+  const on = picked.has(id) || linked.has(id);
+  m.material.color.setHex(on ? COL.pick : m.userData.base);
+  m.material.emissive.setHex(id === hovered && !on ? 0x2a2440 : 0x000000);
+  if (m.material.transparent) m.material.opacity = opt.ghost ? (on ? 0.6 : 0.22) : on ? 0.8 : 0.55;
+  if (m.userData.glz) { m.material.colorWrite = on || id === hovered; m.material.opacity = on ? 0.45 : 0.25; }   // (the partition shows; its block only when picked)
+}
+function hover(id) {
+  if (id === hovered) return; const was = hovered; hovered = id; paint(was); paint(id);
+  document.querySelectorAll(".pc.hov").forEach((d) => d.classList.remove("hov"));
+  if (id >= 0) document.querySelector(`.pc[data-i="${id}"]`)?.classList.add("hov");
+  draw();
+}
+function hoverItem(i) {
+  if (i === hotItem) return; hotItem = i; G.hot.clear();
+  if (i >= 0) { G.hot.add(flat([closed(i)], COL.hot, 0.012, true)); if (P.kind[i] === 1) { const f = fillOver(ringsOf(i), COL.hot); f && G.hot.add(f); } }
+  draw();
+}
+const closed = (i) => { const q = ptsOf(i); return P.kind[i] === 1 && q.length > 2 ? q.concat([q[0]]) : q; };
+const ringsOf = (i) => { const out = []; for (let j = i; j >= 0 && P.grp[j] === P.grp[i]; j--) out.unshift(ptsOf(j)); for (let j = i + 1; j < P.N && P.grp[j] === P.grp[i]; j++) out.push(ptsOf(j)); return out; };
+function clear() {
+  const wl = [...linked, ...picked]; sel = null; linked = new Set(); picked = new Set(); wl.forEach(paint);
+  G.src.clear(); G.pick.clear(); document.querySelectorAll(".pc.on").forEach((d) => d.classList.remove("on"));
+  $("#info").classList.remove("on"); $("#info").innerHTML = "";
+}
+// a piece (a click), or more of them (Shift-click adds or takes one away): purple, their plan lines red, the info and the call
+function selectPiece(id, go, add) {
+  if (add && picked.size && id >= 0) {
+    if (picked.has(id)) picked.delete(id); else picked.add(id);
+    if (!picked.size) { clear(); draw(); return; }
+    sel = { piece: picked.has(id) ? id : [...picked][0] }; D.pieces.forEach((p) => paint(p.id));
+  } else {
+    clear(); if (id < 0) { draw(); return; }
+    sel = { piece: id }; picked = new Set([id]); paint(id);
+  }
+  document.querySelectorAll(".pc").forEach((d) => d.classList.toggle("on", picked.has(+d.dataset.i)));
+  const el = document.querySelector(`.pc[data-i="${id}"]`); el?.scrollIntoView({ block: "nearest" });
+  // their source lines, red, on the floor and seen through the walls
+  G.src.clear(); G.src.add(flat([...picked].flatMap((k) => srcLines(D.pieces[k]).map(([l]) => l.pts)), COL.src, 0.01, true));
+  pieceInfo();
+  const pc = D.pieces[id], [x0, y0, x1, y1] = pc.box;
+  if (go && !add) flyTo(frame([[x0, y0], [x1, y0], [x1, y1], [x0, y1]], view.theta, view.phi, pc.h, 0.6)); else draw();
+}
+// the call row: what the selected segments are (Ritika's, kept in this browser; the Calls box downloads them)
+const callRow = (ids) => {
+  const now = new Set(ids.map((k) => tags[D.pieces[k].key] || ""));
+  return `<div class="calls"><span class="src">call ${ids.length > 1 ? "them" : "it"}</span>` + Object.keys(TAGS).map((t) =>
+    `<button class="chip${now.size === 1 && now.has(t) ? " on" : ""}" data-tag="${t}" title="key ${t[0].toUpperCase()}"><i class="sw" style="background:${hex(TAGS[t])}"></i>${t}</button>`).join("") +
+    `<button class="chip" data-tag="" title="key X">no call</button></div>`;
+};
+function pieceInfo() {
+  const info = $("#info"), ids = [...picked];
+  if (ids.length > 1) {
+    const by = {}; ids.forEach((k) => { const t = tags[D.pieces[k].key] || D.pieces[k].ty; by[t] = (by[t] || 0) + 1; });
+    info.innerHTML = `<div class="hd"><b>${ids.length} selected</b><span class="src">${Object.entries(by).map(([t, n]) => n + " " + t).join(" · ")}</span><button class="x" title="Let go (Esc)">×</button></div>` +
+      callRow(ids) + `<div class="src">Shift-click adds a segment or takes it away.</div>` +
+      `<table class="sl"><thead><tr><th>piece</th><th>type</th><th>call</th><th>m²</th><th>mm</th></tr></thead><tbody>` +
+      ids.map((k) => { const p = D.pieces[k]; return `<tr data-p="${k}"><td>#${k}</td><td>${p.ty}</td><td>${tags[p.key] || ""}</td><td>${p.area}</td><td>${p.width}</td></tr>`; }).join("") + `</tbody></table>`;
+    info.querySelectorAll("tr[data-p]").forEach((tr) => { const k = +tr.dataset.p; tr.onmouseenter = () => hover(k); tr.onmouseleave = () => hover(-1); tr.onclick = () => selectPiece(k, true); });
+  } else {
+    const pc = D.pieces[ids[0]], [x0, y0, x1, y1] = pc.box, feeds = new Set(D.feeds[pc.ty]);
+    const sib = pc.run ? D.pieces.filter((p) => p.run === pc.run).length : 0;
+    info.innerHTML = `<div class="hd"><b>#${pc.id} ${pc.cut ? pc.ty : eff(pc)}</b>${!pc.cut && eff(pc) !== pc.ty ? `<span class="src">(the plan: ${pc.ty})</span>` : ""}${tags[pc.key] ? `<span class="tagd" style="background:${hex(TAGS[tags[pc.key]])}">called ${tags[pc.key]}</span>` : pc.door ? `<span class="tagd" style="background:${hex(TAGS.door)}">the plan's door</span>` : ""}${pc.cut ? `<span class="cut">left out: ${pc.cut.join(", ")}</span>` : ""}${pc.core ? `<span class="src">in the SketchUp core</span>` : ""}<button class="x" title="Let go (Esc)">×</button></div>` +
+      callRow(ids) +
+      `<div class="kv"><span>height</span><span>${pc.h} m</span><span>area</span><span>${pc.area} m²</span><span>mean width</span><span>${pc.width} mm</span>` +
+      `<span>extent</span><span>${((x1 - x0) / 1000).toFixed(2)} × ${((y1 - y0) / 1000).toFixed(2)} m</span>` +
+      `<span>outline</span><span>${pc.rings[0].length} corners${pc.rings.length > 1 ? `, ${pc.rings.length - 1} hole${pc.rings.length > 2 ? "s" : ""}` : ""}</span>` +
+      (pc.run ? `<span>joined run</span><span>${sib > 1 ? `one of ${sib} segments the axo extrudes as one (${pc.run_area} m²) · <a href="#" class="run">select them all</a>` : "a single segment"}</span>` : "") +
+      `<span>made from</span><span>${esc(pc.feedL.join(", ") || "(no line of its layers)")}</span>` +
+      (pc.outline ? `<span>note</span><span class="cut">a curved wall the plan draws on OUTLINE: here only, the axo doesn't extrude it yet</span>` : "") +
+      (pc.core_box ? `<span>note</span><span class="cut">by the core: here only, the axo clips it away (it takes the core as its box)</span>` : "") +
+      (pc.name ? `<span>façade type</span><span>${esc(pc.name)}</span><span>block</span><span class="p">${esc(pc.block)}</span>` : "") + `</div>` +
+      `<table class="sl"><thead><tr><th>layer</th><th>block path</th><th>m</th><th>in</th></tr></thead><tbody>` +
+      srcLines(pc).slice(0, 300).map(([l, m, j]) => `<tr data-j="${j}" class="${feeds.has(l.L) ? "" : "no"}" title="${feeds.has(l.L) ? "click: select it on the plan" : "this layer doesn't make " + pc.ty + " (only near it)"}"><td>${esc(l.L)}${l.k === "f" ? " (fill)" : ""}</td><td class="p">${esc(l.path)}</td><td>${l.m}</td><td>${m}</td></tr>`).join("") +
+      `</tbody></table>` + (pc.src.length > 300 ? `<div class="src">… and ${pc.src.length - 300} more lines (all drawn red)</div>` : "") + (pc.src.length ? `<div class="src" style="margin-top:6px">m: the line's length · in: its length within 30 mm of the piece · grey: a layer that doesn't make ${pc.ty} · click a row to select the line</div>` : `<div class="src">no plan lines within 30 mm</div>`);
+    // a source line's row: that line alone, brighter; a click selects it on the plan
+    info.querySelectorAll("tr[data-j]").forEach((tr) => {
+      const i = D.item[+tr.dataset.j];
+      tr.onmouseenter = () => hoverItem(i); tr.onmouseleave = () => hoverItem(-1);
+      tr.onclick = () => i >= 0 && selectItem(i, true);
+    });
+    info.querySelector("a.run")?.addEventListener("click", (e) => { e.preventDefault(); D.pieces.filter((p) => p.run === pc.run && p.id !== pc.id).forEach((p) => selectPiece(p.id, false, true)); });
+  }
+  info.classList.add("on");
+  info.querySelector(".x").onclick = () => { clear(); draw(); };
+  info.querySelectorAll("[data-tag]").forEach((b) => (b.onclick = () => call(b.dataset.tag)));
+}
+// a call whose segment the data no longer has (its key, the segment's inner point to the mm, moved as the plan or the splitting
+// changed): moved to the one segment of its type whose key is within HEAL mm of it, not called already
+const HEAL = 100;
+function heal() {
+  const keys = new Set(D.pieces.map((p) => p.key)), at = (k) => { const m = /^(\w+):(-?\d+),(-?\d+)/.exec(k); return m && [m[1], +m[2], +m[3]]; };
+  let moved = 0;
+  for (const [key, t] of Object.entries(tags)) {
+    if (keys.has(key)) continue;
+    const a = at(key); if (!a) continue;
+    const near = D.pieces.filter((p) => { const b = at(p.key); return b && b[0] === a[0] && !tags[p.key] && Math.hypot(b[1] - a[1], b[2] - a[2]) <= HEAL; });
+    if (near.length === 1) { delete tags[key]; tags[near[0].key] = t; moved++; }
+  }
+  if (moved) saveTags();
+}
+// a call on the selected segments: kept in this browser (localStorage), shown in its type's colour
+function call(tag) {
+  if (!picked.size) return;
+  for (const k of picked) { const key = D.pieces[k].key; if (tag) tags[key] = tag; else delete tags[key]; restyle(k); }
+  saveTags(); pieceInfo(); chips(); list(); callsBox(); draw();
+}
+function callsBox() {
+  const keys = new Set(D.pieces.map((p) => p.key)), n = {}; let lost = 0;
+  for (const [key, t] of Object.entries(tags)) { if (keys.has(key)) n[t] = (n[t] || 0) + 1; else lost++; }
+  const total = Object.values(n).reduce((a, b) => a + b, 0);
+  $("#calls").innerHTML = `<h2>Calls</h2>` + (total || lost
+    ? `<div>${Object.entries(n).map(([t, c]) => `<i class="sw" style="background:${hex(TAGS[t])}"></i> ${c} ${t}`).join(" · ") || "none"}${lost ? ` <span class="bad">· ${lost} on segments no longer drawn</span>` : ""}</div>` +
+      `<div class="chips" style="margin-top:6px"><button class="chip" id="dl">download (axo-debug-calls.json)</button><button class="chip${onlyCalled ? " on" : ""}" id="oc">list the called only</button><button class="chip" id="ca">clear all</button></div>`
+    : `<div class="src">Select a segment (Shift-click for more) and call it wall, solid, glass or door: keys W S G D, X takes the call off. The calls stay in this browser; download them to hand over.</div>`);
+  $("#dl")?.addEventListener("click", download);
+  $("#oc")?.addEventListener("click", () => { onlyCalled = !onlyCalled; list(); callsBox(); });
+  $("#ca")?.addEventListener("click", () => { if (!confirm("Take every call off?")) return; tags = {}; saveTags(); D.pieces.forEach((p) => restyle(p.id)); if (picked.size) pieceInfo(); chips(); list(); callsBox(); draw(); });
+}
+function download() {
+  const byKey = Object.fromEntries(D.pieces.map((p) => [p.key, p]));
+  const out = { made: new Date().toISOString(), page: "tools/acko/axo_debug.html", frame: "plan mm, y down, the floor plan shifted " + D.shift.join(", ") + " mm onto the SketchUp model",
+    calls: Object.entries(tags).map(([key, tag]) => { const p = byKey[key];
+      return { key, call: tag, ...(p ? { was: p.ty, run: p.run || null, area: p.area, width: p.width, box: p.box, rings: p.rings, layers: p.feedL } : { lost: true }) }; }) };
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1)], { type: "application/json" }));
+  a.download = "axo-debug-calls.json"; document.body.appendChild(a); a.click(); a.remove();
+}
+// a plan item: its layer, block path, size, and the pieces it makes (purple)
+function selectItem(i, go) {
+  clear(); if (i < 0) { draw(); return; }
+  sel = { item: i }; const kd = P.kind[i], L = layerOf(i), j = P.line[i], q = ptsOf(i);
+  const ps = j >= 0 ? D.ofLine[j] : [];
+  ps.forEach(([id, , f]) => f && linked.add(id)); linked.forEach(paint);
+  G.pick.add(flat([closed(i)], COL.src, 0.01, true)); if (kd === 1) { const f = fillOver(ringsOf(i), COL.src); f && G.pick.add(f); }
+  document.querySelectorAll(".pc").forEach((d) => d.classList.toggle("on", linked.has(+d.dataset.i)));
+  const xs = q.map((p) => p[0]), ys = q.map((p) => p[1]), axo = j >= 0, rings = kd === 1 ? ringsOf(i) : null;
+  const info = $("#info");
+  info.innerHTML = `<div class="hd"><b>plan ${KINDS[kd]}</b><span class="src">#${i}${P.py[i] >= 0 ? "" : " · " + "not in the base drawing"}</span><button class="x" title="Let go (Esc)">×</button></div>` +
+    `<div class="kv"><span>layer</span><span><i class="sw" style="background:${hex(layerCol(L))}"></i> ${esc(L)}</span><span>block path</span><span class="p">${esc(P.paths[P.path[i]])}</span>` +
+    (kd === 1 ? `<span>area</span><span>${(areaOf(q) / 1e6).toFixed(3)} m²${rings.length > 1 ? ` (one of ${rings.length} rings)` : ""}</span><span>perimeter</span><span>${(lenOf(i) / 1000).toFixed(2)} m</span>`
+      : `<span>length</span><span>${(lenOf(i) / 1000).toFixed(2)} m</span>`) +
+    `<span>points</span><span>${q.length}</span><span>extent</span><span>${((Math.max(...xs) - Math.min(...xs)) / 1000).toFixed(2)} × ${((Math.max(...ys) - Math.min(...ys)) / 1000).toFixed(2)} m</span>` +
+    `<span>from</span><span>${Math.round(q[0][0])}, ${Math.round(q[0][1])} mm</span></div>` +
+    (!axo ? `<div class="src">The axo doesn't read this layer: it makes no wall.</div>`
+      : ps.length ? `<table class="sl"><thead><tr><th>piece</th><th>type</th><th>m²</th><th>in</th><th></th></tr></thead><tbody>` +
+        ps.map(([id, m, f]) => { const pc = D.pieces[id]; return `<tr data-p="${id}" class="${f ? "" : "no"}"><td>#${id}</td><td>${pc.ty}${pc.cut ? " (cut)" : ""}</td><td>${pc.area}</td><td>${m}</td><td>${f ? "makes it" : "only near it"}</td></tr>`; }).join("") +
+        `</tbody></table><div class="src" style="margin-top:6px">in: the line's length within 30 mm of the piece · click a row to select the piece</div>`
+      : `<div class="src">A wall layer, but no piece within 30 mm of it (its region wasn't a wall: too wide, open, cut away by the slab's edge or the core).</div>`);
+  info.classList.add("on");
+  info.querySelector(".x").onclick = () => { clear(); draw(); };
+  info.querySelectorAll("tr[data-p]").forEach((tr) => {
+    const id = +tr.dataset.p; tr.onmouseenter = () => hover(id); tr.onmouseleave = () => hover(-1); tr.onclick = () => selectPiece(id, true);
+  });
+  if (go) flyTo(frame([[Math.min(...xs), Math.min(...ys)], [Math.max(...xs), Math.max(...ys)]], view.theta, view.phi, 2.4, 1.2)); else draw();
+}
+
+// ---------- the mouse: the deck's axo one ----------
+const ray = new T.Raycaster();
+function pickPiece(e) {
+  if (opt.through) return -1;
+  const r = stage.getBoundingClientRect();
+  ray.setFromCamera(new T.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), cam);
+  const live = meshes.filter((m) => m && m.visible && m.parent.visible);
+  const hit = ray.intersectObjects(live, false)[0];
+  return hit ? hit.object.userData.id : -1;
+}
+// the plan item under the cursor: the nearest line within a few pixels (a hatch line only if nothing else is), else the smallest
+// fill around it
+function pickItem(e) {
+  if (!show.plan) return -1;
+  const g = ground(e, view), x = g.x * 1000 + D.CX, y = g.z * 1000 + D.CY, tol = (6 * 2 * view.half * 1000) / stage.clientHeight, C = P.CELL;
+  let best = -1, bd = tol, fill = -1, fa = Infinity; const seen = new Set();
+  for (let cx = Math.floor((x - tol) / C); cx <= Math.floor((x + tol) / C); cx++) for (let cy = Math.floor((y - tol) / C); cy <= Math.floor((y + tol) / C); cy++) {
+    for (const i of P.grid.get(cx * 100000 + cy) || []) {
+      if (seen.has(i)) continue; seen.add(i);
+      if (!layerOn[layerOf(i)]) continue;
+      const b = i * 4; if (x < P.box[b] - tol || x > P.box[b + 2] + tol || y < P.box[b + 1] - tol || y > P.box[b + 3] + tol) continue;
+      const s = P.start[i] * 2, n = P.n[i], kd = P.kind[i], pen = kd === 2 ? tol * 0.6 : 0;
+      for (let j = 1; j < n + (kd === 1 && n > 2 ? 1 : 0); j++) {
+        const a = (j - 1) * 2, c = (j % n) * 2, ax = P.pts[s + a], ay = P.pts[s + a + 1], bx = P.pts[s + c], by = P.pts[s + c + 1];
+        const dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy, t = L2 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / L2)) : 0;
+        const d = Math.hypot(x - ax - t * dx, y - ay - t * dy) + pen; if (d < bd) { bd = d; best = i; }
+      }
+      if (kd === 1 && x >= P.box[b] && x <= P.box[b + 2] && y >= P.box[b + 1] && y <= P.box[b + 3]) {
+        let inside = false; for (let j = 0, k = n - 1; j < n; k = j++) { const xj = P.pts[s + 2 * j], yj = P.pts[s + 2 * j + 1], xk = P.pts[s + 2 * k], yk = P.pts[s + 2 * k + 1];
+          if ((yj > y) !== (yk > y) && x < ((xk - xj) * (y - yj)) / (yk - yj) + xj) inside = !inside; }
+        const ar = (P.box[b + 2] - P.box[b]) * (P.box[b + 3] - P.box[b + 1]); if (inside && ar < fa) { fa = ar; fill = i; }
+      }
+    }
+  }
+  return best >= 0 ? best : fill;
+}
+function ground(e, v) {
+  const r = stage.getBoundingClientRect(), nx = ((e.clientX - r.left) / r.width) * 2 - 1, ny = -((e.clientY - r.top) / r.height) * 2 + 1;
+  apply(v); const { f, right, up } = basis(v);
+  const o = cam.position.clone().add(right.multiplyScalar(nx * v.half * asp)).add(up.multiplyScalar(ny * v.half));
+  return o.add(f.multiplyScalar(-o.y / f.y));
+}
+function at(e) { apply(view); const id = pickPiece(e); return id >= 0 ? { piece: id } : { item: pickItem(e) }; }
+let drag = null, moveDue = null;
+stage.addEventListener("pointerdown", (e) => { if (!view || e.button > 2) return; fly = null; drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false, turn: e.button === 2 || e.shiftKey, b: e.button }; try { stage.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ } });
+stage.addEventListener("pointermove", (e) => {
+  if (!view) return;
+  if (!drag) {
+    if (moveDue) { moveDue = e; return; }
+    moveDue = e; requestAnimationFrame(() => { const ev = moveDue; moveDue = null; if (!drag) hoverAt(ev); });
+    return;
+  }
+  if (!drag.on && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 3) return;      // a click, not a drag
+  drag.on = true; touched = true; stage.classList.add("drag"); tip.style.display = "none"; hover(-1); hoverItem(-1);
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y, v = view; drag.x = e.clientX; drag.y = e.clientY;
+  if (drag.turn) view = Object.assign({}, v, { theta: v.theta - dx * 0.005, phi: Math.max(0.05, Math.min(1.45, v.phi - dy * 0.004)) });
+  else {
+    const { right, up } = basis(v), k = (2 * v.half) / stage.clientHeight, m = right.multiplyScalar(-dx * k).add(up.multiplyScalar(dy * k));
+    view = Object.assign({}, v, { t: [v.t[0] + m.x, v.t[1] + m.y, v.t[2] + m.z] });
+  }
+  draw();
+});
+function hoverAt(e) {
+  const h = at(e), r = stage.getBoundingClientRect(); hover(h.piece ?? -1); hoverItem(h.item ?? -1);
+  const on = (h.piece ?? -1) >= 0 || (h.item ?? -1) >= 0; stage.classList.toggle("hot", on);
+  if (!on) { tip.style.display = "none"; return; }
+  tip.style.display = "block"; tip.style.left = (e.clientX - r.left + 14) + "px"; tip.style.top = (e.clientY - r.top + 14) + "px";
+  if (h.piece !== undefined) {
+    const pc = D.pieces[h.piece], L = layersOf(pc).slice(0, 3).map(([L, n]) => L + " ×" + n).join(", ");
+    tip.textContent = `#${h.piece} ${pc.name ? "glazing: " + pc.name : pc.ty}${pc.cut ? " (left out: " + pc.cut.join(", ") + ")" : ""}${pc.core ? " (in the core)" : ""}${tags[pc.key] ? " · called " + tags[pc.key] : pc.door ? " · the plan's door" : ""} · ${pc.area} m² · ${pc.width} mm wide · ${pc.h} m · ${L || "no plan lines"}`;
+  } else {
+    const i = h.item, j = P.line[i], n = j >= 0 ? D.ofLine[j].filter(([, , f]) => f).length : 0;
+    tip.textContent = `plan ${KINDS[P.kind[i]]} · ${layerOf(i)} · ${P.paths[P.path[i]]} · ${(lenOf(i) / 1000).toFixed(2)} m` + (j >= 0 ? ` · makes ${n} piece${n === 1 ? "" : "s"}` : "");
+  }
+}
+const up = (e) => {
+  if (drag && !drag.on && drag.b === 0 && e.type === "pointerup") {
+    const h = at(e);
+    if (h.piece !== undefined) e.shiftKey ? selectPiece(h.piece, false, true) : selectPiece(h.piece === selPiece() && picked.size === 1 ? -1 : h.piece, false);
+    else selectItem(sel && sel.item === h.item ? -1 : h.item, false);
+  }
+  drag = null; stage.classList.remove("drag");
+};
+stage.addEventListener("pointerup", up); stage.addEventListener("pointercancel", up);
+stage.addEventListener("pointerleave", () => { if (!drag) { hover(-1); hoverItem(-1); tip.style.display = "none"; } });
+stage.addEventListener("contextmenu", (e) => e.preventDefault());
+stage.addEventListener("wheel", (e) => {
+  if (!view) return; e.preventDefault(); fly = null; touched = true;
+  const v = view, before = ground(e, v), w = Object.assign({}, v, { half: Math.max(0.3, Math.min(120, v.half * Math.exp(e.deltaY * 0.0012))) });
+  const after = ground(e, w); w.t = [w.t[0] + before.x - after.x, w.t[1], w.t[2] + before.z - after.z]; view = w; draw();
+}, { passive: false });
+stage.addEventListener("dblclick", () => { if (view) { touched = false; flyTo(frame(D.slab, view.theta, view.phi, 3.5, 0.04)); touched = false; } });
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && sel) { clear(); draw(); return; }
+  if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.ctrlKey || e.metaKey || e.altKey || !picked.size) return;
+  const k = e.key.toLowerCase();
+  if (TKEY[k]) { call(TKEY[k]); e.preventDefault(); } else if (k === "x" || e.key === "Delete") { call(""); e.preventDefault(); }
+});
+</script>
+</body>
+</html>
