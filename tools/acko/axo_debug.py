@@ -237,6 +237,74 @@ def core_footprint(S, CX, CY):
     return unary_union(tris).buffer(20).buffer(-20) if tris else Polygon()
 
 
+# the plan's furniture the model hasn't (3 Nov: "thse workstations are missing", "add all these missing plants as well"): each rule
+# a plan block or blocks, the model's component for them, and the block its frame is learned from (its pairs with the model's own
+# placements, the nearest within MISS_NEAR mm); with too few pairs (MISS_PAIRS), the component centred on the block's insert point.
+# A block gets one where no model piece of the rule's kinds stands within MISS_NEAR mm, on the slab
+MISS_NEAR, MISS_PAIRS = 1500.0, 5
+MISSING = [
+    {"blocks": ["WS 1500x750mm 2"], "learn": "WS 1500x750mm", "unit": "WS 1500x750mm", "kinds": None, "near": 1500.0},   # (None: that component's own)
+    {"blocks": ["A$C396F796F"], "learn": "A$C396F796F", "unit": "A$C396F796F", "kinds": ["plant"], "near": 900.0, "apart": 400},
+    {"blocks": ["TREE12"], "learn": "TREE12", "unit": "TREE12", "kinds": ["plant"], "near": 900.0, "apart": 400},
+    {"blocks": ["Clump of Trees or Bushes - plan", "TREE_P03", "A$C143125F4", "tree 26"], "learn": None, "unit": "A$C396F796F", "kinds": ["plant"], "near": 900.0, "apart": 400},
+]
+
+
+def missing_from_plan(root, S, sx, sy, CX, CY, slab):
+    """placements for the plan's blocks the model has no piece for (MISSING): [{"u", "m"}] for AXO_SKP.changes.place"""
+    import base64
+    from shapely.prepared import prep as _prep
+    s = open(os.path.join(root, "data", "plan-base.js"), encoding="utf-8").read(); PB = json.loads(s[s.index("window.PLAN_BASE = ") + 19:].strip().rstrip(";"))
+    ox, oy = PB["origin"]; L = PB["layers"]; inst = defaultdict(list)
+    want = {b for r in MISSING for b in r["blocks"] + ([r["learn"]] if r["learn"] else [])}
+    for blk in PB["blocks"]:                                         # (every group: the plants are in "vegetation")
+        Dd = blk["data"]; defs = Dd["defs"]; lay = lambda l, ctx: ctx if l in ("", "0") else l
+        def walk(di, M, ctx):
+            a, b, c, e, f, g = M
+            for l, col, lt, lw, kind, items in defs[di]["runs"]:
+                st = lay(l, ctx)
+                if kind != "i" or L.get(st, {}).get("frozen"): continue
+                for ci, ca, cb, cc, cd, ce, cf in items:
+                    M2 = [a * ca + c * cb, b * ca + e * cb, a * cc + c * cd, b * cc + e * cd, a * ce + c * cf + f, b * ce + e * cf + g]
+                    if defs[ci]["name"] in want:                      # (the block's frame in the plan's, mm, y down)
+                        inst[defs[ci]["name"]].append((np.array([[M2[0], M2[2]], [-M2[1], -M2[3]]]), np.array([M2[4] - ox + sx, oy - M2[5] + sy])))
+                    walk(ci, M2, st)
+        walk(Dd["root"], Dd["place"]["m"], lay(Dd["place"]["spec"][0], "0"))
+    on_slab = _prep(Polygon(slab)); byname = {}
+    for i, x in enumerate(S["units"]): byname.setdefault((x.get("name") or "").rsplit("#", 1)[0], i)
+    kinds_of = defaultdict(set)
+    for p_ in S["parts"]:
+        if p_["u"] >= 0: kinds_of[p_["u"]].add(p_["k"])
+    place = {i: np.frombuffer(base64.b64decode(x["m"]), np.float32).reshape(-1, 12) for i, x in enumerate(S["units"])}
+    out, report = [], []
+    for r in MISSING:
+        u = byname.get(r["unit"])
+        if u is None: continue
+        have = np.array([[f[9] * 1000 + CX, f[11] * 1000 + CY] for i, F in place.items() if (i == u if r["kinds"] is None else kinds_of[i] & set(r["kinds"])) for f in F] or [[1e12, 1e12]])
+        placed = [np.array([q["m"][9] * 1000 + CX, q["m"][11] * 1000 + CY]) for q in out]    # (and apart from the ones placed: r["apart"] mm)
+        mod = [(np.array([[f[0], f[6]], [f[2], f[8]]]) * 1000, np.array([f[9] * 1000 + CX, f[11] * 1000 + CY])) for f in place[u]]
+        Km, kt = [], []
+        for Mp, tp in (inst[r["learn"]] if r["learn"] else []):
+            Mm, tm = min(mod, key=lambda q: np.linalg.norm(q[1] - tp))
+            if np.linalg.norm(tm - tp) > MISS_NEAR or np.sign(np.linalg.det(Mm)) != np.sign(np.linalg.det(Mp)) or abs(np.linalg.det(Mm)) < 1e-9: continue
+            Km.append(np.linalg.inv(Mm) @ Mp); kt.append(np.linalg.inv(Mm) @ (tp - tm))
+        learned = len(Km) >= MISS_PAIRS
+        if learned: Km, kt = np.median(Km, 0), np.median(kt, 0)
+        ref = place[u][0]; R0 = np.array([[ref[0], ref[6]], [ref[2], ref[8]]]); n0 = len(out)
+        # (unlearned: the component's own local box centre set on the insert point, as its own first placement is turned and sized)
+        lo = np.min([p_["lo"] for p_ in S["parts"] if p_["u"] == u and p_["lv"] != 2], 0); hi = np.max([p_["hi"] for p_ in S["parts"] if p_["u"] == u and p_["lv"] != 2], 0); lc = np.array([(lo[0] + hi[0]) / 2, (lo[2] + hi[2]) / 2])
+        for nm in r["blocks"]:
+            for Mp, tp in inst[nm]:
+                if not on_slab.contains(Point(*tp)) or np.min(np.linalg.norm(have - tp, axis=1)) < r["near"] or any(np.linalg.norm(q - tp) < r.get("apart", 200) for q in placed): continue
+                if learned: Mm = Mp @ np.linalg.inv(Km); tm = tp - Mm @ kt; A = Mm / 1000
+                else: A = R0; tm = tp - (A @ lc) * 1000
+                out.append({"u": u, "m": [float(v) for v in (A[0, 0], 0, A[1, 0], ref[3], ref[4], ref[5], A[0, 1], 0, A[1, 1], (tm[0] - CX) / 1000, ref[10], (tm[1] - CY) / 1000)]})
+                placed.append(tp)
+        report.append(f"{len(out) - n0} {r['unit']} on {', '.join(r['blocks'])}" + ("" if learned else " (centred)"))
+    print("  the plan's furniture the model hasn't, placed: " + "; ".join(report))
+    return out
+
+
 def columns(PL, pt):
     """the floor plan's columns: its S-COLS lines and fills noded and closed into faces, the faces that touch joined (a column
     and its hatch, a column's parts): one polygon each"""
@@ -498,12 +566,13 @@ def main():
         if seen[p["key"]] > 1: p["key"] += "#%d" % seen[p["key"]]
     pieces.sort(key=lambda p: -p["area"])
     for i, p in enumerate(pieces): p["id"] = i
+    add_place = missing_from_plan(ROOT, S, d[0], d[1], CX, CY, A["slab"])
     kept = {ty: sum(1 for g in getattr(b.intersection(zone_axo), "geoms", [b.intersection(zone_axo)]) if isinstance(g, Polygon) and g.area > 4e4 and g.length > 1200
                     and 2 * g.area / g.length < (W.GLASS_THICK if ty == "glass" else W.THICK)) for ty, b in axo_bodies.items()}   # (as rebuild keeps them)
     axo = {ty: len(v) for ty, v in S.get("changes", {}).get("walls", {}).items()}
     print(f"{len(pieces)} pieces: kept runs {kept} (data/axo-skp.js has {axo}), {sum('cut' in p for p in pieces)} cut; {sum(1 for p in pieces if p["ty"] in kept and "cut" not in p)} wall segments ({sum(1 for p in pieces if p.get("door"))} the plan's doors); {len(cols)} columns ({sum(1 for p in pieces if p.get("core"))} in the core); {len(placed)} phone booths; {sum(p["ty"] == "facade" for p in pieces)} glazing runs from {len(runs)} façade blocks; {len(lines)} plan lines")
     out = {"CX": CX, "CY": CY, "shift": [round(v) for v in d], "slab": A["slab"], "core": [[round(v) for v in b] for b in core],
-           "heights": {**W.HEIGHT, "column": COLUMN_H, "facade": FACADE_H}, "axo": axo, "axo_runs": kept, "feeds": FEEDS, "colours": layer_colours({l["L"] for l in lines}), "pieces": pieces, "lines": lines}
+           "heights": {**W.HEIGHT, "column": COLUMN_H, "facade": FACADE_H}, "axo": axo, "axo_runs": kept, "add_place": add_place, "feeds": FEEDS, "colours": layer_colours({l["L"] for l in lines}), "pieces": pieces, "lines": lines}
     with open(os.path.join(OUT, "debug.json"), "w") as f: json.dump(out, f, separators=(",", ":"))
     print("wrote", os.path.relpath(os.path.join(OUT, "debug.json"), ROOT))
 

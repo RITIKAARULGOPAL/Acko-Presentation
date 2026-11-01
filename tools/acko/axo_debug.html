@@ -127,7 +127,7 @@ const FURN = /FURN|\bFUR\b|_FUR_|CHAIR|TABLE|SEAT|SOFA|STORAGE|TV UNIT|^AC_WS_|E
 const cls = (layer, group, veg) => veg || group === "vegetation" || GREEN.test(layer) ? "green" : GLASS.test(layer) ? "glass"
   : DOORS.test(layer) ? "door" : WALL.test(layer) ? "wall" : FURN.test(layer) ? "furn" : SHADE.test(layer) ? "shade" : ANNO.test(layer) ? "anno" : "base";
 const KINDS = ["line", "fill", "hatch", "mask"], KIND = { s: 0, f: 1, h: 2, m: 3 };
-const show = { wall: true, solid: true, glass: true, door: true, column: true, facade: true, booth: true, cut: false, core: true, plan: true };
+const show = { wall: true, solid: true, glass: true, door: true, furniture: true, column: true, facade: true, booth: true, cut: false, core: true, plan: true };
 const opt = { colour: "plan", ghost: false, through: false };
 let D, P, cam, renderer, scene, view, touched = false, asp = 1, X, Z, query = "", lquery = "", tab = "pieces";
 let sel = null, hovered = -1, hotItem = -1, linked = new Set(), picked = new Set(), onlyCalled = false;   // sel: {piece: id} or {item: i}
@@ -145,7 +145,8 @@ const hex = (n) => "#" + n.toString(16).padStart(6, "0");
 (async () => {
   try {
     [D] = await Promise.all([fetch(BASE + "debug.json").then((r) => { if (!r.ok) throw new Error(BASE + "debug.json: " + r.status + " (run python -I tools/acko/axo_debug.py)"); return r.json(); }),
-      script("../../data/axo-skp.js"), script("../../data/plan-base.js")]);
+      script("../../data/axo-skp.js"), script("../../data/plan-base.js"), script("../../data/plan-dxf.js"), script("../../data/axo-dxf.js")]);
+    await script("../../assets/js/axo-model.js"); await script("../../assets/js/axo-skp.js");
   } catch (e) { $("#msg").textContent = e.message; $("#src").textContent = "not loaded"; return; }
   X = (x) => (x - D.CX) / 1000; Z = (y) => (y - D.CY) / 1000;
   $("#src").textContent = `floor plan (data/plan-base.js) shifted ${D.shift.join(", ")} mm onto ${window.AXO_SKP.source || "the SketchUp model"}`;
@@ -231,7 +232,7 @@ function link() {
 function build() {
   renderer = new T.WebGLRenderer({ canvas: stage, antialias: true }); renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.setClearColor(0xffffff);
   scene = new T.Scene(); cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
-  for (const k of ["floor", "plan", "core", "wall", "solid", "glass", "column", "facade", "booth", "cut", "src", "hot", "pick"]) { G[k] = new T.Group(); scene.add(G[k]); }
+  for (const k of ["floor", "plan", "core", "wall", "solid", "glass", "column", "facade", "booth", "furniture", "cut", "src", "hot", "pick"]) { G[k] = new T.Group(); scene.add(G[k]); }
   scene.add(new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.8));
   const key = new T.DirectionalLight(0xffffff, 0.55); key.position.set(-40, 90, 60); scene.add(key);
   // the slab, a pale floor with its outline
@@ -269,6 +270,7 @@ function build() {
     G[k].add(mesh); meshes[pc.id] = mesh; restyle(pc.id, true);
   }
   buildPlan();
+  furniture();
   ghost();
 }
 // the plan flat on the floor: per layer, its lines, its hatch lines and its fills (the fills' rings as one shape, even-odd as
@@ -397,6 +399,279 @@ function door(pc) {
   }
   return grp;
 }
+// the furniture and plants: the axo's own (assets/js/axo-skp.js builds the model as the slide draws it, the 28.10 plan's
+// changes in: its furniture where the plan has changed, its tables and chairs), their groups taken into this scene (3 Nov,
+// "bring in the furniture"); the model's phone booths left out of it (the page places its own where the plan draws them)
+const AXOF = { m: null };
+function furniture() {
+  const S = window.AXO_SKP; if (!window.AxoSkp || !window.AxoSkp.available()) return;
+  const bu = new Set(D.pieces.filter((p) => p.ty === "booth").map((p) => p.unit[0])), n0 = {};
+  for (const u of bu) { n0[u] = S.units[u].n; S.units[u].n = 0; }       // (no placements while it builds: none of its booths)
+  // (the plan's workstations the model has none for, placed by tools/acko/axo_debug.py: "thse workstations are missing")
+  if (S.changes && D.add_place && D.add_place.length && !S.changes.debugAdded) { S.changes.place.push(...D.add_place); S.changes.debugAdded = true; }
+  const lg = loungeGroups();
+  if (S.changes && S.changes.place && !S.changes.debugFixed) { S.changes.place = fixPlace(S.changes.place, lg); S.changes.debugFixed = true; }
+  try { AXOF.m = window.AxoSkp.get(); } finally { for (const u of bu) S.units[u].n = n0[u]; }
+  for (const k of ["furniture", "plants"]) { const g = AXOF.m.groups[k]; g.visible = true; G.furniture.add(g); }
+  G.furniture.add(loungeSeats(lg));
+  // the model's partitions' and doors' frames (its hard pieces over TALL m standing TALL_SPAN m or more, or wholly above TALL
+  // m): the page draws its own walls, glass and doors, so they go
+  const TALL = 1.9, TALL_SPAN = 1.5;
+  AXOF.m.groups.furniture.traverse((m) => {
+    if (!m.isMesh || !m.material || !m.material.userData || m.material.userData.kind !== "hard") return;
+    const g = m.geometry, pos = g.getAttribute("position").array, ix = g.getIndex().array, n = ix.length / 3;
+    if (m.isInstancedMesh) { g.computeBoundingBox(); const b = g.boundingBox; if (b.max.y > TALL && b.max.y - b.min.y >= TALL_SPAN) m.count = 0; return; }
+    const up = new Int32Array(n).fill(-1), at = new Map(), lo = new Float32Array(n), hi = new Float32Array(n);
+    const find = (a) => { while (up[a] >= 0) a = up[a]; return a; };
+    for (let t = 0; t < n; t++) for (let j = 0; j < 3; j++) {
+      const v = ix[3 * t + j] * 3, key = Math.round(pos[v] * 200) + "," + Math.round(pos[v + 1] * 200) + "," + Math.round(pos[v + 2] * 200), o = at.get(key);
+      if (o === undefined) at.set(key, t); else { const r1 = find(o), r2 = find(t); if (r1 !== r2) up[r2] = r1; }
+    }
+    const top = new Map(), bot = new Map();
+    for (let t = 0; t < n; t++) { const r = find(t); for (let j = 0; j < 3; j++) { const y = pos[ix[3 * t + j] * 3 + 1]; top.set(r, Math.max(top.get(r) ?? -1e9, y)); bot.set(r, Math.min(bot.get(r) ?? 1e9, y)); } }
+    const frame = (r) => (top.get(r) > TALL && top.get(r) - bot.get(r) >= TALL_SPAN) || bot.get(r) > TALL;   // (a frame's upright, or its head up high)
+    const keep = []; for (let t = 0; t < n; t++) if (!frame(find(t))) keep.push(ix[3 * t], ix[3 * t + 1], ix[3 * t + 2]);
+    if (keep.length < ix.length) g.setIndex(new T.BufferAttribute(new ix.constructor(keep), 1));
+  });
+  // the model's own tables where the 28.10 plan puts a new one (CHANGES.tables): the axo keeps a piece over 3.2 m as millwork, so
+  // the old long table stood on with the new one (3 Nov: "what is this additional table"); a piece of the model's furniture with
+  // its top at a table's height (OLD_TOP m) and down to the floor, covering a third of a new table or more, goes
+  const newT = ((S.changes && S.changes.tables) || []).map(([x, y, w, d]) => [x - w / 2, y - d / 2, x + w / 2, y + d / 2]);   // (their boxes, plan mm)
+  const OLD_TOP = [0.65, 1.0];
+  if (newT.length) AXOF.m.groups.furniture.traverse((m) => {
+    if (!m.isMesh || m.isInstancedMesh || !m.geometry.getIndex()) return;
+    const cc = m.geometry.getAttribute("color");                         // (not the new tables themselves: all one white, 240)
+    if (cc && cc.count && [...Array(Math.min(cc.count, 64)).keys()].every((i) => Math.abs(cc.getX(i) - 240 / 255) < 0.01 && Math.abs(cc.getY(i) - 240 / 255) < 0.01)) return;
+    const g = m.geometry, pos = g.getAttribute("position").array, ix = g.getIndex().array, n = ix.length / 3, up = new Int32Array(n).fill(-1), at = new Map();
+    const find = (a) => { while (up[a] >= 0) a = up[a]; return a; };
+    for (let t = 0; t < n; t++) for (let j = 0; j < 3; j++) { const v = ix[3 * t + j] * 3, key = Math.round(pos[v] * 200) + "," + Math.round(pos[v + 1] * 200) + "," + Math.round(pos[v + 2] * 200), o = at.get(key);
+      if (o === undefined) at.set(key, t); else { const r1 = find(o), r2 = find(t); if (r1 !== r2) up[r2] = r1; } }
+    const bb = new Map();
+    for (let t = 0; t < n; t++) { const r = find(t), b = bb.get(r) || [1e9, 1e9, 1e9, -1e9, -1e9, -1e9];
+      for (let j = 0; j < 3; j++) { const v = ix[3 * t + j] * 3; b[0] = Math.min(b[0], pos[v]); b[1] = Math.min(b[1], pos[v + 1]); b[2] = Math.min(b[2], pos[v + 2]); b[3] = Math.max(b[3], pos[v]); b[4] = Math.max(b[4], pos[v + 1]); b[5] = Math.max(b[5], pos[v + 2]); }
+      bb.set(r, b); }
+    const old = new Set(), tops = [];
+    for (const [r, b] of bb) {                                          // (its top: a piece up at a table's height over a new table)
+      if (b[4] < OLD_TOP[0] || b[4] > OLD_TOP[1]) continue;
+      const px = [b[0] * 1000 + D.CX, b[2] * 1000 + D.CY, b[3] * 1000 + D.CX, b[5] * 1000 + D.CY];
+      if (newT.some((q) => { const w = Math.min(px[2], q[2]) - Math.max(px[0], q[0]), h = Math.min(px[3], q[3]) - Math.max(px[1], q[1]); return w > 0 && h > 0 && w * h >= 0.33 * (q[2] - q[0]) * (q[3] - q[1]); })) { old.add(r); tops.push(b); }
+    }
+    for (const [r, b] of bb)                                            // (and its legs: pieces under it, no higher than it)
+      if (tops.some((t) => b[0] >= t[0] - 0.05 && b[3] <= t[3] + 0.05 && b[2] >= t[2] - 0.05 && b[5] <= t[5] + 0.05 && b[4] <= t[4] + 0.02)) old.add(r);
+    if (!old.size) return;
+    const keep = []; for (let t = 0; t < n; t++) if (!old.has(find(t))) keep.push(ix[3 * t], ix[3 * t + 1], ix[3 * t + 2]);
+    g.setIndex(new T.BufferAttribute(new ix.constructor(keep), 1));
+  });
+  // every table in one beige, the model's own tabletops' (3 Nov: "no white tables.. all tables to have the same beigish
+  // colour"): the 28.10 plan's plain tables (white, the axo's) whole, and any white top at a table's height
+  const BEIGE = [192 / 255, 168 / 255, 144 / 255], TOP = [0.55, 0.9];   // (the café's round tables stand 0.61 m)
+  const white = (c, i) => Math.min(c.getX(i), c.getY(i), c.getZ(i)) > 0.85 && Math.max(c.getX(i), c.getY(i), c.getZ(i)) - Math.min(c.getX(i), c.getY(i), c.getZ(i)) < 0.08;
+  AXOF.m.groups.furniture.traverse((m) => {
+    if (!m.isMesh || !m.geometry.getAttribute("color")) return;
+    const g = m.geometry, c = g.getAttribute("color"), pos = g.getAttribute("position"), ix = g.getIndex() ? g.getIndex().array : null, n = ix ? ix.length / 3 : pos.count / 3;
+    let all = true; for (let i = 0; i < c.count && all; i++) if (Math.abs(c.getX(i) - 240 / 255) > 0.01 || Math.abs(c.getY(i) - 240 / 255) > 0.01) all = false;
+    const paint = new Set();
+    // (heights in the world: a component's geometry is in its own axes, its placement brings it up; its first placement's)
+    const M4 = new T.Matrix4(); const vv = new T.Vector3();             // (its first placement still standing: a removed one is scaled to nothing)
+    if (m.isInstancedMesh) for (let i = 0; i < m.count; i++) { m.getMatrixAt(i, M4); if (Math.abs(M4.determinant()) > 1e-6) break; }
+    const wy = (i) => (m.isInstancedMesh ? vv.fromBufferAttribute(pos, i).applyMatrix4(M4).y : pos.getY(i));
+    if (all) for (let i = 0; i < c.count; i++) paint.add(i);                // (the plain tables: all one white, 240)
+    else for (let t = 0; t < n; t++) {
+      const v = [0, 1, 2].map((j) => (ix ? ix[3 * t + j] : 3 * t + j));
+      if (v.every((i) => { const y = wy(i); return y >= TOP[0] && y <= TOP[1] && white(c, i); })) v.forEach((i) => paint.add(i));
+    }
+    for (const i of paint) c.setXYZ(i, ...BEIGE);
+    if (paint.size) c.needsUpdate = true;
+  });
+}
+// the 28.10 plan's furniture as the axo places it (AXO_SKP.changes.place, 12 floats each: the three axes, then the origin),
+// put right before it builds (3 Nov): a placement stretched STRETCH times or more along an axis ("2 chairs are strched instead
+// of four": a 2-a-side table set stretched over a table for 4 a side) as that many copies side by side, each its share; the café
+// chair at the plan's desks (its CABIN_CHAIR block, a desk and its chairs) as the workstation chair (TASK_CHAIR), "these should be
+// worktation chairs as well"
+const TURN_CHAIR = "chair-flat9";                                      // (the plan's chairs at the café's long table)
+const STRETCH = 1.5, CAFE_CHAIR = /^cafe chair/i, CABIN_CHAIR = "*U738", TASK_CHAIR = /^\*U730(#|$)/;   // (*U738: a desk and its chairs)
+// the plan's lounge (3 Nov: "these are sofas and armchairs"): its sofas (SOFA_BLOCKS) and armchairs (ARMCHAIR_BLOCKS), each one
+// a group of the block's lines (near one another), and the lounge's middle (its coffee tables, TABLE_BLOCKS): the model has no
+// sofa, so a sofa is the model's lounge armchair (LOUNGE_CHAIR, its ottoman left off) in seats side by side along it, and an
+// armchair that chair; each facing the lounge's middle; the axo's own soft pieces on them go (fixPlace)
+const SOFA = { SEAT: 0.42, BACK: 0.8, BACK_D: 0.22, ARM: 0.6, ARM_W: 0.16 };
+const DESK_SET = /^rhrt(#|$)/;                                         // (the model's desk-and-chair, which the axo set on the plan's armchairs)
+const ARMCHAIRS = ["ferfer", "CH_CA_LO_01", "fvtb"];                    // (the plan's armchair blocks)
+const SOFA_BLOCKS = ["rgr"], ARMCHAIR_BLOCKS = ["fvtb"], TABLE_BLOCKS = ["FGFGDG"], LOUNGE_CHAIR = /^A\$C3BB14C(#|$)/;
+function loungeGroups() {
+  const by = (names) => {                                              // (a block's lines, grouped: within 400 mm of one another)
+    const its = []; for (let i = 0; i < P.N; i++) { const p = P.paths[P.path[i]], last = p.split(" > ").pop(); if (names.includes(last)) its.push(i); }
+    const gs = [];
+    for (const i of its) {
+      const b = [P.box[4 * i], P.box[4 * i + 1], P.box[4 * i + 2], P.box[4 * i + 3]];
+      let g = gs.find((q) => b[0] < q.b[2] + 400 && q.b[0] < b[2] + 400 && b[1] < q.b[3] + 400 && q.b[1] < b[3] + 400);
+      if (!g) gs.push(g = { b: b.slice(), pts: [] }); else g.b = [Math.min(g.b[0], b[0]), Math.min(g.b[1], b[1]), Math.max(g.b[2], b[2]), Math.max(g.b[3], b[3])];
+      g.pts.push(...ptsOf(i));
+    }
+    return gs;
+  };
+  const sofas = by(SOFA_BLOCKS), arms = by(ARMCHAIR_BLOCKS), tables = by(TABLE_BLOCKS);
+  const mid = (g) => [(g.b[0] + g.b[2]) / 2, (g.b[1] + g.b[3]) / 2];
+  // (each seat group's middle: the coffee tables nearest it, else the group's own sofas and armchairs)
+  const centre = (g) => { const t = tables.map(mid).sort((a, b) => Math.hypot(a[0] - mid(g)[0], a[1] - mid(g)[1]) - Math.hypot(b[0] - mid(g)[0], b[1] - mid(g)[1]))[0];
+    return t && Math.hypot(t[0] - mid(g)[0], t[1] - mid(g)[1]) < 5000 ? t : mid(g); };
+  return { sofas: sofas.map((g) => ({ ...g, c: centre(g) })), arms: arms.map((g) => ({ ...g, c: centre(g) })) };
+}
+function loungeSeats(lg) {
+  const S = window.AXO_SKP, grp = new T.Group(), u = S.units.findIndex((q) => LOUNGE_CHAIR.test(q.name || ""));
+  if (u < 0 || (!lg.sofas.length && !lg.arms.length)) return grp;
+  const bytes = (b64) => { const s = atob(b64), a = new Uint8Array(s.length); for (let k = 0; k < s.length; k++) a[k] = s.charCodeAt(k); return a.buffer; };
+  // the chair alone: its fine parts, the low pieces (its ottoman, under 0.55 m) left off; its centre, its width, its front (to the ottoman)
+  const geos = [], all = [], low = [];
+  for (const p of S.parts.filter((q) => q.u === u && q.lv !== 2)) {
+    const q = new Int16Array(bytes(p.p)), pos = new Float32Array(q.length);
+    for (let i = 0; i < q.length; i += 3) for (let a = 0; a < 3; a++) pos[i + a] = p.lo[a] + ((q[i + a] + 32768) / 65535) * (p.hi[a] - p.lo[a]);
+    const ix = p.i32 ? new Uint32Array(bytes(p.i)) : new Uint16Array(bytes(p.i)), n = ix.length / 3, up = new Int32Array(n).fill(-1), at = new Map();
+    const find = (a) => { while (up[a] >= 0) a = up[a]; return a; };
+    for (let t = 0; t < n; t++) for (let j = 0; j < 3; j++) { const v = ix[3 * t + j] * 3, key = Math.round(pos[v] * 200) + "," + Math.round(pos[v + 1] * 200) + "," + Math.round(pos[v + 2] * 200), o = at.get(key);
+      if (o === undefined) at.set(key, t); else { const r1 = find(o), r2 = find(t); if (r1 !== r2) up[r2] = r1; } }
+    const top = new Map(); for (let t = 0; t < n; t++) { const r = find(t); for (let j = 0; j < 3; j++) top.set(r, Math.max(top.get(r) ?? -1e9, pos[ix[3 * t + j] * 3 + 1])); }
+    const keep = [];
+    for (let t = 0; t < n; t++) { const lowP = top.get(find(t)) < 0.55, dest = lowP ? low : all;
+      for (let j = 0; j < 3; j++) { const v = ix[3 * t + j] * 3; dest.push([pos[v], pos[v + 2]]); } if (!lowP) keep.push(ix[3 * t], ix[3 * t + 1], ix[3 * t + 2]); }
+    const g = new T.BufferGeometry(); g.setAttribute("position", new T.BufferAttribute(pos, 3));
+    g.setAttribute("color", new T.BufferAttribute(new Uint8Array(bytes(p.c)), 3, true)); g.setIndex(new T.BufferAttribute(new Uint32Array(keep), 1)); g.computeVertexNormals();
+    geos.push(g);
+  }
+  if (!all.length || !low.length) return grp;
+  const xs = all.map((v) => v[0]), zs = all.map((v) => v[1]), c = new T.Vector3((Math.min(...xs) + Math.max(...xs)) / 2, 0, (Math.min(...zs) + Math.max(...zs)) / 2);
+  const oc = low.reduce((s, v) => [s[0] + v[0], s[1] + v[1]], [0, 0]).map((v) => v / low.length), front = new T.Vector3(oc[0] - c.x, 0, oc[1] - c.z).normalize();
+  const side = new T.Vector3(front.z, 0, -front.x), width = Math.max(...all.map((v) => Math.abs((v[0] - c.x) * side.x + (v[1] - c.z) * side.z))) * 2;
+  const mat = new T.MeshLambertMaterial({ vertexColors: true, flatShading: true, side: T.DoubleSide });
+  const seat = (x, y, fx, fy) => {                                   // (a chair at plan (x, y) mm, its front to plan direction (fx, fy))
+    const q = new T.Quaternion().setFromUnitVectors(front, new T.Vector3(fx, 0, fy).normalize()), M = new T.Matrix4().makeRotationFromQuaternion(q);
+    const cc = c.clone().applyMatrix4(M); M.setPosition(X(x) - cc.x, 0, Z(y) - cc.z);
+    for (const g of geos) { const m = new T.Mesh(g, mat); m.applyMatrix4(M); grp.add(m); }
+  };
+  // a sofa: its seat the plan's sofa (its lines' hull) SOFA.SEAT m up, a backrest along its back (away from the lounge's middle) and an
+  // arm at each end, in the armchairs' own upholstery (the colour most of the chair's soft faces have)
+  const up = (() => { const n = {}; for (const g of geos) { const c2 = g.getAttribute("color"); for (let i = 0; i < c2.count; i += 7) { const k = [c2.getX(i), c2.getY(i), c2.getZ(i)].map((v) => Math.round(v * 255 / 16) * 16).join(","); n[k] = (n[k] || 0) + 1; } }
+    const k = Object.entries(n).sort((a, b) => b[1] - a[1])[0][0].split(",").map(Number); return new T.Color(k[0] / 255, k[1] / 255, k[2] / 255); })();
+  const sofaMat = new T.MeshLambertMaterial({ color: up, flatShading: true });
+  for (const s of lg.sofas) {
+    let best = null; for (let a = 0; a < 180; a += 2) { const r = a * Math.PI / 180, d = [Math.cos(r), Math.sin(r)], pr = s.pts.map((p) => p[0] * d[0] + p[1] * d[1]); const L = Math.max(...pr) - Math.min(...pr); if (!best || L > best.L) best = { d, L, lo: Math.min(...pr) }; }
+    const nrm = [-best.d[1], best.d[0]], ps = s.pts.map((p) => p[0] * nrm[0] + p[1] * nrm[1]), D_ = Math.max(...ps) - Math.min(...ps), mn = (Math.min(...ps) + Math.max(...ps)) / 2;
+    const ctr = [best.d[0] * (best.lo + best.L / 2) + nrm[0] * mn, best.d[1] * (best.lo + best.L / 2) + nrm[1] * mn];
+    const toC = [s.c[0] - ctr[0], s.c[1] - ctr[1]], f = toC[0] * nrm[0] + toC[1] * nrm[1] >= 0 ? nrm : [-nrm[0], -nrm[1]];
+    const hull = (() => { const pp = s.pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]), cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]), lo = [], hi = [];
+      for (const q of pp) { while (lo.length > 1 && cr(lo.at(-2), lo.at(-1), q) <= 0) lo.pop(); lo.push(q); } for (const q of pp.reverse()) { while (hi.length > 1 && cr(hi.at(-2), hi.at(-1), q) <= 0) hi.pop(); hi.push(q); }
+      return lo.slice(0, -1).concat(hi.slice(0, -1)); })();
+    const sh = new T.Shape(hull.map(([x, y]) => new T.Vector2(X(x), -Z(y)))), seatG = new T.ExtrudeGeometry(sh, { depth: SOFA.SEAT, bevelEnabled: false }); seatG.rotateX(-Math.PI / 2);
+    grp.add(new T.Mesh(seatG, sofaMat));
+    const L = best.L / 1000, Dm = D_ / 1000, ang = -Math.atan2(best.d[1], best.d[0]);
+    const block = (w, h, d, along, across, y0) => { const b = new T.Mesh(new T.BoxGeometry(w, h, d), sofaMat), x = ctr[0] + best.d[0] * along * 1000 - f[0] * across * 1000, y = ctr[1] + best.d[1] * along * 1000 - f[1] * across * 1000;
+      b.position.set(X(x), y0 + h / 2, Z(y)); b.rotation.y = ang; grp.add(b); };
+    block(L - 0.1, SOFA.BACK - SOFA.SEAT, SOFA.BACK_D, 0, Dm / 2 - SOFA.BACK_D / 2 - 0.02, SOFA.SEAT);          // (the back)
+    for (const e of [-1, 1]) block(SOFA.ARM_W, SOFA.ARM - SOFA.SEAT, Dm - 0.1, e * (L / 2 - SOFA.ARM_W / 2 - 0.08), 0, SOFA.SEAT);   // (its arms)
+  }
+  for (const a of lg.arms) {                                           // (an armchair block can hold more than one: its lines' own clusters)
+    const cl = []; for (const p of a.pts) { let g = cl.find((q) => Math.hypot(q.x / q.n - p[0], q.y / q.n - p[1]) < 900); if (!g) cl.push(g = { x: 0, y: 0, n: 0 }); g.x += p[0]; g.y += p[1]; g.n++; }
+    for (const g of cl) { const x = g.x / g.n, y = g.y / g.n; seat(x, y, a.c[0] - x, a.c[1] - y); }
+  }
+  for (const s of lg.extra || []) seat(s.x, s.y, s.fx, s.fy);
+  console.info(`axo debug: lounge, ${lg.sofas.length} sofas and ${lg.arms.length} armchair groups from the plan`);
+  return grp;
+}
+function fixPlace(place, lg) {
+  // (the axo's soft pieces standing on the plan's sofas and armchairs: the lounge seats stand there)
+  const S0 = window.AXO_SKP, units0 = S0.units.concat((S0.changes && S0.changes.units) || []), parts0 = S0.parts.concat((S0.changes && S0.changes.parts) || []);
+  // (any of the axo's pieces with its middle on a plan sofa, or within 700 mm of a plan armchair: the lounge's seats stand there)
+  const bx = {}, mid = (pl) => { const b = bx[pl.u] || (bx[pl.u] = parts0.filter((p) => p.u === pl.u && p.lv !== 2).reduce((r, p) => [r[0].map((v, k) => Math.min(v, p.lo[k])), r[1].map((v, k) => Math.max(v, p.hi[k]))], [[1e9, 1e9, 1e9], [-1e9, -1e9, -1e9]]));
+    const c = b[0].map((v, k) => (v + b[1][k]) / 2), m = pl.m; return [(m[0] * c[0] + m[3] * c[1] + m[6] * c[2] + m[9]) * 1000 + D.CX, (m[2] * c[0] + m[5] * c[1] + m[8] * c[2] + m[11]) * 1000 + D.CY]; };
+  const armAt = []; if (lg) for (const a of lg.arms) { const cl = []; for (const p of a.pts) { let g = cl.find((q) => Math.hypot(q.x / q.n - p[0], q.y / q.n - p[1]) < 900); if (!g) cl.push(g = { x: 0, y: 0, n: 0 }); g.x += p[0]; g.y += p[1]; g.n++; } armAt.push(...cl.map((g) => [g.x / g.n, g.y / g.n])); }
+  const onSeat = ([x, y]) => (lg && lg.sofas.some((g) => x > g.b[0] && x < g.b[2] && y > g.b[1] && y < g.b[3])) || armAt.some(([ax, ay]) => Math.hypot(ax - x, ay - y) < 700);
+  place = place.filter((pl) => !onSeat(mid(pl)));
+  // (the axo's desk-and-chair (DESK_SET) where the plan draws an armchair ("these are armchairs as well"): an armchair on that
+  // block (its lines within 700 mm, their middle), facing the middle of the armchairs within 3.5 m of it, else where the desk faced)
+  if (lg) {
+    const spots = [];
+    place = place.filter((pl) => {
+      if (!DESK_SET.test(units0[pl.u] && units0[pl.u].name || "")) return true;
+      const [x, y] = mid(pl), C = P.CELL, n = {}, at = {};
+      for (let cx = Math.floor((x - 700) / C); cx <= Math.floor((x + 700) / C); cx++) for (let cy = Math.floor((y - 700) / C); cy <= Math.floor((y + 700) / C); cy++)
+        for (const i of P.grid.get(cx * 100000 + cy) || []) { const nm = P.paths[P.path[i]].split(" > ").pop(), b = i * 4, mx = (P.box[b] + P.box[b + 2]) / 2, my = (P.box[b + 1] + P.box[b + 3]) / 2;
+          if (nm === "(the plan itself)" || DESK_SET.test(nm) || Math.hypot(mx - x, my - y) > 700) continue; n[nm] = (n[nm] || 0) + 1; (at[nm] = at[nm] || []).push([mx, my]); }
+      const nm = Object.keys(n).filter((k) => ARMCHAIRS.includes(k)).sort((a, b) => n[b] - n[a])[0];
+      if (!nm) return true;                                            // (on anything else, the axo's own stays)
+      const c = at[nm].reduce((s, p) => [s[0] + p[0], s[1] + p[1]], [0, 0]).map((v) => v / at[nm].length), m = pl.m;
+      spots.push({ x: c[0], y: c[1], fx: m[6], fy: m[8], block: nm }); return false;
+    });
+    for (const s of spots) {
+      const near = spots.filter((o) => o !== s && Math.hypot(o.x - s.x, o.y - s.y) < 3500);
+      if (near.length) { const all = [s, ...near], mx = all.reduce((a, o) => a + o.x, 0) / all.length, my = all.reduce((a, o) => a + o.y, 0) / all.length; s.fx = mx - s.x; s.fy = my - s.y; }
+    }
+    lg.extra = spots; console.info(`axo debug: ${spots.length} desks on the plan's armchairs made armchairs (${[...new Set(spots.map((s) => s.block))].join(", ")})`);
+  }
+  const S = window.AXO_SKP, units = S.units.concat((S.changes && S.changes.units) || []), parts = S.parts.concat((S.changes && S.changes.parts) || []);
+  const bytes = (b64) => { const s = atob(b64), a = new Uint8Array(s.length); for (let k = 0; k < s.length; k++) a[k] = s.charCodeAt(k); return a.buffer; };
+  const box = {};                                                     // (a component's local box, its fine parts')
+  const boxOf = (u) => box[u] || (box[u] = parts.filter((p) => p.u === u && p.lv !== 2).reduce((b, p) => [b[0].map((v, k) => Math.min(v, p.lo[k])), b[1].map((v, k) => Math.max(v, p.hi[k]))], [[1e9, 1e9, 1e9], [-1e9, -1e9, -1e9]]));
+  const task = S.units.findIndex((u) => TASK_CHAIR.test(u.name || "")), cafeU = units.findIndex((u) => CAFE_CHAIR.test(u.name || ""));
+  // the workstation chair's own frame: its centre on the floor, and its front (away from its backrest, the part above 0.75 m)
+  let taskC = null, taskF = null;
+  if (task >= 0) {
+    const [lo, hi] = boxOf(task); taskC = new T.Vector3((lo[0] + hi[0]) / 2, lo[1], (lo[2] + hi[2]) / 2); let bx = 0, bz = 0, n = 0;
+    for (const p of parts.filter((q) => q.u === task && q.lv !== 2)) {
+      const q = new Int16Array(bytes(p.p));
+      for (let i = 0; i < q.length; i += 3) { const y = p.lo[1] + ((q[i + 1] + 32768) / 65535) * (p.hi[1] - p.lo[1]); if (y < 0.75) continue;
+        bx += p.lo[0] + ((q[i] + 32768) / 65535) * (p.hi[0] - p.lo[0]); bz += p.lo[2] + ((q[i + 2] + 32768) / 65535) * (p.hi[2] - p.lo[2]); n++; }
+    }
+    if (n) { taskF = new T.Vector3(taskC.x - bx / n, 0, taskC.z - bz / n); if (taskF.length() < 1e-3) taskF = null; else taskF.normalize(); }
+  }
+  // a café chair on the plan's desk-chair block (its centre within 450 mm of one of that block's lines)
+  const onCabin = (x, y) => {
+    const C = P.CELL; for (let cx = Math.floor((x - 450) / C); cx <= Math.floor((x + 450) / C); cx++) for (let cy = Math.floor((y - 450) / C); cy <= Math.floor((y + 450) / C); cy++)
+      for (const i of P.grid.get(cx * 100000 + cy) || []) { if (!P.paths[P.path[i]].endsWith(CABIN_CHAIR)) continue;
+        const b = i * 4, mx = (P.box[b] + P.box[b + 2]) / 2, my = (P.box[b + 1] + P.box[b + 3]) / 2; if (Math.hypot(mx - x, my - y) < 450) return true; }
+    return false;
+  };
+  // a café chair's facing as the plan draws its chair (TURN_CHAIR: its backrest hatched, so its lines crowd to its back): from that
+  // crowd to the middle of its outline, snapped to the nearest right angle (3 Nov: "thes echairs orientation is messedup")
+  const facing = (x, y) => {
+    const C = P.CELL, its = new Set();
+    for (let cx = Math.floor((x - 450) / C); cx <= Math.floor((x + 450) / C); cx++) for (let cy = Math.floor((y - 450) / C); cy <= Math.floor((y + 450) / C); cy++)
+      for (const i of P.grid.get(cx * 100000 + cy) || []) { if (!P.paths[P.path[i]].endsWith(TURN_CHAIR)) continue; const b = i * 4; if (Math.hypot((P.box[b] + P.box[b + 2]) / 2 - x, (P.box[b + 1] + P.box[b + 3]) / 2 - y) < 450) its.add(i); }
+    if (!its.size) return null;
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, sx = 0, sy = 0, n = 0;
+    for (const i of its) { const q = ptsOf(i); for (let k = 1; k < q.length; k++) { sx += (q[k][0] + q[k - 1][0]) / 2; sy += (q[k][1] + q[k - 1][1]) / 2; n++; }
+      for (const p of q) { x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]); y0 = Math.min(y0, p[1]); y1 = Math.max(y1, p[1]); } }
+    if (!n) return null;
+    const a = Math.round(Math.atan2((y0 + y1) / 2 - sy / n, (x0 + x1) / 2 - sx / n) / (Math.PI / 2)) * (Math.PI / 2);
+    return [Math.cos(a), Math.sin(a)];
+  };
+  const out = []; let split = 0, swapped = 0, turned = 0;
+  for (const pl0 of place) {
+    let pl = pl0;
+    if (pl.u === cafeU) {                                               // (its front, the component's +z, along the plan chair's facing)
+      const f = facing(pl.m[9] * 1000 + D.CX, pl.m[11] * 1000 + D.CY);
+      if (f) { pl = { u: pl.u, m: [f[1], 0, -f[0], 0, 1, 0, f[0], 0, f[1], pl.m[9], pl.m[10], pl.m[11]] }; turned++; }
+    }
+    const m = pl.m, ax = [new T.Vector3(m[0], m[1], m[2]), new T.Vector3(m[3], m[4], m[5]), new T.Vector3(m[6], m[7], m[8])], t = new T.Vector3(m[9], m[10], m[11]);
+    if (pl.u === cafeU && task >= 0 && taskF && onCabin(t.x * 1000 + D.CX, t.z * 1000 + D.CY)) {
+      // (the café chair's front is its +z; the workstation chair turned so its own front lies along it, its centre on the café chair's)
+      const A = new T.Matrix4().makeBasis(ax[0], ax[1], ax[2]), q = new T.Quaternion().setFromUnitVectors(taskF, new T.Vector3(0, 0, 1));
+      const R = A.clone().multiply(new T.Matrix4().makeRotationFromQuaternion(q)), c = taskC.clone().applyMatrix4(R), e = R.elements;
+      out.push({ u: task, m: [e[0], e[1], e[2], e[4], e[5], e[6], e[8], e[9], e[10], t.x - c.x, t.y - c.y, t.z - c.z] }); swapped++; continue;
+    }
+    const k = [0, 2].find((a) => ax[a].length() >= STRETCH);
+    if (k === undefined) { out.push(pl); continue; }
+    const s = ax[k].length(), n = Math.round(s), [lo, hi] = boxOf(pl.u), span = hi[k] - lo[k], dir = ax[k].clone().normalize();
+    for (let j = 0; j < n; j++) {                                       // (copy j: its axis k shortened to s / n, moved along it into its share)
+      const a2 = ax.map((v) => v.clone()); a2[k].multiplyScalar(1 / n);
+      const shift = dir.clone().multiplyScalar(s * span * (j - (n - 1) / 2) / n + (s - s / n) * (lo[k] + span / 2));
+      out.push({ u: pl.u, m: [a2[0].x, a2[0].y, a2[0].z, a2[1].x, a2[1].y, a2[1].z, a2[2].x, a2[2].y, a2[2].z, t.x + shift.x, t.y + shift.y, t.z + shift.z] });
+    }
+    split++;
+  }
+  console.info(`axo debug: ${split} stretched placements split, ${swapped} café chairs on ${CABIN_CHAIR} now workstation chairs, ${turned} turned as the plan draws them`);
+  return out;
+}
 // a phone booth: the SketchUp model's own (its component's fine parts, in their own colours, at its placement), as the axo
 // draws it; the parts decoded once, as assets/js/axo-skp.js decodes them (3 Nov: "add in the phone booths")
 const BOOTH = { parts: {}, mats: {} };
@@ -474,7 +749,9 @@ const VIEW = { theta: -0.3, phi: 0.9 };
 function fit() { view = frame(D.slab, view ? view.theta : VIEW.theta, view ? view.phi : VIEW.phi, 3.5, 0.04); draw(); }
 function resize() { const r = stage.getBoundingClientRect(); asp = r.width / r.height; renderer.setSize(r.width, r.height, false); if (view && !touched) fit(); else if (view) draw(); }
 let due = false;
-function draw() { if (due || !renderer) return; due = true; requestAnimationFrame(() => { due = false; apply(view); renderer.render(scene, cam); }); }
+function draw() { if (due || !renderer) return; due = true; requestAnimationFrame(() => { due = false; apply(view); lod(); renderer.render(scene, cam); }); }
+// the furniture's level of detail by the view's size, as the axo's own (assets/js/axo-skp.js, its scene's onBeforeRender)
+const lod = () => { if (AXOF.m && AXOF.m.scene.onBeforeRender) AXOF.m.scene.onBeforeRender(renderer, AXOF.m.scene, cam); };
 let fly = null;
 function flyTo(to, ms = 450) {
   const from = view, t0 = performance.now(); fly = { to }; touched = true;
@@ -482,7 +759,7 @@ function flyTo(to, ms = 450) {
     if (!fly || fly.to !== to) return;
     const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
     view = { theta: from.theta + (to.theta - from.theta) * e, phi: from.phi + (to.phi - from.phi) * e, half: from.half + (to.half - from.half) * e, t: from.t.map((v, i) => v + (to.t[i] - v) * e) };
-    apply(view); renderer.render(scene, cam); if (k < 1) requestAnimationFrame(step); else fly = null;
+    apply(view); lod(); renderer.render(scene, cam); if (k < 1) requestAnimationFrame(step); else fly = null;
   };
   requestAnimationFrame(step);
 }
@@ -500,7 +777,7 @@ function chips() {
     ["facade", "external glazing", e("facade"), COL.facade],
     ["booth", "phone booths", e("booth"), COL.booth],
     ["cut", "left out by the axo", e("cut"), COL.cut],
-    ["core", "SketchUp core", null, COL.core], ["plan", "vector plan", P.N, null]];
+    ["furniture", "furniture", null, 0xb98a5a], ["core", "SketchUp core", null, COL.core], ["plan", "vector plan", P.N, null]];
   $("#show").innerHTML = C.map(([k, t, c, col]) => `<button class="chip${show[k] ? " on" : ""}" data-k="${k}">${col !== null ? `<i class="sw" style="background:${hex(col)}"></i>` : ""}${t}${c !== null ? `<b>${c}</b>` : ""}</button>`).join("");
   $("#show").querySelectorAll(".chip").forEach((b) => (b.onclick = () => { const k = b.dataset.k; show[k] = !show[k]; b.classList.toggle("on", show[k]); vis(); list(); }));
   const O = () => `<span class="lab">plan colours</span><button class="chip${opt.colour === "plan" ? " on" : ""}" data-o="plan">Layout slide</button><button class="chip${opt.colour === "layer" ? " on" : ""}" data-o="layer">layers'</button>` +
@@ -515,7 +792,7 @@ function chips() {
   vis();
 }
 function vis() {
-  for (const k of ["core", "plan"]) G[k].visible = show[k];          // (the pieces each by its own type as it stands: pieceOn)
+  for (const k of ["core", "plan", "furniture"]) G[k].visible = show[k];          // (the pieces each by its own type as it stands: pieceOn)
   for (const k of ["wall", "solid", "glass", "column", "facade", "booth", "cut"]) G[k].visible = true;
   D.pieces.forEach((pc) => (meshes[pc.id].visible = pieceOn(pc)));
   for (const L in layerObj) layerObj[L].visible = layerOn[L];
