@@ -45,7 +45,10 @@ COLUMN_H = 2.4                                                      # the column
 FACADE = re.compile(r"^FT\s*\d|Curtain|glazing|Facade|Window|Mullion|Fin\b", re.I)   # a block of the façade's glazing
 NOT_GLASS = re.compile(r"Louver|Railing|Cladding|Opaque", re.I)     # (the façade's, but not glass)
 FACADE_OUT, FACADE_H, FACADE_CLOSE = 1500.0, 2.4, 100.0             # mm beyond the slab's edge; its height (m); gaps closed (mm)
-FACADE_REACH, FACADE_TOUCH = 3500.0, 300.0                          # a block wholly this near (mm), touching kept glazing this near
+RAIL, RAIL_H = re.compile(r"Landscape Deck Railing", re.I), 1.1      # the terraces' railings (the plan's, A-FLOR-HRAL), glass to this (m)
+RAIL_OFF, RAIL_MIN = 400.0, 600.0                                   # none this near the façade's glazing (mm); a run this long at least (mm)
+RAIL_DEEP = 1500.0                                                  # the glazing on a deck's south edge (this shallow, mm) is its handrail
+FACADE_REACH, FACADE_TOUCH = 3500.0, 300.0                         # a block wholly this near (mm), touching kept glazing this near
 
 
 def facade_runs(PL, pt, slab):
@@ -355,7 +358,7 @@ def main():
     runs = facade_runs(PL, pt, Polygon(A["slab"])); on_facade = {i for v in runs.values() for i in v}
     lines, line_of = [], {}
     for i, (L, k, q, path) in enumerate(PL):
-        if (L in LAYERS or L in FEEDS["column"] or W.DOOR.search(L) or i in on_facade) and len(q) > 1:
+        if (L in LAYERS or L in FEEDS["column"] or W.DOOR.search(L) or i in on_facade or any(n and RAIL.search(n) for n in path)) and len(q) > 1:
             line_of[i] = len(lines)
             qq = [pt(x, y) for x, y in q]
             if k == "f" and math.dist(qq[0], qq[-1]) > 1: qq = qq + [qq[0]]
@@ -560,7 +563,34 @@ def main():
                                    "key": "facade:%d,%d" % tuple(round(v) for v in g.representative_point().coords[0])})
                 print(f"  the west tip closed in its point at {[round(v) for v in p_]}: {(math.dist(a_, p_) + math.dist(p_, b_)) / 1000:.2f} m of glass")
     FEEDS["facade"] = sorted(feeds_f)
-    seen = defaultdict(int)                                         # (two façade blocks drawing one module: their keys apart)
+    # the terraces' glass handrails (Ritika, 2 Nov: "these 2 portions should have glass handrails for terrace"): the plan's deck
+    # railings (RAIL, its A-FLOR-HRAL lines): it draws only their ends and posts, at the deck's corners, so each railing is the
+    # deck's south, east and west edges through them (its lines' box), less where the façade's glazing already stands (RAIL_OFF
+    # mm of it), each run left one piece, glass to RAIL_H. The south edge is handrail all along: the façade's glazing the plan
+    # draws on it goes (2 Nov: "this is also handrail")
+    rail_ix = [j for j, l in enumerate(lines) if RAIL.search(l["path"])]
+    decks_r = []
+    for blk in sorted({lines[j]["path"] for j in rail_ix}):
+        xs = [x for j in rail_ix if lines[j]["path"] == blk for x, _ in lines[j]["pts"]]; ys = [y for j in rail_ix if lines[j]["path"] == blk for _, y in lines[j]["pts"]]
+        decks_r.append((min(xs) + 20, min(ys), max(xs) - 20, max(ys) - 20))
+    south = unary_union([LineString([(x0, y1), (x1, y1)]) for x0, y0, x1, y1 in decks_r])
+    on_south = [q for q in pieces if q["ty"] == "facade" and q["box"][3] - q["box"][1] < RAIL_DEEP and Polygon(q["rings"][0]).distance(south) < RAIL_OFF]
+    pieces[:] = [q for q in pieces if not any(q is o for o in on_south)]
+    print(f"  {len(on_south)} façade glazing runs on the terraces' south edges made handrail")
+    fac_u = unary_union([Polygon(q["rings"][0]) for q in pieces if q["ty"] == "facade"]).buffer(RAIL_OFF)
+    runs_r = []
+    for x0, y0, x1, y1 in decks_r:
+        for e in (LineString([(x0, y1), (x1, y1)]), LineString([(x1, y0), (x1, y1)]), LineString([(x0, y0), (x0, y1)])):
+            rest = e.difference(fac_u)
+            runs_r += [s for s in getattr(rest, "geoms", [rest]) if s.length > RAIL_MIN]
+    for g in getattr(unary_union([s.buffer(40, cap_style=2, join_style=2) for s in runs_r]), "geoms", []) or [unary_union([s.buffer(40, cap_style=2, join_style=2) for s in runs_r])]:
+        if g.is_empty: continue
+        pieces.append({"ty": "rail", "h": RAIL_H, "area": round(g.area / 1e6, 3), "width": round(2 * g.area / max(g.length, 1)),
+                       "rings": ring(g.simplify(5)), "src": sources(g), "box": [round(v) for v in g.bounds], "name": "the terrace's handrail",
+                       "block": "Landscape Deck Railing", "key": "rail:%d,%d" % tuple(round(v) for v in g.representative_point().coords[0])})
+    FEEDS["rail"] = sorted({lines[j]["L"] for j in rail_ix})
+    print(f"  {sum(p['ty'] == 'rail' for p in pieces)} terrace handrail runs from {len(rail_ix)} railing lines")
+    seen = defaultdict(int)                                        # (two façade blocks drawing one module: their keys apart)
     for p in pieces:
         seen[p["key"]] += 1
         if seen[p["key"]] > 1: p["key"] += "#%d" % seen[p["key"]]
