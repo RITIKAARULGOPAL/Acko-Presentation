@@ -29,7 +29,8 @@ is ~45 k faces (×638), the plants ~15 M. So:
                  ends (those are doors) is walked again by A* (the corridor floor preferred; furniture, the terrace's grass and
                  the planters avoided): AXO_SKP.route; the crossings left (the doors) reported, crossings.png and route.png
 Writes data/axo-skp.js (window.AXO_SKP) in the world frame AxoModel uses (metres about the DXF slab's centre: x east, y up,
-z south), and check pictures in tools/_work/axo-skp/.
+z south), and check pictures in tools/_work/axo-skp/. Then run tools/acko/axo_skp_28.py: it adds the 28.10 plan's furniture
+(AXO_SKP.changes), which a rebuild here drops.
 """
 import argparse, base64, json, math, os, re, sys, time
 from collections import defaultdict
