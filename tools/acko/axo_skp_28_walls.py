@@ -59,11 +59,11 @@ def b64(s, dt): return np.frombuffer(base64.b64decode(s), dtype=dt)
 DOOR = __import__("re").compile(r"DOOR|_DOR_|DOR-", __import__("re").I)
 
 
-def plan_base_lines(root):
+def plan_base_lines(root, paths=False):
     """the deck's floor plan as it draws (data/plan-base.js, its "base" group walked as assets/js/plan-canvas.js walks it: an
     insert on a frozen layer and anything on an off layer left out), in the deck's plan frame: [(layer, kind, points)],
     kind "s" a line, "f" a fill (30 Oct: "the outlines of the nested blocks are causing conflicts": the drawing's hidden
-    blocks carried walls the floor plan doesn't show)"""
+    blocks carried walls the floor plan doesn't show); with paths, each also with the blocks it sits in (their names)"""
     import json, os
     s = open(os.path.join(root, "data", "plan-base.js"), encoding="utf-8").read(); PB = json.loads(s[s.index("window.PLAN_BASE = ") + 19:].strip().rstrip(";"))
     ox, oy = PB["origin"]; L = PB["layers"]; out = []
@@ -71,14 +71,14 @@ def plan_base_lines(root):
     for blk in PB["blocks"]:
         if blk["group"] != "base": continue
         Dd = blk["data"]; defs = Dd["defs"]
-        def walk(di, M, ctx):
+        def walk(di, M, ctx, path=()):
             d = defs[di]; k = 10 ** (-d["q"]); a, b, c, e, f, g = M
             for l, col, lt, lw, kind, items in d["runs"]:
                 st = lay(l, ctx)
                 if kind == "i":
                     if L.get(st, {}).get("frozen"): continue
                     for ci, ca, cb, cc, cd, ce, cf in items:
-                        walk(ci, [a * ca + c * cb, b * ca + e * cb, a * cc + c * cd, b * cc + e * cd, a * ce + c * cf + f, b * ce + e * cf + g], st)
+                        walk(ci, [a * ca + c * cb, b * ca + e * cb, a * cc + c * cd, b * cc + e * cd, a * ce + c * cf + f, b * ce + e * cf + g], st, path + (defs[ci]["name"],))
                     continue
                 if kind == "t" or L.get(st, {}).get("off") or L.get(st, {}).get("frozen"): continue
                 for it in items:
@@ -87,7 +87,7 @@ def plan_base_lines(root):
                         for i in range(0, len(arr), 2):
                             if i: x += arr[i]; y += arr[i + 1]
                             X, Y = x * k, y * k; pts.append((a * X + c * Y + f - ox, oy - (b * X + e * Y + g)))
-                        out.append((st, "f" if kind == "f" else "s", pts))
+                        out.append((st, "f" if kind == "f" else "s", pts) + ((path,) if paths else ()))
         walk(Dd["root"], Dd["place"]["m"], lay(Dd["place"]["spec"][0], "0"))
     return out
 
