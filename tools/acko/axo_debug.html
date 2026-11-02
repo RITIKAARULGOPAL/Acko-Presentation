@@ -747,6 +747,7 @@ const XS = {
     "150,150,118": 0x8ba660, "205,186,161": 0xd9c3a3, "207,197,187": 0xd9d4cc, "217,211,200": 0xe2ddd4 },   // (SketchUp's floor colours to the reference's)
   slab: 0xdddcd9, wall: 0xeeece8, solid: [0x8a76c8, 0.42], column: 0xdedcd8, core: 0xdad9d6,
   pane: [0x7f6cc0, 0.3], frame: 0x2d2a33, fpane: [0xe6eef0, 0.2], fframe: 0x1f1f22, FPANEL: 1.5, ink: [0.13, 0.12, 0.15],
+  VIEW: { theta: -0.62, phi: 0.92 },     // (the deck's axo angle, A day in ACKO's: slides/s-wayday.html; "match with the presentation angle")
   light: [0.62, 0.42], plants: 1.35,                                     // (the hemisphere's and the sun's: the floors not burnt white)
 };
 const EXF = {};                                                          // (the façade pieces as glass in mullions, made once)
@@ -854,15 +855,15 @@ async function exportImages() {
   try {
     say("styling the floor…"); await tick();
     if (AXOF.m && AXOF.m.scene.onBeforeRender) AXOF.m.scene.onBeforeRender(renderer, AXOF.m.scene, { top: 1 });   // (the furniture's fine level)
-    // the whole floor and its shadow, as the page first frames it
-    const { right, up } = basis({ theta: VIEW.theta, phi: VIEW.phi }); let a0 = 1e9, a1 = -1e9, b0 = 1e9, b1 = -1e9;
+    // the whole floor and its shadow, at the deck's axo angle
+    const { right, up } = basis(XS.VIEW); let a0 = 1e9, a1 = -1e9, b0 = 1e9, b1 = -1e9;
     for (const [x, y] of D.slab) for (const [h, dx, dz] of [[3.7, 0, 0], [0, 0, 0], [-0.6, 4, 5]]) {   // (the shadow: off south-east, blurred)
       const p = new T.Vector3(X(x) + dx, h, Z(y) + dz), a = p.dot(right), b = p.dot(up);
       a0 = Math.min(a0, a); a1 = Math.max(a1, a); b0 = Math.min(b0, b); b1 = Math.max(b1, b);
     }
     const M = 0.02 * (a1 - a0), W = XS.W, H = Math.round(W * ((b1 - b0) + 2 * M) / ((a1 - a0) + 2 * M));
     const c = right.clone().multiplyScalar((a0 + a1) / 2).add(up.clone().multiplyScalar((b0 + b1) / 2));
-    apply({ theta: VIEW.theta, phi: VIEW.phi, t: [c.x, c.y, c.z], half: (b1 - b0) / 2 + M }, xc, W / H); post.uniforms.depthK.value = xc.far - xc.near;
+    apply({ theta: XS.VIEW.theta, phi: XS.VIEW.phi, t: [c.x, c.y, c.z], half: (b1 - b0) / 2 + M }, xc, W / H); post.uniforms.depthK.value = xc.far - xc.near;
     // what the ink sees: the opaque (list), the see-through walls (walls: inked in a pass of their own, so what is behind them
     // keeps its lines), the rest (skip: glass, lines, the shadow) not at all
     const skip = new Set(), plants = new Set(), list = [], walls = [];
