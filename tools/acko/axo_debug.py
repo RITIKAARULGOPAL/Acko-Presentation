@@ -308,6 +308,120 @@ def missing_from_plan(root, S, sx, sy, CX, CY, slab):
     return out
 
 
+def rail_decks(lines):
+    """each terrace's railing box (plan mm): its deck railing's lines' box (RAIL), a little in"""
+    rail_ix = [j for j, l in enumerate(lines) if RAIL.search(l["path"])]; out = []
+    for blk in sorted({lines[j]["path"] for j in rail_ix}):
+        xs = [x for j in rail_ix if lines[j]["path"] == blk for x, _ in lines[j]["pts"]]; ys = [y for j in rail_ix if lines[j]["path"] == blk for _, y in lines[j]["pts"]]
+        out.append((min(xs) + 20, min(ys), max(xs) - 20, max(ys) - 20))
+    return out
+
+
+DOOR_FILL = 2500.0                                                  # an opening in the façade this wide at most (mm), glass both sides: glazed
+GAP_WAS, GAP_NOW, GAP_MIN = 700.0, 40.0, 60.0                        # a gap in the single layer: glazing was this near, none now this near, this long (mm)
+TIP_GUIDE = 12000.0                                                 # the west tip's glazing lines, this far from its point (mm)
+PANE_JOG = 400.0                                                    # the slab edge's jogs (at the columns) this deep or less, smoothed (mm)
+PANE_EDGE = 900.0                                                   # glazing this near the slab's edge (mm) stands on the edge
+PANE, PANE_OUT, PANE_SIMPLE = 30.0, 150.0, 60.0                    # the façade's glass (mm thick); a face is outer when this far out of
+                                                                    # it is outside the slab or on a deck; its line simplified (mm)
+
+
+def single_layer(pieces, slab, lines, decks, tip=None):
+    """the façade's glazing as a single layer of glass (2 Nov: "the external glass walls are too bulky with this layerd glass
+    facacde.. make it asingle layer of glass facade"): each piece (a façade block's strip: its glass, mullions and sills) made
+    the line of its outer face, PANE mm thick; a piece with no outer face, the middle line of its box. Round the west tip, the
+    tip's two glazing lines (tip: they meet in its point) are the line; along the slab's straight edges, the edge"""
+    from shapely.geometry import box as sbox
+    from shapely.ops import substring
+    outside = lambda p: not slab.contains(p) or any(sbox(*d).contains(p) for d in decks)
+    edge = LineString(slab.exterior.coords).simplify(PANE_JOG); n = on_edge = on_tip = 0
+    orig = unary_union([Polygon(q["rings"][0]).buffer(0) for q in pieces if q["ty"] == "facade"])
+    for q in pieces:
+        if q["ty"] != "facade": continue
+        g = Polygon(q["rings"][0], q["rings"][1:]).buffer(0)
+        if g.is_empty: continue
+        # (by the slab's edge: the stretch of the edge it covers, its corners projected onto it; the bays standing out of it too)
+        if tip is not None and g.distance(tip) < PANE_EDGE and g.centroid.x < tip.coords[1][0] + TIP_GUIDE:
+            ts = [tip.project(Point(v)) for v in (g.exterior.coords if isinstance(g, Polygon) else [c for x in g.geoms for c in x.exterior.coords])]
+            if max(ts) - min(ts) > 100:
+                p2 = substring(tip, min(ts), max(ts)).buffer(PANE / 2, cap_style=2, join_style=2); p2 = max(getattr(p2, "geoms", [p2]), key=lambda x: x.area)
+                q["rings"] = [[[round(x), round(y)] for x, y in p2.exterior.coords[:-1]]]; q["width"] = round(PANE); q["area"] = round(p2.area / 1e6, 3); n += 1; on_tip += 1
+                continue
+        if g.distance(edge) < PANE_EDGE:
+            # (the edge from its point farthest from the piece, so the piece's stretch never wraps round its start)
+            cc = list(slab.exterior.coords)[:-1]; k = max(range(len(cc)), key=lambda i: math.dist(cc[i], g.centroid.coords[0]))
+            e2 = LineString(cc[k:] + cc[:k] + [cc[k]])
+            ts = [e2.project(Point(v)) for v in (g.exterior.coords if isinstance(g, Polygon) else [c for x in g.geoms for c in x.exterior.coords])]
+            # (the edge's own small jogs at the columns smoothed out, its corners kept: the pilasters' wraps and the bays flat on it,
+            # 2 Nov: "the bulhy elements are messed up.. should simple glass segments")
+            sub = substring(e2, min(ts), max(ts)).simplify(PANE_JOG) if max(ts) - min(ts) > 200 else None
+            if sub is not None and not sub.is_empty:
+                p2 = sub.buffer(PANE / 2, cap_style=2, join_style=2)
+                p2 = max(getattr(p2, "geoms", [p2]), key=lambda x: x.area)
+                q["rings"] = [[[round(x), round(y)] for x, y in p2.exterior.coords[:-1]]]; q["width"] = round(PANE); q["area"] = round(p2.area / 1e6, 3); n += 1; on_edge += 1
+                continue
+        segs = []
+        for ring in [g.exterior] if isinstance(g, Polygon) else [x.exterior for x in g.geoms]:
+            c = list(ring.coords)
+            for a, b in zip(c, c[1:]):
+                L = math.dist(a, b)
+                if L < 20: continue
+                mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2; nx, ny = -(b[1] - a[1]) / L, (b[0] - a[0]) / L
+                for s in (1, -1):
+                    p = Point(mx + s * nx * PANE_OUT, my + s * ny * PANE_OUT)
+                    if not g.contains(p) and outside(p): segs.append(LineString([a, b])); break
+        line = unary_union(segs) if segs else None
+        if line is not None and not line.is_empty:
+            from shapely.ops import linemerge
+            m = linemerge(line) if line.geom_type == "MultiLineString" else line
+            parts = [s.simplify(PANE_SIMPLE) for s in getattr(m, "geoms", [m]) if s.length > 200]
+        else: parts = []
+        if not parts:                                               # (the middle line of its box, along its length)
+            r = g.minimum_rotated_rectangle; c = list(r.exterior.coords)
+            e = max(((c[k], c[k + 1]) for k in range(2)), key=lambda ab: math.dist(*ab)); o = [(c[k], c[k + 1]) for k in range(2) if (c[k], c[k + 1]) != e][0]
+            h = ((o[1][0] - o[0][0]) / 2, (o[1][1] - o[0][1]) / 2); parts = [LineString([(e[0][0] + h[0], e[0][1] + h[1]), (e[1][0] + h[0], e[1][1] + h[1])])]
+        p2 = unary_union([s.buffer(PANE / 2, cap_style=2, join_style=2) for s in parts])
+        p2 = max(getattr(p2, "geoms", [p2]), key=lambda x: x.area)
+        q["rings"] = [[[round(x), round(y)] for x, y in p2.exterior.coords[:-1]]]; q["width"] = round(PANE); q["area"] = round(p2.area / 1e6, 3); n += 1
+    # the gaps the single layer leaves (2 Nov: "there are gaps here..."): along the slab's edge and the tip's lines, every stretch
+    # the blocks' strips stood by (GAP_WAS mm) that no pane now does (GAP_NOW mm), GAP_MIN mm or longer, glass on that line
+    new = unary_union([Polygon(q["rings"][0]).buffer(0) for q in pieces if q["ty"] == "facade"]); filled = 0
+    tip_x = tip.coords[1][0] + TIP_GUIDE if tip is not None else -1e18
+    for guide, skip in ((edge, lambda pt: pt.x < tip_x), (tip, lambda pt: pt.distance(Point(tip.coords[1])) > TIP_GUIDE)):
+        if guide is None: continue
+        steps = int(guide.length // 100); run = None
+        for i in range(steps + 1):
+            t = i * 100.0; pt = guide.interpolate(t)
+            gap = not skip(pt) and orig.distance(pt) < GAP_WAS and new.distance(pt) > GAP_NOW
+            if gap and run is None: run = t
+            if (not gap or i == steps) and run is not None:
+                if t - run >= GAP_MIN:
+                    p2 = substring(guide, max(0, run - 100), min(guide.length, t)).buffer(PANE / 2, cap_style=2, join_style=2); p2 = max(getattr(p2, "geoms", [p2]), key=lambda x: x.area)
+                    c = p2.representative_point().coords[0]
+                    pieces.append({"ty": "facade", "h": FACADE_H, "area": round(p2.area / 1e6, 3), "width": round(PANE), "rings": [[[round(x), round(y)] for x, y in p2.exterior.coords[:-1]]],
+                                   "src": [], "box": [round(v) for v in p2.bounds], "name": "glass filling a gap", "block": "(none: the single layer's gap)", "key": "facade:%d,%d" % (round(c[0]), round(c[1]))})
+                    filled += 1
+                run = None
+    # and the façade's doors (2 Nov: "check all teh places where this is coming.. that is where the gaps are": the glazed doors the
+    # plan draws as a swing, not glazing): along the slab's edge, any opening up to DOOR_FILL mm with glass at both its ends
+    new = unary_union([Polygon(q["rings"][0]).buffer(0) for q in pieces if q["ty"] == "facade"]); doors_f = 0
+    steps = int(edge.length // 100); cov = [new.distance(edge.interpolate(i * 100.0)) <= GAP_NOW for i in range(steps + 1)]
+    i = 0
+    while i <= steps:
+        if cov[i]: i += 1; continue
+        j = i
+        while j <= steps and not cov[j]: j += 1
+        if i > 0 and j <= steps and (j - i) * 100 <= DOOR_FILL and edge.interpolate(i * 100.0).x >= tip_x:
+            p2 = substring(edge, (i - 1) * 100.0, j * 100.0).buffer(PANE / 2, cap_style=2, join_style=2); p2 = max(getattr(p2, "geoms", [p2]), key=lambda x: x.area)
+            c = p2.representative_point().coords[0]
+            pieces.append({"ty": "facade", "h": FACADE_H, "area": round(p2.area / 1e6, 3), "width": round(PANE), "rings": [[[round(x), round(y)] for x, y in p2.exterior.coords[:-1]]],
+                           "src": [], "box": [round(v) for v in p2.bounds], "name": "glass in the façade's door", "block": "(the plan's glazed door: its swing)", "key": "facade:%d,%d" % (round(c[0]), round(c[1]))})
+            doors_f += 1
+        i = j
+    print(f"  {filled} gaps in the single layer filled with glass, and {doors_f} of the façade's door openings")
+    print(f"  {n} façade glazing runs made a single layer of glass, {PANE:.0f} mm: {on_edge} on the slab's edge, {on_tip} on the west tip's lines, the rest on their outer faces")
+
+
 def columns(PL, pt):
     """the floor plan's columns: its S-COLS lines and fills noded and closed into faces, the faces that touch joined (a column
     and its hatch, a column's parts): one polygon each"""
@@ -543,7 +657,7 @@ def main():
     # the west tip closed in its point (3 Nov: "this is still open", then "still the building has a triangular ending"): the plan
     # draws no glass round it, so the north glazing's line and the diagonal glazing's line carried on from their ends till they
     # meet, in glass; the triangle and its post inside
-    west = Polygon(A["slab"]).bounds[0]
+    west = Polygon(A["slab"]).bounds[0]; tip_guide = None
     tipf = [q for q in pieces if q["ty"] == "facade" and q["box"][0] < west + TIP_ZONE]
     nq = [q for q in tipf if q["box"][3] < TIP_SPLIT]; dq = [q for q in tipf if q["box"][1] > TIP_SPLIT]
     def axis(qs):                                                    # (the longest piece's long direction)
@@ -556,6 +670,8 @@ def main():
         if abs(den) > 1e-3:
             t = ((b_[0] - a_[0]) * vy - (b_[1] - a_[1]) * vx) / den; p_ = (a_[0] + ux * t, a_[1] + uy * t)   # (where the two lines meet)
             if math.dist(a_, p_) < TIP_REACH and math.dist(b_, p_) < TIP_REACH:
+                ua, ub = [((q[0] - p_[0]) / math.dist(q, p_), (q[1] - p_[1]) / math.dist(q, p_)) for q in (a_, b_)]   # (the tip's two lines, for the single layer)
+                tip_guide = LineString([(p_[0] + ua[0] * 2 * TIP_GUIDE, p_[1] + ua[1] * 2 * TIP_GUIDE), p_, (p_[0] + ub[0] * 2 * TIP_GUIDE, p_[1] + ub[1] * 2 * TIP_GUIDE)])   # (twice as long: a piece by its end projects whole)
                 for e0, e1 in ((a_, p_), (p_, b_)):
                     g = LineString([e0, e1]).buffer(60, cap_style=2).union(Point(p_).buffer(60, quad_segs=2))
                     pieces.append({"ty": "facade", "h": FACADE_H, "area": round(g.area / 1e6, 3), "width": 120, "rings": ring(g), "src": sources(g),
@@ -563,17 +679,15 @@ def main():
                                    "key": "facade:%d,%d" % tuple(round(v) for v in g.representative_point().coords[0])})
                 print(f"  the west tip closed in its point at {[round(v) for v in p_]}: {(math.dist(a_, p_) + math.dist(p_, b_)) / 1000:.2f} m of glass")
     FEEDS["facade"] = sorted(feeds_f)
+    single_layer(pieces, Polygon(A["slab"]), lines, rail_decks(lines), tip_guide)
     # the terraces' glass handrails (Ritika, 2 Nov: "these 2 portions should have glass handrails for terrace"): the plan's deck
     # railings (RAIL, its A-FLOR-HRAL lines): it draws only their ends and posts, at the deck's corners, so each railing is the
     # deck's south, east and west edges through them (its lines' box), less where the façade's glazing already stands (RAIL_OFF
     # mm of it), each run left one piece, glass to RAIL_H. The south edge is handrail all along: the façade's glazing the plan
     # draws on it goes (2 Nov: "this is also handrail")
     rail_ix = [j for j, l in enumerate(lines) if RAIL.search(l["path"])]
-    decks_r = []
-    for blk in sorted({lines[j]["path"] for j in rail_ix}):
-        xs = [x for j in rail_ix if lines[j]["path"] == blk for x, _ in lines[j]["pts"]]; ys = [y for j in rail_ix if lines[j]["path"] == blk for _, y in lines[j]["pts"]]
-        decks_r.append((min(xs) + 20, min(ys), max(xs) - 20, max(ys) - 20))
-    south = unary_union([LineString([(x0, y1), (x1, y1)]) for x0, y0, x1, y1 in decks_r])
+    decks_r = rail_decks(lines)
+    south =unary_union([LineString([(x0, y1), (x1, y1)]) for x0, y0, x1, y1 in decks_r])
     on_south = [q for q in pieces if q["ty"] == "facade" and q["box"][3] - q["box"][1] < RAIL_DEEP and Polygon(q["rings"][0]).distance(south) < RAIL_OFF]
     pieces[:] = [q for q in pieces if not any(q is o for o in on_south)]
     print(f"  {len(on_south)} façade glazing runs on the terraces' south edges made handrail")

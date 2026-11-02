@@ -971,7 +971,7 @@ void main() {                                                    // (on whole pi
 async function exportImages() {
   if (XS.busy) return; XS.busy = true;
   const note = document.createElement("div"); note.id = "xmsg"; $("main").appendChild(note);
-  const say = (s) => (note.textContent = s), tick = () => new Promise((r) => requestAnimationFrame(() => r()));
+  const say = (s) => (note.textContent = s), tick = () => new Promise((r) => { requestAnimationFrame(() => r()); setTimeout(r, 40); });   // (a frame for the note, or on: a hidden page has none)
   // (its own camera, and the page's mouse off: a click or a scroll mid-export moved the page's camera between tiles)
   const undo = styleOn(), out = [], xc = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900); stage.style.pointerEvents = "none";
   const tN = new T.MeshNormalMaterial({ flatShading: true, side: T.DoubleSide }), tP = new T.MeshNormalMaterial({ flatShading: true, side: T.DoubleSide, opacity: 0.5 });
