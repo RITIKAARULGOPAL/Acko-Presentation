@@ -741,7 +741,7 @@ function ghost() {
 // garden green), purple glass in dark frames, the façade's glass in black mullions; inked in screen space from the normals and
 // the depth (lines a set width at any size; none inside a plant, its outline only). In tiles, as no GPU takes 8K at once ----------
 const XS = {
-  W: 8192, SS: 2, TILE: 2048, PAD: 24, R: 3,                             // (image px wide; drawn SS times over, in tiles of TILE px with a PAD
+  W: 8192, SS: 2, TILE: 2048, PAD: 24, R: 1,                             // (image px wide; drawn SS times over, in tiles of TILE px with a PAD
                                                                          //  px margin; the ink's reach, drawn px: whole)
   floor: { "206,206,205": 0xdddcd9, "166,146,170": 0xa894d2, "201,182,249": 0xa894d2, "188,172,198": 0x4d4b51, "247,247,205": 0xf3eacb,
     "150,150,118": 0x8ba660, "205,186,161": 0xd9c3a3, "207,197,187": 0xd9d4cc, "217,211,200": 0xe2ddd4 },   // (SketchUp's floor colours to the reference's)
