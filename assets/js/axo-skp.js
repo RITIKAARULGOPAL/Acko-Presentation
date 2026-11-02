@@ -132,15 +132,16 @@
     // ---- the pieces: walls solid; a glass partition a 12 mm pane in an aluminium frame (rails top and bottom, posts at its ends
     // and every PANEL m or less) on a straight piece, a curved or odd one its own shape in glass between rails of its shape; a
     // door a glass door, full height (a jamb each side, rails, a leaf, a pull on each face by its free edge)
-    const WALL_RGB = [232, 230, 226], PANE_RGB = [95, 78, 107], FRAME_RGB = [74, 77, 82], PULL_RGB = [201, 201, 201];
+    const WALL_RGB = [232, 230, 226], PANE_RGB = [95, 78, 107], FPANE_RGB = [223, 233, 239], FRAME_RGB = [74, 77, 82], PULL_RGB = [201, 201, 201];
     const GLZ = { PANE: 0.012, RAIL: 0.05, POST: 0.05 }, PANEL = { glass: 1.2, rail: 1.2, facade: 1.5 }, JAMB = 0.05, PULL = 0.6;
     function pieces(list) {
-      const B = { wall: bucket(), pane: bucket(), frame: bucket() };
+      const B = { wall: bucket(), pane: bucket(), fpane: bucket(), frame: bucket() };
       for (const [ty, h, rings] of list) {
         if (ty === "booth") continue;
         if (ty === "wall" || ty === "solid" || ty === "column") { slabOf(B.wall, WALL_RGB, shapeOf(rings), 0, h); continue; }
         const r = oriented(rings[0]), R = GLZ.RAIL, straight = r && r.fill > 0.8 && rings.length === 1;
-        if (!straight) { const sh = shapeOf(rings); slabOf(B.pane, PANE_RGB, sh, R, h - R); slabOf(B.frame, FRAME_RGB, sh, 0, R); slabOf(B.frame, FRAME_RGB, sh, h - R, h); continue; }
+        const [pb, prgb] = ty === "facade" ? [B.fpane, FPANE_RGB] : [B.pane, PANE_RGB];   // (the external glazing's own, paler glass)
+        if (!straight) { const sh = shapeOf(rings); slabOf(pb, prgb, sh, R, h - R); slabOf(B.frame, FRAME_RGB, sh, 0, R); slabOf(B.frame, FRAME_RGB, sh, h - R, h); continue; }
         const L = r.L / 1000, W = r.W / 1000, x = X(r.c[0]), z = Z(r.c[1]), ang = -Math.atan2(r.u[1], r.u[0]), d = Math.min(W, 0.06);
         const at = (s, n = 0) => [x + Math.cos(ang) * s + Math.sin(ang) * n, z - Math.sin(ang) * s + Math.cos(ang) * n];   // (along it, across it)
         boxAt(B.frame, FRAME_RGB, L, R, d, x, R / 2, z, ang); boxAt(B.frame, FRAME_RGB, L, R, d, x, h - R / 2, z, ang);
@@ -151,7 +152,7 @@
           for (const side of [-1, 1]) { const [px, pz] = at(leafL / 2 - 0.1, side * (GLZ.PANE / 2 + 0.03)); boxAt(B.frame, PULL_RGB, 0.025, PULL, 0.025, px, 1.05, pz, ang); }
           continue;
         }
-        boxAt(B.pane, PANE_RGB, L, h - 2 * R, GLZ.PANE, x, h / 2, z, ang);
+        boxAt(pb, prgb, L, h - 2 * R, GLZ.PANE, x, h / 2, z, ang);
         const n = Math.max(1, Math.ceil(L / (PANEL[ty] || 1.2)));
         for (let k = 0; k <= n; k++) { const [px, pz] = at(-L / 2 + GLZ.POST / 2 + (k / n) * (L - GLZ.POST)); boxAt(B.frame, FRAME_RGB, GLZ.POST, h, d, px, h / 2, pz, ang); }
       }
@@ -691,16 +692,18 @@
     }
     // the fit's pieces (FIT.pieces): walls, partitions and columns solid in a wall's white, edged in the ink; glass partitions, the
     // façade's glazing and the terraces' handrails as the page draws a glass partition (a pane between rails, posts along it),
-    // doors as its glass doors (jambs, rails, a leaf, pulls); the panes in the model's glass, the frames in its metal
+    // doors as its glass doors (jambs, rails, a leaf, pulls); the panes in the model's glass, the frames in its metal; the
+    // external glazing toned down (Ritika: "tone down the external glazing glass"): the pale pane glass of the deck's own axo
+    // (AxoModel's façade: #dfe9ef at 16%)
     if (FIT) {
-      const B = FT.pieces(FIT.pieces);
-      const own = (kind, glass) => mats[kind + "28"] || (mats[kind + "28"] = reg(focusable(new T.MeshLambertMaterial(glass
-        ? { color: 0xffffff, vertexColors: true, flatShading: true, transparent: true, opacity: 0.35, depthWrite: false, side: T.DoubleSide, shadowSide: T.BackSide }
+      const B = FT.pieces(FIT.pieces), SEE_K = { glass: 0.35, pane: 0.16 };
+      const own = (kind) => mats[kind + "28"] || (mats[kind + "28"] = reg(focusable(new T.MeshLambertMaterial(SEE_K[kind]
+        ? { color: 0xffffff, vertexColors: true, flatShading: true, transparent: true, opacity: SEE_K[kind], depthWrite: false, side: T.DoubleSide, shadowSide: T.BackSide }
         : { color: 0xffffff, vertexColors: true, flatShading: true, side: T.DoubleSide, shadowSide: T.BackSide }), kind), kind, true));
-      for (const [b, kind, grp, edged] of [[B.wall, "wall", G.walls, true], [B.pane, "glass", G.glass, false], [B.frame, "mullion", G.facade, false]]) {
+      for (const [b, kind, grp, edged] of [[B.wall, "wall", G.walls, true], [B.pane, "glass", G.glass, false], [B.fpane, "pane", G.glass, false], [B.frame, "mullion", G.facade, false]]) {
         if (!b.pos.length) continue;
-        const g = FT.solid(b.pos, b.col), mesh = new T.Mesh(g, own(kind, kind === "glass"));
-        if (kind === "glass") mesh.renderOrder = 2;
+        const g = FT.solid(b.pos, b.col), mesh = new T.Mesh(g, own(kind));
+        if (SEE_K[kind]) mesh.renderOrder = 2;
         grp.add(mesh); REG.meshes.push([mesh, kind]); if (edged) ink.push(new T.EdgesGeometry(g, 30));
       }
     }
