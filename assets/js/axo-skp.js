@@ -373,6 +373,35 @@
     }
     const terraceMeshes = (tf) => Object.entries(tf.prims || {}).map(([k, b]) => [solid(b.pos, b.col), k]);
 
+    // ---- the tables the plan draws as an outline of its own (on OB_Furniture, no block) that neither the model nor the 28.10
+    // tables have (Ritika: "this table is missing", then "it should be in this shape": the boardroom's 8.6 m table, its slot open
+    // at one end): the outline itself as its top, PLAN_TABLE.TOP m up, a pedestal under each arm at a quarter of its length from
+    // each end (none in the slot), in the tables' beige
+    const PLAN_TABLE = { LAYER: "OB_Furniture", MIN_L: 3000, W: [900, 3200], PTS: 20, NEAR: 1000, TOP: 0.75, SLAB: 0.04, PED: [0.5, 0.6], RGB: [192, 168, 144] };
+    function planTables(tables) {
+      const b = bucket(), have = tables.map((t) => [t[0], t[1]]), H = PLAN_TABLE.TOP - PLAN_TABLE.SLAB;
+      for (let i = 0; i < N; i++) {
+        if (names[lay[i]] !== PLAN_TABLE.LAYER || paths[path[i]] !== "(the plan itself)") continue;
+        const q = ptsOf(i); if (q.length < PLAN_TABLE.PTS) continue;
+        const o = oriented(q); if (!o || o.L < PLAN_TABLE.MIN_L || o.W < PLAN_TABLE.W[0] || o.W > PLAN_TABLE.W[1]) continue;
+        if (have.some(([x, y]) => Math.hypot(x - o.c[0], y - o.c[1]) < PLAN_TABLE.NEAR)) continue;   // (the 28.10 plan's own: drawn already)
+        slabOf(b, PLAN_TABLE.RGB, shapeOf([q]), H, PLAN_TABLE.TOP);
+        const inside = (x, y) => { let c = false; for (let a = 0, e = q.length - 1; a < q.length; e = a++) { const [x1, y1] = q[a], [x2, y2] = q[e];
+          if ((y1 > y) !== (y2 > y) && x < ((x2 - x1) * (y - y1)) / (y2 - y1) + x1) c = !c; } return c; };
+        const ang = Math.atan2(o.u[1], o.u[0]), v = [-o.u[1], o.u[0]];
+        for (const s of [-1, 1]) {
+          const ax = o.c[0] + o.u[0] * s * o.L / 4, ay = o.c[1] + o.u[1] * s * o.L / 4, runs = []; let run = null;
+          for (let t = -o.W / 2; t <= o.W / 2; t += 20) { const on = inside(ax + v[0] * t, ay + v[1] * t);
+            if (on && run === null) run = t; if ((!on || t + 20 > o.W / 2) && run !== null) { runs.push([run, t]); run = null; } }
+          for (const [t0, t1] of runs.filter(([t0, t1]) => t1 - t0 > 250)) {
+            const w = Math.min(PLAN_TABLE.PED[0], (t1 - t0) / 1000 * 0.6), t = (t0 + t1) / 2, x = ax + v[0] * t, y = ay + v[1] * t;
+            boxAt(b, PLAN_TABLE.RGB, PLAN_TABLE.PED[1], H, w, X(x), H / 2, Z(y), -ang);
+          }
+        }
+      }
+      return b.pos.length ? [solid(b.pos, b.col)] : [];
+    }
+
     // ---- the furniture put right, as the page puts it (skip: meshes left alone, the phone booths): the model's partitions' and
     // doors' frames (its hard pieces up over TALL m standing TALL_SPAN m or more, or wholly above TALL m: the plan's walls, glass
     // and doors stand there now); its old tables under a new one (CHANGES.tables: a piece with its top at a table's height,
@@ -420,7 +449,7 @@
         if (paint.size) c.needsUpdate = true;
       });
     }
-    return { pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, trim };
+    return { pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, planTables, trim };
   }
 
   AS.get = function (asset) {
@@ -729,6 +758,7 @@
       FT.trim(G.furniture, tables, tf.decks || [], boothMesh);
       for (const [g, m4, k] of FT.loungeSeats(lg, geometry)) { const m = new T.Mesh(g, matOf(k)); m.applyMatrix4(m4); G.furniture.add(m); REG.meshes.push([m, k]); }
       for (const [g, k] of FT.terraceMeshes(tf)) { const m = new T.Mesh(g, matOf(k)); G.furniture.add(m); REG.meshes.push([m, k]); }
+      for (const g of FT.planTables(tables)) { const m = new T.Mesh(g, matOf("wood")); G.furniture.add(m); REG.meshes.push([m, "wood"]); }
     }
     const hemi = new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.78); scene.add(hemi);
     const key = new T.DirectionalLight(0xffffff, 0.5); key.position.set(-40, 90, 60); scene.add(key, key.target);
