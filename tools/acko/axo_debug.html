@@ -433,7 +433,7 @@ function furniture() {
   try { AXOF.m = window.AxoSkp.get(); } finally { for (const u of bu) S.units[u].n = n0[u]; }
   for (const k of ["furniture", "plants"]) { const g = AXOF.m.groups[k]; g.visible = true; G.furniture.add(g); }
   { const g = AXOF.m.groups.base; g.visible = true; G.skpfloor.add(g); }   // (its floors, grass and soft shadow: the export's)
-  G.furniture.add(loungeSeats(lg)); G.furniture.add(tf.group);
+  G.furniture.add(loungeSeats(lg)); G.furniture.add(tf.group); G.furniture.add(planTables());
   // the model's partitions' and doors' frames (its hard pieces over TALL m standing TALL_SPAN m or more, or wholly above TALL
   // m): the page draws its own walls, glass and doors, so they go
   const TALL = 1.9, TALL_SPAN = 1.5;
@@ -721,6 +721,35 @@ function fixPlace(place, lg) {
 //   stools                   drawn here: the plan's small circles (bar stools by the ledges, low ones elsewhere) and its stools
 //   ledges, fixed seating,   drawn here: the bar ledges along the deck's walls, the fixed seating's three cushioned modules with a
 //   planters, screens        back at each end, the planters' boxes, the mobile screens
+// the tables the plan draws as an outline of its own (on OB_Furniture, no block) that neither the model nor the 28.10 tables have
+// (3 Nov: "this table is missing": the boardroom's 8.6 m table, its chairs round it): the outline itself as its top, PLAN_TABLE.TOP
+// m up, on two pedestals along it, in the tables' beige
+const PLAN_TABLE = { LAYER: "OB_Furniture", MIN_L: 3000, W: [900, 3200], PTS: 20, NEAR: 1000, TOP: 0.75, SLAB: 0.04, PED: [0.5, 0.6], COL: 0xc0a890 };
+function planTables() {
+  const grp = new T.Group(), have = ((window.AXO_SKP.changes && window.AXO_SKP.changes.tables) || []).map((t) => [t[0], t[1]]);
+  const mat = new T.MeshLambertMaterial({ color: PLAN_TABLE.COL, flatShading: true }); let n = 0;
+  for (let i = 0; i < P.N; i++) {
+    if (layerOf(i) !== PLAN_TABLE.LAYER || P.paths[P.path[i]] !== "(the plan itself)") continue;
+    const q = ptsOf(i); if (q.length < PLAN_TABLE.PTS) continue;
+    const o = oriented(q); if (!o || o.L < PLAN_TABLE.MIN_L || o.W < PLAN_TABLE.W[0] || o.W > PLAN_TABLE.W[1]) continue;
+    if (have.some(([x, y]) => Math.hypot(x - o.c[0], y - o.c[1]) < PLAN_TABLE.NEAR)) continue;   // (the 28.10 plan's own: drawn already)
+    // (its hull: the outline also runs round the cable strip's slot in it)
+    const pp = q.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]), cr = (o2, a, b) => (a[0] - o2[0]) * (b[1] - o2[1]) - (a[1] - o2[1]) * (b[0] - o2[0]), lo = [], hi = [];
+    for (const p of pp) { while (lo.length > 1 && cr(lo.at(-2), lo.at(-1), p) <= 0) lo.pop(); lo.push(p); }
+    for (const p of pp.reverse()) { while (hi.length > 1 && cr(hi.at(-2), hi.at(-1), p) <= 0) hi.pop(); hi.push(p); }
+    const sh = new T.Shape(lo.slice(0, -1).concat(hi.slice(0, -1)).map(([x, y]) => new T.Vector2(X(x), -Z(y))));
+    const g = new T.ExtrudeGeometry(sh, { depth: PLAN_TABLE.SLAB, bevelEnabled: false }); g.rotateX(-Math.PI / 2); g.translate(0, PLAN_TABLE.TOP - PLAN_TABLE.SLAB, 0);
+    grp.add(new T.Mesh(g, mat));
+    const ang = Math.atan2(o.u[1], o.u[0]);
+    for (const s of [-1, 1]) {
+      const b = new T.Mesh(new T.BoxGeometry(PLAN_TABLE.PED[1], PLAN_TABLE.TOP - PLAN_TABLE.SLAB, PLAN_TABLE.PED[0]), mat), x = o.c[0] + o.u[0] * s * o.L / 4, y = o.c[1] + o.u[1] * s * o.L / 4;
+      b.position.set(X(x), (PLAN_TABLE.TOP - PLAN_TABLE.SLAB) / 2, Z(y)); b.rotation.y = -ang; grp.add(b);
+    }
+    n++;
+  }
+  console.info(`axo debug: ${n} of the plan's own table outlines made tables`);
+  return grp;
+}
 const TERRACE = { PAD: 150, TABLE: /^reht(#|$)/, LO: 0.45, HI: 0.75, LEDGE: 1.05, SEAT: 0.42, BACK: 0.78, PLANTER: 0.45, SCREEN: 1.8,
   MODULE: 950, COL: { ledge: 0xc0a890, seat: 0x55555b, leg: 0x9a9aa0, cushion: 0xe9e2d2, back: 0xd6ccb8, planter: 0xc9c4bb, screen: 0xd9d6cf } };
 function terraceFurniture() {
