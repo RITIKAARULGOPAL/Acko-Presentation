@@ -449,7 +449,56 @@
         if (paint.size) c.needsUpdate = true;
       });
     }
-    return { pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, planTables, trim };
+    // ---- the open seating by the coffee bar (Ritika: "the open seating area by the coffee bar is empty.. furnish it like the
+    // reference render"): the plan draws no planter, bench or café tables there, only four 460 mm circles (N-FURN-LOOSE
+    // FURNITURE, no block), so as the render has it, at the plan's scale: a long low white planter with rounded ends along the
+    // façade, from the column to the glass partition, its bed behind (the model's plants along the glass stand in it, raised
+    // to its soil) and a bench along its room side, a dark seat pad on the white base; at its near end, in front of the column,
+    // two pedestal café tables (the tables' beige, dark stems) with a café chair at each; the plan's circles as sage poufs
+    const NOOK = { X: [91600, 97400], Y: [37500, 38800], BED: 37980, R: 350, SEAT: 0.42, PAD: 0.05, RIM: 0.55, SOIL: 0.53,
+      TABLES: [[90250, 37150], [91300, 36450]], CHAIRS: [[89700, 37150], [91300, 35900]], TABLE: { D: 600, H: 0.72, STEM: 0.06, FOOT: 450 },
+      POUF: { D: 460, H: 0.42, IN: [87500, 33500, 96000, 37000] },
+      RGB: { base: [236, 234, 230], soil: [96, 82, 68], pad: [84, 74, 68], top: [192, 168, 144], stem: [62, 60, 60], pouf: [176, 190, 160] } };
+    const rounded = (x0, y0, x1, y1, r, n = 6) => { const q = [];
+      for (const [cx, cy, a0] of [[x1 - r, y0 + r, -Math.PI / 2], [x1 - r, y1 - r, 0], [x0 + r, y1 - r, Math.PI / 2], [x0 + r, y0 + r, Math.PI]])
+        for (let k = 0; k <= n; k++) { const a = a0 + (k / n) * Math.PI / 2; q.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+      return q; };
+    function coffeeNook() {
+      const out = { place: [], prims: {}, bed: [NOOK.X[0], NOOK.BED, NOOK.X[1], NOOK.Y[1]], soil: NOOK.SOIL };
+      const pb = (k) => out.prims[k] || (out.prims[k] = bucket()), C = NOOK.RGB;
+      const cyl = (k, rgb, r, y0, y1, x, y, seg = 24) => { const g = new T.CylinderGeometry(r, r, y1 - y0, seg); g.translate(X(x), (y0 + y1) / 2, Z(y)); put(pb(k), g, rgb); };
+      const [x0, x1] = NOOK.X, [y0, y1] = NOOK.Y;
+      slabOf(pb("hard"), C.base, shapeOf([rounded(x0, y0, x1, y1, NOOK.R)]), 0, NOOK.SEAT);                       // (the planter's base)
+      slabOf(pb("hard"), C.base, shapeOf([rounded(x0, NOOK.BED, x1, y1, NOOK.R)]), NOOK.SEAT, NOOK.RIM);           // (its bed's rim)
+      slabOf(pb("hard"), C.soil, shapeOf([rounded(x0 + 60, NOOK.BED + 60, x1 - 60, y1 - 60, NOOK.R - 60)]), NOOK.RIM, NOOK.RIM + 0.004);   // (its soil)
+      slabOf(pb("soft"), C.pad, shapeOf([rounded(x0 + 250, y0 + 40, x1 - 250, NOOK.BED - 20, 80)]), NOOK.SEAT, NOOK.SEAT + NOOK.PAD);   // (the bench's pad)
+      const t = NOOK.TABLE;
+      for (const [x, y] of NOOK.TABLES) {
+        cyl("wood", C.top, t.D / 2000, t.H - 0.03, t.H, x, y); cyl("hard", C.stem, t.STEM / 2, 0.02, t.H - 0.03, x, y, 12); cyl("hard", C.stem, t.FOOT / 2000, 0, 0.02, x, y);
+      }
+      const cafeU = D.units.findIndex((u) => CAFE_CHAIR.test(u.name || "")), y0c = ((D.changes && D.changes.place) || []).find((pl) => pl.u === cafeU)?.m[10] ?? 0;
+      if (cafeU >= 0) NOOK.CHAIRS.forEach(([x, y], i) => {                                                        // (each facing its table)
+        const [tx, ty] = NOOK.TABLES[i], n = Math.hypot(tx - x, ty - y) || 1, f = [(tx - x) / n, (ty - y) / n];
+        out.place.push({ u: cafeU, m: [f[1], 0, -f[0], 0, 1, 0, f[0], 0, f[1], X(x), y0c, Z(y)] });
+      });
+      const [a, b, c, d] = NOOK.POUF.IN;                                                                          // (the plan's circles)
+      for (let i = 0; i < N; i++) {
+        if (names[lay[i]] !== "N-FURN-LOOSE FURNITURE" || paths[path[i]] !== "(the plan itself)") continue;
+        const q = ptsOf(i); if (q.length < 8) continue;
+        const [bx0, by0, bx1, by1] = [box[4 * i], box[4 * i + 1], box[4 * i + 2], box[4 * i + 3]];          // (its box: its points bunch unevenly)
+        const cx = (bx0 + bx1) / 2, cy = (by0 + by1) / 2, r = Math.max(bx1 - bx0, by1 - by0) / 2;
+        if (cx < a || cx > c || cy < b || cy > d || Math.abs(2 * r - NOOK.POUF.D) > 60) continue;
+        cyl("soft", C.pouf, r / 1000, 0, NOOK.POUF.H, cx, cy);
+      }
+      return out;
+    }
+    // (the model's plants in the planter's bed stood up on its soil)
+    const raise = (placements, nook) => { const plants = new Set(D.parts.filter((p) => p.k === "plant" && p.u >= 0).map((p) => p.u)), [a, b, c, d] = nook.bed;
+      for (const u of plants) for (const m4 of placements[u]) { const e = m4.elements, x = e[12] * 1000 + CX, y = e[14] * 1000 + CY;
+        if (Math.abs(m4.determinant()) > 1e-12 && x > a && x < c && y > b && y < d) e[13] += nook.soil; } };
+    const nookMeshes = (nook) => Object.entries(nook.prims).map(([k, b]) => [solid(b.pos, b.col), k]);
+
+    return { pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, planTables, coffeeNook, raise, nookMeshes, trim };
   }
 
   AS.get = function (asset) {
@@ -543,13 +592,14 @@
     const CHG = D.changes, FIT = CHG && CHG.fit && !CHG.debugFixed ? CHG.fit : null, ARCH = ["wall", "top", "glass", "mullion"];
     let place = CHG ? CHG.place : [], areasP = CHG ? CHG.areas : [], tables = CHG ? CHG.tables || [] : [];
     const FT = FIT ? fitting({ T, D, P, X, Z, CX, CY, shift: FIT.shift }) : null, booths = new Map();
-    let lg = null, tf = null;
+    let lg = null, tf = null, nook = null;
     if (FIT) {
       for (const [ty, , , u, m] of FIT.pieces) if (ty === "booth") (booths.get(u) || booths.set(u, []).get(u)).push(m);
       place = place.concat(FIT.place);
       lg = FT.loungeGroups(); place = FT.fixPlace(place, lg);
       tf = FT.terraceFurniture(); areasP = areasP.concat(tf.areas); tables = tables.concat(tf.tables);
       place = place.filter((pl) => !tf.clears(pl)).concat(tf.place);
+      nook = FT.coffeeNook(); place = place.concat(nook.place);
     }
     const placements = D.units.map((u) => {
       const f = new Float32Array(bytes(u.m)), out = [];
@@ -617,6 +667,7 @@
       // the phone booths where the plan draws them, the model's own booth component on each (its own placements gone)
       for (const [u, ms] of booths) placements[u] = ms.map((m) => new T.Matrix4().set(m[0], m[3], m[6], m[9], m[1], m[4], m[7], m[10], m[2], m[5], m[8], m[11], 0, 0, 0, 1));
     }
+    if (nook) FT.raise(placements, nook);
     // a merged part's furniture in the areas: its pieces (triangles joined where they share a corner) that stay under LOW m, have
     // their middle in one and are under BIG m across; a longer one is millwork (the café's counter) and stays
     const BIG = 3.2;
@@ -758,6 +809,7 @@
       FT.trim(G.furniture, tables, tf.decks || [], boothMesh);
       for (const [g, m4, k] of FT.loungeSeats(lg, geometry)) { const m = new T.Mesh(g, matOf(k)); m.applyMatrix4(m4); G.furniture.add(m); REG.meshes.push([m, k]); }
       for (const [g, k] of FT.terraceMeshes(tf)) { const m = new T.Mesh(g, matOf(k)); G.furniture.add(m); REG.meshes.push([m, k]); }
+      for (const [g, k] of FT.nookMeshes(nook)) { const m = new T.Mesh(g, matOf(k)); G.furniture.add(m); REG.meshes.push([m, k]); }
       for (const g of FT.planTables(tables)) { const m = new T.Mesh(g, matOf("wood")); G.furniture.add(m); REG.meshes.push([m, "wood"]); }
     }
     const hemi = new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.78); scene.add(hemi);
