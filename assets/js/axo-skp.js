@@ -455,7 +455,7 @@
     // façade, from the column to the glass partition, its bed behind (the model's plants along the glass stand in it, raised
     // to its soil) and a bench along its room side, a dark seat pad on the white base; at its near end, in front of the column,
     // two pedestal café tables (the tables' beige, dark stems) with a café chair at each; the plan's circles as sage poufs
-    const NOOK = { X: [91600, 97400], Y: [37500, 38800], BED: 37980, R: 350, SEAT: 0.42, PAD: 0.05, RIM: 0.55, SOIL: 0.53,
+    const NOOK = { X: [91600, 97400], Y: [37500, 38800], BED: 37980, R: 350, SEAT: 0.42, PAD: 0.05, RIM: 0.55, SOIL: 0.53, GREEN: 0.4, INK: 0x2a2a2a,
       TABLES: [[90250, 37150], [91300, 36450]], CHAIRS: [[89700, 37150], [91300, 35900]], TABLE: { D: 600, H: 0.72, STEM: 0.06, FOOT: 450 },
       POUF: { D: 460, H: 0.42, IN: [87500, 33500, 96000, 37000] },
       RGB: { base: [236, 234, 230], soil: [96, 82, 68], pad: [84, 74, 68], top: [192, 168, 144], stem: [62, 60, 60], pouf: [176, 190, 160] } };
@@ -492,13 +492,25 @@
       }
       return out;
     }
-    // (the model's plants in the planter's bed stood up on its soil)
+    // (the model's plants in the planter's bed stood up on its soil, as low leafy greens: NOOK.GREEN of their size, about their
+    // foot's middle. Full size, 2 m tall against the façade's glass, they hid the planter and its bench from the day's camera,
+    // which looks in through that glass: "the extrusion simply isn't there")
     const raise = (placements, nook) => { const plants = new Set(D.parts.filter((p) => p.k === "plant" && p.u >= 0).map((p) => p.u)), [a, b, c, d] = nook.bed;
-      for (const u of plants) for (const m4 of placements[u]) { const e = m4.elements, x = e[12] * 1000 + CX, y = e[14] * 1000 + CY;
-        if (Math.abs(m4.determinant()) > 1e-12 && x > a && x < c && y > b && y < d) e[13] += nook.soil; } };
+      for (const u of plants) {
+        const ps = D.parts.filter((p) => p.u === u && p.lv !== 2), foot = new T.Vector3((Math.min(...ps.map((p) => p.lo[0])) + Math.max(...ps.map((p) => p.hi[0]))) / 2,
+          Math.min(...ps.map((p) => p.lo[1])), (Math.min(...ps.map((p) => p.lo[2])) + Math.max(...ps.map((p) => p.hi[2]))) / 2);
+        for (const m4 of placements[u]) { const e = m4.elements, x = e[12] * 1000 + CX, y = e[14] * 1000 + CY;
+          if (Math.abs(m4.determinant()) < 1e-12 || x < a || x > c || y < b || y > d) continue;
+          const w = foot.clone().applyMatrix4(m4);                                   // (its foot where it stands, then shrunk about it)
+          m4.premultiply(new T.Matrix4().makeTranslation(-w.x, -w.y, -w.z)).premultiply(new T.Matrix4().makeScale(NOOK.GREEN, NOOK.GREEN, NOOK.GREEN))
+            .premultiply(new T.Matrix4().makeTranslation(w.x, nook.soil, w.z));
+        } } };
     const nookMeshes = (nook) => Object.entries(nook.prims).map(([k, b]) => [solid(b.pos, b.col), k]);
+    // (and its outlines in the ink, so the white planter on the light floor reads through the façade's glass)
+    const nookInk = (meshes) => { const arr = []; for (const [g, k] of meshes) if (k === "hard" || k === "soft") arr.push(...new T.EdgesGeometry(g, 30).getAttribute("position").array);
+      const lg = new T.BufferGeometry(); lg.setAttribute("position", new T.Float32BufferAttribute(arr, 3)); return lg; };
 
-    return { pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, planTables, coffeeNook, raise, nookMeshes, trim };
+    return { pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, planTables, coffeeNook, raise, nookMeshes, nookInk, ink: NOOK.INK, trim };
   }
 
   AS.get = function (asset) {
@@ -809,7 +821,9 @@
       FT.trim(G.furniture, tables, tf.decks || [], boothMesh);
       for (const [g, m4, k] of FT.loungeSeats(lg, geometry)) { const m = new T.Mesh(g, matOf(k)); m.applyMatrix4(m4); G.furniture.add(m); REG.meshes.push([m, k]); }
       for (const [g, k] of FT.terraceMeshes(tf)) { const m = new T.Mesh(g, matOf(k)); G.furniture.add(m); REG.meshes.push([m, k]); }
-      for (const [g, k] of FT.nookMeshes(nook)) { const m = new T.Mesh(g, matOf(k)); G.furniture.add(m); REG.meshes.push([m, k]); }
+      const nm = FT.nookMeshes(nook);
+      for (const [g, k] of nm) { const m = new T.Mesh(g, matOf(k)); G.furniture.add(m); REG.meshes.push([m, k]); }
+      G.furniture.add(new T.LineSegments(FT.nookInk(nm), reg(new T.LineBasicMaterial({ color: FT.ink, transparent: true, opacity: 0.8 }), "ink")));
       for (const g of FT.planTables(tables)) { const m = new T.Mesh(g, matOf("wood")); G.furniture.add(m); REG.meshes.push([m, "wood"]); }
     }
     const hemi = new T.HemisphereLight(0xffffff, 0xb9b4c6, 0.78); scene.add(hemi);
