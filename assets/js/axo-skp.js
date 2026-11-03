@@ -32,7 +32,8 @@
     // Only the items the fit reads (a furniture layer's, or in one of the blocks it looks for): the rest it never asks about
     const PB = window.PLAN_BASE, LY = PB.layers, [ox, oy] = PB.origin, [sx, sy] = shift;
     const NEED = new Set([...SOFA_BLOCKS, ...ARMCHAIR_BLOCKS, ...TABLE_BLOCKS, ...ARMCHAIRS]), furnL = new Map();
-    const needed = (st, tail) => NEED.has(tail) || tail.endsWith(CABIN_CHAIR) || tail.endsWith(TURN_CHAIR) || (furnL.get(st) ?? furnL.set(st, FURN_L.test(st)).get(st));
+    const needed = (st, tail) => NEED.has(tail) || tail.endsWith(CABIN_CHAIR) || tail.endsWith(TURN_CHAIR) || (st === "OUTLINE" && tail === "(the plan itself)")   // (the planter bench's outline)
+      || (furnL.get(st) ?? furnL.set(st, FURN_L.test(st)).get(st));
     const pts = [], start = [], cnt = [], lay = [], kind = [], path = [], names = [], nameIx = new Map(), paths = [], pathIx = new Map();
     const id = (map, list, s) => { let i = map.get(s); if (i === undefined) { i = list.length; map.set(s, i); list.push(s); } return i; };
     for (const blk of PB.blocks) {
@@ -449,64 +450,65 @@
         if (paint.size) c.needsUpdate = true;
       });
     }
-    // ---- the open seating by the coffee bar (Ritika: "the open seating area by the coffee bar is empty.. furnish it like the
-    // reference render"): the plan draws no planter, bench or café tables there, only four 460 mm circles (N-FURN-LOOSE
-    // FURNITURE, no block), so as the render has it, at the plan's scale: a long low white planter with rounded ends along the
-    // façade, from the column to the glass partition, its bed behind (the model's plants along the glass stand in it, raised
-    // to its soil) and a bench along its room side, a dark seat pad on the white base; at its near end, in front of the column,
-    // two pedestal café tables (the tables' beige, dark stems) with a café chair at each; the plan's circles as sage poufs
-    const NOOK = { X: [91600, 97400], Y: [37500, 38800], BED: 37980, R: 350, SEAT: 0.42, PAD: 0.05, RIM: 0.55, SOIL: 0.53, GREEN: 0.4, INK: 0x2a2a2a,
-      TABLES: [[90250, 37150], [91300, 36450]], CHAIRS: [[89700, 37150], [91300, 35900]], TABLE: { D: 600, H: 0.72, STEM: 0.06, FOOT: 450 },
-      POUF: { D: 460, H: 0.42, IN: [87500, 33500, 96000, 37000] },
-      RGB: { base: [236, 234, 230], soil: [96, 82, 68], pad: [84, 74, 68], top: [192, 168, 144], stem: [62, 60, 60], pouf: [176, 190, 160] } };
-    const rounded = (x0, y0, x1, y1, r, n = 6) => { const q = [];
-      for (const [cx, cy, a0] of [[x1 - r, y0 + r, -Math.PI / 2], [x1 - r, y1 - r, 0], [x0 + r, y1 - r, Math.PI / 2], [x0 + r, y0 + r, Math.PI]])
-        for (let k = 0; k <= n; k++) { const a = a0 + (k / n) * Math.PI / 2; q.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
-      return q; };
-    function coffeeNook() {
-      const out = { place: [], prims: {}, bed: [NOOK.X[0], NOOK.BED, NOOK.X[1], NOOK.Y[1]], soil: NOOK.SOIL };
-      const pb = (k) => out.prims[k] || (out.prims[k] = bucket()), C = NOOK.RGB;
-      const cyl = (k, rgb, r, y0, y1, x, y, seg = 24) => { const g = new T.CylinderGeometry(r, r, y1 - y0, seg); g.translate(X(x), (y0 + y1) / 2, Z(y)); put(pb(k), g, rgb); };
-      const [x0, x1] = NOOK.X, [y0, y1] = NOOK.Y;
-      slabOf(pb("hard"), C.base, shapeOf([rounded(x0, y0, x1, y1, NOOK.R)]), 0, NOOK.SEAT);                       // (the planter's base)
-      slabOf(pb("hard"), C.base, shapeOf([rounded(x0, NOOK.BED, x1, y1, NOOK.R)]), NOOK.SEAT, NOOK.RIM);           // (its bed's rim)
-      slabOf(pb("hard"), C.soil, shapeOf([rounded(x0 + 60, NOOK.BED + 60, x1 - 60, y1 - 60, NOOK.R - 60)]), NOOK.RIM, NOOK.RIM + 0.004);   // (its soil)
-      slabOf(pb("soft"), C.pad, shapeOf([rounded(x0 + 250, y0 + 40, x1 - 250, NOOK.BED - 20, 80)]), NOOK.SEAT, NOOK.SEAT + NOOK.PAD);   // (the bench's pad)
-      const t = NOOK.TABLE;
-      for (const [x, y] of NOOK.TABLES) {
-        cyl("wood", C.top, t.D / 2000, t.H - 0.03, t.H, x, y); cyl("hard", C.stem, t.STEM / 2, 0.02, t.H - 0.03, x, y, 12); cyl("hard", C.stem, t.FOOT / 2000, 0, 0.02, x, y);
+    // ---- the planter bench by the coffee bar, as the plan draws it (Ritika, 3 Nov, on the axo debug page, 5006874: "where is it
+    // here", "remove the plants on this furniture", "Yes, commit it"): the plan's OUTLINE outline round it (NOOK.AT, 9.85 x 1.77 m,
+    // between the coffee bar and the façade, clear of the glass); its planter strip down the middle between the plan's two lines
+    // along it (y = MID), full depth at its west end (x < WEST) and in its north-west wedge (x < WEDGE), white to RIM m, its soil
+    // brown, no plants on it; the bench on the rest, staggered as the plan has it (the west half's south side, the east half's
+    // north side), white to SEAT m with a charcoal seat (the plan's own seat outline on the east half, an inset strip on the
+    // west's); the plan's four 505 mm squares beside it (N-FURN-LOOSE FURNITURE) sage poufs. The plan draws no café tables there
+    const NOOK = { AT: [87513, 34897], SEAT_AT: [90606, 35404], NEAR: 30, MID: [35404, 36004], WEST: 87212, WEDGE: 88050, SEAT_IN: 75,
+      SEAT: 0.42, PAD: 0.05, RIM: 0.55, POUF: { D: 505, H: 0.42 }, INK: 0x2a2a2a,
+      RGB: { base: [236, 234, 230], soil: [107, 83, 64], pad: [62, 61, 64], pouf: [176, 190, 160] } };
+    // (a simple polygon clipped to an axis-aligned box: Sutherland-Hodgman, side by side)
+    const clipBox = (poly, [x0, y0, x1, y1]) => { let out = poly;
+      for (const [ax, lo, keep] of [[0, x0, 1], [0, x1, -1], [1, y0, 1], [1, y1, -1]]) {
+        const inp = out; out = []; if (!inp.length) break; const inside = (p) => keep * (p[ax] - lo) >= 0;
+        for (let i = 0; i < inp.length; i++) { const p = inp[i], q = inp[(i + 1) % inp.length], pi = inside(p), qi = inside(q);
+          if (pi) out.push(p); if (pi !== qi) { const t = (lo - p[ax]) / (q[ax] - p[ax]); out.push([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]); } }
       }
-      const cafeU = D.units.findIndex((u) => CAFE_CHAIR.test(u.name || "")), y0c = ((D.changes && D.changes.place) || []).find((pl) => pl.u === cafeU)?.m[10] ?? 0;
-      if (cafeU >= 0) NOOK.CHAIRS.forEach(([x, y], i) => {                                                        // (each facing its table)
-        const [tx, ty] = NOOK.TABLES[i], n = Math.hypot(tx - x, ty - y) || 1, f = [(tx - x) / n, (ty - y) / n];
-        out.place.push({ u: cafeU, m: [f[1], 0, -f[0], 0, 1, 0, f[0], 0, f[1], X(x), y0c, Z(y)] });
-      });
-      const [a, b, c, d] = NOOK.POUF.IN;                                                                          // (the plan's circles)
+      return out.length > 2 ? out : null; };
+    const inPoly = (q, x, y) => { let c = false; for (let a = 0, b = q.length - 1; a < q.length; b = a++) { const [x1, y1] = q[a], [x2, y2] = q[b];
+      if ((y1 > y) !== (y2 > y) && x < ((x2 - x1) * (y - y1)) / (y2 - y1) + x1) c = !c; } return c; };
+    function coffeeNook() {
+      const out = { place: [], prims: {}, outer: null }, pb = (k) => out.prims[k] || (out.prims[k] = bucket()), C = NOOK.RGB;
+      let seatE = null;
       for (let i = 0; i < N; i++) {
+        if (names[lay[i]] !== "OUTLINE") continue; const q = ptsOf(i); if (!q.length) continue;
+        if (q.length > 40 && Math.hypot(q[0][0] - NOOK.AT[0], q[0][1] - NOOK.AT[1]) < NOOK.NEAR) out.outer = q;
+        if (Math.hypot(q[0][0] - NOOK.SEAT_AT[0], q[0][1] - NOOK.SEAT_AT[1]) < NOOK.NEAR) seatE = q;
+      }
+      const outer = out.outer; if (!outer) return out;
+      const xs = outer.map((p) => p[0]), ys = outer.map((p) => p[1]), [X0, Y0, X1, Y1] = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+      const [m0, m1] = NOOK.MID, BIG = 1e9, I = NOOK.SEAT_IN;
+      const planter = [[-BIG, -BIG, NOOK.WEST, BIG], [NOOK.WEST, -BIG, NOOK.WEDGE, m1], [NOOK.WEDGE, m0, BIG, m1]].map((bx) => clipBox(outer, bx)).filter(Boolean);
+      const benches = [[NOOK.WEST, m1, BIG, BIG], [NOOK.WEDGE, -BIG, BIG, m0]].map((bx) => clipBox(outer, bx)).filter(Boolean);
+      const seats = [seatE, clipBox(outer, [NOOK.WEST + I, m1 + I, BIG, Y1 - I])].filter(Boolean);
+      for (const q of planter) {
+        slabOf(pb("hard"), C.base, shapeOf([q]), 0, NOOK.RIM);
+        const c = q.reduce((s, p) => [s[0] + p[0] / q.length, s[1] + p[1] / q.length], [0, 0]);                  // (its soil, a little in)
+        slabOf(pb("hard"), C.soil, shapeOf([q.map(([x, y]) => { const dx = c[0] - x, dy = c[1] - y, n = Math.hypot(dx, dy) || 1, d = Math.min(60, n / 3); return [x + dx / n * d, y + dy / n * d]; })]), NOOK.RIM, NOOK.RIM + 0.004);
+      }
+      for (const q of benches) slabOf(pb("hard"), C.base, shapeOf([q]), 0, NOOK.SEAT);
+      for (const q of seats) slabOf(pb("soft"), C.pad, shapeOf([q]), NOOK.SEAT, NOOK.SEAT + NOOK.PAD);
+      for (let i = 0; i < N; i++) {                                                                              // (the 505 mm squares)
         if (names[lay[i]] !== "N-FURN-LOOSE FURNITURE" || paths[path[i]] !== "(the plan itself)") continue;
-        const q = ptsOf(i); if (q.length < 8) continue;
-        const [bx0, by0, bx1, by1] = [box[4 * i], box[4 * i + 1], box[4 * i + 2], box[4 * i + 3]];          // (its box: its points bunch unevenly)
-        const cx = (bx0 + bx1) / 2, cy = (by0 + by1) / 2, r = Math.max(bx1 - bx0, by1 - by0) / 2;
-        if (cx < a || cx > c || cy < b || cy > d || Math.abs(2 * r - NOOK.POUF.D) > 60) continue;
-        cyl("soft", C.pouf, r / 1000, 0, NOOK.POUF.H, cx, cy);
+        const w = box[4 * i + 2] - box[4 * i], h = box[4 * i + 3] - box[4 * i + 1], cx = (box[4 * i] + box[4 * i + 2]) / 2, cy = (box[4 * i + 1] + box[4 * i + 3]) / 2;
+        if (Math.abs(w - NOOK.POUF.D) > 40 || Math.abs(h - NOOK.POUF.D) > 40 || cx < X0 - 1000 || cx > X1 + 1000 || cy < Y0 - 1000 || cy > Y1 + 1000) continue;
+        slabOf(pb("soft"), C.pouf, shapeOf([ptsOf(i)]), 0, NOOK.POUF.H);
       }
       return out;
     }
-    // (the model's plants in the planter's bed stood up on its soil, as low leafy greens: NOOK.GREEN of their size, about their
-    // foot's middle. Full size, 2 m tall against the façade's glass, they hid the planter and its bench from the day's camera,
-    // which looks in through that glass: "the extrusion simply isn't there")
-    const raise = (placements, nook) => { const plants = new Set(D.parts.filter((p) => p.k === "plant" && p.u >= 0).map((p) => p.u)), [a, b, c, d] = nook.bed;
-      for (const u of plants) {
+    // (no plants on it: the model's and the plan's plants standing on its outline taken out, scaled to nothing)
+    const raise = (placements, nook) => { if (!nook.outer) return; const zero = new T.Matrix4().makeScale(0, 0, 0);
+      for (const u of new Set(D.parts.filter((p) => p.k === "plant" && p.u >= 0).map((p) => p.u))) {
         const ps = D.parts.filter((p) => p.u === u && p.lv !== 2), foot = new T.Vector3((Math.min(...ps.map((p) => p.lo[0])) + Math.max(...ps.map((p) => p.hi[0]))) / 2,
           Math.min(...ps.map((p) => p.lo[1])), (Math.min(...ps.map((p) => p.lo[2])) + Math.max(...ps.map((p) => p.hi[2]))) / 2);
-        for (const m4 of placements[u]) { const e = m4.elements, x = e[12] * 1000 + CX, y = e[14] * 1000 + CY;
-          if (Math.abs(m4.determinant()) < 1e-12 || x < a || x > c || y < b || y > d) continue;
-          const w = foot.clone().applyMatrix4(m4);                                   // (its foot where it stands, then shrunk about it)
-          m4.premultiply(new T.Matrix4().makeTranslation(-w.x, -w.y, -w.z)).premultiply(new T.Matrix4().makeScale(NOOK.GREEN, NOOK.GREEN, NOOK.GREEN))
-            .premultiply(new T.Matrix4().makeTranslation(w.x, nook.soil, w.z));
-        } } };
+        placements[u].forEach((m4, i) => { if (Math.abs(m4.determinant()) < 1e-12) return; const w = foot.clone().applyMatrix4(m4);
+          if (inPoly(nook.outer, w.x * 1000 + CX, w.z * 1000 + CY)) placements[u][i] = zero; });
+      } };
     const nookMeshes = (nook) => Object.entries(nook.prims).map(([k, b]) => [solid(b.pos, b.col), k]);
-    // (and its outlines in the ink, so the white planter on the light floor reads through the façade's glass)
+    // (and its outlines in the ink, so the white planter reads on the light floor)
     const nookInk = (meshes) => { const arr = []; for (const [g, k] of meshes) if (k === "hard" || k === "soft") arr.push(...new T.EdgesGeometry(g, 30).getAttribute("position").array);
       const lg = new T.BufferGeometry(); lg.setAttribute("position", new T.Float32BufferAttribute(arr, 3)); return lg; };
 
