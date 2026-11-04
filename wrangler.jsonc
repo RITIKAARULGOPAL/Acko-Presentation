@@ -1,0 +1,13 @@
+// Cloudflare (Workers static assets, the successor to Pages): serves dist/site/, which tools/build.py --site writes,
+// behind magic links (worker/index.js; tools/links.py makes and revokes them). tools/deploy.py builds and uploads.
+{
+  "name": "acko-the-loop",
+  "compatibility_date": "2026-11-01",
+  "main": "worker/index.js",
+  // every request goes through the worker first, so no file is served without a live link
+  "assets": { "directory": "./dist/site", "binding": "ASSETS", "run_worker_first": true },
+  // the live links: key = the link's secret, metadata = its label
+  "kv_namespaces": [{ "binding": "LINKS", "id": "599bac1ede5641e785e4608b540bf241" }],
+  "workers_dev": true,
+  "preview_urls": false
+}
