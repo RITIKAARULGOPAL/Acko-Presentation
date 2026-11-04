@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Walkthrough · ACKO slide s-walkthrough</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-walkthrough" data-part="6" data-mode="dark" data-nonum data-title="Walkthrough" data-steps="1" data-mins="0.2"
+  data-notes="The walkthrough: the campus, from arrival through the floor.">
+  <div class="page">
+    <h1 class="wt-h rv-i" style="--i:0">Walkthrough</h1>
+    <p class="wt-p hand rv-i" style="--i:1">A walk through the Loop.</p>
+  </div>
+</section>
+<style>
+/* ---------- walkthrough (2 Nov): before Thank you, in its look ---------- */
+.wt-h { left: 0; width: 100%; top: 40%; text-align: center; font-size: calc(var(--pt) * 46); font-weight: 700; color: #fff; }
+.wt-p { left: 0; width: 100%; top: 56%; text-align: center; font-size: calc(var(--pt) * 26); color: var(--lilac); }
+</style>
+<script>
+/* walkthrough: a title page for the walkthrough */
+ACKO.slide("s-walkthrough", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".page", sc), 100); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

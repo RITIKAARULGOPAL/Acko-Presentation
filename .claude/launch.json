@@ -16,6 +16,13 @@
       "url": "http://localhost:8774"
     },
     {
+      "name": "site",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8790", "--directory", "dist/site"],
+      "port": 8790,
+      "autoPort": true
+    },
+    {
       "name": "dxf-viewer",
       "runtimeExecutable": "python",
       "runtimeArgs": ["-c", "import os, functools, http.server as h; h.ThreadingHTTPServer(('127.0.0.1', int(os.environ.get('PORT', '8010'))), functools.partial(h.SimpleHTTPRequestHandler, directory=r'C:/Users/Ritika/Downloads/dxf-plan-toolkit-v1.0/dxf-plan-toolkit/viewer')).serve_forever()"],

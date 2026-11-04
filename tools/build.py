@@ -10,6 +10,8 @@ usage:
   python tools/build.py --only s-loop,s-site     preview.html — just those slides, joined
   python tools/build.py --single         dist/ACKO-The-Loop.html — ONE self-contained file: every image, font, script and the music
                                          embedded once; opens from anywhere, offline (this is the file to present)
+  python tools/build.py --site           dist/site/ — index.html and only the files it uses, for hosting (Cloudflare Pages takes
+                                         no file over 25 MiB, so not the single file); tools/deploy.py uploads it
 It also writes assets/js/shell.js (the deck's chrome, for a slide opened on its own).
 """
 import base64, json, os, posixpath, re, sys
@@ -133,14 +135,15 @@ LOADER = r"""(function () {
 })();"""
 
 
-def single():
-    html = build()
+def gather(html):
+    """the deck's linked files, styles (url()s root-relative), markup, scripts, and every asset path it uses"""
     head, body = html.split("<body>", 1)
     body = body.rsplit("</body>", 1)[0]
     # the styles: linked stylesheets (their url()s made root-relative) and the slides' <style> blocks, in order
-    css = []
+    css, linked = [], []
     for m in re.finditer(r'<link rel="stylesheet" href="([^"?]+)[^"]*">|<style\b[^>]*>(.*?)</style>', head, re.S):
         if m.group(1):
+            linked.append(m.group(1))
             base = posixpath.dirname(m.group(1))
             text = read(*m.group(1).split("/"))
             text = re.sub(r"url\((['\"]?)(?!data:|https?:|/)([^)'\"]+)\1\)", lambda u: "url(%s)" % posixpath.normpath(posixpath.join(base, u.group(2))), text)
@@ -150,6 +153,7 @@ def single():
     # the markup (everything before the first script) and the scripts, in order (linked ones inlined)
     markup, scripts = body.split("<script", 1)[0], []
     for m in re.finditer(r'<script src="([^"?]+)[^"]*"></script>|<script\b[^>]*>(.*?)</script>', body, re.S):
+        if m.group(1): linked.append(m.group(1))
         scripts.append(read(*m.group(1).split("/")) if m.group(1) else m.group(2))
     alltext = "\n".join(css) + markup + "\n".join(scripts)
     # what to embed: every literal asset path; files named by key (renders, keyplans: "r-board-op1"); and paths built from a prefix
@@ -166,6 +170,11 @@ def single():
         d, stem = posixpath.split(pre)
         for f in os.listdir(os.path.join(ROOT, *d.split("/"))):
             if f.startswith(stem): want.add(posixpath.join(d, f))
+    return head, css, markup, scripts, linked, want
+
+
+def single():
+    head, css, markup, scripts, _, want = gather(build())
     assets, missing, total = {}, [], 0
     for p in sorted(want):
         fp = os.path.join(ROOT, *p.split("/"))
@@ -186,9 +195,33 @@ def single():
     print(f"dist/{SINGLE_NAME}: {len(re.findall(r'<section class=.scene', markup))} slides, {len(assets)} files embedded ({total / 1e6:.1f} MB), {len(html1.encode('utf-8')) / 1e6:.1f} MB in all")
 
 
+SITE = os.path.join(ROOT, "dist", "site")
+
+
+def site():
+    """index.html plus only the files it links and uses, copied fresh into dist/site/ (nothing else of the repo goes up)"""
+    import shutil
+    html = build()
+    _, _, _, _, linked, want = gather(html)
+    shutil.rmtree(SITE, ignore_errors=True)
+    files, missing, total = sorted(set(linked) | want), [], 0
+    for p in files:
+        src = os.path.join(ROOT, *p.split("/"))
+        if not os.path.isfile(src): missing.append(p); continue
+        dst = os.path.join(SITE, *p.split("/"))
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copyfile(src, dst); total += os.path.getsize(src)
+        if os.path.getsize(src) > 25 * 2 ** 20: print(f"  {p} is over Cloudflare Pages' 25 MiB file limit", file=sys.stderr)
+    if missing: print("  missing files (not copied):", ", ".join(missing), file=sys.stderr)
+    with open(os.path.join(SITE, "index.html"), "w", encoding="utf-8", newline="") as f: f.write(html)
+    print(f"dist/site/: index.html + {len(files) - len(missing)} files ({total / 1e6:.1f} MB)")
+
+
 if __name__ == "__main__":
     if "--single" in sys.argv:
         unused_warning(order()); single()
+    elif "--site" in sys.argv:
+        unused_warning(order()); site()
     elif "--only" in sys.argv:
         ids = sys.argv[sys.argv.index("--only") + 1].split(",")
         build(ids, "preview.html"); print(f"preview.html: {', '.join(ids)}")

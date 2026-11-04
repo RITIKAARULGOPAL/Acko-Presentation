@@ -11,8 +11,8 @@
 </head>
 <body>
 <!-- slide:start -->
-<section class="scene" id="s-acko" data-part="1" data-mode="grey" data-title="What defines ACKO" data-steps="1" data-mins="0.6"
-  data-notes="ACKO is India's first fully digital insurer: simple, transparent, technology-driven, customer-centric. No paperwork, no intermediaries; data, AI and digital experience instead. Five words define the brand: confidence, trust, protection, assurance, empowerment. People-centric, technology-first, transparent.">
+<section class="scene" id="s-acko" data-part="1" data-mode="grey" data-title="What defines ACKO" data-steps="2" data-mins="0.6" data-beats="The five values,Their second pictures"
+  data-notes="ACKO is India's first fully digital insurer: simple, transparent, technology-driven, customer-centric. No paperwork, no intermediaries; data, AI and digital experience instead. Five words define the brand: confidence, trust, protection, assurance, empowerment. People-centric, technology-first, transparent. 2 · A click: each value turns to its second picture.">
   <div class="page">
     <div class="hdr"><b>Brand Understanding</b><span>Design concept</span></div>
     <div class="val-strips">
@@ -36,8 +36,12 @@
 .val-strip > b { flex: none; height: 9.9%; display: grid; place-items: center; background: #666; color: #d9d9d9; font-weight: 400; font-size: calc(var(--pt) * 9); }
 .val-strip > div { position: relative; flex: none; height: 87.1%; overflow: hidden; background: #ddd; }
 .val-strip > div i { position: absolute; inset: 0; background: center / cover no-repeat; }
-.val-strip > div i + i { opacity: 0; transition: opacity 1.2s var(--ease); }
-.val-strip.swap > div i + i { opacity: 1; }
+/* beat 2: each strip's second picture wipes down over the first, one after another (as the shutters open), the first sinking
+   back under it; going back to beat 1 the wipe runs up again */
+.val-strip > div i:first-child { transition: transform 1.3s var(--ease), filter 1.3s var(--ease); transition-delay: calc(var(--i) * 180ms); }
+.val-strip.swap > div i:first-child { transform: scale(1.08); filter: brightness(.55); }
+.val-strip > div i + i { clip-path: inset(0 0 100% 0); transform: scale(1.12); transition: clip-path 1.1s var(--ease), transform 1.6s var(--ease); transition-delay: calc(var(--i) * 180ms); }
+.val-strip.swap > div i + i { clip-path: inset(0); transform: none; }
 .val-strip > div { transform: scaleY(0); transform-origin: top; transition: transform 1s var(--ease); transition-delay: calc(var(--i) * 160ms + 150ms); }
 .go .val-strip > div { transform: none; }
 /* the words in their PPT boxes (slide 4): x, y, width, height; the box's anchor and inset */
@@ -45,17 +49,17 @@
 .val-p { left: 7.31%; top: 61.64%; width: 84.21%; height: 9.58%; justify-content: center; padding: calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 8); line-height: 1.3; }
 .val-p b { font-weight: 700; }
 .val-hand { left: 7.64%; top: 71.22%; width: 34%; height: 8.36%; justify-content: flex-end; padding: calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 18); line-height: 1.05; }
-.val-words { left: 24.14%; top: 71.22%; width: 67.38%; height: 8.36%; justify-content: center; padding: calc(var(--pt) * 2.7) calc(var(--pt) * 5.4); white-space: pre; font-size: calc(var(--pt) * 10); font-weight: 700; line-height: 1.2; color: var(--violet); }
+.val-words { left: 24.14%; top: 71.22%; width: 67.38%; height: 8.36%; justify-content: center; padding: calc(var(--pt) * 2.7) calc(var(--pt) * 5.4); white-space: pre; font-size: calc(var(--pt) * 10); font-weight: 700; line-height: 1.2; color: var(--purple-2); }   /* the deep purple of slide 5's "Why an insurance?" (30 Oct) */
 </style>
 <script>
-/* what defines ACKO (deck slide 4): the five values open like shutters; then, slowly, each strip turns to its second picture
-   (the deck's click swaps the first) */
-ACKO.slide("s-acko", ({ $, $$, plain, reveal, later }) => ({
+/* what defines ACKO (deck slide 4): 1 the five values open like shutters; 2 a click, and each strip wipes down to its second
+   picture, one after another (30 Oct: a beat of its own, and a wipe, not a slow fade) */
+ACKO.slide("s-acko", ({ $, $$, plain, reveal }) => ({
   enter(_, sc) {
-    plain(); const strips = $$(".val-strip", sc); strips.forEach((s) => s.classList.remove("swap"));
+    plain(); $$(".val-strip", sc).forEach((s) => s.classList.remove("swap"));
     reveal($(".page", sc), 100);
-    strips.forEach((s, i) => later(() => s.classList.add("swap"), 4200 + i * 900));
   },
+  step(k, sc) { $$(".val-strip", sc).forEach((s) => s.classList.toggle("swap", k >= 2)); },
 }));
 </script>
 <!-- slide:end -->

@@ -25,7 +25,7 @@
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
-    <div class="st-tools ui" style="right:11.5%;top:3.2%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
+    <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
   </div>
 </section>
 <style>
@@ -74,12 +74,13 @@
 /* beat 3: the departments are configurable (Ritika, 23 Oct; no text, her note 26 Oct): the names clickable once it has played */
 #s-strategy.st-cfg-live .st-z.dept.on { pointer-events: auto; cursor: pointer; }
 #s-strategy .st-z.picked { text-decoration: underline; text-decoration-color: #5222d0; text-decoration-thickness: .12em; text-underline-offset: .14em; }
-#s-strategy .st-tools { display: flex; gap: calc(var(--pt) * 4); }
-#s-strategy .st-tool { display: flex; align-items: center; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 2.5) calc(var(--pt) * 6);
-  border: 1px solid rgba(82, 34, 208, .35); border-radius: 99px; background: rgba(255, 255, 255, .9); color: #5222d0; cursor: pointer;
-  font: 600 calc(var(--pt) * 6.5) var(--body); white-space: nowrap; }
-#s-strategy .st-tool svg { width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-#s-strategy .st-tool:hover { background: #5222d0; color: #fff; border-color: #5222d0; }
+/* the tools as the plan pages have theirs (s-layout .ly-tools, 3 Nov): one white bar just left of the ACKO symbol */
+#s-strategy .st-tools { display: flex; border: 1px solid #e3def2; border-radius: calc(var(--pt) * 3); background: #fff; overflow: hidden; }
+#s-strategy .st-tool { display: flex; align-items: center; gap: calc(var(--pt) * 2); height: calc(var(--pt) * 11); padding: 0 calc(var(--pt) * 4); border: 0; border-left: 1px solid #e3def2;
+  background: none; color: #3b3550; font: 500 calc(var(--pt) * 5.2) var(--body); white-space: nowrap; cursor: pointer; transition: background .2s, color .2s; }
+#s-strategy .st-tool:first-child { border-left: 0; }
+#s-strategy .st-tool svg { flex: none; width: calc(var(--pt) * 5.6); height: calc(var(--pt) * 5.6); fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+#s-strategy .st-tool:hover { color: var(--purple); background: rgba(82, 34, 208, .05); }
 #s-strategy .st-tool:focus { outline: none; }
 </style>
 <script>

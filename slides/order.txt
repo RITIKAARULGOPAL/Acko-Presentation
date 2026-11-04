@@ -22,6 +22,13 @@ s-strategy
 # 2 · DESIGN STRATEGY (deck 14–15)
 s-challenges
 s-typologies
+s-site
+
+# 5 · LAYOUT (3 Nov: the section after Design strategy, as Space planning was renamed; data-part 5)
+s-layout
+s-engage
+s-wayfinding
+s-wayday
 
 # 3 · VISUAL DIRECTION (deck 20, 24–45): the campus palette, then the walk, one slide per space (Reception first)
 s-palette2
@@ -42,18 +49,14 @@ s-w-zen
 s-w-studio
 
 # 4 · VALUE ADDITION (deck 46, 47, 48, 52)
-s-engage
 s-material
 s-acoustic
-s-wayfinding
 
-# 5 · SPACE PLANNING (deck 53–54: the blow-ups 55–57 and the schematic axo 58–60 removed 28 Oct, A day in ACKO shows the axo; 61, the occupancy chart, is the layout's Occupancy panel)
-s-layout
-s-wayday
+# 6 · WALKTHROUGH (the walkthrough, then Thank you; data-part 6)
+s-walkthrough
 s-thanks
 
-# APPENDIX · its own deck (the site, then deck 49–51)
-s-site
+# APPENDIX · its own deck (deck 49–51; the site moved to Design strategy 2 Nov)
 s-wellbeing
 s-di
 s-esg

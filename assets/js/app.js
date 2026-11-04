@@ -121,7 +121,7 @@
   /* ======================= chrome ======================= */
   const ov = $("#overview-grid");
   // the deck's sections, in the PPT's order
-  const PARTS = { cover: "Opening", 1: "Design concept", 2: "Design strategy", 3: "Visual direction", 4: "Value addition", 5: "Space planning", A: "Appendix", 0: "About SKV" };
+  const PARTS = { cover: "Opening", 1: "Design concept", 2: "Design strategy", 3: "Visual direction", 4: "Value addition", 5: "Layout", 6: "Walkthrough", A: "Appendix", 0: "About SKV" };
   const front = (s) => s.dataset.part === "cover" || s.dataset.part === "0";
   const nonum = (s) => s.hasAttribute("data-nonum");
   const journey = scenes.filter((s) => !front(s) && !nonum(s) && s.dataset.part !== "A");
@@ -141,12 +141,12 @@
     o.onclick = (e) => { const beat = e.target.closest("[data-beat]"); toggleOverview(false); go(i, beat ? +beat.dataset.beat : 1); };
     grid.appendChild(o);
   });
-  /* the sections list behind the ACKO symbol (top right): hover lists the deck's five sections — past ink, now purple,
+  /* the sections list behind the ACKO symbol (top right): hover lists the deck's sections (those with slides) — past ink, now purple,
      next pale — and a click opens one */
-  const TOPICS = { main: [["1", "Design concept"], ["2", "Design strategy"], ["3", "Visual direction"], ["4", "Value addition"], ["5", "Space planning"]], appendix: [["A", "Appendix"]], skv: [["0", "About SKV"]] };
+  const TOPICS = { main: [["1", "Design concept"], ["2", "Design strategy"], ["5", "Layout"], ["3", "Visual direction"], ["4", "Value addition"], ["6", "Walkthrough"]], appendix: [["A", "Appendix"]], skv: [["0", "About SKV"]] };
   const firstOf = (p) => scenes.findIndex((s) => s.dataset.part === p);
   function topicMark(track) {
-    const tp = TOPICS[track] || TOPICS.main, n = tp.length;
+    const tp = (TOPICS[track] || TOPICS.main).filter(([p]) => firstOf(p) >= 0), n = tp.length;   // only sections that have slides
     $("#tm-list").innerHTML = (track === "main" ? `<button type="button" data-part="cover"><b>—</b>Cover</button>` : "") +
       tp.map(([p, nm], k) => `<button type="button" data-part="${p}"><b>${n > 1 ? String(k + 1).padStart(2, "0") : ""}</b>${nm}</button>`).join("");
     $$("#topic-mark [data-part]").forEach((el) => (el.onclick = (e) => {
@@ -385,6 +385,10 @@
     const O = P.overlays, tri = (x, y) => `M${x - 900} ${y - 600}L${x + 900} ${y - 600}L${x} ${y + 900}Z`;
     // the floor outside the contract (the hotel band, its cores), dulled under a veil of the page's white, over the plan's drawing
     DP.ph.addLayer("dx-nic", (O.nic || []).map((d) => `<path d="${d}"/>`).join(""));
+    // a neighbourhood picked out (focusZone): the rest of the floor under a white veil, the picked one clear (3 Nov), one cut-out per
+    // neighbourhood, shown by markZone
+    const V = 60000;
+    DP.ph.addLayer("dx-dim", P.zones.map((z) => `<path data-nb="${z.n}" fill-rule="evenodd" d="M${vx - V} ${vy - V}H${vx + vw + V}V${vy + vh + V}H${vx - V}Z${z.zone}"/>`).join(""));
     DP.ph.addLayer("dx-marks",
       // the two arrival zones: the receptions in front of the lift lobbies, the west one merged with its coffee point (plan_deck.py)
       `<g class="dx-arrival">${(O.arrive || []).map((a) => `<path class="f" d="${a.fill}"/><path class="e" d="${a.edge}"/>`).join("")}</g>` +
@@ -510,7 +514,7 @@
     DP.zone = z;
     DP.root.classList.remove("focus"); $$(".dx-marks .hi", DP.root).forEach((p) => p.classList.remove("hi"));   // a row's hover, done with
     DP.root.classList.toggle("focus-zone", !!z);
-    $$(".dx-nb [data-nb], .dx-lab [data-nb]", DP.root).forEach((e) => e.classList.toggle("sel", !!z && e.dataset.nb === z.n));
+    $$(".dx-nb [data-nb], .dx-lab [data-nb], .dx-dim [data-nb]", DP.root).forEach((e) => e.classList.toggle("sel", !!z && e.dataset.nb === z.n));
     $$(".ph-team", DP.root).forEach((g) => g.classList.toggle("sel", !!z && g.dataset.id === z.id));
   }
   function focusZone(id, disp) {
@@ -597,10 +601,15 @@
   });
   ["change", "pointerup"].forEach((ev) => LVL.addEventListener(ev, () => LVL.blur()));
   // pan mode: the render grows and follows a drag, never past its edges
-  const PAN = { on: false, x: 0, y: 0, drag: null, s: 1.35 };
+  // pan mode (2 Nov): the render fitted to the page, as small as fills it (the whole height of a wide render), dragged across the rest
+  const PAN = { on: false, x: 0, y: 0, drag: null, s: 1 };
   function panTo(x, y) {
     const c = PHOTO.cur && $(".cover", PHOTO.cur);
-    if (c) { const w = c.offsetWidth * PAN.s, h = c.offsetHeight * PAN.s, mx = Math.max(0, (w - innerWidth) / 2), my = Math.max(0, (h - innerHeight) / 2); x = clamp(x, -mx, mx); y = clamp(y, -my, my); }
+    if (c && c.offsetWidth) {
+      const fw = Math.min(innerWidth, innerHeight * 16 / 9), fh = fw * 9 / 16;      // the page's frame (the letterbox masks the rest)
+      PAN.s = Math.max(fw / c.offsetWidth, fh / c.offsetHeight); PHL.style.setProperty("--ps", PAN.s);
+      const mx = Math.max(0, (c.offsetWidth * PAN.s - fw) / 2), my = Math.max(0, (c.offsetHeight * PAN.s - fh) / 2); x = clamp(x, -mx, mx); y = clamp(y, -my, my);
+    }
     PAN.x = x; PAN.y = y; PHL.style.setProperty("--px", x + "px"); PHL.style.setProperty("--py", y + "px");
   }
   function setPan(on) { PAN.on = on; PHL.classList.toggle("pan", on); $("#wk-pan").classList.toggle("on", on); panTo(0, 0); }
@@ -608,6 +617,15 @@
   PHL.addEventListener("pointerdown", (e) => { if (!PAN.on || e.button !== 0) return; e.preventDefault(); PAN.drag = { x0: e.clientX, y0: e.clientY, px: PAN.x, py: PAN.y }; PHL.classList.add("dragging"); });
   addEventListener("pointermove", (e) => { const d = PAN.drag; if (d) panTo(d.px + (e.clientX - d.x0), d.py + (e.clientY - d.y0)); });
   addEventListener("pointerup", () => { if (PAN.drag) { PAN.drag = null; PHL.classList.remove("dragging"); } });
+  // full view: the render alone, and the browser full screen; the button, Esc or leaving the walk brings the rest back
+  function setFull(on) {
+    document.body.classList.toggle("wk-full", on); $("#wk-full").classList.toggle("on", on);
+    if (on && !document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
+    if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  }
+  $("#wk-full").onclick = () => setFull(!document.body.classList.contains("wk-full"));
+  document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && document.body.classList.contains("wk-full")) setFull(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && document.body.classList.contains("wk-full")) { setFull(false); e.stopImmediatePropagation(); } }, true);
   let kpOn = true;
   $("#wk-kp").onclick = () => { kpOn = !kpOn; $("#wk-kp").classList.toggle("on", kpOn); document.body.classList.toggle("kp-off", !kpOn); };
   // the keyplan: the deck's keyplan image, framed around its camera mark (a little wider than the deck's crop)
@@ -656,7 +674,7 @@
       step(k) { if (s.r[k - 1]) walkShow(s, k); },
       leave() {
         setPan(false); document.body.classList.remove("in-walk");
-        setTimeout(() => { if (!isWalk(scenes[state.idx])) AUD.stop(); }, 0);
+        setTimeout(() => { if (!isWalk(scenes[state.idx])) { AUD.stop(); setFull(false); } }, 0);
       },
     };
   }

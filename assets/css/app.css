@@ -78,7 +78,9 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 .hint { position: fixed; left: var(--gutter); bottom: calc(var(--ptop) + var(--ph) * .022); z-index: 40; font-family: var(--body); font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--soft); pointer-events: none; transition: color .5s; }
 .lockup { position: fixed; right: calc(var(--pl) + var(--pw) * .018); bottom: calc(var(--ptop) + var(--ph) * .018); z-index: 40; display: flex; align-items: center; gap: calc(var(--pt) * 4); }
 .lockup img { height: calc(var(--pt) * 7.5); width: auto; }
-.lockup #brand-skv img { height: calc(var(--pt) * 10); }
+/* SKV balanced with ACKO (2 Nov, the PPT's lockup): its letters (a quarter of the image) a touch under ACKO's (SKV's are wider), on the same baseline,
+   the cube rising above; its box no taller than ACKO's, so the lockup keeps its place */
+.lockup #brand-skv img { height: calc(var(--pt) * 17.2); margin: calc(var(--pt) * -9.3) 0 calc(var(--pt) * -.4); }
 .lockup i { width: 1px; height: calc(var(--pt) * 9); background: var(--line); }
 .brand-btn { display: inline-flex; align-items: center; border: 0; background: none; padding: 0; cursor: pointer; transition: opacity .25s; }
 .brand-btn:hover { opacity: .75; }
@@ -114,7 +116,7 @@ body.on-photo .lockup i { background: rgba(255,255,255,.6); }
 .shot-frame { position: absolute; inset: 0; transition: opacity .9s var(--ease), transform 1.1s var(--ease); }
 .kb { animation: kb 26s ease-in-out infinite alternate; }
 @keyframes kb { from { transform: scale(1.02); } to { transform: scale(1.1) translate(-1.5%, -1%); } }
-#w-photo.pan .cover { animation: none; transform: translate(var(--px, 0), var(--py, 0)) scale(1.35); transition: transform .25s ease-out; cursor: grab; }
+#w-photo.pan .cover { animation: none; transform: translate(var(--px, 0), var(--py, 0)) scale(var(--ps, 1)); transition: transform .25s ease-out; cursor: grab; }
 #w-photo.pan.dragging .cover { transition: none; cursor: grabbing; }
 /* shade between the world and the slide */
 #shade { position: fixed; inset: 0; z-index: 5; pointer-events: none; transition: opacity .8s var(--ease); opacity: 0; }
@@ -216,17 +218,27 @@ html.cx .cur { display: block; }
 .cur.laser.out .cur-laser { opacity: 0; }
 /* ---------- the walk: one slide per space, render full bleed, OP 01 then OP 02 ---------- */
 body.in-walk .hint, body.in-walk .lockup { z-index: 45; }
-.walk .walk-ctl { position: fixed; top: calc(var(--ptop) + var(--ph) * .1); right: calc(var(--pl) + var(--pw) * .018); z-index: 3; display: flex; gap: 6px; }
-.wk-btn { width: 38px; height: 38px; display: grid; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.3); background: rgba(0,0,0,.35); color: #fff; cursor: pointer; backdrop-filter: blur(6px); }
-.wk-btn:hover { border-color: rgba(255,255,255,.75); }
-.wk-btn.on { border-color: var(--lilac); color: var(--lilac); }
-.wk-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+/* the walk's controls (2 Nov): the plan pages' tool group (s-layout .ly-tools), in its place left of the ACKO symbol: one white bar,
+   a label to each button, purple when on */
+.walk .walk-ctl { position: fixed; top: calc(var(--ptop) + var(--ph) * .033); right: calc(var(--pl) + var(--pw) * .047); z-index: 3; display: flex; border: 1px solid #e3def2; border-radius: calc(var(--pt) * 3); background: #fff; overflow: hidden; transition: opacity .3s; }
+.wk-btn { display: flex; align-items: center; gap: calc(var(--pt) * 2); height: calc(var(--pt) * 11); padding: 0 calc(var(--pt) * 4); border: 0; border-left: 1px solid #e3def2;
+  background: none; color: #3b3550; font: 500 calc(var(--pt) * 5.2) var(--body); white-space: nowrap; cursor: pointer; transition: background .2s, color .2s; }
+.walk-ctl > :first-child, .wk-vol .wk-btn { border-left: 0; }
+.wk-btn:hover { color: var(--purple); background: rgba(82, 34, 208, .05); }
+.wk-btn.on { color: var(--purple); background: rgba(82, 34, 208, .1); }
+.wk-btn:focus { outline: none; }
+.wk-btn svg { flex: none; width: calc(var(--pt) * 5.6); height: calc(var(--pt) * 5.6); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .wk-btn .muted-line, .wk-btn.muted .wave { display: none; }
 .wk-btn.muted .muted-line { display: block; }
-.wk-vol { display: flex; align-items: center; height: 38px; border: 1px solid rgba(255,255,255,.3); background: rgba(0,0,0,.35); backdrop-filter: blur(6px); }
-.wk-vol .wk-btn { border: 0; background: transparent; }
-.wk-vol input[type="range"] { -webkit-appearance: none; appearance: none; width: 80px; height: 2px; margin: 0 12px 0 2px; background: rgba(255,255,255,.4); }
-.wk-vol input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--lilac); cursor: pointer; }
+.wk-vol { display: flex; align-items: center; }
+.wk-vol input[type="range"] { -webkit-appearance: none; appearance: none; width: calc(var(--pt) * 24); height: 2px; margin: 0 calc(var(--pt) * 4) 0 0; background: #d6cdf3; cursor: pointer; }
+.wk-vol input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: calc(var(--pt) * 4); height: calc(var(--pt) * 4); border-radius: 50%; background: var(--purple); cursor: pointer; }
+/* full view (2 Nov): the render alone, the deck's chrome and the walk's overlays hidden; the bar keeps only its Exit, faint, to come back */
+body.wk-full :is(.topbar, .hint, .lockup, .progress, #shade), body.wk-full .walk :is(.wk-kp, .wk-name, .wk-nav) { opacity: 0 !important; visibility: hidden; pointer-events: none; }
+body.wk-full .walk :is(.wk-vol, #wk-pan, #wk-kp) { display: none; }
+body.wk-full .walk .walk-ctl { opacity: .55; } body.wk-full .walk .walk-ctl:hover { opacity: 1; }
+body.wk-full #wk-full { border-left: 0; }
+.wk-btn .shrink, body.wk-full #wk-full .grow { display: none; } body.wk-full #wk-full .shrink { display: inline; }
 .walk .wk-name { position: fixed; left: var(--gutter); bottom: calc(var(--ptop) + var(--ph) * .085); z-index: 3; width: min(36vw, 560px); display: flex; flex-direction: column; gap: 8px; color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.35); }
 .wk-kick { font-size: calc(var(--pt) * 6.5); letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.8); }
 .walk .wk-name h2 { font-size: calc(var(--pt) * 21); font-weight: 600; line-height: 1.08; letter-spacing: -.01em; }
@@ -248,7 +260,7 @@ body.in-walk .hint, body.in-walk .lockup { z-index: 45; }
 .wk-nav button:hover, .wk-nav button.on { color: #fff; }
 .wk-nav button.on b { color: var(--lilac); }
 /* the keyplan, top right under the buttons: the deck's plan crop with its maroon camera mark */
-.walk .wk-kp { position: fixed; top: calc(var(--ptop) + var(--ph) * .1 + 48px); right: calc(var(--pl) + var(--pw) * .018); z-index: 3; width: calc(var(--pw) * .19); aspect-ratio: 16 / 10; background: #fff; border: 1px solid rgba(255,255,255,.5); overflow: hidden; transition: opacity .5s; }
+.walk .wk-kp { position: fixed; top: calc(var(--ptop) + var(--ph) * .1); right: calc(var(--pl) + var(--pw) * .018); z-index: 3; width: calc(var(--pw) * .19); aspect-ratio: 16 / 10; background: #fff; border: 1px solid rgba(255,255,255,.5); overflow: hidden; transition: opacity .5s; }
 body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .wk-kp-in { position: absolute; transform-origin: 0 0; }
 .wk-kp-in img { display: block; width: 100%; height: auto; max-width: none; }
@@ -323,6 +335,12 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 /* one neighbourhood picked out (focusZone): the others dim, its rooms take the hover, the big numbers step aside */
 .dxplan.focus-zone .dx-nb path { opacity: .25; transition-delay: 0s; }
 .dxplan.focus-zone .dx-nb path.sel { opacity: 1; stroke-width: 4; }
+/* the rest of the floor dimmed round a picked neighbourhood (3 Nov) */
+.dx-dim path { fill: #fff; opacity: 0; transition: opacity .6s var(--ease); pointer-events: none; }
+.dx-dim { pointer-events: none; }
+.dxplan.focus-zone .dx-dim path.sel { opacity: .72; }
+.dx-arrival, .dx-entry { transition: opacity .6s var(--ease); }
+.dxplan.focus-zone :is(.dx-arrival, .dx-entry) { opacity: .28; }   /* the marks over the veil, dimmed with the rest */
 .dxplan.focus-zone .dx-lab text, .dxplan.focus-zone .dx-blow text { opacity: 0; transition-delay: 0s; }
 .dxplan.focus-zone .ph-room { pointer-events: all; }
 .dxplan.focus-zone .ph-team.sel .ph-seats { pointer-events: none; }

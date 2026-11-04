@@ -11,10 +11,10 @@
 </head>
 <body>
 <!-- slide:start -->
-<section class="scene" id="s-site" data-part="A" data-title="The site" data-steps="1" data-mins="0.4"
+<section class="scene" id="s-site" data-part="2" data-title="The site" data-steps="1" data-mins="0.4"
   data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up, 56,650 sq ft carpet, for about 640 people. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans.">
   <div class="page">
-    <div class="hdr"><b>The Site</b><span>Appendix</span></div>
+    <div class="hdr"><b>The Site</b><span>Layout</span></div>
     <div class="si-copy rv" style="left:1.8%;top:22%;width:30%">
       <h2 style="--i:0">Regalium, Koramangala</h2>
       <p style="--i:1">Koramangala Industrial Layout, off Hosur Road, Bengaluru.</p>
@@ -38,7 +38,13 @@
 .vm-bld path { fill: #dcd8e3; stroke: #cdc8d6; stroke-width: .4; }
 .vm-foot { fill: #c9b3f3; stroke: #5222d0; stroke-width: 1.4; }
 .vm-plate { fill: #5222d0; opacity: .55; }
-.vm-gate { fill: #980000; }
+/* beat 2, into the floor (3 Nov): the neighbourhood and the copy fade, the plate alone stays, lighter, where the plan will be */
+#vmap .vm-fade { transition: opacity .5s var(--ease); }
+body.si-into #vmap .vm-fade { opacity: 0; }
+#vmap .vm-plate { transition: opacity 1.2s var(--ease); }
+body.si-into #vmap .vm-plate { opacity: .22; }
+#s-site .si-copy { transition: opacity .6s var(--ease); }
+#s-site.si-into .si-copy { opacity: 0; }
 .vm-lab { font-family: var(--body); font-size: 11px; fill: #8a849a; letter-spacing: .06em; }
 .vm-mark circle { fill: #ffffff; stroke: #5222d0; stroke-width: 2; }
 .vm-mark text { font-family: var(--body); font-size: 11px; font-weight: 600; fill: #3b3550; paint-order: stroke; stroke: #f2f1f5; stroke-width: 4px; }
@@ -67,16 +73,17 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
     const water = (S.water || []).map((w) => `<path class="vm-water" d="${w.d}"/>`).join("");
     const rail = (S.rail || []).map((r) => `<path class="vm-rail" d="${r.d}"/>`).join("");
     const hosur = S.hosur.map((seg) => `<path class="vm-hosur" d="M${seg.map((q) => q.join(" ")).join("L")}"/>`).join("");
-    const marks = S.marks.slice(0, 5).map((m) => `<g class="vm-mark" transform="translate(${m.x} ${m.y})"><circle r="6"/><text x="10" y="4">${m.n}</text></g>`).join("");
+    const marks = S.marks.slice(0, 5).map((m) => `<g class="vm-mark" data-t="translate(${m.x} ${m.y})" transform="translate(${m.x} ${m.y})"><circle r="6"/><text x="10" y="4">${m.n}</text></g>`).join("");
     const labels = S.labels.map((l) => `<text class="vm-lab" transform="translate(${l.x} ${l.y}) rotate(${l.a})" text-anchor="middle">${l.t}</text>`).join("");
     svg.setAttribute("viewBox", SV.vb.join(" ")); svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
-    svg.innerHTML = `<g id="vm-root">${land}${water}` +
+    svg.innerHTML = `<g id="vm-root"><g class="vm-fade">${land}${water}` +
       roads.map((r) => `<path class="vm-road c" d="${r.d}" style="stroke-width:${r.w + 2.4}"/>`).join("") +
       roads.map((r) => `<path class="vm-road" d="${r.d}" style="stroke-width:${r.w}"/>`).join("") + rail + hosur +
       `<g class="vm-bld">${S.buildings.map((d) => `<path d="${d}"/>`).join("")}</g>` +
-      `<path class="vm-foot" d="${S.footprint.d}"/><path class="vm-plate" d="${S.onSite.plate}"/>` +
-      `<circle class="vm-gate" cx="${S.gate[0]}" cy="${S.gate[1]}" r="7"/>${labels}${marks}` +
-      `<g class="vm-pin" transform="translate(0 10)"><text y="-62" text-anchor="middle">Regalium · 3rd floor</text></g></g>`;
+      `<path class="vm-foot" d="${S.footprint.d}"/>` +
+      `${labels}${marks}` +
+      `<g class="vm-pin" data-t="translate(0 10)" transform="translate(0 10)"><text y="-62" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
+      `<path class="vm-plate" d="${S.onSite.plate}"/></g>`;
     $("#map-credit").textContent = S.attribution || "© OpenStreetMap contributors, Overture Maps";
     $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"} walk</span></li>`).join("");
     SV.built = true;
@@ -85,23 +92,52 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
     cancelAnimationFrame(SV.raf);
     const svg = $("#vmap"), root = $("#vm-root"), from = SV.vb.slice(), r0 = SV.rot, t0 = performance.now();
     if (!root) return;
-    const set = (v, r) => { SV.vb = v; SV.rot = r; svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); root.setAttribute("transform", `rotate(${r.toFixed(2)} 0 10)`); };
+    // the places' names and Regalium's stay level as the map turns (3 Nov): each turned back by the map's turn about its own point
+    const level = $$("#vm-root .vm-mark, #vm-root .vm-pin");
+    const set = (v, r) => { SV.vb = v; SV.rot = r; svg.setAttribute("viewBox", v.map((q) => q.toFixed(1)).join(" ")); root.setAttribute("transform", `rotate(${r.toFixed(2)} 0 10)`);
+      level.forEach((g) => g.setAttribute("transform", `${g.dataset.t} rotate(${(-r).toFixed(2)})`)); };
     if (!ms || reduced) return set(vb, rot);
     const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
       set(from.map((a, i) => a + (vb[i] - a) * e), r0 + (rot - r0) * e); if (k < 1) SV.raf = requestAnimationFrame(run); };
     SV.raf = requestAnimationFrame(run);
   }
+  // into the floor, played by the Layout as it arrives from here: the plate brought to where the Layout's plan sits (its home on that slide: 2.5–97.5% across, 26.3–50.2% down the
+  // page), the turn already done; the map's viewBox found from where the plate is on screen now
+  const END = [-713, -315, 1150, 647], turn = () => -(window.ACKO_SITE ? window.ACKO_SITE.grid : 11.5);
+  function intoView(sc) {
+    const svg = $("#vmap"), plate = $("#vmap .vm-plate"), pg = $(".page", sc).getBoundingClientRect(), r = svg.getBoundingClientRect();
+    const [vx, vy, vw, vh] = SV.vb, k = Math.max(r.width / vw, r.height / vh), ox = r.left + (r.width - vw * k) / 2, oy = r.top + (r.height - vh * k) / 2;
+    // the plate's own outline on screen (its bounding rect would be the turned box's, too big), sampled along the path
+    const m = plate.getScreenCTM(), L = plate.getTotalLength(), xs = [], ys = [];
+    for (let i = 0; i <= 200; i++) { const q = plate.getPointAtLength((L * i) / 200); xs.push(m.a * q.x + m.c * q.y + m.e); ys.push(m.b * q.x + m.d * q.y + m.f); }
+    const u = (x, y) => [vx + (x - ox) / k, vy + (y - oy) / k];
+    const [ux0, uy0] = u(Math.min(...xs), Math.min(...ys)), [ux1, uy1] = u(Math.max(...xs), Math.max(...ys));
+    const T = { l: pg.left + pg.width * 0.025, t: pg.top + pg.height * 0.263, w: pg.width * 0.95, h: pg.height * 0.239 };
+    const k2 = T.w / (ux1 - ux0), W = r.width / k2, H = r.height / k2;   // the building's length to the plan's (the plate is deeper than the plan)
+    return [(ux0 + ux1) / 2 - (T.l + T.w / 2 - r.left) / k2, (uy0 + uy1) / 2 - (T.t + T.h / 2 - r.top) / k2, W, H];
+  }
   return {
     enter(_, sc) {
       siteMap(); world("map"); shade("left");
+      SV.into = false; document.body.classList.remove("si-into"); sc.classList.remove("si-into");
+      // the zoom into the plate, for the Layout to play when it is entered from here (it runs after this slide has left)
+      sc._into = () => {
+        SV.into = true; document.body.classList.add("si-into"); sc.classList.add("si-into");
+        if (SV.rot !== turn()) view(END, turn(), 0);
+        // the neighbourhood and the copy fade first, the map still; then the plate alone zooms, light to draw (3 Nov: smoother)
+        const to = intoView(sc); shade(""); setTimeout(() => view(to, turn(), 1600), 550);
+      };
       // the whole neighbourhood, then closer, with Regalium right of the copy; then the turn that lines it up with the plans
       view([-1060, -590, 2100, 1180], 0, 0);
-      later(() => view([-860, -360, 1300, 731], 0, 3000), 500);
-      later(() => view([-713, -315, 1150, 647], -(window.ACKO_SITE ? window.ACKO_SITE.grid : 11.5), 1800), 3700);
+      later(() => { if (!SV.into) view([-860, -360, 1300, 731], 0, 3000); }, 500);
+      later(() => { if (!SV.into) view(END, turn(), 1800); }, 3700);
       reveal($(".si-copy", sc), 300);
       $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 900 + i * 150));
     },
-    leave() { cancelAnimationFrame(SV.raf); },
+    leave() {
+      cancelAnimationFrame(SV.raf); SV.into = true;      // the intro's last turn won't come after this
+      document.body.classList.add("si-left"); setTimeout(() => document.body.classList.remove("si-left"), 60);   // for the Layout
+    },
   };
 });
 </script>
