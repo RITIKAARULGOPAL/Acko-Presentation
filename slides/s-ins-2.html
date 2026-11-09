@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Institution · 2 · Three principles · ACKO slide s-ins-2</title>
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-ins-2" data-part="1" data-mode="dark" data-title="Institution · 2 · Three principles" data-steps="1" data-mins="0.4"
+  data-notes="The brief, a Modern Indian Institution, read as three things a campus gives people: a courtyard to gather, pathways to meet on the move, steps to pause. The campus, made for a workplace.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:16%;width:80%"><small style="--i:0">The brief</small><h2 style="--i:1">A Modern Indian Institution.</h2><h3 style="--i:2">Not a building. A campus.</h3></div>
+    <div class="pr rv" style="left:6%;top:44%;width:88%"><div class="pr-c" style="--i:3"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:0.5s"><rect pathLength="1" x="20" y="14" width="80" height="62" rx="3"/><rect pathLength="1" x="42" y="30" width="36" height="30"/><circle pathLength="1" cx="60" cy="45" r="6"/></g></svg><b>Courtyard</b><span>a place to gather</span></div><div class="pr-c" style="--i:4"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:0.9s"><path pathLength="1" d="M10 70C35 70 35 20 60 20S85 70 110 70"/><path pathLength="1" d="M10 58C35 58 35 8 60 8S85 58 110 58" style="opacity:.45"/></g></svg><b>Pathway</b><span>a way to meet on the move</span></div><div class="pr-c" style="--i:5"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:1.3s"><path pathLength="1" d="M18 76H102M28 64H92M38 52H82M48 40H72"/><circle pathLength="1" cx="60" cy="24" r="7"/></g></svg><b>Steps</b><span>a place to pause</span></div></div>
+    <p class="ix-hand hand" style="left:6%;top:80%;width:70%;--hd:2.4s">…the campus, made for a workplace.</p>
+    <div class="ins-chip">Option 2 · Three principles</div>
+  </div>
+</section>
+<style>
+
+#s-ins-2 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-2 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-2 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-2 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-2 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-2 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-2 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-2 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-2 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-2 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-2 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-2 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-2 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-2 .pr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4%; }
+#s-ins-2 .pr-c { display: flex; flex-direction: column; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 10) calc(var(--pt) * 12); border: 1px solid rgba(201,179,243,.3); border-radius: calc(var(--pt) * 6); }
+#s-ins-2 .pr-c svg { width: 46%; height: auto; margin-bottom: calc(var(--pt) * 6); }
+#s-ins-2 .pr-c .ln > * { --d: inherit; }
+#s-ins-2 .pr-c b { font-size: calc(var(--pt) * 17); color: #fff; }
+#s-ins-2 .pr-c span { font-size: calc(var(--pt) * 10.5); color: rgba(255,255,255,.7); }
+</style>
+<script>
+ACKO.slide("s-ins-2", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) { plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

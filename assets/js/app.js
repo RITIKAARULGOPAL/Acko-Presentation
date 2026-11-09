@@ -121,7 +121,8 @@
   /* ======================= chrome ======================= */
   const ov = $("#overview-grid");
   // the deck's sections, in the PPT's order
-  const PARTS = { cover: "Opening", 1: "Design concept", 2: "Design strategy", 3: "Visual direction", 4: "Value addition", 5: "Layout", 6: "Walkthrough", A: "Appendix", 0: "About SKV" };
+  const SECT = window.ACKO_SECTIONS || {};   // a page may name its own sections (index-approach.html); the deck itself doesn't
+  const PARTS = Object.assign({ cover: "Opening", 1: "Design concept", 2: "Design strategy", 3: "Visual direction", 4: "Value addition", 5: "Layout", 6: "Walkthrough", A: "Appendix", 0: "About SKV" }, SECT.names || {});
   const front = (s) => s.dataset.part === "cover" || s.dataset.part === "0";
   const nonum = (s) => s.hasAttribute("data-nonum");
   const journey = scenes.filter((s) => !front(s) && !nonum(s) && s.dataset.part !== "A");
@@ -143,12 +144,12 @@
   });
   /* the sections list behind the ACKO symbol (top right): hover lists the deck's sections (those with slides) — past ink, now purple,
      next pale — and a click opens one */
-  const TOPICS = { main: [["1", "Design concept"], ["2", "Design strategy"], ["5", "Layout"], ["3", "Visual direction"], ["4", "Value addition"], ["6", "Walkthrough"]], appendix: [["A", "Appendix"]], skv: [["0", "About SKV"]] };
+  const TOPICS = { main: SECT.main || [["1", "Design concept"], ["2", "Design strategy"], ["5", "Layout"], ["3", "Visual direction"], ["4", "Value addition"], ["6", "Walkthrough"]], appendix: [["A", "Appendix"]], skv: [["0", "About SKV"]] };
   const firstOf = (p) => scenes.findIndex((s) => s.dataset.part === p);
   function topicMark(track) {
     const tp = (TOPICS[track] || TOPICS.main).filter(([p]) => firstOf(p) >= 0), n = tp.length;   // only sections that have slides
     $("#tm-list").innerHTML = (track === "main" ? `<button type="button" data-part="cover"><b>—</b>Cover</button>` : "") +
-      tp.map(([p, nm], k) => `<button type="button" data-part="${p}"><b>${n > 1 ? String(k + 1).padStart(2, "0") : ""}</b>${nm}</button>`).join("");
+      tp.map(([p, nm, num], k) => `<button type="button" data-part="${p}"><b>${num != null ? num : n > 1 ? String(k + 1).padStart(2, "0") : ""}</b>${nm}</button>`).join("");   // a page may give each section its own number
     $$("#topic-mark [data-part]").forEach((el) => (el.onclick = (e) => {
       e.stopPropagation(); if (document.activeElement) document.activeElement.blur();
       if (el.dataset.part === "cover") state.t0 = null;
@@ -668,7 +669,7 @@
         $("#wk-n").innerHTML = `${s.n || sc.dataset.title}<small>${s.sub || ""}</small>`;
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
         $("#wk-opt").innerHTML = s.r.length > 1 ? (s.tags || ["OP 01", "OP 02"]).map((t) => `<span>${t}</span>`).join("") : "";
-        $("#wk-kick").textContent = `Visual Direction · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
+        $("#wk-kick").textContent = `${(SECT.names && SECT.names[sc.dataset.part]) || "Visual Direction"} · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
         AUD.play();
       },
       step(k) { if (s.r[k - 1]) walkShow(s, k); },

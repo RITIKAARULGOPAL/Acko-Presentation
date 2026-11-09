@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belonging lite · 3 · One word · ACKO slide s-blw-3</title>
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-blw-3" data-part="1" data-title="Belonging lite · 3 · One word" data-steps="3" data-mins="0.3" data-beats="Belong,Institution,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <div class="wd" data-only="1"><h2><sup><span data-count="58">0</span>%</sup>belong.</h2></div>
+    <div class="wd" data-only="2"><h2>institution.</h2></div>
+    <div class="wd" data-only="3"><h2 class="last">campus.</h2></div>
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">Option 3 · One word at a time</div>
+  </div>
+</section>
+<style>
+#s-blw-3 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-3 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-3 .page:not(.b2) [data-step="2"], #s-blw-3 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-3 .wd { left: 0; top: 34%; width: 100%; text-align: center; }
+#s-blw-3 .wd h2 { margin: 0; font-size: calc(var(--pt) * 96); line-height: 1; font-weight: 700; color: #1e1a2e; letter-spacing: -.02em; }
+#s-blw-3 .wd h2.last { color: var(--purple); }
+#s-blw-3 .wd sup { font-size: .32em; vertical-align: top; margin-right: .25em; color: var(--purple); letter-spacing: 0; }
+</style>
+<script>
+ACKO.slide("s-blw-3", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 3; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Modern Indian Institution · ACKO slide s-institution</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-institution" data-part="1" data-mode="dark" data-title="A Modern Indian Institution" data-steps="1" data-mins="0.4"
+  data-notes="The brief asked for a Modern Indian Institution. India's great institutions, Nalanda, Takshashila, were campuses, not buildings: pathways, courtyards and steps, where people learnt, met and belonged. So where did we first feel at home among people? On a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+    <div class="in-copy rv" style="left:6%;top:24%;width:46%">
+      <small style="--i:0">The brief</small>
+      <h2 style="--i:1">A Modern Indian Institution.</h2>
+      <h3 style="--i:2">Not a building. A campus.</h3>
+      <p style="--i:3">Nalanda. Takshashila. India’s great institutions were campuses: pathways, courtyards and steps, where people learnt, met and belonged.</p>
+    </div>
+    <p class="in-hand hand" style="left:6%;top:76%;width:60%">…where we first felt at home among people.</p>
+    <svg class="in-plan" viewBox="0 0 400 260" aria-hidden="true" style="left:56%;top:22%;width:38%;height:56%">
+      <g class="ln">
+        <rect pathLength="1" x="10" y="10" width="380" height="240" rx="4"/>
+        <rect pathLength="1" x="130" y="75" width="140" height="110"/>
+        <path pathLength="1" d="M200 10V75"/><path pathLength="1" d="M200 185V250"/><path pathLength="1" d="M10 130H130"/><path pathLength="1" d="M270 130H390"/>
+        <path pathLength="1" d="M180 232H220M184 240H216M188 248H212"/>
+        <circle pathLength="1" cx="200" cy="130" r="20"/><circle pathLength="1" cx="200" cy="130" r="8"/>
+      </g>
+      <g class="col"><circle cx="140" cy="85" r="3"/><circle cx="175" cy="85" r="3"/><circle cx="225" cy="85" r="3"/><circle cx="260" cy="85" r="3"/>
+        <circle cx="140" cy="175" r="3"/><circle cx="175" cy="175" r="3"/><circle cx="225" cy="175" r="3"/><circle cx="260" cy="175" r="3"/>
+        <circle cx="140" cy="130" r="3"/><circle cx="260" cy="130" r="3"/></g>
+      <g class="tag">
+        <text x="200" y="135" text-anchor="middle" dy="-30">courtyard</text>
+        <text x="70" y="124" text-anchor="middle">pathway</text>
+        <text x="200" y="226" text-anchor="middle">steps</text>
+      </g>
+    </svg>
+  </div>
+</section>
+<style>
+/* ---------- a Modern Indian Institution (03 · Spot the opportunity, between the people's challenge and the memories): the brief,
+   on black, beside a campus plan that draws itself ---------- */
+#s-institution .in-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-institution .in-copy h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-institution .in-copy h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-institution .in-copy p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-institution .in-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease) 2.6s, transform .9s var(--ease) 2.6s; }
+#s-institution .page.drawn .in-hand { opacity: 1; transform: none; }
+/* the campus plan: its lines draw on one after another; the colonnade and the names follow */
+#s-institution .in-plan .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-institution .page.drawn .in-plan .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); }
+#s-institution .page.drawn .in-plan .ln > :nth-child(1) { transition-delay: .2s; }
+#s-institution .page.drawn .in-plan .ln > :nth-child(2) { transition-delay: .7s; }
+#s-institution .page.drawn .in-plan .ln > :nth-child(n+3):nth-child(-n+6) { transition-delay: 1.1s; }
+#s-institution .page.drawn .in-plan .ln > :nth-child(n+7) { transition-delay: 1.5s; }
+#s-institution .in-plan .col circle { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-institution .page.drawn .in-plan .col circle { opacity: 1; transition-delay: 1.9s; }
+#s-institution .in-plan .tag text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-institution .page.drawn .in-plan .tag text { opacity: 1; transition-delay: 2.2s; }
+</style>
+<script>
+/* a Modern Indian Institution: the words come in; the campus plan draws itself (wall, courtyard, pathways, steps, the tree), then
+   its colonnade and names; last, the line that hands over to the memories */
+ACKO.slide("s-institution", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) {
+    plain();
+    const pg = $(".page", sc);
+    pg.classList.remove("drawn"); void pg.offsetWidth;
+    reveal($(".in-copy", sc), 120);
+    if (reduced) pg.classList.add("drawn"); else setTimeout(() => pg.classList.add("drawn"), 40);
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

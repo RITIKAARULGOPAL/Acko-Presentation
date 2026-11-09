@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belonging lite · 1 · Ring · ACKO slide s-blw-1</title>
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-blw-1" data-part="1" data-title="Belonging lite · 1 · Ring" data-steps="2" data-mins="0.3" data-beats="58% to belong,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <svg class="ring" viewBox="0 0 300 300" aria-hidden="true" style="left:35%;top:12%;width:30%;height:72%">
+      <circle class="trk" cx="150" cy="150" r="118"/><circle class="arc" cx="150" cy="150" r="118" pathLength="100" transform="rotate(-90 150 150)"/>
+    </svg>
+    <div class="mid" data-only="1" style="left:35%;top:38%;width:30%"><b><span data-count="58">0</span>%</b><span>to belong</span></div>
+    <div class="mid" data-only="2" style="left:35%;top:42%;width:30%"><b class="c">campus.</b></div>
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">Option 1 · Ring</div>
+  </div>
+</section>
+<style>
+#s-blw-1 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-1 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-1 .page:not(.b2) [data-step="2"], #s-blw-1 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-1 .ring .trk { fill: none; stroke: #ece8f5; stroke-width: 20; }
+#s-blw-1 .ring .arc { fill: none; stroke: var(--purple); stroke-width: 20; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.6s var(--ease), stroke .8s var(--ease); }
+#s-blw-1 .page.drawn .ring .arc { stroke-dashoffset: 42; transition-delay: .3s; }
+#s-blw-1 .page.drawn.b2 .ring .arc { stroke-dashoffset: 0; stroke: #a98ff0; transition-delay: 0s; }
+#s-blw-1 .mid { display: flex; flex-direction: column; align-items: center; text-align: center; }
+#s-blw-1 .mid b { font-size: calc(var(--pt) * 64); line-height: 1; font-weight: 700; color: var(--purple); }
+#s-blw-1 .mid b.c { font-size: calc(var(--pt) * 34); }
+#s-blw-1 .mid > span { font-size: calc(var(--pt) * 15); color: #555; margin-top: calc(var(--pt) * 4); }
+</style>
+<script>
+ACKO.slide("s-blw-1", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

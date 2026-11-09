@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-chx-0">
+/* ---------- the challenge → the solution (slides 6–7), lavender ---------- */
+.ch-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.ch-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+/* the four words as the PPT sets them (3 Nov): a small handwritten label, a dotted lead down to its icon, the icon standing on the
+   grid's line (78.5%) */
+.ch-words { display: grid; grid-template-columns: repeat(4, 1fr); }
+.ch-word { position: relative; text-align: center; }
+.ch-word .a, .ch-word .b { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.ch-word span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+.ch-word span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+.ch-word img { height: calc(var(--pt) * 30); width: auto; margin: 0 auto; mix-blend-mode: multiply; }
+.ch-word:nth-child(4) .a img { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }   /* the plug: its picture has more air round it */
+/* the solution's words (beat 2) as the PPT sets them: the longer labels on two lines, each picture (trimmed to its drawing) at its own size */
+#s-chx-0 .ch-word .b span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chx-0 .ch-word:nth-child(1) .b img, #s-chx-0 .ch-word:nth-child(4) .b img { height: calc(var(--pt) * 24.8); }
+#s-chx-0 .ch-word:nth-child(2) .b img { height: calc(var(--pt) * 23.5); }
+#s-chx-0 .ch-word:nth-child(3) .b img { height: calc(var(--pt) * 31); }
+.ch-word .b { position: absolute; inset: 0; opacity: 0; transition: opacity .8s var(--ease); transition-delay: calc(.7s + var(--i) * 250ms); }
+.ch-word .a { transition: opacity .6s var(--ease); transition-delay: calc(.7s + var(--i) * 250ms); }
+.solved .ch-word .a { opacity: 0; }
+.solved .ch-word .b { opacity: 1; }
+/* the copy as the PPT sets it (3 Nov): the italic line, then the headline, its lead-in regular and the question bold */
+.ch-copy { left: 46.1%; top: 56%; width: 44%; }
+.ch-copy small { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+.ch-copy h3 { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+.ch-copy h3 b { font-weight: 700; }
+/* the order the text comes in (3 Nov): the headline, then the four words one by one, then the line above the headline */
+#s-chx-0 .snap .ch-word .a, #s-chx-0 .snap .ch-word .b { transition: none !important; }
+#s-chx-0 .ch-words.rv > * { transition-delay: calc(var(--i) * 250ms); }
+#s-chx-0 .ch-copy > * { opacity: 0; transform: translateY(10px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chx-0 .ch-copy.shown > * { opacity: 1; transform: none; }
+#s-chx-0 .ch-copy.shown h3 { transition-delay: .1s; }
+#s-chx-0 .ch-copy.shown small { transition-delay: 2.4s; }
+#s-chx-0 .ch-copy.shown .one { transition-delay: 3s; }                /* beat 2: One Place One Experience, last */
+.ch-copy .one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; }
+#s-chx-0 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+</style>
+<style data-slide="s-chx-1">
+/* ---------- challenge + solution on one slide · way 1 (a comparison slide, not in the deck) ---------- */
+#s-chx-1 .cx-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-chx-1 .cx-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+#s-chx-1 .cx-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+/* a word as the PPT sets it: a small handwritten label, a dotted lead down to its icon, the icon standing on the line below */
+#s-chx-1 .cx-w { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; }
+#s-chx-1 .cx-w span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+#s-chx-1 .cx-w span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+#s-chx-1 .cx-w.sol span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chx-1 .cx-w img, #s-chx-1 .cx-cell img, #s-chx-1 .cx-col img { height: calc(var(--pt) * 30); width: auto; mix-blend-mode: multiply; }
+#s-chx-1 img.i-plug { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }
+#s-chx-1 img.i-fam, #s-chx-1 img.i-dyn { height: calc(var(--pt) * 24.8); }
+#s-chx-1 img.i-com { height: calc(var(--pt) * 23.5); }
+#s-chx-1 img.i-spa { height: calc(var(--pt) * 31); }
+#s-chx-1 .cx-kick { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+#s-chx-1 .cx-h { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+#s-chx-1 .cx-h b { font-weight: 700; }
+#s-chx-1 .cx-one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; white-space: nowrap; }
+/* beat 2: the solution's parts come in one after another; the challenge stays, a little quieter */
+#s-chx-1 [data-step="2"] .st { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chx-1 [data-step="2"].shown .st { opacity: 1; transform: none; transition-delay: calc(.25s + var(--i, 0) * 220ms); }
+/* stepping back to beat 1: the solution goes at once, without the delays it came in with */
+#s-chx-1 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-chx-1 .dim { transition: opacity .8s var(--ease); }
+#s-chx-1 .b2 .dim { opacity: .62; }
+#s-chx-1 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+
+#s-chx-1 .cx-turn { width: calc(var(--pt) * 14); height: calc(var(--pt) * 14); margin: calc(var(--pt) * -7) 0 0 calc(var(--pt) * -7); border-radius: 50%; background: var(--purple-2); color: #fff;
+  display: grid; place-items: center; font-style: normal; font-size: calc(var(--pt) * 8); }
+</style>
+<style data-slide="s-chx-2">
+/* ---------- challenge + solution on one slide · way 2 (a comparison slide, not in the deck) ---------- */
+#s-chx-2 .cx-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-chx-2 .cx-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+#s-chx-2 .cx-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+/* a word as the PPT sets it: a small handwritten label, a dotted lead down to its icon, the icon standing on the line below */
+#s-chx-2 .cx-w { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; }
+#s-chx-2 .cx-w span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+#s-chx-2 .cx-w span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+#s-chx-2 .cx-w.sol span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chx-2 .cx-w img, #s-chx-2 .cx-cell img, #s-chx-2 .cx-col img { height: calc(var(--pt) * 30); width: auto; mix-blend-mode: multiply; }
+#s-chx-2 img.i-plug { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }
+#s-chx-2 img.i-fam, #s-chx-2 img.i-dyn { height: calc(var(--pt) * 24.8); }
+#s-chx-2 img.i-com { height: calc(var(--pt) * 23.5); }
+#s-chx-2 img.i-spa { height: calc(var(--pt) * 31); }
+#s-chx-2 .cx-kick { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+#s-chx-2 .cx-h { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+#s-chx-2 .cx-h b { font-weight: 700; }
+#s-chx-2 .cx-one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; white-space: nowrap; }
+/* beat 2: the solution's parts come in one after another; the challenge stays, a little quieter */
+#s-chx-2 [data-step="2"] .st { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chx-2 [data-step="2"].shown .st { opacity: 1; transform: none; transition-delay: calc(.25s + var(--i, 0) * 220ms); }
+/* stepping back to beat 1: the solution goes at once, without the delays it came in with */
+#s-chx-2 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-chx-2 .dim { transition: opacity .8s var(--ease); }
+#s-chx-2 .b2 .dim { opacity: .62; }
+#s-chx-2 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+
+#s-chx-2 .cx-pairs { display: grid; grid-template-columns: repeat(4, 1fr); }
+#s-chx-2 .cx-pair { display: flex; flex-direction: column; align-items: center; height: 100%; }
+#s-chx-2 .b2 .cx-pair > .cx-w { opacity: .62; transition-delay: 0s; }
+#s-chx-2 .cx-arrow { position: relative; flex: 1; width: 100%; min-height: calc(var(--pt) * 16); }
+#s-chx-2 .cx-arrow::before { content: ""; position: absolute; left: 50%; top: calc(var(--pt) * 6); bottom: calc(var(--pt) * 8); border-left: 1.5px dashed var(--purple-2); }
+#s-chx-2 .cx-arrow::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 7); width: calc(var(--pt) * 5); height: calc(var(--pt) * 5); margin-left: calc(var(--pt) * -2.5 + .75px);
+  border-right: 1.5px solid var(--purple-2); border-bottom: 1.5px solid var(--purple-2); transform: rotate(45deg); }
+#s-chx-2 .cx-sol .cx-w span { color: var(--purple-2); }
+</style>
+<style data-slide="s-chx-3">
+/* ---------- challenge + solution on one slide · way 3 (a comparison slide, not in the deck) ---------- */
+#s-chx-3 .cx-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-chx-3 .cx-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+#s-chx-3 .cx-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+/* a word as the PPT sets it: a small handwritten label, a dotted lead down to its icon, the icon standing on the line below */
+#s-chx-3 .cx-w { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; }
+#s-chx-3 .cx-w span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+#s-chx-3 .cx-w span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+#s-chx-3 .cx-w.sol span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chx-3 .cx-w img, #s-chx-3 .cx-cell img, #s-chx-3 .cx-col img { height: calc(var(--pt) * 30); width: auto; mix-blend-mode: multiply; }
+#s-chx-3 img.i-plug { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }
+#s-chx-3 img.i-fam, #s-chx-3 img.i-dyn { height: calc(var(--pt) * 24.8); }
+#s-chx-3 img.i-com { height: calc(var(--pt) * 23.5); }
+#s-chx-3 img.i-spa { height: calc(var(--pt) * 31); }
+#s-chx-3 .cx-kick { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+#s-chx-3 .cx-h { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+#s-chx-3 .cx-h b { font-weight: 700; }
+#s-chx-3 .cx-one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; white-space: nowrap; }
+/* beat 2: the solution's parts come in one after another; the challenge stays, a little quieter */
+#s-chx-3 [data-step="2"] .st { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chx-3 [data-step="2"].shown .st { opacity: 1; transform: none; transition-delay: calc(.25s + var(--i, 0) * 220ms); }
+/* stepping back to beat 1: the solution goes at once, without the delays it came in with */
+#s-chx-3 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-chx-3 .dim { transition: opacity .8s var(--ease); }
+#s-chx-3 .b2 .dim { opacity: .62; }
+#s-chx-3 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+
+#s-chx-3 .cx-panel { background: var(--purple-2); opacity: 1 !important; transform: none !important; clip-path: inset(0 100% 0 0); transition: clip-path 1s var(--ease) !important; }
+#s-chx-3 .cx-panel.shown { clip-path: inset(0 0 0 0); }
+#s-chx-3 .inv .cx-kick { color: rgba(255,255,255,.75); }
+#s-chx-3 .inv .cx-h { color: #fff; }
+#s-chx-3 .inv .cx-w span { color: #fff; }
+#s-chx-3 .inv .cx-w span::after { border-left-color: rgba(255,255,255,.8); }
+#s-chx-3 .inv img { filter: invert(1); mix-blend-mode: screen; }
+#s-chx-3 [data-step="2"].shown .st { transition-delay: calc(.5s + var(--i, 0) * 160ms); }
+#s-chx-3 .cx-turn { width: calc(var(--pt) * 16); height: calc(var(--pt) * 16); margin: calc(var(--pt) * -8) 0 0 calc(var(--pt) * -8); border-radius: 50%; background: #fff; color: var(--purple-2);
+  display: grid; place-items: center; font-style: normal; font-size: calc(var(--pt) * 9); box-shadow: 0 2px 10px rgba(40,20,100,.25); transition-delay: .7s; }
+</style>
+<style data-slide="s-chx-4">
+/* ---------- challenge + solution on one slide · way 4 (a comparison slide, not in the deck) ---------- */
+#s-chx-4 .cx-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-chx-4 .cx-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+#s-chx-4 .cx-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+/* a word as the PPT sets it: a small handwritten label, a dotted lead down to its icon, the icon standing on the line below */
+#s-chx-4 .cx-w { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; }
+#s-chx-4 .cx-w span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+#s-chx-4 .cx-w span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+#s-chx-4 .cx-w.sol span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chx-4 .cx-w img, #s-chx-4 .cx-cell img, #s-chx-4 .cx-col img { height: calc(var(--pt) * 30); width: auto; mix-blend-mode: multiply; }
+#s-chx-4 img.i-plug { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }
+#s-chx-4 img.i-fam, #s-chx-4 img.i-dyn { height: calc(var(--pt) * 24.8); }
+#s-chx-4 img.i-com { height: calc(var(--pt) * 23.5); }
+#s-chx-4 img.i-spa { height: calc(var(--pt) * 31); }
+#s-chx-4 .cx-kick { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+#s-chx-4 .cx-h { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+#s-chx-4 .cx-h b { font-weight: 700; }
+#s-chx-4 .cx-one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; white-space: nowrap; }
+/* beat 2: the solution's parts come in one after another; the challenge stays, a little quieter */
+#s-chx-4 [data-step="2"] .st { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chx-4 [data-step="2"].shown .st { opacity: 1; transform: none; transition-delay: calc(.25s + var(--i, 0) * 220ms); }
+/* stepping back to beat 1: the solution goes at once, without the delays it came in with */
+#s-chx-4 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-chx-4 .dim { transition: opacity .8s var(--ease); }
+#s-chx-4 .b2 .dim { opacity: .62; }
+#s-chx-4 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+
+#s-chx-4 .cx-copy .cx-h { transition: opacity .7s var(--ease), transform .7s var(--ease), color .8s var(--ease); }
+#s-chx-4 .b2 .rv .cx-h { color: #7d769a; }
+#s-chx-4 .cx-cols { display: grid; grid-template-columns: repeat(4, 1fr); }
+#s-chx-4 .cx-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; }
+#s-chx-4 .cx-fix { display: block; font-size: calc(var(--pt) * 14); line-height: 1.1; color: var(--purple); margin-bottom: calc(var(--pt) * 3); white-space: nowrap; }
+#s-chx-4 .cx-x { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); transition: color .6s var(--ease); }
+#s-chx-4 .cx-x::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+#s-chx-4 .b2 .cx-x { color: #6f6886; }
+#s-chx-4 .cx-x svg { position: absolute; left: -8%; width: 116%; top: calc(var(--pt) * 3); height: calc(var(--pt) * 8); overflow: visible; }
+#s-chx-4 .cx-x path { fill: none; stroke: var(--plum); stroke-width: 2.4; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .5s var(--ease); }
+#s-chx-4 .b2 .cx-x path { stroke-dashoffset: 0; }
+#s-chx-4 .page:not(.b2) .cx-x path { transition-delay: 0s !important; }
+#s-chx-4 .ics { display: grid; place-items: end center; }
+#s-chx-4 .ics > * { grid-area: 1 / 1; }
+#s-chx-4 .ics .x { transition: opacity .6s var(--ease); }
+#s-chx-4 .b2 .ics .x { opacity: 0; }
+</style>
+<style data-slide="s-chx-5">
+/* ---------- challenge + solution on one slide · way 5 (a comparison slide, not in the deck) ---------- */
+#s-chx-5 .cx-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-chx-5 .cx-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+#s-chx-5 .cx-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+/* a word as the PPT sets it: a small handwritten label, a dotted lead down to its icon, the icon standing on the line below */
+#s-chx-5 .cx-w { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; }
+#s-chx-5 .cx-w span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+#s-chx-5 .cx-w span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+#s-chx-5 .cx-w.sol span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chx-5 .cx-w img, #s-chx-5 .cx-cell img, #s-chx-5 .cx-col img { height: calc(var(--pt) * 30); width: auto; mix-blend-mode: multiply; }
+#s-chx-5 img.i-plug { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }
+#s-chx-5 img.i-fam, #s-chx-5 img.i-dyn { height: calc(var(--pt) * 24.8); }
+#s-chx-5 img.i-com { height: calc(var(--pt) * 23.5); }
+#s-chx-5 img.i-spa { height: calc(var(--pt) * 31); }
+#s-chx-5 .cx-kick { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+#s-chx-5 .cx-h { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+#s-chx-5 .cx-h b { font-weight: 700; }
+#s-chx-5 .cx-one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; white-space: nowrap; }
+/* beat 2: the solution's parts come in one after another; the challenge stays, a little quieter */
+#s-chx-5 [data-step="2"] .st { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chx-5 [data-step="2"].shown .st { opacity: 1; transform: none; transition-delay: calc(.25s + var(--i, 0) * 220ms); }
+/* stepping back to beat 1: the solution goes at once, without the delays it came in with */
+#s-chx-5 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-chx-5 .dim { transition: opacity .8s var(--ease); }
+#s-chx-5 .b2 .dim { opacity: .62; }
+#s-chx-5 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+
+#s-chx-5 .cx-hero .cx-h { font-size: calc(var(--pt) * 20.5); line-height: 1.18; }
+#s-chx-5 .cx-hero.q .cx-h b { font-weight: 400; }
+#s-chx-5 .cx-hero .cx-kick { margin-bottom: calc(var(--pt) * 7); }
+#s-chx-5 .cx-cells { display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; }
+#s-chx-5 .cx-cell { display: flex; align-items: center; gap: calc(var(--pt) * 6); }
+#s-chx-5 .cx-cell img { height: calc(var(--pt) * 24) !important; margin: 0 !important; flex: none; }
+#s-chx-5 .cx-cell span { font-size: calc(var(--pt) * 11); line-height: 1.15; color: #434343; }
+#s-chx-5 .cx-cell.sol span { color: var(--purple-2); max-width: calc(var(--pt) * 62); }
+</style>
+<style data-slide="s-chx-6">
+/* ---------- challenge + solution on one slide · way 6 (a comparison slide, not in the deck) ---------- */
+#s-chx-6 .cx-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-chx-6 .cx-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+#s-chx-6 .cx-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+/* a word as the PPT sets it: a small handwritten label, a dotted lead down to its icon, the icon standing on the line below */
+#s-chx-6 .cx-w { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; }
+#s-chx-6 .cx-w span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+#s-chx-6 .cx-w span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+#s-chx-6 .cx-w.sol span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chx-6 .cx-w img, #s-chx-6 .cx-cell img, #s-chx-6 .cx-col img { height: calc(var(--pt) * 30); width: auto; mix-blend-mode: multiply; }
+#s-chx-6 img.i-plug { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }
+#s-chx-6 img.i-fam, #s-chx-6 img.i-dyn { height: calc(var(--pt) * 24.8); }
+#s-chx-6 img.i-com { height: calc(var(--pt) * 23.5); }
+#s-chx-6 img.i-spa { height: calc(var(--pt) * 31); }
+#s-chx-6 .cx-kick { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+#s-chx-6 .cx-h { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+#s-chx-6 .cx-h b { font-weight: 700; }
+#s-chx-6 .cx-one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; white-space: nowrap; }
+/* beat 2: the solution's parts come in one after another; the challenge stays, a little quieter */
+#s-chx-6 [data-step="2"] .st { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chx-6 [data-step="2"].shown .st { opacity: 1; transform: none; transition-delay: calc(.25s + var(--i, 0) * 220ms); }
+/* stepping back to beat 1: the solution goes at once, without the delays it came in with */
+#s-chx-6 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-chx-6 .dim { transition: opacity .8s var(--ease); }
+#s-chx-6 .b2 .dim { opacity: .62; }
+#s-chx-6 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+
+#s-chx-6 .cx-bridge { overflow: visible; }
+#s-chx-6 .cx-bridge path { fill: none; stroke: var(--purple-2); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+#s-chx-6 .cx-bridge path:first-child { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .9s var(--ease) .2s; }
+#s-chx-6 .cx-bridge.shown path:first-child { stroke-dashoffset: 0; }
+#s-chx-6 .cx-bridge .hd { opacity: 0; transition: opacity .3s var(--ease) 1s; }
+#s-chx-6 .cx-bridge.shown .hd { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<section class="scene" id="s-chx-0" data-part="1" data-mode="lavender" data-title="Challenge + solution · 0 · As today" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="1 · The challenge: bringing people from two existing locations together. Breaking away from an established experience can leave people disoriented, unsettled, displaced, disconnected. 2 · The solution: a protection destination where people have one continuous experience — familiar teams, comfort in the unknown, a different spatial experience, existing team dynamics kept. One place, one experience.">
+  <div class="page">
+    <svg class="ch-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+      <line x1="858" y1="0" x2="858" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/>
+      <line x1="0" y1="567" x2="1920" y2="567"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/>
+    </svg>
+    <div class="ch-words rv" style="left:0;top:59.4%;width:44.7%;height:19.1%">
+      <div class="ch-word" style="--i:0"><div class="a"><span class="hand">Disoriented</span><img src="assets/img/ch-disoriented.webp" alt=""></div><div class="b"><span class="hand">Familiar Teams</span><img src="assets/img/ch-familiar.webp" alt=""></div></div>
+      <div class="ch-word" style="--i:1"><div class="a"><span class="hand">Unsettled</span><img src="assets/img/ch-unsettled.webp" alt=""></div><div class="b"><span class="hand">Comfort in unknown</span><img src="assets/img/ch-comfort.webp" alt=""></div></div>
+      <div class="ch-word" style="--i:2"><div class="a"><span class="hand">Displaced</span><img src="assets/img/ch-displaced.webp" alt=""></div><div class="b"><span class="hand">Different Spatial Experience</span><img src="assets/img/ch-spatial.webp" alt=""></div></div>
+      <div class="ch-word" style="--i:3"><div class="a"><span class="hand">Disconnected</span><img src="assets/img/ch-disconnected.webp" alt=""></div><div class="b"><span class="hand">Existing Team Dynamics</span><img src="assets/img/ch-dynamics.webp" alt=""></div></div>
+    </div>
+    <div class="ch-copy" data-only="1"><small>Breaking Away from the Established Experience</small><h3>&amp; now the challenge at hand is <b>how do we bring in people from two existing locations together.</b></h3></div>
+    <div class="ch-copy" data-only="2"><small>Opening the Way to What’s Next</small><h3>&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3><span class="one">One Place One Experience</span></div>
+    <div class="dz-chip">As today · two beats</div>
+  </div>
+</section>
+<section class="scene" id="s-chx-1" data-part="1" data-mode="lavender" data-title="Challenge + solution · 1 · Two bands" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="Way 1 of 6 to put the challenge and the solution on one slide — Two bands: the challenge moves up into the empty top half (its four words and its question), the solution comes in below it where the slide has it today; the line between them is the turn.">
+  <div class="page">
+
+    <svg class="cx-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><line x1="858" y1="0" x2="858" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/><line x1="0" y1="513" x2="1920" y2="513"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/></svg>
+    <div class="cx-row rv dim" style="left:0;top:26.5%;width:44.7%;height:21%"><div class="cx-w" style="--i:0"><span class="hand">Disoriented</span><img class="" src="assets/img/ch-disoriented.webp" alt=""></div><div class="cx-w" style="--i:1"><span class="hand">Unsettled</span><img class="" src="assets/img/ch-unsettled.webp" alt=""></div><div class="cx-w" style="--i:2"><span class="hand">Displaced</span><img class="" src="assets/img/ch-displaced.webp" alt=""></div><div class="cx-w" style="--i:3"><span class="hand">Disconnected</span><img class="i-plug" src="assets/img/ch-disconnected.webp" alt=""></div></div>
+    <div class="cx-copy rv dim" style="left:46.1%;top:21%;width:44%"><small class="cx-kick" style="--i:0">Breaking Away from the Established Experience</small><h3 class="cx-h" style="--i:1">&amp; now the challenge at hand is <b>how do we bring in people from two existing locations together.</b></h3></div>
+    <i class="cx-turn" data-step="2" style="left:44.7%;top:47.5%">&darr;</i>
+    <div class="cx-row" data-step="2" style="left:0;top:59.4%;width:44.7%;height:19.1%"><div class="cx-w sol st" style="--i:0"><span class="hand">Familiar Teams</span><img class="i-fam" src="assets/img/ch-familiar.webp" alt=""></div><div class="cx-w sol st" style="--i:1"><span class="hand">Comfort in unknown</span><img class="i-com" src="assets/img/ch-comfort.webp" alt=""></div><div class="cx-w sol st" style="--i:2"><span class="hand">Different Spatial Experience</span><img class="i-spa" src="assets/img/ch-spatial.webp" alt=""></div><div class="cx-w sol st" style="--i:3"><span class="hand">Existing Team Dynamics</span><img class="i-dyn" src="assets/img/ch-dynamics.webp" alt=""></div></div>
+    <div class="cx-copy" data-step="2" style="left:46.1%;top:54.5%;width:44%"><small class="cx-kick st" style="--i:0">Opening the Way to What&rsquo;s Next</small><h3 class="cx-h st" style="--i:1">&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3><span class="cx-one st" style="--i:6">One Place One Experience</span></div>
+    <div class="dz-chip">Way 1 of 6 · Two bands</div>
+  </div>
+</section>
+<section class="scene" id="s-chx-2" data-part="1" data-mode="lavender" data-title="Challenge + solution · 2 · Four pairs" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="Way 2 of 6 to put the challenge and the solution on one slide — Four pairs: four columns, each a challenge word over the answer it becomes (Disoriented → Familiar Teams, Unsettled → Comfort in unknown, Displaced → Different Spatial Experience, Disconnected → Existing Team Dynamics); the challenge and the solution stack on the right.">
+  <div class="page">
+
+    <svg class="cx-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><line x1="858" y1="0" x2="858" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/></svg>
+    <div class="cx-pairs rvg" style="left:0;top:22%;width:44.7%;height:56.5%"><div class="cx-pair"><div class="cx-w rv-i" style="--i:0"><span class="hand">Disoriented</span><img class="" src="assets/img/ch-disoriented.webp" alt=""></div><i class="cx-arrow" data-step="2" style="transition-delay:0.30s"></i><div class="cx-sol" data-step="2" style="transition-delay:0.45s"><div class="cx-w sol" style="--i:0"><span class="hand">Familiar Teams</span><img class="i-fam" src="assets/img/ch-familiar.webp" alt=""></div></div></div><div class="cx-pair"><div class="cx-w rv-i" style="--i:1"><span class="hand">Unsettled</span><img class="" src="assets/img/ch-unsettled.webp" alt=""></div><i class="cx-arrow" data-step="2" style="transition-delay:0.55s"></i><div class="cx-sol" data-step="2" style="transition-delay:0.70s"><div class="cx-w sol" style="--i:1"><span class="hand">Comfort in unknown</span><img class="i-com" src="assets/img/ch-comfort.webp" alt=""></div></div></div><div class="cx-pair"><div class="cx-w rv-i" style="--i:2"><span class="hand">Displaced</span><img class="" src="assets/img/ch-displaced.webp" alt=""></div><i class="cx-arrow" data-step="2" style="transition-delay:0.80s"></i><div class="cx-sol" data-step="2" style="transition-delay:0.95s"><div class="cx-w sol" style="--i:2"><span class="hand">Different Spatial Experience</span><img class="i-spa" src="assets/img/ch-spatial.webp" alt=""></div></div></div><div class="cx-pair"><div class="cx-w rv-i" style="--i:3"><span class="hand">Disconnected</span><img class="i-plug" src="assets/img/ch-disconnected.webp" alt=""></div><i class="cx-arrow" data-step="2" style="transition-delay:1.05s"></i><div class="cx-sol" data-step="2" style="transition-delay:1.20s"><div class="cx-w sol" style="--i:3"><span class="hand">Existing Team Dynamics</span><img class="i-dyn" src="assets/img/ch-dynamics.webp" alt=""></div></div></div></div>
+    <div class="cx-copy rv dim" style="left:46.1%;top:17%;width:44%"><small class="cx-kick" style="--i:0">Breaking Away from the Established Experience</small><h3 class="cx-h" style="--i:1">&amp; now the challenge at hand is <b>how do we bring in people from two existing locations together.</b></h3></div>
+    <div class="cx-copy" data-step="2" style="left:46.1%;top:49%;width:44%"><small class="cx-kick st" style="--i:0">Opening the Way to What&rsquo;s Next</small><h3 class="cx-h st" style="--i:1">&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3><span class="cx-one st" style="--i:6">One Place One Experience</span></div>
+    <div class="dz-chip">Way 2 of 6 · Four pairs</div>
+  </div>
+</section>
+<section class="scene" id="s-chx-3" data-part="1" data-mode="lavender" data-title="Challenge + solution · 3 · Before | after" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="Way 3 of 6 to put the challenge and the solution on one slide — Before | after: the page splits on its grid line: the challenge on the lavender left, the solution wiping in as a deep purple right half, white on purple, with an arrow on the seam.">
+  <div class="page">
+
+    <div class="cx-panel" data-step="2" style="left:44.7%;top:0;width:46.9%;height:89.3%"></div>
+    <svg class="cx-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><line x1="858" y1="0" x2="858" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/></svg>
+    <div class="cx-copy rv dim" style="left:3.5%;top:16%;width:38.5%"><small class="cx-kick" style="--i:0">Breaking Away from the Established Experience</small><h3 class="cx-h" style="--i:1">&amp; now the challenge at hand is <b>how do we bring in people from two existing locations together.</b></h3></div>
+    <div class="cx-row rv dim" style="left:0;top:59.4%;width:44.7%;height:19.1%"><div class="cx-w" style="--i:0"><span class="hand">Disoriented</span><img class="" src="assets/img/ch-disoriented.webp" alt=""></div><div class="cx-w" style="--i:1"><span class="hand">Unsettled</span><img class="" src="assets/img/ch-unsettled.webp" alt=""></div><div class="cx-w" style="--i:2"><span class="hand">Displaced</span><img class="" src="assets/img/ch-displaced.webp" alt=""></div><div class="cx-w" style="--i:3"><span class="hand">Disconnected</span><img class="i-plug" src="assets/img/ch-disconnected.webp" alt=""></div></div>
+    <div class="cx-copy inv" data-step="2" style="left:48.5%;top:16%;width:39%"><small class="cx-kick st" style="--i:2">Opening the Way to What&rsquo;s Next</small><h3 class="cx-h st" style="--i:3">&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3></div>
+    <div class="cx-row inv" data-step="2" style="left:45.5%;top:59.4%;width:45.4%;height:19.1%"><div class="cx-w sol st" style="--i:4"><span class="hand">Familiar Teams</span><img class="i-fam" src="assets/img/ch-familiar.webp" alt=""></div><div class="cx-w sol st" style="--i:5"><span class="hand">Comfort in unknown</span><img class="i-com" src="assets/img/ch-comfort.webp" alt=""></div><div class="cx-w sol st" style="--i:6"><span class="hand">Different Spatial Experience</span><img class="i-spa" src="assets/img/ch-spatial.webp" alt=""></div><div class="cx-w sol st" style="--i:7"><span class="hand">Existing Team Dynamics</span><img class="i-dyn" src="assets/img/ch-dynamics.webp" alt=""></div></div>
+    <div class="inv" data-step="2" style="left:48.5%;top:77.5%"><span class="cx-one st" style="--i:9">One Place One Experience</span></div>
+    <i class="cx-turn" data-step="2" style="left:44.7%;top:40%">&rarr;</i>
+    <div class="dz-chip">Way 3 of 6 · Before | after</div>
+  </div>
+</section>
+<section class="scene" id="s-chx-4" data-part="1" data-mode="lavender" data-title="Challenge + solution · 4 · Crossed out" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="Way 4 of 6 to put the challenge and the solution on one slide — Crossed out: the challenge is said first; on the click each of its four words is struck through by hand and its answer is written above it, the drawing turning with it, and the solution answers the question underneath.">
+  <div class="page">
+
+    <svg class="cx-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/><line x1="0" y1="567" x2="1920" y2="567"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/></svg>
+    <div class="cx-copy rv" style="left:4%;top:8%;width:84%"><small class="cx-kick" style="--i:0">Breaking Away from the Established Experience</small><h3 class="cx-h" style="--i:1">&amp; now the challenge at hand is <b>how do we bring in people from two existing locations together.</b></h3></div>
+    <div class="cx-copy" data-step="2" style="left:4%;top:29%;width:84%"><small class="cx-kick st" style="--i:0">Opening the Way to What&rsquo;s Next</small><h3 class="cx-h st" style="--i:1">&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3></div>
+    <div class="cx-cols rv" style="left:0;top:55%;width:91.6%;height:23.5%"><div class="cx-col" style="--i:0"><span class="hand cx-fix" data-step="2" style="transition-delay:0.50s">Familiar Teams</span><span class="hand cx-x">Disoriented<svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" style="transition-delay:0.20s" d="M1 6.5C22 3.5 48 7.5 72 4.8S92 4 99 5.5"/></svg></span><div class="ics"><img class=" x" src="assets/img/ch-disoriented.webp" alt=""><div data-step="2" style="transition-delay:0.50s"><img class="i-fam" src="assets/img/ch-familiar.webp" alt=""></div></div></div><div class="cx-col" style="--i:1"><span class="hand cx-fix" data-step="2" style="transition-delay:0.80s">Comfort in unknown</span><span class="hand cx-x">Unsettled<svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" style="transition-delay:0.50s" d="M1 6.5C22 3.5 48 7.5 72 4.8S92 4 99 5.5"/></svg></span><div class="ics"><img class=" x" src="assets/img/ch-unsettled.webp" alt=""><div data-step="2" style="transition-delay:0.80s"><img class="i-com" src="assets/img/ch-comfort.webp" alt=""></div></div></div><div class="cx-col" style="--i:2"><span class="hand cx-fix" data-step="2" style="transition-delay:1.10s">Different Spatial Experience</span><span class="hand cx-x">Displaced<svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" style="transition-delay:0.80s" d="M1 6.5C22 3.5 48 7.5 72 4.8S92 4 99 5.5"/></svg></span><div class="ics"><img class=" x" src="assets/img/ch-displaced.webp" alt=""><div data-step="2" style="transition-delay:1.10s"><img class="i-spa" src="assets/img/ch-spatial.webp" alt=""></div></div></div><div class="cx-col" style="--i:3"><span class="hand cx-fix" data-step="2" style="transition-delay:1.40s">Existing Team Dynamics</span><span class="hand cx-x">Disconnected<svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" style="transition-delay:1.10s" d="M1 6.5C22 3.5 48 7.5 72 4.8S92 4 99 5.5"/></svg></span><div class="ics"><img class="i-plug x" src="assets/img/ch-disconnected.webp" alt=""><div data-step="2" style="transition-delay:1.40s"><img class="i-dyn" src="assets/img/ch-dynamics.webp" alt=""></div></div></div></div>
+    <div data-step="2" style="left:60%;top:77.5%"><span class="cx-one st" style="--i:6">One Place One Experience</span></div>
+    <div class="dz-chip">Way 4 of 6 · Crossed out</div>
+  </div>
+</section>
+<section class="scene" id="s-chx-5" data-part="1" data-mode="lavender" data-title="Challenge + solution · 5 · Question → answer" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="Way 5 of 6 to put the challenge and the solution on one slide — Question → answer: the words carry it: the challenge as a large question across the top half, the solution answering in bold under it; below, the drawings in two rows, the challenge's fading as the solution's come in, and One Place One Experience to the right.">
+  <div class="page">
+
+    <svg class="cx-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><line x1="1238" y1="0" x2="1238" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/><line x1="0" y1="567" x2="1920" y2="567"/><line x1="0" y1="766" x2="1920" y2="766"/><line x1="0" y1="964" x2="1920" y2="964"/></svg>
+    <div class="cx-hero q rv dim" style="left:4%;top:8%;width:86%"><small class="cx-kick" style="--i:0">Breaking Away from the Established Experience</small><h3 class="cx-h" style="--i:1">&amp; now the challenge at hand is <b>how do we bring in people from two existing locations together.</b></h3></div>
+    <div class="cx-hero a" data-step="2" style="left:4%;top:30%;width:86%"><small class="cx-kick st" style="--i:0">Opening the Way to What&rsquo;s Next</small><h3 class="cx-h st" style="--i:1">&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3></div>
+    <div class="cx-cells rv dim" style="left:2%;top:54.5%;width:61%;height:14.5%"><div class="cx-cell" style="--i:0"><img class="" src="assets/img/ch-disoriented.webp" alt=""><span class="hand">Disoriented</span></div><div class="cx-cell" style="--i:1"><img class="" src="assets/img/ch-unsettled.webp" alt=""><span class="hand">Unsettled</span></div><div class="cx-cell" style="--i:2"><img class="" src="assets/img/ch-displaced.webp" alt=""><span class="hand">Displaced</span></div><div class="cx-cell" style="--i:3"><img class="i-plug" src="assets/img/ch-disconnected.webp" alt=""><span class="hand">Disconnected</span></div></div>
+    <div class="cx-cells" data-step="2" style="left:2%;top:72.3%;width:61%;height:15.5%"><div class="cx-cell sol st" style="--i:2"><img class="i-fam" src="assets/img/ch-familiar.webp" alt=""><span class="hand">Familiar Teams</span></div><div class="cx-cell sol st" style="--i:3"><img class="i-com" src="assets/img/ch-comfort.webp" alt=""><span class="hand">Comfort in unknown</span></div><div class="cx-cell sol st" style="--i:4"><img class="i-spa" src="assets/img/ch-spatial.webp" alt=""><span class="hand">Different Spatial Experience</span></div><div class="cx-cell sol st" style="--i:5"><img class="i-dyn" src="assets/img/ch-dynamics.webp" alt=""><span class="hand">Existing Team Dynamics</span></div></div>
+    <div data-step="2" style="left:66.5%;top:70%;width:24%"><span class="cx-one st" style="--i:7;white-space:normal;line-height:1.1">One Place One Experience</span></div>
+    <div class="dz-chip">Way 5 of 6 · Question → answer</div>
+  </div>
+</section>
+<section class="scene" id="s-chx-6" data-part="1" data-mode="lavender" data-title="Challenge + solution · 6 · Bridge" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="Way 6 of 6 to put the challenge and the solution on one slide — Bridge: the challenge on the left, the solution on the right, each with its own words; on the click an arrow crosses the gap between them and One Place One Experience sits under the bridge.">
+  <div class="page">
+
+    <svg class="cx-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><line x1="748" y1="0" x2="748" y2="1080"/><line x1="1018" y1="0" x2="1018" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/><line x1="0" y1="567" x2="1920" y2="567"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/></svg>
+    <div class="cx-copy rv dim" style="left:2.5%;top:15%;width:35%"><small class="cx-kick" style="--i:0">Breaking Away from the Established Experience</small><h3 class="cx-h" style="--i:1">&amp; now the challenge at hand is <b>how do we bring in people from two existing locations together.</b></h3></div>
+    <div class="cx-row rv dim" style="left:0;top:59.4%;width:39%;height:19.1%"><div class="cx-w" style="--i:0"><span class="hand">Disoriented</span><img class="" src="assets/img/ch-disoriented.webp" alt=""></div><div class="cx-w" style="--i:1"><span class="hand">Unsettled</span><img class="" src="assets/img/ch-unsettled.webp" alt=""></div><div class="cx-w" style="--i:2"><span class="hand">Displaced</span><img class="" src="assets/img/ch-displaced.webp" alt=""></div><div class="cx-w" style="--i:3"><span class="hand">Disconnected</span><img class="i-plug" src="assets/img/ch-disconnected.webp" alt=""></div></div>
+    <svg class="cx-bridge" data-step="2" viewBox="0 0 270 40" preserveAspectRatio="none" style="left:39.6%;top:66%;width:12.8%;height:8%" aria-hidden="true"><path pathLength="1" d="M8 20H250"/><path class="hd" d="M238 9L254 20L238 31"/></svg>
+    <div class="cx-copy" data-step="2" style="left:54.5%;top:15%;width:36%"><small class="cx-kick st" style="--i:0">Opening the Way to What&rsquo;s Next</small><h3 class="cx-h st" style="--i:1">&amp; the solution to <b>create A protection destination where people can have a continuous experience</b></h3></div>
+    <div class="cx-row" data-step="2" style="left:53%;top:59.4%;width:38.6%;height:19.1%"><div class="cx-w sol st" style="--i:2"><span class="hand">Familiar Teams</span><img class="i-fam" src="assets/img/ch-familiar.webp" alt=""></div><div class="cx-w sol st" style="--i:3"><span class="hand">Comfort in unknown</span><img class="i-com" src="assets/img/ch-comfort.webp" alt=""></div><div class="cx-w sol st" style="--i:4"><span class="hand">Different Spatial Experience</span><img class="i-spa" src="assets/img/ch-spatial.webp" alt=""></div><div class="cx-w sol st" style="--i:5"><span class="hand">Existing Team Dynamics</span><img class="i-dyn" src="assets/img/ch-dynamics.webp" alt=""></div></div>
+    <div data-step="2" style="left:14%;top:79.5%;width:64%;text-align:center"><span class="cx-one st" style="--i:7;margin-top:0">One Place One Experience</span></div>
+    <div class="dz-chip">Way 6 of 6 · Bridge</div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-chx-0">
+/* the challenge → the solution (deck slides 6 → 7): the four words of the challenge (1) turn into those of the solution (2);
+   the top half stays empty, as in the deck */
+ACKO.slide("s-chx-0", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc._fresh = true; },
+  step(k, sc) {
+    const pg = $(".page", sc);
+    if (sc._fresh) { pg.classList.add("snap"); pg.classList.toggle("solved", k === 2); void pg.offsetWidth; pg.classList.remove("snap"); }   // entered on its beat: no turn
+    else pg.classList.toggle("solved", k === 2);
+    // the words come in once, as the slide is entered (on either beat); between the beats they stay and turn, both ways (3 Nov:
+    // stepping back from 2 to 1 replayed their entrance over the turn)
+    if (sc._fresh) { sc._fresh = false; reveal($(".ch-words", sc), 900); }
+  },
+}));
+</script>
+<script data-slide="s-chx-1">
+ACKO.slide("s-chx-1", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc.querySelectorAll(".rv, .rvg").forEach((e) => reveal(e, 120)); },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k === 2); },
+}));
+</script>
+<script data-slide="s-chx-2">
+ACKO.slide("s-chx-2", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc.querySelectorAll(".rv, .rvg").forEach((e) => reveal(e, 120)); },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k === 2); },
+}));
+</script>
+<script data-slide="s-chx-3">
+ACKO.slide("s-chx-3", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc.querySelectorAll(".rv, .rvg").forEach((e) => reveal(e, 120)); },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k === 2); },
+}));
+</script>
+<script data-slide="s-chx-4">
+ACKO.slide("s-chx-4", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc.querySelectorAll(".rv, .rvg").forEach((e) => reveal(e, 120)); },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k === 2); },
+}));
+</script>
+<script data-slide="s-chx-5">
+ACKO.slide("s-chx-5", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc.querySelectorAll(".rv, .rvg").forEach((e) => reveal(e, 120)); },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k === 2); },
+}));
+</script>
+<script data-slide="s-chx-6">
+ACKO.slide("s-chx-6", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc.querySelectorAll(".rv, .rvg").forEach((e) => reveal(e, 120)); },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k === 2); },
+}));
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

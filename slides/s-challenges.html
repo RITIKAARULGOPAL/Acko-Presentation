@@ -15,6 +15,7 @@
   data-notes="One vast floor, a thousand disconnected experiences. 1 · Homogeneity: a repetitive, uninterrupted workstation layout makes a uniform environment with little spatial identity. 2 · Distance: from a desk at the far end, the way to the café is a long walk, along the aisles; the elongated plate weakens the sense of direction, making navigation and wayfinding challenging. 3 · Disorientation: on the way, dead ends and a question; the amenities feel disconnected from the work zones, so distances feel longer and people meet less by chance. 4 · So: a campus that connects, not just accommodates.">
   <div class="page">
     <div class="hdr"><b>Design Strategy</b><span>What's our Challenge ?</span></div>
+    <svg class="cl-morph" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"><g></g></svg>
     <div class="cl-axo" style="left:0;top:1%;width:89.8%;height:98.4%"></div>
     <svg class="cl-svg at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true" style="left:0;top:0;width:100%;height:100%">
       <!-- the desks on the floor only: clipped to its outline, and masked off the two terraces and the façade's recess beside each,
@@ -102,8 +103,50 @@
 .cl-n { font-size: calc(var(--pt) * 32); font-weight: 700; color: var(--lavender); line-height: 1; }
 .cl-i { object-fit: contain; mix-blend-mode: multiply; }
 .cl-end { display: flex; align-items: center; box-sizing: border-box; margin: 0; padding: 0 calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 24); line-height: 1.05; color: var(--plum); }
+/* arriving from the football pitches (9 Nov, the re-ordered deck): the bare floor tilts from plan into this axo, then the picture,
+   the header and the headline come in over it and the drawing goes */
+#s-challenges .cl-morph { pointer-events: none; opacity: 0; transition: opacity .6s var(--ease); }
+#s-challenges .page.cl-arrive .cl-morph, #s-challenges .page.cl-land .cl-morph { opacity: 1; transition: none; }
+#s-challenges .page.cl-land .cl-morph { opacity: 0; transition: opacity .7s var(--ease) .25s; }
+#s-challenges .cl-axo, #s-challenges .cl-svg, #s-challenges .cl-h, #s-challenges .hdr { transition: opacity .7s var(--ease); }
+#s-challenges .page.cl-arrive :is(.cl-axo, .cl-svg, .cl-h, .hdr, [data-step]) { opacity: 0 !important; transition: none !important; }
 </style>
 <script>
+/* the floor carried from slide to slide (9 Nov, the re-ordered deck): a slide's leave() marks where the bare floor lay (page px, a
+   2D matrix from ACKO_FLOOR's metres), the next slide's enter() takes it if it's the one it follows, and draws the floor from there */
+window.ACKO_MORPH = window.ACKO_MORPH || (() => {
+  const M = {
+    from: null,
+    AXO: [5.26830, -3.93087, 5.71554, 3.60689, 104.64709, 973.48117],                                    // plan (m) → the challenges axo on the page
+    HOME: [48, 284, 1872, 542],                                   // the Layout's plate on the page (px)
+    BOX: [0.47, 1.79, 245.53, 36.03],                      // the plate's box (m): x0, y0, x1, y1
+    mark(id, data) { M.from = Object.assign({ id, t: performance.now() }, data || {}); },
+    take(id, ms) { const f = M.from; if (!f || f.id !== id || performance.now() - f.t > (ms || 1500)) return null; M.from = null; return f; },
+    mul: (P, Q) => [P[0] * Q[0] + P[2] * Q[1], P[1] * Q[0] + P[3] * Q[1], P[0] * Q[2] + P[2] * Q[3], P[1] * Q[2] + P[3] * Q[3], P[0] * Q[4] + P[2] * Q[5] + P[4], P[1] * Q[4] + P[3] * Q[5] + P[5]],
+    inv(P) { const D = P[0] * P[3] - P[1] * P[2]; return [P[3] / D, -P[1] / D, -P[2] / D, P[0] / D, (P[2] * P[5] - P[3] * P[4]) / D, (P[1] * P[4] - P[0] * P[5]) / D]; },
+    rect(r) { const [x0, y0, x1, y1] = M.BOX, sx = (r[2] - r[0]) / (x1 - x0), sy = (r[3] - r[1]) / (y1 - y0); return [sx, 0, 0, sy, r[0] - sx * x0, r[1] - sy * y0]; },
+    // an element's user space → page px (the page frame is 1920 wide on every slide)
+    page(el, pg) { const m = el.getScreenCTM(), r = pg.getBoundingClientRect(), s = r.width / 1920; return [m.a / s, m.b / s, m.c / s, m.d / s, (m.e - r.left) / s, (m.f - r.top) / s]; },
+    // the bare floor, in metres, into a <g>
+    draw(g) {
+      if (g.childElementCount) return;
+      const F = window.ACKO_FLOOR; if (!F) return;
+      const k = F.unit, P = (pts) => pts.map(([x, y]) => `${(x * k).toFixed(2)} ${(y * k).toFixed(2)}`).join("L"), ns = 'vector-effect="non-scaling-stroke"';
+      g.innerHTML = (F.terraces || []).map((t) => `<path d="M${P(t)}Z" fill="#e3efd9" stroke="#8a83a3" stroke-width="1" ${ns}/>`).join("") +
+        `<path d="M${P(F.plate)}Z" fill="#f4f0ff" stroke="#5222d0" stroke-width="2.4" stroke-linejoin="round" ${ns}/>` +
+        (F.cores || []).map((q) => `<path d="M${P(q)}Z" fill="#dcd7e8" stroke="#8a83a3" stroke-width="1" ${ns}/>`).join("");
+    },
+    // a <g>'s matrix from P to Q over ms (eased); the end state is set by a timer too, so it lands even without frames
+    anim(g, P, Q, ms, done, wait) {
+      const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2), set = (u) => g.setAttribute("transform", `matrix(${P.map((v, i) => (v + (Q[i] - v) * ease(u)).toFixed(4)).join(" ")})`);
+      let end = false, t0 = 0; set(0);
+      const fin = () => { if (end) return; end = true; set(1); if (done) done(); };
+      const tick = (now) => { if (end) return; const u = Math.min(1, (now - t0) / ms); set(u); if (u < 1) requestAnimationFrame(tick); else fin(); };
+      setTimeout(() => { t0 = performance.now(); requestAnimationFrame(tick); setTimeout(fin, ms + 150); }, wait == null ? 450 : wait);   // after the slides' cross-fade has begun
+    },
+  };
+  return M;
+})();
 /* what's our challenge (deck slide 14), on the deck's axo of the bare floor: 1 homogeneity — one uniform grid of desks floods the
    plate; 2 distance — from a desk at the far end the dashed way to the café draws like a maze (Ritika picked it from
    index-lost.html, path 6), and Distance (02) comes when it ends; 3 disorientation — its dead ends (×) pop, then the "?", and
@@ -152,9 +195,24 @@ ACKO.slide("s-challenges", ({ $, $$, plain, inPoly, reduced }) => {
     }
     g.innerHTML = out.join("");
   }
-  return {
-    enter(_, sc) { plain(); clDesks($(".cl-desks", sc)); S.k = 0; },
+  const api = {
+    enter(_, sc) {
+      plain(); clDesks($(".cl-desks", sc)); S.k = 0; S.pend = 0;
+      // the campus strategy's 3D model, built ahead while this page is up, so it comes in without a wait (9 Nov)
+      setTimeout(() => { try { if (window.AxoLayers && AxoLayers.available()) AxoLayers.get(); } catch (e) { /* the picture stays */ } }, 1200);   // not in S.t: step() clears those
+      const pg = $(".page", sc), f = window.ACKO_MORPH && ACKO_MORPH.take("s-pitch");
+      pg.classList.remove("cl-arrive", "cl-land"); S.arr = !!(f && f.m && !reduced);
+      if (S.arr) {                                     // from the pitches: the floor where it lay there, tilting into the axo
+        const g = $(".cl-morph g", sc); ACKO_MORPH.draw(g); pg.classList.add("cl-arrive");
+        ACKO_MORPH.anim(g, f.m, ACKO_MORPH.AXO, 1700, () => {
+          if (document.body.dataset.scene !== sc.id) return;
+          S.arr = false; pg.classList.remove("cl-arrive"); pg.classList.add("cl-land");
+          S.t.push(setTimeout(() => api.step(S.pend || 1, sc), 350));
+        });
+      }
+    },
     step(k, sc) {
+      if (S.arr) { S.pend = k; return; }             // the floor still tilting in: this beat once it has landed
       const svg = $(".cl-svg", sc);
       stop();
       ["b1", "b2", "b3"].forEach((c, i) => svg.classList.toggle(c, Math.min(k, 3) === i + 1));   // beat 4 keeps beat 3 on screen
@@ -165,8 +223,9 @@ ACKO.slide("s-challenges", ({ $, $$, plain, inPoly, reduced }) => {
       if (k >= 2) marks(sc, k === 3 && fwd, k >= 3 ? () => go(sc, ".cl-dis", true) : null);
       if (k === 2) $$(".cl-mark", sc).forEach((g) => g.classList.remove("on"));
     },
-    leave() { stop(); },
+    leave(_, sc) { stop(); S.arr = false; if (sc) $(".page", sc).classList.remove("cl-arrive", "cl-land"); },
   };
+  return api;
 });
 </script>
 <!-- slide:end -->

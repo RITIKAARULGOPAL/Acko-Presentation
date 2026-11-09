@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus strategy · ACKO slide s-nv-strategy</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-nv-strategy" data-part="2" data-title="Campus strategy" data-steps="6" data-mins="1.9"
+  data-beats="How it started,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together,The Client’s journey,The Employees Journey"
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 How it started: the bare shell, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods: 01 Auto, 02 Life, 03 Health, 04 Travel, 05 Drive, 06 Home, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: the floor in colour and the partitions rise. 5 The client's journey: the client's route from the entrance. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back.">
+  <div class="page">
+    <div class="st-anim"></div>
+    <div class="st-3d ui"></div>
+    <div class="st-ov"><svg viewBox="0 0 1920 1080" preserveAspectRatio="none"><g class="st-ent"></g><g class="st-legs"></g></svg></div>
+    <div class="st-veil"></div>
+    <div class="st-t rv">
+      <h3 style="--i:0">Understanding the Campus Strategy</h3>
+      <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
+      <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
+    </div>
+    <p class="st-cap"></p>
+    <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
+  </div>
+</section>
+<style>
+/* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
+/* without WebGL: the deck's animation, where the PPT has it (its picture box less the crop's padding) */
+#s-nv-strategy .st-anim { left: 7.62%; top: 9.07%; width: 78.04%; height: 78.04%; background: url(assets/img/strategy-anim.webp) center / 100% 100% no-repeat; }
+#s-nv-strategy:not(.st-fallback) .st-anim { display: none; }
+#s-nv-strategy.st-fallback .st-3d, #s-nv-strategy.st-fallback .st-ov, #s-nv-strategy.st-fallback .st-tools, #s-nv-strategy.st-fallback .st-cap, #s-nv-strategy.st-fallback .st-veil { display: none; }
+#s-nv-strategy .st-3d { left: 0; top: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+#s-nv-strategy .st-3d.drag { cursor: grabbing; }
+#s-nv-strategy .st-3d canvas { display: block; width: 100%; height: 100%; }
+/* a soft white wash behind the copy, where the floor's west end runs under it */
+#s-nv-strategy .st-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
+  background: radial-gradient(ellipse 30% 22% at 22% 30%, rgba(255,255,255,.92), rgba(255,255,255,.6) 60%, rgba(255,255,255,0)); }
+/* the copy at the PPT's boxes (its insets, anchors and sizes), the title and paragraph 10 % higher so they clear the floor at
+   slide 14's size (Ritika, 26 Oct: "move the text") */
+#s-nv-strategy .st-t { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-nv-strategy .st-t > * { position: absolute; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; margin: 0; padding: calc(var(--pt) * 7.2); }
+#s-nv-strategy .st-t h3 { left: 1.82%; top: 17.01%; width: 44.29%; height: 8.21%; font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); white-space: nowrap; }
+#s-nv-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.4;   /* 29 Oct: "the line spacing is off" */ font-style: italic; font-weight: 300; color: #666; }
+#s-nv-strategy .st-t p b { font-weight: 500; }
+#s-nv-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); justify-content: flex-start; }   /* rows from the top: placed under the name (placeLine) */   /* 29 Oct: "use 1.2 spacing" */
+/* the beat's name, bottom right of the floor, as the deck's animation writes it */
+#s-nv-strategy .st-cap { left: 47.62%; top: 68.32%;   /* on the handwritten line's left edge; the same place on every beat, where The Client's journey had it (29 Oct: "keep this position as constant") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
+  opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+#s-nv-strategy .st-cap.on { opacity: 1; transform: none; }
+/* the overlay: the entrances' maroon marks, the neighbourhoods' names, the Loop's stops (a dot, a leader, the name and its words) */
+#s-nv-strategy .st-ov { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }   /* the names stop at the page's edge, as the model does */
+#s-nv-strategy .st-ov > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#s-nv-strategy .st-ent path { fill: var(--maroon, #980000); transition: opacity .4s var(--ease); }
+#s-nv-strategy .st-legs path { stroke: var(--purple); stroke-width: 1.2; fill: none; vector-effect: non-scaling-stroke; }
+#s-nv-strategy .st-legs circle { fill: var(--purple); stroke: #fff; stroke-width: 1.5; }
+#s-nv-strategy .st-legs g { opacity: 0; transition: opacity .45s var(--ease); }
+#s-nv-strategy .st-legs g.on { opacity: 1; }
+#s-nv-strategy .st-s { position: absolute; transform: translate(-50%, -100%); text-align: center; white-space: nowrap; opacity: 0; transition: opacity .45s var(--ease);
+  padding: calc(var(--pt) * 1.5) calc(var(--pt) * 4); background: rgba(255,255,255,.88); border-radius: 3px; }
+#s-nv-strategy .st-s.on { opacity: 1; }
+#s-nv-strategy .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
+#s-nv-strategy .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
+/* the names as the reference axo has them (29 Oct): condensed bold capitals, each in its own colour, standing upright on the floor
+   along its long axis (--m: the floor's east axis and the vertical as the page shows them), zooming with it */
+#s-nv-strategy .st-z { position: absolute; transform: translate(-50%, -50%) matrix(var(--m, 1, 0, 0, 1, 0, 0)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); user-select: none;
+  font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 800; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
+#s-nv-strategy .st-z.small { font-size: calc(var(--pt) * 9); --sx: .72; }
+#s-nv-strategy .st-z.on { opacity: 1; }
+/* beat 3: the departments are configurable (Ritika, 23 Oct; no text, her note 26 Oct): the names clickable once it has played */
+#s-nv-strategy.st-cfg-live .st-z.dept.on { pointer-events: auto; cursor: pointer; }
+#s-nv-strategy .st-z.picked { text-decoration: underline; text-decoration-color: #5222d0; text-decoration-thickness: .12em; text-underline-offset: .14em; }
+/* the tools as the plan pages have theirs (s-layout .ly-tools, 3 Nov): one white bar just left of the ACKO symbol */
+#s-nv-strategy .st-tools { display: flex; border: 1px solid #e3def2; border-radius: calc(var(--pt) * 3); background: #fff; overflow: hidden; }
+#s-nv-strategy .st-tool { display: flex; align-items: center; gap: calc(var(--pt) * 2); height: calc(var(--pt) * 11); padding: 0 calc(var(--pt) * 4); border: 0; border-left: 1px solid #e3def2;
+  background: none; color: #3b3550; font: 500 calc(var(--pt) * 5.2) var(--body); white-space: nowrap; cursor: pointer; transition: background .2s, color .2s; }
+#s-nv-strategy .st-tool:first-child { border-left: 0; }
+#s-nv-strategy .st-tool svg { flex: none; width: calc(var(--pt) * 5.6); height: calc(var(--pt) * 5.6); fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+#s-nv-strategy .st-tool:hover { color: var(--purple); background: rgba(82, 34, 208, .05); }
+#s-nv-strategy .st-tool:focus { outline: none; }
+</style>
+<script>
+/* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), at the 3D renders' camera
+   (axo_update/acko2A_model*.png), in five beats: "a complete evolution of planning and massing" (Ritika, 26 Oct), from the bare
+   shell to the furnished floor:
+     1 How it started                 the bare shell as a white model: slab, core band and columns, façade; the two entrances
+     2 Planning Acko's Neighbourhood  the six neighbourhoods drop in, 01 to 06, with their numbers, then the atriums, terraces and
+                                      the café's zone; their names (the boundaries from ACKO_NEI.dxf)
+     3 Configuring the Neighbourhoods the departments are configurable (Ritika; no text, 26 Oct): a department's name and
+                                      colour travel together (the numbers stay), stepping along the floor and back (the carousel); then two clicks swap them
+     4 Looping it all Together        the volumes lift away, the floor goes to colour (render 01), the partitions rise (02) (beat 4
+                                      without its route, 29 Oct)
+     5 The Client's Journey           on that floor, the model dimmed a little, the blue route draws (render 09)
+     6 The Employee's Journey         the furniture rises: the rooms' (02), the café (03), the terraces (04), the workstations (05),
+                                      the plants (06); the red route draws from the entrances (render 08), the Loop's seven stops
+                                      named as it reaches them; the blue route fades
+   Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
+   right-drag turns, the wheel zooms on the cursor, Reset view or a double-click goes back. Without WebGL, the deck's GIF. */
+ACKO.slide("s-nv-strategy", ({ $, $$, reduced, plain, reveal }) => {
+  const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
+  // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
+  // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
+  // copyright line clears them ("back on both, axos made smaller"). The entrances below were measured on the PPT's GIF, at FIT_MARKS
+  const FIT14 = [0.0134, 0.0028, 0.8385, 0.9852], SHRINK = 0.95, AT = [1606 / 1920, 10.8 / 1080];
+  const FIT = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2])), FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
+  const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
+    "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
+  // beat 2's entrances where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model
+  // there so a drag or zoom carries it (the maroon ▲)
+  const MARKS = { ent: [[686, 714], [1094, 408]] };
+  // beat 2's names and numbers as the reference axo has them (29 Oct), worked out from the zones, so they follow the drawing. Each
+  // name runs along the long axis at the middle of its zone's outermost north or south edge (moved along it by dx mm, or per ring, clear
+  // of its neighbours), its capitals CAP[size] m tall, in its zone's
+  // colour made deeper (tone(); "acko home ... the pink of 06"): on a north (N) edge it stands up just outside the edge, on a
+  // south (S) edge it hangs from it, below the floor, clear of the façade (as the reference's Drive and Terrace). Health hangs
+  // from its south edge (here Life wraps round its north); the atriums are named on their north edge, east of their middle (clear
+  // of the entrances), the terraces and the café on their south edge. Each number lies on the floor at its zone's middle (the
+  // point farthest from its edge), NUM_H m (its plane's height)
+  const LABELS = [["ACKO Auto", "AUTO", "S"], ["ACKO Life", "LIFE", "N"], ["ACKO Health", "HEALTH", "S", null, 0, 7000],
+    ["ACKO Travel", "TRAVEL", "N", null, 0, -6000], ["ACKO Drive", "DRIVE", "S"], ["ACKO Home", "HOME", "N"],
+    ["Atrium", "atrium", "N", "#737373", 1, [4000, 9000]], ["Terrace", "terrace", "S", "#6f7356", 2], ["Café", "cafezone", "S", "#8f8a5c", 2]];
+  const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
+  const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
+  // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1, 2,
+  // 5 and 6); the name stays put, and the line's first row lands GAP pt under it, however many rows it runs to (placeLine)
+  const GAP = 12;
+  const HAND = ["", "Every journey begins with a thought. Ours began with reimagining what a workplace could feel like.",
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.",
+    "The client journey is envisioned as a seamless transition through ACKO’s neighbourhood, where each touchpoint unfolds a distinct experience while maintaining a continuous sense of connection, discovery, and belonging.",
+    "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
+  const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
+  const DUR = [0, 2.4, 4.4, 6.4, 2.4, 4.2, 7.0];
+  const DIM = 0.45;                                    // the model's dimming under a route (the veil's opacity)             // each beat's play (s)
+  // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
+  // carousel (Ritika's pick of six, index-configure.html): every department steps one zone along the floor, west to east, twice,
+  // then steps back home; then two clicks on names swap them live
+  const DEPTS = ["AUTO", "LIFE", "HEALTH", "TRAVEL", "DRIVE", "HOME"];
+  const FLOOR = ["HOME", "DRIVE", "TRAVEL", "HEALTH", "LIFE", "AUTO"];        // the zones, west to east
+  const PLAN = Object.fromEntries(DEPTS.map((d) => [d, d]));                  // department -> the zone (its key) it sits in
+  const swapped = (A, pairs) => { const B = Object.assign({}, A); for (const [a, b] of pairs) [B[a], B[b]] = [A[b], A[a]]; return B; };
+  const shift = (A, n) => Object.fromEntries(DEPTS.map((d) => [d, FLOOR[(FLOOR.indexOf(A[d]) + n + 6) % 6]]));
+  const STEP1 = shift(PLAN, 1), STEP2 = shift(PLAN, 2);
+  const SCRIPT = [[0.6, 1.8, PLAN, STEP1], [2.4, 3.6, STEP1, STEP2], [4.4, 6.0, STEP2, PLAN]];
+  const SWAP_MS = 900;
+  // the evolution: the shell from beat 1, the partitions with the colour on 4, the furniture on 5 (each group's rise, s)
+  const SHELL = ["mass", "facade"], FURNITURE = { rooms: [0.2, 1.0], cafe: [0.6, 1.4], terrace: [1.0, 1.8], work: [1.4, 2.5], plants: [2.2, 3.0] };
+  let T, M, cam, r, asp = 16 / 9, host, sc, view;
+
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+  const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  const win = (t, a, b) => ease(clamp01((t - a) / (b - a)));
+  const grow = (g, k) => { g.visible = k > 0.002; g.scale.set(1, Math.max(0.001, k), 1); };
+
+  // ---------- the scene at beat k, t seconds in (the same t always gives the same picture) ----------
+  function pose(k, t) {
+    const G = M.groups;
+    M.tint(k <= 3 ? 0 : k === 4 ? win(t, 0.3, 1.0) : 1);
+    for (const g of SHELL) grow(G[g], k === 1 ? win(t, 0.1, 1.5) : 1);
+    grow(G.partitions, k <= 3 ? 0 : k === 4 ? win(t, 1.0, 2.0) : 1);
+    for (const g in FURNITURE) grow(G[g], k <= 5 ? 0 : win(t, FURNITURE[g][0], FURNITURE[g][1]));
+    // beat 3: who sits where (the script while it plays, then the live arrangement); any other beat: the plan
+    const live = k === 3 && t >= DUR[3];
+    if (k !== 3) { S.cur = PLAN; S.swap = null; pick(null); }
+    arrange(k === 3 && !live ? scriptAt(t) : liveAt(performance.now()));
+    sc.classList.toggle("st-cfg-on", k === 3); sc.classList.toggle("st-cfg-live", live);
+    for (const z of S.zl) if (z.dept) z.d.classList.toggle("click", live);
+    // the neighbourhoods: drop in one by one, 01 to 06; the atriums and terraces after; they stay for the configuring; they lift
+    // away as the colour comes
+    M.zones.forEach((v, i) => {
+      let y = 0, f = 0;
+      if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
+      if (k === 3) f = 1;
+      if (k === 4) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }
+      v.position.y = y; M.fade(v, f);
+    });
+    M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
+      let f = 0;
+      if (k === 2) f = win(t, 2.3, 3.0);
+      if (k === 3) f = 1;
+      if (k === 4) f = 1 - win(t, 0, 0.6);
+      M.fade(v, f);
+    });
+    S.names = (k === 2 && t >= 3.0) || k === 3;
+    S.ent = k === 1 ? win(t, 1.4, 2.0) : 1;
+    // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
+    const R = M.routes, emp = R.employee, cli = R.client;
+    cli.visible = k === 5 || (k === 6 && t < 1.0); emp.visible = k === 6;
+    cli.userData.to(k === 5 ? cli.userData.max * win(t, 0.3, DUR[5] - 0.2) : k > 5 ? cli.userData.max : 0);
+    cli.material.opacity = k === 6 ? 1 - win(t, 0.2, 1.0) : 1;
+    S.d = k === 6 ? emp.userData.max * win(t, 1.0, DUR[6] - 0.3) : 0;
+    emp.userData.to(S.d); emp.material.opacity = 1;
+    S.lit = M.data.stops.map((s) => k === 6 && S.d >= s.d - 0.5);
+    // while a route draws (5, 6), the model a little dimmed under it (29 Oct): fading in on 5, held on 6
+    S.dim = k === 5 ? DIM * win(t, 0, 0.6) : k === 6 ? DIM : 0;
+    caption(NAMES[k]);
+  }
+
+  // ---------- beat 3: configuring the neighbourhoods ----------
+  // the arrangement at t into the play: from A to B, e of the way
+  function scriptAt(t) {
+    let c = { A: PLAN, B: PLAN, e: 1 };
+    for (const [a, b, A, B] of SCRIPT) if (t >= a) c = { A, B, e: win(t, a, b) };
+    return c;
+  }
+  function liveAt(now) {
+    const w = S.swap;
+    return w ? { A: w.A, B: w.B, e: ease(clamp01((now - w.t0) / SWAP_MS)) } : { A: S.cur || PLAN, B: S.cur || PLAN, e: 1 };
+  }
+  // each department's name on a low arc between its zones' anchors; each zone in the colour of the department in it
+  function arrange(c) {
+    if (!S.anchor) return;
+    const e = c.e, inA = {}, inB = {};
+    S.np = {};
+    for (const d of DEPTS) {
+      const p0 = S.anchor[c.A[d]], p1 = S.anchor[c.B[d]], lift = c.A[d] !== c.B[d] ? 5 * Math.sin(Math.PI * e) : 0;
+      S.np[d] = [p0[0] + (p1[0] - p0[0]) * e, p0[1] + (p1[1] - p0[1]) * e + lift, p0[2] + (p1[2] - p0[2]) * e];
+      inA[c.A[d]] = d; inB[c.B[d]] = d;
+    }
+    for (const v of M.zones) {
+      const z = v.userData.zone.key, a = S.look[inA[z]], b = S.look[inB[z]], [m, lm] = [v.userData.mats[0][0], v.userData.mats[1][0]];
+      m.color.lerpColors(a.col, b.col, e); lm.color.copy(m.color).multiplyScalar(0.7);
+      v.userData.mats[0][1] = a.op + (b.op - a.op) * e;
+    }
+  }
+  // two clicks on names swap them; a click on the marked name unmarks it
+  function pick(d) {
+    if (!S.zl) return;
+    if (d && (!sc.classList.contains("st-cfg-live") || S.swap)) return;
+    if (d && S.pick && S.pick !== d) { S.swap = { A: S.cur, B: swapped(S.cur, [[S.pick, d]]), t0: performance.now() }; d = null; need(); }
+    else if (d && S.pick === d) d = null;
+    S.pick = d;
+    for (const z of S.zl) if (z.dept) z.d.classList.toggle("picked", z.dept === d);
+  }
+  function caption(txt) {
+    const cap = $(".st-cap", sc), hand = $(".st-hand", sc), line = HAND[NAMES.indexOf(txt)] || hand.textContent;
+    if (cap.dataset.t === txt) return;
+    cap.classList.remove("on"); cap.dataset.t = txt;
+    setTimeout(() => {
+      if (hand.textContent !== line) { hand.textContent = line; S.obs = null; need(); }
+      cap.textContent = txt; placeLine(); cap.classList.add("on");
+    }, 120);
+  }
+  // the line's top (% of the page) so its first row starts GAP pt under the name's letters, both measured as laid out (each
+  // against its own box, so a reveal's or the name's own slide-in doesn't count)
+  function placeLine() {
+    const cap = $(".st-cap", sc), hand = $(".st-hand", sc), page = $(".page", sc), H = page.clientHeight, pt = page.clientWidth / 720;
+    const first = (e) => { const rg = document.createRange(); rg.selectNodeContents(e); const r = rg.getClientRects(); return r.length ? r : null; };
+    const hr = first(hand), cr = first(cap); if (!hr || !cr || !H) return;
+    const capBottom = cap.offsetTop + (cr[cr.length - 1].bottom - cap.getBoundingClientRect().top), rowOff = hr[0].top - hand.getBoundingClientRect().top;
+    hand.style.top = ((capBottom + GAP * pt - rowOff - hand.offsetParent.offsetTop) / H) * 100 + "%";
+  }
+  function play(k) {
+    S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
+    pose(k, reduced ? DUR[k] : 0); need();
+  }
+  function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
+
+  // ---------- the overlay: entrances, neighbourhood names, the Loop's stops ----------
+  const v3 = () => new T.Vector3();
+  const px = (x, y, h) => { const v = v3().set(M.X(x), h, M.Z(y)).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
+  const pw = (x, y, z) => { const v = v3().set(x, y, z).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
+  // a page point at the home view, back on the model: where the camera's ray through it meets the level h (m)
+  function pin() {
+    window.AxoModel.apply(cam, window.AxoLayers.frame(M, view, FIT_MARKS, asp), asp); cam.updateMatrixWorld();      // the marks' own frame
+    const d = v3(); cam.getWorldDirection(d);
+    const at = (x, y, h) => { const o = v3().set(x / 960 - 1, 1 - y / 540, -1).unproject(cam), t = (h - o.y) / d.y; return [o.x + d.x * t, h, o.z + d.z * t]; };
+    S.entAt = MARKS.ent.map(([x, y]) => at(x, y, 4.5));
+    for (const z of S.zl) z.p = [M.X(z.at[0]), (z.side === "N" ? 1 : -1) * (CAP[z.size] * 0.55 + 0.4 + LIFT[z.size]), M.Z(z.at[1])];   // standing on the floor, or hanging below it
+    S.anchor = {}; for (const z of S.zl) if (z.dept) S.anchor[z.dept] = z.p;      // each zone's name point: where its own department is named
+    for (const v of M.zones) {
+      const num = v.userData.num; if (!num) continue;
+      const [x, y] = middle(v.userData.zone.ring); num.position.x = M.X(x); num.position.z = M.Z(y); num.scale.setScalar(NUM_H / v.userData.numH);
+    }
+  }
+  // a ring's middle (plan mm): its point farthest from its edge, on a 1 m grid, then a 0.1 m one round the best
+  function middle(ring) {
+    const n = ring.length, xs = ring.map((q) => q[0]), ys = ring.map((q) => q[1]);
+    const inside = (x, y) => { let c = false; for (let i = 0, j = n - 1; i < n; j = i++) { const [x0, y0] = ring[i], [x1, y1] = ring[j]; if ((y0 > y) !== (y1 > y) && x < x0 + ((y - y0) * (x1 - x0)) / (y1 - y0)) c = !c; } return c; };
+    const edge = (x, y) => {
+      let d = Infinity;
+      for (let i = 0, j = n - 1; i < n; j = i++) {
+        const [x0, y0] = ring[j], [x1, y1] = ring[i], ux = x1 - x0, uy = y1 - y0, t = Math.max(0, Math.min(1, ((x - x0) * ux + (y - y0) * uy) / (ux * ux + uy * uy || 1)));
+        d = Math.min(d, Math.hypot(x - x0 - t * ux, y - y0 - t * uy));
+      }
+      return d;
+    };
+    let best = [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2], bd = -1;
+    const scan = (x0, x1, y0, y1, st) => { for (let x = x0; x <= x1; x += st) for (let y = y0; y <= y1; y += st) if (inside(x, y)) { const d = edge(x, y); if (d > bd) { bd = d; best = [x, y]; } } };
+    scan(Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys), 1000);
+    const [bx, by] = best; scan(bx - 1000, bx + 1000, by - 1000, by + 1000, 100);
+    return best;
+  }
+
+  function overlayBuild() {
+    const box = $(".st-ov", sc), A = M.data;
+    $$(".st-s, .st-z", box).forEach((e) => e.remove());
+    // the entrances: the deck's maroon ▲ (its apex a little right of centre)
+    $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
+    // the names (LABELS), each at the middle of its zone's (or atrium's, terrace's, café's) outermost edge on its side
+    S.zl = [];
+    const tone = (hex) => { const c = new T.Color(hex), h = {}; c.getHSL(h); return "#" + c.setHSL(h.h, Math.min(0.35, h.s) * 0.7, 0.55).getHexString(); };
+    for (const [txt, where, side, col, size, dx] of LABELS) {
+      const zone = A.zones.find((z) => z.key === where), rings = zone ? [zone.ring] : A[where] || [];
+      rings.forEach((ring, i) => {
+        const ys = ring.map((q) => q[1]), e = side === "N" ? Math.min(...ys) : Math.max(...ys), xs = ring.filter((q) => Math.abs(q[1] - e) < 300).map((q) => q[0]);
+        const x = (Math.min(...xs) + Math.max(...xs)) / 2 + ((Array.isArray(dx) ? dx[i] : dx) || 0), y = e + (side === "N" ? -OUT.N : OUT.S);
+        const d = document.createElement("div"); d.className = "st-z" + (size ? " small" : ""); d.textContent = txt; d.style.color = col || tone(zone.colour); box.appendChild(d);
+        const dept = zone ? where : null;
+        if (dept) { d.classList.add("dept"); d.addEventListener("click", () => pick(dept)); }
+        S.zl.push({ d, at: [x, y], size: size || 0, side, dept });
+      });
+    }
+    // the Loop's stops
+    const svg = $(".st-legs", sc); svg.innerHTML = "";
+    S.labs = A.stops.map((s) => {
+      const d = document.createElement("div"); d.className = "st-s"; d.innerHTML = `<b>${s.name}</b><span>${STOPS[s.name] || ""}</span>`; box.appendChild(d);
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.innerHTML = '<path/><circle r="5"/>'; svg.appendChild(g);
+      return { s, d, g };
+    });
+  }
+  function overlay() {
+    const A = M.data, k = 1920 / (host.clientWidth || 1920);
+    // entrances: of a size in the model, so they zoom with it as the names do (29 Oct: "the 2 arrows should also be constant size")
+    const ek = S.home.half / S.state.half;
+    $$(".st-ent path", sc).forEach((p, i) => {
+      const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]);
+      p.setAttribute("transform", `translate(${x} ${y}) scale(${ek.toFixed(4)})`); p.style.opacity = S.ent;
+    });
+    // names: standing upright on the floor along its east (long) axis, as the axo shows such a wall (one matrix: the camera is
+    // orthographic; seen from the other side they turn round, so they never read backwards), CAP m tall in the model, so they
+    // zoom with it as the numbers do (29 Oct: "it should be in a fixed axo angle", "the text size ... should be constant", and
+    // the reference axo)
+    const [ox, oy] = pw(0, 0, 0), [ex, ey] = pw(1, 0, 0), [dx, dy] = pw(0, -1, 0), D = [dx - ox, dy - oy];
+    let E = [ex - ox, ey - oy]; if (E[0] * D[1] - E[1] * D[0] < 0) E = [-E[0], -E[1]];
+    const fs = S.zl.map((z) => parseFloat(getComputedStyle(z.d).fontSize) || 16);
+    S.zl.forEach((z, i) => {
+      const u = CAP[z.size] / (0.72 * fs[i]) / k;                      // m per CSS px of the name's type; frame px to CSS px
+      z.mx = [E[0], E[1], D[0], D[1]].map((v) => (v * u).toFixed(4)).join(", ") + ", 0, 0";
+    });
+    for (const z of S.zl) {
+      const [x, y] = pw(...(z.dept && S.np && S.np[z.dept] ? S.np[z.dept] : z.p));
+      z.d.style.left = (x / 19.2) + "%"; z.d.style.top = (y / 10.8) + "%"; z.d.style.setProperty("--m", z.mx);
+      z.d.classList.toggle("on", !!S.names);
+    }
+    // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
+    // the page's right edge hangs to the left
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
+      const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
+      return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
+    }).filter((b) => b[2] > b[0]);
+    const placed = [];
+    const hit = (L, top, R, bot) => placed.concat(S.obs).some((b) => L < b[2] && R > b[0] && top < b[3] && bot > b[1]);
+    const items = S.labs.map((o, i) => {
+      const [x, y] = px(o.s.x, o.s.y, 0.6);
+      if (!o.w) { o.w = (o.d.offsetWidth || 150) * k; o.h = (o.d.offsetHeight || 44) * k; }
+      return { o, x, y, on: !!(S.lit && S.lit[i]) && x > 20 && x < 1900 && y > 60 && y < 1060 };
+    }).sort((p1, p2) => p2.y - p1.y);
+    for (const it of items) {
+      const { o, x, y } = it;
+      const left = x + o.w / 2 > 1890 ? Math.min(x + 12, 1890) - o.w : x - o.w / 2;
+      const tries = [0, 1, 2, 3, 4, 5].map((n) => y - 64 - n * (o.h + 4)).concat([0, 1, 2].map((n) => y + 40 + o.h + n * (o.h + 4)));
+      const ly = tries.find((b) => b - o.h > 14 && b < 1066 && !hit(left, b - o.h, left + o.w, b)) || tries[0];   // on the page, clear of the copy and the tools      // the label's bottom (frame px)
+      if (it.on) placed.push([left - 6, ly - o.h - 6, left + o.w + 6, ly + 6]);
+      o.g.querySelector("path").setAttribute("d", `M${x} ${y}L${x} ${ly > y ? ly - o.h : ly}`);
+      o.g.querySelector("circle").setAttribute("cx", x); o.g.querySelector("circle").setAttribute("cy", y);
+      o.d.style.left = ((left + o.w / 2) / 19.2) + "%"; o.d.style.top = (ly / 10.8) + "%";
+      o.d.classList.toggle("on", it.on); o.g.classList.toggle("on", it.on);
+    }
+  }
+
+  // ---------- drawing on demand ----------
+  function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
+  function draw(now) {
+    S.raf = 0;
+    if (document.body.dataset.scene !== "s-nv-strategy" || !r) return;
+    const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
+    const pr = r.getPixelRatio();
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(Hh * pr)) {
+      r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
+    }
+    if (S.playing) { const t = (now - S.t0) / 1000; pose(S.k, Math.min(t, DUR[S.k])); if (t >= DUR[S.k]) S.playing = false; }
+    if (S.swap) {                                       // a live swap on beat 3
+      arrange(liveAt(now)); for (const v of M.zones) M.fade(v, 1);
+      if (now - S.swap.t0 >= SWAP_MS) { S.cur = S.swap.B; S.swap = null; }
+    }
+    if (S.tween) {
+      const tw = S.tween, k = Math.min(1, (now - tw.t0) / tw.ms), e = ease(k), L = (a, b) => a + (b - a) * e;
+      S.state = { theta: L(tw.from.theta, tw.to.theta), phi: L(tw.from.phi, tw.to.phi), half: L(tw.from.half, tw.to.half), t: tw.from.t.map((x, i) => L(x, tw.to.t[i])) };
+      if (k >= 1) S.tween = null;
+    }
+    window.AxoModel.apply(cam, S.state, asp);
+    // the dimming: a white veil just in front of the camera, over all it has drawn, under the routes (renderOrder 9)
+    S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
+    if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
+    r.render(M.scene, cam);
+    overlay();
+    if (S.playing || S.tween || S.swap) need();
+  }
+
+  // ---------- panning, turning, zooming ----------
+  // the same mouse on every axo (29 Oct: "LMB for pan, mouse wheel for zoom in zoom out and RMB for rotate"): a left-drag pans (in the axo's right/up), a right-drag (or Shift-drag, for a
+  // trackpad) turns it, the wheel zooms on the cursor (its point on the floor stays put), a double-click goes back to the beat's view
+  function wire() {
+    let drag = null;
+    const ground = (e, v) => {
+      const b = host.getBoundingClientRect(), nx = ((e.clientX - b.left) / b.width) * 2 - 1, ny = -((e.clientY - b.top) / b.height) * 2 + 1;
+      window.AxoModel.apply(cam, v, asp); const { f, right, up } = window.AxoModel.basis(v);
+      const o = cam.position.clone().add(right.multiplyScalar(nx * v.half * asp)).add(up.multiplyScalar(ny * v.half));
+      return o.add(f.multiplyScalar(-o.y / f.y));
+    };
+    host.addEventListener("pointerdown", (e) => {
+      if (e.button > 2) return;
+      drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, turn: e.button === 2 || e.shiftKey };
+      try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ }
+      host.classList.add("drag");
+    });
+    host.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+      if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4) return;
+      S.moved = true; S.tween = null;
+      const v = S.state;
+      if (drag.turn) S.state = Object.assign({}, v, { theta: Math.max(view.theta - 0.8, Math.min(view.theta + 0.8, v.theta - dx * 0.005)), phi: Math.max(0.35, Math.min(1.22, v.phi - dy * 0.004)) });
+      else {
+        const { right, up } = window.AxoModel.basis(v), k = (2 * v.half) / host.clientHeight, m = right.multiplyScalar(-dx * k).add(up.multiplyScalar(dy * k));
+        S.state = Object.assign({}, v, { t: [v.t[0] + m.x, v.t[1] + m.y, v.t[2] + m.z] });
+      }
+      need();
+    });
+    const up = (e) => {
+      if (!drag) return;
+      drag = null; host.classList.remove("drag");
+    };
+    host.addEventListener("pointerup", up); host.addEventListener("pointercancel", () => { drag = null; host.classList.remove("drag"); });
+    host.addEventListener("contextmenu", (e) => e.preventDefault());
+    host.addEventListener("dblclick", home);
+    host.addEventListener("wheel", (e) => {
+      e.preventDefault(); S.moved = true; S.tween = null;
+      const v = S.state, before = ground(e, v), w = Object.assign({}, v, { half: Math.max(4, Math.min(140, v.half * Math.exp(e.deltaY * 0.0012))) });
+      const after = ground(e, w); w.t = [w.t[0] + before.x - after.x, w.t[1], w.t[2] + before.z - after.z]; S.state = w; need();
+    }, { passive: false });
+  }
+
+  // back to the beat's view, eased (Reset view, or a double-click as on the plans)
+  function home() { S.moved = false; S.tween = { from: S.state, to: S.home, t0: performance.now(), ms: 900 }; need(); }
+
+  function start() {
+    host = $(".st-3d", sc);
+    if (!window.AxoLayers || !window.AxoLayers.available()) return false;
+    r = window.AxoModel.renderer(); if (!r) return false;
+    T = window.THREE;
+    if (!M) {
+      M = window.AxoLayers.get(); view = M.data.view;
+      cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+      S.veil = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthTest: false, depthWrite: false }));
+      S.veil.renderOrder = 8; S.veil.frustumCulled = false; S.veil.visible = false; M.scene.add(S.veil);
+      // each department's look: its own zone's colour and opacity as built
+      S.look = Object.fromEntries(M.zones.map((v) => [v.userData.zone.key, { col: new T.Color(v.userData.zone.colour), op: v.userData.mats[0][1] }]));
+      overlayBuild(); wire();
+      // the names' sizes once their fonts are in
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { S.obs = null; S.labs.forEach((o) => { o.w = 0; }); placeLine(); need(); });
+      window.AxoLayers.listeners.add(() => { if (document.body.dataset.scene === "s-nv-strategy") need(); });
+      const again = () => { if (document.body.dataset.scene === "s-nv-strategy") need(); };
+      addEventListener("resize", () => { placeLine(); again(); }); document.addEventListener("visibilitychange", again);
+      sc._strategy = () => ({ k: S.k, playing: S.playing, cap: $(".st-cap", sc).textContent, lit: (S.lit || []).filter(Boolean).length,
+        stops: M.data.stops.map((s) => s.name), d: S.d, state: S.state, home: S.home, names: !!S.names, cur: Object.assign({}, S.cur || PLAN), pick: S.pick || null,
+        employee: M.routes.employee.geometry.drawRange.count, client: M.routes.client.geometry.drawRange.count });
+    }
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    asp = (host.clientWidth || 16) / (host.clientHeight || 9);
+    S.home = window.AxoLayers.frame(M, view, FIT, asp); S.state = S.home; S.moved = false; S.tween = null;
+    if (!S.entAt) pin();
+    return true;
+  }
+
+  return {
+    enter(_, s) {
+      sc = s; plain(); reveal($(".page", sc), 100);
+      S.fresh = true; S.k = 0;
+      const ok = start();
+      sc.classList.toggle("st-fallback", !ok);
+      if (!ok) return;
+      $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
+    },
+    step(k) {
+      if (!M || sc.classList.contains("st-fallback")) return;
+      S.fresh = false;
+      play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
+    },
+    leave() {
+      cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false;
+      if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

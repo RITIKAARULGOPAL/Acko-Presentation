@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-ins-0">
+/* ---------- a Modern Indian Institution (03 · Spot the opportunity, between the people's challenge and the memories): the brief,
+   on black, beside a campus plan that draws itself ---------- */
+#s-ins-0 .in-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-0 .in-copy h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-0 .in-copy h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-0 .in-copy p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-0 .in-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease) 2.6s, transform .9s var(--ease) 2.6s; }
+#s-ins-0 .page.drawn .in-hand { opacity: 1; transform: none; }
+/* the campus plan: its lines draw on one after another; the colonnade and the names follow */
+#s-ins-0 .in-plan .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-0 .page.drawn .in-plan .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(1) { transition-delay: .2s; }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(2) { transition-delay: .7s; }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(n+3):nth-child(-n+6) { transition-delay: 1.1s; }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(n+7) { transition-delay: 1.5s; }
+#s-ins-0 .in-plan .col circle { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-0 .page.drawn .in-plan .col circle { opacity: 1; transition-delay: 1.9s; }
+#s-ins-0 .in-plan .tag text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-0 .page.drawn .in-plan .tag text { opacity: 1; transition-delay: 2.2s; }
+#s-ins-0 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+</style>
+<style data-slide="s-ins-1">
+
+#s-ins-1 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-1 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-1 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-1 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-1 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-1 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-1 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-1 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-1 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-1 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-1 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-1 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-1 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-1 .fig { display: flex; align-items: center; gap: calc(var(--pt) * 14); }
+#s-ins-1 .fig b { font-size: calc(var(--pt) * 92); line-height: .9; font-weight: 700; color: var(--lilac, #c9b3f3); letter-spacing: -.02em; }
+#s-ins-1 .ix .fig p { margin: 0; max-width: 17em; font-size: calc(var(--pt) * 19); line-height: 1.25; color: #fff; }
+#s-ins-1 .fig strong { color: var(--lilac, #c9b3f3); }
+#s-ins-1 cite { display: block; margin-top: calc(var(--pt) * 8); font-style: normal; font-size: calc(var(--pt) * 7.5); letter-spacing: .02em; color: rgba(255,255,255,.45); }
+#s-ins-1 .b1 { transition: opacity .8s var(--ease); }
+#s-ins-1 .b2 .b1 { opacity: .4; }
+#s-ins-1 .ix .b2t p, #s-ins-1 .b2t p { margin: 0 0 calc(var(--pt) * 5); max-width: none; font-size: calc(var(--pt) * 13); color: rgba(255,255,255,.8); }
+#s-ins-1 .b2t strong { color: #fff; }
+#s-ins-1 .ix .l3 { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 34); font-weight: 400; color: #fff; }
+#s-ins-1 .ix .l3 span { font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-1 .l1 { transition-delay: .1s !important; }
+#s-ins-1 .l2 { transition-delay: .8s !important; }
+#s-ins-1 .l3 { transition-delay: 1.5s !important; }
+#s-ins-1 .ix-hand[data-step] { transition-delay: 2.3s; }
+#s-ins-1 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-ins-1 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-ins-2">
+
+#s-ins-2 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-2 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-2 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-2 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-2 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-2 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-2 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-2 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-2 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-2 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-2 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-2 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-2 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-2 .pr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4%; }
+#s-ins-2 .pr-c { display: flex; flex-direction: column; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 10) calc(var(--pt) * 12); border: 1px solid rgba(201,179,243,.3); border-radius: calc(var(--pt) * 6); }
+#s-ins-2 .pr-c svg { width: 46%; height: auto; margin-bottom: calc(var(--pt) * 6); }
+#s-ins-2 .pr-c .ln > * { --d: inherit; }
+#s-ins-2 .pr-c b { font-size: calc(var(--pt) * 17); color: #fff; }
+#s-ins-2 .pr-c span { font-size: calc(var(--pt) * 10.5); color: rgba(255,255,255,.7); }
+</style>
+<style data-slide="s-ins-3">
+
+#s-ins-3 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-3 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-3 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-3 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-3 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-3 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-3 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-3 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-3 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-3 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-3 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-3 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-3 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-3 .tl { display: grid; grid-template-columns: repeat(4, 1fr); }
+#s-ins-3 .tl-s { position: relative; padding-top: calc(var(--pt) * 26); display: flex; flex-direction: column; gap: calc(var(--pt) * 2); }
+#s-ins-3 .tl-s i { position: absolute; left: 0; top: calc(var(--pt) * 6.5); width: calc(var(--pt) * 9); height: calc(var(--pt) * 9); border-radius: 50%; background: #000; border: 2px solid var(--lilac, #c9b3f3); }
+#s-ins-3 .tl-s.now i { background: var(--lilac, #c9b3f3); box-shadow: 0 0 0 calc(var(--pt) * 4) rgba(201,179,243,.25); }
+#s-ins-3 .tl-s em { font-style: normal; font-size: calc(var(--pt) * 8.5); letter-spacing: .1em; color: rgba(255,255,255,.55); }
+#s-ins-3 .tl-s b { font-size: calc(var(--pt) * 17); color: #fff; }
+#s-ins-3 .tl-s.now b { color: var(--lilac, #c9b3f3); }
+#s-ins-3 .tl-s span { font-size: calc(var(--pt) * 10); color: rgba(255,255,255,.7); max-width: 16em; }
+#s-ins-3 .tl-line .ln > * { stroke: rgba(201,179,243,.6); }
+</style>
+<style data-slide="s-ins-4">
+
+#s-ins-4 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-4 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-4 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-4 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-4 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-4 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-4 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-4 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-4 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-4 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-4 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-4 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-4 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-4 .c4-court { transition: transform 1.2s var(--ease), left 1.2s var(--ease), width 1.2s var(--ease), top 1.2s var(--ease), height 1.2s var(--ease); }
+#s-ins-4 .b2 .c4-court { left: 4% !important; top: 40% !important; width: 22% !important; height: 26% !important; }
+#s-ins-4 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-ins-4 .c4-floor .plate { fill: rgba(201,179,243,.08); stroke: var(--lilac, #c9b3f3); stroke-width: .5; }
+#s-ins-4 .c4-floor .core { fill: rgba(255,255,255,.18); stroke: none; }
+#s-ins-4 .c4-floor .yard { fill: rgba(201,179,243,.35); stroke: var(--lilac, #c9b3f3); stroke-width: .3; }
+#s-ins-4 .c4-floor text { font-size: 2.6px; letter-spacing: .3px; text-transform: uppercase; fill: #fff; }
+#s-ins-4 .c4-line { margin: 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; transition-delay: .9s; }
+#s-ins-4 [data-step="2"].c4-floor { transition-delay: .6s; }
+</style>
+<style data-slide="s-ins-5">
+
+#s-ins-5 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-5 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-5 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-5 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-5 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-5 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-5 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-5 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-5 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-5 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-5 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-5 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-5 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-5 .m5-map { left: 0; top: 0; width: 100%; height: 100%; background: url(assets/img/mem-campus.webp) 0 0 / 100% 100% no-repeat; opacity: 0; transform: scale(1.35); transform-origin: 62% 40%; transition: opacity 3.2s var(--ease), transform 4.2s var(--ease); }
+#s-ins-5 .page.drawn .m5-map { opacity: .12; transform: none; }
+</style>
+<style data-slide="s-bel-0">
+
+#s-bel-0 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-0 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-0 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-0 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-0 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-0 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-0 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-0 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-0 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-0 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-0 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-0 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-0 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-0 .fig { display: flex; align-items: center; gap: calc(var(--pt) * 14); }
+#s-bel-0 .fig b { font-size: calc(var(--pt) * 92); line-height: .9; font-weight: 700; color: var(--lilac, #c9b3f3); letter-spacing: -.02em; }
+#s-bel-0 .ix .fig p { margin: 0; max-width: 17em; font-size: calc(var(--pt) * 19); line-height: 1.25; color: #fff; }
+#s-bel-0 .fig strong { color: var(--lilac, #c9b3f3); }
+#s-bel-0 cite { display: block; margin-top: calc(var(--pt) * 8); font-style: normal; font-size: calc(var(--pt) * 7.5); letter-spacing: .02em; color: rgba(255,255,255,.45); }
+#s-bel-0 .b1 { transition: opacity .8s var(--ease); }
+#s-bel-0 .b2 .b1 { opacity: .4; }
+#s-bel-0 .ix .b2t p, #s-bel-0 .b2t p { margin: 0 0 calc(var(--pt) * 5); max-width: none; font-size: calc(var(--pt) * 13); color: rgba(255,255,255,.8); }
+#s-bel-0 .b2t strong { color: #fff; }
+#s-bel-0 .ix .l3 { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 34); font-weight: 400; color: #fff; }
+#s-bel-0 .ix .l3 span { font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-0 .l1 { transition-delay: .1s !important; }
+#s-bel-0 .l2 { transition-delay: .8s !important; }
+#s-bel-0 .l3 { transition-delay: 1.5s !important; }
+#s-bel-0 .ix-hand[data-step] { transition-delay: 2.3s; }
+#s-bel-0 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-0 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-bel-1">
+
+#s-bel-1 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-1 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-1 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-1 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-1 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-1 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-1 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-1 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-1 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-1 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-1 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-1 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-1 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-1 .ix.dv p { margin: 0 0 calc(var(--pt) * 5); max-width: none; font-size: calc(var(--pt) * 13); color: rgba(255,255,255,.8); }
+#s-bel-1 .dv strong { color: #fff; }
+#s-bel-1 .ix .l3 { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 34); font-weight: 400; color: #fff; }
+#s-bel-1 .ix .l3 span { font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-1 .l1 { transition-delay: .1s !important; } #s-bel-1 .l2 { transition-delay: .8s !important; } #s-bel-1 .l3 { transition-delay: 1.5s !important; }
+#s-bel-1 .ix-hand[data-step] { transition-delay: 2.3s; }
+#s-bel-1 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-1 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-bel-1 cite { display: block; font-style: normal; font-size: calc(var(--pt) * 7.5); letter-spacing: .02em; color: rgba(255,255,255,.45); }
+#s-bel-1 .dimmable { transition: opacity .8s var(--ease); }
+#s-bel-1 .b2 .dimmable { opacity: .35; }
+#s-bel-1 .ix .big { font-size: calc(var(--pt) * 64); line-height: .95; }
+#s-bel-1 .ix.dv .l3 { font-size: calc(var(--pt) * 26); }
+#s-bel-1 .ix.dimmable p { max-width: 24em; }
+#s-bel-1 .ix p strong { color: var(--lilac, #c9b3f3); }
+#s-bel-1 .grid circle { fill: rgba(255,255,255,.12); transition: fill .35s var(--ease); }
+#s-bel-1 .page.drawn .grid circle:nth-child(-n+58) { fill: var(--lilac, #c9b3f3); transition-delay: calc(.4s + var(--k) * 22ms); }
+</style>
+<style data-slide="s-bel-2">
+
+#s-bel-2 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-2 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-2 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-2 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-2 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-2 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-2 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-2 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-2 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-2 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-2 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-2 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-2 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-2 .ix.dv p { margin: 0 0 calc(var(--pt) * 5); max-width: none; font-size: calc(var(--pt) * 13); color: rgba(255,255,255,.8); }
+#s-bel-2 .dv strong { color: #fff; }
+#s-bel-2 .ix .l3 { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 34); font-weight: 400; color: #fff; }
+#s-bel-2 .ix .l3 span { font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-2 .l1 { transition-delay: .1s !important; } #s-bel-2 .l2 { transition-delay: .8s !important; } #s-bel-2 .l3 { transition-delay: 1.5s !important; }
+#s-bel-2 .ix-hand[data-step] { transition-delay: 2.3s; }
+#s-bel-2 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-2 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-bel-2 cite { display: block; font-style: normal; font-size: calc(var(--pt) * 7.5); letter-spacing: .02em; color: rgba(255,255,255,.45); }
+#s-bel-2 .dimmable { transition: opacity .8s var(--ease); }
+#s-bel-2 .b2 .dimmable { opacity: .35; }
+#s-bel-2 .bars { display: grid; gap: calc(var(--pt) * 8); margin-top: calc(var(--pt) * 6); }
+#s-bel-2 .bar { display: grid; grid-template-columns: 22% 1fr 10%; align-items: center; gap: 2%; }
+#s-bel-2 .bar span { font-size: calc(var(--pt) * 14); color: rgba(255,255,255,.6); }
+#s-bel-2 .bar i { height: calc(var(--pt) * 14); border-radius: 99px; background: rgba(255,255,255,.18); transform-origin: left; transform: scaleX(0); width: var(--w); transition: transform 1.2s var(--ease); }
+#s-bel-2 .page.drawn .bar i { transform: none; transition-delay: calc(.4s + var(--i) * 150ms); }
+#s-bel-2 .bar b { font-size: calc(var(--pt) * 18); color: rgba(255,255,255,.6); }
+#s-bel-2 .bar b em { font-style: normal; }
+#s-bel-2 .bar.on span, #s-bel-2 .bar.on b { color: var(--lilac, #c9b3f3); font-weight: 700; }
+#s-bel-2 .bar.on i { background: var(--lilac, #c9b3f3); }
+</style>
+<style data-slide="s-bel-3">
+
+#s-bel-3 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-3 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-3 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-3 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-3 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-3 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-3 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-3 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-3 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-3 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-3 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-3 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-3 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-3 .term b { display: block; font-size: calc(var(--pt) * 52); line-height: 1; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-3 .term b.t2 { font-size: calc(var(--pt) * 30); color: #fff; padding-top: calc(var(--pt) * 14); }
+#s-bel-3 .term b.t3 { font-size: calc(var(--pt) * 32); padding-top: calc(var(--pt) * 8); }
+#s-bel-3 .term p { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-bel-3 .term strong { color: #fff; }
+#s-bel-3 .res { padding: calc(var(--pt) * 10) calc(var(--pt) * 14); border: 1px solid var(--lilac, #c9b3f3); border-radius: calc(var(--pt) * 8); margin-top: calc(var(--pt) * -10); }
+#s-bel-3 .op { font-style: normal; font-size: calc(var(--pt) * 44); font-weight: 300; color: rgba(255,255,255,.6); }
+#s-bel-3 .src { font-style: normal; font-size: calc(var(--pt) * 7.5); color: rgba(255,255,255,.45); }
+#s-bel-3 .ix-hand[data-step] { transition-delay: 1s; }
+#s-bel-3 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+</style>
+<style data-slide="s-bel-4">
+
+#s-bel-4 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-4 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-4 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-4 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-4 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-4 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-4 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-4 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-4 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-4 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-4 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-4 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-4 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-4 .ix.dv p { margin: 0 0 calc(var(--pt) * 5); max-width: none; font-size: calc(var(--pt) * 13); color: rgba(255,255,255,.8); }
+#s-bel-4 .dv strong { color: #fff; }
+#s-bel-4 .ix .l3 { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 34); font-weight: 400; color: #fff; }
+#s-bel-4 .ix .l3 span { font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-4 .l1 { transition-delay: .1s !important; } #s-bel-4 .l2 { transition-delay: .8s !important; } #s-bel-4 .l3 { transition-delay: 1.5s !important; }
+#s-bel-4 .ix-hand[data-step] { transition-delay: 2.3s; }
+#s-bel-4 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-4 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-bel-4 cite { display: block; font-style: normal; font-size: calc(var(--pt) * 7.5); letter-spacing: .02em; color: rgba(255,255,255,.45); }
+#s-bel-4 .dimmable { transition: opacity .8s var(--ease); }
+#s-bel-4 .b2 .dimmable { opacity: .35; }
+#s-bel-4 .ix small { font-size: calc(var(--pt) * 13); font-style: normal; color: rgba(255,255,255,.8); }
+#s-bel-4 .pct { color: var(--lilac, #c9b3f3); font-size: 1.25em; }
+#s-bel-4 .ix .word { font-family: var(--hand); font-weight: 400; font-size: calc(var(--pt) * 96); line-height: 1; margin: calc(var(--pt) * 4) 0 calc(var(--pt) * 22); }
+</style>
+<style data-slide="s-bel-5">
+
+#s-bel-5 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-5 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-5 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-5 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-5 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-5 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-5 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-5 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-5 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-5 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-5 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-5 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-5 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-5 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); transition: transform 1.1s var(--ease), opacity 1.1s var(--ease); }
+#s-bel-5 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-bel-5 .col b { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-bel-5 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-bel-5 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-bel-5 .col strong { color: #fff; }
+#s-bel-5 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); color: rgba(255,255,255,.4); }
+#s-bel-5 .b2 .cl { transform: translateX(8%); opacity: .5; }
+#s-bel-5 .b2 .cr { transform: translateX(-8%); opacity: .5; }
+#s-bel-5 .mid { text-align: center; }
+#s-bel-5 .mid small { font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-bel-5 .mid h2 { margin: calc(var(--pt) * 2) 0 0; font-size: calc(var(--pt) * 48); font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-5 [data-step="2"].mid { transition-delay: .5s; }
+#s-bel-5 .ix-hand[data-step] { transition-delay: 1.4s; }
+#s-bel-5 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-5 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-bel-6">
+
+#s-bel-6 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-6 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-6 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-6 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-6 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-6 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-6 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-6 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-6 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-6 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-6 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-6 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-6 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-6 .src { font-style: normal; font-size: calc(var(--pt) * 7); color: rgba(255,255,255,.4); }
+#s-bel-6 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-6 .page:not(.b2) [data-step="2"], #s-bel-6 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+#s-bel-6 .w h2 { margin: 0; font-size: calc(var(--pt) * 60); line-height: 1; font-weight: 700; color: #fff; }
+#s-bel-6 .w3 h2 { color: var(--lilac, #c9b3f3); }
+#s-bel-6 .w span { display: block; margin-top: calc(var(--pt) * 4); font-size: calc(var(--pt) * 10); color: rgba(255,255,255,.6); }
+#s-bel-6 .w span b { color: var(--lilac, #c9b3f3); }
+#s-bel-6 .w1, #s-bel-6 .w2 { transition: opacity .8s var(--ease); }
+#s-bel-6 .b2 .w1 { opacity: .35; }
+#s-bel-6 .b3 .w2 { opacity: .35; }
+#s-bel-6 .ix-hand[data-step] { transition-delay: 1s; }
+</style>
+<style data-slide="s-bel-7">
+
+#s-bel-7 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-7 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-7 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-7 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-7 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-7 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-7 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-7 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-7 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-7 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-7 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-7 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-7 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-7 .src { font-style: normal; font-size: calc(var(--pt) * 7); color: rgba(255,255,255,.4); }
+#s-bel-7 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-7 .page:not(.b2) [data-step="2"], #s-bel-7 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+#s-bel-7 .n7 { transition: transform 1s var(--ease), opacity 1s var(--ease); }
+#s-bel-7 .n7 b { display: block; font-size: calc(var(--pt) * 130); line-height: .9; font-weight: 700; color: var(--lilac, #c9b3f3); letter-spacing: -.03em; }
+#s-bel-7 .n7 p { margin: calc(var(--pt) * 6) 0 calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: #fff; }
+#s-bel-7 .n7 strong { color: var(--lilac, #c9b3f3); }
+#s-bel-7 .b2 .n7 { transform: translateX(-4%); opacity: .45; }
+#s-bel-7 .a7 h2 { margin: 0; font-size: calc(var(--pt) * 56); font-weight: 700; color: #fff; white-space: nowrap; }
+#s-bel-7 [data-step="2"].a7 { transition-delay: .4s; }
+#s-bel-7 .ix-hand[data-step] { transition-delay: 1.3s; }
+</style>
+<style data-slide="s-bel-8">
+
+#s-bel-8 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-bel-8 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-bel-8 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-bel-8 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-bel-8 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-bel-8 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-bel-8 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-bel-8 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-bel-8 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-8 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-bel-8 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-bel-8 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-bel-8 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-bel-8 .src { font-style: normal; font-size: calc(var(--pt) * 7); color: rgba(255,255,255,.4); }
+#s-bel-8 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-bel-8 .page:not(.b2) [data-step="2"], #s-bel-8 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+#s-bel-8 .t8 p { margin: 0 0 calc(var(--pt) * 8); font-size: calc(var(--pt) * 22); color: #fff; }
+#s-bel-8 .t8 b { font-size: calc(var(--pt) * 44); color: var(--lilac, #c9b3f3); margin-right: .15em; }
+#s-bel-8 .g8 { overflow: visible; }
+#s-bel-8 .g8 circle { fill: rgba(255,255,255,.12); transition: fill .35s var(--ease), opacity .8s var(--ease), transform 1.4s var(--ease); }
+#s-bel-8 .page.drawn .g8 circle.on { fill: var(--lilac, #c9b3f3); transition-delay: calc(.4s + var(--k) * 22ms), 0s, calc(var(--k) * 12ms); }
+#s-bel-8 .b2 .g8 circle:not(.on) { opacity: 0; }
+#s-bel-8 .b2 .g8 circle.on { transform: translate(var(--tx), var(--ty)); }
+#s-bel-8 .c8 { margin: 0; text-align: center; font-size: calc(var(--pt) * 40); font-weight: 700; color: #fff; }
+#s-bel-8 [data-step="2"].c8 { transition-delay: 1.2s; }
+#s-bel-8 .ix-hand[data-step] { transition-delay: 1.8s; }
+</style>
+<style data-slide="s-blw-1">
+#s-blw-1 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-1 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-1 .page:not(.b2) [data-step="2"], #s-blw-1 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-1 .ring .trk { fill: none; stroke: #ece8f5; stroke-width: 20; }
+#s-blw-1 .ring .arc { fill: none; stroke: var(--purple); stroke-width: 20; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.6s var(--ease), stroke .8s var(--ease); }
+#s-blw-1 .page.drawn .ring .arc { stroke-dashoffset: 42; transition-delay: .3s; }
+#s-blw-1 .page.drawn.b2 .ring .arc { stroke-dashoffset: 0; stroke: #a98ff0; transition-delay: 0s; }
+#s-blw-1 .mid { display: flex; flex-direction: column; align-items: center; text-align: center; }
+#s-blw-1 .mid b { font-size: calc(var(--pt) * 64); line-height: 1; font-weight: 700; color: var(--purple); }
+#s-blw-1 .mid b.c { font-size: calc(var(--pt) * 34); }
+#s-blw-1 .mid > span { font-size: calc(var(--pt) * 15); color: #555; margin-top: calc(var(--pt) * 4); }
+</style>
+<style data-slide="s-blw-2">
+#s-blw-2 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-2 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-2 .page:not(.b2) [data-step="2"], #s-blw-2 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-2 .cap { display: flex; flex-direction: column; }
+#s-blw-2 .cap b { font-size: calc(var(--pt) * 80); line-height: 1; font-weight: 700; color: var(--purple); }
+#s-blw-2 .cap > span { font-size: calc(var(--pt) * 18); color: #555; }
+#s-blw-2 .g { overflow: visible; }
+#s-blw-2 .g circle { fill: #ece8f5; transition: fill .35s var(--ease), opacity .8s var(--ease), transform 1.4s var(--ease); }
+#s-blw-2 .page.drawn .g circle.on { fill: var(--purple); transition-delay: calc(.4s + var(--k) * 22ms), 0s, calc(var(--k) * 12ms); }
+#s-blw-2 .b2 .g circle:not(.on) { opacity: 0; }
+#s-blw-2 .b2 .g circle.on { transform: translate(var(--tx), var(--ty)); }
+#s-blw-2 .c { margin: 0; text-align: center; font-size: calc(var(--pt) * 40); font-weight: 700; color: var(--purple); }
+#s-blw-2 [data-step="2"].c { transition-delay: 1.2s; }
+</style>
+<style data-slide="s-blw-3">
+#s-blw-3 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-3 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-3 .page:not(.b2) [data-step="2"], #s-blw-3 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-3 .wd { left: 0; top: 34%; width: 100%; text-align: center; }
+#s-blw-3 .wd h2 { margin: 0; font-size: calc(var(--pt) * 96); line-height: 1; font-weight: 700; color: #1e1a2e; letter-spacing: -.02em; }
+#s-blw-3 .wd h2.last { color: var(--purple); }
+#s-blw-3 .wd sup { font-size: .32em; vertical-align: top; margin-right: .25em; color: var(--purple); letter-spacing: 0; }
+</style>
+<style data-slide="s-blw-4">
+#s-blw-4 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-4 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-4 .page:not(.b2) [data-step="2"], #s-blw-4 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-4 .ic { display: flex; flex-direction: column; align-items: center; gap: calc(var(--pt) * 8); }
+#s-blw-4 .ic svg { width: 78%; height: auto; }
+#s-blw-4 .ic svg * { fill: none; stroke: var(--purple-2); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+#s-blw-4 .ic svg.people circle { fill: var(--purple); stroke: none; }
+#s-blw-4 .ic svg.people circle:nth-child(n+8) { fill: #ece8f5; }
+#s-blw-4 .ic svg.court * { stroke: var(--purple); }
+#s-blw-4 .ic b { font-size: calc(var(--pt) * 22); font-weight: 600; color: #1e1a2e; }
+#s-blw-4 .ic b.last { color: var(--purple); font-weight: 700; }
+#s-blw-4 .ic b em { font-style: normal; color: var(--purple); }
+#s-blw-4 .ar { font-style: normal; font-size: calc(var(--pt) * 34); color: #b4aec6; }
+</style>
+<style data-slide="s-blw-5">
+#s-blw-5 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-5 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-5 .page:not(.b2) [data-step="2"], #s-blw-5 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-5 .cy .ln > * { fill: none; stroke: var(--purple-2); stroke-width: 1.4; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-blw-5 .page.drawn .cy .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-blw-5 .cy .dot { fill: var(--purple); opacity: 0; transition: opacity .6s var(--ease); }
+#s-blw-5 .page.drawn .cy .dot { opacity: 1; transition-delay: 1.8s; }
+#s-blw-5 .b2 .cy .ln > :nth-child(2) { fill: #f1eefa; }
+#s-blw-5 .in { display: flex; flex-direction: column; align-items: center; text-align: center; }
+#s-blw-5 .in b { font-size: calc(var(--pt) * 46); line-height: 1; font-weight: 700; color: var(--purple); }
+#s-blw-5 .in b.c { font-size: calc(var(--pt) * 25); }
+#s-blw-5 .in > span { font-size: calc(var(--pt) * 12); color: #555; margin-top: calc(var(--pt) * 2); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<section class="scene" id="s-ins-0" data-part="1" data-mode="dark" data-title="Institution · 0 · As built" data-steps="1" data-mins="0.4"
+  data-notes="The brief asked for a Modern Indian Institution. India's great institutions, Nalanda, Takshashila, were campuses, not buildings: pathways, courtyards and steps, where people learnt, met and belonged. So where did we first feel at home among people? On a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+    <div class="ins-chip">A · Institution · Option 0 · As built</div>
+    <div class="in-copy rv" style="left:6%;top:24%;width:46%">
+      <small style="--i:0">The brief</small>
+      <h2 style="--i:1">A Modern Indian Institution.</h2>
+      <h3 style="--i:2">Not a building. A campus.</h3>
+      <p style="--i:3">Nalanda. Takshashila. India’s great institutions were campuses: pathways, courtyards and steps, where people learnt, met and belonged.</p>
+    </div>
+    <p class="in-hand hand" style="left:6%;top:76%;width:60%">…where we first felt at home among people.</p>
+    <svg class="in-plan" viewBox="0 0 400 260" aria-hidden="true" style="left:56%;top:22%;width:38%;height:56%">
+      <g class="ln">
+        <rect pathLength="1" x="10" y="10" width="380" height="240" rx="4"/>
+        <rect pathLength="1" x="130" y="75" width="140" height="110"/>
+        <path pathLength="1" d="M200 10V75"/><path pathLength="1" d="M200 185V250"/><path pathLength="1" d="M10 130H130"/><path pathLength="1" d="M270 130H390"/>
+        <path pathLength="1" d="M180 232H220M184 240H216M188 248H212"/>
+        <circle pathLength="1" cx="200" cy="130" r="20"/><circle pathLength="1" cx="200" cy="130" r="8"/>
+      </g>
+      <g class="col"><circle cx="140" cy="85" r="3"/><circle cx="175" cy="85" r="3"/><circle cx="225" cy="85" r="3"/><circle cx="260" cy="85" r="3"/>
+        <circle cx="140" cy="175" r="3"/><circle cx="175" cy="175" r="3"/><circle cx="225" cy="175" r="3"/><circle cx="260" cy="175" r="3"/>
+        <circle cx="140" cy="130" r="3"/><circle cx="260" cy="130" r="3"/></g>
+      <g class="tag">
+        <text x="200" y="135" text-anchor="middle" dy="-30">courtyard</text>
+        <text x="70" y="124" text-anchor="middle">pathway</text>
+        <text x="200" y="226" text-anchor="middle">steps</text>
+      </g>
+    </svg>
+  </div>
+</section>
+<section class="scene" id="s-ins-1" data-part="1" data-mode="dark" data-title="Institution · 1 · Belonging → campus" data-steps="2" data-mins="0.4" data-beats="The research,The campus"
+  data-notes="1 · The research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: The Race to Reimagine Workplaces and Workspaces for a Hybrid Future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023; reported by People Matters, Dec 2023). In the same study: 80% come back to collaborate; 64% in India say office layouts don't support collaboration. 2 · The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <div class="ix b1 rv" style="left:6%;top:20%;width:86%">
+      <small style="--i:0">What people come to the office for</small>
+      <div class="fig" style="--i:1"><b><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong.</strong></p></div>
+      <cite style="--i:2">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite>
+    </div>
+    <div class="ix b2t" style="left:6%;top:56%;width:86%">
+      <p class="l1" data-step="2">The brief asked for <strong>a Modern Indian Institution.</strong></p>
+      <p class="l2" data-step="2">And where did we first belong? <strong>On a campus.</strong></p>
+      <h2 class="l3" data-step="2">So we arrived at <span>a campus.</span></h2>
+    </div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">A · Institution · Option 1 · Belonging → campus</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-2" data-part="1" data-mode="dark" data-title="Institution · 2 · Three principles" data-steps="1" data-mins="0.4"
+  data-notes="The brief, a Modern Indian Institution, read as three things a campus gives people: a courtyard to gather, pathways to meet on the move, steps to pause. The campus, made for a workplace.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:16%;width:80%"><small style="--i:0">The brief</small><h2 style="--i:1">A Modern Indian Institution.</h2><h3 style="--i:2">Not a building. A campus.</h3></div>
+    <div class="pr rv" style="left:6%;top:44%;width:88%"><div class="pr-c" style="--i:3"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:0.5s"><rect pathLength="1" x="20" y="14" width="80" height="62" rx="3"/><rect pathLength="1" x="42" y="30" width="36" height="30"/><circle pathLength="1" cx="60" cy="45" r="6"/></g></svg><b>Courtyard</b><span>a place to gather</span></div><div class="pr-c" style="--i:4"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:0.9s"><path pathLength="1" d="M10 70C35 70 35 20 60 20S85 70 110 70"/><path pathLength="1" d="M10 58C35 58 35 8 60 8S85 58 110 58" style="opacity:.45"/></g></svg><b>Pathway</b><span>a way to meet on the move</span></div><div class="pr-c" style="--i:5"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:1.3s"><path pathLength="1" d="M18 76H102M28 64H92M38 52H82M48 40H72"/><circle pathLength="1" cx="60" cy="24" r="7"/></g></svg><b>Steps</b><span>a place to pause</span></div></div>
+    <p class="ix-hand hand" style="left:6%;top:80%;width:70%;--hd:2.4s">…the campus, made for a workplace.</p>
+    <div class="ins-chip">A · Institution · Option 2 · Three principles</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-3" data-part="1" data-mode="dark" data-title="Institution · 3 · A line of campuses" data-steps="1" data-mins="0.4"
+  data-notes="India has always learnt on campuses: Takshashila, Nalanda, and in our time IIM Ahmedabad's courtyards and steps by Louis Kahn. The brief asks for the next one: a Modern Indian Institution, a campus on one floor. (Dates to check before the pitch: Takshashila c. 5th century BCE; Nalanda 5th century CE; IIM Ahmedabad campus by Louis Kahn, 1960s.)">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:16%;width:80%"><small style="--i:0">The brief: a Modern Indian Institution</small><h2 style="--i:1">India learns on campuses.</h2></div>
+    <svg class="dr tl-line" viewBox="0 0 1000 10" preserveAspectRatio="none" aria-hidden="true" style="left:6%;top:49.1%;width:88%;height:1.2%"><g class="ln"><path pathLength="1" d="M0 5H1000" style="--d:.3s;transition-duration:2.2s"/></g></svg>
+    <div class="tl rv" style="left:6%;top:47%;width:88%"><div class="tl-s" style="--i:3"><i></i><em>c. 5th c. BCE</em><b>Takshashila</b><span>learning gathered in one place</span></div><div class="tl-s" style="--i:5"><i></i><em>5th c. CE</em><b>Nalanda</b><span>courtyards, quarters, a campus</span></div><div class="tl-s" style="--i:7"><i></i><em>1960s</em><b>IIM Ahmedabad</b><span>Louis Kahn’s courtyards and steps</span></div><div class="tl-s now" style="--i:9"><i></i><em>2026</em><b>ACKO, Regalium</b><span>a campus on one floor</span></div></div>
+    <p class="ix-hand hand" style="left:6%;top:80%;width:70%;--hd:3s">…not a building. A campus.</p>
+    <div class="ins-chip">A · Institution · Option 3 · A line of campuses</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-4" data-part="1" data-mode="dark" data-title="Institution · 4 · A campus on one floor" data-steps="2" data-mins="0.4" data-beats="The campus,On one floor"
+  data-notes="1 · The brief, a Modern Indian Institution: a campus of courtyards, pathways and steps. 2 · Our floor has its own: the two terraces and the cut-out become its courtyards. Not a building. A campus, on one floor.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:80%"><small style="--i:0">The brief</small><h2 style="--i:1">A Modern Indian Institution.</h2></div>
+    <svg class="dr c4-court" viewBox="0 0 400 260" aria-hidden="true" style="left:30%;top:34%;width:40%;height:44%"><g class="ln"><rect pathLength="1" x="10" y="10" width="380" height="240" rx="4" style="--d:.2s"/><rect pathLength="1" x="130" y="75" width="140" height="110" style="--d:.7s"/>
+        <path pathLength="1" d="M200 10V75" style="--d:1.1s"/><path pathLength="1" d="M200 185V250" style="--d:1.1s"/><path pathLength="1" d="M10 130H130" style="--d:1.1s"/><path pathLength="1" d="M270 130H390" style="--d:1.1s"/>
+        <path pathLength="1" d="M180 232H220M184 240H216M188 248H212" style="--d:1.5s"/><circle pathLength="1" cx="200" cy="130" r="20" style="--d:1.5s"/><circle pathLength="1" cx="200" cy="130" r="8" style="--d:1.5s"/></g>
+      <g><circle class="dot" cx="140" cy="85" r="3"/><circle class="dot" cx="175" cy="85" r="3"/><circle class="dot" cx="225" cy="85" r="3"/><circle class="dot" cx="260" cy="85" r="3"/><circle class="dot" cx="140" cy="175" r="3"/><circle class="dot" cx="175" cy="175" r="3"/><circle class="dot" cx="225" cy="175" r="3"/><circle class="dot" cx="260" cy="175" r="3"/><circle class="dot" cx="140" cy="130" r="3"/><circle class="dot" cx="260" cy="130" r="3"/></g><g><text x="200" y="105" text-anchor="middle">courtyard</text><text x="70" y="124" text-anchor="middle">pathway</text><text x="200" y="226" text-anchor="middle">steps</text></g></svg>
+    <svg class="c4-floor" data-step="2" viewBox="-3 -6 252 50" aria-hidden="true" style="left:30%;top:42%;width:66%;height:30%"></svg>
+    <h3 class="c4-line" data-step="2" style="left:30%;top:76%;width:66%">Not a building. A campus, on one floor.</h3>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:84%;width:60%;--hd:1.8s">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">A · Institution · Option 4 · A campus on one floor</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-5" data-part="1" data-mode="dark" data-title="Institution · 5 · Into the map" data-steps="1" data-mins="0.4"
+  data-notes="The brief, a Modern Indian Institution: not a building, a campus. As we say it, the campus comes into view from above; it is the map of the next slide. Maybe, we've felt this before.">
+  <div class="page">
+
+    <div class="m5-map"></div>
+    <div class="ix rv" style="left:6%;top:28%;width:60%"><small style="--i:0">The brief</small><h2 style="--i:1">A Modern Indian Institution.</h2><h3 style="--i:2">Not a building. A campus.</h3><p style="--i:3">Nalanda. Takshashila. Pathways, courtyards and steps, where people learnt, met and belonged.</p></div>
+    <p class="ix-hand hand" style="left:6%;top:76%;width:60%;--hd:2.4s">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">A · Institution · Option 5 · Into the map</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-0" data-part="1" data-mode="dark" data-title="Belonging · 0 · As built" data-steps="2" data-mins="0.4" data-beats="The research,The campus"
+  data-notes="1 · The research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: The Race to Reimagine Workplaces and Workspaces for a Hybrid Future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023; reported by People Matters, Dec 2023). In the same study: 80% come back to collaborate; 64% in India say office layouts don't support collaboration. 2 · The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <div class="ix b1 rv" style="left:6%;top:20%;width:86%">
+      <small style="--i:0">What people come to the office for</small>
+      <div class="fig" style="--i:1"><b><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong.</strong></p></div>
+      <cite style="--i:2">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite>
+    </div>
+    <div class="ix b2t" style="left:6%;top:56%;width:86%">
+      <p class="l1" data-step="2">The brief asked for <strong>a Modern Indian Institution.</strong></p>
+      <p class="l2" data-step="2">And where did we first belong? <strong>On a campus.</strong></p>
+      <h2 class="l3" data-step="2">So we arrived at <span>a campus.</span></h2>
+    </div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 0 · As built</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-1" data-part="1" data-mode="dark" data-title="Belonging · 1 · 58 in 100" data-steps="2" data-mins="0.4" data-beats="58 in 100,The campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv dimmable" style="left:6%;top:18%;width:50%"><small style="--i:0">What people come to the office for</small>
+      <h2 class="big" style="--i:1"><span data-count="58">0</span> in 100</h2>
+      <p style="--i:2">employees in India come back to the office <strong>to feel they belong.</strong></p>
+      <cite style="--i:3;margin-top:calc(var(--pt) * 8)">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <svg class="grid dimmable" viewBox="0 0 270 270" aria-hidden="true" style="left:60%;top:16%;width:34%;height:62%"><circle cx="12" cy="12" r="7" style="--k:0"/><circle cx="38" cy="12" r="7" style="--k:1"/><circle cx="64" cy="12" r="7" style="--k:2"/><circle cx="90" cy="12" r="7" style="--k:3"/><circle cx="116" cy="12" r="7" style="--k:4"/><circle cx="142" cy="12" r="7" style="--k:5"/><circle cx="168" cy="12" r="7" style="--k:6"/><circle cx="194" cy="12" r="7" style="--k:7"/><circle cx="220" cy="12" r="7" style="--k:8"/><circle cx="246" cy="12" r="7" style="--k:9"/><circle cx="12" cy="38" r="7" style="--k:10"/><circle cx="38" cy="38" r="7" style="--k:11"/><circle cx="64" cy="38" r="7" style="--k:12"/><circle cx="90" cy="38" r="7" style="--k:13"/><circle cx="116" cy="38" r="7" style="--k:14"/><circle cx="142" cy="38" r="7" style="--k:15"/><circle cx="168" cy="38" r="7" style="--k:16"/><circle cx="194" cy="38" r="7" style="--k:17"/><circle cx="220" cy="38" r="7" style="--k:18"/><circle cx="246" cy="38" r="7" style="--k:19"/><circle cx="12" cy="64" r="7" style="--k:20"/><circle cx="38" cy="64" r="7" style="--k:21"/><circle cx="64" cy="64" r="7" style="--k:22"/><circle cx="90" cy="64" r="7" style="--k:23"/><circle cx="116" cy="64" r="7" style="--k:24"/><circle cx="142" cy="64" r="7" style="--k:25"/><circle cx="168" cy="64" r="7" style="--k:26"/><circle cx="194" cy="64" r="7" style="--k:27"/><circle cx="220" cy="64" r="7" style="--k:28"/><circle cx="246" cy="64" r="7" style="--k:29"/><circle cx="12" cy="90" r="7" style="--k:30"/><circle cx="38" cy="90" r="7" style="--k:31"/><circle cx="64" cy="90" r="7" style="--k:32"/><circle cx="90" cy="90" r="7" style="--k:33"/><circle cx="116" cy="90" r="7" style="--k:34"/><circle cx="142" cy="90" r="7" style="--k:35"/><circle cx="168" cy="90" r="7" style="--k:36"/><circle cx="194" cy="90" r="7" style="--k:37"/><circle cx="220" cy="90" r="7" style="--k:38"/><circle cx="246" cy="90" r="7" style="--k:39"/><circle cx="12" cy="116" r="7" style="--k:40"/><circle cx="38" cy="116" r="7" style="--k:41"/><circle cx="64" cy="116" r="7" style="--k:42"/><circle cx="90" cy="116" r="7" style="--k:43"/><circle cx="116" cy="116" r="7" style="--k:44"/><circle cx="142" cy="116" r="7" style="--k:45"/><circle cx="168" cy="116" r="7" style="--k:46"/><circle cx="194" cy="116" r="7" style="--k:47"/><circle cx="220" cy="116" r="7" style="--k:48"/><circle cx="246" cy="116" r="7" style="--k:49"/><circle cx="12" cy="142" r="7" style="--k:50"/><circle cx="38" cy="142" r="7" style="--k:51"/><circle cx="64" cy="142" r="7" style="--k:52"/><circle cx="90" cy="142" r="7" style="--k:53"/><circle cx="116" cy="142" r="7" style="--k:54"/><circle cx="142" cy="142" r="7" style="--k:55"/><circle cx="168" cy="142" r="7" style="--k:56"/><circle cx="194" cy="142" r="7" style="--k:57"/><circle cx="220" cy="142" r="7" style="--k:58"/><circle cx="246" cy="142" r="7" style="--k:59"/><circle cx="12" cy="168" r="7" style="--k:60"/><circle cx="38" cy="168" r="7" style="--k:61"/><circle cx="64" cy="168" r="7" style="--k:62"/><circle cx="90" cy="168" r="7" style="--k:63"/><circle cx="116" cy="168" r="7" style="--k:64"/><circle cx="142" cy="168" r="7" style="--k:65"/><circle cx="168" cy="168" r="7" style="--k:66"/><circle cx="194" cy="168" r="7" style="--k:67"/><circle cx="220" cy="168" r="7" style="--k:68"/><circle cx="246" cy="168" r="7" style="--k:69"/><circle cx="12" cy="194" r="7" style="--k:70"/><circle cx="38" cy="194" r="7" style="--k:71"/><circle cx="64" cy="194" r="7" style="--k:72"/><circle cx="90" cy="194" r="7" style="--k:73"/><circle cx="116" cy="194" r="7" style="--k:74"/><circle cx="142" cy="194" r="7" style="--k:75"/><circle cx="168" cy="194" r="7" style="--k:76"/><circle cx="194" cy="194" r="7" style="--k:77"/><circle cx="220" cy="194" r="7" style="--k:78"/><circle cx="246" cy="194" r="7" style="--k:79"/><circle cx="12" cy="220" r="7" style="--k:80"/><circle cx="38" cy="220" r="7" style="--k:81"/><circle cx="64" cy="220" r="7" style="--k:82"/><circle cx="90" cy="220" r="7" style="--k:83"/><circle cx="116" cy="220" r="7" style="--k:84"/><circle cx="142" cy="220" r="7" style="--k:85"/><circle cx="168" cy="220" r="7" style="--k:86"/><circle cx="194" cy="220" r="7" style="--k:87"/><circle cx="220" cy="220" r="7" style="--k:88"/><circle cx="246" cy="220" r="7" style="--k:89"/><circle cx="12" cy="246" r="7" style="--k:90"/><circle cx="38" cy="246" r="7" style="--k:91"/><circle cx="64" cy="246" r="7" style="--k:92"/><circle cx="90" cy="246" r="7" style="--k:93"/><circle cx="116" cy="246" r="7" style="--k:94"/><circle cx="142" cy="246" r="7" style="--k:95"/><circle cx="168" cy="246" r="7" style="--k:96"/><circle cx="194" cy="246" r="7" style="--k:97"/><circle cx="220" cy="246" r="7" style="--k:98"/><circle cx="246" cy="246" r="7" style="--k:99"/></svg>
+    <div class="ix dv" style="left:6%;top:58%;width:50%">
+      <p class="l1" data-step="2">The brief asked for <strong>a Modern Indian Institution.</strong></p>
+      <p class="l2" data-step="2">And where did we first belong? <strong>On a campus.</strong></p>
+      <h2 class="l3" data-step="2">So we arrived at <span>a campus.</span></h2>
+    </div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 1 · 58 in 100</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-2" data-part="1" data-mode="dark" data-title="Belonging · 2 · Why we come in" data-steps="2" data-mins="0.4" data-beats="Why we come in,The campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv dimmable" style="left:6%;top:14%;width:86%"><small style="--i:0">Why people in India come back to the office</small>
+      <div class="bars"><div class="bar" style="--i:1;--w:80%"><span>To collaborate</span><i></i><b><em data-count="80">0</em>%</b></div><div class="bar on" style="--i:2;--w:58%"><span>To belong</span><i></i><b><em data-count="58">0</em>%</b></div><div class="bar" style="--i:3;--w:53%"><span>To ideate</span><i></i><b><em data-count="53">0</em>%</b></div></div>
+      <cite style="--i:5;margin-top:calc(var(--pt) * 8)">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="ix dv" style="left:6%;top:60%;width:86%">
+      <p class="l1" data-step="2">The brief asked for <strong>a Modern Indian Institution.</strong></p>
+      <p class="l2" data-step="2">And where did we first belong? <strong>On a campus.</strong></p>
+      <h2 class="l3" data-step="2">So we arrived at <span>a campus.</span></h2>
+    </div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 2 · Why we come in</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-3" data-part="1" data-mode="dark" data-title="Belonging · 3 · The equation" data-steps="3" data-mins="0.4" data-beats="58% belong,The brief,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:86%"><small style="--i:0">How we arrived at a campus</small></div>
+      <div class="term rv" style="left:6%;top:30%;width:26%"><b style="--i:1"><span data-count="58">0</span>%</b><p style="--i:2">of employees in India come back to the office <strong>to feel they belong</strong></p></div>
+      <i class="op" data-step="2" style="left:34.5%;top:38%">+</i>
+      <div class="term" data-step="2" style="left:39%;top:30%;width:26%"><b class="t2">The brief</b><p>asked for <strong>a Modern Indian Institution</strong></p></div>
+      <i class="op" data-step="3" style="left:67.5%;top:38%">=</i>
+      <div class="term res" data-step="3" style="left:72%;top:30%;width:22%"><b class="t3">A campus.</b><p>where we first belonged</p></div>
+    <cite class="src" style="left:6%;top:70%;width:60%">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite>
+    <p class="ix-hand hand" data-step="3" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 3 · The equation</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-4" data-part="1" data-mode="dark" data-title="Belonging · 4 · One word" data-steps="2" data-mins="0.4" data-beats="To belong,The campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv dimmable" style="left:6%;top:16%;width:86%"><small style="--i:0">The reason <b class="pct"><span data-count="58">0</span>%</b> of employees in India give for coming back to the office</small>
+      <h2 class="word" style="--i:1">to belong.</h2>
+      <cite style="--i:2">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="ix dv" style="left:6%;top:58%;width:86%">
+      <p class="l1" data-step="2">The brief asked for <strong>a Modern Indian Institution.</strong></p>
+      <p class="l2" data-step="2">And where did we first belong? <strong>On a campus.</strong></p>
+      <h2 class="l3" data-step="2">So we arrived at <span>a campus.</span></h2>
+    </div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 4 · One word</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-5" data-part="1" data-mode="dark" data-title="Belonging · 5 · Where both meet" data-steps="2" data-mins="0.4" data-beats="Two givens,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:86%"><small style="--i:0">Two things we were given</small></div>
+    <div class="col cl rv" style="left:6%;top:26%;width:34%"><em style="--i:1">The research</em><b style="--i:2"><span data-count="58">0</span>%</b><p style="--i:3">of employees in India come back to the office <strong>to feel they belong</strong></p><cite style="--i:4">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="col cr rv" style="left:60%;top:26%;width:34%"><em style="--i:2">The brief</em><b class="t2" style="--i:3">A Modern Indian Institution</b><p style="--i:4">Nalanda. Takshashila. Pathways, courtyards and steps.</p></div>
+    <div class="mid" data-step="2" style="left:30%;top:66%;width:40%"><small>where both meet</small><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 5 · Where both meet</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-6" data-part="1" data-mode="dark" data-title="Belonging · 6 · Three words" data-steps="3" data-mins="0.4" data-beats="Belong,Institution,Campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="w w1 rv" style="left:6%;top:14%;width:70%"><h2 style="--i:0">Belong.</h2><span style="--i:1"><b>58%</b> come to the office for this · <cite class="src">Cisco, “From Mandate to Magnet”, Nov 2023</cite></span></div>
+    <div class="w w2" data-step="2" style="left:6%;top:38%;width:70%"><h2>Institution.</h2><span>the brief</span></div>
+    <div class="w w3" data-step="3" style="left:6%;top:62%;width:70%"><h2>Campus.</h2></div>
+    <p class="ix-hand hand" data-step="3" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 6 · Three words</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-7" data-part="1" data-mode="dark" data-title="Belonging · 7 · Number, then answer" data-steps="2" data-mins="0.4" data-beats="58% to belong,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="n7 rv" style="left:6%;top:24%;width:44%"><b style="--i:0"><span data-count="58">0</span>%</b><p style="--i:1">come in <strong>to belong</strong></p><cite class="src" style="--i:2">Cisco, “From Mandate to Magnet”, Nov 2023</cite></div>
+    <div class="a7" data-step="2" style="left:47%;top:34%;width:50%"><h2>→ a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 7 · Number, then answer</div>
+  </div>
+</section>
+<section class="scene" id="s-bel-8" data-part="1" data-mode="dark" data-title="Belonging · 8 · Dots into a campus" data-steps="2" data-mins="0.4" data-beats="58% to belong,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="t8 rv" style="left:6%;top:36%;width:40%"><p style="--i:0"><b><span data-count="58">0</span>%</b> come in to belong</p><cite class="src" style="--i:1">Cisco, “From Mandate to Magnet”, Nov 2023</cite></div>
+    <svg class="g8" viewBox="0 0 270 270" aria-hidden="true" style="left:52%;top:14%;width:40%;height:66%"><circle class="on" cx="12" cy="12" r="7" style="--k:0;--tx:123.0px;--ty:11.0px"/><circle class="on" cx="38" cy="12" r="7" style="--k:1;--tx:109.1px;--ty:11.7px"/><circle class="on" cx="64" cy="12" r="7" style="--k:2;--tx:95.1px;--ty:13.6px"/><circle class="on" cx="90" cy="12" r="7" style="--k:3;--tx:80.8px;--ty:16.9px"/><circle class="on" cx="116" cy="12" r="7" style="--k:4;--tx:66.0px;--ty:21.4px"/><circle class="on" cx="142" cy="12" r="7" style="--k:5;--tx:50.7px;--ty:27.0px"/><circle class="on" cx="168" cy="12" r="7" style="--k:6;--tx:34.8px;--ty:33.8px"/><circle class="on" cx="194" cy="12" r="7" style="--k:7;--tx:18.0px;--ty:41.7px"/><circle class="on" cx="220" cy="12" r="7" style="--k:8;--tx:0.4px;--ty:50.5px"/><circle class="on" cx="246" cy="12" r="7" style="--k:9;--tx:-18.3px;--ty:60.1px"/><circle class="on" cx="12" cy="38" r="7" style="--k:10;--tx:222.0px;--ty:44.5px"/><circle class="on" cx="38" cy="38" r="7" style="--k:11;--tx:201.0px;--ty:55.5px"/><circle class="on" cx="64" cy="38" r="7" style="--k:12;--tx:178.9px;--ty:67.0px"/><circle class="on" cx="90" cy="38" r="7" style="--k:13;--tx:155.5px;--ty:78.9px"/><circle class="on" cx="116" cy="38" r="7" style="--k:14;--tx:130.8px;--ty:90.9px"/><circle class="on" cx="142" cy="38" r="7" style="--k:15;--tx:104.8px;--ty:103.1px"/><circle class="on" cx="168" cy="38" r="7" style="--k:16;--tx:77.5px;--ty:115.1px"/><circle class="on" cx="194" cy="38" r="7" style="--k:17;--tx:48.9px;--ty:127.0px"/><circle class="on" cx="220" cy="38" r="7" style="--k:18;--tx:19.0px;--ty:138.5px"/><circle class="on" cx="246" cy="38" r="7" style="--k:19;--tx:-12.0px;--ty:149.5px"/><circle class="on" cx="12" cy="64" r="7" style="--k:20;--tx:215.7px;--ty:133.9px"/><circle class="on" cx="38" cy="64" r="7" style="--k:21;--tx:182.4px;--ty:143.5px"/><circle class="on" cx="64" cy="64" r="7" style="--k:22;--tx:148.0px;--ty:152.3px"/><circle class="on" cx="90" cy="64" r="7" style="--k:23;--tx:112.8px;--ty:160.2px"/><circle class="on" cx="116" cy="64" r="7" style="--k:24;--tx:76.7px;--ty:167.0px"/><circle class="on" cx="142" cy="64" r="7" style="--k:25;--tx:40.0px;--ty:172.6px"/><circle class="on" cx="168" cy="64" r="7" style="--k:26;--tx:2.8px;--ty:177.1px"/><circle class="on" cx="194" cy="64" r="7" style="--k:27;--tx:-34.9px;--ty:180.4px"/><circle class="on" cx="220" cy="64" r="7" style="--k:28;--tx:-72.9px;--ty:182.3px"/><circle class="on" cx="246" cy="64" r="7" style="--k:29;--tx:-111.0px;--ty:183.0px"/><circle class="on" cx="12" cy="90" r="7" style="--k:30;--tx:110.9px;--ty:156.3px"/><circle class="on" cx="38" cy="90" r="7" style="--k:31;--tx:72.9px;--ty:154.4px"/><circle class="on" cx="64" cy="90" r="7" style="--k:32;--tx:35.2px;--ty:151.1px"/><circle class="on" cx="90" cy="90" r="7" style="--k:33;--tx:-2.0px;--ty:146.6px"/><circle class="on" cx="116" cy="90" r="7" style="--k:34;--tx:-38.7px;--ty:141.0px"/><circle class="on" cx="142" cy="90" r="7" style="--k:35;--tx:-74.8px;--ty:134.2px"/><circle class="on" cx="168" cy="90" r="7" style="--k:36;--tx:-110.0px;--ty:126.3px"/><circle class="on" cx="194" cy="90" r="7" style="--k:37;--tx:-144.4px;--ty:117.5px"/><circle class="on" cx="220" cy="90" r="7" style="--k:38;--tx:-177.7px;--ty:107.9px"/><circle class="on" cx="246" cy="90" r="7" style="--k:39;--tx:-210.0px;--ty:97.5px"/><circle class="on" cx="12" cy="116" r="7" style="--k:40;--tx:19.0px;--ty:60.5px"/><circle class="on" cx="38" cy="116" r="7" style="--k:41;--tx:-10.9px;--ty:49.0px"/><circle class="on" cx="64" cy="116" r="7" style="--k:42;--tx:-39.5px;--ty:37.1px"/><circle class="on" cx="90" cy="116" r="7" style="--k:43;--tx:-66.8px;--ty:25.1px"/><circle class="on" cx="116" cy="116" r="7" style="--k:44;--tx:-92.8px;--ty:12.9px"/><circle class="on" cx="142" cy="116" r="7" style="--k:45;--tx:-117.5px;--ty:0.9px"/><circle class="on" cx="168" cy="116" r="7" style="--k:46;--tx:-140.9px;--ty:-11.0px"/><circle class="on" cx="194" cy="116" r="7" style="--k:47;--tx:-163.0px;--ty:-22.5px"/><circle class="on" cx="220" cy="116" r="7" style="--k:48;--tx:-184.0px;--ty:-33.5px"/><circle class="on" cx="246" cy="116" r="7" style="--k:49;--tx:-203.7px;--ty:-43.9px"/><circle class="on" cx="12" cy="142" r="7" style="--k:50;--tx:37.6px;--ty:-79.5px"/><circle class="on" cx="38" cy="142" r="7" style="--k:51;--tx:20.0px;--ty:-88.3px"/><circle class="on" cx="64" cy="142" r="7" style="--k:52;--tx:3.2px;--ty:-96.2px"/><circle class="on" cx="90" cy="142" r="7" style="--k:53;--tx:-12.7px;--ty:-103.0px"/><circle class="on" cx="116" cy="142" r="7" style="--k:54;--tx:-28.0px;--ty:-108.6px"/><circle class="on" cx="142" cy="142" r="7" style="--k:55;--tx:-42.8px;--ty:-113.1px"/><circle class="on" cx="168" cy="142" r="7" style="--k:56;--tx:-57.1px;--ty:-116.4px"/><circle class="on" cx="194" cy="142" r="7" style="--k:57;--tx:-71.1px;--ty:-118.3px"/><circle cx="220" cy="142" r="7"/><circle cx="246" cy="142" r="7"/><circle cx="12" cy="168" r="7"/><circle cx="38" cy="168" r="7"/><circle cx="64" cy="168" r="7"/><circle cx="90" cy="168" r="7"/><circle cx="116" cy="168" r="7"/><circle cx="142" cy="168" r="7"/><circle cx="168" cy="168" r="7"/><circle cx="194" cy="168" r="7"/><circle cx="220" cy="168" r="7"/><circle cx="246" cy="168" r="7"/><circle cx="12" cy="194" r="7"/><circle cx="38" cy="194" r="7"/><circle cx="64" cy="194" r="7"/><circle cx="90" cy="194" r="7"/><circle cx="116" cy="194" r="7"/><circle cx="142" cy="194" r="7"/><circle cx="168" cy="194" r="7"/><circle cx="194" cy="194" r="7"/><circle cx="220" cy="194" r="7"/><circle cx="246" cy="194" r="7"/><circle cx="12" cy="220" r="7"/><circle cx="38" cy="220" r="7"/><circle cx="64" cy="220" r="7"/><circle cx="90" cy="220" r="7"/><circle cx="116" cy="220" r="7"/><circle cx="142" cy="220" r="7"/><circle cx="168" cy="220" r="7"/><circle cx="194" cy="220" r="7"/><circle cx="220" cy="220" r="7"/><circle cx="246" cy="220" r="7"/><circle cx="12" cy="246" r="7"/><circle cx="38" cy="246" r="7"/><circle cx="64" cy="246" r="7"/><circle cx="90" cy="246" r="7"/><circle cx="116" cy="246" r="7"/><circle cx="142" cy="246" r="7"/><circle cx="168" cy="246" r="7"/><circle cx="194" cy="246" r="7"/><circle cx="220" cy="246" r="7"/><circle cx="246" cy="246" r="7"/></svg>
+    <h2 class="c8" data-step="2" style="left:52%;top:43%;width:40%">campus.</h2>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">B · Belonging · Variation 8 · Dots into a campus</div>
+  </div>
+</section>
+<section class="scene" id="s-blw-1" data-part="1" data-title="Belonging lite · 1 · Ring" data-steps="2" data-mins="0.3" data-beats="58% to belong,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <svg class="ring" viewBox="0 0 300 300" aria-hidden="true" style="left:35%;top:12%;width:30%;height:72%">
+      <circle class="trk" cx="150" cy="150" r="118"/><circle class="arc" cx="150" cy="150" r="118" pathLength="100" transform="rotate(-90 150 150)"/>
+    </svg>
+    <div class="mid" data-only="1" style="left:35%;top:38%;width:30%"><b><span data-count="58">0</span>%</b><span>to belong</span></div>
+    <div class="mid" data-only="2" style="left:35%;top:42%;width:30%"><b class="c">campus.</b></div>
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">C · Belonging · white · Option 1 · Ring</div>
+  </div>
+</section>
+<section class="scene" id="s-blw-2" data-part="1" data-title="Belonging lite · 2 · Dots" data-steps="2" data-mins="0.3" data-beats="58% to belong,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <div class="cap rv" style="left:6%;top:40%;width:36%"><b style="--i:0"><span data-count="58">0</span>%</b><span style="--i:1">to belong</span></div>
+    <svg class="g" viewBox="0 0 270 270" aria-hidden="true" style="left:50%;top:12%;width:40%;height:70%"><circle class="on" cx="12" cy="12" r="7" style="--k:0;--tx:123.0px;--ty:11.0px"/><circle class="on" cx="38" cy="12" r="7" style="--k:1;--tx:109.1px;--ty:11.7px"/><circle class="on" cx="64" cy="12" r="7" style="--k:2;--tx:95.1px;--ty:13.6px"/><circle class="on" cx="90" cy="12" r="7" style="--k:3;--tx:80.8px;--ty:16.9px"/><circle class="on" cx="116" cy="12" r="7" style="--k:4;--tx:66.0px;--ty:21.4px"/><circle class="on" cx="142" cy="12" r="7" style="--k:5;--tx:50.7px;--ty:27.0px"/><circle class="on" cx="168" cy="12" r="7" style="--k:6;--tx:34.8px;--ty:33.8px"/><circle class="on" cx="194" cy="12" r="7" style="--k:7;--tx:18.0px;--ty:41.7px"/><circle class="on" cx="220" cy="12" r="7" style="--k:8;--tx:0.4px;--ty:50.5px"/><circle class="on" cx="246" cy="12" r="7" style="--k:9;--tx:-18.3px;--ty:60.1px"/><circle class="on" cx="12" cy="38" r="7" style="--k:10;--tx:222.0px;--ty:44.5px"/><circle class="on" cx="38" cy="38" r="7" style="--k:11;--tx:201.0px;--ty:55.5px"/><circle class="on" cx="64" cy="38" r="7" style="--k:12;--tx:178.9px;--ty:67.0px"/><circle class="on" cx="90" cy="38" r="7" style="--k:13;--tx:155.5px;--ty:78.9px"/><circle class="on" cx="116" cy="38" r="7" style="--k:14;--tx:130.8px;--ty:90.9px"/><circle class="on" cx="142" cy="38" r="7" style="--k:15;--tx:104.8px;--ty:103.1px"/><circle class="on" cx="168" cy="38" r="7" style="--k:16;--tx:77.5px;--ty:115.1px"/><circle class="on" cx="194" cy="38" r="7" style="--k:17;--tx:48.9px;--ty:127.0px"/><circle class="on" cx="220" cy="38" r="7" style="--k:18;--tx:19.0px;--ty:138.5px"/><circle class="on" cx="246" cy="38" r="7" style="--k:19;--tx:-12.0px;--ty:149.5px"/><circle class="on" cx="12" cy="64" r="7" style="--k:20;--tx:215.7px;--ty:133.9px"/><circle class="on" cx="38" cy="64" r="7" style="--k:21;--tx:182.4px;--ty:143.5px"/><circle class="on" cx="64" cy="64" r="7" style="--k:22;--tx:148.0px;--ty:152.3px"/><circle class="on" cx="90" cy="64" r="7" style="--k:23;--tx:112.8px;--ty:160.2px"/><circle class="on" cx="116" cy="64" r="7" style="--k:24;--tx:76.7px;--ty:167.0px"/><circle class="on" cx="142" cy="64" r="7" style="--k:25;--tx:40.0px;--ty:172.6px"/><circle class="on" cx="168" cy="64" r="7" style="--k:26;--tx:2.8px;--ty:177.1px"/><circle class="on" cx="194" cy="64" r="7" style="--k:27;--tx:-34.9px;--ty:180.4px"/><circle class="on" cx="220" cy="64" r="7" style="--k:28;--tx:-72.9px;--ty:182.3px"/><circle class="on" cx="246" cy="64" r="7" style="--k:29;--tx:-111.0px;--ty:183.0px"/><circle class="on" cx="12" cy="90" r="7" style="--k:30;--tx:110.9px;--ty:156.3px"/><circle class="on" cx="38" cy="90" r="7" style="--k:31;--tx:72.9px;--ty:154.4px"/><circle class="on" cx="64" cy="90" r="7" style="--k:32;--tx:35.2px;--ty:151.1px"/><circle class="on" cx="90" cy="90" r="7" style="--k:33;--tx:-2.0px;--ty:146.6px"/><circle class="on" cx="116" cy="90" r="7" style="--k:34;--tx:-38.7px;--ty:141.0px"/><circle class="on" cx="142" cy="90" r="7" style="--k:35;--tx:-74.8px;--ty:134.2px"/><circle class="on" cx="168" cy="90" r="7" style="--k:36;--tx:-110.0px;--ty:126.3px"/><circle class="on" cx="194" cy="90" r="7" style="--k:37;--tx:-144.4px;--ty:117.5px"/><circle class="on" cx="220" cy="90" r="7" style="--k:38;--tx:-177.7px;--ty:107.9px"/><circle class="on" cx="246" cy="90" r="7" style="--k:39;--tx:-210.0px;--ty:97.5px"/><circle class="on" cx="12" cy="116" r="7" style="--k:40;--tx:19.0px;--ty:60.5px"/><circle class="on" cx="38" cy="116" r="7" style="--k:41;--tx:-10.9px;--ty:49.0px"/><circle class="on" cx="64" cy="116" r="7" style="--k:42;--tx:-39.5px;--ty:37.1px"/><circle class="on" cx="90" cy="116" r="7" style="--k:43;--tx:-66.8px;--ty:25.1px"/><circle class="on" cx="116" cy="116" r="7" style="--k:44;--tx:-92.8px;--ty:12.9px"/><circle class="on" cx="142" cy="116" r="7" style="--k:45;--tx:-117.5px;--ty:0.9px"/><circle class="on" cx="168" cy="116" r="7" style="--k:46;--tx:-140.9px;--ty:-11.0px"/><circle class="on" cx="194" cy="116" r="7" style="--k:47;--tx:-163.0px;--ty:-22.5px"/><circle class="on" cx="220" cy="116" r="7" style="--k:48;--tx:-184.0px;--ty:-33.5px"/><circle class="on" cx="246" cy="116" r="7" style="--k:49;--tx:-203.7px;--ty:-43.9px"/><circle class="on" cx="12" cy="142" r="7" style="--k:50;--tx:37.6px;--ty:-79.5px"/><circle class="on" cx="38" cy="142" r="7" style="--k:51;--tx:20.0px;--ty:-88.3px"/><circle class="on" cx="64" cy="142" r="7" style="--k:52;--tx:3.2px;--ty:-96.2px"/><circle class="on" cx="90" cy="142" r="7" style="--k:53;--tx:-12.7px;--ty:-103.0px"/><circle class="on" cx="116" cy="142" r="7" style="--k:54;--tx:-28.0px;--ty:-108.6px"/><circle class="on" cx="142" cy="142" r="7" style="--k:55;--tx:-42.8px;--ty:-113.1px"/><circle class="on" cx="168" cy="142" r="7" style="--k:56;--tx:-57.1px;--ty:-116.4px"/><circle class="on" cx="194" cy="142" r="7" style="--k:57;--tx:-71.1px;--ty:-118.3px"/><circle cx="220" cy="142" r="7"/><circle cx="246" cy="142" r="7"/><circle cx="12" cy="168" r="7"/><circle cx="38" cy="168" r="7"/><circle cx="64" cy="168" r="7"/><circle cx="90" cy="168" r="7"/><circle cx="116" cy="168" r="7"/><circle cx="142" cy="168" r="7"/><circle cx="168" cy="168" r="7"/><circle cx="194" cy="168" r="7"/><circle cx="220" cy="168" r="7"/><circle cx="246" cy="168" r="7"/><circle cx="12" cy="194" r="7"/><circle cx="38" cy="194" r="7"/><circle cx="64" cy="194" r="7"/><circle cx="90" cy="194" r="7"/><circle cx="116" cy="194" r="7"/><circle cx="142" cy="194" r="7"/><circle cx="168" cy="194" r="7"/><circle cx="194" cy="194" r="7"/><circle cx="220" cy="194" r="7"/><circle cx="246" cy="194" r="7"/><circle cx="12" cy="220" r="7"/><circle cx="38" cy="220" r="7"/><circle cx="64" cy="220" r="7"/><circle cx="90" cy="220" r="7"/><circle cx="116" cy="220" r="7"/><circle cx="142" cy="220" r="7"/><circle cx="168" cy="220" r="7"/><circle cx="194" cy="220" r="7"/><circle cx="220" cy="220" r="7"/><circle cx="246" cy="220" r="7"/><circle cx="12" cy="246" r="7"/><circle cx="38" cy="246" r="7"/><circle cx="64" cy="246" r="7"/><circle cx="90" cy="246" r="7"/><circle cx="116" cy="246" r="7"/><circle cx="142" cy="246" r="7"/><circle cx="168" cy="246" r="7"/><circle cx="194" cy="246" r="7"/><circle cx="220" cy="246" r="7"/><circle cx="246" cy="246" r="7"/></svg>
+    <h2 class="c" data-step="2" style="left:50%;top:42%;width:40%">campus.</h2>
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">C · Belonging · white · Option 2 · Dots → courtyard</div>
+  </div>
+</section>
+<section class="scene" id="s-blw-3" data-part="1" data-title="Belonging lite · 3 · One word" data-steps="3" data-mins="0.3" data-beats="Belong,Institution,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <div class="wd" data-only="1"><h2><sup><span data-count="58">0</span>%</sup>belong.</h2></div>
+    <div class="wd" data-only="2"><h2>institution.</h2></div>
+    <div class="wd" data-only="3"><h2 class="last">campus.</h2></div>
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">C · Belonging · white · Option 3 · One word at a time</div>
+  </div>
+</section>
+<section class="scene" id="s-blw-4" data-part="1" data-title="Belonging lite · 4 · Three icons" data-steps="3" data-mins="0.3" data-beats="Belong,Institution,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+<div class="ic rv" style="left:9%;top:28%;width:22%"><svg viewBox="0 0 160 120" aria-hidden="true" class="people"><circle cx="40" cy="32" r="7"/><circle cx="62" cy="32" r="7"/><circle cx="84" cy="32" r="7"/><circle cx="106" cy="32" r="7"/><circle cx="40" cy="54" r="7"/><circle cx="62" cy="54" r="7"/><circle cx="84" cy="54" r="7"/><circle cx="106" cy="54" r="7"/><circle cx="40" cy="76" r="7"/><circle cx="62" cy="76" r="7"/><circle cx="84" cy="76" r="7"/><circle cx="106" cy="76" r="7"/></svg><b>belong <em>· 58%</em></b></div>
+<i class="ar" data-step="2" style="left:33%;top:38%">→</i>
+<div class="ic" data-step="2" style="left:40%;top:28%;width:22%"><svg viewBox="0 0 160 120" aria-hidden="true" class="portico"><path d="M24 46L80 18L136 46Z"/><path d="M34 52V100M60 52V100M100 52V100M126 52V100"/><path d="M20 106H140"/></svg><b>institution</b></div>
+<i class="ar" data-step="3" style="left:64%;top:38%">→</i>
+<div class="ic" data-step="3" style="left:71%;top:28%;width:22%"><svg viewBox="0 0 160 120" aria-hidden="true" class="court"><rect x="22" y="14" width="116" height="92" rx="3"/><rect x="56" y="38" width="48" height="44"/><circle cx="80" cy="60" r="8"/><path d="M80 14V38M80 82V106M22 60H56M104 60H138"/></svg><b class="last">campus</b></div>
+
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">C · Belonging · white · Option 4 · Three icons</div>
+  </div>
+</section>
+<section class="scene" id="s-blw-5" data-part="1" data-title="Belonging lite · 5 · Courtyard" data-steps="2" data-mins="0.3" data-beats="58% to belong,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <svg class="cy" viewBox="0 0 400 260" aria-hidden="true" style="left:25%;top:14%;width:50%;height:66%"><g class="ln"><rect pathLength="1" x="10" y="10" width="380" height="240" rx="4" style="--d:.2s"/><rect pathLength="1" x="130" y="75" width="140" height="110" style="--d:.7s"/>
+        <path pathLength="1" d="M200 10V75" style="--d:1.1s"/><path pathLength="1" d="M200 185V250" style="--d:1.1s"/><path pathLength="1" d="M10 130H130" style="--d:1.1s"/><path pathLength="1" d="M270 130H390" style="--d:1.1s"/>
+        <path pathLength="1" d="M180 232H220M184 240H216M188 248H212" style="--d:1.5s"/></g><circle class="dot" cx="140" cy="85" r="3"/><circle class="dot" cx="175" cy="85" r="3"/><circle class="dot" cx="225" cy="85" r="3"/><circle class="dot" cx="260" cy="85" r="3"/><circle class="dot" cx="140" cy="175" r="3"/><circle class="dot" cx="175" cy="175" r="3"/><circle class="dot" cx="225" cy="175" r="3"/><circle class="dot" cx="260" cy="175" r="3"/></svg>
+    <div class="in" data-only="1" style="left:40%;top:38.5%;width:20%"><b><span data-count="58">0</span>%</b><span>to belong</span></div>
+    <div class="in" data-only="2" style="left:40%;top:42%;width:20%"><b class="c">campus.</b></div>
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">C · Belonging · white · Option 5 · Courtyard</div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-ins-0">
+/* a Modern Indian Institution: the words come in; the campus plan draws itself (wall, courtyard, pathways, steps, the tree), then
+   its colonnade and names; last, the line that hands over to the memories */
+ACKO.slide("s-ins-0", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) {
+    plain();
+    const pg = $(".page", sc);
+    pg.classList.remove("drawn"); void pg.offsetWidth;
+    reveal($(".in-copy", sc), 120);
+    if (reduced) pg.classList.add("drawn"); else setTimeout(() => pg.classList.add("drawn"), 40);
+  },
+}));
+</script>
+<script data-slide="s-ins-1">
+ACKO.slide("s-ins-1", ({ $, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    later(() => countUp($("[data-count]", sc), 1500), 400);
+  },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k >= 2); },
+}));
+</script>
+<script data-slide="s-ins-2">
+ACKO.slide("s-ins-2", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) { plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+}));
+</script>
+<script data-slide="s-ins-3">
+ACKO.slide("s-ins-3", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) { plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+}));
+</script>
+<script data-slide="s-ins-4">
+ACKO.slide("s-ins-4", ({ $, plain, reveal, reduced }) => {
+  function floor(svg) {                                         // the bare floor (core and shell), its terraces and cut-out as courtyards
+    const F = window.ACKO_FLOOR; if (!F || svg.childElementCount) return;
+    const k = F.unit, P = (pts) => pts.map(([x, y]) => (x * k).toFixed(2) + " " + (y * k).toFixed(2)).join("L"), mid = (pts) => [pts.reduce((a, p) => a + p[0], 0) / pts.length * k, pts.reduce((a, p) => a + p[1], 0) / pts.length * k];
+    const yards = [...(F.terraces || []), ...(F.cutout ? [F.cutout] : [])];
+    svg.innerHTML = `<path class="plate" d="M${P(F.plate)}Z"/>` + (F.cores || []).map((c) => `<path class="core" d="M${P(c)}Z"/>`).join("") +
+      yards.map((t) => `<path class="yard" d="M${P(t)}Z"/>`).join("") +
+      yards.map((t) => { const [x, y] = mid(t); return `<text x="${x.toFixed(1)}" y="${(y + 9).toFixed(1)}" text-anchor="middle">courtyard</text>`; }).join("");
+  }
+  return {
+    enter(_, sc) { plain(); floor($(".c4-floor", sc)); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+    step(k, sc) { $(".page", sc).classList.toggle("b2", k >= 2); },
+  };
+});
+</script>
+<script data-slide="s-ins-5">
+ACKO.slide("s-ins-5", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) { plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+}));
+</script>
+<script data-slide="s-bel-0">
+ACKO.slide("s-bel-0", ({ $, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    later(() => countUp($("[data-count]", sc), 1500), 400);
+  },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k >= 2); },
+}));
+</script>
+<script data-slide="s-bel-1">
+ACKO.slide("s-bel-1", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-bel-2">
+ACKO.slide("s-bel-2", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-bel-3">
+ACKO.slide("s-bel-3", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 3; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-bel-4">
+ACKO.slide("s-bel-4", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-bel-5">
+ACKO.slide("s-bel-5", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-bel-6">
+ACKO.slide("s-bel-6", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 3; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-bel-7">
+ACKO.slide("s-bel-7", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-bel-8">
+ACKO.slide("s-bel-8", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-blw-1">
+ACKO.slide("s-blw-1", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-blw-2">
+ACKO.slide("s-blw-2", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-blw-3">
+ACKO.slide("s-blw-3", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 3; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-blw-4">
+ACKO.slide("s-blw-4", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 3; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-blw-5">
+ACKO.slide("s-blw-5", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

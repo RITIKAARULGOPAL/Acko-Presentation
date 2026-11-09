@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How we worked · ACKO slide s-approach</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-approach" data-part="cover" data-title="How we worked" data-steps="1" data-mins="0.4"
+  data-notes="How we worked: we let the site lead, and the concept followed. Every decision grew from the site itself: we explored its potential, embraced its character, and let the layout take shape naturally. Six steps: discover the site, map the possibilities, spot the opportunity, frame the idea, layer the lenses, shape the plan.">
+  <div class="page">
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">How we worked</small>
+      <h2 style="--i:1">We let the site lead, <span>and the concept followed.</span></h2>
+      <p style="--i:2">Every decision grew from the site itself. We explored its potential, embraced its character, and let the layout take shape naturally.</p>
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b>Discover</b><span class="hand">the site</span></li>
+      <li style="--i:4"><i></i><b>Map</b><span class="hand">the possibilities</span></li>
+      <li style="--i:5"><i></i><b>Spot</b><span class="hand">the opportunity</span></li>
+      <li style="--i:6"><i></i><b>Frame</b><span class="hand">the idea</span></li>
+      <li style="--i:7"><i></i><b>Layer</b><span class="hand">the lenses</span></li>
+      <li style="--i:8"><i></i><b>Shape</b><span class="hand">the plan</span></li>
+    </ol>
+  </div>
+</section>
+<style>
+/* ---------- how we worked (after the team): the approach in a line, then its six steps ---------- */
+#s-approach .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-approach .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-approach .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-approach .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+/* the steps: a dot on a thin rule, a small arrow between each pair; the verb in bold, its object in the hand */
+#s-approach .ap-steps { display: grid; grid-template-columns: repeat(6, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-approach .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-approach .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-approach .ap-steps li:last-child::before { right: 70%; }
+#s-approach .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-approach .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-approach .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-approach .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+</style>
+<script>
+/* how we worked: the line, then the six steps one after another */
+ACKO.slide("s-approach", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

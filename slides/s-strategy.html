@@ -82,6 +82,7 @@
 #s-strategy .st-tool svg { flex: none; width: calc(var(--pt) * 5.6); height: calc(var(--pt) * 5.6); fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 #s-strategy .st-tool:hover { color: var(--purple); background: rgba(82, 34, 208, .05); }
 #s-strategy .st-tool:focus { outline: none; }
+#s-strategy.st-flat .st-ov, #s-strategy.st-flat .st-cap { opacity: 0; transition: opacity .3s; }   /* turning onto the plan: the names go at once */
 </style>
 <script>
 /* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), at the 3D renders' camera
@@ -478,9 +479,41 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     return true;
   }
 
+  // Layout · Spaces, arriving from here (9 Nov, the re-ordered deck): the furnished model, route and all, turns straight down until it
+  // lies on the plan's home view (vb, plan mm). The 3D floor and the plan differ by a translation in mm: world x = (plan x − 185842 −
+  // M.CX)/1000, z = (plan y + 182802 − M.CY)/1000; φ from vertical, so straight down is φ ≈ 0 (exactly 0 is degenerate), θ 0 is north up.
+  // The canvas goes into a host of its own, first in #stage under both pages, so it never blinks in the slides' cross-fade; its own
+  // frames (this slide's draw() stops once it isn't the scene); the names and leaders go at once; done(host) when it lands
+  function flatten(vb, ms, done) {
+    if (!M || !r || !cam) return false;
+    const stage = document.getElementById("stage"); if (!stage) return false;
+    const h = document.createElement("div"); h.className = "st-flat-host";
+    h.style.cssText = "position:fixed;left:var(--pl);top:var(--ptop);width:var(--pw);height:var(--ph);pointer-events:none;z-index:0";
+    stage.insertBefore(h, stage.firstChild);
+    const cv = r.domElement; h.appendChild(cv); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block";
+    sc.classList.add("st-flat");
+    cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; S.tween = null;
+    const from = { theta: S.state.theta, phi: S.state.phi, half: S.state.half, t: S.state.t.slice() }, d0 = S.dim || 0;
+    const to = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+    const paint = (e) => {
+      const L = (a, b) => a + (b - a) * e;
+      S.state = { theta: L(from.theta, to.theta), phi: L(from.phi, to.phi), half: L(from.half, to.half), t: from.t.map((x, i) => L(x, to.t[i])) };
+      S.dim = d0 * (1 - e);                            // the veil lifts: the furniture at full strength, as the plan's
+      window.AxoModel.apply(cam, S.state, asp);
+      S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
+      if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
+      r.render(M.scene, cam);
+    };
+    let t0 = 0, end = false;
+    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); if (done) done(h); };
+    const tick = (now) => { if (end) return; if (!t0) t0 = now; const k = Math.min(1, (now - t0) / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
+    paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 500);
+    return true;
+  }
+
   return {
     enter(_, s) {
-      sc = s; plain(); reveal($(".page", sc), 100);
+      sc = s; sc._flatten = flatten; plain(); reveal($(".page", sc), 100);
       S.fresh = true; S.k = 0;
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
@@ -492,7 +525,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       S.fresh = false;
       play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() {
+    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy");   // Layout · Spaces flattens the floor from here (9 Nov)
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false;
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },

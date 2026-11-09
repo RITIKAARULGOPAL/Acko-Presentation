@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belonging lite · 4 · Three icons · ACKO slide s-blw-4</title>
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-blw-4" data-part="1" data-title="Belonging lite · 4 · Three icons" data-steps="3" data-mins="0.3" data-beats="Belong,Institution,Campus"
+  data-notes="58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: the race to reimagine workplaces for a hybrid future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, Nov 2023). The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+<div class="ic rv" style="left:9%;top:28%;width:22%"><svg viewBox="0 0 160 120" aria-hidden="true" class="people"><circle cx="40" cy="32" r="7"/><circle cx="62" cy="32" r="7"/><circle cx="84" cy="32" r="7"/><circle cx="106" cy="32" r="7"/><circle cx="40" cy="54" r="7"/><circle cx="62" cy="54" r="7"/><circle cx="84" cy="54" r="7"/><circle cx="106" cy="54" r="7"/><circle cx="40" cy="76" r="7"/><circle cx="62" cy="76" r="7"/><circle cx="84" cy="76" r="7"/><circle cx="106" cy="76" r="7"/></svg><b>belong <em>· 58%</em></b></div>
+<i class="ar" data-step="2" style="left:33%;top:38%">→</i>
+<div class="ic" data-step="2" style="left:40%;top:28%;width:22%"><svg viewBox="0 0 160 120" aria-hidden="true" class="portico"><path d="M24 46L80 18L136 46Z"/><path d="M34 52V100M60 52V100M100 52V100M126 52V100"/><path d="M20 106H140"/></svg><b>institution</b></div>
+<i class="ar" data-step="3" style="left:64%;top:38%">→</i>
+<div class="ic" data-step="3" style="left:71%;top:28%;width:22%"><svg viewBox="0 0 160 120" aria-hidden="true" class="court"><rect x="22" y="14" width="116" height="92" rx="3"/><rect x="56" y="38" width="48" height="44"/><circle cx="80" cy="60" r="8"/><path d="M80 14V38M80 82V106M22 60H56M104 60H138"/></svg><b class="last">campus</b></div>
+
+    <p class="src">Source: Cisco, “From Mandate to Magnet”, Nov 2023</p>
+    <div class="chip">Option 4 · Three icons</div>
+  </div>
+</section>
+<style>
+#s-blw-4 .src { left: 6%; top: 89%; margin: 0; font-size: calc(var(--pt) * 7); color: #9a96a8; }
+#s-blw-4 .chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f1eefa; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-blw-4 .page:not(.b2) [data-step="2"], #s-blw-4 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+
+#s-blw-4 .ic { display: flex; flex-direction: column; align-items: center; gap: calc(var(--pt) * 8); }
+#s-blw-4 .ic svg { width: 78%; height: auto; }
+#s-blw-4 .ic svg * { fill: none; stroke: var(--purple-2); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+#s-blw-4 .ic svg.people circle { fill: var(--purple); stroke: none; }
+#s-blw-4 .ic svg.people circle:nth-child(n+8) { fill: #ece8f5; }
+#s-blw-4 .ic svg.court * { stroke: var(--purple); }
+#s-blw-4 .ic b { font-size: calc(var(--pt) * 22); font-weight: 600; color: #1e1a2e; }
+#s-blw-4 .ic b.last { color: var(--purple); font-weight: 700; }
+#s-blw-4 .ic b em { font-style: normal; color: var(--purple); }
+#s-blw-4 .ar { font-style: normal; font-size: calc(var(--pt) * 34); color: #b4aec6; }
+</style>
+<script>
+ACKO.slide("s-blw-4", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 3; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

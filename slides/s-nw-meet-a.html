@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where the two meet · ACKO slide s-nw-meet-a</title>
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-nw-meet-a" data-part="1" data-title="Words · Meet · A · as built" data-steps="2" data-mins="0.5" data-beats="Two threads,The Loop"
+  data-notes="1 · Two threads. From the brief, a Modern Indian Institution: a campus of pathways, courtyards and steps. From the brand, the Möbius: one continuous surface, no end. 2 · Put together they make the Loop: a campus of pathways and courtyards, drawn as one continuous surface. No dead ends; every path leads to another.">
+  <div class="page">
+    <div class="nw-chip">Meet · A · as built</div>
+    <div class="hdr"><b>Where the two meet</b><span>Design concept</span></div>
+    <div class="th-card th-inst rv dim" style="left:6%;top:15%;width:38%">
+      <svg style="--i:0" viewBox="0 0 400 260" aria-hidden="true">
+        <rect x="10" y="10" width="380" height="240" rx="4"/><rect x="130" y="75" width="140" height="110"/>
+        <path d="M200 10V75M200 185V250M10 130H130M270 130H390"/>
+        <path class="th-steps" d="M180 232H220M184 240H216M188 248H212"/>
+        <circle cx="200" cy="130" r="20"/><circle cx="200" cy="130" r="8"/>
+        <g class="th-col"><circle cx="140" cy="85" r="3"/><circle cx="175" cy="85" r="3"/><circle cx="225" cy="85" r="3"/><circle cx="260" cy="85" r="3"/>
+        <circle cx="140" cy="175" r="3"/><circle cx="175" cy="175" r="3"/><circle cx="225" cy="175" r="3"/><circle cx="260" cy="175" r="3"/>
+        <circle cx="140" cy="130" r="3"/><circle cx="260" cy="130" r="3"/></g>
+      </svg>
+      <small style="--i:1">From your brief</small>
+      <h4 style="--i:2">A Modern Indian Institution</h4>
+      <p style="--i:3">A campus, not a building: pathways, courtyards and steps where people meet.</p>
+    </div>
+    <i class="th-plus rv dim" style="left:50%;top:30%"><span style="--i:4">+</span></i>
+    <div class="th-card th-mob rv dim" style="left:56%;top:15%;width:38%">
+      <div class="th-img" style="--i:5"><img src="assets/img/acko-mark.webp" alt=""></div>
+      <small style="--i:6">From your brand</small>
+      <h4 style="--i:7">The Möbius, ACKO’s mark</h4>
+      <p style="--i:8">One continuous surface: no inside, no outside, no end.</p>
+    </div>
+    <img class="th-ribbon" data-step="2" src="assets/img/loop-ribbon.webp" alt="" style="left:6%;top:63%;width:36%">
+    <div class="th-sum" data-step="2" style="left:46%;top:64%;width:46%">
+      <h3>= The Loop</h3>
+      <p>A campus of pathways and courtyards, drawn as one continuous surface. <b>No dead ends: every path leads to another.</b></p>
+    </div>
+  </div>
+</section>
+<style>
+/* ---------- where the two meet (narrative pass): the brief's institution + the brand's Möbius = the Loop ---------- */
+#s-nw-meet-a .th-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+#s-nw-meet-a .th-card svg, #s-nw-meet-a .th-img { height: calc(var(--pt) * 92); width: auto; margin-bottom: calc(var(--pt) * 12); }
+#s-nw-meet-a .th-img { display: grid; place-items: center; }
+#s-nw-meet-a .th-img img { height: calc(var(--pt) * 70); width: auto; }
+#s-nw-meet-a .th-card svg rect, #s-nw-meet-a .th-card svg path, #s-nw-meet-a .th-card svg circle { fill: none; stroke: var(--purple-2); stroke-width: 2; vector-effect: non-scaling-stroke; }
+#s-nw-meet-a .th-card svg .th-col circle { fill: var(--purple-2); stroke: none; }
+#s-nw-meet-a .th-card small { font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; }
+#s-nw-meet-a .th-card h4 { margin: calc(var(--pt) * 4) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: var(--purple-2); }
+#s-nw-meet-a .th-card p { margin: calc(var(--pt) * 6) 0 0; font-size: calc(var(--pt) * 9.5); line-height: 1.35; color: #333; max-width: 26em; }
+#s-nw-meet-a .th-plus { margin-left: calc(var(--pt) * -10); font-style: normal; font-size: calc(var(--pt) * 34); font-weight: 300; color: var(--purple); }
+#s-nw-meet-a .th-ribbon { height: auto; }
+#s-nw-meet-a .th-sum h3 { margin: 0; font-size: calc(var(--pt) * 30); font-weight: 700; color: var(--purple); }
+#s-nw-meet-a .th-sum p { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 11); line-height: 1.4; color: #333; }
+#s-nw-meet-a .th-sum p b { color: var(--purple-2); }
+#s-nw-meet-a .th-sum { transition-delay: .35s; }
+#s-nw-meet-a .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-nw-meet-a .dim { transition: opacity .8s var(--ease); }
+#s-nw-meet-a .b2 .dim { opacity: .55; }
+#s-nw-meet-a .nw-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; opacity: 1 !important; transform: none !important; }
+</style>
+<script>
+/* where the two meet: the two threads come in (1); the Loop, the two dimmed above it (2) */
+ACKO.slide("s-nw-meet-a", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc.querySelectorAll(".rv").forEach((e) => reveal(e, 140)); },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k >= 2); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

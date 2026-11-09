@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-ins-0">
+/* ---------- a Modern Indian Institution (03 · Spot the opportunity, between the people's challenge and the memories): the brief,
+   on black, beside a campus plan that draws itself ---------- */
+#s-ins-0 .in-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-0 .in-copy h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-0 .in-copy h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-0 .in-copy p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-0 .in-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease) 2.6s, transform .9s var(--ease) 2.6s; }
+#s-ins-0 .page.drawn .in-hand { opacity: 1; transform: none; }
+/* the campus plan: its lines draw on one after another; the colonnade and the names follow */
+#s-ins-0 .in-plan .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-0 .page.drawn .in-plan .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(1) { transition-delay: .2s; }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(2) { transition-delay: .7s; }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(n+3):nth-child(-n+6) { transition-delay: 1.1s; }
+#s-ins-0 .page.drawn .in-plan .ln > :nth-child(n+7) { transition-delay: 1.5s; }
+#s-ins-0 .in-plan .col circle { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-0 .page.drawn .in-plan .col circle { opacity: 1; transition-delay: 1.9s; }
+#s-ins-0 .in-plan .tag text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-0 .page.drawn .in-plan .tag text { opacity: 1; transition-delay: 2.2s; }
+#s-ins-0 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+</style>
+<style data-slide="s-ins-1">
+
+#s-ins-1 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-1 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-1 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-1 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-1 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-1 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-1 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-1 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-1 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-1 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-1 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-1 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-1 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-1 .fig { display: flex; align-items: center; gap: calc(var(--pt) * 14); }
+#s-ins-1 .fig b { font-size: calc(var(--pt) * 92); line-height: .9; font-weight: 700; color: var(--lilac, #c9b3f3); letter-spacing: -.02em; }
+#s-ins-1 .ix .fig p { margin: 0; max-width: 17em; font-size: calc(var(--pt) * 19); line-height: 1.25; color: #fff; }
+#s-ins-1 .fig strong { color: var(--lilac, #c9b3f3); }
+#s-ins-1 cite { display: block; margin-top: calc(var(--pt) * 8); font-style: normal; font-size: calc(var(--pt) * 7.5); letter-spacing: .02em; color: rgba(255,255,255,.45); }
+#s-ins-1 .b1 { transition: opacity .8s var(--ease); }
+#s-ins-1 .b2 .b1 { opacity: .4; }
+#s-ins-1 .ix .b2t p, #s-ins-1 .b2t p { margin: 0 0 calc(var(--pt) * 5); max-width: none; font-size: calc(var(--pt) * 13); color: rgba(255,255,255,.8); }
+#s-ins-1 .b2t strong { color: #fff; }
+#s-ins-1 .ix .l3 { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 34); font-weight: 400; color: #fff; }
+#s-ins-1 .ix .l3 span { font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-1 .l1 { transition-delay: .1s !important; }
+#s-ins-1 .l2 { transition-delay: .8s !important; }
+#s-ins-1 .l3 { transition-delay: 1.5s !important; }
+#s-ins-1 .ix-hand[data-step] { transition-delay: 2.3s; }
+#s-ins-1 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-ins-1 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-ins-2">
+
+#s-ins-2 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-2 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-2 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-2 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-2 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-2 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-2 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-2 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-2 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-2 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-2 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-2 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-2 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-2 .pr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4%; }
+#s-ins-2 .pr-c { display: flex; flex-direction: column; gap: calc(var(--pt) * 4); padding: calc(var(--pt) * 10) calc(var(--pt) * 12); border: 1px solid rgba(201,179,243,.3); border-radius: calc(var(--pt) * 6); }
+#s-ins-2 .pr-c svg { width: 46%; height: auto; margin-bottom: calc(var(--pt) * 6); }
+#s-ins-2 .pr-c .ln > * { --d: inherit; }
+#s-ins-2 .pr-c b { font-size: calc(var(--pt) * 17); color: #fff; }
+#s-ins-2 .pr-c span { font-size: calc(var(--pt) * 10.5); color: rgba(255,255,255,.7); }
+</style>
+<style data-slide="s-ins-3">
+
+#s-ins-3 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-3 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-3 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-3 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-3 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-3 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-3 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-3 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-3 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-3 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-3 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-3 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-3 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-3 .tl { display: grid; grid-template-columns: repeat(4, 1fr); }
+#s-ins-3 .tl-s { position: relative; padding-top: calc(var(--pt) * 26); display: flex; flex-direction: column; gap: calc(var(--pt) * 2); }
+#s-ins-3 .tl-s i { position: absolute; left: 0; top: calc(var(--pt) * 6.5); width: calc(var(--pt) * 9); height: calc(var(--pt) * 9); border-radius: 50%; background: #000; border: 2px solid var(--lilac, #c9b3f3); }
+#s-ins-3 .tl-s.now i { background: var(--lilac, #c9b3f3); box-shadow: 0 0 0 calc(var(--pt) * 4) rgba(201,179,243,.25); }
+#s-ins-3 .tl-s em { font-style: normal; font-size: calc(var(--pt) * 8.5); letter-spacing: .1em; color: rgba(255,255,255,.55); }
+#s-ins-3 .tl-s b { font-size: calc(var(--pt) * 17); color: #fff; }
+#s-ins-3 .tl-s.now b { color: var(--lilac, #c9b3f3); }
+#s-ins-3 .tl-s span { font-size: calc(var(--pt) * 10); color: rgba(255,255,255,.7); max-width: 16em; }
+#s-ins-3 .tl-line .ln > * { stroke: rgba(201,179,243,.6); }
+</style>
+<style data-slide="s-ins-4">
+
+#s-ins-4 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-4 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-4 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-4 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-4 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-4 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-4 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-4 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-4 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-4 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-4 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-4 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-4 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-4 .c4-court { transition: transform 1.2s var(--ease), left 1.2s var(--ease), width 1.2s var(--ease), top 1.2s var(--ease), height 1.2s var(--ease); }
+#s-ins-4 .b2 .c4-court { left: 4% !important; top: 40% !important; width: 22% !important; height: 26% !important; }
+#s-ins-4 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-ins-4 .c4-floor .plate { fill: rgba(201,179,243,.08); stroke: var(--lilac, #c9b3f3); stroke-width: .5; }
+#s-ins-4 .c4-floor .core { fill: rgba(255,255,255,.18); stroke: none; }
+#s-ins-4 .c4-floor .yard { fill: rgba(201,179,243,.35); stroke: var(--lilac, #c9b3f3); stroke-width: .3; }
+#s-ins-4 .c4-floor text { font-size: 2.6px; letter-spacing: .3px; text-transform: uppercase; fill: #fff; }
+#s-ins-4 .c4-line { margin: 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; transition-delay: .9s; }
+#s-ins-4 [data-step="2"].c4-floor { transition-delay: .6s; }
+</style>
+<style data-slide="s-ins-5">
+
+#s-ins-5 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-ins-5 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-ins-5 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-ins-5 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-ins-5 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-ins-5 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-ins-5 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-ins-5 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-ins-5 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-5 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-ins-5 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-ins-5 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-ins-5 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-ins-5 .m5-map { left: 0; top: 0; width: 100%; height: 100%; background: url(assets/img/mem-campus.webp) 0 0 / 100% 100% no-repeat; opacity: 0; transform: scale(1.35); transform-origin: 62% 40%; transition: opacity 3.2s var(--ease), transform 4.2s var(--ease); }
+#s-ins-5 .page.drawn .m5-map { opacity: .12; transform: none; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<section class="scene" id="s-ins-0" data-part="1" data-mode="dark" data-title="Institution · 0 · As built" data-steps="1" data-mins="0.4"
+  data-notes="The brief asked for a Modern Indian Institution. India's great institutions, Nalanda, Takshashila, were campuses, not buildings: pathways, courtyards and steps, where people learnt, met and belonged. So where did we first feel at home among people? On a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+    <div class="ins-chip">Option 0 · As built</div>
+    <div class="in-copy rv" style="left:6%;top:24%;width:46%">
+      <small style="--i:0">The brief</small>
+      <h2 style="--i:1">A Modern Indian Institution.</h2>
+      <h3 style="--i:2">Not a building. A campus.</h3>
+      <p style="--i:3">Nalanda. Takshashila. India’s great institutions were campuses: pathways, courtyards and steps, where people learnt, met and belonged.</p>
+    </div>
+    <p class="in-hand hand" style="left:6%;top:76%;width:60%">…where we first felt at home among people.</p>
+    <svg class="in-plan" viewBox="0 0 400 260" aria-hidden="true" style="left:56%;top:22%;width:38%;height:56%">
+      <g class="ln">
+        <rect pathLength="1" x="10" y="10" width="380" height="240" rx="4"/>
+        <rect pathLength="1" x="130" y="75" width="140" height="110"/>
+        <path pathLength="1" d="M200 10V75"/><path pathLength="1" d="M200 185V250"/><path pathLength="1" d="M10 130H130"/><path pathLength="1" d="M270 130H390"/>
+        <path pathLength="1" d="M180 232H220M184 240H216M188 248H212"/>
+        <circle pathLength="1" cx="200" cy="130" r="20"/><circle pathLength="1" cx="200" cy="130" r="8"/>
+      </g>
+      <g class="col"><circle cx="140" cy="85" r="3"/><circle cx="175" cy="85" r="3"/><circle cx="225" cy="85" r="3"/><circle cx="260" cy="85" r="3"/>
+        <circle cx="140" cy="175" r="3"/><circle cx="175" cy="175" r="3"/><circle cx="225" cy="175" r="3"/><circle cx="260" cy="175" r="3"/>
+        <circle cx="140" cy="130" r="3"/><circle cx="260" cy="130" r="3"/></g>
+      <g class="tag">
+        <text x="200" y="135" text-anchor="middle" dy="-30">courtyard</text>
+        <text x="70" y="124" text-anchor="middle">pathway</text>
+        <text x="200" y="226" text-anchor="middle">steps</text>
+      </g>
+    </svg>
+  </div>
+</section>
+<section class="scene" id="s-ins-1" data-part="1" data-mode="dark" data-title="Institution · 1 · Belonging → campus" data-steps="2" data-mins="0.4" data-beats="The research,The campus"
+  data-notes="1 · The research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet: The Race to Reimagine Workplaces and Workspaces for a Hybrid Future; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023; reported by People Matters, Dec 2023). In the same study: 80% come back to collaborate; 64% in India say office layouts don't support collaboration. 2 · The brief asked for a Modern Indian Institution. Where did we first belong? On a campus. So we arrived at a campus. (Next: maybe, we've felt this before.)">
+  <div class="page">
+
+    <div class="ix b1 rv" style="left:6%;top:20%;width:86%">
+      <small style="--i:0">What people come to the office for</small>
+      <div class="fig" style="--i:1"><b><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong.</strong></p></div>
+      <cite style="--i:2">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite>
+    </div>
+    <div class="ix b2t" style="left:6%;top:56%;width:86%">
+      <p class="l1" data-step="2">The brief asked for <strong>a Modern Indian Institution.</strong></p>
+      <p class="l2" data-step="2">And where did we first belong? <strong>On a campus.</strong></p>
+      <h2 class="l3" data-step="2">So we arrived at <span>a campus.</span></h2>
+    </div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Option 1 · Belonging → campus</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-2" data-part="1" data-mode="dark" data-title="Institution · 2 · Three principles" data-steps="1" data-mins="0.4"
+  data-notes="The brief, a Modern Indian Institution, read as three things a campus gives people: a courtyard to gather, pathways to meet on the move, steps to pause. The campus, made for a workplace.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:16%;width:80%"><small style="--i:0">The brief</small><h2 style="--i:1">A Modern Indian Institution.</h2><h3 style="--i:2">Not a building. A campus.</h3></div>
+    <div class="pr rv" style="left:6%;top:44%;width:88%"><div class="pr-c" style="--i:3"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:0.5s"><rect pathLength="1" x="20" y="14" width="80" height="62" rx="3"/><rect pathLength="1" x="42" y="30" width="36" height="30"/><circle pathLength="1" cx="60" cy="45" r="6"/></g></svg><b>Courtyard</b><span>a place to gather</span></div><div class="pr-c" style="--i:4"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:0.9s"><path pathLength="1" d="M10 70C35 70 35 20 60 20S85 70 110 70"/><path pathLength="1" d="M10 58C35 58 35 8 60 8S85 58 110 58" style="opacity:.45"/></g></svg><b>Pathway</b><span>a way to meet on the move</span></div><div class="pr-c" style="--i:5"><svg class="dr" viewBox="0 0 120 84" aria-hidden="true"><g class="ln" style="--d:1.3s"><path pathLength="1" d="M18 76H102M28 64H92M38 52H82M48 40H72"/><circle pathLength="1" cx="60" cy="24" r="7"/></g></svg><b>Steps</b><span>a place to pause</span></div></div>
+    <p class="ix-hand hand" style="left:6%;top:80%;width:70%;--hd:2.4s">…the campus, made for a workplace.</p>
+    <div class="ins-chip">Option 2 · Three principles</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-3" data-part="1" data-mode="dark" data-title="Institution · 3 · A line of campuses" data-steps="1" data-mins="0.4"
+  data-notes="India has always learnt on campuses: Takshashila, Nalanda, and in our time IIM Ahmedabad's courtyards and steps by Louis Kahn. The brief asks for the next one: a Modern Indian Institution, a campus on one floor. (Dates to check before the pitch: Takshashila c. 5th century BCE; Nalanda 5th century CE; IIM Ahmedabad campus by Louis Kahn, 1960s.)">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:16%;width:80%"><small style="--i:0">The brief: a Modern Indian Institution</small><h2 style="--i:1">India learns on campuses.</h2></div>
+    <svg class="dr tl-line" viewBox="0 0 1000 10" preserveAspectRatio="none" aria-hidden="true" style="left:6%;top:49.1%;width:88%;height:1.2%"><g class="ln"><path pathLength="1" d="M0 5H1000" style="--d:.3s;transition-duration:2.2s"/></g></svg>
+    <div class="tl rv" style="left:6%;top:47%;width:88%"><div class="tl-s" style="--i:3"><i></i><em>c. 5th c. BCE</em><b>Takshashila</b><span>learning gathered in one place</span></div><div class="tl-s" style="--i:5"><i></i><em>5th c. CE</em><b>Nalanda</b><span>courtyards, quarters, a campus</span></div><div class="tl-s" style="--i:7"><i></i><em>1960s</em><b>IIM Ahmedabad</b><span>Louis Kahn’s courtyards and steps</span></div><div class="tl-s now" style="--i:9"><i></i><em>2026</em><b>ACKO, Regalium</b><span>a campus on one floor</span></div></div>
+    <p class="ix-hand hand" style="left:6%;top:80%;width:70%;--hd:3s">…not a building. A campus.</p>
+    <div class="ins-chip">Option 3 · A line of campuses</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-4" data-part="1" data-mode="dark" data-title="Institution · 4 · A campus on one floor" data-steps="2" data-mins="0.4" data-beats="The campus,On one floor"
+  data-notes="1 · The brief, a Modern Indian Institution: a campus of courtyards, pathways and steps. 2 · Our floor has its own: the two terraces and the cut-out become its courtyards. Not a building. A campus, on one floor.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:80%"><small style="--i:0">The brief</small><h2 style="--i:1">A Modern Indian Institution.</h2></div>
+    <svg class="dr c4-court" viewBox="0 0 400 260" aria-hidden="true" style="left:30%;top:34%;width:40%;height:44%"><g class="ln"><rect pathLength="1" x="10" y="10" width="380" height="240" rx="4" style="--d:.2s"/><rect pathLength="1" x="130" y="75" width="140" height="110" style="--d:.7s"/>
+        <path pathLength="1" d="M200 10V75" style="--d:1.1s"/><path pathLength="1" d="M200 185V250" style="--d:1.1s"/><path pathLength="1" d="M10 130H130" style="--d:1.1s"/><path pathLength="1" d="M270 130H390" style="--d:1.1s"/>
+        <path pathLength="1" d="M180 232H220M184 240H216M188 248H212" style="--d:1.5s"/><circle pathLength="1" cx="200" cy="130" r="20" style="--d:1.5s"/><circle pathLength="1" cx="200" cy="130" r="8" style="--d:1.5s"/></g>
+      <g><circle class="dot" cx="140" cy="85" r="3"/><circle class="dot" cx="175" cy="85" r="3"/><circle class="dot" cx="225" cy="85" r="3"/><circle class="dot" cx="260" cy="85" r="3"/><circle class="dot" cx="140" cy="175" r="3"/><circle class="dot" cx="175" cy="175" r="3"/><circle class="dot" cx="225" cy="175" r="3"/><circle class="dot" cx="260" cy="175" r="3"/><circle class="dot" cx="140" cy="130" r="3"/><circle class="dot" cx="260" cy="130" r="3"/></g><g><text x="200" y="105" text-anchor="middle">courtyard</text><text x="70" y="124" text-anchor="middle">pathway</text><text x="200" y="226" text-anchor="middle">steps</text></g></svg>
+    <svg class="c4-floor" data-step="2" viewBox="-3 -6 252 50" aria-hidden="true" style="left:30%;top:42%;width:66%;height:30%"></svg>
+    <h3 class="c4-line" data-step="2" style="left:30%;top:76%;width:66%">Not a building. A campus, on one floor.</h3>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:84%;width:60%;--hd:1.8s">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Option 4 · A campus on one floor</div>
+  </div>
+</section>
+<section class="scene" id="s-ins-5" data-part="1" data-mode="dark" data-title="Institution · 5 · Into the map" data-steps="1" data-mins="0.4"
+  data-notes="The brief, a Modern Indian Institution: not a building, a campus. As we say it, the campus comes into view from above; it is the map of the next slide. Maybe, we've felt this before.">
+  <div class="page">
+
+    <div class="m5-map"></div>
+    <div class="ix rv" style="left:6%;top:28%;width:60%"><small style="--i:0">The brief</small><h2 style="--i:1">A Modern Indian Institution.</h2><h3 style="--i:2">Not a building. A campus.</h3><p style="--i:3">Nalanda. Takshashila. Pathways, courtyards and steps, where people learnt, met and belonged.</p></div>
+    <p class="ix-hand hand" style="left:6%;top:76%;width:60%;--hd:2.4s">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Option 5 · Into the map</div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-ins-0">
+/* a Modern Indian Institution: the words come in; the campus plan draws itself (wall, courtyard, pathways, steps, the tree), then
+   its colonnade and names; last, the line that hands over to the memories */
+ACKO.slide("s-ins-0", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) {
+    plain();
+    const pg = $(".page", sc);
+    pg.classList.remove("drawn"); void pg.offsetWidth;
+    reveal($(".in-copy", sc), 120);
+    if (reduced) pg.classList.add("drawn"); else setTimeout(() => pg.classList.add("drawn"), 40);
+  },
+}));
+</script>
+<script data-slide="s-ins-1">
+ACKO.slide("s-ins-1", ({ $, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    later(() => countUp($("[data-count]", sc), 1500), 400);
+  },
+  step(k, sc) { $(".page", sc).classList.toggle("b2", k >= 2); },
+}));
+</script>
+<script data-slide="s-ins-2">
+ACKO.slide("s-ins-2", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) { plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+}));
+</script>
+<script data-slide="s-ins-3">
+ACKO.slide("s-ins-3", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) { plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+}));
+</script>
+<script data-slide="s-ins-4">
+ACKO.slide("s-ins-4", ({ $, plain, reveal, reduced }) => {
+  function floor(svg) {                                         // the bare floor (core and shell), its terraces and cut-out as courtyards
+    const F = window.ACKO_FLOOR; if (!F || svg.childElementCount) return;
+    const k = F.unit, P = (pts) => pts.map(([x, y]) => (x * k).toFixed(2) + " " + (y * k).toFixed(2)).join("L"), mid = (pts) => [pts.reduce((a, p) => a + p[0], 0) / pts.length * k, pts.reduce((a, p) => a + p[1], 0) / pts.length * k];
+    const yards = [...(F.terraces || []), ...(F.cutout ? [F.cutout] : [])];
+    svg.innerHTML = `<path class="plate" d="M${P(F.plate)}Z"/>` + (F.cores || []).map((c) => `<path class="core" d="M${P(c)}Z"/>`).join("") +
+      yards.map((t) => `<path class="yard" d="M${P(t)}Z"/>`).join("") +
+      yards.map((t) => { const [x, y] = mid(t); return `<text x="${x.toFixed(1)}" y="${(y + 9).toFixed(1)}" text-anchor="middle">courtyard</text>`; }).join("");
+  }
+  return {
+    enter(_, sc) { plain(); floor($(".c4-floor", sc)); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+    step(k, sc) { $(".page", sc).classList.toggle("b2", k >= 2); },
+  };
+});
+</script>
+<script data-slide="s-ins-5">
+ACKO.slide("s-ins-5", ({ $, plain, reveal, reduced }) => ({
+  enter(_, sc) { plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40); },
+}));
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

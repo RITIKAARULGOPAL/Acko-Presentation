@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-meet-0">
+
+#s-meet-0 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-meet-0 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-0 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-meet-0 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-meet-0 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-meet-0 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-meet-0 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-meet-0 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-0 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-0 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-meet-0 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-0 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-meet-0 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-meet-0 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); transition: transform 1.1s var(--ease), opacity 1.1s var(--ease); }
+#s-meet-0 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-meet-0 .col b { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-meet-0 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-meet-0 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-meet-0 .col strong { color: #fff; }
+#s-meet-0 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); color: rgba(255,255,255,.4); }
+#s-meet-0 .b2 .cl { transform: translateX(8%); opacity: .5; }
+#s-meet-0 .b2 .cr { transform: translateX(-8%); opacity: .5; }
+#s-meet-0 .mid { text-align: center; }
+#s-meet-0 .mid small { font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-meet-0 .mid h2 { margin: calc(var(--pt) * 2) 0 0; font-size: calc(var(--pt) * 48); font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-0 [data-step="2"].mid { transition-delay: .5s; }
+#s-meet-0 .ix-hand[data-step] { transition-delay: 1.4s; }
+#s-meet-0 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-meet-0 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-meet-1">
+
+#s-meet-1 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-meet-1 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-1 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-meet-1 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-meet-1 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-meet-1 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-meet-1 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-meet-1 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-1 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-1 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-meet-1 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-1 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-meet-1 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-meet-1 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); }
+#s-meet-1 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-meet-1 .col b.n { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-meet-1 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-meet-1 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-meet-1 .col strong { color: #fff; }
+#s-meet-1 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); line-height: 1.35; color: rgba(255,255,255,.4); }
+#s-meet-1 .meet small { display: block; font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-meet-1 .meet h2 { margin: 0; font-weight: 700; color: var(--lilac, #c9b3f3); line-height: 1; }
+
+#s-meet-1 .vc { border: 1.5px solid rgba(201,179,243,.7); border-radius: 50%; transition: transform 1.1s var(--ease); }
+#s-meet-1 .vc .col { position: absolute; transition: opacity .8s var(--ease); }
+#s-meet-1 .vr .col { text-align: right; align-items: flex-end; }
+#s-meet-1 .col b.n { font-size: calc(var(--pt) * 44); }
+#s-meet-1 .col b.t2 { font-size: calc(var(--pt) * 19); }
+#s-meet-1 .col p { font-size: calc(var(--pt) * 10.5); }
+#s-meet-1 .col cite { font-size: calc(var(--pt) * 6.5); }
+#s-meet-1 .b2 .vl { transform: translateX(25.93%); }
+#s-meet-1 .b2 .vr { transform: translateX(-25.93%); }
+#s-meet-1 .b2 .vc .col { opacity: .55; }
+#s-meet-1 .lens { pointer-events: none; }
+#s-meet-1 .lens path { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .7s var(--ease); }
+#s-meet-1 .b2 .lens path { opacity: 1; transition-delay: 1s; }
+#s-meet-1 .lm { text-align: center; }
+#s-meet-1 .lm small { color: #1a1033; font-size: calc(var(--pt) * 9); font-weight: 600; }
+#s-meet-1 [data-step="2"].lm { transition-delay: 1.3s; }
+#s-meet-1 .meet h2 { text-align: center; font-size: calc(var(--pt) * 40); }
+#s-meet-1 [data-step="2"].meet:not(.lm) { transition-delay: 1.5s; }
+#s-meet-1 .ix-hand[data-step] { transition-delay: 1.6s; }
+#s-meet-1 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-meet-1 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-meet-2">
+
+#s-meet-2 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-meet-2 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-2 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-meet-2 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-meet-2 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-meet-2 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-meet-2 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-meet-2 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-2 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-2 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-meet-2 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-2 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-meet-2 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-meet-2 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); }
+#s-meet-2 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-meet-2 .col b.n { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-meet-2 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-meet-2 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-meet-2 .col strong { color: #fff; }
+#s-meet-2 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); line-height: 1.35; color: rgba(255,255,255,.4); }
+#s-meet-2 .meet small { display: block; font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-meet-2 .meet h2 { margin: 0; font-weight: 700; color: var(--lilac, #c9b3f3); line-height: 1; }
+
+#s-meet-2 .cl, #s-meet-2 .cr { transition: opacity 1s var(--ease); }
+#s-meet-2 .b2 .cl, #s-meet-2 .b2 .cr { opacity: .5; }
+#s-meet-2 .cv { pointer-events: none; }
+#s-meet-2 .cv path { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .3s var(--ease); }
+#s-meet-2 .b2 .cv path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.2s var(--ease); }
+#s-meet-2 .cv circle { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .4s var(--ease); }
+#s-meet-2 .b2 .cv circle { opacity: 1; transition-delay: 1.1s; }
+#s-meet-2 .meet { text-align: center; }
+#s-meet-2 .meet h2 { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 44); }
+#s-meet-2 [data-step="2"].meet { transition-delay: 1.2s; }
+#s-meet-2 .ix-hand[data-step] { transition-delay: 1.6s; }
+#s-meet-2 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-meet-2 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-meet-3">
+
+#s-meet-3 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-meet-3 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-3 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-meet-3 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-meet-3 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-meet-3 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-meet-3 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-meet-3 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-3 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-3 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-meet-3 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-3 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-meet-3 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-meet-3 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); }
+#s-meet-3 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-meet-3 .col b.n { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-meet-3 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-meet-3 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-meet-3 .col strong { color: #fff; }
+#s-meet-3 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); line-height: 1.35; color: rgba(255,255,255,.4); }
+#s-meet-3 .meet small { display: block; font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-meet-3 .meet h2 { margin: 0; font-weight: 700; color: var(--lilac, #c9b3f3); line-height: 1; }
+
+#s-meet-3 .col b.n { font-size: calc(var(--pt) * 48); }
+#s-meet-3 .col b.t2 { font-size: calc(var(--pt) * 22); }
+#s-meet-3 .col p { font-size: calc(var(--pt) * 11); }
+#s-meet-3 .cl, #s-meet-3 .cr { transition: opacity 1s var(--ease); }
+#s-meet-3 .b2 .cl, #s-meet-3 .b2 .cr { opacity: .5; }
+#s-meet-3 .ar { pointer-events: none; }
+#s-meet-3 .ar path { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 2.5; stroke-dasharray: 1; stroke-dashoffset: 1; transition: transform 1.2s var(--ease), stroke-dashoffset .3s; }
+#s-meet-3 .ar .al { transform: translateX(-120px); }
+#s-meet-3 .ar .arr { transform: translateX(120px); }
+#s-meet-3 .page.drawn .ar path { stroke-dashoffset: 0; transition: transform 1.2s var(--ease), stroke-dashoffset 1.2s var(--ease) .5s; }
+#s-meet-3 .b2 .ar .al, #s-meet-3 .b2 .ar .arr { transform: none; }
+#s-meet-3 .b2 .ar path { fill: rgba(201,179,243,.08); }
+#s-meet-3 .meet { text-align: center; }
+#s-meet-3 .meet h2 { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 30); }
+#s-meet-3 [data-step="2"].meet { transition-delay: 1.1s; }
+#s-meet-3 .ix-hand[data-step] { transition-delay: 1.6s; }
+#s-meet-3 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-meet-3 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-meet-4">
+
+#s-meet-4 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-meet-4 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-4 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-meet-4 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-meet-4 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-meet-4 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-meet-4 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-meet-4 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-4 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-4 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-meet-4 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-4 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-meet-4 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-meet-4 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); }
+#s-meet-4 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-meet-4 .col b.n { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-meet-4 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-meet-4 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-meet-4 .col strong { color: #fff; }
+#s-meet-4 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); line-height: 1.35; color: rgba(255,255,255,.4); }
+#s-meet-4 .meet small { display: block; font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-meet-4 .meet h2 { margin: 0; font-weight: 700; color: var(--lilac, #c9b3f3); line-height: 1; }
+
+#s-meet-4 .cd { box-sizing: border-box; padding: calc(var(--pt) * 14); border: 1px solid rgba(255,255,255,.16); border-radius: calc(var(--pt) * 8); }
+#s-meet-4 .cd > .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); }
+#s-meet-4 .col b.n { font-size: calc(var(--pt) * 46); }
+#s-meet-4 .col b.t2 { font-size: calc(var(--pt) * 22); }
+#s-meet-4 .col p { font-size: calc(var(--pt) * 11); }
+#s-meet-4 .op { text-align: center; font-size: calc(var(--pt) * 30); font-weight: 300; color: var(--lilac, #c9b3f3); }
+#s-meet-4 .cc { display: flex; flex-direction: column; justify-content: center; background: var(--lilac, #c9b3f3); border-color: transparent; }
+#s-meet-4 .cc small { color: rgba(26,16,51,.7); }
+#s-meet-4 .cc h2 { margin-top: calc(var(--pt) * 4); font-size: calc(var(--pt) * 32); color: #1a1033; }
+#s-meet-4 [data-step="3"].cc { transition-delay: .25s; }
+#s-meet-4 .ix-hand[data-step] { transition-delay: 1.6s; }
+#s-meet-4 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-meet-4 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+#s-meet-4 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-meet-5">
+
+#s-meet-5 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-meet-5 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-5 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-meet-5 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-meet-5 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-meet-5 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-meet-5 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-meet-5 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-5 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-5 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-meet-5 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-5 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-meet-5 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-meet-5 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); }
+#s-meet-5 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-meet-5 .col b.n { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-meet-5 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-meet-5 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-meet-5 .col strong { color: #fff; }
+#s-meet-5 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); line-height: 1.35; color: rgba(255,255,255,.4); }
+#s-meet-5 .meet small { display: block; font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-meet-5 .meet h2 { margin: 0; font-weight: 700; color: var(--lilac, #c9b3f3); line-height: 1; }
+
+#s-meet-5 .pn { transition: transform 1.1s var(--ease); }
+#s-meet-5 .pl { background: rgba(255,255,255,.035); border-right: 1px solid rgba(201,179,243,.35); }
+#s-meet-5 .pr { background: rgba(201,179,243,.05); }
+#s-meet-5 .b2 .pl { transform: translateX(-24%); }
+#s-meet-5 .b2 .pr { transform: translateX(24%); }
+#s-meet-5 .band { background: var(--lilac, #c9b3f3); transform: scaleX(0); transition: transform 1.1s var(--ease); }
+#s-meet-5 .b2 .band { transform: none; }
+#s-meet-5 .col b.n { font-size: calc(var(--pt) * 52); }
+#s-meet-5 .col b.t2 { font-size: calc(var(--pt) * 24); }
+#s-meet-5 .meet { text-align: center; }
+#s-meet-5 .meet small { color: rgba(26,16,51,.7); }
+#s-meet-5 .meet h2 { margin-top: calc(var(--pt) * 4); font-size: calc(var(--pt) * 30); color: #1a1033; }
+#s-meet-5 [data-step="2"].meet { transition-delay: .9s; }
+#s-meet-5 .ix-hand[data-step] { transition-delay: 1.6s; }
+#s-meet-5 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-meet-5 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-meet-6">
+
+#s-meet-6 .ix small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255,255,255,.6); margin-bottom: calc(var(--pt) * 10); }
+#s-meet-6 .ix h2 { margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.05; font-weight: 700; color: var(--lilac, #c9b3f3); }
+#s-meet-6 .ix h3 { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 17); font-weight: 700; color: #fff; }
+#s-meet-6 .ix p { margin: calc(var(--pt) * 12) 0 0; max-width: 30em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: rgba(255,255,255,.72); }
+#s-meet-6 .ix-hand { margin: 0; font-size: calc(var(--pt) * 22); color: var(--lilac, #c9b3f3); opacity: 0; transform: translateY(8px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-meet-6 .page.drawn .ix-hand { opacity: 1; transform: none; transition-delay: var(--hd, 2.6s); }
+#s-meet-6 .dr .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+#s-meet-6 .page.drawn .dr .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-6 .dr .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-6 .page.drawn .dr .dot { opacity: 1; transition-delay: var(--d, 1.9s); }
+#s-meet-6 .dr text { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; fill: rgba(255,255,255,.55); opacity: 0; transition: opacity .6s var(--ease); }
+#s-meet-6 .page.drawn .dr text { opacity: 1; transition-delay: var(--d, 2.2s); }
+#s-meet-6 .ins-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: rgba(255,255,255,.12); color: #fff; font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+#s-meet-6 .col { display: flex; flex-direction: column; gap: calc(var(--pt) * 6); }
+#s-meet-6 .col em { font-style: italic; font-size: calc(var(--pt) * 9); color: rgba(255,255,255,.55); }
+#s-meet-6 .col b.n { font-size: calc(var(--pt) * 56); line-height: 1; color: var(--lilac, #c9b3f3); }
+#s-meet-6 .col b.t2 { font-size: calc(var(--pt) * 26); line-height: 1.1; color: #fff; padding-top: calc(var(--pt) * 6); }
+#s-meet-6 .col p { margin: 0; font-size: calc(var(--pt) * 12); line-height: 1.35; color: rgba(255,255,255,.75); }
+#s-meet-6 .col strong { color: #fff; }
+#s-meet-6 .col cite { font-style: normal; font-size: calc(var(--pt) * 7); line-height: 1.35; color: rgba(255,255,255,.4); }
+#s-meet-6 .meet small { display: block; font-size: calc(var(--pt) * 10); font-style: italic; color: rgba(255,255,255,.6); }
+#s-meet-6 .meet h2 { margin: 0; font-weight: 700; color: var(--lilac, #c9b3f3); line-height: 1; }
+
+#s-meet-6 .col b.n { font-size: calc(var(--pt) * 46); }
+#s-meet-6 .col b.t2 { font-size: calc(var(--pt) * 22); }
+#s-meet-6 .col p { font-size: calc(var(--pt) * 11); }
+#s-meet-6 .cl, #s-meet-6 .cr { transition: opacity 1s var(--ease); }
+#s-meet-6 .b2 .cl, #s-meet-6 .b2 .cr { opacity: .55; }
+#s-meet-6 .pl6 .ln > * { fill: none; stroke: var(--lilac, #c9b3f3); stroke-width: 1.3; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .3s; }
+#s-meet-6 .b2 .pl6 .ln > * { stroke-dashoffset: 0; transition: stroke-dashoffset 1.1s var(--ease); transition-delay: var(--d, .2s); }
+#s-meet-6 .pl6 .ln circle { display: none; }
+#s-meet-6 .pl6 .dot { fill: var(--lilac, #c9b3f3); opacity: 0; transition: opacity .4s; }
+#s-meet-6 .b2 .pl6 .dot { opacity: 1; transition: opacity .6s var(--ease) 1.9s; }
+#s-meet-6 .meet { text-align: center; }
+#s-meet-6 .cy h2 { font-size: calc(var(--pt) * 17); }
+#s-meet-6 [data-step="2"].cy { transition-delay: 1.4s; }
+#s-meet-6 .ix-hand[data-step] { transition-delay: 2.2s; }
+#s-meet-6 .ix-hand[data-step] { transition-delay: 1.6s; }
+#s-meet-6 .ix-hand[data-step]:not(.shown) { opacity: 0; }
+#s-meet-6 .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<section class="scene" id="s-meet-0" data-part="1" data-mode="dark" data-title="Meet · 0 · As picked" data-steps="2" data-mins="0.4" data-beats="Two givens,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:86%"><small style="--i:0">Two things we were given</small></div>
+    <div class="col cl rv" style="left:6%;top:26%;width:34%"><em style="--i:1">The research</em><b style="--i:2"><span data-count="58">0</span>%</b><p style="--i:3">of employees in India come back to the office <strong>to feel they belong</strong></p><cite style="--i:4">Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="col cr rv" style="left:60%;top:26%;width:34%"><em style="--i:2">The brief</em><b class="t2" style="--i:3">A Modern Indian Institution</b><p style="--i:4">Nalanda. Takshashila. Pathways, courtyards and steps.</p></div>
+    <div class="mid" data-step="2" style="left:30%;top:66%;width:40%"><small>where both meet</small><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Meet · 0 · As picked</div>
+  </div>
+</section>
+<section class="scene" id="s-meet-1" data-part="1" data-mode="dark" data-title="Meet · 1 · Venn" data-steps="2" data-mins="0.4" data-beats="Two givens,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="vc vl rv" style="left:13.125%;top:14.444%;width:33.75%;height:60%"><div class="col" style="--i:0;left:12%;top:24%;width:50%"><em>The research</em><b class="n"><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong</strong></p><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div></div>
+    <div class="vc vr rv" style="left:53.125%;top:14.444%;width:33.75%;height:60%"><div class="col" style="--i:1;left:40%;top:30%;width:48%"><em>The brief</em><b class="t2">A Modern Indian Institution</b><p>Nalanda. Takshashila. Pathways, courtyards and steps.</p></div></div>
+    <svg class="lens" viewBox="0 0 1600 900" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"><path d="M800 199A270 270 0 0 1 800 601A270 270 0 0 1 800 199Z"/></svg>
+    <div class="meet lm" data-step="2" style="left:40%;top:41%;width:20%"><small>where both meet</small></div>
+    <div class="meet" data-step="2" style="left:25%;top:76%;width:50%"><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Meet · 1 · Venn</div>
+  </div>
+</section>
+<section class="scene" id="s-meet-2" data-part="1" data-mode="dark" data-title="Meet · 2 · Converging lines" data-steps="2" data-mins="0.4" data-beats="Two givens,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:86%"><small style="--i:0">Two things we were given</small></div>
+    <div class="col cl rv" style="left:6%;top:26%;width:34%"><em style="--i:1">The research</em><b class="n"><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong</strong></p><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="col cr rv" style="left:60%;top:26%;width:34%"><em style="--i:2">The brief</em><b class="t2">A Modern Indian Institution</b><p>Nalanda. Takshashila. Pathways, courtyards and steps.</p></div>
+    <svg class="cv" viewBox="0 0 1600 900" aria-hidden="true" style="left:0;top:0;width:100%;height:100%">
+      <path pathLength="1" d="M240 560C240 640 800 585 800 655"/><path pathLength="1" d="M1056 520C1056 640 800 585 800 655"/><circle cx="800" cy="655" r="6"/></svg>
+    <div class="meet" data-step="2" style="left:25%;top:74.5%;width:50%"><small>where both meet</small><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Meet · 2 · Converging lines</div>
+  </div>
+</section>
+<section class="scene" id="s-meet-3" data-part="1" data-mode="dark" data-title="Meet · 3 · Two halves, one ring" data-steps="2" data-mins="0.4" data-beats="Two givens,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:86%"><small style="--i:0">Two things we were given</small></div>
+    <div class="col cl rv" style="left:6%;top:28%;width:22%"><em style="--i:1">The research</em><b class="n"><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong</strong></p><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="col cr rv" style="left:72%;top:30%;width:22%"><em style="--i:2">The brief</em><b class="t2">A Modern Indian Institution</b><p>Nalanda. Takshashila. Pathways, courtyards and steps.</p></div>
+    <svg class="ar" viewBox="0 0 1600 900" aria-hidden="true" style="left:0;top:0;width:100%;height:100%">
+      <path class="al" pathLength="1" d="M800 230A190 190 0 0 0 800 610"/><path class="arr" pathLength="1" d="M800 230A190 190 0 0 1 800 610"/></svg>
+    <div class="meet" data-step="2" style="left:35%;top:40%;width:30%"><small>where both meet</small><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Meet · 3 · Two halves, one ring</div>
+  </div>
+</section>
+<section class="scene" id="s-meet-4" data-part="1" data-mode="dark" data-title="Meet · 4 · The equation" data-steps="3" data-mins="0.4" data-beats="The research,The brief,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="ix rv" style="left:6%;top:14%;width:86%"><small style="--i:0">Two things we were given</small></div>
+    <div class="cd col rv" style="left:6%;top:28%;width:26%;height:44%"><div style="--i:1" class="col"><em>The research</em><b class="n"><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong</strong></p><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div></div>
+    <div class="op" data-step="2" style="left:32%;top:44%;width:5%">+</div>
+    <div class="cd col" data-step="2" style="left:37%;top:28%;width:26%;height:44%"><em>The brief</em><b class="t2">A Modern Indian Institution</b><p>Nalanda. Takshashila. Pathways, courtyards and steps.</p></div>
+    <div class="op" data-step="3" style="left:63%;top:44%;width:5%">=</div>
+    <div class="cd cc meet" data-step="3" style="left:68%;top:28%;width:26%;height:44%"><small>where both meet</small><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="3" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Meet · 4 · The equation</div>
+  </div>
+</section>
+<section class="scene" id="s-meet-5" data-part="1" data-mode="dark" data-title="Meet · 5 · Split, then seam" data-steps="2" data-mins="0.4" data-beats="Two givens,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="pn pl" style="left:0;top:0;width:50%;height:100%"></div>
+    <div class="pn pr" style="left:50%;top:0;width:50%;height:100%"></div>
+    <div class="band" style="left:38%;top:0;width:24%;height:100%"></div>
+    <div class="col cl rv" style="left:6%;top:26%;width:28%"><em style="--i:0">The research</em><b class="n"><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong</strong></p><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="col cr rv" style="left:66%;top:28%;width:28%"><em style="--i:1">The brief</em><b class="t2">A Modern Indian Institution</b><p>Nalanda. Takshashila. Pathways, courtyards and steps.</p></div>
+    <div class="meet" data-step="2" style="left:38%;top:42%;width:24%"><small>where both meet</small><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Meet · 5 · Split, then seam</div>
+  </div>
+</section>
+<section class="scene" id="s-meet-6" data-part="1" data-mode="dark" data-title="Meet · 6 · Givens over the plan" data-steps="2" data-mins="0.4" data-beats="Two givens,A campus"
+  data-notes="Research: 58% of employees in India say they come back to the office to foster a sense of belonging (Cisco, From Mandate to Magnet; 9,200 employees and 1,650 employers across seven Asia Pacific markets incl. India, surveyed Nov 2023). Same study: 80% come back to collaborate, 53% to ideate. Then: the brief asked for a Modern Indian Institution; where did we first belong? On a campus. So we arrived at a campus.">
+  <div class="page">
+
+    <div class="col cl rv" style="left:6%;top:12%;width:30%"><em style="--i:0">The research</em><b class="n"><span data-count="58">0</span>%</b><p>of employees in India come back to the office <strong>to feel they belong</strong></p><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></div>
+    <div class="col cr rv" style="left:64%;top:12%;width:30%"><em style="--i:1">The brief</em><b class="t2">A Modern Indian Institution</b><p>Nalanda. Takshashila. Pathways, courtyards and steps.</p></div>
+    <svg class="pl6" data-step="2" viewBox="0 0 400 260" aria-hidden="true" style="left:31%;top:40%;width:38%;height:45.6%"><g class="ln"><rect pathLength="1" x="10" y="10" width="380" height="240" rx="4" style="--d:.2s"/><rect pathLength="1" x="130" y="75" width="140" height="110" style="--d:.7s"/>
+        <path pathLength="1" d="M200 10V75" style="--d:1.1s"/><path pathLength="1" d="M200 185V250" style="--d:1.1s"/><path pathLength="1" d="M10 130H130" style="--d:1.1s"/><path pathLength="1" d="M270 130H390" style="--d:1.1s"/>
+        <path pathLength="1" d="M180 232H220M184 240H216M188 248H212" style="--d:1.5s"/><circle pathLength="1" cx="200" cy="130" r="20" style="--d:1.5s"/><circle pathLength="1" cx="200" cy="130" r="8" style="--d:1.5s"/></g>
+      <g><circle class="dot" cx="140" cy="85" r="3"/><circle class="dot" cx="175" cy="85" r="3"/><circle class="dot" cx="225" cy="85" r="3"/><circle class="dot" cx="260" cy="85" r="3"/><circle class="dot" cx="140" cy="175" r="3"/><circle class="dot" cx="175" cy="175" r="3"/><circle class="dot" cx="225" cy="175" r="3"/><circle class="dot" cx="260" cy="175" r="3"/><circle class="dot" cx="140" cy="130" r="3"/><circle class="dot" cx="260" cy="130" r="3"/></g></svg>
+    <div class="meet" data-step="2" style="left:39%;top:31%;width:22%"><small>where both meet</small></div>
+    <div class="meet cy" data-step="2" style="left:40%;top:60.5%;width:20%"><h2>a campus.</h2></div>
+    <p class="ix-hand hand" data-step="2" style="left:6%;top:86%;width:60%">…maybe, we’ve felt this before.</p>
+    <div class="ins-chip">Meet · 6 · Givens over the plan</div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-meet-0">
+ACKO.slide("s-meet-0", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-meet-1">
+ACKO.slide("s-meet-1", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-meet-2">
+ACKO.slide("s-meet-2", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-meet-3">
+ACKO.slide("s-meet-3", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-meet-4">
+ACKO.slide("s-meet-4", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 3; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-meet-5">
+ACKO.slide("s-meet-5", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script data-slide="s-meet-6">
+ACKO.slide("s-meet-6", ({ $, $$, plain, reveal, countUp, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth;
+    sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    setTimeout(() => pg.classList.add("drawn"), reduced ? 0 : 40);
+    $$("[data-count]", sc).forEach((e, i) => later(() => countUp(e, 1500), 400 + i * 150));
+    
+  },
+  step(k, sc) { const pg = $(".page", sc); for (let b = 2; b <= 2; b++) pg.classList.toggle("b" + b, k >= b); },
+}));
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

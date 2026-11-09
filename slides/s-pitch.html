@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One floor, two football pitches · ACKO slide s-pitch</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-pitch" data-part="1" data-title="One floor, two football pitches" data-steps="2" data-mins="0.6" data-beats="Lengthwise,Widthwise"
+  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 640 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer.">
+  <div class="page">
+    <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
+      <small style="--i:0">ACKO · Regalium, Koramangala</small>
+    </div>
+    <h2 class="pp-h" data-only="1" style="left:3.4%;top:13.5%;width:70%">One floor, longer than <b>two football pitches.</b></h2>
+    <h2 class="pp-h" data-only="2" style="left:3.4%;top:13.5%;width:70%">…and only <b>half a pitch wide.</b></h2>
+    <svg class="pp-svg" viewBox="-9 -20 265 102" preserveAspectRatio="xMidYMid meet" aria-hidden="true" style="left:3%;top:31%;width:94%;height:53%">
+      <g class="pp-pitches"></g>
+      <g class="pp-shell"></g>
+      <g class="pp-len"><path/><text text-anchor="middle">245 m</text></g>
+      <g class="pp-w">
+        <path class="pp-ext"/>
+        <g class="pp-wf"><path/><text>34 m</text><text class="pp-ws">floor</text></g>
+        <g class="pp-wp"><path/><text>68 m</text><text class="pp-ws">pitch</text></g>
+      </g>
+      <text class="pp-lab" text-anchor="middle">TWO FOOTBALL PITCHES · 210 m</text>
+    </svg>
+    <div class="pp-stats" data-only="1" style="left:3.4%;top:85%;width:50%">
+      <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
+      <div><b><span data-count="640">0</span></b><span>people, on one plate</span></div>
+      <div><b><span data-count="3">0</span><small>min</small></b><span>to walk end to end</span></div>
+    </div>
+    <div class="pp-stats" data-only="2" style="left:3.4%;top:85%;width:50%">
+      <div><b>34<small>m</small></b><span>wide, glass to glass</span></div>
+      <div><b>68<small>m</small></b><span>a football pitch, wide</span></div>
+      <div><b>½</b><span>a pitch's width</span></div>
+    </div>
+    <p class="pp-hand hand" data-only="1" style="left:60%;top:86.5%;width:37%">so how do you make it feel like one team?</p>
+    <p class="pp-hand hand" data-only="2" style="left:60%;top:86.5%;width:37%">a long, thin floor: the shape the plan has to answer</p>
+  </div>
+</section>
+<style>
+/* ---------- one floor, two football pitches (01 · Discover the site): the bare floor, to scale, on the pitches' top touchline ---------- */
+#s-pitch .pp-head small { display: block; font-size: calc(var(--pt) * 8.5); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--purple-2); }
+#s-pitch .pp-h { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.08; font-weight: 400; color: var(--purple); }
+#s-pitch .pp-h b { font-weight: 700; }
+#s-pitch .pp-svg { overflow: visible; }
+#s-pitch .pp-pitch rect, #s-pitch .pp-pitch path, #s-pitch .pp-pitch circle { fill: none; stroke: #7cc58f; stroke-width: .35; }
+#s-pitch .pp-pitch rect.pp-turf { fill: #eef8f0; transition: fill .8s var(--ease); }
+#s-pitch .wide .pp-pitch rect.pp-turf { fill: #d9efdf; }                 /* beat 2: the half of the pitch the floor doesn't reach */
+/* the shell: the plate, its cores, stairs, lifts and columns; no furniture */
+#s-pitch .pp-shell .plate { fill: #f4f0ff; stroke: var(--purple-2); stroke-width: .45; stroke-linejoin: round; }
+#s-pitch .pp-shell .core { fill: #dcd7e8; stroke: #8a83a3; stroke-width: .2; }
+#s-pitch .pp-shell .stair { fill: #fff; stroke: #6f6886; stroke-width: .2; }
+#s-pitch .pp-shell .stair-h { stroke: #b4aec6; stroke-width: .12; }
+#s-pitch .pp-shell .lift { fill: #fff; stroke: #6f6886; stroke-width: .2; }
+#s-pitch .pp-shell .lift-x { stroke: #b4aec6; stroke-width: .12; }
+#s-pitch .pp-shell .col { fill: #6f6886; }
+#s-pitch .pp-shell .cut { fill: #fff; stroke: #8a83a3; stroke-width: .2; }
+#s-pitch .pp-shell .terr { fill: none; stroke: #8a83a3; stroke-width: .2; stroke-dasharray: .8 .6; }
+#s-pitch .pp-len path, #s-pitch .pp-w path { fill: none; stroke: #555; stroke-width: .3; }
+#s-pitch .pp-w .pp-ext { stroke: #8a8a8a; stroke-dasharray: 1.2 1; }
+#s-pitch .pp-len text, #s-pitch .pp-w text { font-size: 4.6px; font-weight: 600; fill: var(--purple-2); }
+#s-pitch .pp-wp text { fill: #3c9a5a; }
+#s-pitch .pp-wf path { stroke: var(--purple-2); stroke-width: .5; }
+#s-pitch .pp-wp path { stroke: #3c9a5a; stroke-width: .5; }
+#s-pitch .pp-w .pp-ws { font-size: 3px; font-weight: 500; letter-spacing: .3px; }
+#s-pitch .pp-lab { font-size: 3.1px; font-weight: 600; letter-spacing: .5px; fill: #3c9a5a; }
+#s-pitch .pp-stats { display: flex; gap: 6%; }
+#s-pitch .pp-stats > div { flex: 1; border-top: 2px solid var(--purple-2); padding-top: calc(var(--pt) * 4); }
+#s-pitch .pp-stats b { display: block; font-size: calc(var(--pt) * 26); line-height: 1.05; font-weight: 600; color: var(--purple-2); }
+#s-pitch .pp-stats b small { font-size: .42em; font-weight: 400; margin-left: .2em; color: #555; }
+#s-pitch .pp-stats > div > span { display: block; font-size: calc(var(--pt) * 8.5); color: #555; }
+#s-pitch .pp-hand { margin: 0; text-align: right; font-size: calc(var(--pt) * 17); color: var(--purple-2); }
+/* arriving from Layout · Due Diligence (9 Nov): the bare floor starts on the plan's plate and glides to the touchline; the pitches and
+   the words come in round it */
+#s-pitch .pp-pitches, #s-pitch .pp-len, #s-pitch .pp-lab, #s-pitch .pp-head, #s-pitch .pp-w { transition: opacity .8s var(--ease); }
+#s-pitch .page.pp-arrive :is(.pp-pitches, .pp-len, .pp-lab, .pp-head, .pp-w, [data-only], [data-step]) { opacity: 0 !important; transition: none !important; }
+</style>
+<script>
+/* one floor, two football pitches: the bare floor (core and shell, window.ACKO_FLOOR from data/site-floor.js, in 0.05 m units)
+   drawn to scale on two football pitches laid end to end, its long top edge on their top touchline.
+   1 · lengthwise: the 245 m, the numbers counting up. 2 · widthwise: the view eases right and two bars draw on side by side past
+   the floor's square end, sharing their top: the floor's 34 m against the pitch's 68 m; the pitch beyond the floor darkens:
+   half a pitch wide. Back reverses it. */
+ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
+  const L = 105, W = 68;
+  let G = null, raf = 0, at = 0;                                 // the geometry (from the shell data), and where the beat is: 0 … 1
+  const ease = (u) => (u <= 0 ? 0 : u >= 1 ? 1 : u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2), lerp = (a, b, u) => a + (b - a) * u;
+  const r2 = (v) => +v.toFixed(2);
+  function build(sc) {
+    const F = window.ACKO_FLOOR, k = F.unit, P = (pts) => pts.map(([x, y]) => `${r2(x * k)} ${r2(y * k)}`).join("L");
+    const xs = F.plate.map((p) => p[0] * k), ys = F.plate.map((p) => p[1] * k);
+    const X0 = Math.min(...xs), X1 = Math.max(...xs), Y0 = Math.min(...ys), Y1 = Math.max(...ys);
+    const box = (b, cls) => `<rect class="${cls}" x="${r2(b.x * k)}" y="${r2(b.y * k)}" width="${r2(b.w * k)}" height="${r2(b.h * k)}"/>`;
+    const stair = (b) => { const x = b.x * k, y = b.y * k, w = b.w * k, h = b.h * k; let s = box(b, "stair"); for (let i = 1; i < 6; i++) s += `<path class="stair-h" d="M${r2(x + (w * i) / 6)} ${r2(y)}v${r2(h)}"/>`; return s; };
+    const lift = (b) => { const x = b.x * k, y = b.y * k, w = b.w * k, h = b.h * k; return box(b, "lift") + `<path class="lift-x" d="M${r2(x)} ${r2(y)}l${r2(w)} ${r2(h)}M${r2(x + w)} ${r2(y)}l${r2(-w)} ${r2(h)}"/>`; };
+    $(".pp-shell", sc).innerHTML =
+      (F.terraces || []).map((t) => `<path class="terr" d="M${P(t)}Z"/>`).join("") +
+      `<path class="plate" d="M${P(F.plate)}Z"/>` +
+      (F.cutout ? `<path class="cut" d="M${P(F.cutout)}Z"/>` : "") +
+      (F.cores || []).map((c) => `<path class="core" d="M${P(c)}Z"/>`).join("") +
+      (F.stairs || []).map(stair).join("") + (F.lifts || []).map(lift).join("") +
+      (F.cols || []).map(([x, y, w, h]) => `<rect class="col" x="${r2(x * k)}" y="${r2(y * k)}" width="${r2(w * k)}" height="${r2(h * k)}"/>`).join("");
+    const PC = Y0 + W / 2;                                         // the pitches' centre line: their top touchline on the plate's top edge
+    const pb = (x, d) => `<path d="M${x} ${-20.15}h${16.5 * d}v40.3h${-16.5 * d}M${x} ${-9.16}h${5.5 * d}v18.32h${-5.5 * d}"/>`;
+    const pitch = `<rect class="pp-turf" x="${-L / 2}" y="${-W / 2}" width="${L}" height="${W}"/><path d="M0 ${-W / 2}v${W}"/><circle r="9.15"/>${pb(-L / 2, 1)}${pb(L / 2, -1)}`;
+    $(".pp-pitches", sc).innerHTML = [0, 1].map((i) => `<g class="pp-pitch" transform="translate(${r2(X0 + L / 2 + L * i)} ${r2(PC)})">${pitch}</g>`).join("");
+    G = { X0, X1, Y0, Y1, PC, PX: X0 + 2 * L, FX: X1 + 4.5, WX: X1 + 21,
+      VB1: [X0 - 9, Y0 - 22, 265, W + 22 + 12], VB2: [X0 - 9, Y0 - 22, 294, W + 22 + 12] };
+  }
+  const bar = (x, a, b, u) => { const h = (b - a) * u; return `M${x} ${a}V${a + h}M${x - 1.6} ${a}h3.2M${x - 1.6} ${a + h}h3.2`; };   // drawn down from the shared top
+  function draw(sc, u) {
+    at = u;
+    const { X0, X1, Y0, Y1, PC, PX, FX, WX, VB1, VB2 } = G, e = ease(u);
+    $(".pp-svg", sc).setAttribute("viewBox", VB1.map((v, i) => lerp(v, VB2[i], e).toFixed(2)).join(" "));
+    $(".page", sc).classList.toggle("wide", u > 0.5);
+    const dy = Y0 - 7;
+    $(".pp-len path", sc).setAttribute("d", `M${r2(X0)} ${r2(dy)}H${r2(X1)}M${r2(X0)} ${r2(dy - 2.2)}v4.4M${r2(X1)} ${r2(dy - 2.2)}v4.4`);
+    const t = $(".pp-len text", sc); t.setAttribute("x", r2((X0 + X1) / 2)); t.setAttribute("y", r2(dy - 2.6));
+    const lab = $(".pp-lab", sc); lab.setAttribute("x", r2(X0 + L)); lab.setAttribute("y", r2(PC + W / 2 + 7));
+    // the bars: the extension lines, then the floor's 34 m, then the pitch's 68 m, both from the shared top line
+    const w = $(".pp-w", sc), ue = ease(Math.max(0, (u - 0.25) / 0.75)), uf = ease(Math.max(0, (u - 0.35) / 0.5)), up = ease(Math.max(0, (u - 0.5) / 0.5));
+    w.style.opacity = Math.min(1, u * 4).toFixed(3);
+    const ext = (x0, y, x1) => `M${r2(x0)} ${r2(y)}H${r2(lerp(x0, x1, ue))}`;
+    $(".pp-ext", sc).setAttribute("d", ext(X1 + 0.6, Y0, WX + 2) + ext(X1 + 0.6, Y1, FX + 2) + ext(PX + 0.6, PC + W / 2, WX + 2));
+    $(".pp-wf path", sc).setAttribute("d", bar(r2(FX), r2(Y0), r2(Y1), uf));
+    $(".pp-wp path", sc).setAttribute("d", bar(r2(WX), r2(Y0), r2(Y0 + W), up));
+    const lt = (g, x, y, o) => { const [a, b] = $$("text", g); a.setAttribute("x", r2(x)); a.setAttribute("y", r2(y)); b.setAttribute("x", r2(x)); b.setAttribute("y", r2(y + 3.8)); [a, b].forEach((n) => (n.style.opacity = o.toFixed(3))); };
+    lt($(".pp-wf", sc), FX + 2.4, (Y0 + Y1) / 2 + 0.6, uf); lt($(".pp-wp", sc), WX + 2.4, Y0 + W / 2 + 0.6, up);
+  }
+  function go(sc, to) {
+    cancelAnimationFrame(raf);
+    if (reduced) return draw(sc, to);
+    const from = at, t0 = performance.now(), dur = 1800 * Math.abs(to - from);
+    const tick = (now) => { const k = dur ? Math.min(1, (now - t0) / dur) : 1; draw(sc, from + (to - from) * k); if (k < 1) raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+  }
+  // from Due Diligence: the floor laid on the plan's plate (its place on the Layout), gliding to its place here; then the rest
+  function glide(sc, k) {
+    cancelAnimationFrame(raf); draw(sc, k >= 2 ? 1 : 0);
+    const pg = $(".page", sc), sh = $(".pp-shell", sc), M = ACKO_MORPH;
+    const from = M.mul(M.inv(M.page($(".pp-svg", sc), pg)), M.rect(M.HOME));
+    pg.classList.add("pp-arrive");
+    M.anim(sh, from, [1, 0, 0, 1, 0, 0], 1500, () => {
+      sh.removeAttribute("transform"); pg.classList.remove("pp-arrive");
+      if (k < 2) $$(".pp-stats[data-only='1'] [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
+    });
+  }
+  return {
+    enter(_, sc) {
+      plain();
+      if (!G) build(sc);
+      reveal($(".pp-head", sc), 60);
+      sc._fresh = true; sc._from = !reduced && window.ACKO_MORPH ? ACKO_MORPH.take("s-layout-dd") : null;
+    },
+    step(k, sc) {
+      if (sc._fresh && sc._from) { sc._fresh = false; return glide(sc, k); }
+      if (sc._fresh) {                                           // entered on a beat: that state at once; the numbers count up
+        sc._fresh = false; cancelAnimationFrame(raf); draw(sc, k >= 2 ? 1 : 0);
+        if (k < 2) $$(".pp-stats[data-only='1'] [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
+        return;
+      }
+      go(sc, k >= 2 ? 1 : 0);
+    },
+    leave(_, sc) {
+      cancelAnimationFrame(raf);
+      if (sc && window.ACKO_MORPH) { const pg = $(".page", sc), sh = $(".pp-shell", sc); pg.classList.remove("pp-arrive"); sh.removeAttribute("transform"); ACKO_MORPH.mark("s-pitch", { m: ACKO_MORPH.page(sh, pg) }); }
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

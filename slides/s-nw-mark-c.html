@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What defines ACKO · ACKO slide s-nw-mark-c</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-nw-mark-c" data-part="1" data-mode="grey" data-title="Words · Mark · C · Indian cues" data-steps="3" data-mins="0.6" data-beats="The five values,Their second pictures,Its mark"
+  data-notes="ACKO is India's first fully digital insurer: simple, transparent, technology-driven, customer-centric. No paperwork, no intermediaries; data, AI and digital experience instead. Five words define the brand: confidence, trust, protection, assurance, empowerment. People-centric, technology-first, transparent. 2 · A click: each value turns to its second picture. 3 · A click: and its mark is a Möbius strip, one surface, no end. Plant it here; the concept comes back to it.">
+  <div class="page">
+    <div class="nw-chip">Mark · C · Indian cues</div>
+    <div class="hdr"><b>Brand Understanding</b><span>Design concept</span></div>
+    <div class="val-strips">
+      <div class="val-strip" style="--i:0"><b>Confidence</b><div><i style="background-image:url(assets/img/val-confidence.webp)"></i><i style="background-image:url(assets/img/val-confidence-2.webp)"></i></div></div>
+      <div class="val-strip" style="--i:1"><b>Trust</b><div><i style="background-image:url(assets/img/val-trust.webp)"></i><i style="background-image:url(assets/img/val-trust-2.webp)"></i></div></div>
+      <div class="val-strip" style="--i:2"><b>Protection</b><div><i style="background-image:url(assets/img/val-protection.webp)"></i><i style="background-image:url(assets/img/val-protection-2.webp)"></i></div></div>
+      <div class="val-strip" style="--i:3"><b>Assurance</b><div><i style="background-image:url(assets/img/val-assurance.webp)"></i><i style="background-image:url(assets/img/val-assurance-2.webp)"></i></div></div>
+      <div class="val-strip" style="--i:4"><b>Empowerment</b><div><i style="background-image:url(assets/img/val-empowerment.webp)"></i><i style="background-image:url(assets/img/val-empowerment-2.webp)"></i></div></div>
+    </div>
+    <p class="val-p rv-i" style="--i:7"><span><b>ACKO</b> is <b>India's first fully digital insurance</b> company, <b>redefining insurance</b> by making it <b>simple, transparent, technology-driven,</b> and <b>customer-centric.</b> Unlike traditional <b>insurers built around paperwork</b> and intermediaries, ACKO leverages data, AI, and digital experiences to deliver seamless insurance products <b>with minimal friction.</b></span></p>
+    <div class="nv-mark" data-step="3"><img src="assets/img/acko-mark.webp" alt=""><div><small>…and its mark</small><h3>A Möbius strip.</h3><p>One surface with no end, like a courtyard you can walk round and round. The whole campus is drawn from it.</p></div></div>
+    <div class="val-hand hand rv-i" style="--i:9">What Defines ACKO?</div>
+    <div class="val-words rv-i" style="--i:10">PEOPLE - CENTRIC  I  TECHNOLOGY - FIRST  I  TRANSPARENCY</div>
+  </div>
+</section>
+<style>
+/* ---------- what defines ACKO (slide 4) ---------- */
+.val-strips { left: 7.3%; top: 19.1%; width: 84.4%; height: 42.5%; display: grid; grid-template-columns: 15.9fr 15.9fr 15.7fr 16.9fr 16.9fr; gap: 0 .9%; }
+.val-strip { position: relative; display: flex; flex-direction: column; }
+/* the label band and the photo below it, as in the PPT: band 19.12–23.33%, photo 24.61–61.64% of the page */
+.val-strip { justify-content: space-between; }
+.val-strip > b { flex: none; height: 9.9%; display: grid; place-items: center; background: #666; color: #d9d9d9; font-weight: 400; font-size: calc(var(--pt) * 9); }
+.val-strip > div { position: relative; flex: none; height: 87.1%; overflow: hidden; background: #ddd; }
+.val-strip > div i { position: absolute; inset: 0; background: center / cover no-repeat; }
+/* beat 2: each strip's second picture wipes down over the first, one after another (as the shutters open), the first sinking
+   back under it; going back to beat 1 the wipe runs up again */
+.val-strip > div i:first-child { transition: transform 1.3s var(--ease), filter 1.3s var(--ease); transition-delay: calc(var(--i) * 180ms); }
+.val-strip.swap > div i:first-child { transform: scale(1.08); filter: brightness(.55); }
+.val-strip > div i + i { clip-path: inset(0 0 100% 0); transform: scale(1.12); transition: clip-path 1.1s var(--ease), transform 1.6s var(--ease); transition-delay: calc(var(--i) * 180ms); }
+.val-strip.swap > div i + i { clip-path: inset(0); transform: none; }
+.val-strip > div { transform: scaleY(0); transform-origin: top; transition: transform 1s var(--ease); transition-delay: calc(var(--i) * 160ms + 150ms); }
+.go .val-strip > div { transform: none; }
+/* the words in their PPT boxes (slide 4): x, y, width, height; the box's anchor and inset */
+.val-p, .val-hand, .val-words { display: flex; flex-direction: column; box-sizing: border-box; margin: 0; }
+.val-p { left: 7.31%; top: 61.64%; width: 84.21%; height: 9.58%; justify-content: center; padding: calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 8); line-height: 1.3; }
+.val-p b { font-weight: 700; }
+.val-hand { left: 7.64%; top: 71.22%; width: 34%; height: 8.36%; justify-content: flex-end; padding: calc(var(--pt) * 7.2); font-size: calc(var(--pt) * 18); line-height: 1.05; }
+.val-words { left: 24.14%; top: 71.22%; width: 67.38%; height: 8.36%; justify-content: center; padding: calc(var(--pt) * 2.7) calc(var(--pt) * 5.4); white-space: pre; font-size: calc(var(--pt) * 10); font-weight: 700; line-height: 1.2; color: var(--purple-2); }   /* the deep purple of slide 5's "Why an insurance?" (30 Oct) */
+.nv-mark { left: 7.3%; top: 19.1%; width: 84.4%; height: 42.5%; display: flex; align-items: center; gap: 6%; padding: 0 8%; box-sizing: border-box;
+  background: rgba(238,238,242,.96); border-radius: calc(var(--pt) * 6); z-index: 2; }
+.nv-mark img { height: 62%; width: auto; }
+.nv-mark small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 6); }
+.nv-mark h3 { margin: 0; font-size: calc(var(--pt) * 26); font-weight: 700; color: var(--purple-2); line-height: 1.1; }
+.nv-mark p { margin: calc(var(--pt) * 8) 0 0; font-size: calc(var(--pt) * 10); line-height: 1.35; max-width: 30em; }
+#s-nw-mark-c .nw-chip { left: 73.5%; top: 88.5%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; opacity: 1 !important; transform: none !important; }
+</style>
+<script>
+/* what defines ACKO (deck slide 4): 1 the five values open like shutters; 2 a click, and each strip wipes down to its second
+   picture, one after another (30 Oct: a beat of its own, and a wipe, not a slow fade) */
+ACKO.slide("s-nw-mark-c", ({ $, $$, plain, reveal }) => ({
+  enter(_, sc) {
+    plain(); $$(".val-strip", sc).forEach((s) => s.classList.remove("swap"));
+    reveal($(".page", sc), 100);
+  },
+  step(k, sc) { $$(".val-strip", sc).forEach((s) => s.classList.toggle("swap", k >= 2)); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

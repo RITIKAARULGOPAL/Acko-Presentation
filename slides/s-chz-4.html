@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Challenge copy · 4 · Three-word beats · ACKO slide s-chz-4</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-chz-4" data-part="1" data-mode="lavender" data-title="Challenge copy · 4 · Three-word beats" data-steps="2" data-mins="0.8" data-beats="The challenge,The solution"
+  data-notes="1 · Today: Two places. One team. Lost, Uneasy, Uprooted, Apart. 2 · Tomorrow: One place. One experience. Familiar, At ease, Explore, Together.">
+  <div class="page">
+    <svg class="ch-grid at" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+      <line x1="858" y1="0" x2="858" y2="1080"/><line x1="1759" y1="0" x2="1759" y2="1080"/><line x1="1891" y1="0" x2="1891" y2="1080"/>
+      <line x1="0" y1="567" x2="1920" y2="567"/><line x1="0" y1="848" x2="1920" y2="848"/><line x1="0" y1="964" x2="1920" y2="964"/>
+    </svg>
+    <div class="ch-words rv" style="left:0;top:59.4%;width:44.7%;height:19.1%">
+      <div class="ch-word" style="--i:0"><div class="a"><span class="hand">Lost</span><img src="assets/img/ch-disoriented.webp" alt=""></div><div class="b"><span class="hand">Familiar</span><img src="assets/img/ch-familiar.webp" alt=""></div></div>
+      <div class="ch-word" style="--i:1"><div class="a"><span class="hand">Uneasy</span><img src="assets/img/ch-unsettled.webp" alt=""></div><div class="b"><span class="hand">At ease</span><img src="assets/img/ch-comfort.webp" alt=""></div></div>
+      <div class="ch-word" style="--i:2"><div class="a"><span class="hand">Uprooted</span><img src="assets/img/ch-displaced.webp" alt=""></div><div class="b"><span class="hand">Explore</span><img src="assets/img/ch-spatial.webp" alt=""></div></div>
+      <div class="ch-word" style="--i:3"><div class="a"><span class="hand">Apart</span><img src="assets/img/ch-disconnected.webp" alt=""></div><div class="b"><span class="hand">Together</span><img src="assets/img/ch-dynamics.webp" alt=""></div></div>
+    </div>
+    <div class="ch-copy" data-only="1"><small>Today</small><h3>Two places. <b>One team.</b></h3></div>
+    <div class="ch-copy" data-only="2"><small>Tomorrow</small><h3>One place. <b>One experience.</b></h3></div>
+    <div class="dz-chip">Copy 4 of 4 · Three-word beats</div>
+  </div>
+</section>
+<style>
+/* ---------- the challenge → the solution (slides 6–7), lavender ---------- */
+.ch-grid { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.ch-grid line { stroke: rgba(255,255,255,.55); stroke-width: 1; vector-effect: non-scaling-stroke; }
+/* the four words as the PPT sets them (3 Nov): a small handwritten label, a dotted lead down to its icon, the icon standing on the
+   grid's line (78.5%) */
+.ch-words { display: grid; grid-template-columns: repeat(4, 1fr); }
+.ch-word { position: relative; text-align: center; }
+.ch-word .a, .ch-word .b { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.ch-word span { position: relative; display: block; font-size: calc(var(--pt) * 11.7); line-height: 1.1; color: #434343; padding-bottom: calc(var(--pt) * 19); }
+.ch-word span::after { content: ""; position: absolute; left: 50%; bottom: calc(var(--pt) * 2); height: calc(var(--pt) * 14); border-left: 1.5px dotted #6b6b6b; }
+.ch-word img { height: calc(var(--pt) * 30); width: auto; margin: 0 auto; mix-blend-mode: multiply; }
+.ch-word:nth-child(4) .a img { height: calc(var(--pt) * 42); margin-top: calc(var(--pt) * -12); }   /* the plug: its picture has more air round it */
+/* the solution's words (beat 2) as the PPT sets them: the longer labels on two lines, each picture (trimmed to its drawing) at its own size */
+#s-chz-4 .ch-word .b span { max-width: calc(var(--pt) * 57); line-height: 1.45; }
+#s-chz-4 .ch-word:nth-child(1) .b img, #s-chz-4 .ch-word:nth-child(4) .b img { height: calc(var(--pt) * 24.8); }
+#s-chz-4 .ch-word:nth-child(2) .b img { height: calc(var(--pt) * 23.5); }
+#s-chz-4 .ch-word:nth-child(3) .b img { height: calc(var(--pt) * 31); }
+.ch-word .b { position: absolute; inset: 0; opacity: 0; transition: opacity .8s var(--ease); transition-delay: calc(.7s + var(--i) * 250ms); }
+.ch-word .a { transition: opacity .6s var(--ease); transition-delay: calc(.7s + var(--i) * 250ms); }
+.solved .ch-word .a { opacity: 0; }
+.solved .ch-word .b { opacity: 1; }
+/* the copy as the PPT sets it (3 Nov): the italic line, then the headline, its lead-in regular and the question bold */
+.ch-copy { left: 46.1%; top: 56%; width: 44%; }
+.ch-copy small { display: block; font-size: calc(var(--pt) * 8.8); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 12); }
+.ch-copy h3 { font-size: calc(var(--pt) * 17.9); line-height: 1.24; font-weight: 400; color: var(--purple-2); }
+.ch-copy h3 b { font-weight: 700; }
+/* the order the text comes in (3 Nov): the headline, then the four words one by one, then the line above the headline */
+#s-chz-4 .snap .ch-word .a, #s-chz-4 .snap .ch-word .b { transition: none !important; }
+#s-chz-4 .ch-words.rv > * { transition-delay: calc(var(--i) * 250ms); }
+#s-chz-4 .ch-copy > * { opacity: 0; transform: translateY(10px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-chz-4 .ch-copy.shown > * { opacity: 1; transform: none; }
+#s-chz-4 .ch-copy.shown h3 { transition-delay: .1s; }
+#s-chz-4 .ch-copy.shown small { transition-delay: 2.4s; }
+#s-chz-4 .ch-copy.shown .one { transition-delay: 3s; }                /* beat 2: One Place One Experience, last */
+.ch-copy .one { display: block; margin-top: calc(var(--pt) * 12.3); font-size: calc(var(--pt) * 22); font-style: italic; font-weight: 700; color: #fff; }
+#s-chz-4 .dz-chip { left: 73.5%; top: 88.5%; padding: calc(var(--pt) * 3) calc(var(--pt) * 8); border-radius: 99px; background: #f3effc; color: var(--purple-2); font-size: calc(var(--pt) * 8); font-weight: 600; white-space: nowrap; }
+</style>
+<script>
+/* the challenge → the solution (deck slides 6 → 7): the four words of the challenge (1) turn into those of the solution (2);
+   the top half stays empty, as in the deck */
+ACKO.slide("s-chz-4", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); sc._fresh = true; },
+  step(k, sc) {
+    const pg = $(".page", sc);
+    if (sc._fresh) { pg.classList.add("snap"); pg.classList.toggle("solved", k === 2); void pg.offsetWidth; pg.classList.remove("snap"); }   // entered on its beat: no turn
+    else pg.classList.toggle("solved", k === 2);
+    // the words come in once, as the slide is entered (on either beat); between the beats they stay and turn, both ways (3 Nov:
+    // stepping back from 2 to 1 replayed their entrance over the turn)
+    if (sc._fresh) { sc._fresh = false; reveal($(".ch-words", sc), 900); }
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>
