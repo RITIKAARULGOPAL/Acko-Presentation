@@ -101,7 +101,7 @@
                                       named as it reaches them; the blue route fades
    Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
    right-drag turns, the wheel zooms on the cursor, Reset view or a double-click goes back. Without WebGL, the deck's GIF. */
-ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
+ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
   const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
   // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
   // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
@@ -135,6 +135,23 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
   const DUR = [0, 2.4, 4.4, 6.4, 2.4, 4.2, 7.0];
+  // the building assembles (9 Nov, the re-ordered deck only, window.ACKO_WOW): on beat 1 the core and columns come up in a wave from
+  // the west end to the east, the façade following them, then the entrances drop in: a clipping plane on each group's materials
+  // sweeping along x (world m, the slab −122.5…122.5), set far off (nothing cut) on every other beat and on leaving
+  const WAVE = !!window.ACKO_WOW, W_MASS = [0.1, 1.9], W_FAC = [0.7, 2.7], W_ENT = [2.6, 3.2];
+  if (WAVE) DUR[1] = 3.4;
+  let CLIP = null;
+  function clip(sxM, sxF) {                         // keep x ≤ sx (world m); 1e6: keep all
+    if (!WAVE) return;
+    if (!CLIP) {
+      const T3 = window.THREE; CLIP = { m: new T3.Plane(new T3.Vector3(-1, 0, 0), 1e6), f: new T3.Plane(new T3.Vector3(-1, 0, 0), 1e6) };
+      const put = (g, pl) => g.traverse((o) => { if (!o.material) return; (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { m.clippingPlanes = [pl]; m.needsUpdate = true; }); });
+      put(M.groups.mass, CLIP.m); put(M.groups.facade, CLIP.f);
+      r.localClippingEnabled = true;
+    }
+    CLIP.m.constant = sxM; CLIP.f.constant = sxF;
+  }
+  const sweep = (t, w) => { const e = win(t, w[0], w[1]); return e >= 1 ? 1e6 : -126 + 252 * e; };
   const DIM = 0.45;                                    // the model's dimming under a route (the veil's opacity)             // each beat's play (s)
   // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
   // carousel (Ritika's pick of six, index-configure.html): every department steps one zone along the floor, west to east, twice,
@@ -160,7 +177,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   function pose(k, t) {
     const G = M.groups;
     M.tint(k <= 3 ? 0 : k === 4 ? win(t, 0.3, 1.0) : 1);
-    for (const g of SHELL) grow(G[g], k === 1 ? win(t, 0.1, 1.5) : 1);
+    for (const g of SHELL) grow(G[g], k === 1 && !WAVE ? win(t, 0.1, 1.5) : 1);
+    if (WAVE) clip(k === 1 ? sweep(t, W_MASS) : 1e6, k === 1 ? sweep(t, W_FAC) : 1e6);
     grow(G.partitions, k <= 3 ? 0 : k === 4 ? win(t, 1.0, 2.0) : 1);
     for (const g in FURNITURE) grow(G[g], k <= 5 ? 0 : win(t, FURNITURE[g][0], FURNITURE[g][1]));
     // beat 3: who sits where (the script while it plays, then the live arrangement); any other beat: the plan
@@ -186,7 +204,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       M.fade(v, f);
     });
     S.names = (k === 2 && t >= 3.0) || k === 3;
-    S.ent = k === 1 ? win(t, 1.4, 2.0) : 1;
+    S.ent = k === 1 ? (WAVE ? win(t, W_ENT[0], W_ENT[1]) : win(t, 1.4, 2.0)) : 1;
     // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
     const R = M.routes, emp = R.employee, cli = R.client;
     cli.visible = k === 5 || (k === 6 && t < 1.0); emp.visible = k === 6;
@@ -255,6 +273,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
     hand.style.top = ((capBottom + GAP * pt - rowOff - hand.offsetParent.offsetTop) / H) * 100 + "%";
   }
   function play(k) {
+    if (WAVE && k === 1 && !reduced) cue("swell");
     S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
     pose(k, reduced ? DUR[k] : 0); need();
   }
@@ -484,6 +503,14 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
   // M.CX)/1000, z = (plan y + 182802 − M.CY)/1000; φ from vertical, so straight down is φ ≈ 0 (exactly 0 is degenerate), θ 0 is north up.
   // The canvas goes into a host of its own, first in #stage under both pages, so it never blinks in the slides' cross-fade; its own
   // frames (this slide's draw() stops once it isn't the scene); the names and leaders go at once; done(host) when it lands
+  // the walk (s-walk, 9 Nov), opening on this view: the model drawn once more as it was and copied out, in the same task (the
+  // drawing buffer is only readable until it is shown)
+  function snap() {
+    if (!M || !r || !cam) return null;
+    window.AxoModel.apply(cam, S.state, asp); r.render(M.scene, cam);
+    const c = document.createElement("canvas"); c.width = r.domElement.width; c.height = r.domElement.height; c.getContext("2d").drawImage(r.domElement, 0, 0);
+    return c;
+  }
   function flatten(vb, ms, done) {
     if (!M || !r || !cam) return false;
     const stage = document.getElementById("stage"); if (!stage) return false;
@@ -513,11 +540,18 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
 
   return {
     enter(_, s) {
-      sc = s; sc._flatten = flatten; plain(); reveal($(".page", sc), 100);
+      sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
       S.fresh = true; S.k = 0;
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
+      // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
+      const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;
+      if (fl && plan && plan.data) {
+        const [x, y, w, h] = plan.data.viewBox, vb = plan.vbFor([x, y, x + w, y + h], [35, 157, 1885, 670]);
+        const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
+      }
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
     },
     step(k) {
@@ -526,7 +560,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal }) => {
       play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
     leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy");   // Layout · Spaces flattens the floor from here (9 Nov)
-      cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false;
+      cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },
   };

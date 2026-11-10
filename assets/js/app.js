@@ -697,8 +697,57 @@
   }
 
   /* ======================= the slides' own scripts ======================= */
+  /* ======================= cues ======================= */
+  // soft sounds made on the fly, no files (the re-ordered deck's big moments, 9 Nov): only on a page that asks for them
+  // (window.ACKO_WOW, index-approach.html), never with reduced motion; S (shift+s) mutes and unmutes them
+  const CUE = {
+    ctx: null, out: null, muted: false,
+    init() {
+      if (this.ctx) return this.ctx;
+      const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+      this.ctx = new C(); this.out = this.ctx.createGain(); this.out.gain.value = 0.14; this.out.connect(this.ctx.destination);
+      return this.ctx;
+    },
+    tone(f, t, dur, type, peak, to) {                 // a bell or a pad: quick in, long out (to: a glide to another pitch)
+      const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+      o.type = type; o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + Math.min(0.04, dur / 4)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.out); o.start(t); o.stop(t + dur + 0.05);
+    },
+    noise(t, dur, f0, f1, peak) {                     // air through a band that sweeps: a whoosh
+      const c = this.ctx, n = Math.round(c.sampleRate * dur), buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
+      src.buffer = buf; bp.type = "bandpass"; bp.Q.value = 1.4;
+      bp.frequency.setValueAtTime(f0, t); bp.frequency.exponentialRampToValueAtTime(f1, t + dur * 0.8);
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + dur * 0.45); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(bp); bp.connect(g); g.connect(this.out); src.start(t); src.stop(t + dur);
+    },
+    play(name) {
+      if (!window.ACKO_WOW || this.muted || reduced) return;
+      const c = this.init(); if (!c) return;
+      if (c.state === "suspended") c.resume();
+      const t = c.currentTime + 0.02;
+      if (name === "chime") { this.tone(880, t, 1.8, "sine", 0.45); this.tone(1318.5, t + 0.02, 1.3, "sine", 0.14); }
+      else if (name === "whoosh") this.noise(t, 1.5, 260, 2600, 0.55);
+      else if (name === "swell") { this.tone(110, t, 3.0, "sine", 0.5, 165); this.tone(220, t + 0.15, 2.8, "triangle", 0.1, 330); }
+      else if (name === "tick") this.tone(1760, t, 0.14, "sine", 0.1);
+      else if (name === "close") { this.tone(659.25, t, 1.6, "sine", 0.38); this.tone(987.77, t + 0.38, 2.6, "sine", 0.42); this.tone(1318.5, t + 0.4, 2.2, "sine", 0.1); }
+    },
+    toggle() {
+      this.muted = !this.muted;
+      let n = document.getElementById("cue-toast");
+      if (!n) { n = document.createElement("div"); n.id = "cue-toast"; n.style.cssText = "position:fixed;left:50%;bottom:6%;transform:translateX(-50%);z-index:90;padding:8px 16px;border-radius:99px;background:rgba(20,16,40,.82);color:#fff;font:500 13px/1.2 var(--body, sans-serif);pointer-events:none;transition:opacity .4s"; document.body.appendChild(n); }
+      n.textContent = this.muted ? "Sound cues off" : "Sound cues on"; n.style.opacity = "1";
+      clearTimeout(this.tt); this.tt = setTimeout(() => (n.style.opacity = "0"), 1400);
+    },
+  };
+  ["keydown", "pointerdown"].forEach((ev) => document.addEventListener(ev, () => { if (CUE.ctx && CUE.ctx.state === "suspended") CUE.ctx.resume(); }));
+  document.addEventListener("keydown", (e) => { if (window.ACKO_WOW && e.key === "S" && !(e.target.closest && e.target.closest("input, textarea"))) { CUE.toggle(); e.preventDefault(); } });
+
   const kit = {
     $, $$, clamp, later, clearTimers, raf2, reduced, asset,
+    cue: (n) => CUE.play(n),
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,

@@ -11,10 +11,17 @@
 </head>
 <body>
 <!-- slide:start -->
-<section class="scene" id="s-layout-sp" data-part="5" data-title="Layout · Option 02A" data-steps="6" data-mins="2.4" data-beats="Spaces,Neighbourhoods,Biophilia · the heat,Biophilia · planting,Biophilia · views to green,Acoustics"
-  data-notes="The layout in five layers, each a click (the pills under the plan jump to any of them); the plan's tools and the occupancy chart (the brief against Option 2A) in one button group, top right: Measure and Area (M, A; Esc clears), zoom, Reset, Hover, Egress. 1 · Due diligence: what the building brings, that the layout works around: the fire exit staircases, the AHU rooms, the washrooms, the slab to be strengthened and the lift lobbies. 2 · Spaces: every space in its colour; hover a workstation type to see where it sits. 3 · Neighbourhoods: six, each named after an ACKO product, outlined; click one to zoom in and open its occupancy chart. Vastness, dealt with: homogeneity (six places, each its own identity), disorientation (two arrival zones at the lift lobbies, amenities in every neighbourhood), distance (every desk close to a meeting room and a phone booth). 4 · Biophilia, the heat: where people gather, CO₂ gathers, service rooms counted too. 5 · Planting: the plants placed where people gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); planting beside the exit routes. 6 · Views to green: planting in the line of sight from the desks. 7 · Acoustics: four levels of treatment, from a high-ounce carpet in the workhall to panelling on three sides and a soft ceiling in the phone booths and the podcast studio.">
+<section class="scene" id="s-layout-sp" data-part="5" data-title="Layout · Option 02A" data-steps="12" data-mins="2.4" data-beats="Spaces,Neighbourhoods,01 · Auto,02 · Life,03 · Health,04 · Travel,05 · Drive,06 · Home,Biophilia · the heat,Biophilia · planting,Biophilia · views to green,Acoustics"
+  data-notes="Neighbourhoods one by one (beats 3–8: Auto, Life, Health, Travel, Drive, Home): each its plan, framed on it, beside its axonometric, the furnished model cut to it; below, its seats and area, where it sits on the floor and its occupancy against the brief. The layout in five layers, each a click (the pills under the plan jump to any of them); the plan's tools and the occupancy chart (the brief against Option 2A) in one button group, top right: Measure and Area (M, A; Esc clears), zoom, Reset, Hover, Egress. 1 · Due diligence: what the building brings, that the layout works around: the fire exit staircases, the AHU rooms, the washrooms, the slab to be strengthened and the lift lobbies. 2 · Spaces: every space in its colour; hover a workstation type to see where it sits. 3 · Neighbourhoods: six, each named after an ACKO product, outlined; click one to zoom in and open its occupancy chart. Vastness, dealt with: homogeneity (six places, each its own identity), disorientation (two arrival zones at the lift lobbies, amenities in every neighbourhood), distance (every desk close to a meeting room and a phone booth). 4 · Biophilia, the heat: where people gather, CO₂ gathers, service rooms counted too. 5 · Planting: the plants placed where people gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); planting beside the exit routes. 6 · Views to green: planting in the line of sight from the desks. 7 · Acoustics: four levels of treatment, from a high-ounce carpet in the workhall to panelling on three sides and a soft ceiling in the phone booths and the podcast studio.">
   <div class="page">
+    <!-- the people (9 Nov, the re-ordered deck): 640 come in at the two entrances and walk the Loop to their desks -->
+    <canvas class="ly-ppl" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></canvas>
+    <div class="ly-ppl-n" style="left:3%;top:18.6%;width:50%"><b>0</b><span>people, one floor: each to their own desk</span></div>
     <div class="ly-top"></div>
+    <!-- the neighbourhood sheets (10 Nov): its plan (the shared plan, framed on it, left) beside its axonometric (right) -->
+    <div class="nb-3d" aria-hidden="true" style="left:50.78%;top:14.54%;width:47.4%;height:47.5%"></div>
+    <div class="nb-lab" style="left:1.8%;top:12.2%;width:30%">Plan</div>
+    <div class="nb-lab" style="left:50.78%;top:12.2%;width:30%">Axonometric</div>
     <div class="hdr"><b>Layout</b><span>Space Planning - Option 02A &nbsp;| Revised option</span></div>
     <!-- the bottom band: white under the pills and the layer panels, so a plan zoomed in stays above it -->
     <div class="ly-bot"></div>
@@ -292,6 +299,20 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .occ-key { margin: calc(var(--pt) * 3) 0 0; font-family: var(--body); font-size: calc(var(--pt) * 5.2); line-height: 1.6; color: var(--mute); }
 #s-layout-sp .occ-key i { font-style: normal; margin: 0 calc(var(--pt) * 1.4) 0 calc(var(--pt) * 4); }
 #s-layout-sp .occ-key i:first-child { margin-left: 0; }
+/* the people (9 Nov): dots in their neighbourhood's colour, walking in from the entrances along the Loop; only on Spaces */
+#s-layout-sp .ly-ppl { pointer-events: none; opacity: 0; transition: opacity .6s var(--ease); }
+#s-layout-sp.ppl-on .ly-ppl { opacity: 1; }
+#s-layout-sp .ly-ppl-n { display: flex; align-items: baseline; gap: calc(var(--pt) * 4); opacity: 0; transition: opacity .6s var(--ease); pointer-events: none; }
+#s-layout-sp.ppl-on .ly-ppl-n { opacity: 1; }
+#s-layout-sp.ppl-nb .ly-ppl-n { opacity: 0; }
+#s-layout-sp .ly-ppl-n b { font-family: var(--num, inherit); font-size: calc(var(--pt) * 22); line-height: 1; font-weight: 600; color: var(--purple-2); font-variant-numeric: tabular-nums; }
+#s-layout-sp .ly-ppl-n span { font-size: calc(var(--pt) * 8.5); color: #555; }
+/* the neighbourhood sheets (10 Nov) */
+#s-layout-sp .nb-3d { background: #fff; border-left: 1px solid #ece8f6; opacity: 0; visibility: hidden; transition: opacity .6s var(--ease), visibility 0s linear .6s; pointer-events: none; }
+#s-layout-sp .nb-3d canvas { display: block; width: 100%; height: 100%; }
+#s-layout-sp.nb-sheet .nb-3d { opacity: 1; visibility: visible; transition: opacity .6s var(--ease) .2s, visibility 0s; }
+#s-layout-sp .nb-lab { font-size: calc(var(--pt) * 6.5); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #8a83a3; opacity: 0; transition: opacity .5s var(--ease); pointer-events: none; z-index: 3; }
+#s-layout-sp.nb-sheet .nb-lab { opacity: 1; }
 </style>
 <script>
 /* layout Option 02A (deck slides 53–54, and 61's brief) in four layers on the shared plan (K.plan; its value-addition layers are
@@ -299,10 +320,10 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
    in and opens its key plan and occupancy; vastness, dealt with); 3–5 Biophilia (the heat; the planting softening it, conceptual;
    views to green); 6 Acoustics (four levels, sound rings); 7 Due diligence (what the building brings). The pills under the plan jump to a layer; the tools and Occupancy (the brief against Option 2A), a button group top right: Measure / Area (M, A, Esc), zoom,
    Reset, Hover, Egress. Ritika, 22–23 Oct: from mockups/layout-layers.html. 2 Nov: due diligence plays first (ORDER). */
-ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world }) => {
+ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue, reduced }) => {
   let bot = 670;                              // the bottom band's top on this beat (frame px; band() sets it)
   const box = () => [35, 157, 1885, bot];     // where the plan sits on the page (frame px): centred between the header's band and the bottom band
-  const ORDER = [1, 2, 3, 4, 5, 6];          // the re-ordered deck (9 Nov): Due Diligence on its own, the rest after the axos        // the deck's beats → the layers (2 Nov: due diligence first)
+  const ORDER = [1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6], SHEET = [null, null, "01", "02", "03", "04", "05", "06", null, null, null, null];          // the re-ordered deck (9 Nov): Due Diligence on its own, the rest after the axos        // the deck's beats → the layers (2 Nov: due diligence first)
   let arriving = false, pend = 0, self = null;  // entered from the site, its zoom still playing on the map (pend: the beat asked meanwhile)
   let beat = 0, L = null, egOn = false, pin = null, zone = null, nbSel = "homo", built = false, tools = null;
   const home = () => { const [x, y, w, h] = plan.data.viewBox; return plan.vbFor([x, y, x + w, y + h], box()); };
@@ -342,7 +363,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world }) =>
     $(".f-distp", sc).textContent = mr ? `Every desk is within ${mr} m of a meeting room and ${pb} m of a phone booth, measured on the plan.` : "";
     $$(".three > div", sc).forEach((el) => (el.onclick = () => nbPick(sc, el.dataset.k)));   // nb cards: each card a choice
     nbText(sc);
-    $(".ly-back", sc).onclick = () => closeZone(sc);
+    $(".ly-back", sc).onclick = () => { if (NBX.on) go(sceneIx("s-layout-sp"), 2); else closeZone(sc); };
     // 04 · acoustics: the cards (a room drawn in iso, its treatment, a waveform that flattens)
     const cnt = (re) => spaces.filter((s) => re.test(s.type)).length;
     const work = spaces.filter((s) => s.type === "Workhall"), wh = Math.round((work.length ? work : P.zones).reduce((a, z) => a + z.m2, 0));
@@ -508,15 +529,164 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world }) =>
     $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.toggle("on", b.dataset.t === mode));
   }
   function zoomBy(f) { const v = plan.view; if (!v) return; f = Math.min(f, home()[2] / v[2]); if (Math.abs(f - 1) < 1e-3) return; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; plan.fitVb([cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f], 300); }
+  // ---- the people (9 Nov, the re-ordered deck only: window.ACKO_WOW): 640 of the plan's 646 desks (L.seats, the chairs in the drawing)
+  // filled by people who come in at the two entrances (PLAN_DXF.overlays.entry) and walk the employees' route (ACKO_LOOP's graph: the
+  // shortest way from the nearer entrance to the route point nearest their desk), then step to it; each in their neighbourhood's
+  // colour (the seat tested against the zones' outlines), deepened to show on the plan. Drawn on a canvas over the plan through the
+  // plan's own view (so a zoom keeps them on their desks); once per visit, on Spaces
+  const PPL = { raf: 0, P: null, t0: 0, on: false };
+  const DEEP = { "01": "#2f8fb0", "02": "#7a5cc9", "03": "#46589f", "04": "#a5605f", "05": "#8c8e2e", "06": "#c0577f" };
+  function pplBuild() {
+    if (PPL.P) return PPL.P;
+    const LP = window.ACKO_LOOP, D = plan.data; if (!LP || !L || !L.seats || !D) return null;
+    const N = LP.nodes, adj = N.map(() => []);
+    LP.edges.forEach(([a, b]) => { const d = Math.hypot(N[a][0] - N[b][0], N[a][1] - N[b][1]); adj[a].push([b, d]); adj[b].push([a, d]); });
+    const near = (q) => { let bi = 0, bd = 1e18; N.forEach((n, i) => { const d = (n[0] - q[0]) ** 2 + (n[1] - q[1]) ** 2; if (d < bd) { bd = d; bi = i; } }); return bi; };
+    const dij = (src) => {                                // distances and the way back, from one entrance's route point
+      const dist = new Float64Array(N.length).fill(Infinity), prev = new Int32Array(N.length).fill(-1), done = new Uint8Array(N.length); dist[src] = 0;
+      for (;;) { let u = -1, m = Infinity; for (let i = 0; i < N.length; i++) if (!done[i] && dist[i] < m) { m = dist[i]; u = i; } if (u < 0) break; done[u] = 1;
+        for (const [v, d] of adj[u]) if (dist[u] + d < dist[v]) { dist[v] = dist[u] + d; prev[v] = u; } }
+      return { dist, prev };
+    };
+    const E = (D.overlays && D.overlays.entry) || LP.entries, EN = E.map((e) => near(e)), T = EN.map(dij);
+    const zones = D.zones.map((z) => ({ n: z.n, R: rings(z.zone) }));
+    const inP = (q, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > q[1]) !== (yj > q[1]) && q[0] < ((xj - xi) * (q[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
+    const seats = L.seats.filter((_, i) => i % 108 !== 107).slice(0, 640);          // 640 people, 646 desks: 6 left free
+    const P = seats.map((q, i) => {
+      const z = zones.find((z) => z.R.some((r) => inP(q, r))), sn = near(q);
+      const e = T[0].dist[sn] <= T[1].dist[sn] ? 0 : 1, way = []; for (let u = sn; u >= 0; u = T[e].prev[u]) way.push(N[u]);
+      way.reverse(); const pts = [E[e]].concat(way, [q]);
+      const ss = [0]; for (let k = 1; k < pts.length; k++) ss.push(ss[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]));
+      return { pts, ss, len: ss[ss.length - 1], col: DEEP[z ? z.n : "02"] || "#7a5cc9", go: 0 };
+    });
+    // released in a steady stream over 2.8 s, the two entrances interleaved, in a fixed shuffled order
+    const ord = P.map((_, i) => i).sort((a, b) => ((a * 7919) % 640) - ((b * 7919) % 640));
+    ord.forEach((i, k) => (P[i].go = (k / P.length) * 2800));
+    return (PPL.P = P);
+  }
+  const SPEED = 42;                                       // m/s on the plan: the far desks reached in about 3 s
+  function pplDraw(sc, now) {
+    const cv = $(".ly-ppl", sc), v = plan.view; if (!v || !PPL.P) return 0;
+    const r = Math.min(2, devicePixelRatio || 1), W = Math.round(cv.clientWidth * r), H = Math.round(cv.clientHeight * r); if (!W || !H) return 0;
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    const kk = Math.max(v[2] / W, v[3] / H), x0 = v[0] + v[2] / 2 - (W * kk) / 2, y0 = v[1] + v[3] / 2 - (H * kk) / 2;   // the plan's own fit (xMidYMid meet)
+    const x = cv.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, W, H);
+    const rad = 3.4 * W / 1920;                            // 3.4 page px
+    let seated = 0; const t = now - PPL.t0;
+    for (const o of PPL.P) {
+      const d = (t - o.go) / 1000 * SPEED * 1000; if (d <= 0) continue;
+      let q; if (d >= o.len) { q = o.pts[o.pts.length - 1]; seated++; }
+      else { let a = 0, b = o.ss.length - 1; while (b - a > 1) { const m = (a + b) >> 1; if (o.ss[m] < d) a = m; else b = m; } const f = (d - o.ss[a]) / (o.ss[b] - o.ss[a] || 1); q = [o.pts[a][0] + (o.pts[b][0] - o.pts[a][0]) * f, o.pts[a][1] + (o.pts[b][1] - o.pts[a][1]) * f]; }
+      x.beginPath(); x.arc((q[0] - x0) / kk, (q[1] - y0) / kk, rad, 0, 6.2832); x.fillStyle = o.col; x.fill();
+      x.lineWidth = 0.9 * r; x.strokeStyle = "rgba(255,255,255,.9)"; x.stroke();
+    }
+    return seated;
+  }
+  function ppl(sc, on, play) {
+    if (!window.ACKO_WOW) return;
+    sc.classList.toggle("ppl-on", !!on); sc.classList.toggle("ppl-nb", !!on && !play);   // ppl-nb: Neighbourhoods, the colours without the count
+    if (!on) return;
+    if (!pplBuild()) return;
+    if (!PPL.on && !play) { PPL.on = true; PPL.t0 = -1e9; $(".ly-ppl-n b", sc).textContent = PPL.P.length; }   // straight to Neighbourhoods: already at their desks
+    if (!PPL.on) {                                       // once per visit: the walk in; after it, the dots stay drawn
+      PPL.on = true; PPL.t0 = performance.now() + 300; let ticks = 0, end = false;
+      const n = $(".ly-ppl-n b", sc);
+      if (reduced) PPL.t0 = -1e9;
+      const frame = (now) => {
+        if (document.body.dataset.scene !== sc.id || !sc.classList.contains("ppl-on")) return;
+        const k = pplDraw(sc, now); n.textContent = k;
+        if (k >= (ticks + 1) * 80) { ticks++; cue("tick"); }
+        if (k < PPL.P.length || !end) { if (k >= PPL.P.length) end = true; PPL.raf = requestAnimationFrame(frame); }
+        else { const keep = () => { if (document.body.dataset.scene !== sc.id || !sc.classList.contains("ppl-on")) return; pplDraw(sc, now); PPL.raf = requestAnimationFrame(keep); }; PPL.raf = requestAnimationFrame(keep); }
+      };
+      cancelAnimationFrame(PPL.raf); PPL.raf = requestAnimationFrame(frame);
+      later(() => { n.textContent = PPL.P.length; }, 300 + 2800 + 4200);           // the count lands even without frames
+    } else {
+      cancelAnimationFrame(PPL.raf);
+      const keep = (now) => { if (document.body.dataset.scene !== sc.id || !sc.classList.contains("ppl-on")) return; pplDraw(sc, now); PPL.raf = requestAnimationFrame(keep); };
+      PPL.raf = requestAnimationFrame(keep);
+    }
+  }
+  // ---- the neighbourhood sheets (10 Nov, Ritika: "the axo and layout for neighbourhoods individually in this slide"): beats 3–8, one
+  // neighbourhood each. The plan: the shared plan framed on it in the left half (plan.focusZone, the rest veiled; the people stay on its
+  // desks). The axo: the furnished SketchUp model (AxoSkp, the plan's own mm frame) cut to the neighbourhood's box by four vertical
+  // clipping planes, its purples kept in its outline (AxoSkp.focus), A day in ACKO's angle, framed on the box; from one sheet to the next
+  // the camera and the cut ease together. Leaving the sheets clears the cut and the focus (the model is shared)
+  const LEFT = [35, 157, 945, 670], NB = { theta: -0.62, phi: 0.92 };
+  const NBX = { M: null, cam: null, planes: null, mats: [], cur: null, raf: 0, on: false };
+  const nbZone = (n) => (plan.data.zones || []).find((q) => q.n === n);
+  function nbBox(z) { const M = NBX.M, b = z.box, pad = 1500; return [M.X(b[0] - pad), M.Z(b[1] - pad), M.X(b[2] + pad), M.Z(b[3] + pad)]; }
+  function nbFit(bx, asp) {                                // the box (world m) seen from NB's angle, fitted to the cell
+    const T3 = window.THREE, s0 = { theta: NB.theta, phi: NB.phi, t: [0, 0, 0], half: 1 }, B = window.AxoModel.basis(s0), c = new T3.Vector3((bx[0] + bx[2]) / 2, 1.2, (bx[1] + bx[3]) / 2);
+    let r0 = 1e9, r1 = -1e9, u0 = 1e9, u1 = -1e9;
+    for (const x of [bx[0], bx[2]]) for (const z of [bx[1], bx[3]]) for (const y of [0, 3.6]) {
+      const v = new T3.Vector3(x, y, z).sub(c), r = v.dot(B.right), u = v.dot(B.up); r0 = Math.min(r0, r); r1 = Math.max(r1, r); u0 = Math.min(u0, u); u1 = Math.max(u1, u); }
+    const t = c.clone().add(B.right.clone().multiplyScalar((r0 + r1) / 2)).add(B.up.clone().multiplyScalar((u0 + u1) / 2));
+    return { theta: NB.theta, phi: NB.phi, t: [t.x, t.y, t.z], half: Math.max((u1 - u0) / 2, (r1 - r0) / 2 / asp) * 1.08 };
+  }
+  function nbClip(on) {                                    // the cut on every material of the model, or off again
+    const M = NBX.M, T3 = window.THREE; if (!M) return;
+    if (on && !NBX.planes) {
+      NBX.planes = [new T3.Plane(new T3.Vector3(1, 0, 0), 0), new T3.Plane(new T3.Vector3(-1, 0, 0), 0), new T3.Plane(new T3.Vector3(0, 0, 1), 0), new T3.Plane(new T3.Vector3(0, 0, -1), 0)];
+      NBX.mats = []; M.scene.traverse((o) => { if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { if (!NBX.mats.includes(m)) NBX.mats.push(m); }); });
+      NBX.mats.forEach((m) => { m.clippingPlanes = NBX.planes; m.needsUpdate = true; });
+      window.AxoModel.renderer().localClippingEnabled = true;
+    } else if (!on && NBX.planes) {
+      NBX.mats.forEach((m) => { m.clippingPlanes = null; m.needsUpdate = true; }); NBX.planes = null; NBX.mats = [];
+    }
+  }
+  function nbSet(bx) { const P = NBX.planes; if (!P) return; P[0].constant = -bx[0]; P[1].constant = bx[2]; P[2].constant = -bx[1]; P[3].constant = bx[3]; }
+  function nbDraw(sc, st, bx) {
+    const r = window.AxoModel.renderer(), host = $(".nb-3d", sc);
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return;
+    const pr = r.getPixelRatio(); if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(H * pr)) r.setSize(W, H, false);
+    nbSet(bx); window.AxoModel.apply(NBX.cam, st, W / H); r.render(NBX.M.scene, NBX.cam);
+  }
+  function nbPanel(sc, z, i) {
+    const p = $('.ly-p[data-p="2"]', sc); p.classList.add("zoned");
+    $(".ly-p[data-p=\"2\"] .lead small", sc).textContent = `03 · ${i} of 6`;
+    $(".nb-h", sc).textContent = z.name; $(".nb-p", sc).innerHTML = `<b>${z.seats}</b> workstations · <b>${Math.round(z.m2)}</b> m²`;
+    $(".kp-in", sc).innerHTML = plan.keyplan(z.id);
+    let g = ""; $(".occ", sc).innerHTML = (z.occ || []).map(([grp, a, n]) => (grp !== g ? `<div class="g">${(g = grp)}</div>` : "") + `<div><span>${a.replace(/(\d)-(\d)/g, "$1–$2")}</span><span>${n}</span></div>`).join("");
+  }
+  function sheet(sc, n) {
+    const z = n && nbZone(n);
+    if (!z) {                                             // off: the overview, another layer, or leaving
+      if (!NBX.on) return; NBX.on = false; cancelAnimationFrame(NBX.raf);
+      sc.classList.remove("nb-sheet"); nbClip(false); if (window.AxoSkp && window.AxoSkp.focus) window.AxoSkp.focus(null);
+      $(".ly-p[data-p=\"2\"] .lead small", sc).textContent = "03"; $('.ly-p[data-p="2"]', sc).classList.remove("zoned");
+      plan.focusZone(null); return;
+    }
+    plan.focusZone(z.id, LEFT); nbPanel(sc, z, +n);
+    sc.classList.add("nb-sheet");
+    if (!(window.AxoSkp && window.AxoSkp.available())) return;
+    if (!NBX.M) { NBX.M = window.AxoSkp.get(asset); NBX.cam = new window.THREE.OrthographicCamera(-1, 1, 1, -1, 1, 900); }
+    if (!NBX.M) return;
+    const host = $(".nb-3d", sc), asp = (host.clientWidth || 910) / (host.clientHeight || 513), bx = nbBox(z), to = nbFit(bx, asp);
+    if (!NBX.on) { NBX.on = true; NBX.M.reset(); window.AxoSkp.look("sketchup"); nbClip(true); NBX.cur = { st: to, bx }; }
+    window.AxoSkp.focus(rings(z.zone));
+    const from = NBX.cur, t0 = performance.now(), MS = 900, ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+    cancelAnimationFrame(NBX.raf);
+    const tick = (now) => {
+      if (!NBX.on || document.body.dataset.scene !== sc.id) return;
+      const k = Math.min(1, (now - t0) / MS), e = ease(k), L = (a, b) => a + (b - a) * e;
+      const st = { theta: to.theta, phi: to.phi, t: from.st.t.map((v, i) => L(v, to.t[i])), half: L(from.st.half, to.half) }, b = from.bx.map((v, i) => L(v, bx[i]));
+      NBX.cur = { st, bx: b }; nbDraw(sc, st, b);
+      if (k < 1) NBX.raf = requestAnimationFrame(tick); else { NBX.M.reset(); later(() => { if (NBX.on) nbDraw(sc, NBX.cur.st, NBX.cur.bx); }, 60); }   // the shadows redrawn with the cut
+    };
+    NBX.raf = requestAnimationFrame(tick);
+    later(() => { if (NBX.on && NBX.cur) { NBX.cur = { st: to, bx }; nbDraw(sc, to, bx); } }, MS + 200);      // lands even without frames
+  }
   return self = {
     enter(_, sc) {
       // straight from the site (3 Nov): its map closes in on Regalium's plate till it lies where the plan does, the plan takes
       // the plate's place slowly, then the page's header, tools, pills and panel come in round it
       // The plan's build and first drawing are heavy (a few hundred ms), so they wait till the zoom has landed and the plate stands
       // still: done at once, they froze the zoom's start (3 Nov: "not smooth")
-      arriving = document.body.classList.contains("si-left"); pend = 0;
-      const ax = !arriving && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? ACKO_MORPH.take("s-strategy") : null;
-      const st = ax && document.getElementById("s-strategy");
+      arriving = document.body.classList.contains("si-left"); pend = 0; PPL.on = false; sc.classList.remove("ppl-on");
+      const ax = !arriving && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? (ACKO_MORPH.take("s-strategy") || ACKO_MORPH.take("s-walk")) : null;
+      const st = ax && document.getElementById(ax.id);          // the strategy's axo, or the walk's view from above
       if (st && st._flatten) {                          // from the Employees Journey: the model turns down onto the plan, then the plan
         arriving = true; document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
         const ok = st._flatten(home(), 1700, (h) => {
@@ -537,7 +707,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world }) =>
         later(() => sc.classList.remove("ly-arrive"), 3700);
         later(() => document.body.classList.remove("ly-arrive", "si-into"), 4400);
       } else build(sc);
-      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 3, 4, 5, 6].indexOf(g) + 1); } }));
+      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
       $$("button", tools).forEach((b) => (b.onclick = () => {
         const t = b.dataset.t; b.blur();
@@ -550,7 +720,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world }) =>
       }));
       $('[data-t="hover"]', tools).classList.toggle("on", plan.hoverOn);
       $(".ly-fo-scrim", sc).onclick = () => occ(sc, false); $(".ly-fo-x", sc).onclick = () => occ(sc, false);
-      plan.onZoneClick((z) => { if (beat === 2) { if (zone && zone.id === z.id) closeZone(sc); else openZone(sc, z); } });
+      plan.onZoneClick((z) => { if (beat === 2 && NBX.on) { go(sceneIx("s-layout-sp"), 2 + (+z.n)); return; } if (beat === 2) { if (zone && zone.id === z.id) closeZone(sc); else openZone(sc, z); } });
       document.removeEventListener("keydown", sc._keys, true);
       sc._keys = (e) => {          // M / A: measure; Esc: the chart, then the measurement, then an open neighbourhood
         if (e.target.closest && e.target.closest("input, textarea")) return;
@@ -589,13 +759,15 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world }) =>
         $(".b-vwp", sc).innerHTML = `of the seats have a plant in view within 8 m · median <b>${st.median.toFixed(1)} m</b>`;
       }
       band(sc); plan.planHome(home(), was ? 700 : 0);        // the plan centred in what this beat's panel leaves it
+      sheet(sc, SHEET[n - 1]);                           // beats 3–8: a neighbourhood on its own
+      ppl(sc, k === 1 || k === 2, k === 1);              // Spaces: the people come in; Neighbourhoods: they stay, in their colours (10 Nov)
     },
     leave(_, sc) {
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
       if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
-      plan.planOff();
+      sheet(sc, null); plan.planOff(); cancelAnimationFrame(PPL.raf); if (sc) sc.classList.remove("ppl-on");
       if (sc && sc._h3) { sc._h3.remove(); sc._h3 = null; }   // left mid-turn: the model's host goes
     },
   };
