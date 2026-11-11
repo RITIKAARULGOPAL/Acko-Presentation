@@ -685,3 +685,21 @@ amber `#F2A33A`; "A day in ACKO".
   high, 0.3 m+ tall: from above they stood between the view and the room). The foosball in her view is not in that file: the
   slide draws a white one (`PEOPLE.props`). People there come from the pieces (in the swing, in the chairs over the chess, on
   the pouf, at the bag, two at the foosball), raised onto the deck by a 4th value (mm).
+
+## 29. A brand-first opening, three ways (s-open-1..3, 11 Nov)
+**What (Ritika, 11 Nov):** open the deck on ACKO's own Möbius: what the mark means, the loop connecting and surrounding us, the lines of business joined like a campus, the bridges as protection, then 58% + the brief.
+**How:** one idea per click, the words in `data-only` blocks whose children rise in turn (`.shown > :nth-child(n)` delays). The art is one SVG in page px (viewBox 1920×1080) driven by `b2…b5` classes on the page, so stepping back works by CSS alone; lines draw once, on the forward step that first shows them (`last` guards `drawPath`).
+- **ACKO's mark as vectors:** `acko-mark.webp` is only 169 px wide, so its three bands are traced (OpenCV, colour clusters #4828ba · #9068f0 · #b098f2), then redrawn as three smooth paths in a 169×127 box, scaled with a transform.
+- **Gotcha:** a rule like `.art path { fill: none }` beats a path's own `fill="…"` attribute (CSS beats presentation attributes). Give filled shapes their fill in CSS, with a selector at least as specific.
+- **On the deck's photo:** placing an overlay exactly as `s-mobius` places the photo (left 7.8%, width 84.4%, height 100%; photo px → %: x / 15.36, y / 10.24) lets Ritika's path (`.mr-geo f1 · bk · f2`) and points along it (`getPointAtLength` over the three in turn) sit on the strip. A camera is a CSS transform on a wrapper, with its origin at the twist.
+
+- **Logo → photo, seamlessly (11 Nov, Ritika: "not seamless"):** don't scale one picture onto another; change its shape. `tools/acko/story/mark_morph.py` traces the photo's alpha (outer edge and opening), cuts the ring with rays from the opening's centre at its creases (the twist, the left crossing) into one band per logo band, resamples each pair to N = 180 points by length, and lines up start and direction in normalised box coordinates. It writes the lists into the slide between `/*MORPH*/ … /*END*/`, and `--preview <png>` draws the cuts and pairings over the photo. In the slide a rAF morph moves every point (ease in-out) and blends each fill from its purple to the photo's own tone. The photo comes up over the last fifth on the identical outline, and the vector goes only at the very end. `window.__morph(t)` draws any frame for checking.
+- **Logo → photo as a ribbon unfolding (11 Nov, Ritika: "still not seamless. ACKO logo can unfold like a ribbon"):** reveal the photo itself along the strip's own path. Never morph or cross-fade a second picture. In `tools/acko/story/gen_unfold.py`:
+  - **The mask:** an SVG `<mask>` holding a 430 px stroke along the path, blurred 18 px. It must have *butt* caps: a round cap shows a disc at the start even when nothing is revealed yet.
+  - **The image:** `<image href=mobius.webp>` under the mask, drawn by `stroke-dashoffset` from the twist.
+  - **The logo:** sits at the twist and shrinks into the ribbon's head.
+  - **The hand-over:** at the end the slide's own `<img>` (identical) takes over.
+  - **The options:** 1 Peel round, 2 Both ways, 3 Lavender lead, 4 Untwist from the centre, all on `index-unfold.html`. Check a frame with `window.__unfold["s-unf-N"](t)`.
+- **The logo as a ribbon (11 Nov, her pick):** one route, two parts. First the mark's centreline: a closed Catmull-Rom through hand-placed points in the mark's 169×127 units, each with a band width and colour. Then, from its tip, the strip's own line once round. A window [tail, head] slides along it, drawn quad by quad on two canvases: the mark unclipped, the strip part clipped to the photo by `destination-in` with the `<img>`. Width and colour on the strip part are functions of the distance behind the head, so the head stays narrow and purple while the ribbon behind it widens and turns white over the photo revealed under it.
+  - **Gotcha:** a slide's script is one scope. A helper named `build` collided with the slide's own `build` (the later one wins, silently), so give helpers you inject distinct names.
+
