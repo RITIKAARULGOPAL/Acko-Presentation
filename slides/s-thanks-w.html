@@ -63,7 +63,7 @@ ACKO.slide("s-thanks-w", ({ $, plain, reveal, go, trackIdx, sceneIx, later, redu
     for (let l = 0; l <= Lb; l += 3) { const p = toPage(bk.getPointAtLength(l)), d = Math.hypot(p[0] - CUT[0], p[1] - CUT[1]); if (d < best) { best = d; c = l; } }
     const mob = smp(bk, c).concat(smp(f2), smp(f1), smp(bk, 0, c));
     R.B = resample(fit(mob, [660, 80, 1260, 410]), N);
-    R.A = resample(fit(LP.sweep, [180, 150, 1740, 300]), N);
+    R.A = resample(fit(window.ACKO_LOOP_SMOOTH ? window.ACKO_LOOP_SMOOTH(LP) : LP.sweep, [180, 150, 1740, 300]), N);   // the smooth Loop (10 Nov)
     return true;
   }
   function rib(cv, pts, wid, head) {                     // the ribbon along pts up to share head of its length, ends tapering

@@ -73,8 +73,28 @@
 /* the challenge → the answer (slide 6): the worry comes in as the slide is entered (1); the answer comes in below it, the worry
    staying on, quieter (2); then One Place. One Experience. (3) */
 ACKO.slide("s-challenge", ({ $, plain, reveal }) => ({
-  enter(_, sc) { plain(); sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120)); },
+  enter(_, sc) {
+    plain(); sc.querySelectorAll(".rv").forEach((e) => reveal(e, 120));
+    // from How we worked's "Where it starts" (10 Nov, the re-ordered deck): the lavender grows as a circle out of the Understand dot,
+    // on a white ground, both under the pages (first in #stage), gone once the world has turned lavender itself
+    const f = window.ACKO_WOW && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? window.ACKO_MORPH.take("s-approach") : null;
+    const stage = document.getElementById("stage");
+    if (f && stage) {
+      const box = "position:fixed;left:var(--pl);top:var(--ptop);width:var(--pw);height:var(--ph);pointer-events:none;z-index:0";
+      const white = document.createElement("div"), lav = document.createElement("div");
+      white.style.cssText = box + ";background:#fff";
+      lav.style.cssText = box + ";background:" + (getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#d2c9eb");
+      const at = `${(f.x * 100).toFixed(2)}% ${(f.y * 100).toFixed(2)}%`;
+      lav.style.clipPath = `circle(0% at ${at})`;
+      stage.insertBefore(lav, stage.firstChild); stage.insertBefore(white, lav);
+      void lav.offsetWidth;
+      lav.style.transition = "clip-path 1s cubic-bezier(.65, 0, .35, 1)"; lav.style.clipPath = `circle(150% at ${at})`;
+      setTimeout(() => { white.remove(); lav.remove(); }, 1300);
+    }
+  },
   step(k, sc) { const pg = $(".page", sc); pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3); },
+  // to Where both meet (10 Nov, the re-ordered deck): its lavender, which that slide's panels start in
+  leave() { if (window.ACKO_WOW && window.ACKO_MORPH) window.ACKO_MORPH.mark("s-challenge", { bg: getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#d2c9eb" }); },
 }));
 </script>
 <!-- slide:end -->

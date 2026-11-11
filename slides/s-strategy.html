@@ -124,6 +124,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
   const LABELS = [["ACKO Auto", "AUTO", "S"], ["ACKO Life", "LIFE", "N"], ["ACKO Health", "HEALTH", "S", null, 0, 7000],
     ["ACKO Travel", "TRAVEL", "N", null, 0, -6000], ["ACKO Drive", "DRIVE", "S"], ["ACKO Home", "HOME", "N"],
     ["Atrium", "atrium", "N", "#737373", 1, [4000, 9000]], ["Terrace", "terrace", "S", "#6f7356", 2], ["Café", "cafezone", "S", "#8f8a5c", 2]];
+  if (window.ACKO_WOW) LABELS.slice(0, 6).forEach((l, i) => { l[0] = "Neighbourhood " + String(i + 1).padStart(2, "0"); });   // NB_NUM: by number, on the re-ordered deck
   const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
   const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
   // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1, 2,

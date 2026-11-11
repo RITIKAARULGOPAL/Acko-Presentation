@@ -257,13 +257,44 @@ ACKO.slide("s-loop-w", ({ $, $$, plain, reveal, later, clearTimers, reduced, ass
     for (let k = 0; k < n; k++) { const s = (k / (n - 1)) * L; while (j < ss.length - 2 && ss[j + 1] < s) j++; const f = ss[j + 1] > ss[j] ? (s - ss[j]) / (ss[j + 1] - ss[j]) : 0; out.push([P[j][0] + (P[j + 1][0] - P[j][0]) * f, P[j][1] + (P[j + 1][1] - P[j][1]) * f]); }
     return out;
   }
+  // the Loop, smooth (10 Nov, Ritika: "make the loop look smooth"): the route's corridor zig-zags gone, its course kept. Through every
+  // stop exactly (the sweep passes them at sweepStops), with a few of the route's own points between (one every 30 m, none near a stop),
+  // a centripetal Catmull-Rom spline, then eased a few times with the stops held. Plan mm in, plan mm out; also for the Thank-you slide
+  window.ACKO_LOOP_SMOOTH = window.ACKO_LOOP_SMOOTH || function (LP) {
+    const S = LP.sweep, idx = (LP.sweepStops || []).map((o) => o.i).sort((a, b) => a - b);
+    if (!S || idx.length < 2) return S;
+    const keys = [], pin = [], d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+    for (let s = 0; s < idx.length - 1; s++) {
+      const a = idx[s], b = idx[s + 1], arc = [0];
+      for (let i = a + 1; i <= b; i++) arc.push(arc[arc.length - 1] + d(S[i], S[i - 1]));
+      keys.push(S[a]); pin.push(true);
+      const L = arc[arc.length - 1], n = Math.floor(L / 30000);
+      for (let k = 1; k <= n; k++) { const at = (k * L) / (n + 1); if (at < 12000 || L - at < 12000) continue;
+        let j = 1; while (j < arc.length - 1 && arc[j] < at) j++; keys.push(S[a + j]); pin.push(false); }
+    }
+    keys.push(S[idx[idx.length - 1]]); pin.push(true);
+    const out = [], hold = [], SEG = 16;                      // centripetal Catmull-Rom through the keys
+    for (let i = 0; i < keys.length - 1; i++) {
+      const p0 = keys[Math.max(0, i - 1)], p1 = keys[i], p2 = keys[i + 1], p3 = keys[Math.min(keys.length - 1, i + 2)];
+      const t1 = Math.sqrt(d(p0, p1)) || 1, t2 = t1 + (Math.sqrt(d(p1, p2)) || 1), t3 = t2 + (Math.sqrt(d(p2, p3)) || 1);
+      for (let k = 0; k < SEG; k++) {
+        const t = t1 + ((t2 - t1) * k) / SEG, L = (A, B, ta, tb) => [0, 1].map((c) => (tb - t) / (tb - ta) * A[c] + (t - ta) / (tb - ta) * B[c]);
+        const A1 = L(p0, p1, 0, t1), A2 = L(p1, p2, t1, t2), A3 = L(p2, p3, t2, t3), B1 = L(A1, A2, 0, t2), B2 = L(A2, A3, t1, t3);
+        out.push(k === 0 ? p1.slice() : L(B1, B2, t1, t2)); hold.push(k === 0 && pin[i]);
+      }
+    }
+    out.push(keys[keys.length - 1].slice()); hold.push(true);
+    for (let it = 0; it < 4; it++) for (let i = 1; i < out.length - 1; i++) if (!hold[i])   // eased, the stops held
+      out[i] = [0, 1].map((c) => (out[i - 1][c] + 2 * out[i][c] + out[i + 1][c]) / 4);
+    return out;
+  };
   function wbuild(sc) {
     if (sc._lw) return sc._lw;
     const LP = window.ACKO_LOOP, F = window.ACKO_FLOOR, D = window.PLAN_DXF; if (!LP || !F || !D) return null;
     const [vx, vy, vw, vh] = D.viewBox, vb = plan.vbFor([vx, vy, vx + vw, vy + vh], [35, 157, 1885, 670]), k = 1920 / vb[2], P = (x, y) => [(x - vb[0]) * k, (y - vb[1]) * k];
     const FP = (q) => P(q[0] * 50 + 8842, q[1] * 50 + 12775), d = (pts) => "M" + pts.map((q) => FP(q).map((v) => v.toFixed(1)).join(" ")).join("L") + "Z";
     const T = track(sc);
-    const A = resample(T.pts.slice(Math.ceil(40 / 6), T.pts.length - Math.ceil(40 / 6)), N3), B = resample(LP.sweep.map((q) => P(q[0], q[1])), N3);
+    const A = resample(T.pts.slice(Math.ceil(40 / 6), T.pts.length - Math.ceil(40 / 6)), N3), B = resample(window.ACKO_LOOP_SMOOTH(LP).map((q) => P(q[0], q[1])), N3);
     // the stops: on their spots, the labels above or below the floor, alternately west to east, clear of each other
     const top = Math.min(...F.plate.map((q) => FP(q)[1])), bot = Math.max(...F.plate.map((q) => FP(q)[1]));
     const QUOTE = { "Arrival": "I feel welcomed", "Café": "Hey We finally meet !", "Board Room": "This is my big moment", "Meeting Rooms": "My Impact", "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };

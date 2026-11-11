@@ -76,6 +76,30 @@
 .mem-folk .mem-sc.on { opacity: 1; }
 .mem-folk path[stroke] { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 @keyframes memPulse { 0% { box-shadow: 0 0 0 0 rgba(201,179,243,.45); } 70% { box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(201,179,243,0); } 100% { box-shadow: 0 0 0 0 rgba(201,179,243,0); } }
+/* the close, folded in (10 Nov, the re-ordered deck only): a scrim over the campus; the lines written in, word by word */
+#s-memories .mem-wi { left: 0; top: 0; width: 100%; height: 100%; z-index: 6; display: flex; align-items: center; box-sizing: border-box;
+  padding: 0 calc(var(--pw) * .017 + var(--pt) * 7.2); background: rgba(8, 8, 8, 0); pointer-events: none;
+  -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px); transition: background .9s var(--ease), backdrop-filter .9s var(--ease), -webkit-backdrop-filter .9s var(--ease); }
+/* nearly opaque, and what's behind blurred: the campus a soft dark ghost, no label or photo edge reading through the lines (10 Nov) */
+#s-memories .mem-wi.on { background: rgba(8, 8, 8, .93); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+#s-memories .mem-wi .mw-col { display: flex; flex-direction: column; gap: calc(var(--pt) * 10); }
+#s-memories .mem-wi p { margin: 0; text-align: left; transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-memories .mem-wi .wi-h { font-family: var(--hand); font-weight: 400; color: #fff; }
+#s-memories .mem-wi .mw-l1 .wi-h { font-size: calc(var(--pt) * 22); }
+#s-memories .mem-wi .mw-l2 { font-size: calc(var(--pt) * 16); color: rgba(255,255,255,.85); opacity: 0; transform: translateY(6px); }
+#s-memories .mem-wi .mw-l2 b { color: var(--lilac, #c9b3f3); }
+#s-memories .mem-wi.on .mw-l2 { opacity: 1; transform: none; transition-delay: 1.9s; }
+#s-memories .mem-wi .mw-q { margin-top: calc(var(--pt) * 14); line-height: 1.15; }
+#s-memories .mem-wi .mw-q .wi-h { font-size: calc(var(--pt) * 30); }
+#s-memories .mem-wi .mw-q b { font-family: var(--body); font-weight: 700; font-size: calc(var(--pt) * 28); color: var(--lilac, #c9b3f3); }
+#s-memories .mem-wi .mw-l4 { font-style: italic; font-size: calc(var(--pt) * 11); color: rgba(255,255,255,.62); opacity: 0; transform: translateY(6px); }
+#s-memories .mem-wi.on2 .mw-l4 { opacity: 1; transform: none; transition-delay: 2.6s; }
+#s-memories .mem-wi.on2 :is(.mw-l1, .mw-l2) { opacity: .45; transition-delay: 0s; }
+#s-memories .mem-wi .w { display: inline-block; opacity: 0; filter: blur(5px); transform: translateY(.12em); transition: opacity .6s var(--ease), filter .6s var(--ease), transform .6s var(--ease); }
+#s-memories .mem-wi.on .mw-l1 .w { opacity: 1; filter: none; transform: none; transition-delay: calc(.5s + var(--w) * 90ms); }
+#s-memories .mem-wi.on2 .mw-q .w { opacity: 1; filter: none; transform: none; transition-delay: calc(.4s + var(--w) * 90ms); }
+/* stepping back: what goes, goes at once */
+#s-memories .mem-wi:not(.on) :is(p, .w), #s-memories .mem-wi:not(.on2) :is(.mw-q .w, .mw-l4) { transition-delay: 0s !important; }
 </style>
 <script>
 /* memories (deck slide 8): the deck's page as placed — map, trees, the six photographs — with the dashed route across the
@@ -359,7 +383,7 @@ ACKO.slide("s-memories", ({ $, $$, plain, reveal, reduced }) => {
   }
   return {
     enter(_, sc) {
-      plain();
+      plain(); sc.dataset.mb = "";
       if (!S) S = build($(".mem-folk", sc));
       EL = $$("[data-s]", sc).map((el) => ({ el, s: +el.dataset.s, b: beatOf(+el.dataset.s) }));
       EL.forEach((e) => e.el.classList.remove("on"));
@@ -368,7 +392,15 @@ ACKO.slide("s-memories", ({ $, $$, plain, reveal, reduced }) => {
       reveal($(".mem-h", sc), 100);
       $$(".mem-h > *", sc).forEach((e, i) => e.style.setProperty("--i", i * 4));
     },
-    step(k) { beat(k); },
+    // the close, folded in (10 Nov, the re-ordered deck, where the slide has .mem-wi and 8 beats): the campus dims, then the feeling
+    // and ACKO's promise (7), the question and where it has to happen (8); the memories stay as beat 6 left them, so stepping
+    // 6 → 7 → 6 doesn't replay the sixth
+    step(k, sc) {
+      const w = sc && sc.querySelector(".mem-wi"), b = Math.min(k, 6);
+      if (!(w && b === 6 && sc.dataset.mb === "6")) beat(b);
+      if (sc) sc.dataset.mb = String(b);
+      if (w) { w.classList.toggle("on", k >= 7); w.classList.toggle("on2", k >= 8); }
+    },
     leave() { quiet(); act = null; },
   };
 });

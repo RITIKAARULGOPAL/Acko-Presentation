@@ -508,6 +508,8 @@
     if (DP.layers) DP.layers.off();
   }
   // the layout's value-addition layers (assets/js/plan-layers.js), mounted on the deck plan the first time a slide asks
+  // the bare shell (10 Nov, Layout · Due Diligence): the plan's drawing without the fit-out, and its fit-out layers hidden (.bare)
+  function planBare(on, re) { deckPlan(); if (DP.base && DP.base.bare) DP.base.bare(on, re); DP.root.classList.toggle("bare", !!on); }
   function planLayers() { deckPlan(); return DP.layers || (DP.layers = window.PlanLayers ? window.PlanLayers.mount({ ph: DP.ph, host: DP.root, P: DP.P, A: window.AXO_DXF || { blocks: {}, plants: [] } }) : null); }
   // one neighbourhood picked out: the plan flies to it (inside disp, frame px), the others dim, its rooms can be hovered;
   // focusZone(null) flies back to the beat's view
@@ -751,7 +753,7 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planNb, planFill, planHover, planReset, planHome, layers: planLayers, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; }, onPlanClick: (fn) => { deckPlan(); DP.onPoint = fn || null; },
+    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planBare, planNb, planFill, planHover, planReset, planHome, layers: planLayers, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; }, onPlanClick: (fn) => { deckPlan(); DP.onPoint = fn || null; },
             get zone() { return DP.zone; }, get view() { return DP.ph ? DP.ph.view : null; }, get hoverOn() { return HOVER; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {

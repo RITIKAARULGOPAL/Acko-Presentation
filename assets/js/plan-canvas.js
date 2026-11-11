@@ -25,7 +25,7 @@
   function build(data) {
     const L = data.layers, [ox, oy] = data.origin, parts = [], texts = [];
     let order = 0;
-    const ingest = (c, kind, lt, items) => {
+    const ingest = (c, kind, lt, items, ly) => {
       const tiles = new Map(), o = ++order;
       for (const P of items) {
         let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
@@ -44,7 +44,7 @@
             if (kind === "f" || kind === "m") path.closePath();
           }
         }
-        parts.push({ c, kind, lt, order: o, fine, b, path });
+        parts.push({ c, kind, lt, order: o, fine, b, path, ly });
       }
     };
     for (const blk of data.blocks) {
@@ -52,17 +52,18 @@
       const resolve = (spec, ctx) => {
         const layer = spec[0] || ctx.layer;
         const lt = spec[2] === "L" ? L[layer]?.lt : spec[2] === "B" ? ctx.lt : spec[2];
-        return { layer, lt, veg: ctx.veg };
+        // host: the layer that owns it for the bare shell (planBare): an entity on layer 0 takes its insert's, as CAD does
+        return { layer, lt, veg: ctx.veg, host: layer && layer !== "0" ? layer : ctx.host || layer };
       };
       const off = (l) => L[l] && (L[l].off || L[l].frozen);
       let pend = null;
-      const flush = () => { if (pend) { ingest(pend.c, pend.kind, pend.lt, pend.items); pend = null; } };
+      const flush = () => { if (pend) { ingest(pend.c, pend.kind, pend.lt, pend.items, pend.ly); pend = null; } };
       const push = (st, kind, item) => {
-        const c = cls(st.layer, group, st.veg), lt = kind === "s" ? st.lt : "";
-        if (!pend || pend.c !== c || pend.kind !== kind || pend.lt !== lt) { flush(); pend = { c, kind, lt, items: [] }; }
+        const c = cls(st.layer, group, st.veg), lt = kind === "s" ? st.lt : "", ly = group === "base" ? st.host : "";   // vegetation and text are never shell
+        if (!pend || pend.c !== c || pend.kind !== kind || pend.lt !== lt || pend.ly !== ly) { flush(); pend = { c, kind, lt, items: [], ly }; }
         pend.items.push(item);
       };
-      const root = { layer: "0", lt: L["0"]?.lt || "Continuous", veg: false };
+      const root = { layer: "0", lt: L["0"]?.lt || "Continuous", veg: false, host: "0" };
       (function walk(di, M, ctx) {
         const d = defs[di], k = Math.pow(10, -d.q);
         if (d.veg && !ctx.veg) ctx = { ...ctx, veg: true };
@@ -109,6 +110,10 @@
     cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none";
     stage.insertBefore(cv, (opts && opts.before) || null);
     let vb = null, raf = 0, theme = null;
+    // the bare shell (10 Nov, Layout · Due Diligence): only the building's own layers (walls, columns, cores, stairs, lifts, toilets, the
+    // façade), no fit-out and no text; off unless a slide asks (bare(on, re))
+    let bare = null; const shellOf = new Map();
+    const isShell = (ly) => { if (!shellOf.has(ly)) shellOf.set(ly, !!ly && bare.test(ly)); return shellOf.get(ly); };
     const colours = () => {
       const cs = getComputedStyle(cv), v = (n) => cs.getPropertyValue(n).trim();
       const o = {}; for (const k in STROKE) o[k] = v(STROKE[k][0]);
@@ -117,7 +122,7 @@
       return o;
     };
     function paint() {
-      raf = 0; if (!vb) return;
+      raf = 0; if (!vb) return; clearTimeout(later);
       const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
       if (!r.width || !r.height) return;
       const W = Math.round(r.width * dpr), H = Math.round(r.height * dpr);
@@ -131,6 +136,7 @@
       const cols = [];                                // the columns, last: solid over whatever line runs into them
       for (const p of M.parts) {
         if (p.fine && skipFine) continue;
+        if (bare && !isShell(p.ly)) continue;
         if (p.b[2] < x0 || p.b[0] > vx1 || p.b[3] < y0 || p.b[1] > vy1) continue;
         if (p.c === "col") { cols.push(p); continue; }
         if (p.kind === "f") { ctx.fillStyle = p.c === "green" ? theme.fillGreen : p.c === "glass" ? theme.fillGlass : theme.fill; ctx.fill(p.path, "evenodd"); continue; }
@@ -149,7 +155,7 @@
       ctx.strokeStyle = theme.col; ctx.lineWidth = STROKE.col[1] * dpr * hair;
       for (const p of cols) if (p.kind === "s") ctx.stroke(p.path);
       ctx.fillStyle = theme.text;
-      for (const T of M.texts) {
+      for (const T of bare ? [] : M.texts) {
         const [, , h0, rot, align, row, words, style, wf, ls, font] = T.t, h = h0 * (T.k || 1), fs = h / 0.716;
         if (fs * s < 3 * dpr || T.x < x0 - 20000 || T.x > vx1 + 20000 || T.y < y0 - 20000 || T.y > vy1 + 20000) continue;
         ctx.save(); ctx.translate(T.x, T.y); ctx.rotate(-(T.ang || 0) * Math.PI / 180); if (T.m < 0) ctx.scale(1, -1);
@@ -165,7 +171,13 @@
     // a theme switch (Day / Night) changes the colours
     new MutationObserver(() => { theme = null; if (vb) draw(vb); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
     addEventListener("resize", () => vb && draw(vb));
-    return { el: cv, draw, model: M };
+    const SHELL = /^(A-(WALL|FLOR|DOOR|ELEV)|OB-A-WALL|S-(COLS|STRS)|RAILING|P-SANR|OUTLINE)/;
+    // switched off (leaving the slide), the full drawing comes back at once for any slide that draws next; otherwise quietly, after the
+    // cross-fade, so the hand-off doesn't stall on a whole repaint
+    let later = 0;
+    const setBare = (on, re) => { const nb = on ? re || SHELL : null; if (String(nb) === String(bare)) return; bare = nb; shellOf.clear(); clearTimeout(later);
+      if (!vb) return; if (on) draw(vb); else later = setTimeout(() => draw(vb), 900); };
+    return { el: cv, draw, model: M, bare: setBare };
   }
 
   window.PlanCanvas = { mount, build };
