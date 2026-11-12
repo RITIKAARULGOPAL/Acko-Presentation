@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-wf-a6">
+#s-wf-a6 .wf-chips { display: flex; gap: calc(var(--pt) * 3); }
+#s-wf-a6 .wf-chips button { display: inline-flex; align-items: center; gap: calc(var(--pt) * 2.5); border: 1px solid #ddd6f2; background: #fff; color: var(--ink); border-radius: 999px;
+  padding: calc(var(--pt) * 1.8) calc(var(--pt) * 4.5); font: 600 calc(var(--pt) * 6) / 1.1 var(--num, inherit); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+#s-wf-a6 .wf-chips button::before { content: ""; width: calc(var(--pt) * 5); height: calc(var(--pt) * 5); border-radius: 50%; background: var(--c); }
+#s-wf-a6 .wf-chips button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+#s-wf-a6 .wf-note { font-size: calc(var(--pt) * 5.2); color: var(--mute); font-style: italic; }
+#s-wf-a6 .wf-k { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .16em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
+
+#s-wf-a6 .wf-side h2 { margin: 0 0 calc(var(--pt) * 10); font-size: calc(var(--pt) * 17); line-height: 1.12; font-weight: 600; color: var(--ink); }
+#s-wf-a6 .wf-side h2 span { color: var(--purple); font-weight: 700; display: block; }
+#s-wf-a6 .wf-side p { margin: 0 0 calc(var(--pt) * 9); font-size: calc(var(--pt) * 7); line-height: 1.5; color: var(--soft); }
+#s-wf-a6 .wf-side p b { color: var(--ink); }
+
+#s-wf-a6 .wf-el { width: 100%; height: 100%; }
+#s-wf-a6 .wf-el * { transition: fill .7s cubic-bezier(.4, 0, .2, 1), stop-color .7s cubic-bezier(.4, 0, .2, 1); }
+#s-wf-a6 .wall { fill: #f6f4fa; } #s-wf-a6 .paint { fill: var(--paint); }
+#s-wf-a6 .graphic { font: 700 230px var(--num, sans-serif); fill: #fff; opacity: .92; } #s-wf-a6 .graphic-l { stroke: #fff; stroke-width: 6; opacity: .7; }
+#s-wf-a6 .s1 { stop-color: var(--t1); } #s-wf-a6 .s2 { stop-color: var(--t2); }
+#s-wf-a6 .frame { fill: none; stroke: #2b2440; stroke-width: 6; }
+#s-wf-a6 .room { fill: #fbfaff; } #s-wf-a6 .acoustic rect { fill: var(--acoustic); } #s-wf-a6 .table { fill: #bfb6d6; }
+#s-wf-a6 .glass { fill: rgba(220, 230, 240, .25); stroke: #9aa3b5; stroke-width: 3; }
+#s-wf-a6 .film { fill: var(--privacy); } #s-wf-a6 .filmdot { fill: var(--paint); opacity: .35; }
+#s-wf-a6 .sign { fill: #fff; stroke: #2b2440; stroke-width: 2.5; } #s-wf-a6 .signt { font: 600 20px var(--body, sans-serif); fill: #2b2440; }
+#s-wf-a6 .braille circle { fill: #2b2440; }
+#s-wf-a6 .coffee { fill: var(--coffee); } #s-wf-a6 .coffee-top { fill: #2b2440; } #s-wf-a6 .cup { fill: #fff; stroke: #2b2440; stroke-width: 2; }
+#s-wf-a6 .ln { fill: #fff; stroke: #2b2440; stroke-width: 2.5; }
+#s-wf-a6 .carpet { fill: var(--carpet); } #s-wf-a6 .floor { stroke: #2b2440; stroke-width: 2; }
+#s-wf-a6 .lead path { stroke: #8a83a3; stroke-width: 1.4; stroke-dasharray: 3 4; fill: none; }
+#s-wf-a6 .lab text { font: 600 21px var(--body, sans-serif); fill: #2b2440; } #s-wf-a6 .lab text.gen { fill: #8a83a3; }
+#s-wf-a6 .wf-bar { display: flex; align-items: center; gap: calc(var(--pt) * 6); }
+#s-wf-a6 .wf-bar .wf-k { margin: 0; }
+#s-wf-a6 .wf-name { font-size: calc(var(--pt) * 7); color: var(--ink); }
+
+#s-wf-a6 :is(.paint, .carpet, .coffee, .art, .acoustic) { filter: url(#wfa6-wash); opacity: .88; }
+#s-wf-a6 .wall { fill: #fbf8f1; } #s-wf-a6 .room { fill: #fdfbf6; }
+#s-wf-a6 .frame, #s-wf-a6 .floor, #s-wf-a6 .glass, #s-wf-a6 .sign, #s-wf-a6 .ln, #s-wf-a6 .cup, #s-wf-a6 .coffee-top { stroke: #2b2440; stroke-width: 3.2; }
+#s-wf-a6 .hatch { stroke: rgba(43, 36, 64, .28); stroke-width: 1.4; }
+#s-wf-a6 .lab text { font: 400 34px var(--hand, cursive); fill: #2b2440; } #s-wf-a6 .lab text.gen { fill: #6f6a85; }
+#s-wf-a6 .lead path { stroke: #2b2440; stroke-dasharray: none; stroke-width: 1.2; }
+#s-wf-a6 .graphic { font-family: var(--hand, cursive); font-weight: 400; font-size: 260px; }
+
+#s-wf-a6 .wf-el :is(.lab text, .lead path) { transition: opacity .6s; }
+#s-wf-a6 .filmdot { fill: var(--dot); }
+#s-wf-a6 .wf-el.walk :is(.lab text, .lead path):not(.seen) { opacity: .16; }
+#s-wf-a6 .ring { opacity: .92; transition: opacity .6s; } #s-wf-a6 .ring.done { opacity: .4; }
+#s-wf-a6 .ring path { fill: none; stroke: #2b2440; stroke-width: 4.5; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset .9s cubic-bezier(.5, 0, .3, 1); }
+#s-wf-a6 .ring path.halo { stroke: #fffdf8; stroke-width: 11; }
+#s-wf-a6 .ring.on path { stroke-dashoffset: 0; }
+#s-wf-a6 .who { transition: transform 1s linear, opacity .5s; }
+#s-wf-a6 .who :is(path, circle, rect) { fill: none; stroke: #2b2440; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+#s-wf-a6 .who :is(.torso, .head, .bag) { fill: #fbf8f1; } #s-wf-a6 .who .hand { fill: #2b2440; stroke: none; }
+#s-wf-a6 .who .torso { fill: color-mix(in srgb, #fbf8f1 82%, #2b2440); } #s-wf-a6 .who .strap { stroke-width: 2.6; }
+#s-wf-a6 .limb { transition: transform .45s cubic-bezier(.4, 0, .2, 1); }
+#s-wf-a6 .walking .limb { transition: none; }
+#s-wf-a6 .walking .l1, #s-wf-a6 .walking .a2 { animation: wf6-leg .44s ease-in-out infinite alternate; }
+#s-wf-a6 .walking .l2, #s-wf-a6 .walking .a1 { animation: wf6-leg .44s ease-in-out -.44s infinite alternate; }
+#s-wf-a6 .walking :is(.a1, .a2) { animation-name: wf6-arm; }
+#s-wf-a6 .walking .bob { animation: wf6-bob .22s ease-in-out infinite alternate; }
+@keyframes wf6-leg { from { transform: rotate(23deg); } to { transform: rotate(-23deg); } }
+@keyframes wf6-arm { from { transform: rotate(-20deg); } to { transform: rotate(20deg); } }
+@keyframes wf6-bob { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+#s-wf-a6 .face { transition: transform .35s; } #s-wf-a6 .left .face { transform: scaleX(-1); }
+#s-wf-a6 .headg { transition: transform .5s; } #s-wf-a6 .wonder .headg { transform: translate(0, -196px) rotate(-9deg) translate(0, 196px); }
+#s-wf-a6 .reach .a1 { transform: rotate(-100deg); } #s-wf-a6 .hold .a1 { transform: rotate(-78deg); }
+#s-wf-a6 .mycup { opacity: 0; transition: opacity .3s; } #s-wf-a6 .hold .mycup { opacity: 1; transition-delay: .35s; }
+#s-wf-a6 .mycup rect { fill: #fff; stroke-width: 3; } #s-wf-a6 .steam { stroke-width: 2.4; opacity: .55; animation: wf6-steam 1.6s ease-in-out infinite; }
+@keyframes wf6-steam { 0% { transform: translateY(4px); opacity: 0; } 50% { opacity: .6; } 100% { transform: translateY(-8px); opacity: 0; } }
+#s-wf-a6 .bub { opacity: 0; transition: opacity .35s; } #s-wf-a6 .bub.on { opacity: 1; }
+#s-wf-a6 .bb { fill: #fffdf8; stroke: #2b2440; stroke-width: 3.2; }
+#s-wf-a6 .tail circle { fill: #fffdf8; stroke: #2b2440; stroke-width: 2.6; }
+#s-wf-a6 .bub text { font: 400 38px var(--hand, cursive); fill: #2b2440; } #s-wf-a6 .bub .ans { fill: var(--mark); font-size: 36px; opacity: 0; transition: opacity .5s, fill .7s; }
+#s-wf-a6 .bub.ok .ans { opacity: 1; }
+#s-wf-a6 .wf-close { margin-left: auto; font: 400 calc(var(--pt) * 14) / 1.1 var(--hand, cursive); color: var(--purple); opacity: 0; transform: translateY(6px); transition: opacity .7s, transform .7s; white-space: nowrap; }
+#s-wf-a6 .wf-close.on { opacity: 1; transform: none; }
+#s-wf-a6 .wf-again { opacity: .55; border: 1px solid #ddd6f2; background: #fff; color: var(--ink); border-radius: 999px; padding: calc(var(--pt) * 1.8) calc(var(--pt) * 5);
+  font: 600 calc(var(--pt) * 5.6) / 1.1 inherit; cursor: pointer; }
+#s-wf-a6 .wf-again:hover { border-color: var(--purple); color: var(--purple); }
+</style>
+<style data-slide="s-wf-a4">
+#s-wf-a4 .wf-chips { display: flex; gap: calc(var(--pt) * 3); }
+#s-wf-a4 .wf-chips button { display: inline-flex; align-items: center; gap: calc(var(--pt) * 2.5); border: 1px solid #ddd6f2; background: #fff; color: var(--ink); border-radius: 999px;
+  padding: calc(var(--pt) * 1.8) calc(var(--pt) * 4.5); font: 600 calc(var(--pt) * 6) / 1.1 var(--num, inherit); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+#s-wf-a4 .wf-chips button::before { content: ""; width: calc(var(--pt) * 5); height: calc(var(--pt) * 5); border-radius: 50%; background: var(--c); }
+#s-wf-a4 .wf-chips button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+#s-wf-a4 .wf-note { font-size: calc(var(--pt) * 5.2); color: var(--mute); font-style: italic; }
+#s-wf-a4 .wf-k { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .16em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
+
+#s-wf-a4 .wf-side h2 { margin: 0 0 calc(var(--pt) * 10); font-size: calc(var(--pt) * 17); line-height: 1.12; font-weight: 600; color: var(--ink); }
+#s-wf-a4 .wf-side h2 span { color: var(--purple); font-weight: 700; display: block; }
+#s-wf-a4 .wf-side p { margin: 0 0 calc(var(--pt) * 9); font-size: calc(var(--pt) * 7); line-height: 1.5; color: var(--soft); }
+#s-wf-a4 .wf-side p b { color: var(--ink); }
+
+#s-wf-a4 .wf-el { width: 100%; height: 100%; }
+#s-wf-a4 .wf-el * { transition: fill .7s cubic-bezier(.4, 0, .2, 1), stop-color .7s cubic-bezier(.4, 0, .2, 1); }
+#s-wf-a4 .wall { fill: #f6f4fa; } #s-wf-a4 .paint { fill: var(--paint); }
+#s-wf-a4 .graphic { font: 700 230px var(--num, sans-serif); fill: #fff; opacity: .92; } #s-wf-a4 .graphic-l { stroke: #fff; stroke-width: 6; opacity: .7; }
+#s-wf-a4 .s1 { stop-color: var(--t1); } #s-wf-a4 .s2 { stop-color: var(--t2); }
+#s-wf-a4 .frame { fill: none; stroke: #2b2440; stroke-width: 6; }
+#s-wf-a4 .room { fill: #fbfaff; } #s-wf-a4 .acoustic rect { fill: var(--acoustic); } #s-wf-a4 .table { fill: #bfb6d6; }
+#s-wf-a4 .glass { fill: rgba(220, 230, 240, .25); stroke: #9aa3b5; stroke-width: 3; }
+#s-wf-a4 .film { fill: var(--privacy); } #s-wf-a4 .filmdot { fill: var(--paint); opacity: .35; }
+#s-wf-a4 .sign { fill: #fff; stroke: #2b2440; stroke-width: 2.5; } #s-wf-a4 .signt { font: 600 20px var(--body, sans-serif); fill: #2b2440; }
+#s-wf-a4 .braille circle { fill: #2b2440; }
+#s-wf-a4 .coffee { fill: var(--coffee); } #s-wf-a4 .coffee-top { fill: #2b2440; } #s-wf-a4 .cup { fill: #fff; stroke: #2b2440; stroke-width: 2; }
+#s-wf-a4 .ln { fill: #fff; stroke: #2b2440; stroke-width: 2.5; }
+#s-wf-a4 .carpet { fill: var(--carpet); } #s-wf-a4 .floor { stroke: #2b2440; stroke-width: 2; }
+#s-wf-a4 .lead path { stroke: #8a83a3; stroke-width: 1.4; stroke-dasharray: 3 4; fill: none; }
+#s-wf-a4 .lab text { font: 600 21px var(--body, sans-serif); fill: #2b2440; } #s-wf-a4 .lab text.gen { fill: #8a83a3; }
+#s-wf-a4 .wf-bar { display: flex; align-items: center; gap: calc(var(--pt) * 6); }
+#s-wf-a4 .wf-bar .wf-k { margin: 0; }
+#s-wf-a4 .wf-name { font-size: calc(var(--pt) * 7); color: var(--ink); }
+
+#s-wf-a4 :is(.paint, .carpet, .coffee, .art, .acoustic) { filter: url(#wfa4-wash); opacity: .88; }
+#s-wf-a4 .wall { fill: #fbf8f1; } #s-wf-a4 .room { fill: #fdfbf6; }
+#s-wf-a4 .frame, #s-wf-a4 .floor, #s-wf-a4 .glass, #s-wf-a4 .sign, #s-wf-a4 .ln, #s-wf-a4 .cup, #s-wf-a4 .coffee-top { stroke: #2b2440; stroke-width: 3.2; }
+#s-wf-a4 .hatch { stroke: rgba(43, 36, 64, .28); stroke-width: 1.4; }
+#s-wf-a4 .lab text { font: 400 34px var(--hand, cursive); fill: #2b2440; } #s-wf-a4 .lab text.gen { fill: #6f6a85; }
+#s-wf-a4 .lead path { stroke: #2b2440; stroke-dasharray: none; stroke-width: 1.2; }
+#s-wf-a4 .graphic { font-family: var(--hand, cursive); font-weight: 400; font-size: 260px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<section class="scene" id="s-wf-a6" data-part="5" data-title="Wayfinding · A6 · The walk" data-steps="4" data-mins="1" data-beats="My team,Still us,My 3 pm,Coffee"
+  data-notes="Wayfinding, walked: someone new to the floor, looking for their team, one stop per click. 1 · Where's my team? The wall answers: its colour and its number. 2 · Still us? The artwork and the carpet underfoot carry the same accent. 3 · Which room is my 3 pm? Nalanda, the same signage family everywhere, with braille at reach. 4 · Coffee? Their own point, in its own tone. Known before a sign is read.">
+  <div class="page">
+    <div class="hdr"><b>Wayfinding</b><span>One language, six accents</span></div>
+    <div class="wf-stage" style="left:1.8%;top:14%;width:96.4%;height:68%"><svg class="wf-el" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs><filter id="wfa6-pen" x="-30%" y="-10%" width="160%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter><filter id="wfa6-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><filter id="wfa6-wash" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><pattern id="wfa6-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" class="hatch"/></pattern>
+          <linearGradient id="wfa6-art" x1="0" x2="1"><stop offset="0" class="s1"/><stop offset="1" class="s2"/></linearGradient>
+          <pattern id="wfa6-film" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" class="film"/><ellipse cx="13" cy="13" rx="9" ry="4.5" class="filmdot"/></pattern>
+        </defs>
+        <g filter="url(#wfa6-ink)"><rect class="wall" x="40" y="80" width="1520" height="390"/>
+        <rect class="paint" x="40" y="80" width="460" height="390"/>
+        <text class="graphic" x="270" y="380" text-anchor="middle">03</text>
+        <path class="graphic-l" d="M80 410H460M80 425H360"/>
+        <rect class="art" x="560" y="150" width="210" height="170" fill="url(#wfa6-art)"/><rect class="frame" x="560" y="150" width="210" height="170"/>
+        <rect class="room" x="840" y="80" width="330" height="390"/>
+        <g class="acoustic"><rect x="870" y="110" width="44" height="150"/><rect x="922" y="110" width="44" height="150"/><rect x="974" y="110" width="44" height="150"/><rect x="1026" y="110" width="44" height="150"/><rect x="1078" y="110" width="44" height="150"/></g>
+        <rect class="table" x="905" y="330" width="200" height="16"/>
+        <rect class="glass" x="840" y="80" width="330" height="390"/>
+        <rect x="840" y="250" width="330" height="80" fill="url(#wfa6-film)" class="filmband"/>
+        <rect class="sign" x="1192" y="210" width="110" height="74" rx="6"/><text class="signt" x="1247" y="244" text-anchor="middle">Nalanda</text>
+        <g class="braille"><circle cx="1222" cy="266" r="3.4"/><circle cx="1232" cy="266" r="3.4"/><circle cx="1222" cy="274" r="3.4"/><circle cx="1246" cy="266" r="3.4"/><circle cx="1256" cy="274" r="3.4"/><circle cx="1270" cy="266" r="3.4"/><circle cx="1270" cy="274" r="3.4"/></g>
+        <rect class="coffee" x="1340" y="330" width="210" height="140"/><rect class="coffee-top" x="1330" y="318" width="230" height="14"/>
+        <path class="ln" d="M1445 80V180M1420 180H1470L1460 205H1430Z"/><rect class="cup" x="1370" y="296" width="16" height="22" rx="3"/><rect class="cup" x="1394" y="300" width="14" height="18" rx="3"/>
+        <rect class="carpet" x="40" y="470" width="1520" height="46"/>
+        <line class="floor" x1="40" y1="516" x2="1560" y2="516"/>
+        </g><rect x="40" y="470" width="1520" height="46" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><rect x="1340" y="330" width="210" height="140" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><g class="lead">
+          <path d="M270 80V36"/><path d="M330 432V560"/><path d="M665 150V36"/><path d="M720 320V560"/><path d="M1005 110V36"/><path d="M890 290V560"/>
+          <path d="M1247 210V36"/><path d="M1290 284V560"/><path d="M1445 318V560"/><path d="M110 516V560"/>
+        </g>
+        <g class="lab">
+          <text x="270" y="28" text-anchor="middle">Paint accent</text><text x="330" y="582" text-anchor="middle">Wall graphic</text>
+          <text x="665" y="28" text-anchor="middle">Artwork</text><text x="720" y="582" text-anchor="middle">Artwork tonality</text>
+          <text x="1005" y="28" text-anchor="middle">Meeting-room acoustics</text><text x="890" y="582" text-anchor="middle">Privacy panel</text>
+          <text class="gen" x="1247" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1290" y="582" text-anchor="middle">Inclusive · braille</text>
+          <text x="1445" y="582" text-anchor="middle">Coffee point</text><text x="60" y="582" text-anchor="start">Carpet</text>
+        </g>
+      <g class="ring" data-s="0" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M152.3 196.5L176.7 186.0L203.3 177.8L231.7 172.2L261.3 169.4L291.3 169.3L321.1 172.2L350.0 177.9L377.4 186.3L402.6 197.3L424.9 210.6L443.9 225.9L459.2 242.9L470.2 261.2L476.8 280.3L478.8 299.9L476.2 319.4L469.1 338.3L457.6 356.4L442.0 373.0L422.8 387.9L400.4 400.7L375.4 411.2L348.4 419.1L320.1 424.4L291.0 426.8L261.9 426.5L233.4 423.4L206.1 417.8L180.6 409.6L157.5 399.3L137.0 387.1L119.8 373.1L105.9 357.9L95.7 341.6L89.3 324.7L86.8 307.5L88.1 290.3L93.1 273.6L101.8 257.5L113.9 242.4L129.1 228.7L147.2 216.4L167.7 206.0L190.3 197.5L214.5 191.1L240.0 186.9L266.1 185.1L292.4 185.7"/><path pathLength="1" d="M152.3 196.5L176.7 186.0L203.3 177.8L231.7 172.2L261.3 169.4L291.3 169.3L321.1 172.2L350.0 177.9L377.4 186.3L402.6 197.3L424.9 210.6L443.9 225.9L459.2 242.9L470.2 261.2L476.8 280.3L478.8 299.9L476.2 319.4L469.1 338.3L457.6 356.4L442.0 373.0L422.8 387.9L400.4 400.7L375.4 411.2L348.4 419.1L320.1 424.4L291.0 426.8L261.9 426.5L233.4 423.4L206.1 417.8L180.6 409.6L157.5 399.3L137.0 387.1L119.8 373.1L105.9 357.9L95.7 341.6L89.3 324.7L86.8 307.5L88.1 290.3L93.1 273.6L101.8 257.5L113.9 242.4L129.1 228.7L147.2 216.4L167.7 206.0L190.3 197.5L214.5 191.1L240.0 186.9L266.1 185.1L292.4 185.7"/></g><g class="ring" data-s="1" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M576.7 142.2L595.0 132.7L615.0 125.3L636.3 120.2L658.4 117.6L681.0 117.6L703.3 120.2L725.0 125.3L745.5 132.9L764.4 142.9L781.2 155.0L795.5 168.8L806.9 184.3L815.2 200.8L820.1 218.2L821.6 235.9L819.7 253.6L814.3 270.7L805.7 287.1L794.0 302.2L779.6 315.7L762.8 327.3L744.1 336.8L723.8 344.0L702.6 348.7L680.8 350.9L658.9 350.6L637.5 347.9L617.1 342.7L598.0 335.4L580.6 326.0L565.3 314.9L552.3 302.3L541.9 288.4L534.3 273.7L529.5 258.4L527.6 242.8L528.5 227.2L532.3 212.0L538.8 197.5L547.9 183.8L559.3 171.3L572.9 160.3L588.3 150.8L605.2 143.1L623.4 137.3L642.5 133.5L662.1 131.9L681.8 132.4"/><path pathLength="1" d="M576.7 142.2L595.0 132.7L615.0 125.3L636.3 120.2L658.4 117.6L681.0 117.6L703.3 120.2L725.0 125.3L745.5 132.9L764.4 142.9L781.2 155.0L795.5 168.8L806.9 184.3L815.2 200.8L820.1 218.2L821.6 235.9L819.7 253.6L814.3 270.7L805.7 287.1L794.0 302.2L779.6 315.7L762.8 327.3L744.1 336.8L723.8 344.0L702.6 348.7L680.8 350.9L658.9 350.6L637.5 347.9L617.1 342.7L598.0 335.4L580.6 326.0L565.3 314.9L552.3 302.3L541.9 288.4L534.3 273.7L529.5 258.4L527.6 242.8L528.5 227.2L532.3 212.0L538.8 197.5L547.9 183.8L559.3 171.3L572.9 160.3L588.3 150.8L605.2 143.1L623.4 137.3L642.5 133.5L662.1 131.9L681.8 132.4"/></g><g class="ring" data-s="2" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M1209.6 203.1L1218.4 198.3L1228.0 194.6L1238.2 192.1L1248.9 190.8L1259.7 190.8L1270.4 192.1L1280.8 194.7L1290.7 198.5L1299.7 203.4L1307.8 209.5L1314.6 216.4L1320.1 224.1L1324.1 232.4L1326.5 241.1L1327.2 249.9L1326.2 258.8L1323.7 267.4L1319.5 275.5L1313.9 283.1L1307.0 289.8L1299.0 295.6L1290.0 300.4L1280.2 304.0L1270.0 306.4L1259.6 307.5L1249.1 307.3L1238.8 305.9L1229.0 303.4L1219.8 299.7L1211.5 295.0L1204.1 289.4L1197.9 283.1L1192.9 276.2L1189.3 268.8L1186.9 261.2L1186.0 253.4L1186.5 245.6L1188.3 238.0L1191.4 230.7L1195.8 223.9L1201.3 217.7L1207.8 212.1L1215.2 207.4L1223.3 203.5L1232.0 200.6L1241.2 198.8L1250.6 197.9L1260.1 198.2"/><path pathLength="1" d="M1209.6 203.1L1218.4 198.3L1228.0 194.6L1238.2 192.1L1248.9 190.8L1259.7 190.8L1270.4 192.1L1280.8 194.7L1290.7 198.5L1299.7 203.4L1307.8 209.5L1314.6 216.4L1320.1 224.1L1324.1 232.4L1326.5 241.1L1327.2 249.9L1326.2 258.8L1323.7 267.4L1319.5 275.5L1313.9 283.1L1307.0 289.8L1299.0 295.6L1290.0 300.4L1280.2 304.0L1270.0 306.4L1259.6 307.5L1249.1 307.3L1238.8 305.9L1229.0 303.4L1219.8 299.7L1211.5 295.0L1204.1 289.4L1197.9 283.1L1192.9 276.2L1189.3 268.8L1186.9 261.2L1186.0 253.4L1186.5 245.6L1188.3 238.0L1191.4 230.7L1195.8 223.9L1201.3 217.7L1207.8 212.1L1215.2 207.4L1223.3 203.5L1232.0 200.6L1241.2 198.8L1250.6 197.9L1260.1 198.2"/></g><g class="ring" data-s="3" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M1379.4 314.2L1394.0 305.9L1410.0 299.5L1427.0 295.2L1444.8 292.9L1462.8 292.9L1480.7 295.1L1498.0 299.6L1514.4 306.2L1529.5 314.7L1543.0 325.1L1554.4 337.1L1563.5 350.4L1570.1 364.7L1574.1 379.6L1575.3 394.9L1573.7 410.1L1569.4 425.0L1562.5 439.0L1553.2 452.0L1541.7 463.7L1528.3 473.7L1513.3 481.9L1497.1 488.1L1480.0 492.2L1462.6 494.1L1445.1 493.8L1428.0 491.4L1411.7 487.0L1396.4 480.7L1382.5 472.6L1370.2 463.0L1359.9 452.1L1351.5 440.2L1345.4 427.5L1341.6 414.3L1340.1 400.8L1340.8 387.4L1343.9 374.3L1349.1 361.8L1356.3 350.0L1365.5 339.3L1376.3 329.7L1388.6 321.5L1402.2 314.9L1416.7 309.9L1432.0 306.7L1447.6 305.2L1463.4 305.7"/><path pathLength="1" d="M1379.4 314.2L1394.0 305.9L1410.0 299.5L1427.0 295.2L1444.8 292.9L1462.8 292.9L1480.7 295.1L1498.0 299.6L1514.4 306.2L1529.5 314.7L1543.0 325.1L1554.4 337.1L1563.5 350.4L1570.1 364.7L1574.1 379.6L1575.3 394.9L1573.7 410.1L1569.4 425.0L1562.5 439.0L1553.2 452.0L1541.7 463.7L1528.3 473.7L1513.3 481.9L1497.1 488.1L1480.0 492.2L1462.6 494.1L1445.1 493.8L1428.0 491.4L1411.7 487.0L1396.4 480.7L1382.5 472.6L1370.2 463.0L1359.9 452.1L1351.5 440.2L1345.4 427.5L1341.6 414.3L1340.1 400.8L1340.8 387.4L1343.9 374.3L1349.1 361.8L1356.3 350.0L1365.5 339.3L1376.3 329.7L1388.6 321.5L1402.2 314.9L1416.7 309.9L1432.0 306.7L1447.6 305.2L1463.4 305.7"/></g><g class="who"><g transform="scale(1.18)"><g class="face"><g class="bob" filter="url(#wfa6-pen)"><g transform="translate(0 -98)"><g class="limb l2"><path d="M0 0L-1 94L13 97"/></g></g><g transform="translate(0 -166)"><g class="limb a2"><path d="M0 0L1 68"/></g></g><path class="torso" d="M-15 -171C-6 -177 6 -177 15 -171L14 -97C5 -93 -5 -93 -14 -97Z"/><path class="strap" d="M-11 -170L12 -116"/><rect class="bag" x="4" y="-120" width="22" height="18" rx="3"/><g transform="translate(0 -98)"><g class="limb l1"><path d="M0 0L1 94L15 97"/></g></g><g class="headg"><circle class="head" cx="0" cy="-196" r="19"/><path class="hair" d="M-19 -197C-17 -216 8 -221 19 -203"/><path class="nose" d="M18 -197l7 5l-6 2"/></g><g transform="translate(0 -166)"><g class="limb a1"><path d="M0 0L-1 68"/><circle class="hand" cx="-1" cy="72" r="4.5"/></g></g><g class="mycup"><rect x="63" y="-171" width="15" height="19" rx="3"/><path class="steam" d="M67 -178c-6 -10 6 -14 0 -24M75 -178c-6 -10 6 -14 0 -24"/></g></g></g></g></g><g class="bub"><g class="tail"><circle r="7"/><circle r="10"/><circle r="13"/></g><rect class="bb" height="124" rx="46" filter="url(#wfa6-pen)"/><text class="q" x="34" y="54"></text><text class="ans" x="34" y="100"></text></g></svg></div>
+    <div class="wf-bar" style="left:1.8%;top:85%;width:96.4%"><span class="wf-k">Pick a neighbourhood</span><div class="wf-chips"></div><b class="wf-name"></b><span class="wf-close">Known before a sign is read.</span><button type="button" class="wf-again" title="Play this stop again">&#8635;</button></div>
+  </div>
+</section>
+<section class="scene" id="s-wf-a4" data-part="5" data-title="Wayfinding · A4 · An architect's sketch" data-steps="1" data-mins="0.5"
+  data-notes="Wayfinding: one language, six accents. The same everywhere: one signage family named for a Modern Indian Institution, with braille and tactile signs, inclusive by default. Each neighbourhood speaks in its own accent from ACKO's palette, violet, green and yellow, deep and light: its paint, wall graphic, carpet, privacy panels, artwork and its tonality, meeting-room acoustics and coffee point, so you know where you are before you read a sign. The tones are indicative.">
+  <div class="page">
+    <div class="hdr"><b>Wayfinding</b><span>One language, six accents</span></div>
+    <div class="wf-stage" style="left:1.8%;top:15%;width:69%;height:66%"><svg class="wf-el" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs><filter id="wfa4-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><filter id="wfa4-wash" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><pattern id="wfa4-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" class="hatch"/></pattern>
+          <linearGradient id="wfa4-art" x1="0" x2="1"><stop offset="0" class="s1"/><stop offset="1" class="s2"/></linearGradient>
+          <pattern id="wfa4-film" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" class="film"/><ellipse cx="13" cy="13" rx="9" ry="4.5" class="filmdot"/></pattern>
+        </defs>
+        <g filter="url(#wfa4-ink)"><rect class="wall" x="40" y="80" width="1520" height="390"/>
+        <rect class="paint" x="40" y="80" width="460" height="390"/>
+        <text class="graphic" x="270" y="380" text-anchor="middle">03</text>
+        <path class="graphic-l" d="M80 410H460M80 425H360"/>
+        <rect class="art" x="560" y="150" width="210" height="170" fill="url(#wfa4-art)"/><rect class="frame" x="560" y="150" width="210" height="170"/>
+        <rect class="room" x="840" y="80" width="330" height="390"/>
+        <g class="acoustic"><rect x="870" y="110" width="44" height="150"/><rect x="922" y="110" width="44" height="150"/><rect x="974" y="110" width="44" height="150"/><rect x="1026" y="110" width="44" height="150"/><rect x="1078" y="110" width="44" height="150"/></g>
+        <rect class="table" x="905" y="330" width="200" height="16"/>
+        <rect class="glass" x="840" y="80" width="330" height="390"/>
+        <rect x="840" y="250" width="330" height="80" fill="url(#wfa4-film)" class="filmband"/>
+        <rect class="sign" x="1192" y="210" width="110" height="74" rx="6"/><text class="signt" x="1247" y="244" text-anchor="middle">Nalanda</text>
+        <g class="braille"><circle cx="1222" cy="266" r="3.4"/><circle cx="1232" cy="266" r="3.4"/><circle cx="1222" cy="274" r="3.4"/><circle cx="1246" cy="266" r="3.4"/><circle cx="1256" cy="274" r="3.4"/><circle cx="1270" cy="266" r="3.4"/><circle cx="1270" cy="274" r="3.4"/></g>
+        <rect class="coffee" x="1340" y="330" width="210" height="140"/><rect class="coffee-top" x="1330" y="318" width="230" height="14"/>
+        <path class="ln" d="M1445 80V180M1420 180H1470L1460 205H1430Z"/><rect class="cup" x="1370" y="296" width="16" height="22" rx="3"/><rect class="cup" x="1394" y="300" width="14" height="18" rx="3"/>
+        <rect class="carpet" x="40" y="470" width="1520" height="46"/>
+        <line class="floor" x1="40" y1="516" x2="1560" y2="516"/>
+        </g><rect x="40" y="470" width="1520" height="46" fill="url(#wfa4-hatch)" filter="url(#wfa4-ink)"/><rect x="1340" y="330" width="210" height="140" fill="url(#wfa4-hatch)" filter="url(#wfa4-ink)"/><g class="lead">
+          <path d="M270 80V36"/><path d="M330 432V560"/><path d="M665 150V36"/><path d="M720 320V560"/><path d="M1005 110V36"/><path d="M890 290V560"/>
+          <path d="M1247 210V36"/><path d="M1290 284V560"/><path d="M1445 318V560"/><path d="M110 516V560"/>
+        </g>
+        <g class="lab">
+          <text x="270" y="28" text-anchor="middle">Paint accent</text><text x="330" y="582" text-anchor="middle">Wall graphic</text>
+          <text x="665" y="28" text-anchor="middle">Artwork</text><text x="720" y="582" text-anchor="middle">Artwork tonality</text>
+          <text x="1005" y="28" text-anchor="middle">Meeting-room acoustics</text><text x="890" y="582" text-anchor="middle">Privacy panel</text>
+          <text class="gen" x="1247" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1290" y="582" text-anchor="middle">Inclusive · braille</text>
+          <text x="1445" y="582" text-anchor="middle">Coffee point</text><text x="60" y="582" text-anchor="start">Carpet</text>
+        </g>
+      </svg></div>
+    <div class="wf-bar" style="left:1.8%;top:84%;width:69%"><span class="wf-k">Pick a neighbourhood</span><div class="wf-chips"></div><b class="wf-name"></b></div>
+    <div class="wf-side" style="left:73%;top:16%;width:25%">
+      <h2>One language, <span>six accents.</span></h2>
+      <span class="wf-k">The same everywhere</span>
+      <p><b>Signage</b> in one family, the rooms named for a Modern Indian Institution: Nalanda, Sabha, Takshashila. <b>Inclusive</b> by default: braille and tactile, high contrast, at reach height.</p>
+      <span class="wf-k">Each neighbourhood, its own accent</span>
+      <p>ACKO's violet, green and yellow, deep and light: six accents, carried through eight layers, so you know where you are <b>before you read a sign</b>.</p>
+      <p class="wf-note">Tones indicative, from ACKO's palette.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="data/loop-path.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-wf-a6">
+ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
+  // the six accents (ACKO's logo colours: violet, green, yellow; deep and light), one per neighbourhood; indicative
+  const NB = [["01", "#5222d0", "Violet"], ["02", "#a98bf2", "Violet, light"], ["03", "#0fa458", "Green"], ["04", "#8fd8ae", "Green, light"],
+    ["05", "#f2ae00", "Yellow"], ["06", "#ffd866", "Yellow, light"]];
+  const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)), toh = (c) => "#" + c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
+  const mix = (a, b, t) => toh(hx(a).map((v, i) => v + (hx(b)[i] - v) * t));
+  // each layer's tone from the accent
+  const LAYERS = [
+    ["paint", "Paint accent", "the neighbourhood's own wall", (c) => c],
+    ["graphic", "Wall graphics", "its number, large, at the way in", (c) => c],
+    ["carpet", "Carpet", "underfoot, a deeper, quieter tone", (c) => mix(c, "#4a4652", 0.55)],
+    ["privacy", "Privacy panels", "the film on the glass, a light tint", (c) => mix(c, "#ffffff", 0.68)],
+    ["art", "Artwork", "a piece chosen for the neighbourhood", (c) => mix(c, "#ffffff", 0.2)],
+    ["tone", "Artwork tonality", "light to deep, in its colour", (c) => `linear-gradient(90deg, ${mix(c, "#ffffff", 0.55)}, ${mix(c, "#1d1733", 0.35)})`],
+    ["acoustic", "Meeting-room acoustics", "the panels inside its rooms", (c) => mix(c, "#ffffff", 0.35)],
+    ["coffee", "Collab / coffee point", "the counter, a warmer tone", (c) => mix(c, "#c8a27a", 0.45)]];
+  const GENERAL = [["Signage", "one family across the floor: rooms named for a Modern Indian Institution (Nalanda, Sabha, Takshashila)"],
+    ["Inclusivity", "braille and tactile signs, high contrast, at reach height"]];
+  const tones = (c) => Object.fromEntries(LAYERS.map(([k, , , f]) => [k, f(c)]));
+
+  function pick(sc, i, paint) {
+    $$(".wf-chips button", sc).forEach((b, j) => b.classList.toggle("on", j === i));
+    paint(sc, i);
+  }
+  function chips(sc, paint) {
+    const box = $(".wf-chips", sc); if (box.childElementCount) return;
+    box.innerHTML = NB.map(([n, c]) => `<button type="button" style="--c:${c}">${n}</button>`).join("");
+    $$("button", box).forEach((b, j) => (b.onclick = (e) => { e.stopPropagation(); b.blur(); pick(sc, j, paint); }));
+  }
+
+  const WORD = ["Violet", "Light violet", "Green", "Light green", "Yellow", "Light yellow"];
+  // the stops: where he stands (x on the carpet), which way he faces, his pose, the question, the answer, which labels ink in
+  const STOPS = [
+    { x: 530, face: -1, side: 1, q: "Where's my team?", a: (w, n) => `${w}, ${n}. That's us!`, labs: [0, 1], lit: ["paint"] },
+    { x: 805, face: -1, side: 1, q: "Still us?", a: (w) => `Our art, our ${w.toLowerCase()} floor.`, labs: [2, 3, 9], lit: ["t1", "t2", "carpet"] },
+    { x: 1150, face: 1, side: 1, pose: "reach", q: "Which room is my 3 pm?", a: () => "Nalanda. Found it by touch.", labs: [4, 5, 6, 7], lit: ["privacy", "dot", "acoustic"] },
+    { x: 1325, face: 1, side: 1, pose: "hold", q: "Coffee?", a: () => "Ours, right here.", labs: [8], lit: ["coffee"] }];
+  const SPEED = 230, START = -70;
+  let T = [], cur = -1, nb = 2, X = START;
+  const at = (fn, ms) => T.push(setTimeout(fn, ms)), stop = () => { T.forEach(clearTimeout); T = []; };
+  let TONE = {}, lit = [];
+  const grey = (c) => { const [r, g, b] = hx(c), L = 0.2126 * r + 0.7152 * g + 0.0722 * b; return mix(toh([L, L * 0.99, L * 0.965]), "#f4f1ec", 0.3); };
+  function light(sc, keys) {
+    if (keys) lit = keys;
+    const el = $(".wf-el", sc);
+    Object.entries(TONE).forEach(([k, c]) => el.style.setProperty("--" + k, lit === "all" || lit.includes(k) ? c : grey(c)));
+  }
+  function paint(sc, i) {
+    nb = i;
+    const [n, c, name] = NB[i], t = tones(c), el = $(".wf-el", sc);
+    TONE = { paint: t.paint, carpet: t.carpet, privacy: t.privacy, acoustic: t.acoustic, coffee: t.coffee, dot: t.paint,
+      t1: mix(c, "#ffffff", 0.55), t2: mix(c, "#1d1733", 0.35) };
+    light(sc);
+    el.style.setProperty("--mark", mix(c, "#1d1733", [1, 3, 5].includes(i) ? 0.5 : 0.12));
+    $$(".graphic", sc).forEach((g) => (g.textContent = n)); $(".wf-name", sc).textContent = `Neighbourhood ${n} · ${name}`;
+    if (cur >= 0) bubble(sc, cur, $(".bub", sc).classList.contains("ok"));
+  }
+  // the thought bubble over his head, sized to its words
+  function bubble(sc, k, ok) {
+    const s = STOPS[k], b = $(".bub", sc), q = $(".q", b), a = $(".ans", b);
+    q.textContent = s.q; a.textContent = s.a(WORD[nb], NB[nb][0]);
+    let w = 300; try { w = Math.max(q.getComputedTextLength(), ok ? a.getComputedTextLength() : 0, a.getComputedTextLength()) + 68; } catch (e) {}
+    const h = 124, top = 58, left = Math.max(16, Math.min(1584 - w, s.side > 0 ? s.x + 18 : s.x - 18 - w));
+    $(".bb", b).setAttribute("width", w); $(".bb", b).setAttribute("x", 0); b.setAttribute("transform", `translate(${left} ${top})`);
+    // three little circles rising from his head to the bubble
+    const hx = s.x + s.side * 14 - left, hy = 212 - top, ex = Math.max(40, Math.min(w - 40, s.x + s.side * 40 - left)), ey = h + 6;
+    $$(".tail circle", b).forEach((c, j) => { const f = (j + 1) / 3.4; c.setAttribute("cx", hx + (ex - hx) * f); c.setAttribute("cy", hy + (ey - hy) * f); });
+    b.classList.toggle("ok", !!ok);
+  }
+  function place(sc, x, ms) {
+    const who = $(".who", sc); X = x;
+    who.style.transitionDuration = (ms / 1000) + "s, .5s"; who.style.transform = `translate(${x}px, 480px)`;
+  }
+  let shown = 0;   // the stop on screen, 1–4 (0: none yet)
+  function reset(sc) {
+    stop(); cur = -1; shown = 0; light(sc, []);
+    const el = $(".wf-el", sc), who = $(".who", sc);
+    el.classList.add("walk"); $$(".seen", el).forEach((e) => e.classList.remove("seen")); $$(".ring", el).forEach((r) => r.classList.remove("on", "done"));
+    $(".bub", sc).classList.remove("on", "ok"); $(".wf-close", sc).classList.remove("on");
+    who.classList.remove("walking", "left", "reach", "hold", "wonder"); who.style.opacity = 1; place(sc, START, 0);
+  }
+  function found(sc, k, settled) {
+    const labs = $$(".lab text", sc), leads = $$(".lead path", sc), r = $(`.ring[data-s="${k}"]`, sc);
+    r.classList.add("on"); r.classList.toggle("done", !!settled); if (!settled) light(sc, STOPS[k].lit);
+    STOPS[k].labs.forEach((j) => { labs[j].classList.add("seen"); leads[j].classList.add("seen"); });
+  }
+  function close(sc, ms) {
+    at(() => { light(sc, "all"); $$(".lab text, .lead path", sc).forEach((e) => e.classList.add("seen")); $(".wf-el", sc).classList.remove("walk"); $(".wf-close", sc).classList.add("on"); }, ms);
+  }
+  // going back, or opening a beat directly: him at stop k at once, answered; the stops before it found
+  function jump(sc, k) {
+    reset(sc);
+    const s = STOPS[k - 1], who = $(".who", sc);
+    for (let i = 0; i < k; i++) found(sc, i, i < k - 1);
+    place(sc, s.x, 0); who.classList.toggle("left", s.face < 0); if (s.pose) who.classList.add(s.pose);
+    cur = k - 1; bubble(sc, k - 1, true); $(".bub", sc).classList.add("on"); shown = k;
+    if (k === STOPS.length) close(sc, 300);
+  }
+  // one beat on: the last stop's bubble goes, he walks to stop k, wonders, and the neighbourhood answers; then he waits for the next click
+  function walkTo(sc, k) {
+    stop();
+    const who = $(".who", sc), prev = STOPS[k - 2], s = STOPS[k - 1], ms = Math.abs(s.x - X) / SPEED * 1000, go = prev ? 300 : 350;
+    $(".bub", sc).classList.remove("on"); cur = -1; shown = k; light(sc, []);
+    if (prev) { $(`.ring[data-s="${k - 2}"]`, sc).classList.add("done"); if (prev.pose) who.classList.remove(prev.pose); }
+    who.classList.remove("wonder");
+    at(() => { who.classList.remove("left"); who.classList.add("walking"); place(sc, s.x, ms); }, go);
+    at(() => {
+      who.classList.remove("walking"); who.classList.toggle("left", s.face < 0);
+      at(() => { cur = k - 1; who.classList.add("wonder"); bubble(sc, k - 1, false); $(".bub", sc).classList.add("on"); }, 300);
+      at(() => { who.classList.remove("wonder"); if (s.pose) who.classList.add(s.pose); found(sc, k - 1, false); bubble(sc, k - 1, true); }, 1350);
+      if (k === STOPS.length) close(sc, 2600);
+    }, go + ms + 30);
+  }
+  return {
+    enter(_, sc) {
+      plain(); chips(sc, paint); pick(sc, 2, paint); reset(sc);
+      // the small replay plays the stop on screen again, from the one before
+      const again = $(".wf-again", sc);
+      again.onclick = (e) => { e.stopPropagation(); again.blur(); if (reduced || !shown) return; const k = shown; if (k > 1) jump(sc, k - 1); else reset(sc); walkTo(sc, k); };
+    },
+    step(k, sc) { if (!reduced && k === shown + 1) walkTo(sc, k); else jump(sc, k); },
+    leave() { stop(); },
+  };
+
+});
+</script>
+<script data-slide="s-wf-a4">
+ACKO.slide("s-wf-a4", ({ $, $$, plain, reveal, later, reduced }) => {
+  // the six accents (ACKO's logo colours: violet, green, yellow; deep and light), one per neighbourhood; indicative
+  const NB = [["01", "#5222d0", "Violet"], ["02", "#a98bf2", "Violet, light"], ["03", "#0fa458", "Green"], ["04", "#8fd8ae", "Green, light"],
+    ["05", "#f2ae00", "Yellow"], ["06", "#ffd866", "Yellow, light"]];
+  const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)), toh = (c) => "#" + c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
+  const mix = (a, b, t) => toh(hx(a).map((v, i) => v + (hx(b)[i] - v) * t));
+  // each layer's tone from the accent
+  const LAYERS = [
+    ["paint", "Paint accent", "the neighbourhood's own wall", (c) => c],
+    ["graphic", "Wall graphics", "its number, large, at the way in", (c) => c],
+    ["carpet", "Carpet", "underfoot, a deeper, quieter tone", (c) => mix(c, "#4a4652", 0.55)],
+    ["privacy", "Privacy panels", "the film on the glass, a light tint", (c) => mix(c, "#ffffff", 0.68)],
+    ["art", "Artwork", "a piece chosen for the neighbourhood", (c) => mix(c, "#ffffff", 0.2)],
+    ["tone", "Artwork tonality", "light to deep, in its colour", (c) => `linear-gradient(90deg, ${mix(c, "#ffffff", 0.55)}, ${mix(c, "#1d1733", 0.35)})`],
+    ["acoustic", "Meeting-room acoustics", "the panels inside its rooms", (c) => mix(c, "#ffffff", 0.35)],
+    ["coffee", "Collab / coffee point", "the counter, a warmer tone", (c) => mix(c, "#c8a27a", 0.45)]];
+  const GENERAL = [["Signage", "one family across the floor: rooms named for a Modern Indian Institution (Nalanda, Sabha, Takshashila)"],
+    ["Inclusivity", "braille and tactile signs, high contrast, at reach height"]];
+  const tones = (c) => Object.fromEntries(LAYERS.map(([k, , , f]) => [k, f(c)]));
+
+  function pick(sc, i, paint) {
+    $$(".wf-chips button", sc).forEach((b, j) => b.classList.toggle("on", j === i));
+    paint(sc, i);
+  }
+  function chips(sc, paint) {
+    const box = $(".wf-chips", sc); if (box.childElementCount) return;
+    box.innerHTML = NB.map(([n, c]) => `<button type="button" style="--c:${c}">${n}</button>`).join("");
+    $$("button", box).forEach((b, j) => (b.onclick = (e) => { e.stopPropagation(); b.blur(); pick(sc, j, paint); }));
+  }
+
+  function paint(sc, i) {
+    const [n, c, name] = NB[i], t = tones(c), el = $(".wf-el", sc);
+    ["paint", "carpet", "privacy", "acoustic", "coffee"].forEach((k) => el.style.setProperty("--" + k, t[k]));
+    el.style.setProperty("--t1", mix(c, "#ffffff", 0.55)); el.style.setProperty("--t2", mix(c, "#1d1733", 0.35));
+    $$(".graphic", sc).forEach((g) => (g.textContent = n)); $(".wf-name", sc).textContent = `Neighbourhood ${n} · ${name}`;
+  }
+  return { enter(_, sc) { plain(); chips(sc, paint); pick(sc, 2, paint); } };
+
+});
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where it starts · ACKO slide s-sec-6</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-sec-6" data-part="cover" data-title="Part 06 · The Day" data-steps="1" data-mins="0.3"
+  data-notes="Part 06 of six: The Day, can we live it. Every stop, built. From arrival to evening.">
+  <div class="page">
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Part 06 · The Day</small></div>
+    <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
+      <li style="--i:3"><i></i><b>01</b><span class="hand">Belonging</span></li>
+      <li style="--i:4"><i></i><b>02</b><span class="hand">The Loop</span></li>
+      <li style="--i:5"><i></i><b>03</b><span class="hand">The Site</span></li>
+      <li style="--i:6"><i></i><b>04</b><span class="hand">The Plan</span></li>
+      <li style="--i:7"><i></i><b>05</b><span class="hand">The Feel</span></li>
+      <li style="--i:8"><i></i><b>06</b><span class="hand">The Day</span></li>
+    </ol>
+    <div class="st-line" style="left:8%;top:62%;width:84%"><p><b>Every stop</b>, built.</p><span class="hand">From arrival to evening.</span></div>
+  </div>
+</section>
+<style>
+/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
+#s-sec-6 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-sec-6 .ap-steps { display: grid; grid-template-columns: repeat(6, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-sec-6 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-sec-6 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-sec-6 .ap-steps li:last-child::before { right: 70%; }
+#s-sec-6 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-sec-6 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-sec-6 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-sec-6 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-sec-6 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
+#s-sec-6 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
+#s-sec-6 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
+#s-sec-6 .ap-steps b { font-size: calc(var(--pt) * 15); }
+#s-sec-6 .ap-steps .hand { font-size: calc(var(--pt) * 19); }
+#s-sec-6 .page.lit .ap-steps li:not(:nth-child(6)) { opacity: .26 !important; }
+#s-sec-6 .page.lit .ap-steps li:nth-child(6) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
+#s-sec-6 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-sec-6 .page.said .st-line { opacity: 1; transform: none; }
+#s-sec-6 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-sec-6 .st-line b { font-weight: 700; color: var(--purple); }
+#s-sec-6 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+</style>
+<script>
+/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
+   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
+ACKO.slide("s-sec-6", ({ $, plain, reveal, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
+    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
+    if (reduced) { pg.classList.add("lit", "said"); return; }
+    later(() => pg.classList.add("lit"), 1300);
+    later(() => pg.classList.add("said"), 2000);
+  },
+  leave(_, sc) {
+    if (!sc || !window.ACKO_MORPH) return;
+    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(6) i", sc).getBoundingClientRect();
+    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
+  },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

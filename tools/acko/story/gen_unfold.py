@@ -15,7 +15,7 @@ OPTS = [
     (2, "Both ways", {"mode": "both", "logo": "twist", "go": 2000}),
     (3, "Lavender lead", {"mode": "lead", "logo": "twist", "go": 3000}),
     (4, "Untwist from the centre", {"mode": "peel", "logo": "centre", "go": 2600}),
-    (5, "Ribbon logo", {"mode": "ribbon", "logo": "twist", "go": 3000}),   # Ritika's pick (11 Nov): "make the ACKO logo itself in ribbon form and let the ribbon unfold to become the white Möbius strip"
+    (5, "Ribbon logo", {"mode": "ribbon", "logo": "twist", "go": 3000, "swing": 260}),   # swing (12 Nov, her red path): out of the tip to the right, round and down   # Ritika's pick (11 Nov): "make the ACKO logo itself in ribbon form and let the ribbon unfold to become the white Möbius strip"
     # more of the ribbon logo (11 Nov, Ritika: "give more variations"), all on tools/acko/story/ribbon_unfold.js
     (6, "Centre stage", {"mode": "ribbon", "logo": "twist", "place": "centre", "go": 3400}),
     (7, "Purple Möbius first", {"mode": "ribbon", "logo": "twist", "tint": "purple", "go": 2800}),
@@ -135,6 +135,55 @@ for n, name, opt in OPTS:
         for own, title in (("s-open", "The opening"), ("s-open-2", "Opening · 2 · Into the strip")):
             o = t.replace(sid, own).replace("<title>Unfold · %d · %s · ACKO slide %s" % (n, name, own), "<title>%s · ACKO slide %s" % (title, own))
             open("slides/%s.html" % own, "w", encoding="utf-8", newline="\n").write(o); print("ok", own, "=", sid)
+
+# ---- s-loopmean, "The loop around us" (11 Nov, Ritika: "the first few slides seem boring… combine it into 2 slides": the opening and
+# the Möbius): the same strip, already there, posed left; a right-hand column that builds a statement a click (connects and surrounds ·
+# many lines of business, one loop · where it bridges, it holds, closing on the Möbius slide's own line), the strip gaining a layer each
+# click (the line · the lines of business · the glow at the twist and the crossing). Made from the opening's template without its morph
+LM_WORDS = '''    <div class="lm">
+      <div class="lm-1" data-step="1"><em>Around us</em><h2>A loop <b>connects.</b> A loop <b>surrounds.</b></h2><p>ACKO’s own ethos, shaped into the place where ACKO works.</p></div>
+      <div class="lm-2" data-step="2"><h2>Many lines of business. <b>One loop.</b></h2><p class="hand">like a campus: many entities, one ground</p></div>
+      <div class="lm-3" data-step="3"><h2>Where it bridges, <b>it holds.</b></h2><p>Security and protection, built into the place.</p><p class="hand">one continuous journey, where every connection leads to another</p></div>
+    </div>
+'''
+LM_CSS = '''/* the loop around us: the strip on the left all the way, its line drawn from the first click, the lines of business on the second,
+   the glow on the third; the words a right-hand column that builds, the earlier statements stepping back a little */
+#s-loopmean .o2-cam, #s-loopmean .b2 .o2-cam, #s-loopmean .b3 .o2-cam { transform: translate(-21%, 4%) scale(.72); }
+#s-loopmean .o2-art svg { opacity: 1; }
+#s-loopmean .o2-art img { opacity: 1; }
+#s-loopmean .b2 .o2-lob i { transform: scale(1); transition-delay: calc(var(--i) * 160ms + .2s); }
+#s-loopmean .b2 .o2-lob b { opacity: 1; transition-delay: calc(var(--i) * 160ms + .35s); }
+#s-loopmean .b3 .o2-lob { opacity: 1; }
+#s-loopmean .b3 .o2-glow { opacity: 1; transform: translate(-50%, -50%) scale(1); animation: o2-breathe 3.2s ease-in-out 1.6s infinite; }
+#s-loopmean .lm { left: 63%; top: 13%; width: 34%; display: flex; flex-direction: column; gap: calc(var(--pt) * 16); }
+#s-loopmean .lm > div { position: relative; display: flex; flex-direction: column; gap: calc(var(--pt) * 5); }
+#s-loopmean .lm em { font-style: italic; font-size: calc(var(--pt) * 9); color: #555; }
+#s-loopmean .lm h2 { margin: 0; font-size: calc(var(--pt) * 22); font-weight: 400; line-height: 1.12; color: #111; }
+#s-loopmean .lm h2 b { font-weight: 700; color: var(--purple); }
+#s-loopmean .lm p { margin: 0; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-loopmean .lm p.hand { font-family: var(--hand); font-size: calc(var(--pt) * 19); line-height: 1; color: var(--purple); }
+#s-loopmean .lm > div.shown { transition: opacity .6s var(--ease), transform .6s var(--ease); }
+#s-loopmean .b2 .lm-1.shown, #s-loopmean .b3 .lm-2.shown { opacity: .45; }
+#s-loopmean .b3 .lm-1.shown { opacity: .35; }
+'''
+LM_STUB = '''  // the loop around us: no morph here, the strip is already on the page
+  const MS = { raf: 0 };
+'''
+if "<!--words-->" in src:   # only from the white two-beat template; the dark opening (restored 11 Nov) has no s-loopmean
+    lm = src[:a] + LM_STUB + src[b:]
+    lm = lm.replace(LOGO_SVG, "").replace(STEP, "")
+    _w0, _w1 = lm.index("    <!--words-->"), lm.index("    <!--/words-->") + len("    <!--/words-->\n")
+    lm = lm[:_w0] + LM_WORDS + lm[_w1:]
+    _r = "      if (k >= 2 && last < 2) run(sc);"
+    assert lm.count(_r) == 1, "run"
+    lm = lm.replace(_r, "      if (k >= 1 && last < 1) run(sc);")
+    lm = re.sub(r'data-title="[^"]*" data-steps="2" data-mins="[^"]*" data-beats="[^"]*"',
+                'data-title="The loop around us" data-steps="3" data-mins="0.9" data-beats="Connects and surrounds,One loop,It holds"', lm, count=1)
+    lm = re.sub(r'(<section class="scene" id="s-open"[^>]*?)data-notes="[^"]*"', lambda m: m.group(1) + 'data-notes="1 · A loop does two things: it connects, and it surrounds. So we took ACKO\'s own ethos and shaped the workplace around it. 2 · ACKO has many lines of business, car, two-wheeler, health, travel, life, and more to come. One loop joins them all, the way a campus joins its buildings: many entities, one ground. 3 · And where a loop bridges, it holds: security and protection, built into the place. A workplace inspired by the Möbius: one continuous journey, where every connection leads to another."', lm, count=1, flags=re.S)
+    lm = lm.replace("</style>", LM_CSS + "</style>", 1)
+    lm = lm.replace("s-open", "s-loopmean").replace("<title>The opening · ACKO slide s-loopmean", "<title>The loop around us · ACKO slide s-loopmean")
+    lm = lm.replace("assets/img/s-loopmean", "assets/img/s-open")
+    open("slides/s-loopmean.html", "w", encoding="utf-8", newline="\n").write(lm); print("ok s-loopmean")
 
 # the comparison page: today's morph (0), the four unfolds, then the Möbius
 ORDER = ["s-unf-%d" % n for n, _, _ in OPTS] + ["s-mobius"]

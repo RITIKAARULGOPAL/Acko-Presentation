@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agenda option 1 · ACKO slide s-ag-1</title>
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
+     acts of the brand-first story (STORY.md), each with the question it answers -->
+<section class="scene" id="s-ag-1" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
+  data-notes="The agenda: One promise, made into a place. Why people come in, the answer in ACKO’s own promise, and how it becomes one floor and one day. Five parts. 01 Belonging: why people come in. 02 The Site: where it must happen. 03 The Plan: how it becomes a campus. 04 The Feel: what it feels like. 05 The Day: can we live it. Bridge: let's begin with the people.">
+  <div class="page">
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">Today</small>
+      <h2 style="--i:1">One promise, <span>made into a place.</span></h2>
+      <p style="--i:2">Why people come in, the answer in ACKO’s own promise, and how it becomes one floor and one day.</p>
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b><em>01</em> Belonging</b><span class="hand">why people come in</span></li>
+      <li style="--i:5"><i></i><b><em>02</em> The Site</b><span class="hand">where it must happen</span></li>
+      <li style="--i:6"><i></i><b><em>03</em> The Plan</b><span class="hand">how it becomes a campus</span></li>
+      <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">what it feels like</span></li>
+      <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">can we live it?</span></li>
+    </ol>
+  </div>
+</section>
+<style>
+/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
+#s-ag-1 .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-ag-1 .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-ag-1 .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-ag-1 .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-ag-1 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-ag-1 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-ag-1 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-ag-1 .ap-steps li:last-child::before { right: 70%; }
+#s-ag-1 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-ag-1 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-ag-1 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-ag-1 .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
+#s-ag-1 .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
+</style>
+<script>
+/* the agenda: the line, then the six parts one after another */
+ACKO.slide("s-ag-1", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

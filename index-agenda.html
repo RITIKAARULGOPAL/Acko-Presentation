@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-ag-1">
+/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
+#s-ag-1 .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-ag-1 .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-ag-1 .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-ag-1 .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-ag-1 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-ag-1 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-ag-1 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-ag-1 .ap-steps li:last-child::before { right: 70%; }
+#s-ag-1 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-ag-1 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-ag-1 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-ag-1 .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
+#s-ag-1 .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
+</style>
+<style data-slide="s-ag-2">
+/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
+#s-ag-2 .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-ag-2 .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-ag-2 .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-ag-2 .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-ag-2 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-ag-2 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-ag-2 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-ag-2 .ap-steps li:last-child::before { right: 70%; }
+#s-ag-2 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-ag-2 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-ag-2 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-ag-2 .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
+#s-ag-2 .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
+</style>
+<style data-slide="s-ag-3">
+/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
+#s-ag-3 .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-ag-3 .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-ag-3 .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-ag-3 .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-ag-3 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-ag-3 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-ag-3 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-ag-3 .ap-steps li:last-child::before { right: 70%; }
+#s-ag-3 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-ag-3 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-ag-3 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-ag-3 .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
+#s-ag-3 .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
+</style>
+<style data-slide="s-ag-4">
+/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
+#s-ag-4 .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-ag-4 .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-ag-4 .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-ag-4 .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-ag-4 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-ag-4 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-ag-4 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-ag-4 .ap-steps li:last-child::before { right: 70%; }
+#s-ag-4 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-ag-4 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-ag-4 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-ag-4 .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
+#s-ag-4 .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
+</style>
+<style data-slide="s-ag-5">
+/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
+#s-ag-5 .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-ag-5 .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-ag-5 .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-ag-5 .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-ag-5 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-ag-5 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-ag-5 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-ag-5 .ap-steps li:last-child::before { right: 70%; }
+#s-ag-5 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-ag-5 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-ag-5 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-ag-5 .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
+#s-ag-5 .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
+</style>
+<style data-slide="s-ag-6">
+/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
+#s-ag-6 .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
+#s-ag-6 .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-ag-6 .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
+#s-ag-6 .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
+#s-ag-6 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-ag-6 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-ag-6 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-ag-6 .ap-steps li:last-child::before { right: 70%; }
+#s-ag-6 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-ag-6 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-ag-6 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-ag-6 .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
+#s-ag-6 .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
+     acts of the brand-first story (STORY.md), each with the question it answers -->
+<section class="scene" id="s-ag-1" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
+  data-notes="The agenda: One promise, made into a place. Why people come in, the answer in ACKO’s own promise, and how it becomes one floor and one day. Five parts. 01 Belonging: why people come in. 02 The Site: where it must happen. 03 The Plan: how it becomes a campus. 04 The Feel: what it feels like. 05 The Day: can we live it. Bridge: let's begin with the people.">
+  <div class="page">
+    <div class="op-chip">Agenda · 1 · As now</div>
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">Today</small>
+      <h2 style="--i:1">One promise, <span>made into a place.</span></h2>
+      <p style="--i:2">Why people come in, the answer in ACKO’s own promise, and how it becomes one floor and one day.</p>
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b><em>01</em> Belonging</b><span class="hand">why people come in</span></li>
+      <li style="--i:5"><i></i><b><em>02</em> The Site</b><span class="hand">where it must happen</span></li>
+      <li style="--i:6"><i></i><b><em>03</em> The Plan</b><span class="hand">how it becomes a campus</span></li>
+      <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">what it feels like</span></li>
+      <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">can we live it?</span></li>
+    </ol>
+  </div>
+</section>
+<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
+     acts of the brand-first story (STORY.md), each with the question it answers -->
+<section class="scene" id="s-ag-2" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
+  data-notes="The agenda: From belonging to a campus. How 640 Ackers, two offices and one long floor become one place. Five parts. 01 Belonging: why we come in. 02 The Site: one floor, 245 m long. 03 The Plan: one loop, six neighbourhoods. 04 The Feel: warm, quiet, easy to find. 05 The Day: arrival to evening. Bridge: let's begin with the people.">
+  <div class="page">
+    <div class="op-chip">Agenda · 2 · From belonging to campus</div>
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">Today</small>
+      <h2 style="--i:1">From belonging <span>to a campus.</span></h2>
+      <p style="--i:2">How 640 Ackers, two offices and one long floor become one place.</p>
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b><em>01</em> Belonging</b><span class="hand">why we come in</span></li>
+      <li style="--i:5"><i></i><b><em>02</em> The Site</b><span class="hand">one floor, 245 m long</span></li>
+      <li style="--i:6"><i></i><b><em>03</em> The Plan</b><span class="hand">one loop, six neighbourhoods</span></li>
+      <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">warm, quiet, easy to find</span></li>
+      <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">arrival to evening</span></li>
+    </ol>
+  </div>
+</section>
+<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
+     acts of the brand-first story (STORY.md), each with the question it answers -->
+<section class="scene" id="s-ag-3" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
+  data-notes="The agenda: Five questions, one answer. Each part asks one thing. The answer is always the Loop. Five parts. 01 Belonging: why come in. 02 The Site: where. 03 The Plan: how. 04 The Feel: how does it feel. 05 The Day: can we live it. Bridge: let's begin with the people.">
+  <div class="page">
+    <div class="op-chip">Agenda · 3 · Five questions</div>
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">Five questions</small>
+      <h2 style="--i:1">Five questions, <span>one answer.</span></h2>
+      <p style="--i:2">Each part asks one thing. The answer is always the Loop.</p>
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b><em>01</em> Belonging</b><span class="hand">why come in?</span></li>
+      <li style="--i:5"><i></i><b><em>02</em> The Site</b><span class="hand">where?</span></li>
+      <li style="--i:6"><i></i><b><em>03</em> The Plan</b><span class="hand">how?</span></li>
+      <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">how does it feel?</span></li>
+      <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">can we live it?</span></li>
+    </ol>
+  </div>
+</section>
+<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
+     acts of the brand-first story (STORY.md), each with the question it answers -->
+<section class="scene" id="s-ag-4" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
+  data-notes="The agenda: Always us with you, made into a place. ACKO’s promise, followed from its people to its floor. Five parts. 01 Belonging: the people and the promise. 02 The Site: the floor we were given. 03 The Plan: the loop that plans it. 04 The Feel: the materials that hold it. 05 The Day: the day that proves it. Bridge: let's begin with the people.">
+  <div class="page">
+    <div class="op-chip">Agenda · 4 · The promise</div>
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">ACKO’s promise</small>
+      <h2 style="--i:1">Always us with you, <span><br>made into a place.</span></h2>
+      <p style="--i:2">ACKO’s promise, followed from its people to its floor.</p>
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b><em>01</em> Belonging</b><span class="hand">the people and the promise</span></li>
+      <li style="--i:5"><i></i><b><em>02</em> The Site</b><span class="hand">the floor we were given</span></li>
+      <li style="--i:6"><i></i><b><em>03</em> The Plan</b><span class="hand">the loop that plans it</span></li>
+      <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">the materials that hold it</span></li>
+      <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">the day that proves it</span></li>
+    </ol>
+  </div>
+</section>
+<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
+     acts of the brand-first story (STORY.md), each with the question it answers -->
+<section class="scene" id="s-ag-5" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
+  data-notes="The agenda: Walk it the way an Acker would. We’ll take you round the Loop, from the first hello to the last coffee. Five parts. 01 Belonging: meet the people. 02 The Site: see the ground. 03 The Plan: follow the plan. 04 The Feel: touch the materials. 05 The Day: live the day. Bridge: let's begin with the people.">
+  <div class="page">
+    <div class="op-chip">Agenda · 5 · A walk</div>
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">Today’s walk</small>
+      <h2 style="--i:1">Walk it <span>the way an Acker would.</span></h2>
+      <p style="--i:2">We’ll take you round the Loop, from the first hello to the last coffee.</p>
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b><em>01</em> Belonging</b><span class="hand">meet the people</span></li>
+      <li style="--i:5"><i></i><b><em>02</em> The Site</b><span class="hand">see the ground</span></li>
+      <li style="--i:6"><i></i><b><em>03</em> The Plan</b><span class="hand">follow the plan</span></li>
+      <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">touch the materials</span></li>
+      <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">live the day</span></li>
+    </ol>
+  </div>
+</section>
+<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
+     acts of the brand-first story (STORY.md), each with the question it answers -->
+<section class="scene" id="s-ag-6" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
+  data-notes="The agenda: The Loop, ACKO Campus.  Five parts. 01 Belonging: people. 02 The Site: place. 03 The Plan: plan. 04 The Feel: feel. 05 The Day: day. Bridge: let's begin with the people.">
+  <div class="page">
+    <div class="op-chip">Agenda · 6 · Few words</div>
+    <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
+      <small style="--i:0">The Loop</small>
+      <h2 style="--i:1">The Loop, <span>ACKO Campus.</span></h2>
+      
+    </div>
+    <ol class="ap-steps rv" style="left:8%;top:66%;width:84%">
+      <li style="--i:3"><i></i><b><em>01</em> Belonging</b><span class="hand">people</span></li>
+      <li style="--i:5"><i></i><b><em>02</em> The Site</b><span class="hand">place</span></li>
+      <li style="--i:6"><i></i><b><em>03</em> The Plan</b><span class="hand">plan</span></li>
+      <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">feel</span></li>
+      <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">day</span></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="data/loop-path.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<style>.scene .page > .op-chip { left: 2.2%; top: 3.2%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #5222d0; color: #fff; font-size: calc(var(--pt) * 8); font-weight: 700; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }</style>
+<script>window.ACKO_WOW = true;</script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-ag-1">
+/* the agenda: the line, then the six parts one after another */
+ACKO.slide("s-ag-1", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<script data-slide="s-ag-2">
+/* the agenda: the line, then the six parts one after another */
+ACKO.slide("s-ag-2", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<script data-slide="s-ag-3">
+/* the agenda: the line, then the six parts one after another */
+ACKO.slide("s-ag-3", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<script data-slide="s-ag-4">
+/* the agenda: the line, then the six parts one after another */
+ACKO.slide("s-ag-4", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<script data-slide="s-ag-5">
+/* the agenda: the line, then the six parts one after another */
+ACKO.slide("s-ag-5", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<script data-slide="s-ag-6">
+/* the agenda: the line, then the six parts one after another */
+ACKO.slide("s-ag-6", ({ $, plain, reveal }) => ({
+  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

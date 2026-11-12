@@ -24,8 +24,9 @@ if "ACKO_SECTIONS" not in js:
         js = js.replace(a, b)
     open(p, "w", encoding="utf-8", newline="").write(js)
 
-STEPS = [("s1", "The Loop"), ("s2", "Belonging"), ("s3", "The Site"),     # this deck's order (11 Nov, the brand first)
-         ("s4", "The Plan"), ("s5", "The Palette"), ("s6", "The Experience")]
+STEPS = [("s1", "Belonging"), ("s3", "The Site"),     # 12 Nov (Ritika: "remove the loop in agenda"): five parts; the Loop answers inside Belonging
+             # STORY.md (11 Nov): six acts; Belonging first, the question, then the Loop, the answer (Ritika)
+         ("s4", "The Plan"), ("s5", "The Feel"), ("s6", "The Day")]
 LAB = {k: "%02d · %s" % (i + 1, n) for i, (k, n) in enumerate(STEPS)}
 LAB["A"] = "Appendix · Kit of parts"
 # the opening: her pick of index-open.html (gen_open.py) once it is slides/s-open.html; until then option 1 stands in
@@ -42,18 +43,63 @@ if OPEN != "s-open": print("note: slides/s-open.html isn't there yet, so the dec
 #   06 The Experience: the emotions (Acker's engagement points), the renders, the walkthrough, a day in ACKO
 #   then Thank you, where the Loop folds back into the Möbius. The kit of parts (acoustic, wayfinding, typologies) goes to the
 #   appendix; How we worked, Where it starts and the people's challenge (problem first) leave the order, their files kept
+AGENDA_Q = ["why people come in", "where it must happen", "how the floor becomes a campus", "what it feels like", "can we live it"]
+
+# the agenda called back at the start of every section (Ritika, 11 Nov: "call back this with every section start"): s-sec-1..6, made
+# from s-start (Where it starts): the six parts, the others step back and this one stays lit, then its line
+SECTIONS = [
+    ("About <b>640 Ackers</b>, from two offices, onto one floor.", "So we began with them."),
+    ("<b>One floor</b> in Koramangala: where it has to happen.", ""),
+    ("<b>One loop</b>, seven stops, six neighbourhoods.", ""),
+    ("What you <b>touch</b>, hear and find your way by.", ""),
+    ("<b>Every stop</b>, built.", "From arrival to evening."),
+]
+_st = open("slides/s-start.html", encoding="utf-8").read()
+_li = re.findall(r'<li style="--i:\d"><i></i><b>[^<]*</b><span class="hand">[^<]*</span></li>', _st)
+assert len(_li) == 6, "start steps"
+NPARTS = len(STEPS)
+_ln = re.search(r'<div class="st-line"[^>]*>.*?</div>', _st).group(0)
+for _n, (_line, _hand) in enumerate(SECTIONS, 1):
+    _act = STEPS[_n - 1][1]; _id = "s-sec-%d" % _n
+    c = _st
+    for _old in _li[NPARTS:]: c = c.replace(_old + "\n", "").replace(_old, "")   # five parts now: the spare step goes
+    c = c.replace("grid-template-columns: repeat(6, 1fr)", "grid-template-columns: repeat(%d, 1fr)" % NPARTS)
+    for _k, (_old, (_, _name)) in enumerate(zip(_li, STEPS), 1):
+        c = c.replace(_old, re.sub(r"<b>[^<]*</b><span class=\"hand\">[^<]*</span>", "<b>%02d</b><span class=\"hand\">%s</span>" % (_k, _name), _old), 1)
+    c = c.replace(_ln, re.sub(r"<p>.*?</p><span class=\"hand\">.*?</span>", "<p>%s</p><span class=\"hand\">%s</span>" % (_line, _hand), _ln))
+    c = c.replace('<small style="--i:0">Where it starts</small>', '<small style="--i:0">Part %02d · %s</small>' % (_n, _act))
+    c = re.sub(r'data-title="[^"]*"', 'data-title="Part %02d · %s"' % (_n, _act), c, count=1)
+    c = re.sub(r'data-notes="[^"]*"', 'data-notes="Part %02d of six: %s, %s. %s"' % (_n, _act, AGENDA_Q[_n - 1], re.sub("<[^>]+>", "", _line + " " + _hand).strip()), c, count=1)
+    for _x, _y in (("li:not(:first-child)", "li:not(:nth-child(%d))" % _n), ("li:first-child i", "li:nth-child(%d) i" % _n), ('$(".ap-steps li i", sc)', '$(".ap-steps li:nth-child(%d) i", sc)' % _n)):
+        assert c.count(_x) == 1, _x; c = c.replace(_x, _y)
+    c = c.replace("s-start", _id)
+    open("slides/%s.html" % _id, "w", encoding="utf-8", newline="\n").write(c)
+
+# the renders in the Loop's order, each named by its stop and feeling (STORY.md, Act 6)
+STOPS = [("Arrival", "I feel welcomed", "s-w-reception s-w-recoffee"),
+         ("Café", "Hey, we finally meet!", "s-w-cafe1 s-w-cafe2 s-w-deck s-w-coffee"),
+         ("Board Room", "This is my big moment", "s-w-board s-w-exec"),
+         ("Meeting Rooms", "My impact", "s-w-dept s-w-sprint"),
+         ("Collab", "Wow, worth the commute", "s-w-collab s-w-garden"),
+         ("Work", "These are my folks!", "s-w-arena s-w-arena2a"),
+         ("Wellness", "They thought of me too!", "s-w-mothers s-w-zen s-w-studio")]
 GROUPS = [
-    ("cover", "s-cover s-team"),
-    ("s1", OPEN + " s-mobius"),
-    ("s2", "s-campus s-memories"),
-    ("s3", "s-site s-layout-dd s-pitch s-challenges"),
-    ("s4", "s-loop-w s-strategy s-walk s-layout-sp"),
-    ("s5", "s-palette2 s-material"),
-    ("s6", "s-engage s-w-reception s-w-recoffee s-w-deck s-w-board s-w-dept s-w-sprint s-w-arena s-w-arena2a s-w-exec s-w-cafe1 s-w-cafe2 s-w-garden s-w-coffee s-w-collab s-w-mothers s-w-zen s-w-studio s-walkthrough s-wayday"),
+    ("cover", "s-cover s-team s-agenda"),
+    ("s1", "s-sec-1 s-challenge " + OPEN + " s-campus s-memories s-mobius s-loop-stops"),   # the Möbius and the seven stops close Belonging (12 Nov: "remove the loop in agenda")   # 12 Nov, Ritika: "belonging, people's challenge, ackos mark, where both meet, the memories, the loop card, mobius, 7 stops, site"
+    ("s3", "s-sec-2 s-site s-layout-dd s-pitch s-challenges"),
+    ("s4", "s-sec-3 s-loop-w s-strategy s-walk s-layout-sp"),
+    ("s5", "s-sec-4 s-palette2 s-material s-acoustic s-wayfinding s-engage"),
+    ("s6", "s-sec-5 " + " ".join(s for _, _, g in STOPS for s in g.split()) + " s-walkthrough s-wayday"),
     ("close", "s-thanks-w"),
-    ("A", "s-acoustic s-wayfinding s-typologies"),
+    ("A", "s-typologies"),
     (None, "s-wellbeing s-di s-esg s-skv"),
 ]
+# s-loop-stops: the Loop's first two beats (Welcome to the Loop, Where emotions matter), right after the memories; s-loop-w keeps all
+# three at the start of 04 The Plan (a quick recap, then the floor)
+_lw = open("slides/s-loop-w.html", encoding="utf-8").read().replace("s-loop-w", "s-loop-stops")
+_a = 'data-steps="3"'; assert _lw.count(_a) == 1, "loop steps"
+_lw = _lw.replace(_a, 'data-steps="2"').replace('data-beats="Welcome to the Loop,Where emotions matter,On the floor"', 'data-beats="Welcome to the Loop,Where emotions matter"')
+open("slides/s-loop-stops.html", "w", encoding="utf-8", newline="\n").write(_lw)
 GROUPS_10NOV = [
     ("cover", "s-cover s-team s-approach-w"),
     # problem first, then the solution (Ritika, 10 Nov: variation 1 of narrative-options.html, opening on the people's challenge):
@@ -75,21 +121,24 @@ GROUPS_10NOV = [
     ("close", "s-thanks-w"),
     (None, "s-wellbeing s-di s-esg s-skv"),
 ]
-def make(out, swap=None, wi=None, hfix=None):
-  """one page of the re-ordered deck; swap renames (or with None drops) slides, wi marks a What if option page (10 Nov)"""
-  swap = swap or {}
+def make(out, swap=None, wi=None, hfix=None, move=None):
+  """one page of the re-ordered deck; swap renames (or with None drops) slides, wi marks a What if option page (10 Nov); move puts a
+  slide right after another, in that slide's part (12 Nov)"""
+  swap = swap or {}; move = move or {}
   ORDER = [swap.get(i, i) for _, g in GROUPS for i in g.split() if swap.get(i, i)]
+  _partof = {swap.get(i, i): p for p, g in GROUPS for i in g.split() if swap.get(i, i)}   # each slide's part, by its id on this page
+  for _m, _after in move.items():                    # in order; a slide not in the groups is inserted (12 Nov: the wayfinding pair)
+      if _m in ORDER: ORDER.remove(_m)
+      ORDER.insert(ORDER.index(_after) + 1, _m); _partof[_m] = _partof[_after]
   live = [l.strip() for l in open("slides/order.txt", encoding="utf-8") if l.strip() and not l.startswith("#")]
   assert all(os.path.exists(os.path.join("slides", i + ".html")) for i in ORDER) and len(set(ORDER)) == len(ORDER)
   build.build(ORDER, out)
 
   h = open(out, encoding="utf-8").read()
   # each section's chapter
-  for part, g in GROUPS:
-      if not part: continue
-      for sid in g.split():
-          sid = swap.get(sid, sid)
-          if not sid: continue
+  for sid in ORDER:
+          part = _partof[sid]
+          if not part: continue
           h, n = re.subn(r'(<section\b[^>]*?\sid="%s"[^>]*?\sdata-part=")[^"]*(")' % sid, lambda m: m.group(1) + part + m.group(2), h, count=1)
           if not n:
               h, n = re.subn(r'(<section\b[^>]*?\sdata-part=")[^"]*("[^>]*?\sid="%s")' % sid, lambda m: m.group(1) + part + m.group(2), h, count=1)
@@ -99,11 +148,11 @@ def make(out, swap=None, wi=None, hfix=None):
       ('<div class="hdr"><b>The Site</b><span>Layout</span></div>', "The Site", "s3"),
       ('<div class="hdr"><b>Design Strategy</b><span>Understanding how we derived a solution.</span></div>', "Workstation Typologies", "A"),
       ('<div class="hdr"><b>Design Strategy</b><span>What\'s our Challenge ?</span></div>', "The Opportunity", "s3"),
-      ('<div class="hdr"><b>ESG Strategy</b><span>Value Addition | Kit of parts</span></div>', "Wayfinding", "A"),
-      ('<div class="hdr"><b>Acker’s engagement points</b><span>Value Addition | Kit of parts</span></div>', "Acker’s engagement points", "s6"),
+      ('<div class="hdr"><b>ESG Strategy</b><span>Value Addition | Kit of parts</span></div>', "Wayfinding", "s5"),
+      ('<div class="hdr"><b>Acker’s engagement points</b><span>Value Addition | Kit of parts</span></div>', "Acker’s engagement points", "s5"),
       ('<div class="hdr"><b>The Campus Palette</b><span>Visual Direction</span></div>', "The Campus Palette", "s5"),
       ('<div class="hdr"><b>Value Addition</b><span>Kit of parts | Material Strategy</span></div>', "Material Strategy", "s5"),
-      ('<div class="hdr"><b>Value Addition</b><span>Kit of parts | Acoustic Strategy</span></div>', "Acoustic Strategy", "A"),
+      ('<div class="hdr"><b>Value Addition</b><span>Kit of parts | Acoustic Strategy</span></div>', "Acoustic Strategy", "s5"),
       ('<div class="hdr"><b>Schematic Axonometric</b><span>Space Planning &nbsp;| Wayfinding</span></div>', "A day in ACKO", "s6"),
   ]
   # the layout's header, once per copy: Due Diligence discovers the site (03), Spaces on shapes the plan (05)
@@ -113,6 +162,7 @@ def make(out, swap=None, wi=None, hfix=None):
       h = h[:j] + '<div class="hdr"><b>Layout · Option 02A</b><span>%s</span></div>' % LAB[step] + h[j + len(LY):]
   assert LY not in h
   for old, title, step in HDR:
+      if old not in h: continue                        # a slide not in this page (index-story2.html)
       assert h.count(old) >= 1, old[:60]                 # the layout's twice (Due Diligence, then Spaces on)
       h = h.replace(old, '<div class="hdr"><b>%s</b><span>%s</span></div>' % (title, LAB[step]))
   # Where both meet opens on the question that bridges from the challenge (wow_campus.py, 10 Nov); its notes say it first
@@ -143,7 +193,7 @@ def fold(h):
     new = sec.replace('data-steps="6"', 'data-steps="8"').replace('Study time,The stairs"', 'Study time,The stairs,The promise,What if"')
     new = new.replace("A campus is where we first felt safe among people.",
         "7 · A campus is where we first felt safe among people, and protection is what ACKO promises its customers. "
-        "8 · So what if the workplace kept that promise to its own people? We started where it has to happen: one floor in Koramangala.")
+        "8 · So what if the workplace kept that promise to its own people? The answer was already in your mark.")
     assert new.count('data-steps="8"') == 1 and "The promise,What if" in new and "8 · So what if" in new, "memories head"
     h = h.replace(sec, new, 1)
     k = h.index('<div class="page">', j) + len('<div class="page">')
@@ -153,11 +203,12 @@ def fold(h):
 # 11 Nov: the challenge's promise has left the order and acoustic and wayfinding are in the appendix; the lines that stay say what
 # each slide gives in the Loop's own positive words
 LENS = [("s-palette2", "A place that already feels like home."), ("s-material", "A place that already feels like home."),
-        ("s-engage", "Room to explore.")]
+        ("s-acoustic", "Same rhythm."), ("s-wayfinding", "Easy to find."), ("s-engage", "Room to explore.")]
 LENS_CSS = ('<style>.scene .page > .lens-cb { left: 1.8%; top: 10%; margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 13); '
             'line-height: 1; color: var(--purple); white-space: nowrap; }</style>\n')
 def lenses(h):
     for sid, line in LENS:
+        if 'id="%s"' % sid not in h: continue   # not in this page
         a = 'id="%s"' % sid; i = h.index(a); j = h.index(">", i) + 1
         sec = h[h.rindex("<section", 0, i):j]
         n = re.search(r'data-notes="', sec)
@@ -181,6 +232,57 @@ OPP = [
     ('>Disorientation<', '>Clarity<'),
     ('>Amenities feel disconnected from work zones, increasing perceived distances and reducing spontaneous interaction.<', '>From dead ends to one clear path, so everyone always knows where they are, and meets along the way.<'),
 ]
+# ---- STORY.md (11 Nov): the bridge into the next slide, said last (in the notes, N); the renders named by their stop and feeling;
+# Where it starts re-labelled to the six acts, with 02 Belonging the one that stays
+BRIDGE = {
+    "s-team": "And it starts with something you already own.",
+    "s-agenda": "Let's begin with the people. Part 1.",
+    "s-sec-1": "Moving offices is easy. Moving people isn't.", "s-sec-2": "Regalium, Koramangala.",
+    "s-sec-3": "The Loop, laid on the floor.", "s-sec-4": "Starting with the palette.", "s-sec-5": "Arrival first.",
+    "s-open": "So what makes one place feel like home? We looked at two things.",
+    "s-mobius": "So we gathered those campus moments into seven stops on one loop.",
+    "s-mark": "So we gathered those campus moments into seven stops on one loop.",
+    "s-challenge": "And the promise already lives in ACKO's own mark…",
+    "s-campus": "And most of us have been here before…",
+    "s-memories": "The answer was in your own mark.",
+    "s-loop-stops": "A loop needs a ground. Part 2.",
+    "s-site": "Here is the floor itself, as we found it.",
+    "s-layout-dd": "To feel how big this floor is…",
+    "s-pitch": "That length could divide people, or hold a whole campus.",
+    "s-challenges": "A campus that connects, not just accommodates. Part 3: how the floor becomes one.",
+    "s-loop-w": "Now we build the campus up around it.",
+    "s-strategy": "Let's step onto the floor and walk it.",
+    "s-walk": "And from above, here's the plan that makes it work.",
+    "s-layout-sp": "A plan is a promise on paper. Part 4: what makes it feel like home.",
+    "s-palette2": "And how each surface earns its place…",
+    "s-material": "Calm needs quiet: the floor's own rhythm.",
+    "s-acoustic": "And on a floor this long, finding your way should be effortless.",
+    "s-wayfinding": "Materials make it feel like home. People make it feel alive: where emotions matter.",
+    "s-engage": "So let's live it. Part 5.",
+    "s-w-studio": "That's every stop. Now watch them come alive.",
+    "s-walkthrough": "And over one day…",
+    "s-wayday": "And at the end of the day, the loop comes back to where it began.",
+}
+STOP_OF = {s: (n, f) for n, f, g in STOPS for s in g.split()}
+START_ACTS = [(k, n) for k, n in STEPS]
+def storyfix(h):
+    import html as _h
+    # bridges, at the end of the notes
+    for sid, line in BRIDGE.items():
+        if 'id="%s"' % sid not in h: continue   # a slide not in this order
+        a = h.index('id="%s"' % sid); i = h.rindex("<section", 0, a); j = h.index(">", a) + 1
+        sec = h[i:j]; m = re.search(r'data-notes="([^"]*)"', sec)
+        new = sec[:m.end(1)] + " → Bridge: " + _h.escape(line, quote=True) + sec[m.end(1):] if m else sec.replace("<section", '<section data-notes="Bridge: %s"' % _h.escape(line, quote=True), 1)
+        h = h[:i] + new + h[j:]
+    # the renders: the stop in the small title, its feeling as the quote
+    for sid, (stop, feel) in STOP_OF.items():
+        a = h.index('id="%s"' % sid); i = h.rindex("<section", 0, a); j = h.index(">", a) + 1
+        sec = h[i:j]; m = re.search(r'data-walk="([^"]*)"', sec); assert m, sid
+        w = json.loads(_h.unescape(m.group(1)))
+        w["sub"] = stop + (" · " + w["sub"] if w.get("sub") else ""); w["q"] = feel
+        h = h[:i] + sec[:m.start(1)] + _h.escape(json.dumps(w, ensure_ascii=False), quote=True) + sec[m.end(1):] + h[j:]
+    return h
+
 def opportunity(h):
     a = h.index('id="s-challenges"'); i = h.rindex("<section", 0, a); j = h.index("</section>", a)
     sec = h[i:j]
@@ -188,4 +290,221 @@ def opportunity(h):
         assert sec.count(x) == 1, x[:50]
         sec = sec.replace(x, y)
     return h[:i] + sec + h[j:]
-make("index-approach.html", {"s-whatif": None}, hfix=lambda h: opportunity(lenses(fold(h))))
+make("index-approach.html", {"s-whatif": None}, hfix=lambda h: storyfix(opportunity(lenses(fold(h)))))
+
+# ---- index-story2.html (12 Nov, Ritika: "spot the places where there's gap in the narrative … do these changes in a new html"): the
+# same deck with the review's fixes, on this page only (index-approach.html stays as approved). Text: the mark as ACKO's promise, the
+# memories closing on "That promise is a loop", the join said on the way into the seven stops, the agenda's subtitle, the bridges.
+# Order: Walk the Loop out ("walk the loop 7 moments can be removed"); the Acoustic strategy slide out, its points folded into the
+# layout's Acoustics beat ("retain the layout's acoustic and include the extra information"). The layout's six neighbourhood sheets
+# leave the click order: a click on a neighbourhood opens its sheet, → goes on to the next, "Back to layout" / Esc returns
+# ("if I click on a neighbourhood the individual boundary and axo page would open …")
+def _sec(h, sid):
+    a = h.index('id="%s"' % sid); i = h.rindex("<section", 0, a); return i, h.index("</section>", a)
+def _in_sec(h, sid, x, y, n=1):
+    i, j = _sec(h, sid); s = h[i:j]; assert s.count(x) >= n, (sid, x[:50]); return h[:i] + s.replace(x, y) + h[j:]
+def _bridge(h, sid, text):
+    i, j = _sec(h, sid); s = h[i:j]; k = s.index(">") + 1; tag = s[:k]
+    tag2, c = re.subn(r"→ Bridge: [^\"]*", lambda m: "→ Bridge: " + text.replace("'", "&#x27;"), tag, count=1); assert c, sid
+    return h[:i] + tag2 + s[k:] + h[j:]
+AC_MORE = ('<ul class="ac-more"><li><b>NRC 0.70–0.90</b> across the floor</li><li>Ceiling treatment in meeting rooms for <b>RT60</b></li>'
+           '<li>Absorptive wall panels for speech clarity</li><li>Full-height partitions to the right <b>STC</b></li>'
+           '<li>HVAC noise held to zone <b>NC</b> targets</li><li>Sound masking, so focus holds</li><li>Acoustic doors and double glazing</li></ul>'
+           '<p class="ac-note">An acoustic consultant can refine the specification.</p>')
+SP2_CSS = ('<style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }'
+           '#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }'
+           '#s-layout-sp .sp2-nav { display: none; left: 34%; top: 3.4%; z-index: 7; align-items: center; gap: calc(var(--pt) * 8); }'
+           '#s-layout-sp.nb-open .sp2-nav { display: flex; }'
+           '#s-layout-sp .sp2-nav button { border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 9); font: 600 calc(var(--pt) * 8) var(--body); cursor: pointer; }'
+           '#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 8.5); color: #333; }</style>\n')
+SP2_JS = '''
+  // the sheets on demand (12 Nov): a click opens a neighbourhood's sheet; → / Next goes on to the next; Back / Esc returns to the layout
+  let SH = null; const NBS = ["01", "02", "03", "04", "05", "06"];
+  function nbOpen(sc, n) { SH = String(n).padStart(2, "0"); closeZone(sc); sheet(sc, SH); sc.classList.add("nb-open"); $(".sp2-nav b", sc).textContent = "Neighbourhood " + SH + " of 06"; }
+  function nbClose(sc) { if (!SH) return; SH = null; sc.classList.remove("nb-open"); sheet(sc, null); plan.planHome(home(), 700); }
+  function nbStep(sc, d) { const i = NBS.indexOf(SH) + d; if (i < 0 || i >= NBS.length) nbClose(sc); else nbOpen(sc, NBS[i]); }
+'''
+# Campus strategy, beat 4 "Looping it all Together" (12 Nov): the Loop's ribbon, as The Loop lays it on the floor (its smoothing and
+# its hooks, taken from slides/s-loop-w.html), built as a strip on the 3D floor so it turns and zooms with the model, drawing itself
+# along its length after the partitions rise; the seven stops called out (the slide's own labels) as the ribbon reaches each
+_LWSRC = open("slides/s-loop-w.html", encoding="utf-8").read()
+_LWFN = _LWSRC[_LWSRC.index("  function resample(P, n) {"):_LWSRC.index("  function rib(cv, pts, wid) {")]
+RIB_JS = _LWFN + r"""
+  // the Loop as a path on the floor (12 Nov, Ritika: "loop ribbon is not looking like a path. it is not blending with the axos angle"):
+  // the employees' route along the corridors through the seven stops (ACKO_LOOP.sweep, plan mm → model mm as flatten() has it), its
+  // corners lightly rounded, lying on the floor in the model (walls overlap it), a deeper tone of the floor's circulation lilac on a
+  // paler, wider edge strip; round ends
+  const RW = 1.1, RY = 0.06;   // 12 Nov: sleeker (the route ribbon should sleeker)
+  function chaikin(P, it) { for (let k = 0; k < it; k++) { const Q = [P[0]];
+    for (let i = 0; i + 1 < P.length; i++) { const a = P[i], b = P[i + 1]; Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); }
+    Q.push(P[P.length - 1]); P = Q; } return P; }
+  function strip(P, wid, y, col, op, ro, off) {
+    const n = P.length, ss = [0]; for (let i = 1; i < n; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
+    const L = ss[n - 1], R = wid / 2;
+    const E = P.map((p, i) => {
+      const a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1;
+      const u = Math.min(1, Math.min(ss[i], L - ss[i]) / R), w = R * Math.sqrt(Math.max(0, 1 - (1 - u) * (1 - u)));   // a round end
+      return [[p[0] - dz / l * w, p[1] + dx / l * w], [p[0] + dz / l * w, p[1] - dx / l * w]];
+    });
+    const pos = []; for (let i = 0; i + 1 < n; i++) { const [a, b] = E[i], [c, d] = E[i + 1]; for (const q of [a, b, c, b, d, c]) pos.push(q[0], y, q[1]); }
+    const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); geo.setDrawRange(0, 0);
+    const m = new T.Mesh(geo, new T.MeshBasicMaterial({ color: col, transparent: true, opacity: op, side: T.DoubleSide, depthWrite: false,
+      polygonOffset: true, polygonOffsetFactor: off, polygonOffsetUnits: 2 * off }));
+    m.renderOrder = ro; m.visible = false; m.frustumCulled = false; return m;
+  }
+  function ribbon() {
+    if (S.rb !== undefined) return S.rb;
+    S.rb = null;
+    const LP = window.ACKO_LOOP; if (!LP || !LP.sweep || !M) return null;
+    let P = LP.sweep.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05);
+    P = resample(chaikin(P, 5), 1600);
+    const n = P.length, under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6);
+    M.scene.add(under, top);
+    // each stop's share of the way along the path (its nearest point)
+    const at = M.data.stops.map((s) => { const x = M.X(s.x), z = M.Z(s.y); let bi = 0, bd = Infinity;
+      P.forEach((p, i) => { const d = Math.hypot(p[0] - x, p[1] - z); if (d < bd) { bd = d; bi = i; } }); return { f: bi / (n - 1), d: bd }; });
+    const show = (on) => { under.visible = on; top.visible = on; };
+    const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k); };
+    return (S.rb = { show, to, at: at.map((o) => o.f), miss: at.map((o) => +o.d.toFixed(2)) });
+  }
+"""
+FROM_CSS = ('<style>#s-strategy .st-from { left: 0; top: 1%; width: 89.8%; height: 98.4%; pointer-events: none; opacity: 0;'
+            ' background: url(assets/img/challenge-axo.webp) 100% 0 / 111.4% 100% no-repeat; transform-origin: 93.15% 0; transform: scale(.95); }'
+            '#s-layout-sp .ly-p[data-p="1"] p:not(.hand), #s-layout-sp .nb-p { display: none; }</style>\n')
+def axo_handoff(h):
+    # 12 Nov (Ritika: "the transition of these 2 axos can be smooth. now it looks like 2 different slides"): The Opportunity marks the
+    # hand-off as it leaves; Campus strategy holds that axo picture over its own floor, the shell already standing, then dissolves it
+    h = _in_sec(h, "s-strategy", '<div class="st-3d ui"></div>', '<div class="st-3d ui"></div>\n    <div class="st-from"></div>')
+    a = h.index('ACKO.slide("s-challenges"'); b = h.index("</script>", a); js = h[a:b]
+    x = "    leave(_, sc) { stop(); S.arr = false;"
+    assert js.count(x) == 1, "challenges leave"; h = h[:a] + js.replace(x, '    leave(_, sc) { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-challenges"); stop(); S.arr = false;') + h[b:]
+    a = h.index('ACKO.slide("s-strategy"'); b = h.index("</script>", a); js = h[a:b]
+    R = [('      const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;',
+          '      const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-challenges", 2500) : null;\n'
+          '      const im = $(".st-from", sc); im.style.transition = "none"; im.style.opacity = fc ? 1 : 0; S.fromCh = !!fc;\n'
+          '      if (fc) later(() => { im.style.transition = "opacity 1.3s var(--ease)"; im.style.opacity = 0; }, 500);\n'
+          '      const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;'),
+         ("  function play(k) {\n", "  function play(k) {\n    if (k === 1 && S.fromCh) { S.fromCh = false; show(1); return; }   // from The Opportunity: the shell already stands\n"),
+         ("ACKO.slide(\"s-strategy\", ({ $, $$, reduced, plain, reveal, cue, plan }) => {", "ACKO.slide(\"s-strategy\", ({ $, $$, reduced, plain, reveal, cue, plan, later }) => {")]
+    for p, q in R:
+        assert js.count(p) == 1, ("strategy js 3", p[:60], js.count(p)); js = js.replace(p, q)
+    h = h[:a] + js + h[b:]
+    t2 = '<script src="assets/js/app.js'
+    return h.replace(t2, FROM_CSS + t2, 1)
+def strat_loop(h):
+    a = h.index('ACKO.slide("s-strategy"'); b = h.index("</script>", a); js = h[a:b]
+    R = [("  const DUR = [0, 2.4, 4.4, 6.4, 2.4, 4.2, 7.0];\n", "  const DUR = [0, 2.4, 4.4, 6.4, 7.5, 4.2, 7.0];   // beat 4 longer: the Loop's ribbon draws on after the partitions (12 Nov)\n"),
+         ("    S.lit = M.data.stops.map((s) => k === 6 && S.d >= s.d - 0.5);",
+          "    const RB = ribbon(), re = k === 4 ? win(t, 2.0, 7.0) : 0;   // 12 Nov: slower, as Ritika asked\n"
+          "    if (RB) { RB.show(k === 4 && re > 0.001); RB.to(re); }\n"
+          "    S.lit = M.data.stops.map((s, i) => (k === 6 && S.d >= s.d - 0.5) || (k === 4 && !!RB && re > 0.001 && re >= RB.at[i] - 0.002));"),
+         ("  function show(k) {", RIB_JS + "  function show(k) {"),
+         ("    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark(\"s-strategy\");", "    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark(\"s-strategy\"); if (S.rb) S.rb.show(false);"),
+         ("employee: M.routes.employee.geometry.drawRange.count,", "employee: M.routes.employee.geometry.drawRange.count, rb: S.rb ? { at: S.rb.at, miss: S.rb.miss } : null,")]
+    for x, y in R:
+        assert js.count(x) == 1, ("strategy js", x[:60], js.count(x)); js = js.replace(x, y)
+    h = h[:a] + js + h[b:]
+    return _in_sec(h, "s-strategy", "4 Looping it all together: the floor in colour and the partitions rise.",
+                   "4 Looping it all together: the floor in colour and the partitions rise, then the Loop&#x27;s ribbon lies down on the floor through its seven stops, each called out with its words as the ribbon reaches it.")
+
+# Campus strategy (12 Nov): beat 1 is The Shell (the planning has begun on the slide before); beat 5 calls out the client's touchpoints
+# where the blue route reaches them (model mm, d m along the route, as data/axo-layers.js has it; named from the plan's rooms there)
+CLIENT_JS = """  const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
+    { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
+    { name: "Wellness", q: "Room to pause", x: -133687, y: 203833, d: 54.4 },
+    { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
+    { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
+"""
+def strat_more(h):
+    a = h.index('ACKO.slide("s-strategy"'); b = h.index("</script>", a); js = h[a:b]
+    R = [('const NAMES = ["", "How it started",', 'const NAMES = ["", "The Shell",'),
+         ('"Every journey begins with a thought. Ours began with reimagining what a workplace could feel like."',
+          '"One long floor and two entrances: the ground the Loop is laid on."'),
+         ("  const MARKS = {", CLIENT_JS + "  const MARKS = {"),
+         ("    S.labs = A.stops.map((s) => {", "    S.labs = A.stops.concat(CLIENT).map((s) => {"),
+         ('d.innerHTML = `<b>${s.name}</b><span>${STOPS[s.name] || ""}</span>`;', 'd.innerHTML = `<b>${s.name}</b><span>${s.q || STOPS[s.name] || ""}</span>`; if (s.client) d.classList.add("cl");'),
+         ("    S.lit = M.data.stops.map((s, i) => (k === 6 && S.d >= s.d - 0.5) || (k === 4 && !!RB && re > 0.001 && re >= RB.at[i] - 0.002));",
+          "    const cd = k === 5 ? cli.userData.max * win(t, 0.3, DUR[5] - 0.2) : 0;\n"
+          "    S.lit = S.labs.map((o, i) => o.s.client ? k === 5 && cd >= o.s.d - 0.5 : (k === 6 && S.d >= o.s.d - 0.5) || (k === 4 && !!RB && re > 0.001 && re >= RB.at[i] - 0.002));")]
+    for x, y in R:
+        assert js.count(x) == 1, ("strategy js 2", x[:60], js.count(x)); js = js.replace(x, y)
+    h = h[:a] + js + h[b:]
+    i, j = _sec(h, "s-strategy"); s = h[i:j]
+    for x, y in [('data-beats="How it started,', 'data-beats="The Shell,'),
+                 ("1 How it started: the bare shell", "1 The shell: the bare floor we were given"),
+                 ("5 The client's journey: the client's route from the entrance.", "5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, Wellness, the east Reception, Collab.")]:
+        if x not in s: x = x.replace("'", "&#x27;"); y = y.replace("'", "&#x27;")
+        assert x in s, ("strategy head", x[:50]); s = s.replace(x, y, 1)
+    h = h[:i] + s + h[j:]
+    css = '<style>#s-strategy .st-s.cl b { color: #1a2cf0; }</style>\n'
+    t2 = '<script src="assets/js/app.js'
+    return h.replace(t2, css + t2, 1)
+
+def story2(h):
+    # the order: the plan's walk and the separate acoustic slide are out of this page; their neighbours' bridges close the gap
+    h = _bridge(h, "s-strategy", "And from above, here's the plan that makes it work.")
+    h = _bridge(h, "s-material", "And on a floor this long, finding your way should be effortless.")
+    h = _bridge(h, "s-team", "Here's how we'll take you through it.")
+    # 1 · the mark as ACKO's promise, not yet the answer; the memories point ahead
+    h = _in_sec(h, "s-open", "<em>ACKO · the mark</em>", "<em>It starts with a promise</em>")
+    h = _in_sec(h, "s-open", "like a campus: many entities, one ground", "one ground for every line of business")
+    h = _in_sec(h, "s-memories", "The answer was already in your mark.", "That promise is a loop.")
+    h = _bridge(h, "s-memories", "That promise is a loop: your own mark.")
+    # 3 · the join, said on the way into the seven stops; 4 · "this familiar feeling" now reads back past the Möbius
+    h = _bridge(h, "s-mobius", "Your mark, made into a campus: seven campus moments on one loop. The Loop, ACKO Campus.")
+    h = _in_sec(h, "s-loop-stops", "Draws from this familiar feeling", "Draws from those campus memories")
+    # 2 · the Loop on the floor, a one-click recap first
+    # 2 · (12 Nov, Ritika: "these 2 slides are repetitive … add the loop on the floor slide's loop ribbon and call out to the looping it
+    # together slide"): The Loop leaves this page; its ribbon on the floor and the seven call-outs move into Campus strategy, beat 4
+    h = strat_loop(h)
+    # 12 Nov (Ritika: "this slide in between is hindering the story continuity … How it started can be changed … have call out for
+    # client journey as well. move day in acko slide after wayfinding"): the Part 03 card out, the strategy opens on The Shell, the
+    # client's touchpoints called out, A day in ACKO in Part 04 after Wayfinding
+    h = strat_more(h)
+    h = axo_handoff(h)
+    h = _bridge(h, "s-challenges", "A campus that connects, not just accommodates. So here's how we plan it: the Loop, laid on the floor.")
+    # 12 Nov (Ritika: "swap the wayfinding slide to the one in the given html", index-wayfinding-walk.html; both, the walk then the sketch)
+    # (12 Nov: "also remove the wayfinding static slide": the sketch, s-wf-a4, is out; the walk leads into the day)
+    for _w, _t, _b in (("s-wf-a6", "Wayfinding", "And here's the floor in use, through one day."),):
+        h = _in_sec(h, _w, '<div class="hdr"><b>Wayfinding</b><span>One language, six accents</span></div>', '<div class="hdr"><b>Wayfinding</b><span>%s</span></div>' % LAB["s5"])
+        h = re.sub(r'(<section[^>]*\sid="%s"[^>]*?\sdata-title=")[^"]*(")' % _w, lambda m: m.group(1) + _t.replace("'", "&#x27;") + m.group(2), h, count=1)
+        h = re.sub(r'(<section[^>]*\sid="%s"[^>]*?\sdata-notes="[^"]*)(")' % _w, lambda m: m.group(1) + " → Bridge: " + _b.replace("'", "&#x27;") + m.group(2), h, count=1, flags=re.S)
+    h = _bridge(h, "s-wayday", "And at every stop, something for the Acker: their engagement points.")
+    h = _bridge(h, "s-walkthrough", "And at the end of the day, the loop comes back to where it began.")
+    h = _in_sec(h, "s-wayday", "<span>05 · The Day</span>", "<span>04 · The Feel</span>")
+    # 6 · the agenda's subtitle; 9 · the reception renders say Arrival once
+    h = _in_sec(h, "s-agenda", "ACKO’s own promise, “it’s always us with you”, followed from your mark to the floor, and through one day on it.",
+                "Why people come in, the answer in ACKO’s own promise, and how it becomes one floor and one day.")
+    h = h.replace("Arrival · Arrival", "Arrival")
+    # the layout: six beats (the sheets on demand), the acoustics fuller, the sheet's nav
+    i, j = _sec(h, "s-layout-sp"); s = h[i:j]
+    s = re.sub(r'data-steps="12"', 'data-steps="6"', s, count=1)
+    s = re.sub(r'data-beats="[^"]*"', 'data-beats="Spaces,Neighbourhoods,Biophilia · the heat,Biophilia · planting,Biophilia · views to green,Acoustics"', s, count=1)
+    s = s.replace('<p>The rings show sound: wide and lingering in the open workhall, cut short in the treated rooms.</p></div>',
+                  '<p>The rings show sound: wide and lingering in the open workhall, cut short in the treated rooms.</p>' + AC_MORE + '</div>', 1)
+    assert "ac-more" in s, "acoustics panel"
+    k = s.index('<div class="page">') + len('<div class="page">')
+    s = s[:k] + '\n    <div class="sp2-nav ui"><button type="button" class="sp2-back">← Back to layout</button><b></b><button type="button" class="sp2-next">Next neighbourhood →</button></div>' + s[k:]
+    h = h[:i] + s + h[j:]
+    a = h.index('ACKO.slide("s-layout-sp"'); b = h.index("</script>", a); js = h[a:b]
+    R = [('const ORDER = [1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6], SHEET = [null, null, "01", "02", "03", "04", "05", "06", null, null, null, null];',
+          'const ORDER = [1, 2, 3, 4, 5, 6], SHEET = [null, null, null, null, null, null];'),
+         ('[1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6].indexOf(g) + 1', '[1, 2, 3, 4, 5, 6].indexOf(g) + 1'),
+         ('plan.onZoneClick((z) => { if (beat === 2 && NBX.on) { go(sceneIx("s-layout-sp"), 2 + (+z.n)); return; } if (beat === 2) { if (zone && zone.id === z.id) closeZone(sc); else openZone(sc, z); } });',
+          'plan.onZoneClick((z) => { if (beat === 2) nbOpen(sc, z.n); });\n      $(".sp2-back", sc).onclick = (e) => { e.stopPropagation(); nbClose(sc); }; $(".sp2-next", sc).onclick = (e) => { e.stopPropagation(); nbStep(sc, 1); };'),
+         ('const goTo = (n) => go(sceneIx("s-layout-sp"), 2 + (+n));', 'const goTo = (n) => nbOpen(sc, n);'),
+         ('if (NBX.on) go(sceneIx("s-layout-sp"), 2); else closeZone(sc);', 'if (NBX.on) nbClose(sc); else closeZone(sc);'),
+         ('        if (e.target.closest && e.target.closest("input, textarea")) return;',
+          '        if (e.target.closest && e.target.closest("input, textarea")) return;\n'
+          '        if (SH && ["ArrowRight", "PageDown", " "].includes(e.key)) { nbStep(sc, 1); e.stopImmediatePropagation(); e.preventDefault(); return; }\n'
+          '        if (SH && ["ArrowLeft", "PageUp"].includes(e.key)) { nbStep(sc, -1); e.stopImmediatePropagation(); e.preventDefault(); return; }\n'
+          '        if (SH && e.key === "Escape") { nbClose(sc); e.stopImmediatePropagation(); e.preventDefault(); return; }'),
+         ('  function sheet(sc, n) {', SP2_JS + '  function sheet(sc, n) {'),
+         ('    step(n, sc) {\n', '    step(n, sc) {\n      if (SH) { SH = null; sc.classList.remove("nb-open"); }\n'),
+         ('    leave(_, sc) {\n', '    leave(_, sc) {\n      SH = null; if (sc) sc.classList.remove("nb-open");\n')]
+    for x, y in R:
+        assert js.count(x) == 1, ("layout js", x[:60], js.count(x)); js = js.replace(x, y)
+    h = h[:a] + js + h[b:]
+    t = '<script src="assets/js/app.js'
+    return h.replace(t, SP2_CSS + t, 1)
+make("index-story2.html", {"s-whatif": None, "s-walk": None, "s-acoustic": None, "s-loop-w": None, "s-sec-3": None, "s-wayfinding": "s-wf-a6"}, move={"s-wayday": "s-wf-a6"}, hfix=lambda h: story2(storyfix(opportunity(lenses(fold(h))))))

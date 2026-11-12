@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wayfinding · The colour key · ACKO slide s-wf-b</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-wf-b" data-part="5" data-title="Wayfinding · The colour key" data-steps="1" data-mins="0.5"
+  data-notes="Wayfinding: one language, six accents. The same everywhere: one signage family named for a Modern Indian Institution, with braille and tactile signs, inclusive by default. Each neighbourhood speaks in its own accent from ACKO's palette, violet, green and yellow, deep and light: its paint, wall graphic, carpet, privacy panels, artwork and its tonality, meeting-room acoustics and coffee point, so you know where you are before you read a sign. The tones are indicative.">
+  <div class="page">
+    <div class="hdr"><b>Wayfinding</b><span>One language, six accents</span></div>
+    <div class="wf-plan" style="left:1.8%;top:16%;width:40%;height:40%"><svg class="wf-pl" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div class="wf-bar" style="left:1.8%;top:60%;width:40%"><span class="wf-k">Pick a neighbourhood, on the plan or here</span><div class="wf-chips"></div></div>
+    <div class="wf-key" style="left:44.5%;top:16%;width:26%">
+      <span class="wf-k">The same everywhere</span><div class="wf-gen"></div>
+      <span class="wf-k wf-k2">Neighbourhood <b class="wf-n">03</b></span><div class="wf-lay"></div>
+    </div>
+    <div class="wf-side" style="left:73%;top:16%;width:25%">
+      <h2>One language, <span>six accents.</span></h2>
+      <span class="wf-k">The same everywhere</span>
+      <p><b>Signage</b> in one family, the rooms named for a Modern Indian Institution: Nalanda, Sabha, Takshashila. <b>Inclusive</b> by default: braille and tactile, high contrast, at reach height.</p>
+      <span class="wf-k">Each neighbourhood, its own accent</span>
+      <p>ACKO's violet, green and yellow, deep and light: six accents, carried through eight layers, so you know where you are <b>before you read a sign</b>.</p>
+      <p class="wf-note">Tones indicative, from ACKO's palette.</p>
+    </div>
+  </div>
+</section>
+<style>
+#s-wf-b .wf-chips { display: flex; gap: calc(var(--pt) * 3); }
+#s-wf-b .wf-chips button { display: inline-flex; align-items: center; gap: calc(var(--pt) * 2.5); border: 1px solid #ddd6f2; background: #fff; color: var(--ink); border-radius: 999px;
+  padding: calc(var(--pt) * 1.8) calc(var(--pt) * 4.5); font: 600 calc(var(--pt) * 6) / 1.1 var(--num, inherit); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+#s-wf-b .wf-chips button::before { content: ""; width: calc(var(--pt) * 5); height: calc(var(--pt) * 5); border-radius: 50%; background: var(--c); }
+#s-wf-b .wf-chips button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+#s-wf-b .wf-note { font-size: calc(var(--pt) * 5.2); color: var(--mute); font-style: italic; }
+#s-wf-b .wf-k { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .16em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
+
+#s-wf-b .wf-side h2 { margin: 0 0 calc(var(--pt) * 10); font-size: calc(var(--pt) * 17); line-height: 1.12; font-weight: 600; color: var(--ink); }
+#s-wf-b .wf-side h2 span { color: var(--purple); font-weight: 700; display: block; }
+#s-wf-b .wf-side p { margin: 0 0 calc(var(--pt) * 9); font-size: calc(var(--pt) * 7); line-height: 1.5; color: var(--soft); }
+#s-wf-b .wf-side p b { color: var(--ink); }
+
+#s-wf-b .wf-pl { width: 100%; height: 100%; }
+#s-wf-b .wf-pl .sp { fill: #efecf6; stroke: #fff; stroke-width: 120; }
+#s-wf-b .wf-pl .z { fill: var(--c); fill-opacity: .28; stroke: var(--c); stroke-width: 260; cursor: pointer; transition: fill-opacity .3s; }
+#s-wf-b .wf-pl .z.on { fill-opacity: .82; }
+#s-wf-b .wf-pl text { font: 700 5200px var(--num, sans-serif); fill: #2b2440; pointer-events: none; }
+#s-wf-b .wf-gen > div, #s-wf-b .wf-lay > div { display: grid; grid-template-columns: calc(var(--pt) * 16) 1fr; gap: calc(var(--pt) * 5); align-items: center; padding: calc(var(--pt) * 2.4) 0; border-top: 1px solid #efecf7; }
+#s-wf-b .wf-gen i { width: calc(var(--pt) * 16); height: calc(var(--pt) * 9); border-radius: calc(var(--pt) * 2); background: repeating-linear-gradient(90deg, #2b2440 0 2px, #fff 2px 6px); border: 1px solid #2b2440; }
+#s-wf-b .wf-lay i { width: calc(var(--pt) * 16); height: calc(var(--pt) * 9); border-radius: calc(var(--pt) * 2); background: var(--s); transition: background .5s; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+#s-wf-b .wf-key b.t { display: block; font-size: calc(var(--pt) * 6.6); color: var(--ink); }
+#s-wf-b .wf-key small { display: block; font-size: calc(var(--pt) * 5.3); color: var(--mute); }
+#s-wf-b .wf-k2 { margin-top: calc(var(--pt) * 8); } #s-wf-b .wf-k2 b { color: var(--ink); }
+#s-wf-b .wf-bar .wf-k { margin-bottom: calc(var(--pt) * 3); }
+</style>
+<script>
+ACKO.slide("s-wf-b", ({ $, $$, plain, reveal, later, reduced }) => {
+  // the six accents (ACKO's logo colours: violet, green, yellow; deep and light), one per neighbourhood; indicative
+  const NB = [["01", "#5222d0", "Violet"], ["02", "#a98bf2", "Violet, light"], ["03", "#0fa458", "Green"], ["04", "#8fd8ae", "Green, light"],
+    ["05", "#f2ae00", "Yellow"], ["06", "#ffd866", "Yellow, light"]];
+  const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)), toh = (c) => "#" + c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
+  const mix = (a, b, t) => toh(hx(a).map((v, i) => v + (hx(b)[i] - v) * t));
+  // each layer's tone from the accent
+  const LAYERS = [
+    ["paint", "Paint accent", "the neighbourhood's own wall", (c) => c],
+    ["graphic", "Wall graphics", "its number, large, at the way in", (c) => c],
+    ["carpet", "Carpet", "underfoot, a deeper, quieter tone", (c) => mix(c, "#4a4652", 0.55)],
+    ["privacy", "Privacy panels", "the film on the glass, a light tint", (c) => mix(c, "#ffffff", 0.68)],
+    ["art", "Artwork", "a piece chosen for the neighbourhood", (c) => mix(c, "#ffffff", 0.2)],
+    ["tone", "Artwork tonality", "light to deep, in its colour", (c) => `linear-gradient(90deg, ${mix(c, "#ffffff", 0.55)}, ${mix(c, "#1d1733", 0.35)})`],
+    ["acoustic", "Meeting-room acoustics", "the panels inside its rooms", (c) => mix(c, "#ffffff", 0.35)],
+    ["coffee", "Collab / coffee point", "the counter, a warmer tone", (c) => mix(c, "#c8a27a", 0.45)]];
+  const GENERAL = [["Signage", "one family across the floor: rooms named for a Modern Indian Institution (Nalanda, Sabha, Takshashila)"],
+    ["Inclusivity", "braille and tactile signs, high contrast, at reach height"]];
+  const tones = (c) => Object.fromEntries(LAYERS.map(([k, , , f]) => [k, f(c)]));
+
+  function pick(sc, i, paint) {
+    $$(".wf-chips button", sc).forEach((b, j) => b.classList.toggle("on", j === i));
+    paint(sc, i);
+  }
+  function chips(sc, paint) {
+    const box = $(".wf-chips", sc); if (box.childElementCount) return;
+    box.innerHTML = NB.map(([n, c]) => `<button type="button" style="--c:${c}">${n}</button>`).join("");
+    $$("button", box).forEach((b, j) => (b.onclick = (e) => { e.stopPropagation(); b.blur(); pick(sc, j, paint); }));
+  }
+
+  function drawPlan(sc) {
+    const svg = $(".wf-pl", sc); if (svg.childElementCount || !window.PLAN_DXF) return;
+    const P = window.PLAN_DXF, [x, y, w, h] = P.viewBox; svg.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+    svg.innerHTML = (P.spaces || []).filter((s) => s.type !== "Not in contract").map((s) => `<path class="sp" d="${s.d}"/>`).join("") +
+      P.zones.map((z, j) => `<path class="z" data-j="${j}" d="${z.zone}" style="--c:${NB[j] ? NB[j][1] : "#ccc"}"/>`).join("") +
+      P.zones.map((z) => `<text x="${z.x}" y="${z.y + 1800}" text-anchor="middle">${z.n}</text>`).join("");
+    $$(".z", svg).forEach((p) => (p.onclick = (e) => { e.stopPropagation(); pick(sc, +p.dataset.j, paint); }));
+  }
+  function paint(sc, i) {
+    const [n, c] = NB[i], t = tones(c);
+    $$(".wf-pl .z", sc).forEach((p) => p.classList.toggle("on", +p.dataset.j === i));
+    $(".wf-n", sc).textContent = n;
+    $(".wf-lay", sc).innerHTML = LAYERS.map(([k, name, note]) => `<div><i style="--s:${t[k]}"></i><div><b class="t">${name}</b><small>${note}</small></div></div>`).join("");
+  }
+  return { enter(_, sc) {
+    plain(); drawPlan(sc); chips(sc, paint);
+    $(".wf-gen", sc).innerHTML = GENERAL.map(([t, n]) => `<div><i></i><div><b class="t">${t}</b><small>${n}</small></div></div>`).join("");
+    pick(sc, 2, paint);
+  } };
+
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

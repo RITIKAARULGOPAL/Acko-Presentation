@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO's mark · ACKO slide s-mark</title>
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- ACKO's mark (11 Nov, Ritika: Part 01 "back to the PPT's slides": the Möbius, then this, in the Loop slide's own design): the hand line
+     top right, a lavender ribbon (the deck's ribbon colour and width) drawn in a wide loop across the page, ACKO's lines of business
+     landing on it as stops (the Loop's stop style), and the ACKO wordmark title and italic paragraph bottom left, a pair a beat -->
+<section class="scene" id="s-mark" data-part="1" data-title="ACKO's mark" data-steps="2" data-mins="0.8" data-beats="The mark,Every line of business"
+  data-notes="1 · ACKO's mark is a Möbius strip: one continuous loop, one surface, no inside, no outside. It stands for infinite trust, inclusivity and collaboration. In ACKO's words: it's never us versus you; it's always us with you. 2 · Car, two-wheeler, health, travel, life, and whatever comes next: one loop holds them all, the way a campus holds many buildings on one ground. And where a loop bridges, it holds: security and protection, built into the place.">
+  <div class="page">
+    <p class="mk-welcome hand" style="left:47%;top:3.5%;width:51%">It’s never us versus you, <span>it’s always us with you…</span></p>
+    <svg class="mk-rib" viewBox="0 0 1920 1080" aria-hidden="true" style="left:0;top:0;width:100%;height:100%">
+      <path class="mk-e back"/><path class="mk-b back"/><path class="mk-e over"/><path class="mk-b over"/>
+    </svg>
+    <svg class="mk-leads" viewBox="0 0 1920 1080" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></svg>
+    <div class="mk-stops" style="left:0;top:0;width:100%;height:100%"></div>
+    <div class="mk-title" data-only="1"><img src="assets/img/acko-ink.webp" alt="ACKO"><span>’s mark is one continuous loop.</span></div>
+    <p class="mk-p" data-only="1">ACKO’s Möbius stands for <b>infinite trust, inclusivity and collaboration</b>: one surface, no inside, no outside. A loop connects, and a loop surrounds, <b>always on the customer’s side.</b></p>
+    <div class="mk-title" data-only="2"><img src="assets/img/acko-ink.webp" alt="ACKO"><span>’s loop, around every line of business.</span></div>
+    <p class="mk-p" data-only="2">Car, two-wheeler, health, travel, life, and <b>what comes next</b>: one loop holds them all, the way <b>a campus holds many buildings on one ground.</b> And where it bridges, it holds: <b>security and protection, built into the place.</b></p>
+  </div>
+</section>
+<style>
+/* the Loop slide's own words (s-loop: lp-welcome, lp-title, lp-p, lp-stop), here prefixed */
+#s-mark .mk-welcome { margin: 0; font-size: calc(var(--pt) * 25); line-height: 1.2; color: #000; text-align: right; }
+#s-mark .mk-welcome span { color: var(--purple-2); }
+#s-mark .mk-title { left: 2.8%; top: 66.6%; display: flex; align-items: center; gap: calc(var(--pt) * 1.5); }
+#s-mark .mk-title img { height: calc(var(--pt) * 15); width: auto; }
+#s-mark .mk-title span { font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); }
+#s-mark .mk-p { left: 2.9%; top: 73.4%; width: 50.7%; margin: 0; font-size: calc(var(--pt) * 9.6); line-height: 1.45; font-style: italic; text-align: justify; }
+#s-mark .mk-p b { font-weight: 700; }
+#s-mark .mk-p[data-only="1"].shown { transition-delay: .15s, .15s, 0s; }
+/* the ribbon: the deck's lavender, white edges, drawn round once; the front strand crosses over at the middle */
+#s-mark .mk-rib path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+#s-mark .mk-rib .mk-e { stroke: #fff; stroke-width: 64; }
+#s-mark .mk-rib .mk-b { stroke: rgb(190,164,245); stroke-width: 56; }
+#s-mark .mk-rib .mk-b.back { stroke: rgb(203,182,248); }
+/* the lines of business on the ribbon, the Loop's stops */
+#s-mark .mk-leads path { fill: none; stroke: var(--purple); stroke-width: 1.4; stroke-dasharray: 2 4; opacity: 0; transition: opacity .5s var(--ease); }
+#s-mark .mk-leads path.on { opacity: 1; }
+#s-mark .mk-stop { position: absolute; width: 0; height: 0; opacity: 0; transition: opacity .6s var(--ease); }
+#s-mark .mk-stop.on { opacity: 1; }
+#s-mark .mk-stop i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 8); height: calc(var(--pt) * 8); margin: calc(var(--pt) * -4) 0 0 calc(var(--pt) * -4); border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 calc(var(--pt) * 2) #fff; }
+#s-mark .mk-stop.next i { background: #fff; border: 2px dashed var(--purple); box-sizing: border-box; }
+#s-mark .mk-stop b { position: absolute; transform: translateX(-50%); white-space: nowrap; font-size: calc(var(--pt) * 9); font-weight: 700; color: #000; }
+#s-mark .mk-stop.next b { font-style: italic; color: var(--plum, #6f2f9f); }
+@media (prefers-reduced-motion: reduce) { #s-mark * { transition-duration: 0s !important; transition-delay: 0s !important; } }
+</style>
+<script>
+/* ACKO's mark: the ribbon draws round on entering; on beat 2 the lines of business land on it one after another, left to right */
+ACKO.slide("s-mark", ({ $, $$, plain, later, drawPath, reduced }) => {
+  // a wide figure of eight across the page (page px): the back strand whole, the front strand over the crossing
+  const C = [960, 410], A = 740, H = 0.76;
+  const lem = (t) => { const s = Math.sin(t), c = Math.cos(t), d = 1 + s * s; return [C[0] + (A * c) / d, C[1] + (H * A * s * c) / d]; };
+  const pts = (t0, t1, n) => { let d = ""; for (let i = 0; i <= n; i++) { const p = lem(t0 + ((t1 - t0) * i) / n); d += (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); } return d; };
+  const LOOP = pts(0, Math.PI * 2, 260) + "Z", OVER = pts(Math.PI / 2 - 0.36, Math.PI / 2 + 0.36, 40);
+  // left to right round the loop, each label outside the ribbon: [name, share of the loop's length (0 = its right tip), side, next?]
+  const LOB = [["Car", 0.5, "left"], ["Two-Wheeler", 0.4, "up"], ["Health", 0.6, "down"], ["Travel", 0.9, "down"], ["Life", 0.1, "down"], ["What’s next", 0.0, "up", true]];
+  let built = false;
+  function build(sc) {
+    if (built) return; built = true;
+    $$(".mk-rib .back", sc).forEach((p) => p.setAttribute("d", LOOP));
+    $$(".mk-rib .over", sc).forEach((p) => p.setAttribute("d", OVER));
+    const ref = $(".mk-rib .mk-b.back", sc), L = ref.getTotalLength();
+    let leads = "", stops = "";
+    const D = 58, V = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+    LOB.forEach(([n, f, side, nx], k) => {
+      const p = ref.getPointAtLength(((f * L) % L + L) % L), v = V[side], q = [p.x + v[0] * D, p.y + v[1] * D];
+      leads += `<path data-k="${k}" d="M${(p.x + v[0] * 10).toFixed(1)} ${(p.y + v[1] * 10).toFixed(1)}L${q[0].toFixed(1)} ${q[1].toFixed(1)}"/>`;
+      const pos = side === "up" ? `left:0;top:calc(${-D} * var(--ph) / 1080 - var(--pt) * 13)` : side === "down" ? `left:0;top:calc(${D} * var(--ph) / 1080 + var(--pt) * 2)`
+        : side === "left" ? `left:calc(${-D} * var(--pw) / 1920 - var(--pt) * 2);top:calc(var(--pt) * -6);transform:translateX(-100%)` : `left:calc(${D} * var(--pw) / 1920 + var(--pt) * 2);top:calc(var(--pt) * -6);transform:none`;
+      stops += `<div class="mk-stop${nx ? " next" : ""}" data-k="${k}" style="left:${(p.x / 19.2).toFixed(2)}%;top:${(p.y / 10.8).toFixed(2)}%"><i></i><b style="${pos}">${n}</b></div>`;
+    });
+    $(".mk-leads", sc).innerHTML = leads; $(".mk-stops", sc).innerHTML = stops;
+  }
+  function stopsOn(sc, on, play) {
+    LOB.forEach((_, k) => { const f = () => { $(`.mk-stop[data-k="${k}"]`, sc).classList.toggle("on", on); $(`.mk-leads [data-k="${k}"]`, sc).classList.toggle("on", on); };
+      if (on && play && !reduced) later(f, 200 + 220 * k); else f(); });
+  }
+  let last = 0;
+  return {
+    enter(_, sc) { plain(); build(sc); last = 0; $$(".mk-rib path", sc).forEach((p, i) => (reduced ? (p.style.strokeDasharray = "none") : drawPath(p, i < 2 ? 2400 : 500, i < 2 ? 200 : 1500))); },
+    step(k, sc) { stopsOn(sc, k >= 2, k >= 2 && last < 2); last = k; },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

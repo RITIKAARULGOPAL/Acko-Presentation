@@ -18,5 +18,5 @@ def close():
             '<p class="mw-l1">' + words([("h", "A campus is where we first felt safe among people.")]) + '</p>'
             '<p class="mw-l2"><b>Protection</b> is what ACKO promises its customers.</p>'
             '<p class="wi-q mw-q">' + words([("h", "What if the workplace kept that promise"), ("b", " to its own people?")]) + '</p>'
-            '<p class="mw-l4">So we started where it has to happen: one floor in Koramangala.</p>'
+            '<p class="mw-l4">The answer was already in your mark.</p>'
             '</div></div>')
