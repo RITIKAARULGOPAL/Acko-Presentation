@@ -50,27 +50,24 @@
 #s-agenda .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
 </style>
 <style data-slide="s-heard">
-/* the agenda's type (s-agenda): a small hand line, the 30 pt headline in the purple; then the points, one a row */
+/* the agenda's type (s-agenda): the 30 pt headline in the purple; then the points, two columns of six, read down */
 #s-heard .hd-copy { left: 8%; top: 13.5%; width: 60%; }
-#s-heard .hd-copy .hand { display: block; font-size: calc(var(--pt) * 13); color: var(--purple); margin-bottom: calc(var(--pt) * 4); }
 #s-heard .hd-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
-#s-heard .hd-cols { left: 8%; top: 37%; width: 84%; display: grid; grid-template-columns: calc(var(--pt) * 22.36) 1fr; font-size: calc(var(--pt) * 6.6); }   /* the rows' columns (2.6em at 8.6 pt) */
-#s-heard .hd-cols b { grid-column: 2; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); padding-left: calc(var(--pt) * 9.2); }   /* in line with the boxes' text */
-#s-heard .hd-rows { left: 8%; top: 41.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; gap: calc(var(--pt) * 5.5); font-size: calc(var(--pt) * 8.6); }
-#s-heard .hd-rows li { display: grid; grid-template-columns: 2.6em 1fr; align-items: center; }
+#s-heard .hd-cols { left: 8%; top: 31%; width: 84%; display: grid; grid-template-columns: calc(var(--pt) * 22.36) 1fr; font-size: calc(var(--pt) * 6.6); }   /* the rows' number column (2.6em at 8.6 pt) */
+#s-heard .hd-cols b { grid-column: 2; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }   /* in line with the points' text */
+#s-heard .hd-rows { left: 8%; top: 35.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: 4%; font-size: calc(var(--pt) * 8.6); }   /* shared rows keep the columns level */
+#s-heard .hd-rows li { display: grid; grid-template-columns: 2.6em 1fr; align-items: baseline; padding: .55em 0; border-top: 1px solid #e4def2; }
+#s-heard .hd-rows li:nth-child(6), #s-heard .hd-rows li:nth-child(12) { border-bottom: 1px solid #e4def2; }
 #s-heard .hd-rows em { font-style: normal; font-weight: 700; color: var(--purple); }
 #s-heard .hd-rows p { margin: 0; line-height: 1.35; }
-/* a placeholder looks like one: grey italic in a dashed box (replace the text and drop the class to fill it) */
-#s-heard .hd-ph { border: 1.5px dashed #c9c3d6; border-radius: 6px; background: #faf9fc; color: #8a8496; font-style: italic; padding: .6em .9em; }
-#s-heard .hd-date { padding: 0 .4em; font-family: var(--body); font-size: .62em; vertical-align: .15em; }
-#s-heard .hd-draft { right: 6.2%; top: 3.4%; margin: 0; padding: .3em .9em; border: 1px dashed #b45f06; border-radius: 99px; color: #b45f06;
-  font-size: calc(var(--pt) * 5.4); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+#s-heard .hd-rows b { font-weight: 600; color: var(--purple); }
 #s-heard .hd-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple); }
-/* the one beat: what you told us, row by row; then the closing line */
-#s-heard .hd-rows em, #s-heard .hd-said, #s-heard .hd-close { opacity: 0; transform: translateY(8px);
-  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 110ms); }
-#s-heard .page.hd-on1 .hd-rows em, #s-heard .page.hd-on1 .hd-said { opacity: 1; transform: none; }
-#s-heard .page.hd-on1 .hd-close { opacity: 1; transform: none; transition-delay: .8s; }
+/* the one beat: the points, one after another; then the closing line */
+#s-heard .hd-rows li, #s-heard .hd-close { opacity: 0; transform: translateY(8px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
+#s-heard .page.hd-on1 .hd-rows li { opacity: 1; transform: none; }
+#s-heard .page.hd-on1 .hd-close { opacity: 1; transform: none; transition-delay: 1.2s; }
 </style>
 <style data-slide="s-sec-1">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
@@ -1460,26 +1457,29 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   </div>
 </section>
 <!-- We heard you (Ritika, 17 Nov: "before the concept slides, a 'we heard you' slide would come which would have the meetings mom and
-     then based on the mom we've worked on this presentation"). After the agenda, before Part 01. Only what you told us, one point a
-     row (Ritika, 17 Nov: "dont have so we part..just have what you told us"). DRAFT: the meeting's minutes aren't in yet, so every
-     point is a placeholder, drawn as one (grey, dashed) so it can't be presented by mistake. To fill it: replace each .hd-ph's text
-     and remove its hd-ph class; set the date; remove the .hd-draft tag. The type follows the agenda (s-agenda). -->
+     then based on the mom we've worked on this presentation"). After the agenda, before Part 01. Only what you told us (Ritika,
+     17 Nov: "dont have so we part..just have what you told us"): the MoM's twelve points, in her words, two columns of six; the
+     space each one is about in the purple (the design system's key words). Date line dropped (Ritika, 17 Nov). The type follows
+     the agenda (s-agenda). -->
 <section class="scene" id="s-heard" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
-  data-notes="We heard you: the points from our meeting; everything that follows is built on them. 1 · What you told us. DRAFT: replace the placeholders with the meeting's MoM before presenting. → Bridge: So we began with the people. Part 1.">
+  data-notes="We heard you: twelve points from our meeting; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room. → Bridge: So we began with the people. Part 1.">
   <div class="page">
     <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
-    <p class="hd-draft">Draft · fill from the MoM</p>
-    <div class="hd-copy">
-      <span class="hand">from our meeting on <i class="hd-ph hd-date">[date]</i></span>
-      <h2>We heard you.</h2>
-    </div>
+    <div class="hd-copy"><h2>We heard you.</h2></div>
     <div class="hd-cols"><b>What you told us</b></div>
     <ol class="hd-rows">
-      <li style="--i:0"><em>01</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p></li>
-      <li style="--i:1"><em>02</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p></li>
-      <li style="--i:2"><em>03</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p></li>
-      <li style="--i:3"><em>04</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p></li>
-      <li style="--i:4"><em>05</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p></li>
+      <li style="--i:0"><em>01</em><p class="hd-said">Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li style="--i:1"><em>02</em><p class="hd-said">Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li style="--i:2"><em>03</em><p class="hd-said">Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li style="--i:3"><em>04</em><p class="hd-said">Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li style="--i:4"><em>05</em><p class="hd-said">Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li style="--i:5"><em>06</em><p class="hd-said">Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li style="--i:6"><em>07</em><p class="hd-said">Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:7"><em>08</em><p class="hd-said">Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li style="--i:8"><em>09</em><p class="hd-said"><b>Crash/nap room</b>: mandatory</p></li>
+      <li style="--i:9"><em>10</em><p class="hd-said"><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li style="--i:10"><em>11</em><p class="hd-said"><b>Dealers room</b> to be added</p></li>
+      <li style="--i:11"><em>12</em><p class="hd-said"><b>Mail room</b> to be provided</p></li>
     </ol>
     <p class="hand hd-close">Everything that follows is built on what you told us.</p>
   </div>
