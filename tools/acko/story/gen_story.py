@@ -507,6 +507,15 @@ def story2(h):
     # 6 · the agenda's subtitle; 9 · the reception renders say Arrival once
     h = _in_sec(h, "s-agenda", "ACKO’s own promise, “it’s always us with you”, followed from your mark to the floor, and through one day on it.",
                 "Why a campus, how one loop ties it together, and how it becomes one floor and one day.")   # campus first (17 Nov)
+    # the agenda campus-first (Ritika, 17 Nov, on the slide: "change this based on the new concept slides"; her pick of three
+    # headlines): the note's one sentence, every team a home in one campus that one loop ties together
+    for x, y in (('One promise, <span>made into a place.</span>', 'Every team a home,<br><span>one campus, one loop.</span>'),   # two whole lines, not "… one / campus"
+                 ('<span class="hand">why people come in</span>', '<span class="hand">why a campus</span>'),
+                 ('<span class="hand">how it becomes a campus</span>', '<span class="hand">six homes on one loop</span>'),
+                 ('The agenda: one promise, made into a place, in five parts.', 'The agenda: every team a home, one campus, one loop, in five parts.'),
+                 ('03 The Plan: how it becomes a campus.', '03 The Plan: six homes on one loop.')):
+        h = _in_sec(h, "s-agenda", x, y)
+    h = _in_sec(h, "s-sec-1", "Part 01 of six: Belonging, why people come in.", "Part 01 of six: Belonging, why a campus.")
     h = h.replace("Arrival · Arrival", "Arrival")
     # the layout: six beats (the sheets on demand), the acoustics fuller, the sheet's nav
     i, j = _sec(h, "s-layout-sp"); s = h[i:j]
