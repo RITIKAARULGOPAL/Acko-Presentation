@@ -167,7 +167,7 @@ def make(out, swap=None, wi=None, hfix=None, move=None):
       h = h.replace(old, '<div class="hdr"><b>%s</b><span>%s</span></div>' % (title, LAB[step]))
   # Where both meet opens on the question that bridges from the challenge (wow_campus.py, 10 Nov); its notes say it first
   _n = 'data-notes="Research: 58% of employees'
-  assert h.count(_n) == 1, "campus notes"
+  assert h.count(_n) == (1 if 'id="s-campus"' in h else 0), "campus notes"   # (index-story2.html has no Where both meet since 17 Nov)
   h = h.replace(_n, 'data-notes="First the question: what makes one place feel like home? We looked at two things. Research: 58% of employees')
   # the page's own section names: the overview's headings, the sections menu, the renders' kicker
   names = dict(LAB); names["close"] = "Thank you"
@@ -246,6 +246,10 @@ BRIDGE = {
     "s-campus": "And most of us have been here before…",
     "s-memories": "The answer was in your own mark.",
     "s-loop-stops": "A loop needs a ground. Part 2.",
+    # the concept note's three (17 Nov, index-story2.html only: index-approach.html doesn't have them)
+    "s-why-campus": "So how does a floor this long hold together? With something ACKO already stands for.",
+    "s-campus-loop": "Here it is on our floor.",
+    "s-loop-floor": "Most of us have felt this before…",
     "s-site": "Here is the floor itself, as we found it.",
     "s-layout-dd": "To feel how big this floor is…",
     "s-pitch": "That length could divide people, or hold a whole campus.",
@@ -338,12 +342,12 @@ RIB_JS = _LWFN + r"""
   function chaikin(P, it) { for (let k = 0; k < it; k++) { const Q = [P[0]];
     for (let i = 0; i + 1 < P.length; i++) { const a = P[i], b = P[i + 1]; Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); }
     Q.push(P[P.length - 1]); P = Q; } return P; }
-  function strip(P, wid, y, col, op, ro, off) {
+  function strip(P, wid, y, col, op, ro, off, flat) {
     const n = P.length, ss = [0]; for (let i = 1; i < n; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
     const L = ss[n - 1], R = wid / 2;
     const E = P.map((p, i) => {
       const a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1;
-      const u = Math.min(1, Math.min(ss[i], L - ss[i]) / R), w = R * Math.sqrt(Math.max(0, 1 - (1 - u) * (1 - u)));   // a round end
+      const u = flat ? 1 : Math.min(1, Math.min(ss[i], L - ss[i]) / R), w = R * Math.sqrt(Math.max(0, 1 - (1 - u) * (1 - u)));   // a round end (none on the closed ring)
       return [[p[0] - dz / l * w, p[1] + dx / l * w], [p[0] + dz / l * w, p[1] - dx / l * w]];
     });
     const pos = []; for (let i = 0; i + 1 < n; i++) { const [a, b] = E[i], [c, d] = E[i + 1]; for (const q of [a, b, c, b, d, c]) pos.push(q[0], y, q[1]); }
@@ -352,20 +356,38 @@ RIB_JS = _LWFN + r"""
       polygonOffset: true, polygonOffsetFactor: off, polygonOffsetUnits: 2 * off }));
     m.renderOrder = ro; m.visible = false; m.frustumCulled = false; return m;
   }
+  // 17 Nov (the 16 Nov concept note: "a path with two ends is a corridor with dead ends … redraw the campus strategy route as the same
+  // loop"): the ribbon is the Loop as ONE closed ring (ACKO_LOOP.ring), as The loop on our floor draws it: the main street out and back
+  // as two lanes (each point set 0.8 m to the ring's left: it runs clockwise, so out east the lane is north of the street, back west
+  // south of it), round the meeting island at each end, no ends; the lane 02A has yet to open (ringDash) faint; each stop's call-out on
+  // the ring, at its share of the way round
   function ribbon() {
     if (S.rb !== undefined) return S.rb;
     S.rb = null;
-    const LP = window.ACKO_LOOP; if (!LP || !LP.sweep || !M) return null;
-    let P = LP.sweep.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05);
-    P = resample(chaikin(P, 5), 1600);
-    const n = P.length, under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6);
-    M.scene.add(under, top);
-    // each stop's share of the way along the path (its nearest point)
-    const at = M.data.stops.map((s) => { const x = M.X(s.x), z = M.Z(s.y); let bi = 0, bd = Infinity;
-      P.forEach((p, i) => { const d = Math.hypot(p[0] - x, p[1] - z); if (d < bd) { bd = d; bi = i; } }); return { f: bi / (n - 1), d: bd }; });
+    const LP = window.ACKO_LOOP; if (!LP || !LP.ring || !M) return null;
+    const N = LP.ring.length, LANE = 800;
+    let C = LP.ring.map((p) => p.slice());
+    for (let it = 0; it < 6; it++) C = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N]; return [0.25 * a[0] + 0.5 * p[0] + 0.25 * b[0], 0.25 * a[1] + 0.5 * p[1] + 0.25 * b[1]]; });
+    const OFF = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+      return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE]; });
+    const D = (LP.ringDash && LP.ringDash[0]) || [N - 1, 0];
+    const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % N) { o.push(OFF[i]); if (i === i1) break; } return o; };
+    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m);
+    const P = prep(seq(D[1], D[0]), 1600), Q = prep(seq(D[0], D[1]), 80), n = P.length;
+    const under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true);
+    const dU = strip(Q, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.35, 8, -4, true), dT = strip(Q, RW, RY, 0x8f6cf0, 0.35, 9, -6, true);
+    dU.geometry.setDrawRange(0, Infinity); dT.geometry.setDrawRange(0, Infinity);
+    M.scene.add(under, top, dU, dT);
+    // each stop's share of the way round (its place on the ring), and the call-out's point there (between the lanes, model frame)
+    const cum = [0]; for (let i = 1; i < N; i++) cum.push(cum[i - 1] + Math.hypot(OFF[i][0] - OFF[i - 1][0], OFF[i][1] - OFF[i - 1][1]));
+    const len = cum[D[0]] || cum[N - 1], idx = {};
+    (LP.ringStops || []).forEach((s) => { if (s.kind === "stop") idx[s.name] = s.i; });
+    const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, cum[idx[s.name]] / len)));
+    const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : [C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802]));
     const show = (on) => { under.visible = on; top.visible = on; };
-    const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k); };
-    return (S.rb = { show, to, at: at.map((o) => o.f), miss: at.map((o) => +o.d.toFixed(2)) });
+    const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
+      dU.visible = dT.visible = top.visible && e >= 0.995; };
+    return (S.rb = { show, to, at, pos, miss: at.map(() => 0) });
   }
 """
 FROM_CSS = ('<style>#s-strategy .st-from { left: 0; top: 1%; width: 89.8%; height: 98.4%; pointer-events: none; opacity: 0;'
@@ -400,12 +422,20 @@ def strat_loop(h):
           "    S.lit = M.data.stops.map((s, i) => (k === 6 && S.d >= s.d - 0.5) || (k === 4 && !!RB && re > 0.001 && re >= RB.at[i] - 0.002));"),
          ("  function show(k) {", RIB_JS + "  function show(k) {"),
          ("    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark(\"s-strategy\");", "    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark(\"s-strategy\"); if (S.rb) S.rb.show(false);"),
-         ("employee: M.routes.employee.geometry.drawRange.count,", "employee: M.routes.employee.geometry.drawRange.count, rb: S.rb ? { at: S.rb.at, miss: S.rb.miss } : null,")]
+         ("employee: M.routes.employee.geometry.drawRange.count,", "employee: M.routes.employee.geometry.drawRange.count, rb: S.rb ? { at: S.rb.at, miss: S.rb.miss } : null,"),
+         # 17 Nov (the concept note): on beat 4 the call-outs sit on the ring itself ("if a node isn't on the loop, it's wrong"); the
+         # Arrival an open ring, the commons filled nodes
+         ("      const [x, y] = px(o.s.x, o.s.y, 0.6);",
+          "      const q = S.k === 4 && S.rb && S.rb.pos && S.rb.pos[i] ? S.rb.pos[i] : [o.s.x, o.s.y]; const [x, y] = px(q[0], q[1], 0.6);"),
+         ("g.innerHTML = '<path/><circle r=\"5\"/>'; svg.appendChild(g);",
+          "g.innerHTML = '<path/><circle r=\"5\"/>'; if (s.name === \"Arrival\") g.classList.add(\"arr\"); svg.appendChild(g);")]
     for x, y in R:
         assert js.count(x) == 1, ("strategy js", x[:60], js.count(x)); js = js.replace(x, y)
     h = h[:a] + js + h[b:]
+    t2 = '<script src="assets/js/app.js'
+    h = h.replace(t2, '<style>#s-strategy .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }</style>\n' + t2, 1)
     return _in_sec(h, "s-strategy", "4 Looping it all together: the floor in colour and the partitions rise.",
-                   "4 Looping it all together: the floor in colour and the partitions rise, then the Loop&#x27;s ribbon lies down on the floor through its seven stops, each called out with its words as the ribbon reaches it.")
+                   "4 Looping it all together: the floor in colour and the partitions rise, then the Loop lies down on the floor as one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open.")
 
 # Campus strategy (12 Nov): beat 1 is The Shell (the planning has begun on the slide before); beat 5 calls out the client's touchpoints
 # where the blue route reaches them (model mm, d m along the route, as data/axo-layers.js has it; named from the plan's rooms there)
@@ -445,14 +475,14 @@ def story2(h):
     h = _bridge(h, "s-strategy", "And from above, here's the plan that makes it work.")
     h = _bridge(h, "s-material", "And on a floor this long, finding your way should be effortless.")
     h = _bridge(h, "s-team", "Here's how we'll take you through it.")
-    # 1 · the mark as ACKO's promise, not yet the answer; the memories point ahead
-    h = _in_sec(h, "s-open", "<em>ACKO · the mark</em>", "<em>It starts with a promise</em>")
-    h = _in_sec(h, "s-open", "like a campus: many entities, one ground", "one ground for every line of business")
-    h = _in_sec(h, "s-memories", "The answer was already in your mark.", "That promise is a loop.")
-    h = _bridge(h, "s-memories", "That promise is a loop: your own mark.")
-    # 3 · the join, said on the way into the seven stops; 4 · "this familiar feeling" now reads back past the Möbius
-    h = _bridge(h, "s-mobius", "Your mark, made into a campus: seven campus moments on one loop. The Loop, ACKO Campus.")
-    h = _in_sec(h, "s-loop-stops", "Draws from this familiar feeling", "Draws from those campus memories")
+    # 17 Nov (the 16 Nov concept note, ACKO_Campus_Concept_Rework_Note.html: "23 slides become 3"): Part 01 is the three new slides,
+    # Why a campus → Campus + Möbius = The ACKO Loop → The loop on our floor, then the memories as a pause (their six photos; the
+    # promise and What if beats went with fold()). The people's challenge, the Möbius opening, Where both meet, the Möbius and the
+    # seven stops leave this page (the make() call below); their patches went with them. Words: belonging, not safety
+    h = _in_sec(h, "s-memories", "A campus is where we first felt safe among people.", "A campus is where we first felt we belonged.")
+    h = _bridge(h, "s-memories", "Here's the floor itself, as we found it. Part 2.")
+    h = _in_sec(h, "s-agenda", "01 Belonging: why people come in, and the answer in ACKO's own mark.",
+                "01 Belonging: why a campus, and the one loop that ties it together.")
     # 2 · the Loop on the floor, a one-click recap first
     # 2 · (12 Nov, Ritika: "these 2 slides are repetitive … add the loop on the floor slide's loop ribbon and call out to the looping it
     # together slide"): The Loop leaves this page; its ribbon on the floor and the seven call-outs move into Campus strategy, beat 4
@@ -474,7 +504,7 @@ def story2(h):
     h = _in_sec(h, "s-wayday", "<span>05 · The Day</span>", "<span>04 · The Feel</span>")
     # 6 · the agenda's subtitle; 9 · the reception renders say Arrival once
     h = _in_sec(h, "s-agenda", "ACKO’s own promise, “it’s always us with you”, followed from your mark to the floor, and through one day on it.",
-                "Why people come in, the answer in ACKO’s own promise, and how it becomes one floor and one day.")
+                "Why a campus, how one loop ties it together, and how it becomes one floor and one day.")   # campus first (17 Nov)
     h = h.replace("Arrival · Arrival", "Arrival")
     # the layout: six beats (the sheets on demand), the acoustics fuller, the sheet's nav
     i, j = _sec(h, "s-layout-sp"); s = h[i:j]
@@ -507,4 +537,32 @@ def story2(h):
     h = h[:a] + js + h[b:]
     t = '<script src="assets/js/app.js'
     return h.replace(t, SP2_CSS + t, 1)
-make("index-story2.html", {"s-whatif": None, "s-walk": None, "s-acoustic": None, "s-loop-w": None, "s-sec-3": None, "s-wayfinding": "s-wf-a6"}, move={"s-wayday": "s-wf-a6"}, hfix=lambda h: story2(storyfix(opportunity(lenses(fold(h))))))
+# ---- the 16 Nov concept note (ACKO_Campus_Concept_Rework_Note.html, 17 Nov, Ritika: "do these changes to the newly committed file"):
+# every diagram labelled as concept, plan or reference ("so the client never mistakes a reference image for the project"), small, by
+# the lockup; and no neighbourhood block in a purple ("Loop = the only strong purple line"): 02 Life (lilac) and 03 Health (violet
+# blue) take a soft mint and a soft peach, on this page only (Ritika: "Story 2 only"); the plan and the axo both read AXO_LAYERS
+TAG = {"s-why-campus": "Concept", "s-campus-loop": "Concept", "s-challenges": "Concept", "s-pitch": "Concept",
+       "s-loop-floor": "Plan", "s-strategy": "Plan", "s-layout-dd": "Plan", "s-layout-sp": "Plan",
+       "s-memories": "Reference", "s-site": "Reference"}
+TAG_CSS = ('<style>.scene .page > .dg-tag { right: 12.6%; top: 95.1%; margin: 0; padding: .25em .9em; border: 1px solid currentColor; '
+           'border-radius: 99px; font-size: calc(var(--pt) * 5); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; '
+           'line-height: 1.3; opacity: .5; pointer-events: none; }</style>\n')
+NB_FIX = ('<script>/* index-story2.html only (17 Nov, the concept note: "if purple appears on a block, it\'s wrong"): 02 and 03 off the '
+          'purples */ (window.AXO_LAYERS && window.AXO_LAYERS.zones || []).forEach(function (z) { if (z.n === "02") z.colour = "#cfe9df"; '
+          'if (z.n === "03") z.colour = "#f3dcc4"; });</script>\n')
+def concept_note(h):
+    for sid, tag in TAG.items():
+        if 'id="%s"' % sid not in h: continue
+        i, _j = _sec(h, sid); k = h.index(">", h.index('<div class="page', i)) + 1
+        h = h[:k] + '\n    <p class="dg-tag">%s</p>' % tag + h[k:]
+    d = '<script src="data/axo-layers.js?v=1"></script>\n'
+    assert h.count(d) == 1, "axo-layers script"
+    h = h.replace(d, d + NB_FIX, 1)
+    t = '<script src="assets/js/app.js'
+    return h.replace(t, TAG_CSS + t, 1)
+# the order (17 Nov, the concept note's "new flow"): cover, team, agenda, Part 01, the three new slides in place of the people's
+# challenge, the Möbius opening and Where both meet, the memories as the pause; the Möbius and the seven stops out; fold() out (the
+# memories end on their six photos: What if and the promise are what Campus + Möbius now says)
+make("index-story2.html", {"s-whatif": None, "s-walk": None, "s-acoustic": None, "s-loop-w": None, "s-sec-3": None, "s-wayfinding": "s-wf-a6",
+                           "s-challenge": "s-why-campus", OPEN: "s-campus-loop", "s-campus": "s-loop-floor", "s-mobius": None, "s-loop-stops": None},
+     move={"s-wayday": "s-wf-a6"}, hfix=lambda h: concept_note(story2(storyfix(opportunity(lenses(h))))))

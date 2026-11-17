@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The loop on our floor · ACKO slide s-loop-floor</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- NEW 3 of the 16 Nov concept note (ACKO_Campus_Concept_Rework_Note.html): "prove it on the real Layout 02A plan". The shared deck
+     plan (app.js deckPlan, as the layout slides draw it) with the neighbourhoods on, and over it, in the plan's own mm, the Loop as ONE
+     closed route (data/loop-path.js ACKO_LOOP.ring, tools/acko/loop_path.py): the main street both lift lobbies open onto, drawn as
+     two close lanes (out and back), a ring round the meeting island at each end, the lane 02A has yet to open dashed. Commons are
+     filled purple nodes on it, the two arrivals open rings. Neighbourhood numbers are the plan's own (06 west … 01 east). -->
+<section class="scene" id="s-loop-floor" data-part="1" data-title="The loop on our floor" data-steps="3" data-mins="1" data-beats="The floor,The loop,No dead ends"
+  data-notes="One floor, 245 m long, and one loop holds it together. 1 · The real Layout 02A plan: six neighbourhoods, each a home in its own colour. 2 · The loop: the middle of the floor is too narrow for two lanes, so it runs as a main street that both lift lobbies open onto, then rings the meeting island at each end and comes back. The café, the Acker Garden, the state room, the meeting rooms and wellness all sit on it. The dashed stretch is honest: 02A doesn't have that lane round the west island yet, so planning must open it; the east island already has one. 3 · Six neighbourhoods, one continuous loop, two arrivals, and every desk a short walk from a meeting room. This turns a metaphor into a plan.">
+  <div class="page">
+    <div class="hdr"><b>The loop on our floor</b><span>01 · Belonging</span></div>
+    <h2 class="lf-h">One floor, 245 m long.<br><strong>One loop holds it together.</strong></h2>
+    <ul class="lf-key">
+      <li><i class="k-nb"></i>Neighbourhood</li>
+      <li><i class="k-loop"></i>Loop</li>
+      <li><i class="k-node"></i>Commons</li>
+      <li><i class="k-arr"></i>Arrival</li>
+      <li><i class="k-dash"></i>To open in 02A</li>
+    </ul>
+    <p class="hand lf-n1" data-step="2">02A tweak: open a lane round the meeting island to close the ring</p>
+    <p class="hand lf-n2" data-step="2">a main street both arrivals open onto</p>
+    <p class="hand lf-n3" data-step="2">already rings the island in 01 and comes back</p>
+    <div class="lf-stats rv" data-step="3">
+      <div style="--i:0"><b>6</b><i>neighbourhoods</i><p>A home for every team, each named after an ACKO product, with its own colour and its own front door onto the loop.</p></div>
+      <div style="--i:1"><b>1</b><i>continuous loop</i><p>A main street through the middle, a ring around each end. On a 245 m floor, no dead ends: every walk comes back round.</p></div>
+      <div style="--i:2"><b>2</b><i>arrivals</i><p>Both lift lobbies open straight onto the loop. You arrive on the campus, not in a corridor.</p></div>
+      <div style="--i:3"><b class="lf-dist">20</b><i>m at most</i><p class="lf-distp">From any desk to a meeting room. The café, garden, state room and wellness all sit on the loop.</p></div>
+    </div>
+    <p class="lf-foot">Loop traced on Layout Option 02A, Regalium 3rd floor. Indicative route, to be confirmed in detailed planning.</p>
+  </div>
+</section>
+<style>
+#s-loop-floor .lf-h { left: 4.6%; top: 9.2%; width: 56%; margin: 0; font-weight: 500; font-size: calc(var(--pt) * 23); line-height: 1.08; letter-spacing: -.01em; color: var(--ink); }
+#s-loop-floor .lf-h strong { font-weight: 700; color: var(--purple); }
+#s-loop-floor .lf-key { left: 57%; top: 13.2%; width: 39%; margin: 0; padding: 0; list-style: none; display: flex; justify-content: flex-end; gap: 1.6em; font-size: calc(var(--pt) * 6.4); color: var(--ink); }
+#s-loop-floor .lf-key li { display: flex; align-items: center; gap: .55em; white-space: nowrap; }
+#s-loop-floor .lf-key i { display: inline-block; flex: none; }
+#s-loop-floor .k-nb { width: 1.5em; height: 1em; border-radius: .2em; background: #dfe9cf; }
+#s-loop-floor .k-loop { width: 1.8em; height: 0; border-top: .2em solid var(--purple); border-radius: .2em; }
+#s-loop-floor .k-node { width: .8em; height: .8em; border-radius: 50%; background: var(--purple); }
+#s-loop-floor .k-arr { width: .8em; height: .8em; border-radius: 50%; border: .18em solid var(--ink); background: #fff; box-sizing: border-box; }
+#s-loop-floor .k-dash { width: 1.8em; height: 0; border-top: .2em dotted var(--purple); }
+#s-loop-floor .hand { margin: 0; font-size: calc(var(--pt) * 12.5); line-height: 1.05; color: var(--purple); }
+#s-loop-floor .lf-n1 { left: 4.6%; top: 56.6%; width: 33%; }
+#s-loop-floor .lf-n2 { left: 36%; top: 56.6%; width: 28%; text-align: center; }
+#s-loop-floor .lf-n3 { left: 66%; top: 56.6%; width: 30%; text-align: right; }
+#s-loop-floor .lf-stats { left: 4.6%; top: 67.5%; width: 90.8%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3.2%; }
+#s-loop-floor .lf-stats > div { position: relative; }
+#s-loop-floor .lf-stats b { font-family: var(--num, inherit); font-weight: 600; font-size: calc(var(--pt) * 30); line-height: 1; color: var(--purple); letter-spacing: -.02em; }
+#s-loop-floor .lf-stats i { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); color: var(--ink); margin-left: .35em; }
+#s-loop-floor .lf-stats p { margin: .7em 0 0; font-size: calc(var(--pt) * 7); line-height: 1.4; color: var(--ink); opacity: .82; }
+#s-loop-floor .lf-foot { left: 4.6%; top: 90.6%; width: 70%; margin: 0; font-size: calc(var(--pt) * 5.6); color: var(--ink); opacity: .6; }
+/* the plan behind (the shared #world-plan, outside this slide): while this slide holds it (.lf-on) the arrival zones' purple tint and the
+   entrance triangles step aside (only the loop is purple; the arrivals are the loop's open rings), and the loop layer shows */
+.dxplan:not(.lf-on) .lf-layer { display: none; }
+.dxplan.lf-on .dx-arrival, .dxplan.lf-on .dx-entry { display: none; }
+.lf-layer .lf-l, .lf-layer .lf-d { fill: none; stroke: #5222d0; stroke-width: 380; stroke-linejoin: round; stroke-linecap: round; }
+.lf-layer .lf-l { stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.8s cubic-bezier(.45, 0, .2, 1); }
+.dxplan.lf-loop .lf-layer .lf-l { stroke-dashoffset: 0; }
+.lf-layer .lf-d { stroke-dasharray: 520 460; stroke-linecap: butt; opacity: 0; transition: opacity .6s 2.5s; }
+.dxplan.lf-loop .lf-layer .lf-d { opacity: 1; }
+.lf-layer .lf-pt { opacity: 0; transition: opacity .45s; }
+.dxplan.lf-loop .lf-layer .lf-pt { opacity: 1; transition-delay: calc(var(--t) * 2.6s + .2s); }
+.lf-layer .lf-c { fill: #5222d0; stroke: #fff; stroke-width: 260; }
+.lf-layer .lf-a { fill: #fff; stroke: #1a1a2e; stroke-width: 360; }
+.lf-layer .lf-pill { stroke-width: 160; }
+.lf-layer .lf-c + .lf-pill, .lf-layer .lf-pill.c { fill: #5222d0; stroke: #5222d0; }
+.lf-layer .lf-pill.a { fill: #fff; stroke: #1a1a2e; }
+.lf-layer text { font-family: var(--body, sans-serif); font-weight: 700; letter-spacing: 90px; text-anchor: middle; dominant-baseline: central; }
+.lf-layer .lf-t.c { fill: #fff; font-size: 1300px; }
+.lf-layer .lf-t.a { fill: #1a1a2e; font-size: 1300px; }
+.lf-layer .lf-nbn circle { fill: #fff; stroke: #1a1a2e; stroke-width: 150; }
+.lf-layer .lf-nbn text { font-size: 1500px; font-weight: 600; letter-spacing: 0; fill: #1a1a2e; }
+</style>
+<script>
+ACKO.slide("s-loop-floor", ({ $, plan, reveal }) => {
+  const DISP = [86, 318, 1834, 596];              // where the plan sits on the page (frame px of 1920 × 1080): the band under the title
+  const LANE = 900;                               // mm either side of the route: the street's two directions, 1.8 m apart
+  const NAME = { "Café": "Café", Collab: "Acker Garden", "Board Room": "State room", "Meeting Rooms": "Meeting rooms", Wellness: "Wellness" };
+  let layer = null, on = false;
+  const view = () => { const [x, y, w, h] = window.PLAN_DXF.viewBox; return plan.vbFor([x, y, x + w, y + h], DISP); };
+  const f = (v) => v.toFixed(0);
+  function pill(x, y, label, kind, up) {
+    const t = label.toUpperCase(), w = t.length * 1000 + 1600, h = 2300, cy = y + (up ? -3600 : 3600);
+    return `<line x1="${f(x)}" y1="${f(y + (up ? -1300 : 1300))}" x2="${f(x)}" y2="${f(cy + (up ? h / 2 : -h / 2))}" stroke="${kind === "a" ? "#1a1a2e" : "#5222d0"}" stroke-width="140"/>` +
+      `<rect class="lf-pill ${kind}" x="${f(x - w / 2)}" y="${f(cy - h / 2)}" width="${f(w)}" height="${h}" rx="${h / 2}"/>` +
+      `<text class="lf-t ${kind}" x="${f(x)}" y="${f(cy)}">${t}</text>`;
+  }
+  function build() {
+    const dp = plan.deckPlan();
+    if (layer && layer.isConnected) return dp;
+    const L = window.ACKO_LOOP, P = window.PLAN_DXF;
+    if (!L || !L.ring) return dp;
+    // the route, lightly smoothed (each point keeps its index, so the dashed range and the stops still name it), then offset to its
+    // left: the ring runs clockwise, so out east the lane sits north of the street and back west it sits south; round the islands, outside
+    const n = L.ring.length;
+    let R = L.ring.map((p) => p.slice());
+    for (let it = 0; it < 6; it++) R = R.map((p, i) => { const a = R[(i - 1 + n) % n], b = R[(i + 1) % n]; return [0.25 * a[0] + 0.5 * p[0] + 0.25 * b[0], 0.25 * a[1] + 0.5 * p[1] + 0.25 * b[1]]; });
+    const off = R.map((p, i) => {
+      const a = R[(i - 1 + n) % n], b = R[(i + 1) % n]; let dx = b[0] - a[0], dy = b[1] - a[1]; const l = Math.hypot(dx, dy) || 1;
+      return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE];
+    });
+    const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % n) { o.push(off[i]); if (i === i1) break; } return o; };
+    const d = (pts, close) => "M" + pts.map((p) => f(p[0]) + " " + f(p[1])).join("L") + (close ? "Z" : "");
+    const D = L.ringDash && L.ringDash[0];
+    const solid = D ? d(seq(D[1], D[0])) : d(off, true), dash = D ? d(seq(D[0], D[1])) : "";
+    // the stops: commons as filled nodes across both lanes, labelled below; the arrivals as open rings, labelled above
+    const pts = (L.ringStops || []).map((s) => {
+      const p = R[s.i], t = (s.i / n).toFixed(3);
+      if (s.kind === "arrival") return `<g class="lf-pt" style="--t:${t}"><circle class="lf-a" cx="${f(p[0])}" cy="${f(p[1])}" r="1500"/>${pill(p[0], p[1], s.name, "a", true)}</g>`;
+      if (!NAME[s.name]) return "";
+      return `<g class="lf-pt" style="--t:${t}"><circle class="lf-c" cx="${f(p[0])}" cy="${f(p[1])}" r="1250"/>${pill(p[0], p[1], NAME[s.name], "c", false)}</g>`;
+    }).join("");
+    // the neighbourhoods' numbers (the plan's own; the plan doesn't draw them on its fills)
+    const nbs = P.zones.map((z) => `<g class="lf-nbn"><circle cx="${f(z.x)}" cy="${f(z.y)}" r="1500"/><text x="${f(z.x)}" y="${f(z.y)}">${z.n}</text></g>`).join("");
+    layer = dp.ph.addLayer("lf-layer", `<g>${nbs}</g><path class="lf-l" pathLength="1" d="${solid}"/><path class="lf-d" d="${dash}"/><g>${pts}</g>`);
+    return dp;
+  }
+  // every desk to its nearest meeting room, measured on the plan (as Layout · Option 02A's neighbourhood beat works it out)
+  function distance(sc) {
+    const P = window.PLAN_DXF, Ls = plan.layers ? plan.layers() : null, desks = Ls && Ls.desks ? Ls.desks : [];
+    const rooms = P.spaces.filter((s) => /Quick sprint|Collaboration huddle|Departmental/.test(s.type)).map((s) => [s.x, s.y]);
+    if (!desks.length || !rooms.length) return;
+    const far = Math.max(...desks.map((q) => Math.min(...rooms.map((r) => Math.hypot(r[0] - q[0], r[1] - q[1])))));
+    $(".lf-dist", sc).textContent = Math.ceil(far / 1000);
+  }
+  return {
+    enter(_, sc) { on = false; distance(sc); },
+    step(k, sc) {
+      const dp = build();
+      if (!on) { plan.planOn(sc, { nb: true, view: view(), ms: 0 }); on = true; }
+      dp.root.classList.add("lf-on");
+      dp.root.classList.toggle("lf-loop", k >= 2);
+      if (k === 3) reveal($(".lf-stats", sc), 160);
+    },
+    leave() {
+      const r = document.querySelector(".dxplan"); if (r) r.classList.remove("lf-on", "lf-loop");
+      plan.planOff(); on = false;
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>
