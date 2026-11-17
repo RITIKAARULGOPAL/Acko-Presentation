@@ -518,6 +518,14 @@ def story2(h):
         h = _in_sec(h, "s-agenda", x, y)
     h = _in_sec(h, "s-sec-1", "Part 01 of six: Belonging, why people come in.", "Part 01 of six: Belonging, why a campus.")
     h = _in_sec(h, "s-agenda", "05 The Day: can we live it. Bridge: let's begin with the people.", "05 The Day: can we live it.")
+    # the agenda without its copy block (Ritika, 17 Nov, boxing "Today", the headline and its line: "remove the caption from agenda";
+    # all of it): the five parts alone, up in the middle, under a small "Agenda" (the slide's own label style; its enter() unchanged).
+    # The notes keep "every team a home, one campus, one loop" as the line to say
+    i, j = _sec(h, "s-agenda"); s = h[i:j]
+    s, n1 = re.subn(r'<div class="ap-copy rv"[^>]*>.*?</div>', '<div class="ap-copy rv" style="left:8%;top:30%;width:62%"><small style="--i:0">Agenda</small></div>', s, count=1, flags=re.S)
+    s, n2 = re.subn(r'(<ol class="ap-steps rv" style="left:8%;)top:66%', r'\1top:40%', s, count=1)
+    assert n1 == 1 and n2 == 1, ("agenda copy", n1, n2)
+    h = h[:i] + s + h[j:]
     h = _bridge(h, "s-agenda", "First, what we heard from you.")   # into We heard you (17 Nov)
     h = h.replace("Arrival · Arrival", "Arrival")
     # the layout: six beats (the sheets on demand), the acoustics fuller, the sheet's nav
