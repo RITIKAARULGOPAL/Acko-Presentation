@@ -480,7 +480,9 @@ def story2(h):
     # promise and What if beats went with fold()). The people's challenge, the Möbius opening, Where both meet, the Möbius and the
     # seven stops leave this page (the make() call below); their patches went with them. Words: belonging, not safety
     h = _in_sec(h, "s-memories", "A campus is where we first felt safe among people.", "A campus is where we first felt we belonged.")
-    h = _bridge(h, "s-memories", "Here's the floor itself, as we found it. Part 2.")
+    # (17 Nov, later: the memories moved to the Appendix, so The loop on our floor hands over to Part 02 itself)
+    h = _bridge(h, "s-loop-floor", "Here's the floor itself, as we found it. Part 2.")
+    h = _bridge(h, "s-memories", "Appendix: the campus moments behind the Loop, kept for questions.")
     h = _in_sec(h, "s-agenda", "01 Belonging: why people come in, and the answer in ACKO's own mark.",
                 "01 Belonging: why a campus, and the one loop that ties it together.")
     # 2 · the Loop on the floor, a one-click recap first
@@ -565,4 +567,5 @@ def concept_note(h):
 # memories end on their six photos: What if and the promise are what Campus + Möbius now says)
 make("index-story2.html", {"s-whatif": None, "s-walk": None, "s-acoustic": None, "s-loop-w": None, "s-sec-3": None, "s-wayfinding": "s-wf-a6",
                            "s-challenge": "s-why-campus", OPEN: "s-campus-loop", "s-campus": "s-loop-floor", "s-mobius": None, "s-loop-stops": None},
-     move={"s-wayday": "s-wf-a6"}, hfix=lambda h: concept_note(story2(storyfix(opportunity(lenses(h))))))
+     # the memories to the Appendix (Ritika, 17 Nov, on the slide: "move this slide to archive"): out of Part 01, kept beside the typologies
+     move={"s-wayday": "s-wf-a6", "s-memories": "s-typologies"}, hfix=lambda h: concept_note(story2(storyfix(opportunity(lenses(h))))))

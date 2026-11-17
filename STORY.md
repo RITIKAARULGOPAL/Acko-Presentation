@@ -275,3 +275,15 @@ The Part 02 "The answer was in your own mark" card is gone. 52 slides.
   - → or "Next neighbourhood" goes on through 01–06; "← Back to layout" or Esc returns.
 - **Walk test:** 109 beats, 0 errors.
 - **Still to come:** her Drive link with the new renders.
+
+## Part 01 rebuilt from the concept note (17 Nov, `index-story2.html`)
+The design team's note (16 Nov, `ACKO_Campus_Concept_Rework_Note.html`): the client should leave with one sentence, *"Each team has its own home, but everyone belongs to the same campus, and one continuous loop is what ties it together."* Campus is the idea; the Möbius only inspires why the connector is a loop; the Loop is the result. Ritika, 17 Nov: "do these changes to the newly committed file".
+- **Order:** cover, team, agenda, Part 01, then three slides in place of the people's challenge, the Möbius opening, Where both meet, the memories, the Möbius and the seven stops, then Part 02 (22 clicks become 10):
+  1. **Why a campus** (`s-why-campus`): "Two offices. One campus." Two offices' dots onto one 245 m floor, then into six neighbourhoods on one loop; every neighbourhood mixes both.
+  2. **How it ties together** (`s-campus-loop`): Campus + Möbius = The ACKO Loop. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life.
+  3. **The loop on our floor** (`s-loop-floor`): the real 02A plan, the Loop as one closed ring: a main street both arrivals open onto, round the meeting island at each end, no dead ends.
+  4. **The memories** moved to the Appendix, after Workstation Typologies (Ritika, 17 Nov: "move this slide to archive"): their six photos, kept for questions (the promise and What if are what slide 2 now says).
+- **Campus strategy, beat 4:** the ribbon is the same closed ring (two lanes, no ends); the call-outs sit on it.
+- **Words:** "where we first felt we belonged" (not "safe"); "a loop connects" (not "surrounds"); "inspired by the Möbius"; the agenda campus-first: "Why a campus, how one loop ties it together, and how it becomes one floor and one day."
+- **Colour:** 02 and 03 in a soft mint and peach on this page only (only the loop is purple). **Tags:** concept, plan or reference by the lockup on every diagram.
+- **Still to confirm (the note):** opening the lane round the west meeting island (06 in the plan's own numbering, the note's mockup calls it 01); which product names go with 01–06; the "us with you" quote and the 58% source.
