@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We heard you · ACKO slide s-heard</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you (Ritika, 17 Nov: "before the concept slides, a 'we heard you' slide would come which would have the meetings mom and
+     then based on the mom we've worked on this presentation"). After the agenda, before Part 01. DRAFT: the meeting's minutes aren't
+     in yet, so every point is a placeholder, drawn as one (grey, dashed) so it can't be presented by mistake. To fill it: replace
+     each .hd-ph's text and remove its hd-ph class; set the date; remove the .hd-draft tag. The type follows the agenda (s-agenda). -->
+<section class="scene" id="s-heard" data-part="cover" data-title="We heard you" data-steps="2" data-mins="0.6" data-beats="What you told us,So we"
+  data-notes="We heard you: the points from our meeting, and what we did about each; everything that follows is built on them. 1 · What you told us. 2 · So we: what we did, and where it is in this deck. DRAFT: replace the placeholders with the meeting's MoM before presenting.">
+  <div class="page">
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <p class="hd-draft">Draft · fill from the MoM</p>
+    <div class="hd-copy">
+      <span class="hand">from our meeting on <i class="hd-ph hd-date">[date]</i></span>
+      <h2>We heard you.</h2>
+    </div>
+    <div class="hd-cols"><b>What you told us</b><b>So we…</b></div>
+    <ol class="hd-rows">
+      <li style="--i:0"><em>01</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:1"><em>02</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:2"><em>03</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:3"><em>04</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:4"><em>05</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+    </ol>
+    <p class="hand hd-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<style>
+/* the agenda's type (s-agenda): a small hand line, the 30 pt headline in the purple; then the points, two columns, one row each */
+#s-heard .hd-copy { left: 8%; top: 13.5%; width: 60%; }
+#s-heard .hd-copy .hand { display: block; font-size: calc(var(--pt) * 13); color: var(--purple); margin-bottom: calc(var(--pt) * 4); }
+#s-heard .hd-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-heard .hd-cols { left: 8%; top: 37%; width: 84%; display: grid; grid-template-columns: calc(var(--pt) * 22.36) 1fr calc(var(--pt) * 25.8) 1fr; font-size: calc(var(--pt) * 6.6); }   /* the rows' columns (2.6em · 3em at 8.6 pt) */
+#s-heard .hd-cols b { font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); padding-left: calc(var(--pt) * 9.2); }   /* in line with the boxes' text */
+#s-heard .hd-cols b:first-child { grid-column: 2; }
+#s-heard .hd-cols b:last-child { grid-column: 4; }
+#s-heard .hd-rows { left: 8%; top: 41.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; gap: calc(var(--pt) * 5.5); font-size: calc(var(--pt) * 8.6); }
+#s-heard .hd-rows li { display: grid; grid-template-columns: 2.6em 1fr 3em 1fr; align-items: center; }
+#s-heard .hd-rows em { font-style: normal; font-weight: 700; color: var(--purple); }
+#s-heard .hd-rows p { margin: 0; line-height: 1.35; }
+#s-heard .hd-arr { justify-self: center; width: 1.6em; height: 0; border-top: 1.5px solid var(--purple); position: relative; }
+#s-heard .hd-arr::after { content: ""; position: absolute; right: -1px; top: -.32em; width: .5em; height: .5em; border-top: 1.5px solid var(--purple); border-right: 1.5px solid var(--purple); transform: translateY(-.5px) rotate(45deg); }
+/* a placeholder looks like one: grey italic in a dashed box (replace the text and drop the class to fill it) */
+#s-heard .hd-ph { border: 1.5px dashed #c9c3d6; border-radius: 6px; background: #faf9fc; color: #8a8496; font-style: italic; padding: .6em .9em; }
+#s-heard .hd-date { padding: 0 .4em; font-family: var(--body); font-size: .62em; vertical-align: .15em; }
+#s-heard .hd-draft { right: 6.2%; top: 3.4%; margin: 0; padding: .3em .9em; border: 1px dashed #b45f06; border-radius: 99px; color: #b45f06;
+  font-size: calc(var(--pt) * 5.4); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+#s-heard .hd-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple); }
+/* the beats: 1 · what you told us, row by row; 2 · so we, the arrows and the answers, row by row; then the closing line */
+#s-heard .hd-rows em, #s-heard .hd-said, #s-heard .hd-arr, #s-heard .hd-did, #s-heard .hd-close { opacity: 0; transform: translateY(8px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 110ms); }
+#s-heard .page.hd-on1 .hd-rows em, #s-heard .page.hd-on1 .hd-said { opacity: 1; transform: none; }
+#s-heard .page.hd-on2 .hd-arr, #s-heard .page.hd-on2 .hd-did { opacity: 1; transform: none; }
+#s-heard .page.hd-on2 .hd-close { opacity: 1; transform: none; transition-delay: .8s; }
+</style>
+<script>
+ACKO.slide("s-heard", ({ $, plain, later }) => ({
+  enter(_, sc) { plain(); },
+  step(k, sc) {
+    const p = $(".page", sc);
+    later(() => { p.classList.toggle("hd-on1", k >= 1); p.classList.toggle("hd-on2", k >= 2); }, 40);
+  },
+  leave(_, sc) { const p = sc && $(".page", sc); if (p) p.classList.remove("hd-on1", "hd-on2"); },
+}));
+</script>
+<!-- slide:end -->
+</body>
+</html>

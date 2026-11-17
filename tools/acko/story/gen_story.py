@@ -250,6 +250,7 @@ BRIDGE = {
     "s-why-campus": "So how does a floor this long hold together? With something ACKO already stands for.",
     "s-campus-loop": "Here it is on our floor.",
     "s-loop-floor": "Most of us have felt this before…",
+    "s-heard": "So we began with the people. Part 1.",
     "s-site": "Here is the floor itself, as we found it.",
     "s-layout-dd": "To feel how big this floor is…",
     "s-pitch": "That length could divide people, or hold a whole campus.",
@@ -516,6 +517,8 @@ def story2(h):
                  ('03 The Plan: how it becomes a campus.', '03 The Plan: six homes on one loop.')):
         h = _in_sec(h, "s-agenda", x, y)
     h = _in_sec(h, "s-sec-1", "Part 01 of six: Belonging, why people come in.", "Part 01 of six: Belonging, why a campus.")
+    h = _in_sec(h, "s-agenda", "05 The Day: can we live it. Bridge: let's begin with the people.", "05 The Day: can we live it.")
+    h = _bridge(h, "s-agenda", "First, what we heard from you.")   # into We heard you (17 Nov)
     h = h.replace("Arrival · Arrival", "Arrival")
     # the layout: six beats (the sheets on demand), the acoustics fuller, the sheet's nav
     i, j = _sec(h, "s-layout-sp"); s = h[i:j]
@@ -577,4 +580,6 @@ def concept_note(h):
 make("index-story2.html", {"s-whatif": None, "s-walk": None, "s-acoustic": None, "s-loop-w": None, "s-sec-3": None, "s-wayfinding": "s-wf-a6",
                            "s-challenge": "s-why-campus", OPEN: "s-campus-loop", "s-campus": "s-loop-floor", "s-mobius": None, "s-loop-stops": None},
      # the memories to the Appendix (Ritika, 17 Nov, on the slide: "move this slide to archive"): out of Part 01, kept beside the typologies
-     move={"s-wayday": "s-wf-a6", "s-memories": "s-typologies"}, hfix=lambda h: concept_note(story2(storyfix(opportunity(lenses(h))))))
+     # We heard you after the agenda (Ritika, 17 Nov: "before the concept slides, a 'we heard you' slide … the meetings mom"; her pick:
+     # before the Part 01 card), placeholders until the minutes are in
+     move={"s-wayday": "s-wf-a6", "s-memories": "s-typologies", "s-heard": "s-agenda"}, hfix=lambda h: concept_note(story2(storyfix(opportunity(lenses(h))))))

@@ -49,6 +49,34 @@
 #s-agenda .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
 #s-agenda .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
 </style>
+<style data-slide="s-heard">
+/* the agenda's type (s-agenda): a small hand line, the 30 pt headline in the purple; then the points, two columns, one row each */
+#s-heard .hd-copy { left: 8%; top: 13.5%; width: 60%; }
+#s-heard .hd-copy .hand { display: block; font-size: calc(var(--pt) * 13); color: var(--purple); margin-bottom: calc(var(--pt) * 4); }
+#s-heard .hd-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-heard .hd-cols { left: 8%; top: 37%; width: 84%; display: grid; grid-template-columns: calc(var(--pt) * 22.36) 1fr calc(var(--pt) * 25.8) 1fr; font-size: calc(var(--pt) * 6.6); }   /* the rows' columns (2.6em · 3em at 8.6 pt) */
+#s-heard .hd-cols b { font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); padding-left: calc(var(--pt) * 9.2); }   /* in line with the boxes' text */
+#s-heard .hd-cols b:first-child { grid-column: 2; }
+#s-heard .hd-cols b:last-child { grid-column: 4; }
+#s-heard .hd-rows { left: 8%; top: 41.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; gap: calc(var(--pt) * 5.5); font-size: calc(var(--pt) * 8.6); }
+#s-heard .hd-rows li { display: grid; grid-template-columns: 2.6em 1fr 3em 1fr; align-items: center; }
+#s-heard .hd-rows em { font-style: normal; font-weight: 700; color: var(--purple); }
+#s-heard .hd-rows p { margin: 0; line-height: 1.35; }
+#s-heard .hd-arr { justify-self: center; width: 1.6em; height: 0; border-top: 1.5px solid var(--purple); position: relative; }
+#s-heard .hd-arr::after { content: ""; position: absolute; right: -1px; top: -.32em; width: .5em; height: .5em; border-top: 1.5px solid var(--purple); border-right: 1.5px solid var(--purple); transform: translateY(-.5px) rotate(45deg); }
+/* a placeholder looks like one: grey italic in a dashed box (replace the text and drop the class to fill it) */
+#s-heard .hd-ph { border: 1.5px dashed #c9c3d6; border-radius: 6px; background: #faf9fc; color: #8a8496; font-style: italic; padding: .6em .9em; }
+#s-heard .hd-date { padding: 0 .4em; font-family: var(--body); font-size: .62em; vertical-align: .15em; }
+#s-heard .hd-draft { right: 6.2%; top: 3.4%; margin: 0; padding: .3em .9em; border: 1px dashed #b45f06; border-radius: 99px; color: #b45f06;
+  font-size: calc(var(--pt) * 5.4); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+#s-heard .hd-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple); }
+/* the beats: 1 · what you told us, row by row; 2 · so we, the arrows and the answers, row by row; then the closing line */
+#s-heard .hd-rows em, #s-heard .hd-said, #s-heard .hd-arr, #s-heard .hd-did, #s-heard .hd-close { opacity: 0; transform: translateY(8px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 110ms); }
+#s-heard .page.hd-on1 .hd-rows em, #s-heard .page.hd-on1 .hd-said { opacity: 1; transform: none; }
+#s-heard .page.hd-on2 .hd-arr, #s-heard .page.hd-on2 .hd-did { opacity: 1; transform: none; }
+#s-heard .page.hd-on2 .hd-close { opacity: 1; transform: none; transition-delay: .8s; }
+</style>
 <style data-slide="s-sec-1">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
 #s-sec-1 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
@@ -1424,7 +1452,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 <!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
      acts of the brand-first story (STORY.md), each with the question it answers -->
 <section class="scene" id="s-agenda" data-part="cover" data-title="The agenda" data-steps="1" data-mins="0.4"
-  data-notes="The agenda: every team a home, one campus, one loop, in five parts. 01 Belonging: why a campus, and the one loop that ties it together. 02 The Site: where it must happen. 03 The Plan: six homes on one loop. 04 The Feel: what it feels like. 05 The Day: can we live it. Bridge: let's begin with the people. → Bridge: Let&#x27;s begin with the people. Part 1.">
+  data-notes="The agenda: every team a home, one campus, one loop, in five parts. 01 Belonging: why a campus, and the one loop that ties it together. 02 The Site: where it must happen. 03 The Plan: six homes on one loop. 04 The Feel: what it feels like. 05 The Day: can we live it. → Bridge: First, what we heard from you.">
   <div class="page">
     <div class="ap-copy rv" style="left:8%;top:21%;width:62%">
       <small style="--i:0">Today</small>
@@ -1438,6 +1466,30 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
       <li style="--i:7"><i></i><b><em>04</em> The Feel</b><span class="hand">what it feels like</span></li>
       <li style="--i:8"><i></i><b><em>05</em> The Day</b><span class="hand">can we live it?</span></li>
     </ol>
+  </div>
+</section>
+<!-- We heard you (Ritika, 17 Nov: "before the concept slides, a 'we heard you' slide would come which would have the meetings mom and
+     then based on the mom we've worked on this presentation"). After the agenda, before Part 01. DRAFT: the meeting's minutes aren't
+     in yet, so every point is a placeholder, drawn as one (grey, dashed) so it can't be presented by mistake. To fill it: replace
+     each .hd-ph's text and remove its hd-ph class; set the date; remove the .hd-draft tag. The type follows the agenda (s-agenda). -->
+<section class="scene" id="s-heard" data-part="cover" data-title="We heard you" data-steps="2" data-mins="0.6" data-beats="What you told us,So we"
+  data-notes="We heard you: the points from our meeting, and what we did about each; everything that follows is built on them. 1 · What you told us. 2 · So we: what we did, and where it is in this deck. DRAFT: replace the placeholders with the meeting's MoM before presenting. → Bridge: So we began with the people. Part 1.">
+  <div class="page">
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <p class="hd-draft">Draft · fill from the MoM</p>
+    <div class="hd-copy">
+      <span class="hand">from our meeting on <i class="hd-ph hd-date">[date]</i></span>
+      <h2>We heard you.</h2>
+    </div>
+    <div class="hd-cols"><b>What you told us</b><b>So we…</b></div>
+    <ol class="hd-rows">
+      <li style="--i:0"><em>01</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:1"><em>02</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:2"><em>03</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:3"><em>04</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+      <li style="--i:4"><em>05</em><p class="hd-said hd-ph">[From the MoM: what ACKO said]</p><i class="hd-arr" aria-hidden="true"></i><p class="hd-did hd-ph">[What we did, and where it is in this deck]</p></li>
+    </ol>
+    <p class="hand hd-close">Everything that follows is built on what you told us.</p>
   </div>
 </section>
 <section class="scene" id="s-sec-1" data-part="s1" data-title="Part 01 · Belonging" data-steps="1" data-mins="0.3"
@@ -2675,6 +2727,16 @@ ACKO.slide("s-team", ({ $, plain, reveal }) => ({ enter(_, sc) { plain(); reveal
 /* the agenda: the line, then the six parts one after another */
 ACKO.slide("s-agenda", ({ $, plain, reveal }) => ({
   enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
+}));
+</script>
+<script data-slide="s-heard">
+ACKO.slide("s-heard", ({ $, plain, later }) => ({
+  enter(_, sc) { plain(); },
+  step(k, sc) {
+    const p = $(".page", sc);
+    later(() => { p.classList.toggle("hd-on1", k >= 1); p.classList.toggle("hd-on2", k >= 2); }, 40);
+  },
+  leave(_, sc) { const p = sc && $(".page", sc); if (p) p.classList.remove("hd-on1", "hd-on2"); },
 }));
 </script>
 <script data-slide="s-sec-1">
