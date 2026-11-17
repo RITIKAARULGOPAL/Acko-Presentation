@@ -1,6 +1,7 @@
-# index-why-campus.html: six ways to depict "Why a campus" (17 Nov, Ritika: "give multiple variations in depicting this slide").
+# index-why-campus.html: twelve ways to depict "Why a campus" (17 Nov, Ritika: "give multiple variations in depicting this slide";
+# then "give more options": 7-9 take option 6's campus map further, 10-12 are new).
 # The words, the footer and the three beats are the same in every option; only the picture changes. The options are
-# slides/s-wc-1..6.html (not in order.txt): 1 is the slide as it is (copied here from slides/s-why-campus.html), 2-6 are written
+# slides/s-wc-1..12.html (not in order.txt): 1 is the slide as it is (copied here from slides/s-why-campus.html), 2-12 are written
 # by hand. Her pick goes into slides/s-why-campus.html (its ids renamed back), then Story 2 is rebuilt.
 #   python tools/acko/story/gen_why_opts.py .
 import sys, os
@@ -15,6 +16,12 @@ OPTS = [
     (4, "Two lines, one loop"),
     (5, "By the numbers"),
     (6, "Campus map"),
+    (7, "Map · by headcount"),
+    (8, "Map · night"),
+    (9, "Map · warmth"),
+    (10, "A village of homes"),
+    (11, "Around one table"),
+    (12, "Two streams"),
 ]
 
 # option 1: the slide as it is, under its own id
