@@ -212,7 +212,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       M.fade(v, f);
     });
     S.names = (k === 2 && t >= 3.0) || k === 3;
-    S.hotOn = k === 4; S.reach = k === 4 ? win(t, 2.0, 7.0) : 0;   // beat 4: each space lights up as the Loop's stroke reaches it
+    S.hotOn = k === 4; S.reach = k === 4 ? win(t, 1.5, 6.5) : 0; S.pulse = k === 4 ? clamp01(t / 1.3) : 1;   // beat 4: each space lights up as the Loop's stroke reaches it
     S.ent = k === 1 ? (WAVE ? win(t, W_ENT[0], W_ENT[1]) : win(t, 1.4, 2.0)) : 1;
     // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
     const R = M.routes, emp = R.employee, cli = R.client;
@@ -328,7 +328,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     const box = $(".st-ov", sc), A = M.data;
     $$(".st-s, .st-z", box).forEach((e) => e.remove());
     // the entrances: the deck's maroon ▲ (its apex a little right of centre)
-    $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
+    $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<circle class="rp" r="16" style="fill:none;stroke:#980000;stroke-width:2.5;opacity:0"/><path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
     // the names (LABELS), each at the middle of its zone's (or atrium's, terrace's, café's) outermost edge on its side
     S.zl = [];
     const tone = (hex) => { const c = new T.Color(hex), h = {}; c.getHSL(h); return "#" + c.setHSL(h.h, Math.min(0.35, h.s) * 0.7, 0.55).getHexString(); };
@@ -372,9 +372,12 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     const A = M.data, k = 1920 / (host.clientWidth || 1920);
     // entrances: of a size in the model, so they zoom with it as the names do (29 Oct: "the 2 arrows should also be constant size")
     const ek = S.home.half / S.state.half;
+    // beat 4 opens on them: they swell and a ripple goes out, then the Loop grows from them
+    const lead = S.k === 4 && S.pulse < 1, bump = lead ? 1 + 0.6 * Math.sin(Math.PI * S.pulse) : 1;
     $$(".st-ent path", sc).forEach((p, i) => {
-      const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]);
-      p.setAttribute("transform", `translate(${x} ${y}) scale(${ek.toFixed(4)})`); p.style.opacity = S.ent;
+      const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]), rp = $$(".st-ent circle", sc)[i];
+      p.setAttribute("transform", `translate(${x} ${y}) scale(${(ek * bump).toFixed(4)})`); p.style.opacity = S.ent;
+      if (rp) { rp.setAttribute("transform", `translate(${x} ${y}) scale(${(ek * (1 + 3 * (lead ? S.pulse : 1))).toFixed(4)})`); rp.style.opacity = lead ? (0.7 * (1 - S.pulse)).toFixed(3) : 0; }
     });
     // names: standing upright on the floor along its east (long) axis, as the axo shows such a wall (one matrix: the camera is
     // orthographic; seen from the other side they turn round, so they never read backwards), CAP m tall in the model, so they

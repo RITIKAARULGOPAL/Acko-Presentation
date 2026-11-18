@@ -3736,7 +3736,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       M.fade(v, f);
     });
     S.names = (k === 2 && t >= 3.0) || k === 3;
-    S.hotOn = k === 4; S.reach = k === 4 ? win(t, 2.0, 7.0) : 0;   // beat 4: each space lights up as the Loop's stroke reaches it
+    S.hotOn = k === 4; S.reach = k === 4 ? win(t, 1.5, 6.5) : 0; S.pulse = k === 4 ? clamp01(t / 1.3) : 1;   // beat 4: each space lights up as the Loop's stroke reaches it
     S.ent = k === 1 ? (WAVE ? win(t, W_ENT[0], W_ENT[1]) : win(t, 1.4, 2.0)) : 1;
     // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
     const R = M.routes, emp = R.employee, cli = R.client;
@@ -3745,7 +3745,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     cli.material.opacity = k === 6 ? 1 - win(t, 0.2, 1.0) : 1;
     S.d = k === 6 ? emp.userData.max * win(t, 1.0, DUR[6] - 0.3) : 0;
     emp.userData.to(S.d); emp.material.opacity = 1;
-    const RB = ribbon(), re = k === 4 ? win(t, 2.0, 7.0) : 0;   // 12 Nov: slower, as Ritika asked
+    const RB = ribbon(), re = k === 4 ? win(t, 1.5, 6.5) : 0;   // 12 Nov: slower, as Ritika asked; 18 Nov: after the arrows have landed
     if (RB) { RB.show(k === 4 && re > 0.001); RB.to(re); }
     const cd = k === 5 ? cli.userData.max * win(t, 0.3, DUR[5] - 0.2) : 0;
     S.lit = S.labs.map((o, i) => o.s.client ? k === 5 && cd >= o.s.d - 0.5 : (k === 6 && S.d >= o.s.d - 0.5) || (k === 4 && !!RB && re > 0.001 && re >= RB.at[i] - 0.002));
@@ -3945,45 +3945,51 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // south of it), round the meeting island at each end, no ends; the lane 02A has yet to open (ringDash) faint; each stop's call-out on
   // the ring, at its share of the way round
   // 18 Nov (Ritika: "the loop should connect all spaces and look like a loop"; "in the corridor zone, no branching out; the spaces should
-  // come in the loop's path"): the Loop is the corridor route itself (ACKO_LOOP.ring: the main street out and back, through the seven
-  // stops, past the spaces), as ONE closed ring, its two directions parted into lanes 3 m apart so it reads as an oval track, eased,
-  // with only a faint hand-drawn tremor. No spurs: each space's dot is the nearest point on the ring, so the spaces sit on the path.
+  // come in the loop's path"; "first show the arrival arrow and the loop should start from them"): the Loop is the corridor route itself
+  // (ACKO_LOOP.ring: the main street out and back, through the seven stops, past the spaces), as ONE closed ring, its two directions parted
+  // into lanes 3 m apart so it reads as an oval track, eased, with only a faint hand-drawn tremor. It is split at the two entrances
+  // (Arrival 1 and 2, where the maroon arrows stand) into two arcs that draw together, each growing out of its own arrow and meeting at the
+  // other. No spurs: each space's dot is the nearest point on the ring, so the spaces sit on the path.
   function ribbon() {
     if (S.rb !== undefined) return S.rb;
     S.rb = null;
     const LP = window.ACKO_LOOP; if (!LP || !LP.ring || !M || typeof spaces !== "function") return null;
-    const N = LP.ring.length, LANE = 1500;
+    const N = LP.ring.length, LANE = 1500, ARR = (LP.ringStops || []).filter((s) => s.kind === "arrival").map((s) => s.i);
+    if (ARR.length < 2) return null;
+    const A1 = ARR[0], A2 = ARR[1];
     let C = LP.ring.map((p) => p.slice());
     for (let it = 0; it < 6; it++) C = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N]; return [0.25 * a[0] + 0.5 * p[0] + 0.25 * b[0], 0.25 * a[1] + 0.5 * p[1] + 0.25 * b[1]]; });
     const OFF = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
       return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE]; });
-    const D = (LP.ringDash && LP.ringDash[0]) || [N - 1, 0];
     const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % N) { o.push(OFF[i]); if (i === i1) break; } return o; };
     const tremor = (p) => { const h = hd(p); return [p[0] + (h[0] - p[0]) * 0.2, p[1] + (h[1] - p[1]) * 0.2]; };
     const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m).map(tremor);
-    const P = prep(seq(D[1], D[0]), 1600), Q = prep(seq(D[0], D[1]), 80), n = P.length;
-    const under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true);
-    const dU = strip(Q, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.35, 8, -4, true), dT = strip(Q, RW, RY, 0x8f6cf0, 0.35, 9, -6, true);
-    dU.geometry.setDrawRange(0, Infinity); dT.geometry.setDrawRange(0, Infinity);
-    M.scene.add(under, top, dU, dT);
-    // each stop's and space's place on the ring: the share of the way round (its place on the ring) and the point there (model mm, on the corridor)
+    // the ring's length from Arrival 1 round to each point, to split it into the two arcs
     const cum = [0]; for (let i = 1; i < N; i++) cum.push(cum[i - 1] + Math.hypot(OFF[i][0] - OFF[i - 1][0], OFF[i][1] - OFF[i - 1][1]));
-    const len = cum[D[0]] || cum[N - 1], idx = {};
+    const L = cum[N - 1] + Math.hypot(OFF[0][0] - OFF[N - 1][0], OFF[0][1] - OFF[N - 1][1]), sOf = (j) => (cum[j] - cum[A1] + L) % L, sA = sOf(A2);
+    const nA = Math.max(200, Math.round(1600 * sA / L)), nB = Math.max(200, 1600 - nA);
+    const arcs = [prep(seq(A1, A2), nA), prep(seq(A2, A1), nB)].map((P) => ({ P, n: P.length,
+      under: strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top: strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true) }));
+    arcs.forEach((a) => M.scene.add(a.under, a.top));
+    // each place's share of ITS arc (the stroke front growing out of the nearer arrow reaches it then) and its point on the ring (model mm)
+    const share = (j) => { const s0 = sOf(j); return s0 <= sA ? s0 / sA : (s0 - sA) / (L - sA); };
+    const idx = {};
     (LP.ringStops || []).forEach((s) => { if (s.kind === "stop") idx[s.name] = s.i; });
-    const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, cum[idx[s.name]] / len)));
+    const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, share(idx[s.name]))));
     const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : [C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802]));
     const hot = spaces().map((q) => { let j = 0, d0 = 1e18; for (let i = 0; i < N; i++) { const d = (C[i][0] - 185842 - q.x) ** 2 + (C[i][1] + 182802 - q.y) ** 2; if (d < d0) { d0 = d; j = i; } }
-      return { at: Math.min(1, cum[j] / len), pos: [C[j][0] - 185842, C[j][1] + 182802] }; });
-    // a few white chevrons on the stroke say which way round it runs
-    const ar = [0.1, 0.3, 0.5, 0.7, 0.9].map((f) => {
-      const j = Math.round(f * (n - 1)), a = P[Math.max(0, j - 6)], b = P[Math.min(n - 1, j + 6)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], L = 1.5, W = 0.95, Y = RY + 0.03;
-      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute([c[0] + ux * L, Y, c[1] + uz * L, c[0] - ux * L * 0.5 - uz * W, Y, c[1] - uz * L * 0.5 + ux * W, c[0] - ux * L * 0.5 + uz * W, Y, c[1] - uz * L * 0.5 - ux * W], 3));
+      return { at: Math.min(1, share(j)), pos: [C[j][0] - 185842, C[j][1] + 182802] }; });
+    // white chevrons say which way each arc runs
+    const ar = [];
+    arcs.forEach((a, ai) => (ai ? [0.2, 0.5, 0.8] : [0.5]).forEach((f) => {
+      const P = a.P, n = a.n, j = Math.round(f * (n - 1)), p0 = P[Math.max(0, j - 6)], p1 = P[Math.min(n - 1, j + 6)], dx = p1[0] - p0[0], dz = p1[1] - p0[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], Ln = 1.5, W = 0.95, Y = RY + 0.03;
+      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute([c[0] + ux * Ln, Y, c[1] + uz * Ln, c[0] - ux * Ln * 0.5 - uz * W, Y, c[1] - uz * Ln * 0.5 + ux * W, c[0] - ux * Ln * 0.5 + uz * W, Y, c[1] - uz * Ln * 0.5 - ux * W], 3));
       const m = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, side: T.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -8, polygonOffsetUnits: -16 }));
-      m.renderOrder = 10; m.visible = false; m.frustumCulled = false; M.scene.add(m); return { m, f };
-    });
-    const show = (on) => { under.visible = on; top.visible = on; if (!on) ar.forEach((x) => { x.m.visible = false; }); };
-    const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
-      dU.visible = dT.visible = top.visible && e >= 0.995; ar.forEach((x) => { x.m.visible = top.visible && e >= x.f + 0.01; }); };
+      m.renderOrder = 10; m.visible = false; m.frustumCulled = false; M.scene.add(m); ar.push({ m, f, ai });
+    }));
+    const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
+    const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
+      ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
     return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
   }
   function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
@@ -4028,7 +4034,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const box = $(".st-ov", sc), A = M.data;
     $$(".st-s, .st-z", box).forEach((e) => e.remove());
     // the entrances: the deck's maroon ▲ (its apex a little right of centre)
-    $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
+    $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<circle class="rp" r="16" style="fill:none;stroke:#980000;stroke-width:2.5;opacity:0"/><path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
     // the names (LABELS), each at the middle of its zone's (or atrium's, terrace's, café's) outermost edge on its side
     S.zl = [];
     const tone = (hex) => { const c = new T.Color(hex), h = {}; c.getHSL(h); return "#" + c.setHSL(h.h, Math.min(0.35, h.s) * 0.7, 0.55).getHexString(); };
@@ -4072,9 +4078,12 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const A = M.data, k = 1920 / (host.clientWidth || 1920);
     // entrances: of a size in the model, so they zoom with it as the names do (29 Oct: "the 2 arrows should also be constant size")
     const ek = S.home.half / S.state.half;
+    // beat 4 opens on them: they swell and a ripple goes out, then the Loop grows from them
+    const lead = S.k === 4 && S.pulse < 1, bump = lead ? 1 + 0.6 * Math.sin(Math.PI * S.pulse) : 1;
     $$(".st-ent path", sc).forEach((p, i) => {
-      const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]);
-      p.setAttribute("transform", `translate(${x} ${y}) scale(${ek.toFixed(4)})`); p.style.opacity = S.ent;
+      const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]), rp = $$(".st-ent circle", sc)[i];
+      p.setAttribute("transform", `translate(${x} ${y}) scale(${(ek * bump).toFixed(4)})`); p.style.opacity = S.ent;
+      if (rp) { rp.setAttribute("transform", `translate(${x} ${y}) scale(${(ek * (1 + 3 * (lead ? S.pulse : 1))).toFixed(4)})`); rp.style.opacity = lead ? (0.7 * (1 - S.pulse)).toFixed(3) : 0; }
     });
     // names: standing upright on the floor along its east (long) axis, as the axo shows such a wall (one matrix: the camera is
     // orthographic; seen from the other side they turn round, so they never read backwards), CAP m tall in the model, so they
