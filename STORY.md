@@ -291,13 +291,13 @@ The design team's note (16 Nov, `ACKO_Campus_Concept_Rework_Note.html`): the cli
 - **Still to confirm (the note):** opening the lane round the west meeting island (06 in the plan's own numbering, the note's mockup calls it 01); which product names go with 01–06; the "us with you" quote and the 58% source.
 
 ## The new structure (18 Nov, Ritika: "ACKO — Presentation Structure"; `index-story3.html`, `tools/acko/story/gen_story3.py`)
-Story 2 stays as the previous version. Eight sections; a divider opens 04–08; Thank you closes; the Appendix and About SKV are side tracks.
-- **01 Project Vision** (opening & project introduction): Cover · Meet the team
-- **02 Design Drivers** (design inputs so far): Design inputs
-- **03 Overview** (presentation roadmap): the agenda, listing what is ahead, 04–08, each with her line
-- **04 Concept Framework** (establishing the overarching design vision): Two Offices · The ACKO Campus (stand-ins: Why a campus's first beat; Campus + Möbius = The ACKO Loop; Ritika to give the content)
-- **05 Design Development** (translating the concept into a spatial solution): Site context · Football pitches · Site due diligence · Conceptual axonometries with no defined boundaries (Campus strategy's first four beats; to be redrawn) · Proposed layout · Detailed axonometric (placeholder: the layout transforms into an axonometry with the loop, neighbourhoods, client and employee journeys defined) · A day in ACKO
-- **06 Design Expression** (materiality, visualisation and spatial experience): Material strategy and Material palette (her PDFs to come) · Walkthrough (stand-in; her HTML to come) · the 3D visualisations, the renders (her drive link to come)
-- **07 Integrated Performance** (technical performance and added value): ESG strategy (stand-in; PDF to come) · Wayfinding · Engagement points · D & I (stand-in, "Designed for all"; PDF to come)
-- **08 Project Review** (revisiting previous discussions and establishing alignment): Previous meeting recap (placeholder; PDF to come)
+Story 2 stays as the previous version. Eight sections, the last five numbered 01–05 ("section should be numbered from 1 so total is 5"); a divider opens each of them; the section menu shows names without numbers; Thank you closes; the Appendix and About SKV are side tracks.
+- **Project Vision** (opening & project introduction): Cover · Meet the team
+- **Design Drivers** (design inputs so far): Design inputs
+- **Overview** (presentation roadmap): the agenda, `s-overview`, in the divider's design, the five sections 01–05 together, names only (18 Nov, Ritika: "page 4 should be like page 5")
+- **01 Concept Framework** (establishing the overarching design vision): Two Offices · The ACKO Campus (stand-ins: Why a campus's first beat; Campus + Möbius = The ACKO Loop; Ritika to give the content)
+- **02 Design Development** (translating the concept into a spatial solution): Site context · Football pitches · Site due diligence · Conceptual axonometries with no defined boundaries (Campus strategy's first four beats; to be redrawn) · Proposed layout · Detailed axonometric (placeholder: the layout transforms into an axonometry with the loop, neighbourhoods, client and employee journeys defined) · A day in ACKO
+- **03 Design Expression** (materiality, visualisation and spatial experience): Material strategy and Material palette (her PDFs to come) · Walkthrough (stand-in; her HTML to come) · the 3D visualisations, the renders (her drive link to come)
+- **04 Integrated Performance** (technical performance and added value): ESG strategy (stand-in; PDF to come) · Wayfinding · Engagement points · D & I (stand-in, "Designed for all"; PDF to come)
+- **05 Project Review** (revisiting previous discussions and establishing alignment): Previous meeting recap (placeholder; PDF to come)
 - Out of this page: the Part cards, Why a campus's beats 2–3, The loop on our floor, The opportunity. Appendix: Typologies, the memories, Well-being.

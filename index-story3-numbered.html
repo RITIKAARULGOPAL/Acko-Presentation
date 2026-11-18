@@ -33,31 +33,6 @@
 .tm-p span { display: block; font-family: var(--label); font-size: calc(var(--pt) * 4.2); color: rgba(255,255,255,.8); line-height: 1.3; }
 .tm-p { position: absolute; }
 </style>
-<style data-slide="s-agenda">
-/* ---------- the agenda (as How we worked): the promise in a line, then the six parts ---------- */
-#s-agenda .ap-copy small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; margin-bottom: calc(var(--pt) * 10); }
-#s-agenda .ap-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
-#s-agenda .ap-copy h2 span { font-weight: 400; color: var(--purple-2); }
-#s-agenda .ap-copy p { margin: calc(var(--pt) * 14) 0 0; max-width: 36em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #555; }
-#s-agenda .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
-#s-agenda .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
-#s-agenda .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
-#s-agenda .ap-steps li:last-child::before { right: 70%; }
-#s-agenda .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
-#s-agenda .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
-#s-agenda .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-agenda .ap-steps b em { font-style: normal; font-weight: 600; font-size: calc(var(--pt) * 9); letter-spacing: .08em; color: #926ff3; margin-right: calc(var(--pt) * 2); }
-#s-agenda .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
-
-/* Story 3 (18 Nov): five sections with longer names and lines, as a list */
-#s-agenda .ap-steps { grid-template-columns: 1fr; }
-#s-agenda .ap-steps li { display: grid; grid-template-columns: calc(var(--pt) * 215) 1fr; align-items: baseline; padding: calc(var(--pt) * 7) 0 calc(var(--pt) * 7) calc(var(--pt) * 14); border-top: 1px solid #e4def2; }
-#s-agenda .ap-steps li:last-child { border-bottom: 1px solid #e4def2; }
-#s-agenda .ap-steps li::before, #s-agenda .ap-steps li:not(:last-child)::after { display: none; }
-#s-agenda .ap-steps i { top: 50%; width: calc(var(--pt) * 6); height: calc(var(--pt) * 6); margin-top: calc(var(--pt) * -3); }
-#s-agenda .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-agenda .ap-steps .hand { margin-top: 0; font-size: calc(var(--pt) * 17); }
-</style>
 <style data-slide="s-heard">
 #s-heard .page { background: #fff; }
 /* the panel: deep purple, wiped in from the left; its words placed in it (the deck's concept type: a small italic label, the
@@ -1186,6 +1161,78 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   .skv-row { flex-wrap: wrap; }
 }
 </style>
+<style data-slide="s-div-1">
+/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
+#s-div-1 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-1 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-div-1 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-div-1 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-div-1 .ap-steps li:last-child::before { right: 70%; }
+#s-div-1 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-div-1 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-div-1 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-div-1 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-1 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
+#s-div-1 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
+#s-div-1 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
+#s-div-1 .ap-steps b { font-size: calc(var(--pt) * 15); }
+#s-div-1 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-1 .page.lit .ap-steps li:not(:nth-child(1)) { opacity: .26 !important; }
+#s-div-1 .page.lit .ap-steps li:nth-child(1) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
+#s-div-1 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-div-1 .page.said .st-line { opacity: 1; transform: none; }
+#s-div-1 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-1 .st-line b { font-weight: 700; color: var(--purple); }
+#s-div-1 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+</style>
+<style data-slide="s-div-2">
+/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
+#s-div-2 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-2 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-div-2 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-div-2 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-div-2 .ap-steps li:last-child::before { right: 70%; }
+#s-div-2 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-div-2 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-div-2 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-div-2 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-2 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
+#s-div-2 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
+#s-div-2 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
+#s-div-2 .ap-steps b { font-size: calc(var(--pt) * 15); }
+#s-div-2 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-2 .page.lit .ap-steps li:not(:nth-child(2)) { opacity: .26 !important; }
+#s-div-2 .page.lit .ap-steps li:nth-child(2) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
+#s-div-2 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-div-2 .page.said .st-line { opacity: 1; transform: none; }
+#s-div-2 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-2 .st-line b { font-weight: 700; color: var(--purple); }
+#s-div-2 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+</style>
+<style data-slide="s-div-3">
+/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
+#s-div-3 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-3 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-div-3 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-div-3 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-div-3 .ap-steps li:last-child::before { right: 70%; }
+#s-div-3 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-div-3 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-div-3 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-div-3 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-3 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
+#s-div-3 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
+#s-div-3 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
+#s-div-3 .ap-steps b { font-size: calc(var(--pt) * 15); }
+#s-div-3 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-3 .page.lit .ap-steps li:not(:nth-child(3)) { opacity: .26 !important; }
+#s-div-3 .page.lit .ap-steps li:nth-child(3) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
+#s-div-3 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-div-3 .page.said .st-line { opacity: 1; transform: none; }
+#s-div-3 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-3 .st-line b { font-weight: 700; color: var(--purple); }
+#s-div-3 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+</style>
 <style data-slide="s-div-4">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
 #s-div-4 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
@@ -1202,8 +1249,8 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-div-4 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-div-4 .ap-steps b { font-size: calc(var(--pt) * 15); }
 #s-div-4 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
-#s-div-4 .page.lit .ap-steps li:not(:nth-child(1)) { opacity: .26 !important; }
-#s-div-4 .page.lit .ap-steps li:nth-child(1) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
+#s-div-4 .page.lit .ap-steps li:not(:nth-child(4)) { opacity: .26 !important; }
+#s-div-4 .page.lit .ap-steps li:nth-child(4) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-div-4 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-div-4 .page.said .st-line { opacity: 1; transform: none; }
 #s-div-4 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
@@ -1226,85 +1273,37 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-div-5 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-div-5 .ap-steps b { font-size: calc(var(--pt) * 15); }
 #s-div-5 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
-#s-div-5 .page.lit .ap-steps li:not(:nth-child(2)) { opacity: .26 !important; }
-#s-div-5 .page.lit .ap-steps li:nth-child(2) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
+#s-div-5 .page.lit .ap-steps li:not(:nth-child(5)) { opacity: .26 !important; }
+#s-div-5 .page.lit .ap-steps li:nth-child(5) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-div-5 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-div-5 .page.said .st-line { opacity: 1; transform: none; }
 #s-div-5 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
 #s-div-5 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-5 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
-<style data-slide="s-div-6">
+<style data-slide="s-overview">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-6 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
-#s-div-6 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
-#s-div-6 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
-#s-div-6 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
-#s-div-6 .ap-steps li:last-child::before { right: 70%; }
-#s-div-6 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
-#s-div-6 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
-#s-div-6 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-6 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
-#s-div-6 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
-#s-div-6 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
-#s-div-6 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
-#s-div-6 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-6 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
-#s-div-6 .page.lit .ap-steps li:not(:nth-child(3)) { opacity: .26 !important; }
-#s-div-6 .page.lit .ap-steps li:nth-child(3) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
-#s-div-6 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-#s-div-6 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-6 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
-#s-div-6 .st-line b { font-weight: 700; color: var(--purple); }
-#s-div-6 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
-</style>
-<style data-slide="s-div-7">
-/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-7 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
-#s-div-7 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
-#s-div-7 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
-#s-div-7 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
-#s-div-7 .ap-steps li:last-child::before { right: 70%; }
-#s-div-7 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
-#s-div-7 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
-#s-div-7 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-7 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
-#s-div-7 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
-#s-div-7 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
-#s-div-7 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
-#s-div-7 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-7 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
-#s-div-7 .page.lit .ap-steps li:not(:nth-child(4)) { opacity: .26 !important; }
-#s-div-7 .page.lit .ap-steps li:nth-child(4) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
-#s-div-7 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-#s-div-7 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-7 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
-#s-div-7 .st-line b { font-weight: 700; color: var(--purple); }
-#s-div-7 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
-</style>
-<style data-slide="s-div-8">
-/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-8 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
-#s-div-8 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
-#s-div-8 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
-#s-div-8 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
-#s-div-8 .ap-steps li:last-child::before { right: 70%; }
-#s-div-8 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
-#s-div-8 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
-#s-div-8 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-8 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
-#s-div-8 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
-#s-div-8 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
-#s-div-8 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
-#s-div-8 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-8 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
-#s-div-8 .page.lit .ap-steps li:not(:nth-child(5)) { opacity: .26 !important; }
-#s-div-8 .page.lit .ap-steps li:nth-child(5) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
-#s-div-8 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-#s-div-8 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-8 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
-#s-div-8 .st-line b { font-weight: 700; color: var(--purple); }
-#s-div-8 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+#s-overview .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-overview .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+#s-overview .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
+#s-overview .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
+#s-overview .ap-steps li:last-child::before { right: 70%; }
+#s-overview .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
+#s-overview .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
+#s-overview .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
+#s-overview .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-overview .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
+#s-overview .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
+#s-overview .ap-steps li::before { top: calc(var(--pt) * 6.5); }
+#s-overview .ap-steps b { font-size: calc(var(--pt) * 15); }
+#s-overview .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-overview .page.lit .ap-steps li:not(:first-child) { opacity: .26 !important; }
+#s-overview .page.lit .ap-steps li:first-child i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
+#s-overview .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-overview .page.said .st-line { opacity: 1; transform: none; }
+#s-overview .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-overview .st-line b { font-weight: 700; color: var(--purple); }
+#s-overview .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
 <style data-slide="s-axo-detail">
 #s-axo-detail .page { background: #fff; }
@@ -1465,32 +1464,30 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   </div>
 </section>
 
-<!-- The agenda (11 Nov, Ritika: "add an agenda slide like the previous iteration"): s-approach-w's layout (How we worked), with the six
-     acts of the brand-first story (STORY.md), each with the question it answers -->
-<section class="scene" id="s-agenda" data-part="p3" data-title="The agenda" data-steps="1" data-mins="0.4"
-  data-notes="The agenda: five sections ahead. 04 Concept Framework: establishing the overarching design vision. 05 Design Development: translating the concept into a spatial solution. 06 Design Expression: materiality, visualisation and spatial experience. 07 Integrated Performance: technical performance and added value. 08 Project Review: revisiting previous discussions and establishing alignment. → Bridge: The concept first. 04 · Concept Framework.">
+<section class="scene" id="s-overview" data-part="p3" data-title="Agenda" data-steps="1" data-mins="0.3"
+  data-notes="The agenda: five sections ahead. 01 Concept Framework: establishing the overarching design vision. 02 Design Development: translating the concept into a spatial solution. 03 Design Expression: materiality, visualisation and spatial experience. 04 Integrated Performance: technical performance and added value. 05 Project Review: revisiting previous discussions and establishing alignment. → Bridge: The concept first. 01 · Concept Framework.">
   <div class="page">
-    <div class="ap-copy rv" style="left:8%;top:22%;width:62%"><small style="--i:0">Agenda</small></div>
-    <ol class="ap-steps rv" style="left:8%;top:32%;width:84%">
-      <li style="--i:3"><i></i><b><em>04</em> Concept Framework</b><span class="hand">establishing the overarching design vision</span></li>
-      <li style="--i:5"><i></i><b><em>05</em> Design Development</b><span class="hand">translating the concept into a spatial solution</span></li>
-      <li style="--i:6"><i></i><b><em>06</em> Design Expression</b><span class="hand">materiality, visualisation and spatial experience</span></li>
-      <li style="--i:7"><i></i><b><em>07</em> Integrated Performance</b><span class="hand">technical performance and added value</span></li>
-      <li style="--i:8"><i></i><b><em>08</em> Project Review</b><span class="hand">revisiting previous discussions and establishing alignment</span></li>
-    </ol>
-  </div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
+    <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
+      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
+          </ol>
+      </div>
 </section>
 
-<section class="scene" id="s-div-4" data-part="p4" data-title="04 · Concept Framework" data-steps="1" data-mins="0.3"
-  data-notes="Section 04 of 08: Concept Framework, establishing the overarching design vision.">
+<section class="scene" id="s-div-1" data-part="p4" data-title="01 · Concept Framework" data-steps="1" data-mins="0.3"
+  data-notes="Section 01 of 05: Concept Framework, establishing the overarching design vision.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">04 · Concept Framework</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">01 · Concept Framework</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>04</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>05</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>06</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>07</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>08</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Establishing the overarching design vision.</p><span class="hand"></span></div>
   </div>
@@ -1500,7 +1497,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor. → Bridge: Two offices, one floor: so we made it one campus.">
   <div class="page">
     <p class="dg-tag">Concept</p>
-    <div class="hdr"><b>Two Offices</b><span>04 · Concept Framework</span></div>
+    <div class="hdr"><b>Two Offices</b><span>01 · Concept Framework</span></div>
     <p class="wc-hand hand wc-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
     <h2 class="wc-h wc-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
     <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
@@ -1559,11 +1556,11 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
      own six colours (never purple); only the loop is purple. The Möbius is the deck's own render (assets/img/mobius.webp, cropped). -->
 <section class="scene" id="s-campus-loop" data-part="p4" data-mode="dark" data-title="The ACKO Campus" data-steps="4" data-mins="1"
   data-beats="Campus,+ Möbius,= The ACKO Loop,Address · connects · daily life"
-  data-notes="Campus first: belonging is the idea. Möbius second: ACKO's promise of continuity, no inside and no outside, is the inspiration for why the connector is a loop and not a corridor. It doesn't set the shape of the plan. The result is the ACKO Loop: one continuous route linking every neighbourhood, both arrivals and every shared space. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life. → Bridge: Now the floor itself. 05 · Design Development.">
+  data-notes="Campus first: belonging is the idea. Möbius second: ACKO's promise of continuity, no inside and no outside, is the inspiration for why the connector is a loop and not a corridor. It doesn't set the shape of the plan. The result is the ACKO Loop: one continuous route linking every neighbourhood, both arrivals and every shared space. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life. → Bridge: Now the floor itself. 02 · Design Development.">
   <div class="page">
     <p class="dg-tag">Concept</p>
     <div class="cpl-glow"></div>
-    <div class="hdr"><b>The ACKO Campus</b><span>04 · Concept Framework</span></div>   <!-- the deck's header, as every Story 2 slide has it (Ritika, 17 Nov) -->
+    <div class="hdr"><b>The ACKO Campus</b><span>01 · Concept Framework</span></div>   <!-- the deck's header, as every Story 2 slide has it (Ritika, 17 Nov) -->
     <p class="cpl-hand hand">a campus to belong to, a promise to hold it together</p>
     <h2 class="cpl-h"><span data-step="1">Campus</span> <span data-step="2">+ Möbius</span> <span data-step="3">= <b>The ACKO Loop.</b></span></h2>
 
@@ -1611,16 +1608,16 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   </div>
 </section>
 
-<section class="scene" id="s-div-5" data-part="p5" data-title="05 · Design Development" data-steps="1" data-mins="0.3"
-  data-notes="Section 05 of 08: Design Development, translating the concept into a spatial solution.">
+<section class="scene" id="s-div-2" data-part="p5" data-title="02 · Design Development" data-steps="1" data-mins="0.3"
+  data-notes="Section 02 of 05: Design Development, translating the concept into a spatial solution.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">05 · Design Development</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">02 · Design Development</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>04</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>05</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>06</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>07</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>08</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Translating the concept into a spatial solution.</p><span class="hand"></span></div>
   </div>
@@ -1630,7 +1627,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up, 56,650 sq ft carpet, for about 640 people. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans. → Bridge: How big is this floor? Two football pitches.">
   <div class="page">
     <p class="dg-tag">Reference</p>
-    <div class="hdr"><b>The Site</b><span>05 · Design Development</span></div>
+    <div class="hdr"><b>The Site</b><span>02 · Design Development</span></div>
     <div class="si-copy rv" style="left:1.8%;top:22%;width:30%">
       <h2 style="--i:0">Regalium, Koramangala</h2>
       <p style="--i:1">Koramangala Industrial Layout, off Hosur Road, Bengaluru.</p>
@@ -1689,7 +1686,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
       <g class="lit" transform="matrix(50 0 0 50 8842 12775)"><g class="a"></g><g class="b"></g></g>
       <line class="ray"/><circle class="halo"/><circle class="sun"/></g></svg>
     <div class="ly-top"></div>
-    <div class="hdr"><b>Layout · Option 02A</b><span>05 · Design Development</span></div>
+    <div class="hdr"><b>Layout · Option 02A</b><span>02 · Design Development</span></div>
     <!-- the bottom band: white under the pills and the layer panels, so a plan zoomed in stays above it -->
     <div class="ly-bot"></div>
     <!-- the layers, a pill each, under the plan -->
@@ -1867,7 +1864,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
         <div class="nbe-cnt"></div><p class="nbe-hint">Hover a dot on the plan or the model to see what it is · scroll the model to zoom</p>
       </div>
     </div>
-    <div class="hdr"><b>Layout · Option 02A</b><span>05 · Design Development</span></div>
+    <div class="hdr"><b>Layout · Option 02A</b><span>02 · Design Development</span></div>
     <!-- the bottom band: white under the pills and the layer panels, so a plan zoomed in stays above it -->
     <div class="ly-bot"></div>
     <!-- the layers, a pill each, under the plan -->
@@ -2016,7 +2013,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 <section class="scene" id="s-axo-detail" data-part="p5" data-title="Detailed axonometric" data-steps="1" data-mins="0.5" data-beats="Placeholder"
   data-notes="PLACEHOLDER. Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the loop, the neighbourhoods, and the client's and employees' journeys are defined. To be built. → Bridge: And over one day in ACKO…">
   <div class="page">
-    <div class="hdr"><b>Detailed axonometric</b><span>05 · Design Development</span></div>
+    <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>
     <p class="ph-k">Placeholder</p>
     <h2 class="ph-head">Detailed <span>axonometric.</span></h2>
     <div class="ph-box">
@@ -2028,12 +2025,12 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 
 <section class="scene" id="s-wayday" data-part="p5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
   data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Board Room,Wellness"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop's seven stops by the clock, each a space in use, its people small and in grey. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The amber light columns are the wayfinding hotspots at Ritika's marked spots (the Reception sign, the corridor sign, the neighbourhood's graphic, the workhall, the Collab, the art wall): click one for its pop-up (signage concepts to come). Whole floor shows the whole campus; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: What it&#x27;s made of. 06 · Design Expression.">
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop's seven stops by the clock, each a space in use, its people small and in grey. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The amber light columns are the wayfinding hotspots at Ritika's marked spots (the Reception sign, the corridor sign, the neighbourhood's graphic, the workhall, the Collab, the art wall): click one for its pop-up (signage concepts to come). Whole floor shows the whole campus; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: What it&#x27;s made of. 03 · Design Expression.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
     <svg class="wd-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"/></svg>
-    <div class="hdr"><b>A day in ACKO</b><span>05 · Design Development</span></div>
+    <div class="hdr"><b>A day in ACKO</b><span>02 · Design Development</span></div>
     <div class="lt-tools ui"><button type="button" class="wd-rs" title="Back to the day's view"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button><button type="button" class="wd-play on">The day</button><button type="button" class="wd-all">Whole floor</button></div>
     <div class="wd-title"><small>Wayfinding</small><h1>A day in ACKO</h1><p>From arrival to the evening: the campus in use through the day. Tap a light for the wayfinding at that spot.</p></div>
     <div class="wd-now"><div class="t"></div><b></b><span></span><q></q></div>
@@ -2043,16 +2040,16 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   </div>
 </section>
 
-<section class="scene" id="s-div-6" data-part="p6" data-title="06 · Design Expression" data-steps="1" data-mins="0.3"
-  data-notes="Section 06 of 08: Design Expression, materiality, visualisation and spatial experience.">
+<section class="scene" id="s-div-3" data-part="p6" data-title="03 · Design Expression" data-steps="1" data-mins="0.3"
+  data-notes="Section 03 of 05: Design Expression, materiality, visualisation and spatial experience.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">06 · Design Expression</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">03 · Design Expression</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>04</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>05</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>06</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>07</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>08</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Materiality, visualisation and spatial experience.</p><span class="hand"></span></div>
   </div>
@@ -2062,7 +2059,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   data-notes="A place that already feels like home. The kit of parts, by surface. Flooring: tiles, wooden LVT, carpet. Ceiling: stretch fabric, spray-applied treatment, gypsum ceiling with track lights, acoustic baffles. Furnishing: rugs, fabrics, blinds. Wall finishes: wallpaper, acoustic panel, wooden panel. Material intelligence matters. → Bridge: And the palette it comes together in.">
   <div class="page rv">
     <p class="lens-cb">A place that already feels like home.</p>
-    <div class="hdr"><b>Material Strategy</b><span>06 · Design Expression</span></div>
+    <div class="hdr"><b>Material Strategy</b><span>03 · Design Expression</span></div>
       <i class="dk" style="--i:0;left:52.9%;top:31.5%;width:9.2%;height:16.5%;background-size:100% 100%;background-image:url(assets/img/mat3-01.webp)"></i>
       <i class="dk" style="--i:1;left:62.8%;top:31.4%;width:10.9%;height:34.2%;background-size:100% 100%;background-image:url(assets/img/mat3-02.webp)"></i>
       <i class="dk" style="--i:2;left:88.7%;top:31.4%;width:9.8%;height:34.2%;background-size:100% 100%;background-image:url(assets/img/mat3-03.webp)"></i>
@@ -2106,7 +2103,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
   data-notes="A place that already feels like home. The campus palette: textured, contrast, warmth, refined, layered. A sophisticated blend of light wood, accent stone, soft neutrals and lush greenery for a grounded and contemporary workplace. Timeless, serene, soothing, organic, sleek, expressive, tactile, understated, artisanal, accent. → Bridge: Now walk through it.">
   <div class="page">
     <p class="lens-cb">A place that already feels like home.</p>
-    <div class="hdr"><b>The Campus Palette</b><span>06 · Design Expression</span></div>
+    <div class="hdr"><b>The Campus Palette</b><span>03 · Design Expression</span></div>
     <div class="pl-board rv" style="left:0;top:0;width:100%;height:100%">
       <i class="dk" style="--i:0;left:43.2%;top:21.6%;width:9.4%;height:47.2%;background-size:100% 100%;background-image:url(assets/img/pal3-01.webp)"></i>
       <i class="dk" style="--i:1;left:43.2%;top:27.7%;width:9.4%;height:41.1%;background-size:100% 100%;background-image:url(assets/img/pal3-02.webp)"></i>
@@ -2214,19 +2211,19 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 </section>
 
 <section class="scene walk" id="s-w-studio" data-walk="{&quot;n&quot;: &quot;Studio Room&quot;, &quot;sub&quot;: &quot;Wellness · A space for Acko&#x27;s voice&quot;, &quot;r&quot;: [&quot;r3-studio-op1&quot;, &quot;r3-studio-op2&quot;], &quot;kp&quot;: [45, 45], &quot;q&quot;: &quot;They thought of me too!&quot;}" data-part="p6" data-mode="dark" data-title="Studio Room" data-steps="2" data-mins="0.15" data-beats="OP 01,OP 02"
-  data-notes="The studio: a space for ACKO&#x27;s voice, the podcast set. Option 01 and Option 02. → Bridge: How it performs. 07 · Integrated Performance.">
+  data-notes="The studio: a space for ACKO&#x27;s voice, the podcast set. Option 01 and Option 02. → Bridge: How it performs. 04 · Integrated Performance.">
 </section>
 
-<section class="scene" id="s-div-7" data-part="p7" data-title="07 · Integrated Performance" data-steps="1" data-mins="0.3"
-  data-notes="Section 07 of 08: Integrated Performance, technical performance and added value.">
+<section class="scene" id="s-div-4" data-part="p7" data-title="04 · Integrated Performance" data-steps="1" data-mins="0.3"
+  data-notes="Section 04 of 05: Integrated Performance, technical performance and added value.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">07 · Integrated Performance</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">04 · Integrated Performance</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>04</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>05</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>06</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>07</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>08</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Technical performance and added value.</p><span class="hand"></span></div>
   </div>
@@ -2242,7 +2239,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 <section class="scene" id="s-wf-a6" data-part="p7" data-title="Wayfinding" data-steps="4" data-mins="1" data-beats="My team,Still us,My 3 pm,Coffee"
   data-notes="Wayfinding, walked: someone new to the floor, looking for their team, one stop per click. 1 · Where's my team? The wall answers: its colour and its number. 2 · Still us? The artwork and the carpet underfoot carry the same accent. 3 · Which room is my 3 pm? Nalanda, the same signage family everywhere, with braille at reach. 4 · Coffee? Their own point, in its own tone. Known before a sign is read. → Bridge: And at every stop, something for the Acker: their engagement points.">
   <div class="page">
-    <div class="hdr"><b>Wayfinding</b><span>07 · Integrated Performance</span></div>
+    <div class="hdr"><b>Wayfinding</b><span>04 · Integrated Performance</span></div>
     <div class="wf-stage" style="left:1.8%;top:14%;width:96.4%;height:68%"><svg class="wf-el" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs><filter id="wfa6-pen" x="-30%" y="-10%" width="160%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter><filter id="wfa6-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><filter id="wfa6-wash" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><pattern id="wfa6-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" class="hatch"/></pattern>
           <linearGradient id="wfa6-art" x1="0" x2="1"><stop offset="0" class="s1"/><stop offset="1" class="s2"/></linearGradient>
@@ -2287,7 +2284,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
        c punch bag, d word search, e feelings shelves, f speech bubbles, g "you look good" mirror. -->
   <div class="page">
     <p class="lens-cb">Room to explore.</p>
-    <div class="hdr"><b>Acker’s engagement points</b><span>07 · Integrated Performance</span></div>
+    <div class="hdr"><b>Acker’s engagement points</b><span>04 · Integrated Performance</span></div>
     <div class="eg-in rv" style="left:0;top:0;width:100%;height:100%">
       <i class="dk click" data-k="a" style="--i:0;left:34.2%;top:51.6%;width:13.2%;height:20.5%;background-size:106.6% 183.5%;background-position:100.0% 53.2%;background-image:url(assets/img/eng-a.webp)"></i>
       <i class="dk click" data-k="b" style="--i:1;left:47.9%;top:51.6%;width:11.1%;height:20.5%;background-size:100.0% 128.0%;background-position:0.0% 100.0%;background-image:url(assets/img/eng-b.webp)"></i>
@@ -2335,22 +2332,22 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 </section>
 
 <section class="scene deck" id="s-di" data-part="p7" data-title="Designed for all" data-steps="1" data-mins="0.5"
-  data-notes="Universally accessible design: braille signage, quiet room, mother's room, gender-inclusive toilets, visual and audible fire alarms, zen room. → Bridge: Last, back to where we started. 08 · Project Review.">
+  data-notes="Universally accessible design: braille signage, quiet room, mother's room, gender-inclusive toilets, visual and audible fire alarms, zen room. → Bridge: Last, back to where we started. 05 · Project Review.">
   <div class="page">
     <div class="deckpage" data-only="1" style="background-image:url(assets/deck/s50.webp)"></div>
   </div>
 </section>
 
-<section class="scene" id="s-div-8" data-part="p8" data-title="08 · Project Review" data-steps="1" data-mins="0.3"
-  data-notes="Section 08 of 08: Project Review, revisiting previous discussions and establishing alignment.">
+<section class="scene" id="s-div-5" data-part="p8" data-title="05 · Project Review" data-steps="1" data-mins="0.3"
+  data-notes="Section 05 of 05: Project Review, revisiting previous discussions and establishing alignment.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">08 · Project Review</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">05 · Project Review</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>04</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>05</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>06</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>07</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>08</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Revisiting previous discussions and establishing alignment.</p><span class="hand"></span></div>
   </div>
@@ -2359,7 +2356,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 <section class="scene" id="s-recap" data-part="p8" data-title="Previous meeting recap" data-steps="1" data-mins="0.5" data-beats="Placeholder"
   data-notes="PLACEHOLDER. Previous meeting recap: revisiting previous discussions and establishing alignment. Ritika's PDF to come. → Bridge: Thank you.">
   <div class="page">
-    <div class="hdr"><b>Previous meeting recap</b><span>08 · Project Review</span></div>
+    <div class="hdr"><b>Previous meeting recap</b><span>05 · Project Review</span></div>
     <p class="ph-k">Placeholder</p>
     <h2 class="ph-head">Previous meeting <span>recap.</span></h2>
     <div class="ph-box">
@@ -2692,7 +2689,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 <style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }#s-layout-sp .sp2-nav { display: none; left: 34%; top: 3.4%; z-index: 7; align-items: center; gap: calc(var(--pt) * 8); }#s-layout-sp.nb-open .sp2-nav { display: flex; }#s-layout-sp .sp2-nav button { border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 9); font: 600 calc(var(--pt) * 8) var(--body); cursor: pointer; }#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 8.5); color: #333; }</style>
 <style>.scene .page > .dg-tag { right: 12.6%; top: 95.1%; margin: 0; padding: .25em .9em; border: 1px solid currentColor; border-radius: 99px; font-size: calc(var(--pt) * 5); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; line-height: 1.3; opacity: .5; pointer-events: none; }</style>
 <script>window.ACKO_WOW = true;   /* the big moments (9 Nov): this page only */</script>
-<script>window.ACKO_SECTIONS = {"names": {"cover": "01 · Project Vision", "p2": "02 · Design Drivers", "p3": "03 · Overview", "p4": "04 · Concept Framework", "p5": "05 · Design Development", "p6": "06 · Design Expression", "p7": "07 · Integrated Performance", "p8": "08 · Project Review", "close": "Thank you", "A": "Appendix · Kit of parts"}, "main": [["cover", "Project Vision", "01"], ["p2", "Design Drivers", "02"], ["p3", "Overview", "03"], ["p4", "Concept Framework", "04"], ["p5", "Design Development", "05"], ["p6", "Design Expression", "06"], ["p7", "Integrated Performance", "07"], ["p8", "Project Review", "08"], ["close", "Thank you", ""]]};</script>
+<script>window.ACKO_SECTIONS = {"names": {"cover": "Project Vision", "p2": "Design Drivers", "p3": "Overview", "p4": "01 · Concept Framework", "p5": "02 · Design Development", "p6": "03 · Design Expression", "p7": "04 · Integrated Performance", "p8": "05 · Project Review", "close": "Thank you", "A": "Appendix · Kit of parts"}, "main": [["cover", "Project Vision", ""], ["p2", "Design Drivers", ""], ["p3", "Overview", ""], ["p4", "Concept Framework", ""], ["p5", "Design Development", ""], ["p6", "Design Expression", ""], ["p7", "Integrated Performance", ""], ["p8", "Project Review", ""], ["close", "Thank you", ""]]};</script>
 <style>/* the beat number (index-story2-numbered.html only) */
 #beat-no { position: fixed; left: 50%; top: calc(var(--ptop) + var(--ph) * .022); transform: translateX(-50%); z-index: 140; display: flex; align-items: center; gap: 8px;
   max-width: 56vw; padding: 5px 13px 5px 6px; border-radius: 99px; background: rgba(82, 34, 208, .94); color: #fff; font: 600 12px/1.2 var(--body);
@@ -2746,12 +2743,6 @@ ACKO.slide("s-cover", ({ $, plain, reveal }) => ({
 <script data-slide="s-team">
 /* the team (deck slide 2): the portraits come in one after another */
 ACKO.slide("s-team", ({ $, plain, reveal }) => ({ enter(_, sc) { plain(); reveal($(".tm-people", sc), 150); } }));
-</script>
-<script data-slide="s-agenda">
-/* the agenda: the line, then the six parts one after another */
-ACKO.slide("s-agenda", ({ $, plain, reveal }) => ({
-  enter(_, sc) { plain(); reveal($(".ap-copy", sc), 140); reveal($(".ap-steps", sc), 160); },
-}));
 </script>
 <script data-slide="s-heard">
 ACKO.slide("s-heard", ({ $, plain, later, reduced }) => {
@@ -5596,6 +5587,60 @@ ACKO.slide("s-skv", ({ $, $$, later, plain, countUp, asset }) => {
   };
 });
 </script>
+<script data-slide="s-div-1">
+/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
+   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
+ACKO.slide("s-div-1", ({ $, plain, reveal, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
+    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
+    if (reduced) { pg.classList.add("lit", "said"); return; }
+    later(() => pg.classList.add("lit"), 1300);
+    later(() => pg.classList.add("said"), 2000);
+  },
+  leave(_, sc) {
+    if (!sc || !window.ACKO_MORPH) return;
+    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(1) i", sc).getBoundingClientRect();
+    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
+  },
+}));
+</script>
+<script data-slide="s-div-2">
+/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
+   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
+ACKO.slide("s-div-2", ({ $, plain, reveal, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
+    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
+    if (reduced) { pg.classList.add("lit", "said"); return; }
+    later(() => pg.classList.add("lit"), 1300);
+    later(() => pg.classList.add("said"), 2000);
+  },
+  leave(_, sc) {
+    if (!sc || !window.ACKO_MORPH) return;
+    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(2) i", sc).getBoundingClientRect();
+    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
+  },
+}));
+</script>
+<script data-slide="s-div-3">
+/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
+   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
+ACKO.slide("s-div-3", ({ $, plain, reveal, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
+    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
+    if (reduced) { pg.classList.add("lit", "said"); return; }
+    later(() => pg.classList.add("lit"), 1300);
+    later(() => pg.classList.add("said"), 2000);
+  },
+  leave(_, sc) {
+    if (!sc || !window.ACKO_MORPH) return;
+    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(3) i", sc).getBoundingClientRect();
+    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
+  },
+}));
+</script>
 <script data-slide="s-div-4">
 /* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
    Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
@@ -5609,7 +5654,7 @@ ACKO.slide("s-div-4", ({ $, plain, reveal, later, reduced }) => ({
   },
   leave(_, sc) {
     if (!sc || !window.ACKO_MORPH) return;
-    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(1) i", sc).getBoundingClientRect();
+    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(4) i", sc).getBoundingClientRect();
     window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
   },
 }));
@@ -5627,61 +5672,22 @@ ACKO.slide("s-div-5", ({ $, plain, reveal, later, reduced }) => ({
   },
   leave(_, sc) {
     if (!sc || !window.ACKO_MORPH) return;
-    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(2) i", sc).getBoundingClientRect();
-    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
-  },
-}));
-</script>
-<script data-slide="s-div-6">
-/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
-   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
-ACKO.slide("s-div-6", ({ $, plain, reveal, later, reduced }) => ({
-  enter(_, sc) {
-    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
-    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
-    if (reduced) { pg.classList.add("lit", "said"); return; }
-    later(() => pg.classList.add("lit"), 1300);
-    later(() => pg.classList.add("said"), 2000);
-  },
-  leave(_, sc) {
-    if (!sc || !window.ACKO_MORPH) return;
-    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(3) i", sc).getBoundingClientRect();
-    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
-  },
-}));
-</script>
-<script data-slide="s-div-7">
-/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
-   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
-ACKO.slide("s-div-7", ({ $, plain, reveal, later, reduced }) => ({
-  enter(_, sc) {
-    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
-    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
-    if (reduced) { pg.classList.add("lit", "said"); return; }
-    later(() => pg.classList.add("lit"), 1300);
-    later(() => pg.classList.add("said"), 2000);
-  },
-  leave(_, sc) {
-    if (!sc || !window.ACKO_MORPH) return;
-    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(4) i", sc).getBoundingClientRect();
-    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
-  },
-}));
-</script>
-<script data-slide="s-div-8">
-/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
-   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
-ACKO.slide("s-div-8", ({ $, plain, reveal, later, reduced }) => ({
-  enter(_, sc) {
-    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
-    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
-    if (reduced) { pg.classList.add("lit", "said"); return; }
-    later(() => pg.classList.add("lit"), 1300);
-    later(() => pg.classList.add("said"), 2000);
-  },
-  leave(_, sc) {
-    if (!sc || !window.ACKO_MORPH) return;
     const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(5) i", sc).getBoundingClientRect();
+    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
+  },
+}));
+</script>
+<script data-slide="s-overview">
+/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
+   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
+ACKO.slide("s-overview", ({ $, plain, reveal, later, reduced }) => ({
+  enter(_, sc) {
+    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
+    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
+  },
+  leave(_, sc) {
+    if (!sc || !window.ACKO_MORPH) return;
+    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li i", sc).getBoundingClientRect();
     window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
   },
 }));

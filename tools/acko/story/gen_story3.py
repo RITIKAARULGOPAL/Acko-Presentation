@@ -17,20 +17,20 @@ RENDERS = ("s-w-reception s-w-recoffee s-w-cafe1 s-w-cafe2 s-w-deck s-w-coffee s
            "s-w-garden s-w-arena s-w-arena2a s-w-mothers s-w-zen s-w-studio").split()
 # (part key, number, name, her line, slides)
 SECTIONS = [
-    ("cover", "01", "Project Vision", "Opening & project introduction", ["s-cover", "s-team"]),
-    ("p2", "02", "Design Drivers", "Design inputs so far", ["s-heard"]),
-    ("p3", "03", "Overview", "Presentation roadmap", ["s-agenda"]),
-    ("p4", "04", "Concept Framework", "Establishing the overarching design vision", ["s-div-4", "s-why-campus", "s-campus-loop"]),
-    ("p5", "05", "Design Development", "Translating the concept into a spatial solution",
-     ["s-div-5", "s-site", "s-pitch", "s-layout-dd", "s-strategy", "s-layout-sp", "s-axo-detail", "s-wayday"]),
-    ("p6", "06", "Design Expression", "Materiality, visualisation and spatial experience", ["s-div-6", "s-material", "s-palette2", "s-walkthrough"] + RENDERS),
-    ("p7", "07", "Integrated Performance", "Technical performance and added value", ["s-div-7", "s-esg", "s-wf-a6", "s-engage", "s-di"]),
-    ("p8", "08", "Project Review", "Revisiting previous discussions and establishing alignment", ["s-div-8", "s-recap"]),
+    ("cover", "", "Project Vision", "Opening & project introduction", ["s-cover", "s-team"]),
+    ("p2", "", "Design Drivers", "Design inputs so far", ["s-heard"]),
+    ("p3", "", "Overview", "Presentation roadmap", ["s-overview"]),
+    ("p4", "01", "Concept Framework", "Establishing the overarching design vision", ["s-div-1", "s-why-campus", "s-campus-loop"]),
+    ("p5", "02", "Design Development", "Translating the concept into a spatial solution",
+     ["s-div-2", "s-site", "s-pitch", "s-layout-dd", "s-strategy", "s-layout-sp", "s-axo-detail", "s-wayday"]),
+    ("p6", "03", "Design Expression", "Materiality, visualisation and spatial experience", ["s-div-3", "s-material", "s-palette2", "s-walkthrough"] + RENDERS),
+    ("p7", "04", "Integrated Performance", "Technical performance and added value", ["s-div-4", "s-esg", "s-wf-a6", "s-engage", "s-di"]),
+    ("p8", "05", "Project Review", "Revisiting previous discussions and establishing alignment", ["s-div-5", "s-recap"]),
     ("close", "", "Thank you", "", ["s-thanks-w"]),
     ("A", "", "Appendix · Kit of parts", "", ["s-typologies", "s-memories", "s-wellbeing"]),
     ("0", "", "About SKV", "", ["s-skv"]),
 ]
-AHEAD = [s for s in SECTIONS if s[0] in ("p4", "p5", "p6", "p7", "p8")]   # what the agenda and the dividers list
+AHEAD = [s for s in SECTIONS if s[0] in ("p4", "p5", "p6", "p7", "p8")]   # what the agenda and the dividers list: sections 01-05 (18 Nov, Ritika: "section should be numbered from 1 so total is 5")
 PART = {sid: key for key, _, _, _, ids in SECTIONS for sid in ids}
 LABEL = {key: ("%s · %s" % (num, name) if num else name) for key, num, name, _, _ in SECTIONS}
 ORDER = [sid for _, _, _, _, ids in SECTIONS for sid in ids]
@@ -39,27 +39,27 @@ OLD_LABELS = ["01 · Belonging", "02 · The Site", "03 · The Plan", "04 · The 
 BRIDGE = {
     "s-team": "First, the inputs you gave us.",
     "s-heard": "Here's how today will run.",
-    "s-agenda": "The concept first. 04 · Concept Framework.",
+    "s-overview": "The concept first. 01 · Concept Framework.",
     "s-why-campus": "Two offices, one floor: so we made it one campus.",
-    "s-campus-loop": "Now the floor itself. 05 · Design Development.",
+    "s-campus-loop": "Now the floor itself. 02 · Design Development.",
     "s-site": "How big is this floor? Two football pitches.",
     "s-pitch": "And what we found on it: the due diligence.",
     "s-layout-dd": "From the campus idea to the floor, in four moves.",
     "s-strategy": "And here's the plan that makes it work.",
     "s-layout-sp": "Now the plan rises into the axonometric.",
     "s-axo-detail": "And over one day in ACKO…",
-    "s-wayday": "What it's made of. 06 · Design Expression.",
+    "s-wayday": "What it's made of. 03 · Design Expression.",
     "s-material": "And the palette it comes together in.",
     "s-palette2": "Now walk through it.",
     "s-walkthrough": "And every space, one by one.",
-    "s-w-studio": "How it performs. 07 · Integrated Performance.",
+    "s-w-studio": "How it performs. 04 · Integrated Performance.",
     "s-esg": "And on a floor this long, finding your way should be effortless.",
     "s-wf-a6": "And at every stop, something for the Acker: their engagement points.",
     "s-engage": "And designed for everyone.",
-    "s-di": "Last, back to where we started. 08 · Project Review.",
+    "s-di": "Last, back to where we started. 05 · Project Review.",
     "s-recap": "Thank you.",
 }
-NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-axo-detail", "s-recap"]
+NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-axo-detail", "s-recap"]
 
 # ---- the dividers: s-start's design (as gen_story.py makes the Part cards), the five sections ahead, this one lit, her line said
 st = open("slides/s-start.html", encoding="utf-8").read()
@@ -76,15 +76,36 @@ for n, (key, num, name, line, _) in enumerate(AHEAD, 1):
     c = c.replace(ln, re.sub(r'<p>.*?</p><span class="hand">.*?</span>', '<p>%s.</p><span class="hand"></span>' % line, ln))
     c = c.replace('<small style="--i:0">Where it starts</small>', '<small style="--i:0">%s · %s</small>' % (num, name))
     c = re.sub(r'data-title="[^"]*"', 'data-title="%s · %s"' % (num, name), c, count=1)
-    c = re.sub(r'data-notes="[^"]*"', 'data-notes="Section %s of 08: %s, %s."' % (num, name, line[0].lower() + line[1:]), c, count=1)
+    c = re.sub(r'data-notes="[^"]*"', 'data-notes="Section %s of 05: %s, %s."' % (num, name, line[0].lower() + line[1:]), c, count=1)
     for x, y in (("li:not(:first-child)", "li:not(:nth-child(%d))" % n), ("li:first-child i", "li:nth-child(%d) i" % n),
                  ('$(".ap-steps li i", sc)', '$(".ap-steps li:nth-child(%d) i", sc)' % n),
                  ("#s-start .ap-steps .hand { font-size: calc(var(--pt) * 19); }", "#s-start .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */")):
         assert c.count(x) == 1, (sid, x); c = c.replace(x, y)
     c = c.replace("<!-- slide:start -->\n", "<!-- slide:start -->\n<!-- Divider %s · %s, generated by tools/acko/story/gen_story3.py from s-start (18 Nov, Ritika: a divider "
-                  "for each of 04–08); edit the generator, not this file. -->\n" % (num, name), 1)
+                  "for each of 01–05); edit the generator, not this file. -->\n" % (num, name), 1)
     c = c.replace("s-start", sid)
     open("slides/%s.html" % sid, "w", encoding="utf-8", newline="\n").write(c)
+
+# ---- the agenda (03 Overview): the divider's design, all five sections at full strength: the dots, the numbers 01-05, the names
+# (18 Nov, Ritika: "page 4 should be like page 5"; names only)
+c = st
+c = c.replace(li[5] + "\n", "").replace(li[5], "")
+c = c.replace("grid-template-columns: repeat(6, 1fr)", "grid-template-columns: repeat(5, 1fr)")
+for old, (_, num2, name2, _, _) in zip(li, AHEAD):
+    c = c.replace(old, re.sub(r'<b>[^<]*</b><span class="hand">[^<]*</span></li>'.replace("</li>", ""), '<b>%s</b><span class="hand">%s</span>' % (num2, name2), old), 1)
+c = c.replace(ln + "\n", "").replace(ln, "")
+c = c.replace('<small style="--i:0">Where it starts</small>', '<small style="--i:0">Agenda</small>')
+c = re.sub(r'data-title="[^"]*"', 'data-title="Agenda"', c, count=1)
+c = re.sub(r'data-notes="[^"]*"', 'data-notes="%s"' % _h.escape("The agenda: five sections ahead. " + " ".join(
+    "%s %s: %s." % (num, name, line[0].lower() + line[1:]) for _, num, name, line, _ in AHEAD), quote=True), c, count=1)
+for x, y in (("    later(() => pg.classList.add(\"lit\"), 1300);\n    later(() => pg.classList.add(\"said\"), 2000);\n", ""),
+             ("    if (reduced) { pg.classList.add(\"lit\", \"said\"); return; }\n", ""),
+             ("#s-start .ap-steps .hand { font-size: calc(var(--pt) * 19); }", "#s-start .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */")):
+    assert c.count(x) == 1, ("overview", x[:50]); c = c.replace(x, y)
+c = c.replace("<!-- slide:start -->\n", "<!-- slide:start -->\n<!-- The agenda for index-story3.html, generated by tools/acko/story/gen_story3.py from s-start: the divider's design, "
+              "the five sections 01-05 together; edit the generator, not this file. -->\n", 1)
+c = c.replace("s-start", "s-overview")
+open("slides/s-overview.html", "w", encoding="utf-8", newline="\n").write(c)
 
 # ---- the new slides, built on their own to lift their sections, styles and scripts
 tmp = os.path.join(tempfile.gettempdir(), "acko-story3-new.html")
@@ -150,30 +171,6 @@ s = attr(s, "data-steps", "4")
 if beats: s = attr(s, "data-beats", ",".join(beats.group(1).split(",")[:4]))
 SEC2["s-strategy"] = bridge(notes_cut(s, "5 ·"), BRIDGE["s-strategy"])
 
-# the agenda: what is ahead, 04–08, each with her line
-s = SEC2["s-agenda"]
-items = re.findall(r'<li style="--i:\d"><i></i><b><em>\d\d</em> [^<]*</b><span class="hand">[^<]*</span></li>', s)
-assert len(items) == 5, ("agenda items", len(items))
-for old, (_, num, name, line, _) in zip(items, AHEAD):
-    s = s.replace(old, re.sub(r"<b>.*?</b><span class=\"hand\">[^<]*</span>",
-                              '<b><em>%s</em> %s</b><span class="hand">%s</span>' % (num, name, line[0].lower() + line[1:]), old), 1)
-s = re.sub(r'data-notes="[^"]*"', 'data-notes="%s"' % _h.escape("The agenda: five sections ahead. " + " ".join(
-    "%s %s: %s." % (num, name, line[0].lower() + line[1:]) for _, num, name, line, _ in AHEAD) + " → Bridge: " + BRIDGE["s-agenda"], quote=True), s, count=1)
-# the longer names and lines don't fit five columns: a list, the number and name, then her line (this page only)
-s = s.replace('style="left:8%;top:30%;width:62%"', 'style="left:8%;top:22%;width:62%"', 1).replace('style="left:8%;top:40%;width:84%"', 'style="left:8%;top:32%;width:84%"', 1)
-assert "top:22%" in s and "top:32%" in s, "agenda positions"
-SEC2["s-agenda"] = s
-AGENDA_LIST = """
-/* Story 3 (18 Nov): five sections with longer names and lines, as a list */
-#s-agenda .ap-steps { grid-template-columns: 1fr; }
-#s-agenda .ap-steps li { display: grid; grid-template-columns: calc(var(--pt) * 215) 1fr; align-items: baseline; padding: calc(var(--pt) * 7) 0 calc(var(--pt) * 7) calc(var(--pt) * 14); border-top: 1px solid #e4def2; }
-#s-agenda .ap-steps li:last-child { border-bottom: 1px solid #e4def2; }
-#s-agenda .ap-steps li::before, #s-agenda .ap-steps li:not(:last-child)::after { display: none; }
-#s-agenda .ap-steps i { top: 50%; width: calc(var(--pt) * 6); height: calc(var(--pt) * 6); margin-top: calc(var(--pt) * -3); }
-#s-agenda .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-agenda .ap-steps .hand { margin-top: 0; font-size: calc(var(--pt) * 17); }
-"""
-
 h = h[:i] + "\n" + "\n\n".join(LEAD[sid] + SEC2[sid] for sid in ORDER) + "\n" + h[j:]
 # the dropped slides' styles and scripts go; the new slides' come in
 for sid in dropped:
@@ -184,11 +181,9 @@ last_style = max(m.end() for m in re.finditer(r'<style data-slide="[^"]+">.*?</s
 h = h[:last_style] + st_new + h[last_style:]
 k = h.index("<script>ACKO.start();</script>")
 h = h[:k] + js_new + h[k:]
-a = h.index('<style data-slide="s-agenda">'); z = h.index("</style>", a)
-h = h[:z] + AGENDA_LIST + h[z:]
 # the page's sections: the menu, the overview's headings, the renders' kicker
 names = {key: LABEL[key] for key, *_ in SECTIONS if key != "0"}
-main = [[key, name, num] for key, num, name, _, _ in SECTIONS if num] + [["close", "Thank you", ""]]
+main = [[key, name, ""] for key, num, name, _, _ in SECTIONS if key not in ("close", "A", "0")] + [["close", "Thank you", ""]]   # the dropdown: no numbers (18 Nov, Ritika)
 h, n = re.subn(r"<script>window\.ACKO_SECTIONS = .*?;</script>", lambda m: "<script>window.ACKO_SECTIONS = %s;</script>" % json.dumps({"names": names, "main": main}, ensure_ascii=False), h, count=1)
 assert n == 1, "sections"
 open(OUT, "w", encoding="utf-8").write(h)
