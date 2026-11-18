@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-wc-3">
+/* ---------- Why a campus, option 3 · the merge ---------- */
+#s-wc-3 .w3-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wc-3 .w3-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wc-3 .w3-h b { font-weight: 700; color: var(--accent); }
+#s-wc-3 .w3-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wc-3 .w3-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wc-3 .drawn .w3-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the emblem */
+#s-wc-3 .w3-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wc-3 .w3-ca { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
+#s-wc-3 .w3-cb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
+#s-wc-3 .w3-one { fill: #f7f5f1; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-wc-3 .w3-common { fill: #eee8fc; }
+#s-wc-3 .w3-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-wc-3 .w3-loop { fill: none; stroke: var(--purple); stroke-width: 4.4; }
+#s-wc-3 .w3-stub { fill: none; stroke: var(--purple); stroke-width: 2.4; }
+#s-wc-3 .w3-node { fill: var(--purple); }
+#s-wc-3 .w3-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wc-3 .w3-num text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wc-3 .w3-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wc-3 .pa { fill: #5b34d6; }
+#s-wc-3 .pb { fill: #bcae92; }
+/* beat 2: the two circles slide together and fade as the one comes up; beat 3: the one gives way to the ring */
+#s-wc-3 .w3-ca, #s-wc-3 .w3-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wc-3 .b2 .w3-ca { transform: translateX(260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wc-3 .b2 .w3-cb { transform: translateX(-260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wc-3 .w3-one, #s-wc-3 .w3-s3 { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wc-3 .b2 .w3-one { opacity: 1; transition: opacity .9s var(--ease) 1s; }
+#s-wc-3 .b3 .w3-one { opacity: 0; transition: opacity .6s var(--ease); }
+#s-wc-3 .b3 .w3-s3 { opacity: 1; transition: opacity .7s var(--ease) .15s; }
+#s-wc-3 .still .w3-ca, #s-wc-3 .still .w3-cb, #s-wc-3 .still .w3-one, #s-wc-3 .still .w3-s3 { transition: none !important; }   /* arriving mid-way: no replay */
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wc-3 .w3-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wc-3 .w3-a { color: var(--accent); }
+#s-wc-3 .w3-b { color: #a3967a; }
+#s-wc-3 .w3-f { color: var(--ink); }
+#s-wc-3 .w3-n { color: var(--accent); }
+#s-wc-3 .page.b2 .w3-a.shown, #s-wc-3 .page.b2 .w3-b.shown, #s-wc-3 .page.b3 .w3-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wc-3 .w3-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wc-3 .w3-cap3 { color: var(--accent); }
+#s-wc-3 .w3-f[data-step], #s-wc-3 .w3-cap[data-step="2"] { transition-delay: 1.1s; }
+#s-wc-3 .w3-n[data-step], #s-wc-3 .w3-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wc-3 .page:not(.b2) [data-step="2"], #s-wc-3 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wc-3 .w3-rule { height: 1px; background: var(--line); }
+#s-wc-3 .w3-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wc-3 .w3-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wc-3 .w3-ft-r { text-align: right; line-height: 1.3; }
+#s-wc-3 .w3-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wc-3 .w3-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wc-3 .w3-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<style data-slide="s-wm-1">
+/* ---------- Why a campus, option 3 · the merge ---------- */
+#s-wm-1 .m1-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wm-1 .m1-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wm-1 .m1-h b { font-weight: 700; color: var(--accent); }
+#s-wm-1 .m1-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wm-1 .m1-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wm-1 .drawn .m1-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the emblem */
+#s-wm-1 .m1-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wm-1 .m1-ca { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
+#s-wm-1 .m1-cb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
+#s-wm-1 .m1-lens { opacity: 0; }
+#s-wm-1 .m1-one { fill: #f7f5f1; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-wm-1 .m1-common { fill: #eee8fc; }
+#s-wm-1 .m1-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-wm-1 .m1-loop { fill: none; stroke: var(--purple); stroke-width: 4.4; }
+#s-wm-1 .m1-stub { fill: none; stroke: var(--purple); stroke-width: 2.4; }
+#s-wm-1 .m1-node { fill: var(--purple); }
+#s-wm-1 .m1-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wm-1 .m1-num text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wm-1 .m1-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wm-1 .pa { fill: #5b34d6; }
+#s-wm-1 .pb { fill: #bcae92; }
+/* beat 2: the two circles meet (the script plays it: in to overlap, a pause, on to one); here only where they end, gone into the one */
+#s-wm-1 .m1-ca, #s-wm-1 .m1-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-1 .b2 .m1-ca { transform: translateX(260px); opacity: 0; transition: none; }
+#s-wm-1 .b2 .m1-cb { transform: translateX(-260px); opacity: 0; transition: none; }
+#s-wm-1 .m1-one, #s-wm-1 .m1-s3 { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-1 .b2 .m1-one { opacity: 1; transition: opacity .9s var(--ease) 2.1s; }
+#s-wm-1 .b3 .m1-one { opacity: 0; transition: opacity .6s var(--ease); }
+#s-wm-1 .b3 .m1-s3 { opacity: 1; transition: opacity .7s var(--ease) .15s; }
+#s-wm-1 .still .m1-ca, #s-wm-1 .still .m1-cb, #s-wm-1 .still .m1-one, #s-wm-1 .still .m1-s3 { transition: none !important; }   /* arriving mid-way: no replay */
+/* beat 2's words wait for the meeting to end */
+#s-wm-1 .page .m1-f[data-step], #s-wm-1 .page .m1-cap[data-step="2"] { transition-delay: 2.3s; }
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wm-1 .m1-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wm-1 .m1-a { color: var(--accent); }
+#s-wm-1 .m1-b { color: #a3967a; }
+#s-wm-1 .m1-f { color: var(--ink); }
+#s-wm-1 .m1-n { color: var(--accent); }
+#s-wm-1 .page.b2 .m1-a.shown, #s-wm-1 .page.b2 .m1-b.shown, #s-wm-1 .page.b3 .m1-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wm-1 .m1-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wm-1 .m1-cap3 { color: var(--accent); }
+#s-wm-1 .m1-f[data-step], #s-wm-1 .m1-cap[data-step="2"] { transition-delay: 1.1s; }
+#s-wm-1 .m1-n[data-step], #s-wm-1 .m1-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wm-1 .page:not(.b2) [data-step="2"], #s-wm-1 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wm-1 .m1-rule { height: 1px; background: var(--line); }
+#s-wm-1 .m1-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wm-1 .m1-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wm-1 .m1-ft-r { text-align: right; line-height: 1.3; }
+#s-wm-1 .m1-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wm-1 .m1-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wm-1 .m1-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<style data-slide="s-wm-2">
+/* ---------- Why a campus, option 3 · the merge ---------- */
+#s-wm-2 .m2-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wm-2 .m2-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wm-2 .m2-h b { font-weight: 700; color: var(--accent); }
+#s-wm-2 .m2-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wm-2 .m2-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wm-2 .drawn .m2-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the emblem */
+#s-wm-2 .m2-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wm-2 .m2-ca { fill: #e8e0fb; stroke: #7a5ae3; stroke-width: 3; }
+#s-wm-2 .m2-cb { fill: #f1ebdf; stroke: #c4b89f; stroke-width: 3; }
+#s-wm-2 .m2-drop { fill: #f4f1ec; stroke: #cfc6e6; stroke-width: 3; }
+#s-wm-2 .m2-one { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-wm-2 .m2-rip circle { fill: none; stroke: #6a46e0; stroke-width: 3.2; vector-effect: non-scaling-stroke; transform-box: view-box; transform-origin: 960px 595px; opacity: 0; }
+#s-wm-2 .m2-common { fill: #eee8fc; }
+#s-wm-2 .m2-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-wm-2 .m2-loop { fill: none; stroke: var(--purple); stroke-width: 4.4; }
+#s-wm-2 .m2-stub { fill: none; stroke: var(--purple); stroke-width: 2.4; }
+#s-wm-2 .m2-node { fill: var(--purple); }
+#s-wm-2 .m2-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wm-2 .m2-num text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wm-2 .m2-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wm-2 .pa { fill: #5b34d6; }
+#s-wm-2 .pb { fill: #bcae92; }
+/* beat 2: the two drops flow together (the script plays it); here only where they end: the one drop, its outline dashed */
+#s-wm-2 .m2-ca, #s-wm-2 .m2-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-2 .b2 .m2-ca { transform: translateX(260px); opacity: 0; transition: none; }
+#s-wm-2 .b2 .m2-cb { transform: translateX(-260px); opacity: 0; transition: none; }
+#s-wm-2 .m2-drop { transform-box: view-box; transform-origin: 960px 595px; transform: scale(0); transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-2 .b2 .m2-drop { transform: none; transition: none; }
+#s-wm-2 .b3 .m2-drop { opacity: 0; transition: opacity .8s var(--ease) .1s; }
+#s-wm-2 .m2-one { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-2 .b2 .m2-one { opacity: 1; transition: opacity .8s var(--ease) 2.2s; }
+#s-wm-2 .b3 .m2-one { opacity: 0; transition: opacity .4s var(--ease); }
+/* beat 3: the ring and its neighbourhoods rise out of the ripple */
+#s-wm-2 .m2-s3 { opacity: 0; transform-box: view-box; transform-origin: 960px 595px; transform: scale(.8); transition: opacity .25s var(--ease), transform .25s var(--ease); }
+#s-wm-2 .b3 .m2-s3 { opacity: 1; transform: none; transition: opacity .8s var(--ease) .35s, transform 1.4s cubic-bezier(.3,1.25,.5,1) .35s; }
+#s-wm-2 .still .m2-ca, #s-wm-2 .still .m2-cb, #s-wm-2 .still .m2-drop, #s-wm-2 .still .m2-one, #s-wm-2 .still .m2-s3 { transition: none !important; }   /* arriving mid-way: no replay */
+/* beat 2's words wait for the drops to become one */
+#s-wm-2 .page .m2-f[data-step], #s-wm-2 .page .m2-cap[data-step="2"] { transition-delay: 2.2s; }
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wm-2 .m2-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wm-2 .m2-a { color: var(--accent); }
+#s-wm-2 .m2-b { color: #a3967a; }
+#s-wm-2 .m2-f { color: var(--ink); }
+#s-wm-2 .m2-n { color: var(--accent); }
+#s-wm-2 .page.b2 .m2-a.shown, #s-wm-2 .page.b2 .m2-b.shown, #s-wm-2 .page.b3 .m2-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wm-2 .m2-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wm-2 .m2-cap3 { color: var(--accent); }
+#s-wm-2 .m2-f[data-step], #s-wm-2 .m2-cap[data-step="2"] { transition-delay: 1.1s; }
+#s-wm-2 .m2-n[data-step], #s-wm-2 .m2-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wm-2 .page:not(.b2) [data-step="2"], #s-wm-2 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wm-2 .m2-rule { height: 1px; background: var(--line); }
+#s-wm-2 .m2-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wm-2 .m2-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wm-2 .m2-ft-r { text-align: right; line-height: 1.3; }
+#s-wm-2 .m2-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wm-2 .m2-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wm-2 .m2-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<style data-slide="s-wm-3">
+/* ---------- Why a campus, option 3 · the merge ---------- */
+#s-wm-3 .m3-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wm-3 .m3-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wm-3 .m3-h b { font-weight: 700; color: var(--accent); }
+#s-wm-3 .m3-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wm-3 .m3-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wm-3 .drawn .m3-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the emblem */
+#s-wm-3 .m3-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wm-3 .m3-ca { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
+#s-wm-3 .m3-cb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
+#s-wm-3 .m3-common { fill: #eee8fc; }
+#s-wm-3 .m3-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-wm-3 .m3-line { fill: none; stroke: var(--purple); stroke-width: 4.4; stroke-linejoin: round; }
+#s-wm-3 .m3-stub { fill: none; stroke: var(--purple); stroke-width: 2.4; }
+#s-wm-3 .m3-node { fill: var(--purple); }
+#s-wm-3 .m3-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wm-3 .m3-num text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wm-3 .m3-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wm-3 .pa { fill: #5b34d6; }
+#s-wm-3 .pb { fill: #bcae92; }
+/* beat 2: the circles slide in till they touch, take one floor's colour, and the one line is drawn round both (the script);
+   beat 3: the circles fade as the line untwists into the loop, and the neighbourhoods come up round it */
+#s-wm-3 .m3-ca, #s-wm-3 .m3-cb { transition: transform .3s var(--ease), opacity .3s var(--ease), fill .3s var(--ease); }
+#s-wm-3 .b2 .m3-ca { transform: translateX(110px); fill: #f6f3ef; transition: transform 1.5s cubic-bezier(.45,.05,.3,1), fill 1s var(--ease) 1.3s; }
+#s-wm-3 .b2 .m3-cb { transform: translateX(-110px); fill: #f6f3ef; transition: transform 1.5s cubic-bezier(.45,.05,.3,1), fill 1s var(--ease) 1.3s; }
+#s-wm-3 .b3 .m3-ca, #s-wm-3 .b3 .m3-cb { opacity: 0; transition: opacity .9s var(--ease) .1s; }
+#s-wm-3 .m3-line { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-3 .b2 .m3-line { opacity: 1; transition: none; }
+#s-wm-3 .m3-s3, #s-wm-3 .m3-arr { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-3 .b3 .m3-s3 { opacity: 1; transition: opacity .8s var(--ease) 1s; }
+#s-wm-3 .b3 .m3-arr { opacity: 1; transition: opacity .5s var(--ease) 1.5s; }
+#s-wm-3 .still .m3-ca, #s-wm-3 .still .m3-cb, #s-wm-3 .still .m3-line, #s-wm-3 .still .m3-s3, #s-wm-3 .still .m3-arr { transition: none !important; }   /* arriving mid-way: no replay */
+/* beat 2's words wait for the line */
+#s-wm-3 .page .m3-f[data-step], #s-wm-3 .page .m3-cap[data-step="2"] { transition-delay: 1.8s; }
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wm-3 .m3-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wm-3 .m3-a { color: var(--accent); }
+#s-wm-3 .m3-b { color: #a3967a; }
+#s-wm-3 .m3-f { color: var(--ink); }
+#s-wm-3 .m3-n { color: var(--accent); }
+#s-wm-3 .page.b2 .m3-a.shown, #s-wm-3 .page.b2 .m3-b.shown, #s-wm-3 .page.b3 .m3-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wm-3 .m3-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wm-3 .m3-cap3 { color: var(--accent); }
+#s-wm-3 .m3-f[data-step], #s-wm-3 .m3-cap[data-step="2"] { transition-delay: 1.1s; }
+#s-wm-3 .m3-n[data-step], #s-wm-3 .m3-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wm-3 .page:not(.b2) [data-step="2"], #s-wm-3 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wm-3 .m3-rule { height: 1px; background: var(--line); }
+#s-wm-3 .m3-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wm-3 .m3-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wm-3 .m3-ft-r { text-align: right; line-height: 1.3; }
+#s-wm-3 .m3-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wm-3 .m3-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wm-3 .m3-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<style data-slide="s-wm-4">
+/* ---------- Why a campus, option 3 · the merge ---------- */
+#s-wm-4 .m4-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wm-4 .m4-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wm-4 .m4-h b { font-weight: 700; color: var(--accent); }
+#s-wm-4 .m4-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wm-4 .m4-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wm-4 .drawn .m4-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the emblem */
+#s-wm-4 .m4-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wm-4 .m4-ca { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
+#s-wm-4 .m4-cb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
+#s-wm-4 .m4-one { fill: #f7f5f1; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-wm-4 .m4-common { fill: #eee8fc; }
+#s-wm-4 .m4-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-wm-4 .m4-loop { fill: none; stroke: var(--purple); stroke-width: 4.4; }
+#s-wm-4 .m4-node { fill: var(--purple); }
+#s-wm-4 .m4-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wm-4 .m4-num text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wm-4 .m4-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wm-4 .pa { fill: #5b34d6; }
+#s-wm-4 .pb { fill: #bcae92; }
+/* beat 2: the two circles slide together and fade as the one comes up; beat 3: the one gives way to the ring */
+#s-wm-4 .m4-ca, #s-wm-4 .m4-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-4 .b2 .m4-ca { transform: translateX(260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wm-4 .b2 .m4-cb { transform: translateX(-260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wm-4 .m4-one, #s-wm-4 .m4-s3 { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-4 .b2 .m4-one { opacity: 1; transition: opacity .9s var(--ease) 1s; }
+#s-wm-4 .b3 .m4-one { opacity: 0; transition: opacity .6s var(--ease); }
+#s-wm-4 .b3 .m4-s3 { opacity: 1; transition: opacity .5s var(--ease); }
+/* and the one opens like a flower: six petals unfold from the loop, turning out from the centre one after another */
+#s-wm-4 .m4-p { stroke: #fff; stroke-width: 2; transform-box: view-box; transform-origin: 960px 595px; transform: scale(.25) rotate(-50deg); opacity: 0; transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-4 .b3 .m4-p { transform: none; opacity: 1; transition: transform 1.5s cubic-bezier(.3,1.2,.5,1) calc(.2s + var(--i) * 130ms), opacity .6s var(--ease) calc(.2s + var(--i) * 130ms); }
+#s-wm-4 .m4-num { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-4 .b3 .m4-num { opacity: 1; transition: opacity .7s var(--ease) 1.5s; }
+#s-wm-4 .still .m4-ca, #s-wm-4 .still .m4-cb, #s-wm-4 .still .m4-one, #s-wm-4 .still .m4-s3, #s-wm-4 .still .m4-p, #s-wm-4 .still .m4-num { transition: none !important; }   /* arriving mid-way: no replay */
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wm-4 .m4-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wm-4 .m4-a { color: var(--accent); }
+#s-wm-4 .m4-b { color: #a3967a; }
+#s-wm-4 .m4-f { color: var(--ink); }
+#s-wm-4 .m4-n { color: var(--accent); }
+#s-wm-4 .page.b2 .m4-a.shown, #s-wm-4 .page.b2 .m4-b.shown, #s-wm-4 .page.b3 .m4-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wm-4 .m4-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wm-4 .m4-cap3 { color: var(--accent); }
+#s-wm-4 .m4-f[data-step], #s-wm-4 .m4-cap[data-step="2"] { transition-delay: 1.1s; }
+#s-wm-4 .m4-n[data-step], #s-wm-4 .m4-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wm-4 .page:not(.b2) [data-step="2"], #s-wm-4 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wm-4 .m4-rule { height: 1px; background: var(--line); }
+#s-wm-4 .m4-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wm-4 .m4-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wm-4 .m4-ft-r { text-align: right; line-height: 1.3; }
+#s-wm-4 .m4-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wm-4 .m4-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wm-4 .m4-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<style data-slide="s-wm-5">
+/* ---------- Why a campus, option 3 · the merge ---------- */
+#s-wm-5 .m5-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wm-5 .m5-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wm-5 .m5-h b { font-weight: 700; color: var(--accent); }
+#s-wm-5 .m5-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wm-5 .m5-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wm-5 .drawn .m5-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the emblem */
+#s-wm-5 .m5-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wm-5 .m5-ca { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
+#s-wm-5 .m5-cb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
+#s-wm-5 .m5-one { fill: #f7f5f1; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-wm-5 .m5-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-wm-5 .m5-loop { fill: none; stroke: var(--purple); stroke-width: 4.4; }
+#s-wm-5 .m5-node { fill: var(--purple); }
+#s-wm-5 .m5-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wm-5 .m5-b text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wm-5 .m5-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wm-5 .pa { fill: #5b34d6; }
+#s-wm-5 .pb { fill: #bcae92; }
+/* beat 2: the two circles slide together and fade as the one comes up; beat 3: the one gives way to the ring */
+#s-wm-5 .m5-ca, #s-wm-5 .m5-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-5 .b2 .m5-ca { transform: translateX(260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wm-5 .b2 .m5-cb { transform: translateX(-260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wm-5 .m5-one, #s-wm-5 .m5-s3 { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-5 .b2 .m5-one { opacity: 1; transition: opacity .9s var(--ease) 1s; }
+#s-wm-5 .b3 .m5-one { opacity: 0; transition: opacity .6s var(--ease); }
+#s-wm-5 .b3 .m5-s3 { opacity: 1; transition: opacity .7s var(--ease) .15s; }
+/* and the neighbourhoods swell up as soft bubbles, one after another round the ring, with no edges between them */
+#s-wm-5 .m5-b { transform-box: fill-box; transform-origin: center; transform: scale(.5); opacity: 0; transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-5 .b3 .m5-b { transform: none; opacity: 1; transition: transform 1.4s cubic-bezier(.3,1.25,.5,1) calc(.3s + var(--i) * 120ms), opacity .9s var(--ease) calc(.3s + var(--i) * 120ms); }
+#s-wm-5 .still .m5-ca, #s-wm-5 .still .m5-cb, #s-wm-5 .still .m5-one, #s-wm-5 .still .m5-s3, #s-wm-5 .still .m5-b { transition: none !important; }   /* arriving mid-way: no replay */
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wm-5 .m5-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wm-5 .m5-a { color: var(--accent); }
+#s-wm-5 .m5-b { color: #a3967a; }
+#s-wm-5 .m5-f { color: var(--ink); }
+#s-wm-5 .m5-n { color: var(--accent); }
+#s-wm-5 .page.b2 .m5-a.shown, #s-wm-5 .page.b2 .m5-b.shown, #s-wm-5 .page.b3 .m5-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wm-5 .m5-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wm-5 .m5-cap3 { color: var(--accent); }
+#s-wm-5 .m5-f[data-step], #s-wm-5 .m5-cap[data-step="2"] { transition-delay: 1.1s; }
+#s-wm-5 .m5-n[data-step], #s-wm-5 .m5-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wm-5 .page:not(.b2) [data-step="2"], #s-wm-5 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wm-5 .m5-rule { height: 1px; background: var(--line); }
+#s-wm-5 .m5-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wm-5 .m5-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wm-5 .m5-ft-r { text-align: right; line-height: 1.3; }
+#s-wm-5 .m5-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wm-5 .m5-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wm-5 .m5-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<style data-slide="s-wm-6">
+/* ---------- Why a campus, option 3 · the merge ---------- */
+#s-wm-6 .m6-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wm-6 .m6-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wm-6 .m6-h b { font-weight: 700; color: var(--accent); }
+#s-wm-6 .m6-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wm-6 .m6-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wm-6 .drawn .m6-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the emblem */
+#s-wm-6 .m6-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wm-6 .m6-ca { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
+#s-wm-6 .m6-cb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
+#s-wm-6 .m6-one { fill: #f7f5f1; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-wm-6 .m6-common { fill: #eee8fc; }
+#s-wm-6 .m6-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-wm-6 .m6-loop { fill: none; stroke: var(--purple); stroke-width: 4.4; }
+#s-wm-6 .m6-stub { fill: none; stroke: var(--purple); stroke-width: 2.4; }
+#s-wm-6 .m6-node { fill: var(--purple); }
+#s-wm-6 .m6-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wm-6 .m6-num text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wm-6 .m6-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wm-6 .m6-walk circle { stroke: #fff; stroke-width: 1.6; }
+#s-wm-6 .pa { fill: #5b34d6; }
+#s-wm-6 .pb { fill: #bcae92; }
+/* beat 2: the two circles slide together and fade as the one comes up; beat 3: the one gives way to the ring */
+#s-wm-6 .m6-ca, #s-wm-6 .m6-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-wm-6 .b2 .m6-ca { transform: translateX(260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wm-6 .b2 .m6-cb { transform: translateX(-260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-wm-6 .m6-one, #s-wm-6 .m6-s3, #s-wm-6 .m6-arr, #s-wm-6 .m6-walk { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wm-6 .b2 .m6-one { opacity: 1; transition: opacity .9s var(--ease) 1s; }
+#s-wm-6 .b3 .m6-one { opacity: 0; transition: opacity .6s var(--ease); }
+#s-wm-6 .b3 .m6-s3, #s-wm-6 .b3 .m6-arr { opacity: 1; transition: opacity .6s var(--ease) .1s; }
+/* the walkers come out once everyone is seated */
+#s-wm-6 .b3 .m6-walk { opacity: 1; transition: opacity 1s var(--ease) 4.6s; }
+#s-wm-6 .still .m6-ca, #s-wm-6 .still .m6-cb, #s-wm-6 .still .m6-one, #s-wm-6 .still .m6-s3, #s-wm-6 .still .m6-arr, #s-wm-6 .still .m6-walk { transition: none !important; }   /* arriving mid-way: no replay */
+/* beat 3's words come as the first are seated */
+#s-wm-6 .page .m6-n[data-step], #s-wm-6 .page .m6-cap[data-step="3"] { transition-delay: 2.6s; }
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wm-6 .m6-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wm-6 .m6-a { color: var(--accent); }
+#s-wm-6 .m6-b { color: #a3967a; }
+#s-wm-6 .m6-f { color: var(--ink); }
+#s-wm-6 .m6-n { color: var(--accent); }
+#s-wm-6 .page.b2 .m6-a.shown, #s-wm-6 .page.b2 .m6-b.shown, #s-wm-6 .page.b3 .m6-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wm-6 .m6-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wm-6 .m6-cap3 { color: var(--accent); }
+#s-wm-6 .m6-f[data-step], #s-wm-6 .m6-cap[data-step="2"] { transition-delay: 1.1s; }
+#s-wm-6 .m6-n[data-step], #s-wm-6 .m6-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wm-6 .page:not(.b2) [data-step="2"], #s-wm-6 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wm-6 .m6-rule { height: 1px; background: var(--line); }
+#s-wm-6 .m6-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wm-6 .m6-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wm-6 .m6-ft-r { text-align: right; line-height: 1.3; }
+#s-wm-6 .m6-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wm-6 .m6-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wm-6 .m6-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<section class="scene" id="s-wc-3" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="op-chip">The merge · 3 · as chosen</div>
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="w3-hand hand w3-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="w3-h w3-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="w3-sub w3-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
+    <svg class="w3-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <g class="w3-in" style="--i:3">
+        <circle class="w3-ca" cx="700" cy="595" r="150"/>
+        <circle class="w3-cb" cx="1220" cy="595" r="150"/>
+      </g>
+      <circle class="w3-one" cx="960" cy="595" r="172"/>
+      <g class="w3-s3">
+        <g class="w3-segs"></g>
+        <circle class="w3-common" cx="960" cy="595" r="78"/>
+        <text class="w3-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="w3-stub"></path>
+        <path class="w3-loop" d="M960 495 A100 100 0 1 1 960 695 A100 100 0 1 1 960 495 Z"/>
+        <g class="w3-node"></g>
+        <g class="w3-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+        <g class="w3-num"></g>
+      </g>
+      <g class="w3-dots"></g>
+    </svg>
+
+    <span class="w3-lb w3-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="w3-lb w3-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
+    <span class="w3-lb w3-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="w3-lb w3-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="w3-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="w3-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="w3-cap w3-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="w3-rule w3-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="w3-ft-l w3-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="w3-ft-r w3-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<section class="scene" id="s-wm-1" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="op-chip">The merge · 3.1 · They meet</div>
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="m1-hand hand m1-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="m1-h m1-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="m1-sub m1-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
+    <svg class="m1-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <defs><linearGradient id="m1-lg" x1="0" x2="1"><stop offset="0" stop-color="#d6c8f8"/><stop offset="1" stop-color="#e6dac4"/></linearGradient></defs>
+      <g class="m1-in" style="--i:3">
+        <circle class="m1-ca" cx="700" cy="595" r="150"/>
+        <circle class="m1-cb" cx="1220" cy="595" r="150"/>
+      </g>
+      <!-- where they overlap, the circles at 870 and 1050 -->
+      <path class="m1-lens" fill="url(#m1-lg)" d="M960 475 A150 150 0 0 1 960 715 A150 150 0 0 1 960 475 Z"/>
+      <circle class="m1-one" cx="960" cy="595" r="172"/>
+      <g class="m1-s3">
+        <g class="m1-segs"></g>
+        <circle class="m1-common" cx="960" cy="595" r="78"/>
+        <text class="m1-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="m1-stub"></path>
+        <path class="m1-loop" d="M960 495 A100 100 0 1 1 960 695 A100 100 0 1 1 960 495 Z"/>
+        <g class="m1-node"></g>
+        <g class="m1-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+        <g class="m1-num"></g>
+      </g>
+      <g class="m1-dots"></g>
+    </svg>
+
+    <span class="m1-lb m1-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="m1-lb m1-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
+    <span class="m1-lb m1-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="m1-lb m1-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="m1-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="m1-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="m1-cap m1-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="m1-rule m1-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="m1-ft-l m1-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="m1-ft-r m1-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<section class="scene" id="s-wm-2" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="op-chip">The merge · 3.2 · Two drops</div>
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="m2-hand hand m2-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="m2-h m2-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="m2-sub m2-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
+    <svg class="m2-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <defs>
+        <filter id="m2-goo" filterUnits="userSpaceOnUse" x="380" y="300" width="1160" height="590" color-interpolation-filters="sRGB">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="16"/>
+          <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -14"/>
+        </filter>
+      </defs>
+      <g class="m2-in" style="--i:3">
+        <g filter="url(#m2-goo)">
+          <circle class="m2-ca" cx="700" cy="595" r="150"/>
+          <circle class="m2-cb" cx="1220" cy="595" r="150"/>
+          <circle class="m2-drop" cx="960" cy="595" r="172"/>
+        </g>
+      </g>
+      <circle class="m2-one" cx="960" cy="595" r="172"/>
+      <g class="m2-rip"><circle cx="960" cy="595" r="100"/><circle cx="960" cy="595" r="100"/></g>
+      <g class="m2-s3">
+        <g class="m2-segs"></g>
+        <circle class="m2-common" cx="960" cy="595" r="78"/>
+        <text class="m2-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="m2-stub"></path>
+        <path class="m2-loop" d="M960 495 A100 100 0 1 1 960 695 A100 100 0 1 1 960 495 Z"/>
+        <g class="m2-node"></g>
+        <g class="m2-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+        <g class="m2-num"></g>
+      </g>
+      <g class="m2-dots"></g>
+    </svg>
+
+    <span class="m2-lb m2-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="m2-lb m2-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
+    <span class="m2-lb m2-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="m2-lb m2-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="m2-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="m2-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="m2-cap m2-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="m2-rule m2-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="m2-ft-l m2-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="m2-ft-r m2-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<section class="scene" id="s-wm-3" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="op-chip">The merge · 3.3 · ∞ becomes O</div>
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="m3-hand hand m3-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="m3-h m3-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="m3-sub m3-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
+    <svg class="m3-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <g class="m3-in" style="--i:3">
+        <circle class="m3-ca" cx="700" cy="595" r="150"/>
+        <circle class="m3-cb" cx="1220" cy="595" r="150"/>
+      </g>
+      <g class="m3-s3">
+        <g class="m3-segs"></g>
+        <circle class="m3-common" cx="960" cy="595" r="78"/>
+        <text class="m3-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="m3-stub"></path>
+        <g class="m3-node"></g>
+        <g class="m3-num"></g>
+      </g>
+      <!-- the one line: a figure-eight at beat 2, the loop at beat 3 -->
+      <path class="m3-line"/>
+      <g class="m3-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+      <g class="m3-dots"></g>
+    </svg>
+
+    <span class="m3-lb m3-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="m3-lb m3-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
+    <span class="m3-lb m3-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="m3-lb m3-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="m3-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="m3-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="m3-cap m3-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="m3-rule m3-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="m3-ft-l m3-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="m3-ft-r m3-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<section class="scene" id="s-wm-4" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="op-chip">The merge · 3.4 · Bloom</div>
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="m4-hand hand m4-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="m4-h m4-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="m4-sub m4-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
+    <svg class="m4-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <g class="m4-in" style="--i:3">
+        <circle class="m4-ca" cx="700" cy="595" r="150"/>
+        <circle class="m4-cb" cx="1220" cy="595" r="150"/>
+      </g>
+      <circle class="m4-one" cx="960" cy="595" r="172"/>
+      <g class="m4-s3">
+        <g class="m4-petals"></g>
+        <circle class="m4-common" cx="960" cy="595" r="78"/>
+        <text class="m4-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="m4-loop" d="M960 495 A100 100 0 1 1 960 695 A100 100 0 1 1 960 495 Z"/>
+        <g class="m4-node"></g>
+        <g class="m4-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+        <g class="m4-num"></g>
+      </g>
+      <g class="m4-dots"></g>
+    </svg>
+
+    <span class="m4-lb m4-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="m4-lb m4-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
+    <span class="m4-lb m4-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="m4-lb m4-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="m4-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="m4-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="m4-cap m4-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="m4-rule m4-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="m4-ft-l m4-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="m4-ft-r m4-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<section class="scene" id="s-wm-5" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="op-chip">The merge · 3.5 · Soft neighbourhoods</div>
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="m5-hand hand m5-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="m5-h m5-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="m5-sub m5-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
+    <svg class="m5-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <defs>
+        <radialGradient id="m5-g0"><stop offset="0" stop-color="#c9eaf3"/><stop offset=".55" stop-color="#c9eaf3" stop-opacity=".92"/><stop offset="1" stop-color="#c9eaf3" stop-opacity="0"/></radialGradient>
+        <radialGradient id="m5-g1"><stop offset="0" stop-color="#cfe9df"/><stop offset=".55" stop-color="#cfe9df" stop-opacity=".92"/><stop offset="1" stop-color="#cfe9df" stop-opacity="0"/></radialGradient>
+        <radialGradient id="m5-g2"><stop offset="0" stop-color="#f3dcc4"/><stop offset=".55" stop-color="#f3dcc4" stop-opacity=".92"/><stop offset="1" stop-color="#f3dcc4" stop-opacity="0"/></radialGradient>
+        <radialGradient id="m5-g3"><stop offset="0" stop-color="#e0d3d3"/><stop offset=".55" stop-color="#e0d3d3" stop-opacity=".92"/><stop offset="1" stop-color="#e0d3d3" stop-opacity="0"/></radialGradient>
+        <radialGradient id="m5-g4"><stop offset="0" stop-color="#ebedd6"/><stop offset=".55" stop-color="#ebedd6" stop-opacity=".92"/><stop offset="1" stop-color="#ebedd6" stop-opacity="0"/></radialGradient>
+        <radialGradient id="m5-g5"><stop offset="0" stop-color="#f0d8e2"/><stop offset=".55" stop-color="#f0d8e2" stop-opacity=".92"/><stop offset="1" stop-color="#f0d8e2" stop-opacity="0"/></radialGradient>
+        <radialGradient id="m5-gc"><stop offset="0" stop-color="#e4dafb"/><stop offset=".6" stop-color="#ebe4fc" stop-opacity=".9"/><stop offset="1" stop-color="#f3effd" stop-opacity="0"/></radialGradient>
+      </defs>
+      <g class="m5-in" style="--i:3">
+        <circle class="m5-ca" cx="700" cy="595" r="150"/>
+        <circle class="m5-cb" cx="1220" cy="595" r="150"/>
+      </g>
+      <circle class="m5-one" cx="960" cy="595" r="172"/>
+      <g class="m5-s3">
+        <g class="m5-bub"></g>
+        <circle cx="960" cy="595" r="98" fill="url(#m5-gc)"/>
+        <text class="m5-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="m5-loop" d="M960 495 A100 100 0 1 1 960 695 A100 100 0 1 1 960 495 Z"/>
+        <g class="m5-node"></g>
+        <g class="m5-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+      </g>
+      <g class="m5-dots"></g>
+    </svg>
+
+    <span class="m5-lb m5-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="m5-lb m5-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
+    <span class="m5-lb m5-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="m5-lb m5-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="m5-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="m5-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="m5-cap m5-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="m5-rule m5-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="m5-ft-l m5-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="m5-ft-r m5-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<section class="scene" id="s-wm-6" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="op-chip">The merge · 3.6 · Through the arrivals</div>
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="m6-hand hand m6-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="m6-h m6-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="m6-sub m6-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
+    <svg class="m6-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <g class="m6-in" style="--i:3">
+        <circle class="m6-ca" cx="700" cy="595" r="150"/>
+        <circle class="m6-cb" cx="1220" cy="595" r="150"/>
+      </g>
+      <circle class="m6-one" cx="960" cy="595" r="172"/>
+      <g class="m6-s3">
+        <g class="m6-segs"></g>
+        <circle class="m6-common" cx="960" cy="595" r="78"/>
+        <text class="m6-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="m6-stub"></path>
+        <path class="m6-loop" d="M960 495 A100 100 0 1 1 960 695 A100 100 0 1 1 960 495 Z"/>
+        <g class="m6-node"></g>
+        <g class="m6-num"></g>
+      </g>
+      <g class="m6-dots"></g>
+      <g class="m6-walk"></g>
+      <g class="m6-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+    </svg>
+
+    <span class="m6-lb m6-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="m6-lb m6-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
+    <span class="m6-lb m6-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="m6-lb m6-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="m6-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="m6-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="m6-cap m6-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="m6-rule m6-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="m6-ft-l m6-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="m6-ft-r m6-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="data/loop-path.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<style>.scene .page > .op-chip { left: 50%; top: 3.2%; transform: translateX(-50%); z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #5222d0; color: #fff; font-size: calc(var(--pt) * 8); font-weight: 700; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }</style>
+<script>window.ACKO_WOW = true;</script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-wc-3">
+/* Why a campus, option 3 · the merge. The people as dots (PRESENTATION-PATTERNS §5): each keeps three places, data-a (in its office's
+   circle), data-b (mixed in the one circle) and data-c (a seat in one of the six neighbourhoods round the ring), and a beat moves it
+   there with a CSS transform, staggered. The offices alternate seat by seat, so every neighbourhood holds both. */
+ACKO.slide("s-wc-3", ({ $, $$, plain, raf2, reduced, drawPath }) => {
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595;
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  const R0 = 115, R1 = 172, RING = 100;
+  let built = false, fresh = true;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const f = (p) => p.map((v) => v.toFixed(1)).join(" ");
+  // a sunflower: n points spread evenly over a disc
+  const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    // the six neighbourhoods: sectors of the band round the ring, from the top, clockwise, with a small gap between
+    let segs = "", nums = "", stub = "", nodes = "";
+    for (let s = 0; s < 6; s++) {
+      const a0 = -90 + s * 60 + 3, a1 = -90 + (s + 1) * 60 - 3, m = (a0 + a1) / 2;
+      segs += `<path style="fill:${NB[s]}" d="M${f(pol(R1, a0))} A${R1} ${R1} 0 0 1 ${f(pol(R1, a1))} L${f(pol(R0, a1))} A${R0} ${R0} 0 0 0 ${f(pol(R0, a0))} Z"/>`;
+      const [x, y] = pol(R1 + 20, m); nums += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`;
+      stub += `M${f(pol(RING, m))} L${f(pol(R0, m))} `; const [nx, ny] = pol(RING, m); nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
+    }
+    $(".w3-segs", sc).innerHTML = segs; $(".w3-num", sc).innerHTML = nums; $(".w3-stub", sc).setAttribute("d", stub); $(".w3-node", sc).innerHTML = nodes;
+    // a · in each office's circle; b · mixed in the one circle; c · seats in the sectors, two rows, the offices alternating
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const B = disc(CX, CY, 140, N);
+    for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
+    const seats = [];
+    WANT.forEach((n, s) => { const a0 = -90 + s * 60 + 7, a1 = -90 + (s + 1) * 60 - 7;
+      for (let j = 0; j < n; j++) seats.push(pol(j % 2 ? 157 : 131, a0 + ((j + .5) * (a1 - a0)) / n)); });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    // each office's dots take its seats in order round the ring, from where they stand in the one circle
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(p) - ang(q)); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".w3-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
+  }
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".w3-dots circle", sc).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;
+    });
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), loop = $(".w3-loop", sc), still = fresh || reduced;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      move(sc, k, still ? 0 : k === 3 ? 2400 : 2200);
+      // the ring draws itself round from the first arrival as the neighbourhoods come up
+      if (k === 3 && !still) drawPath(loop, 1500, 250);
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+  };
+});
+</script>
+<script data-slide="s-wm-1">
+/* Why a campus · the merge, variant 3.1 · they meet. The people as dots (PRESENTATION-PATTERNS §5): each keeps four places, data-a
+   (in its office's circle), data-l (in the lens where the two circles overlap), data-b (mixed in the one circle) and data-c (a seat
+   in one of the six neighbourhoods round the ring). Beat 2, from beat 1, is played with the Web Animations API: the circles slide in
+   to overlap and pause, the people crowd into the lens, then all go on to one; any other step moves them with a CSS transform. The
+   offices alternate seat by seat, so every neighbourhood holds both. */
+ACKO.slide("s-wm-1", ({ $, $$, plain, raf2, reduced, drawPath }) => {
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595, E = "cubic-bezier(.45,.05,.3,1)", MEET = 3000;
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  const R0 = 115, R1 = 172, RING = 100;
+  let built = false, fresh = true, last = 0;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const f = (p) => p.map((v) => v.toFixed(1)).join(" ");
+  const disc = (cx, cy, r, n, ry) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = Math.sqrt((i + .5) / n); return [cx + r * s * Math.cos(t), cy + (ry || r) * s * Math.sin(t)]; });
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [a[i], a[k]] = [a[k], a[i]]; } return a; };
+    let segs = "", nums = "", stub = "", nodes = "";
+    for (let s = 0; s < 6; s++) {
+      const a0 = -90 + s * 60 + 3, a1 = -90 + (s + 1) * 60 - 3, m = (a0 + a1) / 2;
+      segs += `<path style="fill:${NB[s]}" d="M${f(pol(R1, a0))} A${R1} ${R1} 0 0 1 ${f(pol(R1, a1))} L${f(pol(R0, a1))} A${R0} ${R0} 0 0 0 ${f(pol(R0, a0))} Z"/>`;
+      const [x, y] = pol(R1 + 20, m); nums += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`;
+      stub += `M${f(pol(RING, m))} L${f(pol(R0, m))} `; const [nx, ny] = pol(RING, m); nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
+    }
+    $(".m1-segs", sc).innerHTML = segs; $(".m1-num", sc).innerHTML = nums; $(".m1-stub", sc).setAttribute("d", stub); $(".m1-node", sc).innerHTML = nodes;
+    // a · in each office's circle; l · crowded into the lens; b · mixed in the one circle; c · the seats, the offices alternating
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const L = shuffle(disc(CX, CY, 42, N, 98));
+    const B = shuffle(disc(CX, CY, 140, N));
+    const seats = [];
+    WANT.forEach((n, s) => { const a0 = -90 + s * 60 + 7, a1 = -90 + (s + 1) * 60 - 7;
+      for (let j = 0; j < n; j++) seats.push(pol(j % 2 ? 157 : 131, a0 + ((j + .5) * (a1 - a0)) / n)); });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(p) - ang(q)); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".m1-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-l="${r1(L[i])}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
+  }
+  const T = (p, r) => `translate(${p[0]}px,${p[1]}px) scale(${r})`;
+  const pt = (c, k) => c.dataset[k].split(",").map(Number);
+  // only the script's own animations: getAnimations() also flushes the style, so it runs after the beat's classes are set
+  const stop = (els) => els.forEach((e) => e.getAnimations().forEach((a) => { if (!(window.CSSTransition && a instanceof CSSTransition)) a.cancel(); }));
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".m1-dots circle", sc).forEach((c, i) => {
+      c.style.transition = ms ? `transform ${ms}ms ${E} ${Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = T(pt(c, key), R[k - 1]);
+    });
+  }
+  // beat 2, from beat 1: in to overlap, a pause with everyone in the lens, then on to one
+  function meet(sc) {
+    $$(".m1-dots circle", sc).forEach((c, i) => {
+      c.style.transition = "none"; c.style.transform = T(pt(c, "b"), R[1]);
+      c.animate([{ transform: T(pt(c, "a"), R[0]), easing: E }, { transform: T(pt(c, "l"), 6), offset: .44 },
+        { transform: T(pt(c, "l"), 6), offset: .58, easing: E }, { transform: T(pt(c, "b"), R[1]) }],
+        { duration: MEET, delay: Math.round((i % 16) * 25), fill: "backwards" });
+    });
+    [[$(".m1-ca", sc), 1], [$(".m1-cb", sc), -1]].forEach(([el, d]) => el.animate([
+      { transform: "translateX(0)", opacity: 1, easing: E }, { transform: `translateX(${170 * d}px)`, opacity: 1, offset: .4 },
+      { transform: `translateX(${170 * d}px)`, opacity: 1, offset: .58, easing: E }, { transform: `translateX(${260 * d}px)`, opacity: 0 }], { duration: MEET }));
+    $(".m1-lens", sc).animate([{ opacity: 0 }, { opacity: 0, offset: .28 }, { opacity: 1, offset: .42 }, { opacity: 1, offset: .6 }, { opacity: 0, offset: .8 }, { opacity: 0 }], { duration: MEET });
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true; last = 0;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), loop = $(".m1-loop", sc), still = fresh || reduced, from = last;
+      last = k;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      stop([...$$(".m1-dots circle", sc), $(".m1-ca", sc), $(".m1-cb", sc), $(".m1-lens", sc)]);
+      if (k === 2 && from === 1 && !still) meet(sc);
+      else move(sc, k, still ? 0 : k === 3 ? 2400 : 2200);
+      // the ring draws itself round from the first arrival as the neighbourhoods come up
+      if (k === 3 && !still) drawPath(loop, 1500, 250);
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+  };
+});
+</script>
+<script data-slide="s-wm-2">
+/* Why a campus · the merge, variant 3.2 · two drops. The people as dots (PRESENTATION-PATTERNS §5): each keeps three places, data-a
+   (in its office's drop), data-b (mixed in the one drop) and data-c (a seat in one of the six neighbourhoods round the ring), and a
+   beat moves it there with a CSS transform, staggered. The drops' merge (beat 2, from beat 1) and the ripple (beat 3, from beat 2)
+   are played with the Web Animations API; the CSS holds where each beat ends. The offices alternate seat by seat, so every
+   neighbourhood holds both. */
+ACKO.slide("s-wm-2", ({ $, $$, plain, raf2, reduced, drawPath }) => {
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595, E = "cubic-bezier(.45,.05,.3,1)", FLOW = 2600;
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  const R0 = 115, R1 = 172, RING = 100;
+  let built = false, fresh = true, last = 0;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const f = (p) => p.map((v) => v.toFixed(1)).join(" ");
+  const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    let segs = "", nums = "", stub = "", nodes = "";
+    for (let s = 0; s < 6; s++) {
+      const a0 = -90 + s * 60 + 3, a1 = -90 + (s + 1) * 60 - 3, m = (a0 + a1) / 2;
+      segs += `<path style="fill:${NB[s]}" d="M${f(pol(R1, a0))} A${R1} ${R1} 0 0 1 ${f(pol(R1, a1))} L${f(pol(R0, a1))} A${R0} ${R0} 0 0 0 ${f(pol(R0, a0))} Z"/>`;
+      const [x, y] = pol(R1 + 20, m); nums += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`;
+      stub += `M${f(pol(RING, m))} L${f(pol(R0, m))} `; const [nx, ny] = pol(RING, m); nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
+    }
+    $(".m2-segs", sc).innerHTML = segs; $(".m2-num", sc).innerHTML = nums; $(".m2-stub", sc).setAttribute("d", stub); $(".m2-node", sc).innerHTML = nodes;
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const B = disc(CX, CY, 140, N);
+    for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
+    const seats = [];
+    WANT.forEach((n, s) => { const a0 = -90 + s * 60 + 7, a1 = -90 + (s + 1) * 60 - 7;
+      for (let j = 0; j < n; j++) seats.push(pol(j % 2 ? 157 : 131, a0 + ((j + .5) * (a1 - a0)) / n)); });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(p) - ang(q)); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".m2-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
+  }
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".m2-dots circle", sc).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      c.style.transition = ms ? `transform ${ms}ms ${E} ${Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;
+    });
+  }
+  // only the script's own animations: getAnimations() also flushes the style, so it runs after the beat's classes are set
+  const stop = (els) => els.forEach((e) => e.getAnimations().forEach((a) => { if (!(window.CSSTransition && a instanceof CSSTransition)) a.cancel(); }));
+  // beat 2, from beat 1: the drops are drawn to each other, a bridge forms, and they pull into one drop with a small wobble
+  function flow(sc) {
+    [[$(".m2-ca", sc), 1], [$(".m2-cb", sc), -1]].forEach(([el, d]) => el.animate([
+      { transform: "translateX(0)", opacity: 1, easing: "cubic-bezier(.55,0,.35,1)" }, { transform: `translateX(${260 * d}px)`, opacity: 1, offset: .7 },
+      { transform: `translateX(${260 * d}px)`, opacity: 0 }], { duration: FLOW }));
+    $(".m2-drop", sc).animate([{ transform: "scale(0)" }, { transform: "scale(.2)", offset: .5, easing: "cubic-bezier(.3,0,.3,1)" },
+      { transform: "scale(1.07)", offset: .76 }, { transform: "scale(.97)", offset: .89 }, { transform: "scale(1)" }], { duration: FLOW });
+  }
+  // beat 3, from beat 2: two rings run out from the centre
+  function ripple(sc) {
+    $$(".m2-rip circle", sc).forEach((c, i) => c.animate([{ transform: "scale(.5)", opacity: .95 }, { transform: "scale(2.4)", opacity: 0 }],
+      { duration: 1500, delay: 60 + i * 280, easing: "cubic-bezier(.2,.6,.3,1)" }));
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true; last = 0;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), loop = $(".m2-loop", sc), still = fresh || reduced, from = last;
+      last = k;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      stop([$(".m2-ca", sc), $(".m2-cb", sc), $(".m2-drop", sc), ...$$(".m2-rip circle", sc)]);
+      if (!still && k === 2 && from === 1) flow(sc);
+      if (!still && k === 3 && from === 2) ripple(sc);
+      move(sc, k, still ? 0 : k === 3 ? 2400 : 2300);
+      // the ring draws itself round from the first arrival as it rises
+      if (k === 3 && !still) drawPath(loop, 1500, 400);
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+  };
+});
+</script>
+<script data-slide="s-wm-3">
+/* Why a campus · the merge, variant 3.3 · ∞ becomes O. The people as dots (PRESENTATION-PATTERNS §5): each keeps three places, data-a
+   (in its office's circle), data-b (mixed over both lobes of the figure-eight) and data-c (a seat in one of the six neighbourhoods
+   round the ring), and a beat moves it there with a CSS transform, staggered. The one line is K points: the figure-eight (two circles
+   of 150 touching at the centre: up and round the left one anticlockwise, then up and round the right one clockwise) and the ring
+   (from the top arrival, anticlockwise), point for point, so the morph untwists it: the left lobe becomes the ring's left half, the
+   right lobe turns over into its right half, and the crossing parts into the two arrivals. The offices alternate seat by seat. */
+ACKO.slide("s-wm-3", ({ $, $$, plain, raf2, reduced, drawPath }) => {
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595, K = 240, TAU = 2 * Math.PI;
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  const R0 = 115, R1 = 172, RING = 100;
+  const EIGHT = Array.from({ length: K }, (_, i) => { const u = i / K;
+    if (u < .5) { const t = TAU * 2 * u; return [810 + 150 * Math.cos(-t), CY + 150 * Math.sin(-t)]; }
+    const t = TAU * (2 * u - 1); return [1110 + 150 * Math.cos(Math.PI + t), CY + 150 * Math.sin(Math.PI + t)]; });
+  const O = Array.from({ length: K }, (_, i) => { const a = -Math.PI / 2 - (TAU * i) / K; return [CX + RING * Math.cos(a), CY + RING * Math.sin(a)]; });
+  const D = (pts) => "M" + pts.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L") + " Z";
+  let built = false, fresh = true, last = 0, tok = 0;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const f = (p) => p.map((v) => v.toFixed(1)).join(" ");
+  const disc = (cx, cy, r, n, rot = 0) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996 + rot, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    let segs = "", nums = "", stub = "", nodes = "";
+    for (let s = 0; s < 6; s++) {
+      const a0 = -90 + s * 60 + 3, a1 = -90 + (s + 1) * 60 - 3, m = (a0 + a1) / 2;
+      segs += `<path style="fill:${NB[s]}" d="M${f(pol(R1, a0))} A${R1} ${R1} 0 0 1 ${f(pol(R1, a1))} L${f(pol(R0, a1))} A${R0} ${R0} 0 0 0 ${f(pol(R0, a0))} Z"/>`;
+      const [x, y] = pol(R1 + 20, m); nums += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`;
+      stub += `M${f(pol(RING, m))} L${f(pol(R0, m))} `; const [nx, ny] = pol(RING, m); nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
+    }
+    $(".m3-segs", sc).innerHTML = segs; $(".m3-num", sc).innerHTML = nums; $(".m3-stub", sc).setAttribute("d", stub); $(".m3-node", sc).innerHTML = nodes;
+    $(".m3-line", sc).setAttribute("d", D(EIGHT));
+    // a · in each office's circle; b · mixed over both lobes; c · the seats, the offices alternating
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const B = [...disc(810, CY, 112, N / 2), ...disc(1110, CY, 112, N / 2, 2.2)];   // the right lobe's pattern turned, so the two differ
+    for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
+    const seats = [];
+    WANT.forEach((n, s) => { const a0 = -90 + s * 60 + 7, a1 = -90 + (s + 1) * 60 - 7;
+      for (let j = 0; j < n; j++) seats.push(pol(j % 2 ? 157 : 131, a0 + ((j + .5) * (a1 - a0)) / n)); });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(p) - ang(q)); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".m3-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
+  }
+  function move(sc, k, ms, wait) {
+    const key = "abc"[k - 1];
+    $$(".m3-dots circle", sc).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${(wait || 0) + Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;
+    });
+  }
+  const plainLine = (line) => { line.style.transition = "none"; line.style.strokeDasharray = ""; line.style.strokeDashoffset = ""; };
+  // the line from one shape to the other, point for point, eased
+  function morph(line, a, b, ms, delay) {
+    const my = ++tok, t0 = performance.now() + delay;
+    const ease = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+    const frame = (now) => {
+      if (my !== tok) return;
+      const x = Math.min(1, Math.max(0, (now - t0) / ms)), e = ease(x);
+      line.setAttribute("d", D(a.map((p, i) => [p[0] + (b[i][0] - p[0]) * e, p[1] + (b[i][1] - p[1]) * e])));
+      if (x < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+  const set = (line, pts) => { tok++; line.setAttribute("d", D(pts)); };
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true; last = 0;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), line = $(".m3-line", sc), still = fresh || reduced, from = last; last = k;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      if (k === 2 && from === 1 && !still) { set(line, EIGHT); drawPath(line, 1300, 1400); }        // drawn round both, once they touch
+      else if (k === 2 && from === 3 && !still) { plainLine(line); morph(line, O, EIGHT, 1200, 0); }  // back: the loop twists again
+      else if (k === 3 && from === 2 && !still) { plainLine(line); morph(line, EIGHT, O, 1500, 150); } // it untwists
+      else { plainLine(line); set(line, k === 3 ? O : EIGHT); }
+      move(sc, k, still ? 0 : k === 3 ? 2400 : 2000, k === 3 && !still ? 400 : 0);
+      fresh = false;
+    },
+    leave() { tok++; },
+  };
+});
+</script>
+<script data-slide="s-wm-4">
+/* Why a campus · the merge, variant 3.4 · bloom. The people as dots (PRESENTATION-PATTERNS §5): each keeps three places, data-a
+   (in its office's circle), data-b (mixed in the one circle) and data-c (a seat in one of the six petals), and a beat moves it there
+   with a CSS transform, staggered. The offices alternate seat by seat, so every petal holds both. */
+ACKO.slide("s-wm-4", ({ $, $$, plain, raf2, reduced, drawPath }) => {
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595, RING = 100;
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  // a petal pointing out from the loop, in its own frame: v across it, u out from the centre (pointed at its base on the loop, round at its tip, 204)
+  const PETAL = [[0, 102], [10, 112], [66, 130], [66, 163], [66, 190], [36, 204], [0, 204], [-36, 204], [-66, 190], [-66, 163], [-66, 130], [-10, 112], [0, 102]];
+  const SEATS7 = [[-15, 126], [15, 126], [-31, 148], [0, 148], [31, 148], [-22, 170], [22, 170]], NUM = [0, 191];   // its number in its tip
+  let built = false, fresh = true;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    let petals = "", nums = "", nodes = ""; const seats = [];
+    for (let s = 0; s < 6; s++) {
+      const m = -60 + s * 60, a = (m * Math.PI) / 180, co = Math.cos(a), si = Math.sin(a);
+      const P = ([v, u]) => [CX + u * co - v * si, CY + u * si + v * co], f = (p) => P(p).map((x) => x.toFixed(1)).join(" ");
+      const q = PETAL.map(f);
+      petals += `<path class="m4-p" style="--i:${s};fill:${NB[s]}" d="M${q[0]} C${q[1]} ${q[2]} ${q[3]} C${q[4]} ${q[5]} ${q[6]} C${q[7]} ${q[8]} ${q[9]} C${q[10]} ${q[11]} ${q[12]} Z"/>`;
+      const [x, y] = P(NUM); nums += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`;
+      const [nx, ny] = pol(RING, m); nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
+      SEATS7.filter((_, j) => WANT[s] === 7 || j !== 3).forEach((p) => seats.push(P(p)));
+    }
+    $(".m4-petals", sc).innerHTML = petals; $(".m4-num", sc).innerHTML = nums; $(".m4-node", sc).innerHTML = nodes;
+    // a · in each office's circle; b · mixed in the one circle; c · the seats in the petals, the offices alternating
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const B = disc(CX, CY, 140, N);
+    for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    // each office's dots take its seats in order round the ring, from where they stand in the one circle
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(p) - ang(q)); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".m4-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
+  }
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".m4-dots circle", sc).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      // into the petals a little after they open
+      const d = Math.round((i % 16) * 25) + (k === 3 && ms ? 450 : 0);
+      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${d}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;
+    });
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), loop = $(".m4-loop", sc), still = fresh || reduced;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      move(sc, k, still ? 0 : k === 3 ? 2200 : 2200);
+      // the ring draws itself round from the first arrival as the petals open
+      if (k === 3 && !still) drawPath(loop, 1300, 100);
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+  };
+});
+</script>
+<script data-slide="s-wm-5">
+/* Why a campus · the merge, variant 3.5 · soft neighbourhoods. The people as dots (PRESENTATION-PATTERNS §5): each keeps three
+   places, data-a (in its office's circle), data-b (mixed in the one circle) and data-c (a seat in one of the six bubbles round the
+   ring, round the bubble's number), and a beat moves it there with a CSS transform, staggered. The offices alternate seat by seat,
+   so every bubble holds both. */
+ACKO.slide("s-wm-5", ({ $, $$, plain, raf2, reduced, drawPath }) => {
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595, RING = 100;
+  const WANT = [7, 7, 6, 7, 7, 6], RB = 152, BR = 82, SR = 34;
+  let built = false, fresh = true;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    // the six neighbourhoods: soft bubbles round the ring, from the top right, clockwise, where option 3 has its sectors
+    let bub = "", nodes = ""; const seats = [];
+    for (let s = 0; s < 6; s++) {
+      const m = -60 + s * 60, [bx, by] = pol(RB, m), [nx, ny] = pol(RING, m);
+      bub += `<g class="m5-b" style="--i:${s}"><circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="${BR}" fill="url(#m5-g${s})"/>` +
+        `<text x="${bx.toFixed(1)}" y="${(by + 4.5).toFixed(1)}" text-anchor="middle">0${s + 1}</text></g>`;
+      nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
+      // its people round its number
+      for (let j = 0; j < WANT[s]; j++) { const a = ((m + 180 + (360 * (j + .5)) / WANT[s]) * Math.PI) / 180; seats.push([bx + SR * Math.cos(a), by + SR * Math.sin(a)]); }
+    }
+    $(".m5-bub", sc).innerHTML = bub; $(".m5-node", sc).innerHTML = nodes;
+    // a · in each office's circle; b · mixed in the one circle; c · the seats, the offices alternating
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const B = disc(CX, CY, 140, N);
+    for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    // each office's dots take its seats in order round the ring, from where they stand in the one circle
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(p) - ang(q)); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".m5-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
+  }
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".m5-dots circle", sc).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;
+    });
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), loop = $(".m5-loop", sc), still = fresh || reduced;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      move(sc, k, still ? 0 : k === 3 ? 2400 : 2200);
+      // the ring draws itself round from the first arrival as the bubbles swell
+      if (k === 3 && !still) drawPath(loop, 1500, 250);
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+  };
+});
+</script>
+<script data-slide="s-wm-6">
+/* Why a campus · the merge, variant 3.6 · through the arrivals. The people as dots (PRESENTATION-PATTERNS §5): each keeps three
+   places, data-a (in its office's circle), data-b (mixed in the one circle) and data-c (a seat in one of the six neighbourhoods round
+   the ring). Beat 3, from beat 2, is a walk played with the Web Animations API: from where it stands to the nearer arrival (the top
+   one for 01 and 06, the bottom one for 03 and 04, either for 02 and 05), along the loop the short way to its neighbourhood, and out
+   to its seat, at a walking pace, each arrival's queue in turn. Then six walkers, three from each office, keep going round the loop
+   (requestAnimationFrame, only while this slide is on, stopped on leave; still with reduced motion). The offices alternate seat by
+   seat, so every neighbourhood holds both. */
+ACKO.slide("s-wm-6", ({ $, $$, plain, raf2, reduced, drawPath }) => {
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595, E = "cubic-bezier(.45,.05,.3,1)";
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  const R0 = 115, R1 = 172, RING = 100, SPEED = 15;   // the walkers, degrees a second
+  const WALKERS = [[-90, 1, "pa"], [-90 + 120, -1, "pb"], [-90 + 240, 1, "pa"], [90, -1, "pb"], [90 + 120, 1, "pb"], [90 + 240, -1, "pa"]];
+  let built = false, fresh = true, last = 0, raf = 0, t0 = 0, SC = null;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const f = (p) => p.map((v) => v.toFixed(1)).join(" ");
+  const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    let segs = "", nums = "", stub = "", nodes = "";
+    for (let s = 0; s < 6; s++) {
+      const a0 = -90 + s * 60 + 3, a1 = -90 + (s + 1) * 60 - 3, m = (a0 + a1) / 2;
+      segs += `<path style="fill:${NB[s]}" d="M${f(pol(R1, a0))} A${R1} ${R1} 0 0 1 ${f(pol(R1, a1))} L${f(pol(R0, a1))} A${R0} ${R0} 0 0 0 ${f(pol(R0, a0))} Z"/>`;
+      const [x, y] = pol(R1 + 20, m); nums += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`;
+      stub += `M${f(pol(RING, m))} L${f(pol(R0, m))} `; const [nx, ny] = pol(RING, m); nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
+    }
+    $(".m6-segs", sc).innerHTML = segs; $(".m6-num", sc).innerHTML = nums; $(".m6-stub", sc).setAttribute("d", stub); $(".m6-node", sc).innerHTML = nodes;
+    $(".m6-walk", sc).innerHTML = WALKERS.map(([, , c]) => `<circle class="${c}" r="4.6"/>`).join("");
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const B = disc(CX, CY, 140, N);
+    for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
+    const seats = [], mids = [];
+    WANT.forEach((n, s) => { const a0 = -90 + s * 60 + 7, a1 = -90 + (s + 1) * 60 - 7;
+      for (let j = 0; j < n; j++) { seats.push(pol(j % 2 ? 157 : 131, a0 + ((j + .5) * (a1 - a0)) / n)); mids.push(-60 + s * 60); } });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(i));
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(seats[p]) - ang(seats[q])); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".m6-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(seats[C[i]])}" data-m="${mids[C[i]]}" style="${at(p, R[0])}"/>`).join("");
+  }
+  const T = (p, r) => `translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+  const pt = (c, k) => c.dataset[k].split(",").map(Number);
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".m6-dots circle", sc).forEach((c, i) => {
+      c.getAnimations().forEach((a) => a.cancel());
+      c.style.transition = ms ? `transform ${ms}ms ${E} ${Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = T(pt(c, key), R[k - 1]);
+    });
+  }
+  // beat 3, from beat 2: in through an arrival, along the loop, out to the seat
+  function walk(sc) {
+    const dots = $$(".m6-dots circle", sc), queue = { "-90": 0, "90": 0 };
+    const plans = dots.map((c, i) => {
+      const b = pt(c, "b"), seat = pt(c, "c"), m = +c.dataset.m, sn = Math.sin((m * Math.PI) / 180);
+      const al = sn < -.01 ? -90 : sn > .01 ? 90 : i % 2 ? -90 : 90;
+      const dl = ((m - al + 540) % 360) - 180, n = Math.max(1, Math.round(Math.abs(dl) / 10));
+      const pts = [b, pol(RING, al)]; for (let j = 1; j <= n; j++) pts.push(pol(RING, al + (dl * j) / n)); pts.push(seat);
+      const gap = Math.hypot(b[0] - pts[1][0], b[1] - pts[1][1]);
+      return { c, pts, al, gap };
+    });
+    // each arrival's queue: the nearest first
+    plans.slice().sort((p, q) => p.gap - q.gap).forEach((p) => (p.rank = queue[p.al]++));
+    plans.forEach(({ c, pts, rank }) => {
+      const len = [0]; for (let j = 1; j < pts.length; j++) len.push(len[j - 1] + Math.hypot(pts[j][0] - pts[j - 1][0], pts[j][1] - pts[j - 1][1]));
+      const L = len[len.length - 1];
+      const frames = pts.map((p, j) => ({ transform: T(p, j ? R[2] : R[1]), offset: len[j] / L, easing: j === pts.length - 2 ? "ease-out" : "linear" }));
+      c.getAnimations().forEach((a) => a.cancel());
+      c.style.transition = "none"; c.style.transform = T(pts[pts.length - 1], R[2]);
+      c.animate(frames, { duration: 500 + L * 4.2, delay: 450 + rank * 120, fill: "backwards" });
+    });
+  }
+  // the walkers round the loop
+  function place(t) {
+    $$(".m6-walk circle", SC).forEach((w, i) => { const [a0, dir] = WALKERS[i], [x, y] = pol(RING, a0 + dir * SPEED * t); w.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`); });
+  }
+  function frame(now) {
+    if (!raf || (document.body.dataset.scene && document.body.dataset.scene !== "s-wm-6")) { raf = 0; return; }
+    place((now - t0) / 1000); raf = requestAnimationFrame(frame);
+  }
+  function walkers(on) {
+    if (raf) cancelAnimationFrame(raf); raf = 0;
+    if (!on) return;
+    place(0); if (!reduced) { t0 = performance.now(); raf = requestAnimationFrame(frame); }
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true; last = 0; SC = sc;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), loop = $(".m6-loop", sc), still = fresh || reduced, from = last; last = k; SC = sc;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      if (k === 3 && from === 2 && !still) walk(sc);
+      else move(sc, k, still ? 0 : 2200);
+      walkers(k === 3);
+      // the ring draws itself round from the first arrival before anyone walks it
+      if (k === 3 && !still) drawPath(loop, 1100, 50);
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+    leave() { walkers(false); },
+  };
+});
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

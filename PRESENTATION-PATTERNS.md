@@ -721,3 +721,66 @@ amber `#F2A33A`; "A day in ACKO".
 - **Key words underlined in turn** (the pick, `s-heard`): the key word bold purple, `font-size: 1.12em; line-height: 1` so it grows without opening its line; a 2px underline is a background (`linear-gradient` sized `0% 2px` → `100% 2px`, `box-decoration-break: clone` for words that wrap), delayed `--k × 140 ms` after the points are in (`--k` set from each point's order in `enter`).
 - **Gotcha: keyframes, not transitions, for a delayed reveal on load.** A transition starts from the style the browser last drew; on a fresh load the element had no drawn "before" style, so the sweep began already purple and the underline showed as a solid block through its delay. An `animation: … both` holds its own first frame through the delay, and restarts cleanly when its class comes off and on (a replay).
 - **Checking without the pane:** when the Browser pane is hidden its tabs don't paint (screenshots come back blank, transitions don't run); measure with scripts (`getBoundingClientRect`, computed styles, transitions frozen) and take screenshots headless with puppeteer-core, as `tools/walk.js` does.
+
+## 32. One ribbon across two slides, making each figure as it passes (Why a campus → How it ties together, 18 Nov)
+**What (Ritika):** "the circle fill of the merged circle would move like a ribbon to next slide on beat and in the next slide neighbourhood split and its put together called as campus would come and the same ribbon would continue as mobius strip after '+' … and after '=' the acko loop animation on the site boundary will come."
+- **The hand-off:** `s-why-campus` ends on one drop (960, 590, r 210, under a goo filter) with its people at `disc(960, 590, 168, 40)` shuffled with seed 5. `s-campus-loop` opens on that frame exactly (the same filter, circle and dots), so the engine's cross-fade only changes the words. Both slides are white, so the page doesn't change under it.
+  - **The words never overlap:** the new slide's header and hand line wait for a `.drawn` class (added a frame after `enter`) plus 0.5 s, and its first headline span has a 0.6 s delay. So Why a campus's words have faded before these come in.
+  - **The drop glides** (Ritika, 18 Nov: "the transition between both slides should be smooth"). The goo-filtered drop and its outline sit in one group with an SVG `transform` eased per frame: `translate(c) scale(s) translate(−drop)`, from (960, 590) to the campus's centre, shrinking by R1/210. The filter's region moves with it, and the people ride along (each frame, their B position through the same transform).
+  - **Then it splits:** the neighbourhoods pop one after another as the drop fades. Its rim grows into a lavender ring just outside them (r 128 → 142, stroke 4 → 26), and the canvas ribbon takes over as that closed ring and opens.
+  - **On an options page,** put a copy of the first slide before every version (`s-wcx-2`, `s-wcx-3`), so each opens from its drop.
+- **One route, one ribbon:** the route is one polyline in page px, built from parts: arcs, cubic Béziers, a path's stretch through a map, the loop ring. Each part has a width and is in front or behind; each named part's start is kept (`R.at`). The ribbon is a stretch [tail, head] of it, drawn on a canvas with §20's renderer: tapered polygons, behind at 35% and in front at 75% with white edges, per-point width eased between parts. At rest it has a long soft tail and a short head, like a brushstroke.
+- **One continuous run** (Ritika, 18 Nov: "the ribbon flows without beat", then "the animation can be continuous instead of pause"): `run()` is one frame loop; after the drop's glide and split, the ribbon's head runs the whole route at a steady pace (a trapezoid speed profile, ease 10% in and 12% out, about 12 s) and each figure is made as it passes: `setStep(n)` forward only for the words, the plate, the flyers (when the head leaves the Möbius), the shared spaces, the loop; the tail catches the head at the end. While it runs, `step()` just records the step. `?noauto` falls back to the click-by-click `play(k)` (and the old `auto()` pauses, which are off then). A **Replay** pill (class `.end` on the page, shown once the loop is drawn) calls `replay()`: back to the opening frame, then `setStep(1)`; its pointer events are stopped so the click doesn't advance the deck.
+- **A beat runs it from one wait to the next** (cubic in-out), and figures are made as the head passes:
+  - **Campus:** the glide and the split above; the ribbon then opens off the campus's ring (no taper at first) and runs out to wait.
+  - **The Möbius:** her path from `s-mobius` (pieces f1, bk, f2 in the render's own px), twice round from its left-most point.
+    - **MOB 1:** the render is painted in under the ribbon: a wide stroke along the route so far, then `source-in` the image.
+    - **MOB 2:** the ribbon leaves a trail that is the strip. The trail window and the ribbon window are joined while they overlap, and their tapers at the meeting point grow from 0 as they part, so nothing jumps.
+    - **MOB 3:** ACKO's mark, its band's centre line traced from the image's three colours (a column or row run per colour, then smoothed). The back face is the "behind" pass. The ribbon is as wide as the band, and the paint stroke is drawn per segment at that width.
+  - **The ACKO Loop, over four clicks** (Ritika, 18 Nov: "it is not based on beats"):
+    1. "=" and the floor's outline (option 6's plate); the ribbon runs on to the loop's west end and waits there, in the raked corner, clear of every zone;
+    2. the neighbourhoods (`.on-n`);
+    3. the shared spaces (`.on-s`);
+    4. the ribbon draws the loop up to its head, and the arrivals appear as it passes them.
+
+    The zones' own CSS staggers them in (`--i`); those clicks call `pose(k, false)`, which sets the classes without the no-transition class.
+    - **Not the real route:** Ritika asked for "an organic smooth loop instead of the defined path", so not `ACKO_LOOP.ring`.
+    - **The loop:** a closed centripetal Catmull-Rom spline through the layout's points, nudged a few px (seeded).
+    - **Direction:** the points start at the west end heading up (east along the top first), so the ribbon arrives along the loop. Otherwise it has to U-turn into it.
+    - **Six zonings** (`LAYOUTS`, picked by `LAYOUT`; copies `s-cz-2` … `s-cz-6` on `index-campus-zoning.html`), each a table of zones (`[x0, y0, x1, y1, label, shape]`) and loop points:
+
+      | # | Name | The zoning and the loop |
+      |---|---|---|
+      | 1 | Islands | the loop bulges round the shared spaces |
+      | 2 | Beads | the loop runs through them |
+      | 3 | Bubbles | ellipses, with a freer loop |
+      | 4 | Spine | segments down the middle, with a calm band round them |
+      | 5 | Courtyards | tall shared spaces between the neighbourhood pairs; the loop opens into a lobe in each |
+      | 6 | Staggered | a checkerboard, and a snake of two cosine lanes |
+      | 7 | Scribble | Ritika's reference (18 Nov): one thin grey line looping over itself like cursive (a trochoid, `scrib()`), a calm lane back, a start ring and an arrow; soft radial-gradient blobs |
+
+      Zoning 5 is the deck's (Ritika, 18 Nov): its zones are **loosely drawn** (`loose: true`: a squircle's 16 points nudged a few px by a seeded jitter per zone, through a closed `cr()` spline, with a faint darker outline), and each shared space says just "shared space" on two lines, not a name. `gen_why_opts.py` reads the deck's `LAYOUT` and makes copies for the others.
+
+      **Nothing may come outside the site boundary** (Ritika, 18 Nov: "it can randomly come outside"): `fit(p)` pulls a point back to 6 px inside the outline (the raked west edge is a straight line from the NW corner to the SW one). It is applied to every jittered point of a loose shape and its spline, and to the loop's control points and its sampled spline. A headless check (every zone point and the loop's points inside the `.cpl-plate` polygon, on every layout) keeps it so; the loop's points are in `data-loop-pts` on the section for it.
+
+      **Except the neighbourhoods of a layout with `spill: true`** (zoning 5, Ritika, 18 Nov: "make the neighbourhood boundaries roughly come out of the site boundary and also remove neighbourhood outline"): they are drawn with no outline, and their outer edges spill 9–20 px past the site boundary, unevenly, with a more ragged jitter (`fitN()` allows up to 26 px, no further). Shared spaces keep their faint outline and stay inside. The test: shared spaces and the loop inside; neighbourhoods within 28 px.
+
+      **A neighbourhood's fill is translucent and multiplied** (Ritika, 18 Nov: "so the site boundary is seen"): `mix-blend-mode: multiply` on the zone's group (not on its shape: the group's opacity makes a layer, which would isolate the blend), with `fill-opacity .72`, so the outline shows through where it spills over it.
+
+      **The neighbourhoods fly** (Ritika, 18 Nov: "that neighbourhood in campus can move to ACKO campus neighbourhoods"): the campus's six ring segments are named 01–06 (text pieces with the same pop-in class), and on click 4 each is copied as a "flyer" that is translated and stretched, per frame, from its own box to its floor shape's box (staggered 110 ms), fading out as the shape fades in; the ring keeps ghosts at 26% (their numbers at 50%). Entering later, going back or reduced motion: the end state at once.
+
+      **People as figures** (Ritika, 18 Nov: "instead of dots give variations to show humans", then "retain only the inclusivity variant"): a person is a `<g>` holding a small shape in the dots' own unit (a dot was r 1; a person is about 2.3 tall), scaled by the same transform, so every move is unchanged. `PERSON(i)` (i is the person's index, 0–39, the same on both slides) draws male (a torso and two legs), female (a dress and a bun), 4 wheelchair users (index 3, 14, 22, 33, male and female alternating) and 2 pregnant women (index 9, 26, the dress with a front bulge). Ten other styles were tried and dropped.
+
+      The scribble needs a few things the others don't:
+      - **An open spline** (`cr(P, step, true)`): a closed one would join the arrow to the start.
+      - **A per-layout `line`:** width, colour and an arrowhead, drawn on the canvas at the head's end.
+      - **Labels on a layer above the canvas,** with a paper-coloured halo (`paint-order: stroke`), since the line crosses the blobs.
+      - **The start ring on route index 1:** the route drops the first point of a part it shares with the last.
+
+    - **Labels:** check that each fits inside its zone and clear of the loop (a 3× close-up), above all at the loop's end turns.
+- **Entries:** entered at beat 1, it plays from the drop. Any other entry, a step back or reduced motion shows the beat's end at once (`pose(k)`). The frame loop stops on leave or a scene change. A `ResizeObserver` redraws the canvas at rest.
+- **Images on a canvas in the single file:** load them with `(window.ASSET_URLS && window.ASSET_URLS[p]) || p`, with the path written literally in the script, so `build.py --single` embeds them.
+- **Gotchas:**
+  - **`getAnimations()` flushes the style.** Call it after setting the beat's classes, or a `[data-step]` label is shown under the "not yet this beat" rule and loses its delay. And cancel only Web Animations, not `CSSTransition`s.
+  - **The no-transition class** a slide uses to jump to a state: don't leave it on through `enter`. The engine sets `.shown` right after `enter`, so the beat's words would lose their delays. Flush and remove it in `enter`.
+  - **Filming:** film on the virtual clock (§19), starting from the slide's own entry (no pre-steps) for beat 1. CSS transitions still run on the real clock.
