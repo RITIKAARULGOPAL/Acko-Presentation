@@ -460,7 +460,7 @@ def strat_loop(h):
     t2 = '<script src="assets/js/app.js'
     h = h.replace(t2, '<style>#s-strategy .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }</style>\n' + t2, 1)
     return _in_sec(h, "s-strategy", "4 Looping it all together: the floor in colour and the partitions rise.",
-                   "4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, and the spaces light up as pulsing hotspots with their names, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open.")
+                   "4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open.")
 
 # Campus strategy (12 Nov): beat 1 is The Shell (the planning has begun on the slide before); beat 5 calls out the client's touchpoints
 # where the blue route reaches them (model mm, d m along the route, as data/axo-layers.js has it; named from the plan's rooms there)

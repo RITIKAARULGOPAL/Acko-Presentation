@@ -5185,9 +5185,10 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       return { sp, d, g };
     });
   }
-  // the spaces called out on beat 4: one of each chosen room type (its largest), at the point farthest from its walls (model mm)
-  const SPACES = [["Visitor hub", "Visitor Hub"], ["Executive corner cabin", "Executive Cabin"], ["Departmental room", "Departmental Room"], ["Collaboration huddle", "Collab Huddle"],
-    ["Zen room", "Zen Room"], ["Mother's room", "Mother\u2019s Room"]];
+  // the spaces that could be called out on beat 4 as hotspots, [room type, name] (model mm; the room's largest, at the point farthest from its
+  // walls). None for now (Ritika, 18 Nov: "remove the departmental room and the other text-only rooms"): beat 4 is the Loop and its seven stops;
+  // the rooms come with the layout and the axos after. Add pairs here, e.g. ["Zen room", "Zen Room"], to bring hotspots back.
+  const SPACES = [];
   function spaces() {
     if (S.spc) return S.spc;
     const area = (r) => Math.abs(r.reduce((a, q, i) => a + q[0] * r[(i + 1) % r.length][1] - r[(i + 1) % r.length][0] * q[1], 0)) / 2;
