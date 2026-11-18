@@ -724,7 +724,10 @@ amber `#F2A33A`; "A day in ACKO".
     - **MOB 1:** the render is painted in under the ribbon: a wide stroke along the route so far, then `source-in` the image.
     - **MOB 2:** the ribbon leaves a trail that is the strip. The trail window and the ribbon window are joined while they overlap, and their tapers at the meeting point grow from 0 as they part, so nothing jumps.
     - **MOB 3:** ACKO's mark, its band's centre line traced from the image's three colours (a column or row run per colour, then smoothed). The back face is the "behind" pass. The ribbon is as wide as the band, and the paint stroke is drawn per segment at that width.
-  - **The ACKO Loop:** the floor's outline (option 6's plate) fades in; the ribbon narrows into Arrival 1 and goes round `ACKO_LOOP.ring`. The loop is drawn on the canvas up to the head, its dashed stretch dashed, and the arrivals appear as it passes them.
+  - **The ACKO Loop:** the floor's outline (option 6's plate) fades in with a zoning sketch on it, its zones one after another: neighbourhoods along both long edges, the shared spaces as islands down the middle. Ritika (18 Nov) asked for "an organic smooth loop instead of the defined path", so not `ACKO_LOOP.ring`.
+    - **The loop:** one closed centripetal Catmull-Rom spline through 24 points, nudged a few px (seeded). It runs east along the bottom and back west along the top, bulging round each island and pinching between them, so the islands sit inside it.
+    - **Drawing it:** the ribbon narrows into Arrival 1 and draws the loop on the canvas up to its head. The arrivals (the spline points nearest the real ones' x) appear as it passes them.
+    - **Direction:** pick the loop's direction so the ribbon arrives along it (here eastward on the bottom lane), or it has to U-turn into it.
 - **Entries:** entered at beat 1, it plays from the drop. Any other entry, a step back or reduced motion shows the beat's end at once (`pose(k)`). The frame loop stops on leave or a scene change. A `ResizeObserver` redraws the canvas at rest.
 - **Images on a canvas in the single file:** load them with `(window.ASSET_URLS && window.ASSET_URLS[p]) || p`, with the path written literally in the script, so `build.py --single` embeds them.
 - **Gotchas:**

@@ -18,13 +18,15 @@
          neighbourhoods split off it and are put together, the people taking their seats (both offices in every one); it waits.
      2 · + Möbius: the same ribbon runs on and twice round ACKO's Möbius (MOB: 1 the deck's render, painted in as it passes · 2 the
          ribbon becomes the strip · 3 ACKO's mark, painted in as it passes; index-campus-loop.html shows the three); it waits.
-     3 · = The ACKO Loop: the floor's outline comes up and the ribbon runs into Arrival 1 and round the loop (ACKO_LOOP.ring), drawing it.
+     3 · = The ACKO Loop: the floor's outline comes up with a zoning sketch on it (neighbourhoods along both edges, the shared spaces as
+         islands down the middle; illustrative, not the plan), and the ribbon runs into Arrival 1 and draws one smooth, organic loop
+         through it (Ritika, 18 Nov: "an organic smooth loop instead of the defined path"; the real route is on s-loop-floor).
      4 · the line that ties neighbourhood, loop and commons together.
      The ribbon is a stretch of one route, drawn on a canvas as tapered polygons (the Möbius slide's way, PRESENTATION-PATTERNS §20),
      lighter where it passes behind the strip. -->
 <section class="scene" id="s-campus-loop" data-part="1" data-title="How campus and loop tie together" data-steps="4" data-mins="1.2"
   data-beats="Campus,+ Möbius,= The ACKO Loop,Address · connects · daily life"
-  data-notes="The one floor becomes a ribbon. Campus first: it splits into six neighbourhoods, put together as one campus; belonging is the idea. Möbius second: the same ribbon runs round ACKO's Möbius, its promise of continuity, no inside and no outside; the inspiration for why the connector is a loop and not a corridor. The result is the ACKO Loop, drawn on our own floor: one continuous route linking every neighbourhood, both arrivals and every shared space. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life.">
+  data-notes="The one floor becomes a ribbon. Campus first: it splits into six neighbourhoods, put together as one campus; belonging is the idea. Möbius second: the same ribbon runs round ACKO's Möbius, its promise of continuity, no inside and no outside; the inspiration for why the connector is a loop and not a corridor. The result is the ACKO Loop, sketched on our own floor: one smooth, continuous route, the neighbourhoods along both sides, the shared spaces inside it, both arrivals on it. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life.">
   <div class="page">
     <div class="hdr"><b>How it ties together</b><span>01 · Belonging</span></div>
     <p class="cpl-hand hand">a campus to belong to, a promise to hold it together</p>
@@ -40,6 +42,7 @@
       </defs>
       <!-- 3 · the floor's outline (the loop itself is drawn on the canvas, as the ribbon reaches it) -->
       <path class="cpl-plate"/>
+      <g class="cpl-zones"></g>
       <!-- 1 · the campus: six neighbourhoods, put together inside one shared outline -->
       <circle class="cpl-out" cx="288" cy="555" r="146"/>
       <g class="cpl-segs"></g>
@@ -89,6 +92,12 @@
 #s-campus-loop .cpl-seg.on { opacity: 1; transform: none; }
 #s-campus-loop .cpl-plate { fill: #f7f6f3; stroke: #b5aea4; stroke-width: 1.4; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .9s var(--ease); }
 #s-campus-loop .cpl-plate.on { opacity: 1; }
+/* the zoning sketch on the floor: neighbourhoods (their numbers) and shared spaces (their names), one after another */
+#s-campus-loop .cpl-z { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.9); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+#s-campus-loop .cpl-zones.on .cpl-z { opacity: 1; transform: none; transition: opacity .5s var(--ease) calc(.35s + var(--i) * 70ms), transform .6s var(--ease) calc(.35s + var(--i) * 70ms); }
+#s-campus-loop .cpl-z text { font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: .08em; fill: var(--ink); opacity: .72; }
+#s-campus-loop .cpl-z.sh text { font-size: 8.4px; letter-spacing: .12em; text-transform: uppercase; fill: #7a6fb5; opacity: 1; }
+#s-campus-loop .still .cpl-z { transition: none !important; }
 #s-campus-loop .cpl-dots circle { transform-box: view-box; transform-origin: 0 0; }
 #s-campus-loop .pa { fill: #1e9e95; }
 #s-campus-loop .pb { fill: #bcae92; }
@@ -141,6 +150,31 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, reduced }) => {
   // (scratch trace_mark.py): [x, y, band width, 1 front / 0 the lavender back face], up the back face, along the top band to the
   // right tip, back along the bottom band
   const KK = 1.7, KX = 616.4, KY = 447, MARK = [[23.4,93.0,21.3,0],[25.4,90.4,30.9,0],[27.1,88.1,38.8,0],[27.9,86.0,43.6,0],[27.7,84.0,45.7,0],[27.2,82.0,46.7,0],[26.6,80.0,47.3,0],[26.1,78.0,47.7,0],[25.6,76.0,48.1,0],[25.2,74.0,48.4,0],[24.9,72.0,48.6,0],[24.6,70.0,48.7,0],[24.3,68.0,48.7,0],[24.1,66.0,48.9,0],[24.0,64.0,48.9,0],[24.0,62.0,48.9,0],[24.1,60.0,48.9,0],[24.3,58.0,48.7,0],[24.6,56.0,48.7,0],[24.9,54.0,48.6,0],[25.2,52.0,48.4,0],[25.6,50.0,48.1,0],[26.1,48.0,47.7,0],[26.6,46.0,47.3,0],[27.2,44.0,46.7,0],[27.7,42.0,45.8,0],[27.8,40.0,43.7,0],[27.1,37.9,39.2,0],[25.4,35.6,31.4,0],[23.5,33.0,21.9,0],[22.4,30.6,14.0,1],[22.8,28.7,9.9,1],[24.2,27.5,9.0,1],[26.0,26.7,9.8,1],[28.0,26.0,11.1,1],[30.0,25.4,12.5,1],[32.0,24.9,14.1,1],[34.0,24.4,15.7,1],[36.0,23.9,17.1,1],[38.0,23.4,18.6,1],[40.0,22.9,20.0,1],[42.0,22.5,21.5,1],[44.0,22.2,23.1,1],[46.0,21.8,24.6,1],[48.0,21.5,26.1,1],[50.0,21.2,27.5,1],[52.0,20.9,28.8,1],[54.0,20.7,30.1,1],[56.0,20.5,31.5,1],[58.0,20.4,32.8,1],[60.0,20.3,34.1,1],[62.0,20.2,35.4,1],[64.0,20.1,36.5,1],[66.0,20.1,37.7,1],[68.0,20.1,38.8,1],[70.0,20.2,39.9,1],[72.0,20.4,40.9,1],[74.0,20.6,41.8,1],[76.0,20.9,42.6,1],[78.0,21.3,43.1,1],[80.0,21.7,43.6,1],[82.0,22.2,43.9,1],[84.0,22.7,44.3,1],[86.0,23.2,44.6,1],[88.0,23.8,45.0,1],[90.0,24.4,45.3,1],[92.0,25.0,45.6,1],[94.0,25.7,45.8,1],[96.0,26.4,46.0,1],[98.0,27.1,46.3,1],[100.0,27.8,46.5,1],[102.0,28.6,46.6,1],[104.0,29.4,46.7,1],[106.0,30.2,46.8,1],[108.0,31.0,46.9,1],[110.0,31.8,47.0,1],[112.0,32.7,47.1,1],[114.0,33.5,47.1,1],[116.0,34.4,47.1,1],[118.0,35.3,47.1,1],[120.0,36.2,47.0,1],[122.0,36.9,46.9,1],[124.0,37.5,46.3,1],[126.0,37.9,45.3,1],[128.0,38.1,43.7,1],[130.0,38.2,41.9,1],[132.0,38.2,40.0,1],[134.0,38.3,38.0,1],[136.0,38.3,36.1,1],[138.0,38.4,34.2,1],[140.0,38.5,32.3,1],[142.0,38.6,30.2,1],[144.0,38.7,28.2,1],[146.0,38.9,26.1,1],[148.0,39.0,24.1,1],[150.0,39.1,22.1,1],[152.0,39.3,19.9,1],[154.0,39.4,17.8,1],[156.0,39.5,15.7,1],[158.0,39.7,13.6,1],[160.0,40.0,11.7,1],[161.8,40.4,10.2,1],[163.5,41.6,9.9,1],[164.7,43.7,11.6,1],[165.6,46.9,15.3,1],[166.2,50.6,20.3,1],[166.7,54.5,25.8,1],[167.0,58.3,31.2,1],[166.9,61.7,35.9,1],[166.1,64.6,39.6,1],[164.7,66.7,41.8,1],[163.0,68.2,43.0,1],[161.0,69.4,43.6,1],[159.0,70.5,44.0,1],[157.0,71.5,44.3,1],[155.0,72.6,44.6,1],[153.0,73.7,44.9,1],[151.0,74.7,45.1,1],[149.0,75.8,45.4,1],[147.0,76.8,45.7,1],[145.0,77.8,46.0,1],[143.0,78.8,46.2,1],[141.0,79.9,46.4,1],[139.0,80.8,46.7,1],[137.0,81.8,46.9,1],[135.0,82.8,47.0,1],[133.0,83.7,47.0,1],[131.0,84.7,47.1,1],[129.0,85.7,47.2,1],[127.0,86.6,47.3,1],[125.0,87.5,47.4,1],[123.0,88.4,47.3,1],[121.0,89.3,47.2,1],[119.0,90.3,47.1,1],[117.0,91.2,47.1,1],[115.0,92.1,47.1,1],[113.0,92.9,47.1,1],[111.0,93.8,47.1,1],[109.0,94.6,47.0,1],[107.0,95.4,46.9,1],[105.0,96.2,46.8,1],[103.0,97.0,46.7,1],[101.0,97.8,46.6,1],[99.0,98.5,46.4,1],[97.0,99.2,46.2,1],[95.0,99.9,46.0,1],[93.0,100.6,45.8,1],[91.0,101.3,45.5,1],[89.0,101.9,45.2,1],[87.0,102.5,44.8,1],[85.0,103.0,44.4,1],[83.0,103.5,44.1,1],[81.0,104.0,43.7,1],[79.0,104.5,43.4,1],[77.0,104.9,42.9,1],[75.0,105.3,42.3,1],[73.0,105.6,41.5,1],[71.0,105.8,40.5,1],[69.0,105.9,39.4,1],[67.0,105.9,38.3,1],[65.0,105.9,37.1,1],[63.0,105.8,36.0,1],[61.0,105.8,34.8,1],[59.0,105.6,33.5,1],[57.0,105.5,32.3,1],[55.0,105.3,30.9,1],[53.0,105.1,29.6,1],[51.0,104.9,28.2,1],[49.0,104.7,26.8,1],[47.0,104.4,25.4,1],[45.0,104.0,23.8,1],[43.0,103.6,22.3,1],[41.0,103.3,20.8,1],[39.0,102.8,19.3,1],[37.0,102.4,17.8,1],[35.0,101.9,16.4,1],[33.0,101.4,14.9,1],[31.0,100.8,13.3,1],[29.0,100.3,11.8,1],[27.0,99.6,10.4,1],[25.1,98.9,9.3,1],[23.4,97.9,9.0,1],[22.4,96.4,11.1,1],[22.8,94.2,17.0,0]];
+  // the zoning sketch on the floor (page px; illustrative): [x0, y0, x1, y1, label], neighbourhoods along the top and bottom edges,
+  // the shared spaces as islands down the middle
+  const ZONES = [
+    [1162, 512, 1338, 540, "01"], [1352, 512, 1548, 540, "02"], [1562, 512, 1796, 540, "03"],
+    [1182, 552, 1250, 572, "Café"], [1306, 552, 1394, 572, "Board room"], [1450, 552, 1520, 572, "Library"], [1576, 552, 1650, 572, "Terrace"], [1706, 552, 1774, 572, "Garden"],
+    [1172, 584, 1366, 608, "04"], [1380, 584, 1592, 608, "05"], [1606, 584, 1796, 608, "06"]];
+  // the loop's points: from its west end, east along the bottom (under each island, in between them), round the east end, back
+  // west along the top
+  const LOOP = [[1150, 562], [1166, 575], [1216, 579], [1283, 569], [1350, 579], [1418, 568], [1485, 579], [1549, 569], [1613, 579], [1677, 568],
+    [1740, 579], [1786, 575], [1802, 562], [1786, 549], [1740, 545], [1677, 556], [1613, 545], [1549, 555], [1485, 545], [1418, 556], [1350, 545],
+    [1283, 555], [1216, 545], [1166, 549]];
+  // a closed centripetal Catmull-Rom through points, sampled about every step px
+  const cr = (P, step) => {
+    const out = [], n = P.length, tj = (a, b) => Math.sqrt(Math.hypot(b[0] - a[0], b[1] - a[1])) || 1e-3;
+    for (let i = 0; i < n; i++) {
+      const p0 = P[(i - 1 + n) % n], p1 = P[i], p2 = P[(i + 1) % n], p3 = P[(i + 2) % n];
+      const t1 = tj(p0, p1), t2 = t1 + tj(p1, p2), t3 = t2 + tj(p2, p3), m = Math.max(2, Math.ceil(Math.hypot(p2[0] - p1[0], p2[1] - p1[1]) / step));
+      for (let s = 0; s < m; s++) {
+        const t = t1 + ((t2 - t1) * s) / m, L = (a, b, ta, tb) => [0, 1].map((j) => ((tb - t) * a[j] + (t - ta) * b[j]) / (tb - ta));
+        const A1 = L(p0, p1, 0, t1), A2 = L(p1, p2, t1, t2), A3 = L(p2, p3, t2, t3);
+        out.push(L(L(A1, A2, 0, t2), L(A2, A3, t1, t3), t1, t2));
+      }
+    }
+    return out;
+  };
   const S = { built: false, fresh: true, last: 0, raf: 0, R: null, cur: null, img: null, sc: null };
   const ease = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -196,10 +230,9 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, reduced }) => {
     const r1 = (p) => p.map((v) => v.toFixed(1));
     $(".cpl-dots", sc).innerHTML = B.map((p, i) => `<circle class="${i < N / 2 ? "pa" : "pb"}" r="1" data-b="${r1(p)}" data-c="${r1(C[i])}"/>`).join("");
     // the floor's outline: its extent (rooms, zones, cores and lobbies), its west end raked as the plan's is (as option 6 draws it)
-    const P = window.PLAN_DXF, L = window.ACKO_LOOP, FP = (x, y) => [LX + (x - VB[0]) * KL, LY + (y - VB[1]) * KL];
+    const P = window.PLAN_DXF, FP = (x, y) => [LX + (x - VB[0]) * KL, LY + (y - VB[1]) * KL];
     const nums = (d) => { const n = d.match(/-?\d+(?:\.\d+)?/g).map(Number), p = []; for (let i = 0; i + 1 < n.length; i += 2) p.push([n[i], n[i + 1]]); return p; };
-    let ring = [], ia = 0, d0 = 0, arr = [];
-    if (P && L) {
+    if (P) {
       const box = (p) => { const xs = p.map((q) => q[0]), ys = p.map((q) => q[1]); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; };
       const area = (b) => (b[2] - b[0]) * (b[3] - b[1]);
       const outer = (d) => d.split(/(?=M)/).reduce((best, s) => (area(box(nums(s))) > area(box(nums(best))) ? s : best));
@@ -208,12 +241,19 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, reduced }) => {
       const top = Math.min(...all.map((p) => p[1])), bot = Math.max(...all.map((p) => p[1])), east = Math.max(...all.map((p) => p[0]));
       const west = (near) => Math.min(...all.filter((p) => Math.abs(p[1] - near) < 1500).map((p) => p[0]));
       $(".cpl-plate", sc).setAttribute("d", "M" + [[west(top), top], [east, top], [east, bot], [west(bot), bot]].map((p) => f1(FP(...p))).join("L") + "Z");
-      // the loop, smoothed as option 6 smooths it (index-keeping, closed); its last stretch dashed
-      ring = L.ring.map((p) => FP(p[0], p[1]));
-      for (let t = 0; t < 3; t++) ring = ring.map((p, i, a) => { const q = a[(i - 1 + a.length) % a.length], r = a[(i + 1) % a.length]; return [p[0] / 2 + (q[0] + r[0]) / 4, p[1] / 2 + (q[1] + r[1]) / 4]; });
-      d0 = (L.ringDash && L.ringDash[0] && L.ringDash[0][0]) || ring.length;
-      arr = L.ringStops.filter((s) => s.kind === "arrival").map((s) => s.i); ia = arr[0] || 0;
     }
+    // on it, a zoning sketch (illustrative, not the plan; 18 Nov, Ritika: "show random zoning diagram with neighbourhoods, shared
+    // spaces and loop"): the neighbourhoods along both long edges, the shared spaces as islands down the middle
+    $(".cpl-zones", sc).innerHTML = ZONES.map(([x0, y0, x1, y1, n], i) => { const nb = /^\d/.test(n);
+      return `<g class="cpl-z${nb ? "" : " sh"}" style="--i:${i}"><rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" rx="${nb ? 7 : (y1 - y0) / 2}" style="fill:${nb ? NB[+n - 1] : "#eee8fc"}"/>`
+        + `<text x="${(x0 + x1) / 2}" y="${(y0 + y1) / 2 + (nb ? 4 : 3)}" text-anchor="middle">${n}</text></g>`; }).join("");
+    // and the ACKO Loop through it as one smooth, organic loop (centripetal Catmull-Rom, closed): east along the bottom, back west
+    // along the top, bulging round each island and pinching between them, so the shared spaces sit inside it and the neighbourhoods
+    // line it on both sides. Arrival 1 on the bottom lane, Arrival 2 on the top, where the real ones are along the floor
+    let sd = 11; const rn = () => ((sd = (sd * 16807) % 2147483647) / 2147483647) - .5;
+    const ring = cr(LOOP.map(([x, y], i) => (i % 12 ? [x + rn() * 8, y + rn() * 3] : [x, y])), 3);
+    const near = (q) => ring.reduce((b, p, i) => (Math.hypot(p[0] - q[0], p[1] - q[1]) < Math.hypot(ring[b][0] - q[0], ring[b][1] - q[1]) ? i : b), 0);
+    const arr = [near([1272, 575]), near([1560, 548])], ia = arr[0];
     // the route
     const geo = (c) => $(".cpl-geo ." + c, sc), toM = (p) => [MX + p.x * KM, MY + p.y * KM];
     const bk = geo("bk"), fa = geo("f1"), fb = geo("f2");
@@ -249,7 +289,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, reduced }) => {
       const ai = ring[ia];
       parts.push({ pts: bez(REST2, [REST2[0] + 90, REST2[1]], [ai[0] - dir[0] * 80, ai[1] - dir[1] * 80], ai), w: [WID, WL], tag: "rest2" }); // into Arrival 1
       const idx = [...Array(ring.length - ia).keys()].map((i) => i + ia).concat([...Array(ia + 1).keys()]);
-      parts.push({ pts: idx.map((i) => ring[i]), w: WL, tag: "loop", flag: idx.map((i) => (i >= d0 || i === 0 ? 1 : 0) + (arr.includes(i) ? 2 : 0)) });
+      parts.push({ pts: idx.map((i) => ring[i]), w: WL, tag: "loop", flag: idx.map((i) => (arr.includes(i) ? 2 : 0)) });
     }
     const R = (S.R = route(parts));
     R.rest1 = R.at.rest1; R.rest2 = R.at.rest2 || R.end; R.mob0 = R.at.mob; R.mob1 = R.at.mobx; R.loop0 = R.at.loop || R.end;
@@ -339,7 +379,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, reduced }) => {
     const R = S.R;
     $(".cpl-drop", sc).style.opacity = k ? 0 : 1; $(".cpl-one", sc).style.opacity = k ? 0 : 1; $(".cpl-cond", sc).style.opacity = 0;
     $$(".cpl-seg", sc).forEach((e) => e.classList.toggle("on", k >= 1)); $(".cpl-out", sc).classList.toggle("on", k >= 1);
-    $(".cpl-plate", sc).classList.toggle("on", k >= 3);
+    $(".cpl-plate", sc).classList.toggle("on", k >= 3); $(".cpl-zones", sc).classList.toggle("on", k >= 3);
     seat(sc, k >= 1, 0);
     const st = { wins: [], reveal: 0, loop: 0 };
     if (k === 1) st.wins = wins(R.rest1 - LREST, R.rest1, 130, 22);
@@ -361,7 +401,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, reduced }) => {
     stop();
     const R = S.R, T = RUN[k], t0 = performance.now(), popped = new Set();
     let seated = false;
-    if (k === 3) $(".cpl-plate", sc).classList.add("on");
+    if (k === 3) { $(".cpl-plate", sc).classList.add("on"); $(".cpl-zones", sc).classList.add("on"); }
     const frame = (now) => {
       if (document.body.dataset.scene && document.body.dataset.scene !== sc.id) { S.raf = 0; return; }
       const t = now - t0;
