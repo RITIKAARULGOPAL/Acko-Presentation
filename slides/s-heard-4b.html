@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First, your words · B · Sticky notes · ACKO slide s-heard-4b</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · The minutes, B · Sticky notes (Ritika, 17 Nov: "this style and wording is fine. show variations taking this as
+     base"). Not in order.txt; see index-heard-minutes.html. A pinboard: the MoM's twelve points as handwritten sticky notes in
+     yellow, lavender and lilac, slapped on one by one in a 4 × 3 grid, each space swept with a purple highlighter; then "First, your
+     words." stamped in the column on the left and the hand line. Hover a note to lift it. A click settles it. -->
+<section class="scene" id="s-heard-4b" data-part="cover" data-title="First, your words" data-steps="1" data-mins="0.6" data-beats="Before our ideas"
+  data-notes="First, your words: twelve points from our meeting, one note each; then, what we made of them. 1 · Before our ideas: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="hdr"><b>First, your words</b><span>Before we begin</span></div>
+    <div class="sn-side">
+      <b class="hand sn-k">Before our ideas</b>
+      <h2 class="sn-head">First, <span>your words.</span></h2>
+      <p class="hand sn-close">Then, what we made of them.</p>
+    </div>
+    <ol class="sn-wall">
+      <li class="ui" style="--c:#fff0a3;--r:-2.4deg"><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li class="ui" style="--c:#e8dffc;--r:1.8deg"><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li class="ui" style="--c:#d8ccf8;--r:-1.1deg"><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li class="ui" style="--c:#fff0a3;--r:2.6deg"><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li class="ui" style="--c:#d8ccf8;--r:1.3deg"><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li class="ui" style="--c:#fff0a3;--r:-2.1deg"><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li class="ui" style="--c:#e8dffc;--r:2.2deg"><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li class="ui" style="--c:#d8ccf8;--r:-1.6deg"><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li class="ui" style="--c:#e8dffc;--r:-2.8deg"><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li class="ui" style="--c:#d8ccf8;--r:1.2deg"><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li class="ui" style="--c:#fff0a3;--r:-.8deg"><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li class="ui" style="--c:#e8dffc;--r:2.4deg"><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+  </div>
+</section>
+<style>
+/* a pinboard: warm, with a fine dot */
+#s-heard-4b .page { background: radial-gradient(rgba(60, 40, 20, .07) 1px, transparent 1.3px) 0 0 / calc(var(--pt) * 6) calc(var(--pt) * 6), linear-gradient(160deg, #f5f2ec, #ebe6dd); }
+
+/* the column on the left: the label first, the headline stamped last, then the hand line */
+#s-heard-4b .sn-side { left: 0; top: 0; width: 34%; height: 100%; }
+#s-heard-4b .sn-side > * { position: absolute; left: 19%; width: 78%; margin: 0; }
+#s-heard-4b .sn-k { top: 30%; font-size: calc(var(--pt) * 15); font-weight: 400; color: var(--purple); opacity: 0; transition: opacity .6s var(--ease); }
+#s-heard-4b .page.sn-in .sn-k { opacity: 1; }
+#s-heard-4b .sn-head { top: 36.5%; font-size: calc(var(--pt) * 30); line-height: 1.06; font-weight: 700; color: var(--purple); transform-origin: 20% 60%;
+  opacity: 0; transform: rotate(-2deg) scale(1.7); }
+#s-heard-4b .sn-head span { display: block; }
+#s-heard-4b .page.sn-done .sn-head { opacity: 1; transform: rotate(-2deg); animation: sn-stamp .55s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes sn-stamp { 0% { opacity: 0; transform: rotate(-2deg) scale(1.7); } 60% { opacity: 1; transform: rotate(-2deg) scale(.96); } 100% { opacity: 1; transform: rotate(-2deg) scale(1); } }
+#s-heard-4b .sn-close { top: 60%; font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--purple); opacity: 0; transform: translateY(8px);
+  transition: opacity .7s var(--ease) .9s, transform .7s var(--ease) .9s; }
+#s-heard-4b .page.sn-done .sn-close { opacity: 1; transform: none; }
+
+/* the notes: four across, three down, each slapped on with a little bounce and left at its own angle */
+#s-heard-4b .sn-wall { left: 36%; top: 10%; width: 59%; height: 80%; margin: 0; padding: 0; list-style: none; display: grid;
+  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 3.4% 2.8%; }
+#s-heard-4b .sn-wall li { position: relative; padding: 8% 9% 7%; background: var(--c);
+  box-shadow: 0 1px 1px rgba(40, 30, 60, .08), 0 calc(var(--pt) * 5) calc(var(--pt) * 8) calc(var(--pt) * -3) rgba(40, 30, 60, .34);
+  opacity: 0; transform: translateY(calc(var(--pt) * -12)) rotate(calc(var(--r) * 3)) scale(1.16);
+  transition: opacity .18s ease, transform .5s cubic-bezier(.3, 1.45, .5, 1), box-shadow .3s; }
+#s-heard-4b .sn-wall li::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 15%; background: rgba(40, 30, 60, .04); }   /* the gummed strip */
+#s-heard-4b .sn-wall li.on { opacity: 1; transform: rotate(var(--r)); }
+#s-heard-4b .sn-wall li.on:hover { z-index: 3; transform: rotate(0) scale(1.08); box-shadow: 0 1px 1px rgba(40, 30, 60, .08), 0 calc(var(--pt) * 10) calc(var(--pt) * 16) calc(var(--pt) * -4) rgba(40, 30, 60, .4); }
+#s-heard-4b .sn-wall em { display: block; font: 400 calc(var(--pt) * 15) / 1 var(--hand); font-style: normal; color: var(--purple); }
+#s-heard-4b .sn-wall p { margin: .3em 0 0; font-family: var(--hand); font-size: calc(var(--pt) * 12.6); line-height: 1.06; color: #2a2433; }
+/* the space, swept with a highlighter once the note is on */
+#s-heard-4b .sn-wall b { padding: 0 .12em; font-weight: 400; color: #3a1aa0; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(rgba(146, 111, 243, .42), rgba(146, 111, 243, .42)) 0 86% / 0% 46% no-repeat; transition: background-size .45s cubic-bezier(.5, 0, .3, 1); }
+#s-heard-4b .sn-wall li.mk b { background-size: 100% 46%; }
+</style>
+<script>
+ACKO.slide("s-heard-4b", ({ $, $$, plain, later, reduced }) => {
+  const GAP = 300;                                     // a note every 0.3 s
+  let run = 0;
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("sn-in", "sn-done");
+    $$(".sn-wall li", p).forEach((li) => li.classList.remove("on", "mk"));
+  }
+  function settle(sc) {
+    run++;
+    const p = $(".page", sc);
+    $$(".sn-wall li", p).forEach((li) => li.classList.add("on", "mk"));
+    p.classList.add("sn-in", "sn-done");
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc), lis = [...$$(".sn-wall li", p)];
+    p.classList.add("sn-in");
+    lis.forEach((li, i) => {
+      later(() => { if (id === run) li.classList.add("on"); }, 600 + i * GAP);
+      later(() => { if (id === run) li.classList.add("mk"); }, 600 + i * GAP + 380);
+    });
+    later(() => { if (id === run) p.classList.add("sn-done"); }, 600 + lis.length * GAP + 600);
+  }
+  return {
+    enter(_, sc) {
+      plain(); reset(sc);
+      sc._skip = (e) => { const p = $(".page", sc); if (p.classList.contains("sn-in") && !p.classList.contains("sn-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("sn-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

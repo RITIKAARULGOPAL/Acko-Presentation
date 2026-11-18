@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-heard-f1">
+#s-heard-f1 .page { background: #fff; }
+/* the deck's concept type: a small italic label, then the headline, 400 ink with its key words 700 purple */
+#s-heard-f1 .fm-k { left: 8%; top: 10.5%; margin: 0; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-heard-f1 .fm-head { left: 8%; top: 14.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 26); line-height: 1.12; font-weight: 400; color: #16131f; letter-spacing: -.01em; }
+#s-heard-f1 .fm-head span { font-weight: 700; color: var(--purple); }
+#s-heard-f1 .fm-k, #s-heard-f1 .fm-head { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-heard-f1 .fm-head { transition-delay: .12s; }
+#s-heard-f1 .page.fm-in .fm-k, #s-heard-f1 .page.fm-in .fm-head { opacity: 1; transform: none; }
+
+/* the register: No. · Space · Feedback; a purple rule under the head draws across, then the rows slide in */
+#s-heard-f1 .rg-table { left: 8%; top: 27.5%; width: 84%; font-size: calc(var(--pt) * 7.6); }
+#s-heard-f1 .rg-hd, #s-heard-f1 .rg-rows li { display: grid; grid-template-columns: 24% 76%; align-items: baseline; }
+#s-heard-f1 .rg-hd { position: relative; padding: 0 0 .7em; font-size: calc(var(--pt) * 6.2); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--purple);
+  opacity: 0; transition: opacity .6s var(--ease) .3s; }
+#s-heard-f1 .rg-hd::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: var(--purple); transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform .9s cubic-bezier(.6, 0, .2, 1) .35s; }
+#s-heard-f1 .page.fm-in .rg-hd { opacity: 1; }
+#s-heard-f1 .page.fm-in .rg-hd::after { transform: none; }
+#s-heard-f1 .rg-rows { margin: 0; padding: 0; list-style: none; }
+#s-heard-f1 .rg-rows li { padding: .5em 0; border-bottom: 1px solid #ebe7f3; opacity: 0; transform: translateX(calc(var(--pt) * -8));
+  transition: opacity .5s var(--ease), transform .5s var(--ease), background .25s; transition-delay: calc(var(--i) * 70ms + .8s), calc(var(--i) * 70ms + .8s), 0s; }
+#s-heard-f1 .page.fm-in .rg-rows li { opacity: 1; transform: none; }
+#s-heard-f1 .rg-rows li:hover { background: #f7f5fc; }
+#s-heard-f1 .rg-rows strong { font-weight: 600; color: #16131f; }
+#s-heard-f1 .rg-rows p { margin: 0; line-height: 1.3; color: #3b3550; }
+#s-heard-f1 .rg-rows b { font-weight: 700; color: var(--purple); }   /* the key words, purple bold (Ritika, 18 Nov) */
+
+#s-heard-f1 .fm-close { left: 8%; top: 88%; width: 84%; margin: 0; font-size: calc(var(--pt) * 8.6); font-style: italic; color: #555;
+  opacity: 0; transition: opacity .7s var(--ease) 3.4s; }
+#s-heard-f1 .page.fm-in .fm-close { opacity: 1; }
+/* a click: everything in at once */
+#s-heard-f1 .page.fm-now .fm-k, #s-heard-f1 .page.fm-now .fm-head, #s-heard-f1 .page.fm-now .rg-hd, #s-heard-f1 .page.fm-now .rg-hd::after,
+#s-heard-f1 .page.fm-now .rg-rows li, #s-heard-f1 .page.fm-now .fm-close { transition-delay: 0s !important; transition-duration: .3s !important; }
+/* the key words, one after another once the points are in (18 Nov, Ritika: "do some animation to highlight the keywords"); three
+   styles, switched on the options page: hl-1 purple sweeps across the word, hl-2 an underline draws beneath it, hl-3 a lavender
+   marker behind it. Keyframes, each holding its first frame through its delay, so a fresh load or a replay starts clean. Bold from
+   the start, the marker's padding paid back by its margin, so nothing reflows. */
+#s-heard-f1 .page { --kb: 1.5s; --kw-ink: #3b3550; }
+#s-heard-f1 .page li p b { font-weight: 800; font-size: 1.12em; line-height: 1; -webkit-box-decoration-break: clone; box-decoration-break: clone; }   /* bolder and a little bigger than the sentence (Ritika, 18 Nov: "can the keywords be bolder or bigger") */
+#s-heard-f1 .page.hl-1 li p b { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, var(--purple) 0, var(--purple) 50%, var(--kw-ink) 50%, var(--kw-ink) 100%); background-size: 200% 100%; background-position: 100% 0; }
+#s-heard-f1 .page.hl-1.kw-on li p b { animation: hf1-sweep .7s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf1-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+#s-heard-f1 .page.hl-2 li p b { background: linear-gradient(var(--purple), var(--purple)) 0 100% / 0% 2px no-repeat; }
+#s-heard-f1 .page.hl-2.kw-on li p b { animation: hf1-line .6s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf1-line { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+#s-heard-f1 .page.hl-3 li p b { padding: 0 .12em; margin: 0 -.12em; background: linear-gradient(rgba(146, 111, 243, .24), rgba(146, 111, 243, .24)) 0 88% / 0% 58% no-repeat; }
+#s-heard-f1 .page.hl-3.kw-on li p b { animation: hf1-mark .55s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf1-mark { from { background-size: 0% 58%; } to { background-size: 100% 58%; } }
+#s-heard-f1 .page.fm-now li p b { animation-delay: 0s !important; animation-duration: .3s !important; }
+</style>
+<style data-slide="s-heard-f2">
+#s-heard-f2 .page { background: #f7f6fa; }
+#s-heard-f2 .fm-k { left: 8%; top: 9.5%; margin: 0; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-heard-f2 .fm-head { left: 8%; top: 13.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 26); line-height: 1.12; font-weight: 400; color: #16131f; letter-spacing: -.01em; }
+#s-heard-f2 .fm-head span { font-weight: 700; color: var(--purple); }
+#s-heard-f2 .fm-k, #s-heard-f2 .fm-head { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-heard-f2 .fm-head { transition-delay: .12s; }
+#s-heard-f2 .page.fm-in .fm-k, #s-heard-f2 .page.fm-in .fm-head { opacity: 1; transform: none; }
+
+/* the cards: four across, three down; each rises in turn and a purple line draws along its top */
+#s-heard-f2 .cd-grid { left: 8%; top: 27%; width: 84%; height: 56%; margin: 0; padding: 0; list-style: none; display: grid;
+  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 3.2% 1.6%; }
+#s-heard-f2 .cd-grid li { position: relative; padding: 8% 7.5% 6%; background: #fff; border: 1px solid #e6e1f0; border-radius: calc(var(--pt) * 2.5);
+  box-shadow: 0 1px 2px rgba(40, 30, 70, .04); opacity: 0; transform: translateY(calc(var(--pt) * 8));
+  transition: opacity .55s var(--ease), transform .55s var(--ease), box-shadow .3s; transition-delay: calc((var(--c) + var(--r)) * 90ms + .5s), calc((var(--c) + var(--r)) * 90ms + .5s), 0s; }
+#s-heard-f2 .cd-grid li::before { content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 2px; border-radius: 2px 2px 0 0; background: var(--purple);
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform .6s cubic-bezier(.6, 0, .2, 1); transition-delay: calc((var(--c) + var(--r)) * 90ms + .85s); }
+#s-heard-f2 .page.fm-in .cd-grid li { opacity: 1; transform: none; }
+#s-heard-f2 .page.fm-in .cd-grid li::before { transform: none; }
+#s-heard-f2 .page.fm-in .cd-grid li:hover { transform: translateY(calc(var(--pt) * -1.5)); box-shadow: 0 calc(var(--pt) * 4) calc(var(--pt) * 10) rgba(40, 30, 70, .12); transition-delay: 0s; }
+#s-heard-f2 .cd-grid h3 { margin: 0 0 .45em; font-size: calc(var(--pt) * 8); line-height: 1.2; font-weight: 600; color: #16131f; }
+#s-heard-f2 .cd-grid p { margin: 0; font-size: calc(var(--pt) * 6.6); line-height: 1.38; color: #555; }
+#s-heard-f2 .cd-grid b { font-weight: 700; color: var(--purple); }   /* the key words, purple bold (Ritika, 18 Nov) */
+
+#s-heard-f2 .fm-close { left: 8%; top: 87.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 8.6); font-style: italic; color: #555;
+  opacity: 0; transition: opacity .7s var(--ease) 3.3s; }
+#s-heard-f2 .page.fm-in .fm-close { opacity: 1; }
+#s-heard-f2 .page.fm-now .fm-k, #s-heard-f2 .page.fm-now .fm-head, #s-heard-f2 .page.fm-now .cd-grid li, #s-heard-f2 .page.fm-now .cd-grid li::before,
+#s-heard-f2 .page.fm-now .fm-close { transition-delay: 0s !important; transition-duration: .3s !important; }
+/* the key words, one after another once the points are in (18 Nov, Ritika: "do some animation to highlight the keywords"); three
+   styles, switched on the options page: hl-1 purple sweeps across the word, hl-2 an underline draws beneath it, hl-3 a lavender
+   marker behind it. Keyframes, each holding its first frame through its delay, so a fresh load or a replay starts clean. Bold from
+   the start, the marker's padding paid back by its margin, so nothing reflows. */
+#s-heard-f2 .page { --kb: 1.3s; --kw-ink: #555; }
+#s-heard-f2 .page li p b { font-weight: 800; font-size: 1.12em; line-height: 1; -webkit-box-decoration-break: clone; box-decoration-break: clone; }   /* bolder and a little bigger than the sentence (Ritika, 18 Nov: "can the keywords be bolder or bigger") */
+#s-heard-f2 .page.hl-1 li p b { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, var(--purple) 0, var(--purple) 50%, var(--kw-ink) 50%, var(--kw-ink) 100%); background-size: 200% 100%; background-position: 100% 0; }
+#s-heard-f2 .page.hl-1.kw-on li p b { animation: hf2-sweep .7s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf2-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+#s-heard-f2 .page.hl-2 li p b { background: linear-gradient(var(--purple), var(--purple)) 0 100% / 0% 2px no-repeat; }
+#s-heard-f2 .page.hl-2.kw-on li p b { animation: hf2-line .6s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf2-line { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+#s-heard-f2 .page.hl-3 li p b { padding: 0 .12em; margin: 0 -.12em; background: linear-gradient(rgba(146, 111, 243, .24), rgba(146, 111, 243, .24)) 0 88% / 0% 58% no-repeat; }
+#s-heard-f2 .page.hl-3.kw-on li p b { animation: hf2-mark .55s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf2-mark { from { background-size: 0% 58%; } to { background-size: 100% 58%; } }
+#s-heard-f2 .page.fm-now li p b { animation-delay: 0s !important; animation-duration: .3s !important; }
+</style>
+<style data-slide="s-heard-f3">
+#s-heard-f3 .page { background: #fff; }
+/* the panel: deep purple, wiped in from the left; its words placed in it */
+#s-heard-f3 .pl-panel { left: 0; top: 9%; width: 34%; height: 82%; background: linear-gradient(155deg, #2e1585 0%, #4a22c2 60%, #5222d0 100%);
+  clip-path: inset(0 100% 0 0); transition: clip-path .9s cubic-bezier(.6, 0, .2, 1) .1s; }
+#s-heard-f3 .page.fm-in .pl-panel { clip-path: inset(0 0 0 0); }
+#s-heard-f3 .pl-panel > * { position: absolute; left: 16%; width: 72%; margin: 0; opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-heard-f3 .fm-k { top: 22%; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255, 255, 255, .74); transition-delay: .6s; }
+#s-heard-f3 .fm-head { top: 29%; font-size: calc(var(--pt) * 26); line-height: 1.12; font-weight: 400; color: #fff; letter-spacing: -.01em; transition-delay: .75s; }
+#s-heard-f3 .fm-head span { font-weight: 700; color: var(--lilac); }
+#s-heard-f3 .fm-close { top: 80%; font-size: calc(var(--pt) * 8.6); line-height: 1.4; font-style: italic; color: rgba(255, 255, 255, .82); transition-delay: 3.5s; }
+#s-heard-f3 .page.fm-in .pl-panel > * { opacity: 1; transform: none; }
+
+/* the twelve: two columns of six, read down, on hairline rules */
+#s-heard-f3 .pl-rows { left: 39%; top: 28%; width: 54%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: 7%; font-size: calc(var(--pt) * 7.6); }
+#s-heard-f3 .pl-rows li { display: block; padding: .62em 0; border-top: 1px solid #e6e1f0;
+  opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i) * 60ms + 1s); }
+#s-heard-f3 .pl-rows li:nth-child(6), #s-heard-f3 .pl-rows li:nth-child(12) { border-bottom: 1px solid #e6e1f0; }
+#s-heard-f3 .page.fm-in .pl-rows li { opacity: 1; transform: none; }
+#s-heard-f3 .pl-rows p { margin: 0; line-height: 1.38; color: #3b3550; }
+#s-heard-f3 .pl-rows b { font-weight: 700; color: var(--purple); }   /* the key words, purple bold (Ritika, 18 Nov) */
+
+#s-heard-f3 .page.fm-now .pl-panel, #s-heard-f3 .page.fm-now .pl-panel > *, #s-heard-f3 .page.fm-now .pl-rows li { transition-delay: 0s !important; transition-duration: .3s !important; }
+/* the key words, one after another once the points are in (18 Nov, Ritika: "do some animation to highlight the keywords"); three
+   styles, switched on the options page: hl-1 purple sweeps across the word, hl-2 an underline draws beneath it, hl-3 a lavender
+   marker behind it. Keyframes, each holding its first frame through its delay, so a fresh load or a replay starts clean. Bold from
+   the start, the marker's padding paid back by its margin, so nothing reflows. */
+#s-heard-f3 .page { --kb: 1.6s; --kw-ink: #3b3550; }
+#s-heard-f3 .page li p b { font-weight: 800; font-size: 1.12em; line-height: 1; -webkit-box-decoration-break: clone; box-decoration-break: clone; }   /* bolder and a little bigger than the sentence (Ritika, 18 Nov: "can the keywords be bolder or bigger") */
+#s-heard-f3 .page.hl-1 li p b { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, var(--purple) 0, var(--purple) 50%, var(--kw-ink) 50%, var(--kw-ink) 100%); background-size: 200% 100%; background-position: 100% 0; }
+#s-heard-f3 .page.hl-1.kw-on li p b { animation: hf3-sweep .7s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf3-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+#s-heard-f3 .page.hl-2 li p b { background: linear-gradient(var(--purple), var(--purple)) 0 100% / 0% 2px no-repeat; }
+#s-heard-f3 .page.hl-2.kw-on li p b { animation: hf3-line .6s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf3-line { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+#s-heard-f3 .page.hl-3 li p b { padding: 0 .12em; margin: 0 -.12em; background: linear-gradient(rgba(146, 111, 243, .24), rgba(146, 111, 243, .24)) 0 88% / 0% 58% no-repeat; }
+#s-heard-f3 .page.hl-3.kw-on li p b { animation: hf3-mark .55s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf3-mark { from { background-size: 0% 58%; } to { background-size: 100% 58%; } }
+#s-heard-f3 .page.fm-now li p b { animation-delay: 0s !important; animation-duration: .3s !important; }
+</style>
+<style data-slide="s-heard-f4">
+#s-heard-f4 .page { background: #fff; }
+#s-heard-f4 .fm-k { left: 8%; top: 10%; margin: 0; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-heard-f4 .fm-head { left: 8%; top: 14%; width: 84%; margin: 0; font-size: calc(var(--pt) * 26); line-height: 1.12; font-weight: 400; color: #16131f; letter-spacing: -.01em; }
+#s-heard-f4 .fm-head span { font-weight: 700; color: var(--purple); }
+#s-heard-f4 .fm-k, #s-heard-f4 .fm-head { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-heard-f4 .fm-head { transition-delay: .12s; }
+#s-heard-f4 .page.fm-in .fm-k, #s-heard-f4 .page.fm-in .fm-head { opacity: 1; transform: none; }
+
+/* a thin purple rule drawn across, then the index three across */
+#s-heard-f4 .ix-rule { left: 8%; top: 27%; width: 84%; height: 1.5px; background: var(--purple); transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform 1s cubic-bezier(.6, 0, .2, 1) .4s; }
+#s-heard-f4 .page.fm-in .ix-rule { transform: none; }
+#s-heard-f4 .ix-grid { left: 8%; top: 31%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr);
+  column-gap: 4%; row-gap: calc(var(--pt) * 20); }
+#s-heard-f4 .ix-grid li { position: relative; display: block; padding-top: calc(var(--pt) * 7);
+  opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i) * 70ms + .9s); }
+#s-heard-f4 .page.fm-in .ix-grid li { opacity: 1; transform: none; }
+#s-heard-f4 .ix-grid li::before { content: ""; position: absolute; left: 0; top: 0; width: calc(var(--pt) * 14); height: 1.5px; background: var(--purple); }   /* an editorial mark, in place of a number */
+#s-heard-f4 .ix-grid h3 { margin: 0 0 .3em; font-size: calc(var(--pt) * 7.8); line-height: 1.2; font-weight: 600; color: #16131f; }
+#s-heard-f4 .ix-grid p { margin: 0; font-size: calc(var(--pt) * 6.6); line-height: 1.4; color: #555; }
+#s-heard-f4 .ix-grid b { font-weight: 700; color: var(--purple); }   /* the key words, purple bold (Ritika, 18 Nov) */
+
+#s-heard-f4 .fm-close { left: 8%; top: 87.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 8.6); font-style: italic; color: #555;
+  opacity: 0; transition: opacity .7s var(--ease) 3.4s; }
+#s-heard-f4 .page.fm-in .fm-close { opacity: 1; }
+#s-heard-f4 .page.fm-now .fm-k, #s-heard-f4 .page.fm-now .fm-head, #s-heard-f4 .page.fm-now .ix-rule, #s-heard-f4 .page.fm-now .ix-grid li,
+#s-heard-f4 .page.fm-now .fm-close { transition-delay: 0s !important; transition-duration: .3s !important; }
+/* the key words, one after another once the points are in (18 Nov, Ritika: "do some animation to highlight the keywords"); three
+   styles, switched on the options page: hl-1 purple sweeps across the word, hl-2 an underline draws beneath it, hl-3 a lavender
+   marker behind it. Keyframes, each holding its first frame through its delay, so a fresh load or a replay starts clean. Bold from
+   the start, the marker's padding paid back by its margin, so nothing reflows. */
+#s-heard-f4 .page { --kb: 1.5s; --kw-ink: #555; }
+#s-heard-f4 .page li p b { font-weight: 800; font-size: 1.12em; line-height: 1; -webkit-box-decoration-break: clone; box-decoration-break: clone; }   /* bolder and a little bigger than the sentence (Ritika, 18 Nov: "can the keywords be bolder or bigger") */
+#s-heard-f4 .page.hl-1 li p b { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, var(--purple) 0, var(--purple) 50%, var(--kw-ink) 50%, var(--kw-ink) 100%); background-size: 200% 100%; background-position: 100% 0; }
+#s-heard-f4 .page.hl-1.kw-on li p b { animation: hf4-sweep .7s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf4-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+#s-heard-f4 .page.hl-2 li p b { background: linear-gradient(var(--purple), var(--purple)) 0 100% / 0% 2px no-repeat; }
+#s-heard-f4 .page.hl-2.kw-on li p b { animation: hf4-line .6s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf4-line { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+#s-heard-f4 .page.hl-3 li p b { padding: 0 .12em; margin: 0 -.12em; background: linear-gradient(rgba(146, 111, 243, .24), rgba(146, 111, 243, .24)) 0 88% / 0% 58% no-repeat; }
+#s-heard-f4 .page.hl-3.kw-on li p b { animation: hf4-mark .55s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf4-mark { from { background-size: 0% 58%; } to { background-size: 100% 58%; } }
+#s-heard-f4 .page.fm-now li p b { animation-delay: 0s !important; animation-duration: .3s !important; }
+</style>
+<style data-slide="s-heard-f5">
+/* a white sheet on a pale desk */
+#s-heard-f5 .page { background: radial-gradient(ellipse 80% 75% at 50% 40%, #f3f1f7 0%, #e5e1ec 100%); }
+#s-heard-f5 .dc-sheet { left: 7%; top: 9%; width: 86%; height: 84%; background: #fff; border-radius: 2px;
+  box-shadow: 0 calc(var(--pt) * .6) calc(var(--pt) * 1.5) rgba(40, 30, 70, .1), 0 calc(var(--pt) * 9) calc(var(--pt) * 22) rgba(40, 30, 70, .16);
+  opacity: 0; transform: translateY(calc(var(--pt) * 10)); transition: opacity .7s var(--ease), transform .9s var(--ease); }
+#s-heard-f5 .page.fm-in .dc-sheet { opacity: 1; transform: none; }
+#s-heard-f5 .dc-sheet > * { position: absolute; left: 6%; margin: 0; }
+
+/* the header block */
+#s-heard-f5 .dc-meta, #s-heard-f5 .fm-k, #s-heard-f5 .fm-head { opacity: 0; transform: translateY(6px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+#s-heard-f5 .dc-meta { top: 7%; font-size: calc(var(--pt) * 6.2); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #8d86a0; transition-delay: .4s; }
+#s-heard-f5 .fm-k { top: 12.5%; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; transition-delay: .5s; }
+#s-heard-f5 .fm-head { top: 16.5%; width: 88%; font-size: calc(var(--pt) * 24); line-height: 1.12; font-weight: 400; color: #16131f; letter-spacing: -.01em; transition-delay: .62s; }
+#s-heard-f5 .fm-head span { font-weight: 700; color: var(--purple); }
+#s-heard-f5 .page.fm-in .dc-meta, #s-heard-f5 .page.fm-in .fm-k, #s-heard-f5 .page.fm-in .fm-head { opacity: 1; transform: none; }
+#s-heard-f5 .dc-rule { top: 29.5%; width: 88%; height: 1px; background: #d6cfe6; transform: scaleX(0); transform-origin: 0 50%; transition: transform .9s cubic-bezier(.6, 0, .2, 1) .8s; }
+#s-heard-f5 .page.fm-in .dc-rule { transform: none; }
+
+/* the points: two columns of six, read down */
+#s-heard-f5 .dc-rows { top: 33%; width: 88%; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(6, auto);
+  grid-auto-flow: column; column-gap: 6%; font-size: calc(var(--pt) * 7.4); }
+#s-heard-f5 .dc-rows li { display: block; padding: .55em 0; border-bottom: 1px solid #f0edf6;
+  opacity: 0; transition: opacity .5s var(--ease); transition-delay: calc(var(--i) * 60ms + 1.1s); }
+#s-heard-f5 .page.fm-in .dc-rows li { opacity: 1; }
+#s-heard-f5 .dc-rows p { margin: 0; line-height: 1.38; color: #3b3550; }
+#s-heard-f5 .dc-rows b { font-weight: 700; color: var(--purple); }   /* the key words, purple bold (Ritika, 18 Nov) */
+
+/* the sign-off: a short rule, the closing words under it */
+#s-heard-f5 .dc-sign { top: 86%; width: 30%; height: 1px; background: #bdb4d6; transform: scaleX(0); transform-origin: 0 50%; transition: transform .7s cubic-bezier(.6, 0, .2, 1) 3.3s; }
+#s-heard-f5 .page.fm-in .dc-sign { transform: none; }
+#s-heard-f5 .fm-close { top: 88.5%; width: 88%; font-size: calc(var(--pt) * 8.6); font-style: italic; color: #555; opacity: 0; transition: opacity .7s var(--ease) 3.6s; }
+#s-heard-f5 .page.fm-in .fm-close { opacity: 1; }
+#s-heard-f5 .page.fm-now .dc-sheet, #s-heard-f5 .page.fm-now .dc-meta, #s-heard-f5 .page.fm-now .fm-k, #s-heard-f5 .page.fm-now .fm-head, #s-heard-f5 .page.fm-now .dc-rule,
+#s-heard-f5 .page.fm-now .dc-rows li, #s-heard-f5 .page.fm-now .dc-sign, #s-heard-f5 .page.fm-now .fm-close { transition-delay: 0s !important; transition-duration: .3s !important; }
+/* the key words, one after another once the points are in (18 Nov, Ritika: "do some animation to highlight the keywords"); three
+   styles, switched on the options page: hl-1 purple sweeps across the word, hl-2 an underline draws beneath it, hl-3 a lavender
+   marker behind it. Keyframes, each holding its first frame through its delay, so a fresh load or a replay starts clean. Bold from
+   the start, the marker's padding paid back by its margin, so nothing reflows. */
+#s-heard-f5 .page { --kb: 1.7s; --kw-ink: #3b3550; }
+#s-heard-f5 .page li p b { font-weight: 800; font-size: 1.12em; line-height: 1; -webkit-box-decoration-break: clone; box-decoration-break: clone; }   /* bolder and a little bigger than the sentence (Ritika, 18 Nov: "can the keywords be bolder or bigger") */
+#s-heard-f5 .page.hl-1 li p b { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, var(--purple) 0, var(--purple) 50%, var(--kw-ink) 50%, var(--kw-ink) 100%); background-size: 200% 100%; background-position: 100% 0; }
+#s-heard-f5 .page.hl-1.kw-on li p b { animation: hf5-sweep .7s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf5-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+#s-heard-f5 .page.hl-2 li p b { background: linear-gradient(var(--purple), var(--purple)) 0 100% / 0% 2px no-repeat; }
+#s-heard-f5 .page.hl-2.kw-on li p b { animation: hf5-line .6s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf5-line { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+#s-heard-f5 .page.hl-3 li p b { padding: 0 .12em; margin: 0 -.12em; background: linear-gradient(rgba(146, 111, 243, .24), rgba(146, 111, 243, .24)) 0 88% / 0% 58% no-repeat; }
+#s-heard-f5 .page.hl-3.kw-on li p b { animation: hf5-mark .55s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf5-mark { from { background-size: 0% 58%; } to { background-size: 100% 58%; } }
+#s-heard-f5 .page.fm-now li p b { animation-delay: 0s !important; animation-duration: .3s !important; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<!-- We heard you · formal 1, Register (18 Nov, Ritika: "give formal options", design and wording both). Not in order.txt; see
+     index-heard-formal.html, whose wording bar sets .fm-head / .fm-k / .fm-close. The deck's concept-slide type: a small italic
+     label, the headline in Figtree 400 ink with its key words 700 purple. The MoM's twelve points as a formal register: Space ·
+     Feedback, one line each, the sentence word for word; the rows slide in one after another. A click settles it.
+     18 Nov (Ritika): wording D ("design inputs so far works"); the key words purple bold; the points not numbered. -->
+<section class="scene" id="s-heard-f1" data-part="cover" data-title="Design inputs" data-steps="1" data-mins="0.6" data-beats="Received from ACKO"
+  data-notes="Design inputs: the twelve points received from ACKO at our meeting; they have shaped the revised proposal. 1 · The palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">Formal · 1 · Register</div>
+    <div class="hdr"><b>Design inputs</b><span>Before we begin</span></div>
+    <p class="fm-k">Received from ACKO</p>
+    <h2 class="fm-head">Design <span>inputs.</span></h2>
+    <div class="rg-table">
+      <div class="rg-hd"><span>Space</span><span>Feedback</span></div>
+      <ol class="rg-rows">
+        <li class="ui" style="--i:0"><strong>Lean Nordic palette</strong><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+        <li class="ui" style="--i:1"><strong>Breakout spaces</strong><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+        <li class="ui" style="--i:2"><strong>Collaborative space</strong><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+        <li class="ui" style="--i:3"><strong>Podcast &amp; Green room</strong><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+        <li class="ui" style="--i:4"><strong>Boardroom</strong><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+        <li class="ui" style="--i:5"><strong>Meeting rooms</strong><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+        <li class="ui" style="--i:6"><strong>Cafeteria</strong><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+        <li class="ui" style="--i:7"><strong>Landscape deck</strong><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+        <li class="ui" style="--i:8"><strong>Crash/nap room</strong><p><b>Crash/nap room</b>: mandatory</p></li>
+        <li class="ui" style="--i:9"><strong>Sick room</strong><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+        <li class="ui" style="--i:10"><strong>Dealers room</strong><p><b>Dealers room</b> to be added</p></li>
+        <li class="ui" style="--i:11"><strong>Mail room</strong><p><b>Mail room</b> to be provided</p></li>
+      </ol>
+    </div>
+    <p class="fm-close">These inputs have shaped the revised proposal.</p>
+  </div>
+</section>
+<!-- We heard you · formal 2, Cards (18 Nov, Ritika: "give formal options"). Not in order.txt; see index-heard-formal.html. The
+     deck's concept type above a 4 × 3 grid of white cards on a pale page: each card its space as the title and the MoM
+     sentence word for word; the cards rise in a wave from the top left, a purple line drawing along each one's top. Hover a card
+     to lift it. A click settles it.
+     18 Nov (Ritika): wording D ("design inputs so far works"); the key words purple bold; the points not numbered. -->
+<section class="scene" id="s-heard-f2" data-part="cover" data-title="Design inputs" data-steps="1" data-mins="0.6" data-beats="Received from ACKO"
+  data-notes="Design inputs: the twelve points received from ACKO at our meeting; they have shaped the revised proposal. 1 · The palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">Formal · 2 · Cards</div>
+    <div class="hdr"><b>Design inputs</b><span>Before we begin</span></div>
+    <p class="fm-k">Received from ACKO</p>
+    <h2 class="fm-head">Design <span>inputs.</span></h2>
+    <ol class="cd-grid">
+      <li class="ui" style="--c:0;--r:0"><h3>Lean Nordic palette</h3><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li class="ui" style="--c:1;--r:0"><h3>Breakout spaces</h3><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li class="ui" style="--c:2;--r:0"><h3>Collaborative space</h3><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li class="ui" style="--c:3;--r:0"><h3>Podcast &amp; Green room</h3><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li class="ui" style="--c:0;--r:1"><h3>Boardroom</h3><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li class="ui" style="--c:1;--r:1"><h3>Meeting rooms</h3><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li class="ui" style="--c:2;--r:1"><h3>Cafeteria</h3><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li class="ui" style="--c:3;--r:1"><h3>Landscape deck</h3><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li class="ui" style="--c:0;--r:2"><h3>Crash/nap room</h3><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li class="ui" style="--c:1;--r:2"><h3>Sick room</h3><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li class="ui" style="--c:2;--r:2"><h3>Dealers room</h3><p><b>Dealers room</b> to be added</p></li>
+      <li class="ui" style="--c:3;--r:2"><h3>Mail room</h3><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="fm-close">These inputs have shaped the revised proposal.</p>
+  </div>
+</section>
+<!-- We heard you · formal 3, Panel (18 Nov, Ritika: "give formal options"). Not in order.txt; see index-heard-formal.html. A deep
+     purple panel on the left (between the header and the copyright) holds the label, the headline in white with its key words in
+     lilac, and the closing line; on the right the MoM's twelve points, word for word, two columns of six on hairline rules. The panel
+     wipes in, then the points follow. A click settles it.
+     18 Nov (Ritika): wording D ("design inputs so far works"); the key words purple bold; the points not numbered. -->
+<section class="scene" id="s-heard-f3" data-part="cover" data-title="Design inputs" data-steps="1" data-mins="0.6" data-beats="Received from ACKO"
+  data-notes="Design inputs: the twelve points received from ACKO at our meeting; they have shaped the revised proposal. 1 · The palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">Formal · 3 · Panel</div>
+    <div class="hdr"><b>Design inputs</b><span>Before we begin</span></div>
+    <div class="pl-panel">
+      <p class="fm-k">Received from ACKO</p>
+      <h2 class="fm-head">Design <span>inputs.</span></h2>
+      <p class="fm-close">These inputs have shaped the revised proposal.</p>
+    </div>
+    <ol class="pl-rows">
+      <li style="--i:0"><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li style="--i:1"><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li style="--i:2"><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li style="--i:3"><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li style="--i:4"><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li style="--i:5"><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:7"><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li style="--i:8"><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li style="--i:9"><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li style="--i:10"><p><b>Dealers room</b> to be added</p></li>
+      <li style="--i:11"><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+  </div>
+</section>
+<!-- We heard you · formal 4, Editorial (18 Nov, Ritika: "give formal options"). Not in order.txt; see index-heard-formal.html.
+     Editorial, like an annual report: the deck's concept type, a thin purple rule drawn across, then the MoM's twelve points three
+     across and four down, each under a short purple rule, its space in 600 and the sentence word for word. A click
+     settles it.
+     18 Nov (Ritika): wording D ("design inputs so far works"); the key words purple bold; the points not numbered. -->
+<section class="scene" id="s-heard-f4" data-part="cover" data-title="Design inputs" data-steps="1" data-mins="0.6" data-beats="Received from ACKO"
+  data-notes="Design inputs: the twelve points received from ACKO at our meeting; they have shaped the revised proposal. 1 · The palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">Formal · 4 · Editorial</div>
+    <div class="hdr"><b>Design inputs</b><span>Before we begin</span></div>
+    <p class="fm-k">Received from ACKO</p>
+    <h2 class="fm-head">Design <span>inputs.</span></h2>
+    <i class="ix-rule" aria-hidden="true"></i>
+    <ol class="ix-grid">
+      <li style="--i:0"><div><h3>Lean Nordic palette</h3><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></div></li>
+      <li style="--i:1"><div><h3>Breakout spaces</h3><p>Provide more variety in <b>breakout spaces</b>.</p></div></li>
+      <li style="--i:2"><div><h3>Collaborative space</h3><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></div></li>
+      <li style="--i:3"><div><h3>Podcast &amp; Green room</h3><p>Increase the size of the <b>podcast room &amp; Green room</b></p></div></li>
+      <li style="--i:4"><div><h3>Boardroom</h3><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></div></li>
+      <li style="--i:5"><div><h3>Meeting rooms</h3><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></div></li>
+      <li style="--i:6"><div><h3>Cafeteria</h3><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></div></li>
+      <li style="--i:7"><div><h3>Landscape deck</h3><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></div></li>
+      <li style="--i:8"><div><h3>Crash/nap room</h3><p><b>Crash/nap room</b>: mandatory</p></div></li>
+      <li style="--i:9"><div><h3>Sick room</h3><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></div></li>
+      <li style="--i:10"><div><h3>Dealers room</h3><p><b>Dealers room</b> to be added</p></div></li>
+      <li style="--i:11"><div><h3>Mail room</h3><p><b>Mail room</b> to be provided</p></div></li>
+    </ol>
+    <p class="fm-close">These inputs have shaped the revised proposal.</p>
+  </div>
+</section>
+<!-- We heard you · formal 5, Document (18 Nov, Ritika: "give formal options"). Not in order.txt; see index-heard-formal.html. The
+     minutes as an official document: a white sheet on a pale desk with a header block (a small line naming the client, the site
+     and SKV, no date: Ritika, 17 Nov), the label and the headline, a hairline, then the MoM's twelve points word for word in two
+     columns of six, and a ruled sign-off line with the closing words. A click settles it.
+     18 Nov (Ritika): wording D ("design inputs so far works"); the key words purple bold; the points not numbered. -->
+<section class="scene" id="s-heard-f5" data-part="cover" data-title="Design inputs" data-steps="1" data-mins="0.6" data-beats="Received from ACKO"
+  data-notes="Design inputs: the twelve points received from ACKO at our meeting; they have shaped the revised proposal. 1 · The palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">Formal · 5 · Document</div>
+    <div class="hdr"><b>Design inputs</b><span>Before we begin</span></div>
+    <div class="dc-sheet">
+      <p class="dc-meta">ACKO · Head office, Regalium, Koramangala · Prepared by SKV</p>
+      <p class="fm-k">Received from ACKO</p>
+      <h2 class="fm-head">Design <span>inputs.</span></h2>
+      <i class="dc-rule" aria-hidden="true"></i>
+      <ol class="dc-rows">
+        <li style="--i:0"><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+        <li style="--i:1"><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+        <li style="--i:2"><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+        <li style="--i:3"><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+        <li style="--i:4"><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+        <li style="--i:5"><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+        <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+        <li style="--i:7"><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+        <li style="--i:8"><p><b>Crash/nap room</b>: mandatory</p></li>
+        <li style="--i:9"><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+        <li style="--i:10"><p><b>Dealers room</b> to be added</p></li>
+        <li style="--i:11"><p><b>Mail room</b> to be provided</p></li>
+      </ol>
+      <i class="dc-sign" aria-hidden="true"></i>
+      <p class="fm-close">These inputs have shaped the revised proposal.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="data/loop-path.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<style>.scene .page > .op-chip { left: 2.2%; top: 3.2%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #5222d0; color: #fff; font-size: calc(var(--pt) * 8); font-weight: 700; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }</style>
+<style>/* the wording bar (option pages only) */
+#hw-bar { position: fixed; left: calc(var(--pl) + var(--pw) * .62); bottom: calc(var(--ptop) + var(--ph) * .012); transform: translateX(-50%); z-index: 130;
+  display: flex; align-items: center; gap: 3px; padding: 4px 5px 4px 11px; border-radius: 99px; background: rgba(255,255,255,.95);
+  box-shadow: 0 2px 14px rgba(20,10,60,.22); font: 600 12px/1 var(--body); color: #26213a; pointer-events: auto; white-space: nowrap; }
+#hw-bar .hw-l { margin-right: 5px; font-size: 9.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #5222d0; }
+#hw-bar button { min-width: 25px; height: 23px; padding: 0 7px; border: 1px solid #d6cdf3; border-radius: 99px; background: #fff; color: #5222d0;
+  font: 700 11px/1 var(--body); cursor: pointer; pointer-events: auto; }
+#hw-bar button:hover { border-color: #5222d0; }
+#hw-bar button.on { background: #5222d0; border-color: #5222d0; color: #fff; }
+#hw-bar .hw-now { max-width: 190px; margin: 0 7px; overflow: hidden; text-overflow: ellipsis; color: #26213a; }
+</style>
+<script>window.HEARD_WORDS = [{"id": "A", "a": "Summary of", "b": "your feedback.", "kick": "Minutes of our meeting", "hand": "The proposal that follows responds to each of these points.", "title": "Summary of feedback"}, {"id": "B", "a": "Key points from", "b": "our discussion.", "kick": "Client feedback", "hand": "Each has been considered in the design that follows.", "title": "Key points"}, {"id": "C", "a": "Your brief,", "b": "as discussed.", "kick": "Twelve points from our meeting", "hand": "The following pages address each point in turn.", "title": "Your brief"}, {"id": "D", "a": "Design", "b": "inputs.", "kick": "Received from ACKO", "hand": "These inputs have shaped the revised proposal.", "title": "Design inputs"}, {"id": "E", "a": "What", "b": "we heard.", "kick": "Meeting outcomes", "hand": "Each outcome is addressed in the proposal that follows.", "title": "What we heard"}, {"id": "F", "a": "Feedback", "b": "received.", "kick": "Minutes of meeting", "hand": "Our response is set out in the pages that follow.", "title": "Feedback received"}]; window.HEARD_MAP = {"s-heard-f1": {"title": ".hdr b", "kick": ".fm-k", "head": ".fm-head", "hand": ".fm-close", "lines": 1}, "s-heard-f2": {"title": ".hdr b", "kick": ".fm-k", "head": ".fm-head", "hand": ".fm-close", "lines": 1}, "s-heard-f3": {"title": ".hdr b", "kick": ".fm-k", "head": ".fm-head", "hand": ".fm-close", "lines": 3}, "s-heard-f4": {"title": ".hdr b", "kick": ".fm-k", "head": ".fm-head", "hand": ".fm-close", "lines": 1}, "s-heard-f5": {"title": ".hdr b", "kick": ".fm-k", "head": ".fm-head", "hand": ".fm-close", "lines": 1}};</script>
+<script>
+(() => {
+  const W = window.HEARD_WORDS, M = window.HEARD_MAP, KEY = "acko-heard-formal-words";
+  let cur = Math.max(0, W.findIndex((w) => w.id === "D"));
+  try { const i = W.findIndex((w) => w.id === localStorage.getItem(KEY)); if (i >= 0) cur = i; } catch (e) { /* no storage: start on the first */ }
+  const q = (sid, sel) => (sel ? document.querySelector("#" + sid + " " + sel) : null);
+  // shrink a headline 5% at a time (to 60% at most) until it keeps to its lines and no word runs over; in deck points, so it scales
+  function fit(el, lines) {
+    el.style.fontSize = "";
+    const page = el.closest(".page"), pt = page ? page.getBoundingClientRect().width / 720 : 1;
+    if (!pt) return;
+    const n = parseFloat(getComputedStyle(el).fontSize) / pt;
+    for (let f = 1; f >= .6; f -= .05) {
+      el.style.fontSize = `calc(var(--pt) * ${(n * f).toFixed(2)})`;
+      const lh = parseFloat(getComputedStyle(el).lineHeight) || n * f * pt * 1.12;
+      if (el.scrollWidth <= el.clientWidth + 1 && el.offsetHeight <= lh * lines + 2) return;
+    }
+  }
+  function apply(i) {
+    cur = i; const w = W[i];
+    for (const sid in M) {
+      const m = M[sid], t = q(sid, m.title), k = q(sid, m.kick), h = q(sid, m.head), c = q(sid, m.hand);
+      if (t) t.textContent = w.title;
+      if (k) k.textContent = w.kick;
+      if (c) c.textContent = w.hand;
+      if (h) { h.innerHTML = ""; h.append(w.a + " "); const s = document.createElement("span"); s.textContent = w.b; h.append(s); fit(h, m.lines); }
+    }
+    document.querySelectorAll("#hw-bar button").forEach((b) => b.classList.toggle("on", +b.dataset.i === i));
+    const now = document.querySelector("#hw-bar .hw-now"); if (now) now.textContent = w.a + " " + w.b;
+    try { localStorage.setItem(KEY, w.id); } catch (e) { /* not remembered, still shown */ }
+  }
+  function start() {
+    const bar = document.createElement("div");
+    bar.id = "hw-bar";
+    bar.innerHTML = '<span class="hw-l">Words</span>' + W.map((w, i) => `<button type="button" data-i="${i}" title="${w.a} ${w.b}">${w.id}</button>`).join("") + '<b class="hw-now"></b>';
+    bar.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { e.stopPropagation(); apply(+b.dataset.i); } });
+    document.body.appendChild(bar);
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => apply(cur));
+    addEventListener("resize", () => apply(cur));
+  }
+  window.__heard = { apply, words: W, map: M };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
+</script>
+<style>#hw-bar .hw-sep { width: 1px; height: 16px; margin: 0 6px 0 4px; background: #d6cdf3; }
+#hw-bar button.sel { background: #5222d0; border-color: #5222d0; color: #fff; }
+.scene .page.kw-quick { --kb: .15s !important; }</style>
+<script>
+(() => {
+  const KEY = "acko-heard-formal-hl", NAMES = ["Sweep", "Underline", "Marker"];
+  let hl = 2;   // the underline (Ritika, 18 Nov: "underline is nice")
+  try { const v = +localStorage.getItem(KEY); if (v >= 1 && v <= 3) hl = v; } catch (e) { /* no storage: the underline */ }
+  function set(n, replay) {
+    hl = n;
+    document.querySelectorAll(".scene .page").forEach((p) => { p.classList.remove("hl-1", "hl-2", "hl-3"); p.classList.add("hl-" + n); });
+    document.querySelectorAll("#hw-bar .hw-hl").forEach((b) => b.classList.toggle("sel", +b.dataset.hl === n));
+    try { localStorage.setItem(KEY, String(n)); } catch (e) { /* not remembered, still shown */ }
+    const p = replay && document.querySelector(".scene.active .page");
+    if (p && p.classList.contains("kw-on")) { p.classList.add("kw-quick"); p.classList.remove("kw-on"); void p.offsetWidth; p.classList.add("kw-on"); }
+  }
+  function add() {
+    const bar = document.getElementById("hw-bar");
+    if (!bar) { requestAnimationFrame(add); return; }
+    const g = document.createElement("span");
+    g.style.display = "contents";
+    g.innerHTML = '<i class="hw-sep"></i><span class="hw-l">Highlight</span>' + NAMES.map((n, i) => `<button type="button" class="hw-hl" data-hl="${i + 1}" title="${n}">${i + 1}</button>`).join("");
+    bar.insertBefore(g, bar.querySelector(".hw-now"));
+    g.addEventListener("click", (e) => { const b = e.target.closest(".hw-hl"); if (b) { e.stopPropagation(); set(+b.dataset.hl, true); } });   // not the wording bar's
+    set(hl, false);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", add); else add();
+})();
+</script>
+<script>window.ACKO_WOW = true;</script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-heard-f1">
+ACKO.slide("s-heard-f1", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  return {
+    enter(_, sc) {
+      plain(); run++;
+      const p = page(sc); p.classList.remove("fm-in", "fm-now", "kw-on", "kw-quick");
+      if (!/\bhl-\d\b/.test(p.className)) p.classList.add("hl-2");   // the underline (Ritika, 18 Nov: "underline is nice"), unless the options page set a style
+      sc.querySelectorAll("li").forEach((li, k) => { const b = li.querySelector("p b"); if (b) b.style.setProperty("--k", k); });
+      sc._skip = () => { if (p.classList.contains("fm-in")) p.classList.add("fm-now"); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("fm-in")) return;
+      if (reduced) { p.classList.add("fm-now", "fm-in", "kw-on"); return; }
+      const id = ++run; later(() => { if (id === run) p.classList.add("fm-in", "kw-on"); }, 80);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("fm-in", "fm-now", "kw-on", "kw-quick"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-f2">
+ACKO.slide("s-heard-f2", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  return {
+    enter(_, sc) {
+      plain(); run++;
+      const p = page(sc); p.classList.remove("fm-in", "fm-now", "kw-on", "kw-quick");
+      if (!/\bhl-\d\b/.test(p.className)) p.classList.add("hl-2");   // the underline (Ritika, 18 Nov: "underline is nice"), unless the options page set a style
+      sc.querySelectorAll("li").forEach((li, k) => { const b = li.querySelector("p b"); if (b) b.style.setProperty("--k", k); });
+      sc._skip = () => { if (p.classList.contains("fm-in")) p.classList.add("fm-now"); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("fm-in")) return;
+      if (reduced) { p.classList.add("fm-now", "fm-in", "kw-on"); return; }
+      const id = ++run; later(() => { if (id === run) p.classList.add("fm-in", "kw-on"); }, 80);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("fm-in", "fm-now", "kw-on", "kw-quick"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-f3">
+ACKO.slide("s-heard-f3", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  return {
+    enter(_, sc) {
+      plain(); run++;
+      const p = page(sc); p.classList.remove("fm-in", "fm-now", "kw-on", "kw-quick");
+      if (!/\bhl-\d\b/.test(p.className)) p.classList.add("hl-2");   // the underline (Ritika, 18 Nov: "underline is nice"), unless the options page set a style
+      sc.querySelectorAll("li").forEach((li, k) => { const b = li.querySelector("p b"); if (b) b.style.setProperty("--k", k); });
+      sc._skip = () => { if (p.classList.contains("fm-in")) p.classList.add("fm-now"); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("fm-in")) return;
+      if (reduced) { p.classList.add("fm-now", "fm-in", "kw-on"); return; }
+      const id = ++run; later(() => { if (id === run) p.classList.add("fm-in", "kw-on"); }, 80);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("fm-in", "fm-now", "kw-on", "kw-quick"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-f4">
+ACKO.slide("s-heard-f4", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  return {
+    enter(_, sc) {
+      plain(); run++;
+      const p = page(sc); p.classList.remove("fm-in", "fm-now", "kw-on", "kw-quick");
+      if (!/\bhl-\d\b/.test(p.className)) p.classList.add("hl-2");   // the underline (Ritika, 18 Nov: "underline is nice"), unless the options page set a style
+      sc.querySelectorAll("li").forEach((li, k) => { const b = li.querySelector("p b"); if (b) b.style.setProperty("--k", k); });
+      sc._skip = () => { if (p.classList.contains("fm-in")) p.classList.add("fm-now"); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("fm-in")) return;
+      if (reduced) { p.classList.add("fm-now", "fm-in", "kw-on"); return; }
+      const id = ++run; later(() => { if (id === run) p.classList.add("fm-in", "kw-on"); }, 80);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("fm-in", "fm-now", "kw-on", "kw-quick"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-f5">
+ACKO.slide("s-heard-f5", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  return {
+    enter(_, sc) {
+      plain(); run++;
+      const p = page(sc); p.classList.remove("fm-in", "fm-now", "kw-on", "kw-quick");
+      if (!/\bhl-\d\b/.test(p.className)) p.classList.add("hl-2");   // the underline (Ritika, 18 Nov: "underline is nice"), unless the options page set a style
+      sc.querySelectorAll("li").forEach((li, k) => { const b = li.querySelector("p b"); if (b) b.style.setProperty("--k", k); });
+      sc._skip = () => { if (p.classList.contains("fm-in")) p.classList.add("fm-now"); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("fm-in")) return;
+      if (reduced) { p.classList.add("fm-now", "fm-in", "kw-on"); return; }
+      const id = ++run; later(() => { if (id === run) p.classList.add("fm-in", "kw-on"); }, 80);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("fm-in", "fm-now", "kw-on", "kw-quick"); }
+    },
+  };
+});
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

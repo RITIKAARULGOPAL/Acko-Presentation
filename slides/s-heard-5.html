@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We heard you · 5 · One loop · ACKO slide s-heard-5</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · option 5, One loop, twelve stops (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not in
+     order.txt; see index-heard.html. "We heard you." in the middle; round it a loop draws itself, clockwise from the top left, a
+     lilac ribbon with the purple line in it, and the MoM's twelve points come up as numbered stops as its head passes them (three
+     along the top, three down the right, three along the bottom, three up the left), so the first slide already hints at the Loop
+     the deck builds to. When it closes, a small light keeps going round. ~6 s; a click settles it. -->
+<section class="scene" id="s-heard-5" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, one loop round them; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <svg class="lp-loop" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+      <defs><filter id="lp5-glow" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="7"/></filter></defs>
+      <path class="lp-rib" d="M560 370 H1360 A205 205 0 0 1 1360 780 H560 A205 205 0 0 1 560 370 Z"/>
+      <path class="lp-line" d="M560 370 H1360 A205 205 0 0 1 1360 780 H560 A205 205 0 0 1 560 370 Z"/>
+      <circle class="lp-halo" r="16" filter="url(#lp5-glow)"/><circle class="lp-head" r="7"/>
+    </svg>
+    <div class="lp-mid">
+      <b class="lp-k">What you told us</b>
+      <h2>We heard you.</h2>
+      <p class="hand">Everything that follows is built on what you told us.</p>
+    </div>
+    <ol class="lp-stops">
+      <li><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+  </div>
+</section>
+<style>
+#s-heard-5 .page { background: #fff; }
+#s-heard-5 .lp-loop, #s-heard-5 .lp-stops { left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* the loop: a lilac ribbon with the purple line in it, drawn by its head */
+#s-heard-5 .lp-rib { fill: none; stroke: #ebe5fb; stroke-width: 40; stroke-linejoin: round; }
+#s-heard-5 .lp-line { fill: none; stroke: var(--purple); stroke-width: 3.5; stroke-linecap: round; }
+#s-heard-5 .lp-head { fill: var(--purple); opacity: 0; transition: opacity .4s; }
+#s-heard-5 .lp-halo { fill: var(--violet); opacity: 0; transition: opacity .4s; }
+#s-heard-5 .page.lp-run :is(.lp-head, .lp-halo) { opacity: 1; }
+#s-heard-5 .page.lp-run .lp-halo { opacity: .7; }
+#s-heard-5 .page.lp-idle .lp-head { opacity: .9; }
+#s-heard-5 .page.lp-idle .lp-halo { opacity: .45; }
+
+/* in the middle: the headline, then the hand line */
+#s-heard-5 .lp-mid { left: 25%; top: 41%; width: 50%; text-align: center; }
+#s-heard-5 .lp-mid > * { display: block; margin: 0; opacity: 0; transform: translateY(10px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-heard-5 .lp-k { font-size: calc(var(--pt) * 6.4); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--violet); }
+#s-heard-5 .lp-mid h2 { margin-top: .12em; font-size: calc(var(--pt) * 32); line-height: 1.1; font-weight: 700; color: var(--purple); transition-delay: .1s; }
+#s-heard-5 .lp-mid .hand { margin-top: .35em; font-size: calc(var(--pt) * 13); color: var(--purple); }
+#s-heard-5 .page.lp-in .lp-mid > :not(.hand), #s-heard-5 .page.lp-done .lp-mid .hand { opacity: 1; transform: none; }
+
+/* the stops: a numbered dot on the loop, its words outside it */
+#s-heard-5 .lp-stops { margin: 0; padding: 0; list-style: none; font-size: calc(var(--pt) * 6.5); }
+#s-heard-5 .lp-stops li { position: absolute; width: 0; height: 0; }
+#s-heard-5 .lp-stops em { position: absolute; left: 0; top: 0; z-index: 2; width: calc(var(--pt) * 12); height: calc(var(--pt) * 12); margin: calc(var(--pt) * -6) 0 0 calc(var(--pt) * -6);
+  border-radius: 50%; background: var(--purple); color: #fff; font: 700 calc(var(--pt) * 5) / calc(var(--pt) * 12) var(--num); font-style: normal; text-align: center;
+  box-shadow: 0 0 0 calc(var(--pt) * 1.4) #fff, 0 calc(var(--pt) * 1.5) calc(var(--pt) * 5) rgba(82, 34, 208, .3);
+  opacity: 0; transform: scale(.2); transition: opacity .25s, transform .55s cubic-bezier(.3, 1.7, .5, 1); }
+#s-heard-5 .lp-stops em::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--violet); opacity: 0; }
+#s-heard-5 .lp-stops li.on em { opacity: 1; transform: none; }
+#s-heard-5 .lp-stops li.on em::after { animation: lp-ring 1.1s ease-out .1s; }
+@keyframes lp-ring { from { transform: scale(1); opacity: .7; } to { transform: scale(2.6); opacity: 0; } }
+#s-heard-5 .lp-stops p { position: absolute; width: calc(var(--pt) * 92); margin: 0; line-height: 1.32; color: #3b3550;
+  opacity: 0; transition: opacity .5s var(--ease) .12s, transform .5s var(--ease) .12s; }
+#s-heard-5 .lp-stops b { font-weight: 600; color: var(--purple); }
+#s-heard-5 .lp-stops li.on p { opacity: 1; }
+/* where the words sit: above the top, below the bottom, out to the right and the left */
+#s-heard-5 .lp-stops li.t p { left: calc(var(--pt) * -46); bottom: calc(var(--pt) * 13); text-align: center; transform: translateY(6px); }
+#s-heard-5 .lp-stops li.b p { left: calc(var(--pt) * -46); top: calc(var(--pt) * 13); text-align: center; transform: translateY(-6px); }
+#s-heard-5 .lp-stops li.r p { left: calc(var(--pt) * 12); top: 0; transform: translate(-6px, -50%); }
+#s-heard-5 .lp-stops li.l p { right: calc(var(--pt) * 12); top: 0; text-align: right; transform: translate(6px, -50%); }
+#s-heard-5 .lp-stops li.on.t p, #s-heard-5 .lp-stops li.on.b p { transform: none; }
+#s-heard-5 .lp-stops li.on.r p, #s-heard-5 .lp-stops li.on.l p { transform: translate(0, -50%); }
+</style>
+<script>
+ACKO.slide("s-heard-5", ({ $, $$, plain, later, reduced }) => {
+  // the stadium (page px of 1920 × 1080): the top from x 560 to 1360 at y 370, the ends' radius 205, the bottom at y 780
+  const X0 = 560, X1 = 1360, Y0 = 370, R = 205, CY = 575, ARC = Math.PI * R, TOP = X1 - X0, L = 2 * TOP + 2 * ARC, DRAW = 5200, LAP = 14000;
+  // twelve stops clockwise from the top left: three along each side, the ends' at -55°, 0°, 55° from their middles
+  const STOPS = [];
+  [X0 + 90, 960, X1 - 90].forEach((x) => STOPS.push({ s: x - X0, x, y: Y0, side: "t" }));
+  [-55, 0, 55].forEach((a) => { const r = (a * Math.PI) / 180; STOPS.push({ s: TOP + ((a + 90) / 180) * ARC, x: X1 + R * Math.cos(r), y: CY + R * Math.sin(r), side: "r" }); });
+  [X1 - 90, 960, X0 + 90].forEach((x) => STOPS.push({ s: TOP + ARC + (X1 - x), x, y: Y0 + 2 * R, side: "b" }));
+  [125, 180, 235].forEach((a) => { const r = (a * Math.PI) / 180; STOPS.push({ s: 2 * TOP + ARC + ((a - 90) / 180) * ARC, x: X0 + R * Math.cos(r), y: CY + R * Math.sin(r), side: "l" }); });
+  const ease = (k) => (k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  let run = 0;
+  function place(sc) {
+    if (sc._lp) return;
+    sc._lp = 1;
+    $$(".lp-stops li", sc).forEach((li, i) => {
+      const o = STOPS[i]; li.classList.add(o.side);
+      li.style.left = (o.x / 19.2).toFixed(3) + "%"; li.style.top = (o.y / 10.8).toFixed(3) + "%";
+    });
+    $$(".lp-rib, .lp-line", sc).forEach((p) => { p.style.strokeDasharray = L.toFixed(1); });
+  }
+  const paths = (sc) => [...$$(".lp-rib, .lp-line", sc)];
+  function head(sc, len) {
+    const pt = $(".lp-line", sc).getPointAtLength(((len % L) + L) % L);
+    $$(".lp-head, .lp-halo", sc).forEach((c) => { c.setAttribute("cx", pt.x.toFixed(1)); c.setAttribute("cy", pt.y.toFixed(1)); });
+  }
+  function drawn(sc, len) { paths(sc).forEach((p) => (p.style.strokeDashoffset = (L - len).toFixed(1))); }
+  function idle(sc, id) {                              // once closed, a small light keeps going round
+    const p = $(".page", sc), t0 = performance.now();
+    p.classList.add("lp-idle");
+    const f = (now) => { if (id !== run) return; head(sc, ((now - t0) / LAP) * L); requestAnimationFrame(f); };
+    requestAnimationFrame(f);
+  }
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("lp-in", "lp-run", "lp-done", "lp-idle");
+    $$(".lp-stops li", p).forEach((li) => li.classList.remove("on"));
+    drawn(sc, 0); head(sc, 0);
+  }
+  function settle(sc) {
+    const id = ++run, p = $(".page", sc);
+    drawn(sc, L); p.classList.remove("lp-run"); p.classList.add("lp-in", "lp-done");
+    $$(".lp-stops li", p).forEach((li) => li.classList.add("on"));
+    if (!reduced) idle(sc, id);
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc), lis = [...$$(".lp-stops li", p)];
+    p.classList.add("lp-in");
+    later(() => {
+      if (id !== run) return;
+      p.classList.add("lp-run");
+      const t0 = performance.now();
+      const f = (now) => {
+        if (id !== run) return;
+        const k = Math.min(1, (now - t0) / DRAW), len = ease(k) * L;
+        drawn(sc, len); head(sc, len);
+        STOPS.forEach((o, i) => { if (len >= o.s) lis[i].classList.add("on"); });
+        if (k < 1) requestAnimationFrame(f);
+        else { p.classList.remove("lp-run"); p.classList.add("lp-done"); idle(sc, id); }
+      };
+      requestAnimationFrame(f);
+    }, 700);
+  }
+  return {
+    enter(_, sc) {
+      plain(); place(sc); reset(sc);
+      sc._skip = () => { const p = $(".page", sc); if (p.classList.contains("lp-in") && !p.classList.contains("lp-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("lp-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

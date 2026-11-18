@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design inputs · Formal 2 · Cards · ACKO slide s-heard-f2</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · formal 2, Cards (18 Nov, Ritika: "give formal options"). Not in order.txt; see index-heard-formal.html. The
+     deck's concept type above a 4 × 3 grid of white cards on a pale page: each card its space as the title and the MoM
+     sentence word for word; the cards rise in a wave from the top left, a purple line drawing along each one's top. Hover a card
+     to lift it. A click settles it.
+     18 Nov (Ritika): wording D ("design inputs so far works"); the key words purple bold; the points not numbered. -->
+<section class="scene" id="s-heard-f2" data-part="cover" data-title="Design inputs" data-steps="1" data-mins="0.6" data-beats="Received from ACKO"
+  data-notes="Design inputs: the twelve points received from ACKO at our meeting; they have shaped the revised proposal. 1 · The palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="hdr"><b>Design inputs</b><span>Before we begin</span></div>
+    <p class="fm-k">Received from ACKO</p>
+    <h2 class="fm-head">Design <span>inputs.</span></h2>
+    <ol class="cd-grid">
+      <li class="ui" style="--c:0;--r:0"><h3>Lean Nordic palette</h3><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li class="ui" style="--c:1;--r:0"><h3>Breakout spaces</h3><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li class="ui" style="--c:2;--r:0"><h3>Collaborative space</h3><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li class="ui" style="--c:3;--r:0"><h3>Podcast &amp; Green room</h3><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li class="ui" style="--c:0;--r:1"><h3>Boardroom</h3><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li class="ui" style="--c:1;--r:1"><h3>Meeting rooms</h3><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li class="ui" style="--c:2;--r:1"><h3>Cafeteria</h3><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li class="ui" style="--c:3;--r:1"><h3>Landscape deck</h3><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li class="ui" style="--c:0;--r:2"><h3>Crash/nap room</h3><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li class="ui" style="--c:1;--r:2"><h3>Sick room</h3><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li class="ui" style="--c:2;--r:2"><h3>Dealers room</h3><p><b>Dealers room</b> to be added</p></li>
+      <li class="ui" style="--c:3;--r:2"><h3>Mail room</h3><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="fm-close">These inputs have shaped the revised proposal.</p>
+  </div>
+</section>
+<style>
+#s-heard-f2 .page { background: #f7f6fa; }
+#s-heard-f2 .fm-k { left: 8%; top: 9.5%; margin: 0; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-heard-f2 .fm-head { left: 8%; top: 13.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 26); line-height: 1.12; font-weight: 400; color: #16131f; letter-spacing: -.01em; }
+#s-heard-f2 .fm-head span { font-weight: 700; color: var(--purple); }
+#s-heard-f2 .fm-k, #s-heard-f2 .fm-head { opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-heard-f2 .fm-head { transition-delay: .12s; }
+#s-heard-f2 .page.fm-in .fm-k, #s-heard-f2 .page.fm-in .fm-head { opacity: 1; transform: none; }
+
+/* the cards: four across, three down; each rises in turn and a purple line draws along its top */
+#s-heard-f2 .cd-grid { left: 8%; top: 27%; width: 84%; height: 56%; margin: 0; padding: 0; list-style: none; display: grid;
+  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 3.2% 1.6%; }
+#s-heard-f2 .cd-grid li { position: relative; padding: 8% 7.5% 6%; background: #fff; border: 1px solid #e6e1f0; border-radius: calc(var(--pt) * 2.5);
+  box-shadow: 0 1px 2px rgba(40, 30, 70, .04); opacity: 0; transform: translateY(calc(var(--pt) * 8));
+  transition: opacity .55s var(--ease), transform .55s var(--ease), box-shadow .3s; transition-delay: calc((var(--c) + var(--r)) * 90ms + .5s), calc((var(--c) + var(--r)) * 90ms + .5s), 0s; }
+#s-heard-f2 .cd-grid li::before { content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 2px; border-radius: 2px 2px 0 0; background: var(--purple);
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform .6s cubic-bezier(.6, 0, .2, 1); transition-delay: calc((var(--c) + var(--r)) * 90ms + .85s); }
+#s-heard-f2 .page.fm-in .cd-grid li { opacity: 1; transform: none; }
+#s-heard-f2 .page.fm-in .cd-grid li::before { transform: none; }
+#s-heard-f2 .page.fm-in .cd-grid li:hover { transform: translateY(calc(var(--pt) * -1.5)); box-shadow: 0 calc(var(--pt) * 4) calc(var(--pt) * 10) rgba(40, 30, 70, .12); transition-delay: 0s; }
+#s-heard-f2 .cd-grid h3 { margin: 0 0 .45em; font-size: calc(var(--pt) * 8); line-height: 1.2; font-weight: 600; color: #16131f; }
+#s-heard-f2 .cd-grid p { margin: 0; font-size: calc(var(--pt) * 6.6); line-height: 1.38; color: #555; }
+#s-heard-f2 .cd-grid b { font-weight: 700; color: var(--purple); }   /* the key words, purple bold (Ritika, 18 Nov) */
+
+#s-heard-f2 .fm-close { left: 8%; top: 87.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 8.6); font-style: italic; color: #555;
+  opacity: 0; transition: opacity .7s var(--ease) 3.3s; }
+#s-heard-f2 .page.fm-in .fm-close { opacity: 1; }
+#s-heard-f2 .page.fm-now .fm-k, #s-heard-f2 .page.fm-now .fm-head, #s-heard-f2 .page.fm-now .cd-grid li, #s-heard-f2 .page.fm-now .cd-grid li::before,
+#s-heard-f2 .page.fm-now .fm-close { transition-delay: 0s !important; transition-duration: .3s !important; }
+/* the key words, one after another once the points are in (18 Nov, Ritika: "do some animation to highlight the keywords"); three
+   styles, switched on the options page: hl-1 purple sweeps across the word, hl-2 an underline draws beneath it, hl-3 a lavender
+   marker behind it. Keyframes, each holding its first frame through its delay, so a fresh load or a replay starts clean. Bold from
+   the start, the marker's padding paid back by its margin, so nothing reflows. */
+#s-heard-f2 .page { --kb: 1.3s; --kw-ink: #555; }
+#s-heard-f2 .page li p b { font-weight: 800; font-size: 1.12em; line-height: 1; -webkit-box-decoration-break: clone; box-decoration-break: clone; }   /* bolder and a little bigger than the sentence (Ritika, 18 Nov: "can the keywords be bolder or bigger") */
+#s-heard-f2 .page.hl-1 li p b { color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, var(--purple) 0, var(--purple) 50%, var(--kw-ink) 50%, var(--kw-ink) 100%); background-size: 200% 100%; background-position: 100% 0; }
+#s-heard-f2 .page.hl-1.kw-on li p b { animation: hf2-sweep .7s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf2-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+#s-heard-f2 .page.hl-2 li p b { background: linear-gradient(var(--purple), var(--purple)) 0 100% / 0% 2px no-repeat; }
+#s-heard-f2 .page.hl-2.kw-on li p b { animation: hf2-line .6s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf2-line { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+#s-heard-f2 .page.hl-3 li p b { padding: 0 .12em; margin: 0 -.12em; background: linear-gradient(rgba(146, 111, 243, .24), rgba(146, 111, 243, .24)) 0 88% / 0% 58% no-repeat; }
+#s-heard-f2 .page.hl-3.kw-on li p b { animation: hf2-mark .55s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + var(--kb)) both; }
+@keyframes hf2-mark { from { background-size: 0% 58%; } to { background-size: 100% 58%; } }
+#s-heard-f2 .page.fm-now li p b { animation-delay: 0s !important; animation-duration: .3s !important; }
+</style>
+<script>
+ACKO.slide("s-heard-f2", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  return {
+    enter(_, sc) {
+      plain(); run++;
+      const p = page(sc); p.classList.remove("fm-in", "fm-now", "kw-on", "kw-quick");
+      if (!/\bhl-\d\b/.test(p.className)) p.classList.add("hl-2");   // the underline (Ritika, 18 Nov: "underline is nice"), unless the options page set a style
+      sc.querySelectorAll("li").forEach((li, k) => { const b = li.querySelector("p b"); if (b) b.style.setProperty("--k", k); });
+      sc._skip = () => { if (p.classList.contains("fm-in")) p.classList.add("fm-now"); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("fm-in")) return;
+      if (reduced) { p.classList.add("fm-now", "fm-in", "kw-on"); return; }
+      const id = ++run; later(() => { if (id === run) p.classList.add("fm-in", "kw-on"); }, 80);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("fm-in", "fm-now", "kw-on", "kw-quick"); }
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

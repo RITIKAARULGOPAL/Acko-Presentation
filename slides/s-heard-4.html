@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We heard you · 4 · The minutes · ACKO slide s-heard-4</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · option 4, The minutes, handwritten (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not
+     in order.txt; see index-heard.html. A warm paper page: the MoM's twelve points write themselves in the hand (Square Peg), word by
+     word, two columns of six; each gets a purple tick and its space is circled in a drawn stroke; then "We heard you." lands on top
+     like a stamp and the closing line follows. ~7 s; a click settles it. -->
+<section class="scene" id="s-heard-4" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, written as you said them; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="mn-margin" aria-hidden="true"></div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <h2 class="mn-head">We heard you.</h2>
+    <b class="hand mn-k">What you told us</b>
+    <ol class="mn-rows">
+      <li><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="hand mn-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<style>
+/* warm paper, a notebook's margin line */
+#s-heard-4 .page { background: #fbf8f1; }
+#s-heard-4 .mn-margin { left: 5.6%; top: 0; width: 1px; height: 100%; background: rgba(82, 34, 208, .16); }
+
+/* the headline lands last, like a stamp */
+#s-heard-4 .mn-head { left: 8%; top: 11.5%; margin: 0; font-size: calc(var(--pt) * 32); line-height: 1.1; font-weight: 700; color: var(--purple); transform-origin: 20% 60%;
+  opacity: 0; transform: rotate(-2deg) scale(1.7); }
+#s-heard-4 .page.mn-done .mn-head { opacity: 1; transform: rotate(-2deg); animation: mn-stamp .55s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes mn-stamp { 0% { opacity: 0; transform: rotate(-2deg) scale(1.7); } 60% { opacity: 1; transform: rotate(-2deg) scale(.96); } 100% { opacity: 1; transform: rotate(-2deg) scale(1); } }
+#s-heard-4 .page.mn-done.mn-thud { animation: mn-thud .3s ease-out .32s; }
+@keyframes mn-thud { 0%, 100% { transform: none; } 40% { transform: translateY(1.5px); } }
+
+#s-heard-4 .mn-k { left: 8%; top: 24.5%; font-size: calc(var(--pt) * 15); font-weight: 400; color: var(--purple); opacity: 0; transition: opacity .6s var(--ease); }
+#s-heard-4 .page.mn-in .mn-k { opacity: 1; }
+
+/* the twelve, two columns of six, read down; written in the hand, word by word */
+#s-heard-4 .mn-rows { left: 8%; top: 30.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: 5%; font-family: var(--hand); font-size: calc(var(--pt) * 13.6); color: #26213a; }
+#s-heard-4 .mn-rows li { position: relative; display: grid; grid-template-columns: 1.9em 1fr; align-items: baseline; padding: .32em 0 .38em; border-top: 1px dashed rgba(82, 34, 208, .2); }
+#s-heard-4 .mn-rows li:nth-child(6), #s-heard-4 .mn-rows li:nth-child(12) { border-bottom: 1px dashed rgba(82, 34, 208, .2); }
+#s-heard-4 .mn-rows em { font-style: normal; color: var(--purple); opacity: 0; transition: opacity .3s; }
+#s-heard-4 .mn-rows li.on em { opacity: 1; }
+#s-heard-4 .mn-rows p { margin: 0; line-height: 1.04; }
+#s-heard-4 .mn-rows b { position: relative; font-weight: 400; color: var(--purple); white-space: nowrap; }
+#s-heard-4 .mn-rows .w { opacity: 0; filter: blur(2px); transition: opacity .22s ease, filter .22s ease; }
+#s-heard-4 .mn-rows .w.on { opacity: 1; filter: none; }
+/* the drawn marks: a tick in the margin, a ring round the space */
+#s-heard-4 .mn-rows svg { position: absolute; overflow: visible; pointer-events: none; fill: none; stroke: var(--purple); stroke-linecap: round; stroke-linejoin: round; }
+#s-heard-4 .mn-rows svg path { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset .45s cubic-bezier(.5, 0, .3, 1), opacity 0s; }
+#s-heard-4 .mn-rows .mk path { stroke-dashoffset: 0; opacity: 1; }
+#s-heard-4 .mn-tick { left: -1.45em; top: .45em; width: .95em; height: .8em; stroke-width: 2.2; }
+#s-heard-4 .mn-ring { left: -.22em; top: -.18em; width: calc(100% + .44em); height: calc(100% + .35em); stroke-width: 1.7; opacity: .75; }   /* stretched with the word: thicker up and down, finer along, like a pen */
+
+#s-heard-4 .mn-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple);
+  opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease) .9s, transform .7s var(--ease) .9s; }
+#s-heard-4 .page.mn-done .mn-close { opacity: 1; transform: none; }
+</style>
+<script>
+ACKO.slide("s-heard-4", ({ $, $$, plain, later, reduced }) => {
+  const WORD = 42, PAUSE = 140;                        // a word every 42 ms; a breath between points
+  let run = 0;
+  // each word its own span, keeping the space's <b>; then the tick and the ring, drawn later
+  function prep(sc) {
+    if (sc._mn) return;
+    sc._mn = 1;
+    $$(".mn-rows li", sc).forEach((li) => {
+      const p = $("p", li);
+      const wrap = (node) => [...node.childNodes].forEach((c) => {
+        if (c.nodeType === 3) {
+          const f = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach((t) => {
+            if (!t) return;
+            if (/^\s+$/.test(t)) f.appendChild(document.createTextNode(t));
+            else { const s = document.createElement("span"); s.className = "w"; s.textContent = t; f.appendChild(s); }
+          });
+          node.replaceChild(f, c);
+        } else if (c.nodeType === 1) wrap(c);
+      });
+      wrap(p);
+      li.insertAdjacentHTML("afterbegin", '<svg class="mn-tick" viewBox="0 0 20 16" aria-hidden="true"><path pathLength="1" d="M2 9 L7.5 14 L18 2"/></svg>');
+      const b = $("b", p);
+      if (b) b.insertAdjacentHTML("beforeend", '<svg class="mn-ring" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M10 25 C4 9 46 2 82 6 C99 9 100 30 80 35 C54 41 14 39 5 27 C1 19 14 9 30 7"/></svg>');
+    });
+  }
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("mn-in", "mn-done", "mn-thud");
+    $$(".mn-rows .on, .mn-rows .mk", p).forEach((e) => e.classList.remove("on", "mk"));
+  }
+  function settle(sc) {
+    run++;
+    const p = $(".page", sc);
+    $$(".mn-rows li, .mn-rows .w", p).forEach((e) => e.classList.add("on"));
+    $$(".mn-rows svg", p).forEach((e) => e.classList.add("mk"));
+    p.classList.add("mn-in", "mn-done");
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc);
+    p.classList.add("mn-in");
+    let t = 500;
+    $$(".mn-rows li", p).forEach((li) => {
+      const ws = [...$$(".w", li)], t0 = t;
+      later(() => { if (id === run) li.classList.add("on"); }, t0);
+      ws.forEach((w, i) => later(() => { if (id === run) w.classList.add("on"); }, t0 + 60 + i * WORD));
+      const end = t0 + 60 + ws.length * WORD;
+      later(() => { if (id === run) $(".mn-tick", li).classList.add("mk"); }, end);
+      later(() => { if (id !== run) return; const r = $(".mn-ring", li); if (r) r.classList.add("mk"); }, end + 120);
+      t = end + PAUSE;
+    });
+    later(() => { if (id === run) p.classList.add("mn-done", "mn-thud"); }, t + 450);
+  }
+  return {
+    enter(_, sc) {
+      plain(); prep(sc); reset(sc);
+      sc._skip = () => { const p = $(".page", sc); if (p.classList.contains("mn-in") && !p.classList.contains("mn-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("mn-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

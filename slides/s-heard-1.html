@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We heard you · 1 · Twelve voices · ACKO slide s-heard-1</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · option 1, Twelve voices (Ritika, 17 Nov: "give variations in this slide. make it immersive so it catches client's
+     attention since its the very 1st slide"). Not in order.txt; index-heard.html (tools/acko/story/gen_heard_opts.py) shows it beside
+     the others. Black page. The MoM's twelve points arrive one at a time, large, over a voice's waveform, each then flying into its
+     place in a 4 × 3 grid; last, "We heard you." lands over the twelve and the hand line closes. ~9 s; a click settles it. -->
+<section class="scene" id="s-heard-1" data-part="cover" data-mode="dark" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="vc-glow" aria-hidden="true"></div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <h2 class="vc-head">We heard <span>you.</span></h2>
+    <div class="vc-wave" aria-hidden="true"></div>
+    <ol class="vc-grid">
+      <li style="--i:0"><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li style="--i:1"><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li style="--i:2"><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li style="--i:3"><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li style="--i:4"><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li style="--i:5"><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li style="--i:6"><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:7"><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li style="--i:8"><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li style="--i:9"><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li style="--i:10"><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li style="--i:11"><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="hand vc-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<style>
+/* a black page lit from the middle, where the voices speak */
+#s-heard-1 .page { background: #000; overflow: hidden; }
+#s-heard-1 .vc-glow { inset: 0; background: radial-gradient(ellipse 52% 46% at 50% 44%, rgba(82, 34, 208, .34) 0%, rgba(40, 18, 96, .16) 46%, rgba(0, 0, 0, 0) 74%);
+  opacity: .55; transition: opacity 1.2s var(--ease), transform 1.2s var(--ease); }
+#s-heard-1 .page.vc-talk .vc-glow { opacity: 1; animation: vc-breathe 2.6s ease-in-out infinite alternate; }
+#s-heard-1 .page.vc-done .vc-glow { opacity: .5; transform: translateY(-16%) scale(1.15); animation: none; }
+@keyframes vc-breathe { from { transform: scale(1); } to { transform: scale(1.06); } }
+
+/* the headline, last: white, its "you." in the violet */
+#s-heard-1 .vc-head { left: 8%; top: 12%; margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.08; font-weight: 700; color: #fff; letter-spacing: -.01em;
+  opacity: 0; transform: translateY(18px) scale(1.04); transform-origin: 0 50%; filter: blur(8px); transition: opacity .9s var(--ease), transform .9s var(--ease), filter .9s var(--ease); }
+#s-heard-1 .vc-head span { color: var(--violet); }
+#s-heard-1 .page.vc-done .vc-head { opacity: 1; transform: none; filter: none; }
+
+/* one voice at a time: the point large in the middle, its space in the violet */
+#s-heard-1 .vc-say { left: 12%; top: 25%; width: 76%; height: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  z-index: 3; pointer-events: none; opacity: 0; transform: translateY(14px) scale(1.03); filter: blur(10px);
+  transition: opacity .35s var(--ease), transform .35s var(--ease), filter .35s var(--ease); will-change: transform, opacity; }
+#s-heard-1 .vc-say.in { opacity: 1; transform: none; filter: none; }
+#s-heard-1 .vc-say em { font: 700 calc(var(--pt) * 10) var(--num); font-style: normal; letter-spacing: .18em; color: var(--violet); }
+#s-heard-1 .vc-say p { margin: .35em 0 0; max-width: 92%; font-size: calc(var(--pt) * 21); line-height: 1.18; font-weight: 500; color: #fff; text-shadow: 0 0 calc(var(--pt) * 14) #000; }
+#s-heard-1 .vc-say b { font-weight: 700; color: var(--lilac); }
+
+/* the voice's waveform under it */
+#s-heard-1 .vc-wave { left: 28%; top: 57%; width: 44%; height: 9%; display: flex; align-items: center; gap: .35%; opacity: 0; transition: opacity .6s var(--ease); }
+#s-heard-1 .vc-wave i { flex: 1; height: calc(var(--h) * 100%); border-radius: 99px; background: linear-gradient(180deg, var(--lilac), var(--violet) 50%, var(--purple));
+  transform: scaleY(.06); transition: transform .4s var(--ease); }
+#s-heard-1 .page.vc-talk .vc-wave { opacity: 1; }
+#s-heard-1 .page.vc-talk .vc-wave i { animation: vc-bar calc(var(--s) * 1s) ease-in-out calc(var(--k) * -1s) infinite alternate; }
+#s-heard-1 .page.vc-done .vc-wave { opacity: 0; }
+@keyframes vc-bar { from { transform: scaleY(.08); } to { transform: scaleY(1); } }
+
+/* the twelve, collected: four across, three down */
+#s-heard-1 .vc-grid { left: 8%; top: 33.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3.2%;
+  font-size: calc(var(--pt) * 7.2); }
+#s-heard-1 .vc-grid li { padding: .75em 0 1.25em; border-top: 1px solid rgba(255, 255, 255, .16); opacity: 0; transform: translateY(6px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease), border-color .5s; }
+#s-heard-1 .vc-grid li.on { opacity: .22; transform: none; }
+#s-heard-1 .page.vc-done .vc-grid li { opacity: 1; transform: none; transition-delay: calc(var(--i) * 45ms + .35s); border-top-color: rgba(146, 111, 243, .5); }
+#s-heard-1 .vc-grid em { display: block; font: 700 calc(var(--pt) * 12) var(--num); font-style: normal; color: var(--violet); }
+#s-heard-1 .vc-grid p { margin: .4em 0 0; line-height: 1.38; color: rgba(255, 255, 255, .74); }
+#s-heard-1 .vc-grid b { font-weight: 600; color: #fff; }
+
+#s-heard-1 .vc-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--lilac);
+  opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease) 1.2s, transform .7s var(--ease) 1.2s; }
+#s-heard-1 .page.vc-done .vc-close { opacity: 1; transform: none; }
+</style>
+<script>
+ACKO.slide("s-heard-1", ({ $, $$, plain, later, reduced }) => {
+  const GAP = 700;                                     // one voice every 0.7 s
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  function wave(p) {                                   // the bars, made once: heights shaped like speech (louder in the middle)
+    const w = $(".vc-wave", p); if (w.children.length) return;
+    let h = "";
+    for (let k = 0; k < 56; k++) {
+      const x = k / 55, env = .35 + .65 * Math.sin(Math.PI * x), r = Math.abs(Math.sin(k * 12.9898) * 43758.5453) % 1;
+      h += `<i style="--h:${(env * (.45 + .55 * r)).toFixed(3)};--s:${(.28 + .32 * r).toFixed(3)};--k:${(r * 2).toFixed(3)}"></i>`;
+    }
+    w.innerHTML = h;
+  }
+  function reset(p) {
+    run++;
+    $$(".vc-say", p).forEach((e) => e.remove());
+    p.classList.remove("vc-talk", "vc-done");
+    $$(".vc-grid li", p).forEach((li) => li.classList.remove("on"));
+  }
+  function settle(p) {
+    run++;
+    $$(".vc-say", p).forEach((e) => e.remove());
+    p.classList.remove("vc-talk"); p.classList.add("vc-done");
+  }
+  function play(p) {
+    const id = ++run, items = [...$$(".vc-grid li", p)];
+    p.classList.add("vc-talk");
+    items.forEach((li, i) => {
+      const t0 = 350 + i * GAP;
+      later(() => {
+        if (id !== run) return;
+        const say = document.createElement("div");
+        say.className = "vc-say";
+        say.innerHTML = `<em>${$("em", li).textContent}</em><p>${$("p", li).innerHTML}</p>`;
+        p.appendChild(say);
+        void say.offsetWidth; say.classList.add("in");
+        later(() => {                                  // then into its place in the grid, small
+          if (id !== run) return;
+          const a = $("p", say).getBoundingClientRect(), b = li.getBoundingClientRect();
+          const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2), s = Math.max(.2, Math.min(.5, b.width / a.width));
+          say.style.transition = "transform .55s cubic-bezier(.5,0,.2,1), opacity .5s ease .05s, filter .5s";
+          say.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${s.toFixed(3)})`;
+          say.style.opacity = "0";
+          later(() => { if (id === run) li.classList.add("on"); }, 260);
+          later(() => say.remove(), 650);
+        }, GAP * .68);
+      }, t0);
+    });
+    later(() => { if (id === run) settle(p); }, 350 + items.length * GAP + 250);
+  }
+  return {
+    enter(_, sc) {
+      plain();
+      const p = page(sc); wave(p); reset(p);
+      sc._skip = () => { if (p.classList.contains("vc-talk")) settle(p); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc);
+      if (p.classList.contains("vc-talk") || p.classList.contains("vc-done")) return;
+      if (reduced) settle(p); else play(p);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(page(sc));
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

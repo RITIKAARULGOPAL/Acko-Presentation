@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACKO · The Loop</title>
+<meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
+<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
+<style data-slide="s-heard">
+/* the agenda's type (s-agenda): the 30 pt headline in the purple; then the points, two columns of six, read down */
+#s-heard .hd-copy { left: 8%; top: 13.5%; width: 60%; }
+#s-heard .hd-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
+#s-heard .hd-cols { left: 8%; top: 31%; width: 84%; display: grid; grid-template-columns: calc(var(--pt) * 22.36) 1fr; font-size: calc(var(--pt) * 6.6); }   /* the rows' number column (2.6em at 8.6 pt) */
+#s-heard .hd-cols b { grid-column: 2; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }   /* in line with the points' text */
+#s-heard .hd-rows { left: 8%; top: 35.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: 4%; font-size: calc(var(--pt) * 8.6); }   /* shared rows keep the columns level */
+#s-heard .hd-rows li { display: grid; grid-template-columns: 2.6em 1fr; align-items: baseline; padding: .55em 0; border-top: 1px solid #e4def2; }
+#s-heard .hd-rows li:nth-child(6), #s-heard .hd-rows li:nth-child(12) { border-bottom: 1px solid #e4def2; }
+#s-heard .hd-rows em { font-style: normal; font-weight: 700; color: var(--purple); }
+#s-heard .hd-rows p { margin: 0; line-height: 1.35; }
+#s-heard .hd-rows b { font-weight: 600; color: var(--purple); }
+#s-heard .hd-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple); }
+/* the one beat: the points, one after another; then the closing line */
+#s-heard .hd-rows li, #s-heard .hd-close { opacity: 0; transform: translateY(8px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
+#s-heard .page.hd-on1 .hd-rows li { opacity: 1; transform: none; }
+#s-heard .page.hd-on1 .hd-close { opacity: 1; transform: none; transition-delay: 1.2s; }
+</style>
+<style data-slide="s-heard-1">
+/* a black page lit from the middle, where the voices speak */
+#s-heard-1 .page { background: #000; overflow: hidden; }
+#s-heard-1 .vc-glow { inset: 0; background: radial-gradient(ellipse 52% 46% at 50% 44%, rgba(82, 34, 208, .34) 0%, rgba(40, 18, 96, .16) 46%, rgba(0, 0, 0, 0) 74%);
+  opacity: .55; transition: opacity 1.2s var(--ease), transform 1.2s var(--ease); }
+#s-heard-1 .page.vc-talk .vc-glow { opacity: 1; animation: vc-breathe 2.6s ease-in-out infinite alternate; }
+#s-heard-1 .page.vc-done .vc-glow { opacity: .5; transform: translateY(-16%) scale(1.15); animation: none; }
+@keyframes vc-breathe { from { transform: scale(1); } to { transform: scale(1.06); } }
+
+/* the headline, last: white, its "you." in the violet */
+#s-heard-1 .vc-head { left: 8%; top: 12%; margin: 0; font-size: calc(var(--pt) * 34); line-height: 1.08; font-weight: 700; color: #fff; letter-spacing: -.01em;
+  opacity: 0; transform: translateY(18px) scale(1.04); transform-origin: 0 50%; filter: blur(8px); transition: opacity .9s var(--ease), transform .9s var(--ease), filter .9s var(--ease); }
+#s-heard-1 .vc-head span { color: var(--violet); }
+#s-heard-1 .page.vc-done .vc-head { opacity: 1; transform: none; filter: none; }
+
+/* one voice at a time: the point large in the middle, its space in the violet */
+#s-heard-1 .vc-say { left: 12%; top: 25%; width: 76%; height: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  z-index: 3; pointer-events: none; opacity: 0; transform: translateY(14px) scale(1.03); filter: blur(10px);
+  transition: opacity .35s var(--ease), transform .35s var(--ease), filter .35s var(--ease); will-change: transform, opacity; }
+#s-heard-1 .vc-say.in { opacity: 1; transform: none; filter: none; }
+#s-heard-1 .vc-say em { font: 700 calc(var(--pt) * 10) var(--num); font-style: normal; letter-spacing: .18em; color: var(--violet); }
+#s-heard-1 .vc-say p { margin: .35em 0 0; max-width: 92%; font-size: calc(var(--pt) * 21); line-height: 1.18; font-weight: 500; color: #fff; text-shadow: 0 0 calc(var(--pt) * 14) #000; }
+#s-heard-1 .vc-say b { font-weight: 700; color: var(--lilac); }
+
+/* the voice's waveform under it */
+#s-heard-1 .vc-wave { left: 28%; top: 57%; width: 44%; height: 9%; display: flex; align-items: center; gap: .35%; opacity: 0; transition: opacity .6s var(--ease); }
+#s-heard-1 .vc-wave i { flex: 1; height: calc(var(--h) * 100%); border-radius: 99px; background: linear-gradient(180deg, var(--lilac), var(--violet) 50%, var(--purple));
+  transform: scaleY(.06); transition: transform .4s var(--ease); }
+#s-heard-1 .page.vc-talk .vc-wave { opacity: 1; }
+#s-heard-1 .page.vc-talk .vc-wave i { animation: vc-bar calc(var(--s) * 1s) ease-in-out calc(var(--k) * -1s) infinite alternate; }
+#s-heard-1 .page.vc-done .vc-wave { opacity: 0; }
+@keyframes vc-bar { from { transform: scaleY(.08); } to { transform: scaleY(1); } }
+
+/* the twelve, collected: four across, three down */
+#s-heard-1 .vc-grid { left: 8%; top: 33.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 3.2%;
+  font-size: calc(var(--pt) * 7.2); }
+#s-heard-1 .vc-grid li { padding: .75em 0 1.25em; border-top: 1px solid rgba(255, 255, 255, .16); opacity: 0; transform: translateY(6px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease), border-color .5s; }
+#s-heard-1 .vc-grid li.on { opacity: .22; transform: none; }
+#s-heard-1 .page.vc-done .vc-grid li { opacity: 1; transform: none; transition-delay: calc(var(--i) * 45ms + .35s); border-top-color: rgba(146, 111, 243, .5); }
+#s-heard-1 .vc-grid em { display: block; font: 700 calc(var(--pt) * 12) var(--num); font-style: normal; color: var(--violet); }
+#s-heard-1 .vc-grid p { margin: .4em 0 0; line-height: 1.38; color: rgba(255, 255, 255, .74); }
+#s-heard-1 .vc-grid b { font-weight: 600; color: #fff; }
+
+#s-heard-1 .vc-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--lilac);
+  opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease) 1.2s, transform .7s var(--ease) 1.2s; }
+#s-heard-1 .page.vc-done .vc-close { opacity: 1; transform: none; }
+</style>
+<style data-slide="s-heard-2">
+/* the agenda's headline (s-agenda), top left; the floor across the middle of the page */
+#s-heard-2 .page { background: #fff; }
+#s-heard-2 .fl-copy { left: 8%; top: 13.5%; width: 60%; }
+#s-heard-2 .fl-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple);
+  opacity: 0; transform: translateY(10px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-heard-2 .page.fl-in .fl-copy h2 { opacity: 1; transform: none; }
+#s-heard-2 .fl-plan, #s-heard-2 .fl-leads, #s-heard-2 .fl-pins, #s-heard-2 .fl-notes { left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* the floor: its plate, cores and every space; 01 turns them to the Lean Nordic tone; a point lights its rooms in the violet */
+#s-heard-2 .fl-plan { opacity: 0; transform: scale(1.03); transition: opacity 1s var(--ease), transform 1.4s var(--ease); }
+#s-heard-2 .page.fl-in .fl-plan { opacity: 1; transform: none; }
+#s-heard-2 .fl-plan .plate { fill: #fbfaff; stroke: #c9bfee; stroke-width: 1.4; vector-effect: non-scaling-stroke; transition: fill .9s var(--ease), stroke .9s; }
+#s-heard-2 .fl-plan .core { fill: #e9e5f3; }
+#s-heard-2 .fl-plan .sp { fill: #f1eef8; stroke: #d8d0ee; stroke-width: .6; vector-effect: non-scaling-stroke; transition: fill .7s var(--ease), stroke .7s; }
+#s-heard-2 .page.fl-nordic .fl-plan .plate { fill: #f8f4ec; stroke: #d9ccb6; }
+#s-heard-2 .page.fl-nordic .fl-plan .sp { fill: #efe6d6; stroke: #ddd0bb; }
+#s-heard-2 .page .fl-plan .sp.on { fill: var(--violet); stroke: #7a55e6; }
+#s-heard-2 .page .fl-plan .sp.hot { fill: var(--purple); stroke: var(--purple); }
+
+/* the leaders, pin to words, drawn as the pin lands */
+#s-heard-2 .fl-leads path { fill: none; stroke: #b7a5ef; stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .55s var(--ease) .15s, stroke .3s; }
+#s-heard-2 .fl-leads path.on { stroke-dashoffset: 0; }
+#s-heard-2 .fl-leads path.hot { stroke: var(--purple); }
+
+/* the pins: numbered, dropping in with a little bounce and two rings */
+#s-heard-2 .fl-pins i { position: absolute; z-index: 2; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); margin: calc(var(--pt) * -5) 0 0 calc(var(--pt) * -5);
+  border-radius: 50%; background: var(--purple); color: #fff; font: 700 calc(var(--pt) * 4.4) / calc(var(--pt) * 10) var(--num); font-style: normal; text-align: center;
+  box-shadow: 0 0 0 calc(var(--pt) * 1.1) #fff, 0 calc(var(--pt) * 2) calc(var(--pt) * 6) rgba(82, 34, 208, .35);
+  opacity: 0; transform: translateY(calc(var(--pt) * -16)) scale(.5); transition: opacity .3s, transform .6s cubic-bezier(.3, 1.6, .5, 1), background .3s; }
+#s-heard-2 .fl-pins i.on { opacity: 1; transform: none; }
+#s-heard-2 .fl-pins i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--purple); opacity: 0; pointer-events: none; }
+#s-heard-2 .fl-pins i.on::after { animation: fl-ring 1.3s ease-out .25s 2; }
+#s-heard-2 .fl-pins i.hot { transform: scale(1.3); background: #3e17a8; z-index: 3; }
+@keyframes fl-ring { from { transform: scale(1); opacity: .65; } to { transform: scale(2.8); opacity: 0; } }
+
+/* the twelve points: six above the floor, six below, each at its leader's end */
+#s-heard-2 .fl-notes { margin: 0; padding: 0; list-style: none; font-size: calc(var(--pt) * 6.5); pointer-events: none; }
+#s-heard-2 .fl-notes li { position: absolute; width: 14%; text-align: center; padding-top: .55em; opacity: 0; transform: translateY(8px);
+  transition: opacity .5s var(--ease) .2s, transform .5s var(--ease) .2s; }
+#s-heard-2 .fl-notes li.up { padding: 0 0 .55em; transform: translateY(calc(-100% - 8px)); }
+#s-heard-2 .fl-notes li.on { opacity: 1; transform: none; }
+#s-heard-2 .fl-notes li.up.on { transform: translateY(-100%); }
+#s-heard-2 .fl-notes em { display: block; font: 700 calc(var(--pt) * 9) var(--num); font-style: normal; color: var(--purple); transition: transform .3s var(--ease); }
+#s-heard-2 .fl-notes p { margin: .2em 0 0; line-height: 1.32; color: #3b3550; transition: color .3s; }
+#s-heard-2 .fl-notes b { font-weight: 600; color: var(--purple); }
+#s-heard-2 .fl-notes li.hot p { color: #000; }
+#s-heard-2 .fl-notes li.hot em { transform: scale(1.15); }
+
+#s-heard-2 .fl-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple);
+  opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease) .4s, transform .7s var(--ease) .4s; }
+#s-heard-2 .page.fl-done .fl-close { opacity: 1; transform: none; }
+</style>
+<style data-slide="s-heard-3">
+/* the column on the left, black; the wall of windows on the right, edge to edge */
+#s-heard-3 .page { background: #000; overflow: hidden; }
+#s-heard-3 .wn-side { left: 0; top: 0; width: 31%; height: 100%; }
+#s-heard-3 .wn-side > * { position: absolute; left: 8.5%; width: 80%; margin: 0; opacity: 0; transform: translateY(12px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-heard-3 .wn-k { top: 30%; font-size: calc(var(--pt) * 6.6); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--violet); }
+#s-heard-3 .wn-side h2 { top: 35%; font-size: calc(var(--pt) * 38); line-height: 1.02; font-weight: 700; color: #fff; letter-spacing: -.015em; transition-delay: .12s; }
+#s-heard-3 .wn-side h2 span { display: block; color: var(--violet); }
+#s-heard-3 .wn-side .hand { top: 66%; font-size: calc(var(--pt) * 13); line-height: 1.05; color: var(--lilac); transition-delay: 2.4s; }
+#s-heard-3 .page.wn-in .wn-side > * { opacity: 1; transform: none; }
+
+#s-heard-3 .wn-wall { left: 31%; top: 0; width: 69%; height: 92%; margin: 0; padding: 0; list-style: none; display: grid;
+  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 2px; font-size: calc(var(--pt) * 6.8); }
+/* a window: its render behind, darkened from the foot, opening upward in a wave from the top left */
+#s-heard-3 .wn-wall li { position: relative; overflow: hidden; background: var(--bg, #111); clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(.7, 0, .2, 1); transition-delay: calc((var(--c) + var(--r)) * 120ms + 450ms); }
+#s-heard-3 .page.wn-in .wn-wall li { clip-path: inset(0 0 0 0); }
+#s-heard-3 .wn-wall li > i { position: absolute; inset: 0; background: var(--img) center / cover no-repeat; transform: scale(1.22);
+  transition: transform 2.2s var(--ease), filter .5s; transition-delay: calc((var(--c) + var(--r)) * 120ms + 450ms), 0s; filter: brightness(.82) saturate(.95); }
+#s-heard-3 .page.wn-in .wn-wall li > i { transform: scale(1.04); }
+#s-heard-3 .page.wn-drift .wn-wall li > i { animation: wn-drift 16s ease-in-out infinite alternate; animation-delay: calc((var(--c) * 3 + var(--r) * 5) * -1.3s); }
+@keyframes wn-drift { from { transform: scale(1.04) translate(0, 0); } to { transform: scale(1.12) translate(-2%, -1.5%); } }
+#s-heard-3 .wn-wall li::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.55) 34%, rgba(0,0,0,.08) 66%, rgba(0,0,0,.25) 100%);
+  transition: opacity .5s var(--ease); }
+#s-heard-3 .wn-wall li.wn-new::after { background: linear-gradient(0deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,0) 50%); }
+#s-heard-3 .wn-wall em, #s-heard-3 .wn-wall p, #s-heard-3 .wn-wall svg { position: absolute; z-index: 1; opacity: 0; transform: translateY(8px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc((var(--c) + var(--r)) * 120ms + 1.2s); }
+#s-heard-3 .page.wn-in .wn-wall em, #s-heard-3 .page.wn-in .wn-wall p, #s-heard-3 .page.wn-in .wn-wall svg { opacity: 1; transform: none; }
+#s-heard-3 .wn-wall em { left: 9%; top: 7%; font: 700 calc(var(--pt) * 13) var(--num); font-style: normal; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+#s-heard-3 .wn-wall p { left: 9%; right: 9%; bottom: 8%; margin: 0; line-height: 1.34; color: rgba(255,255,255,.86); }
+#s-heard-3 .wn-wall b { font-weight: 700; color: #fff; }
+#s-heard-3 .wn-wall li:not(.wn-new) b { color: var(--lilac); }
+#s-heard-3 .wn-wall svg { left: 50%; top: 40%; width: 34%; margin: -17% 0 0 -17%; fill: none; stroke: rgba(255,255,255,.9); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+/* a click while the wave is still opening: everything in at once */
+#s-heard-3 .page.wn-now .wn-side > *, #s-heard-3 .page.wn-now .wn-wall li, #s-heard-3 .page.wn-now .wn-wall li > i,
+#s-heard-3 .page.wn-now .wn-wall em, #s-heard-3 .page.wn-now .wn-wall p, #s-heard-3 .page.wn-now .wn-wall svg { transition-delay: 0s !important; transition-duration: .35s !important; }
+/* hover: the window comes up */
+#s-heard-3 .wn-wall li:hover > i { filter: brightness(1.05) saturate(1.05); }
+#s-heard-3 .wn-wall li:hover::after { opacity: .7; }
+</style>
+<style data-slide="s-heard-4">
+/* warm paper, a notebook's margin line */
+#s-heard-4 .page { background: #fbf8f1; }
+#s-heard-4 .mn-margin { left: 5.6%; top: 0; width: 1px; height: 100%; background: rgba(82, 34, 208, .16); }
+
+/* the headline lands last, like a stamp */
+#s-heard-4 .mn-head { left: 8%; top: 11.5%; margin: 0; font-size: calc(var(--pt) * 32); line-height: 1.1; font-weight: 700; color: var(--purple); transform-origin: 20% 60%;
+  opacity: 0; transform: rotate(-2deg) scale(1.7); }
+#s-heard-4 .page.mn-done .mn-head { opacity: 1; transform: rotate(-2deg); animation: mn-stamp .55s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes mn-stamp { 0% { opacity: 0; transform: rotate(-2deg) scale(1.7); } 60% { opacity: 1; transform: rotate(-2deg) scale(.96); } 100% { opacity: 1; transform: rotate(-2deg) scale(1); } }
+#s-heard-4 .page.mn-done.mn-thud { animation: mn-thud .3s ease-out .32s; }
+@keyframes mn-thud { 0%, 100% { transform: none; } 40% { transform: translateY(1.5px); } }
+
+#s-heard-4 .mn-k { left: 8%; top: 24.5%; font-size: calc(var(--pt) * 15); font-weight: 400; color: var(--purple); opacity: 0; transition: opacity .6s var(--ease); }
+#s-heard-4 .page.mn-in .mn-k { opacity: 1; }
+
+/* the twelve, two columns of six, read down; written in the hand, word by word */
+#s-heard-4 .mn-rows { left: 8%; top: 30.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: 5%; font-family: var(--hand); font-size: calc(var(--pt) * 13.6); color: #26213a; }
+#s-heard-4 .mn-rows li { position: relative; display: grid; grid-template-columns: 1.9em 1fr; align-items: baseline; padding: .32em 0 .38em; border-top: 1px dashed rgba(82, 34, 208, .2); }
+#s-heard-4 .mn-rows li:nth-child(6), #s-heard-4 .mn-rows li:nth-child(12) { border-bottom: 1px dashed rgba(82, 34, 208, .2); }
+#s-heard-4 .mn-rows em { font-style: normal; color: var(--purple); opacity: 0; transition: opacity .3s; }
+#s-heard-4 .mn-rows li.on em { opacity: 1; }
+#s-heard-4 .mn-rows p { margin: 0; line-height: 1.04; }
+#s-heard-4 .mn-rows b { position: relative; font-weight: 400; color: var(--purple); white-space: nowrap; }
+#s-heard-4 .mn-rows .w { opacity: 0; filter: blur(2px); transition: opacity .22s ease, filter .22s ease; }
+#s-heard-4 .mn-rows .w.on { opacity: 1; filter: none; }
+/* the drawn marks: a tick in the margin, a ring round the space */
+#s-heard-4 .mn-rows svg { position: absolute; overflow: visible; pointer-events: none; fill: none; stroke: var(--purple); stroke-linecap: round; stroke-linejoin: round; }
+#s-heard-4 .mn-rows svg path { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset .45s cubic-bezier(.5, 0, .3, 1), opacity 0s; }
+#s-heard-4 .mn-rows .mk path { stroke-dashoffset: 0; opacity: 1; }
+#s-heard-4 .mn-tick { left: -1.45em; top: .45em; width: .95em; height: .8em; stroke-width: 2.2; }
+#s-heard-4 .mn-ring { left: -.22em; top: -.18em; width: calc(100% + .44em); height: calc(100% + .35em); stroke-width: 1.7; opacity: .75; }   /* stretched with the word: thicker up and down, finer along, like a pen */
+
+#s-heard-4 .mn-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple);
+  opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease) .9s, transform .7s var(--ease) .9s; }
+#s-heard-4 .page.mn-done .mn-close { opacity: 1; transform: none; }
+</style>
+<style data-slide="s-heard-5">
+#s-heard-5 .page { background: #fff; }
+#s-heard-5 .lp-loop, #s-heard-5 .lp-stops { left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* the loop: a lilac ribbon with the purple line in it, drawn by its head */
+#s-heard-5 .lp-rib { fill: none; stroke: #ebe5fb; stroke-width: 40; stroke-linejoin: round; }
+#s-heard-5 .lp-line { fill: none; stroke: var(--purple); stroke-width: 3.5; stroke-linecap: round; }
+#s-heard-5 .lp-head { fill: var(--purple); opacity: 0; transition: opacity .4s; }
+#s-heard-5 .lp-halo { fill: var(--violet); opacity: 0; transition: opacity .4s; }
+#s-heard-5 .page.lp-run :is(.lp-head, .lp-halo) { opacity: 1; }
+#s-heard-5 .page.lp-run .lp-halo { opacity: .7; }
+#s-heard-5 .page.lp-idle .lp-head { opacity: .9; }
+#s-heard-5 .page.lp-idle .lp-halo { opacity: .45; }
+
+/* in the middle: the headline, then the hand line */
+#s-heard-5 .lp-mid { left: 25%; top: 41%; width: 50%; text-align: center; }
+#s-heard-5 .lp-mid > * { display: block; margin: 0; opacity: 0; transform: translateY(10px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-heard-5 .lp-k { font-size: calc(var(--pt) * 6.4); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--violet); }
+#s-heard-5 .lp-mid h2 { margin-top: .12em; font-size: calc(var(--pt) * 32); line-height: 1.1; font-weight: 700; color: var(--purple); transition-delay: .1s; }
+#s-heard-5 .lp-mid .hand { margin-top: .35em; font-size: calc(var(--pt) * 13); color: var(--purple); }
+#s-heard-5 .page.lp-in .lp-mid > :not(.hand), #s-heard-5 .page.lp-done .lp-mid .hand { opacity: 1; transform: none; }
+
+/* the stops: a numbered dot on the loop, its words outside it */
+#s-heard-5 .lp-stops { margin: 0; padding: 0; list-style: none; font-size: calc(var(--pt) * 6.5); }
+#s-heard-5 .lp-stops li { position: absolute; width: 0; height: 0; }
+#s-heard-5 .lp-stops em { position: absolute; left: 0; top: 0; z-index: 2; width: calc(var(--pt) * 12); height: calc(var(--pt) * 12); margin: calc(var(--pt) * -6) 0 0 calc(var(--pt) * -6);
+  border-radius: 50%; background: var(--purple); color: #fff; font: 700 calc(var(--pt) * 5) / calc(var(--pt) * 12) var(--num); font-style: normal; text-align: center;
+  box-shadow: 0 0 0 calc(var(--pt) * 1.4) #fff, 0 calc(var(--pt) * 1.5) calc(var(--pt) * 5) rgba(82, 34, 208, .3);
+  opacity: 0; transform: scale(.2); transition: opacity .25s, transform .55s cubic-bezier(.3, 1.7, .5, 1); }
+#s-heard-5 .lp-stops em::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--violet); opacity: 0; }
+#s-heard-5 .lp-stops li.on em { opacity: 1; transform: none; }
+#s-heard-5 .lp-stops li.on em::after { animation: lp-ring 1.1s ease-out .1s; }
+@keyframes lp-ring { from { transform: scale(1); opacity: .7; } to { transform: scale(2.6); opacity: 0; } }
+#s-heard-5 .lp-stops p { position: absolute; width: calc(var(--pt) * 92); margin: 0; line-height: 1.32; color: #3b3550;
+  opacity: 0; transition: opacity .5s var(--ease) .12s, transform .5s var(--ease) .12s; }
+#s-heard-5 .lp-stops b { font-weight: 600; color: var(--purple); }
+#s-heard-5 .lp-stops li.on p { opacity: 1; }
+/* where the words sit: above the top, below the bottom, out to the right and the left */
+#s-heard-5 .lp-stops li.t p { left: calc(var(--pt) * -46); bottom: calc(var(--pt) * 13); text-align: center; transform: translateY(6px); }
+#s-heard-5 .lp-stops li.b p { left: calc(var(--pt) * -46); top: calc(var(--pt) * 13); text-align: center; transform: translateY(-6px); }
+#s-heard-5 .lp-stops li.r p { left: calc(var(--pt) * 12); top: 0; transform: translate(-6px, -50%); }
+#s-heard-5 .lp-stops li.l p { right: calc(var(--pt) * 12); top: 0; text-align: right; transform: translate(6px, -50%); }
+#s-heard-5 .lp-stops li.on.t p, #s-heard-5 .lp-stops li.on.b p { transform: none; }
+#s-heard-5 .lp-stops li.on.r p, #s-heard-5 .lp-stops li.on.l p { transform: translate(0, -50%); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
+</header>
+
+<!-- ======================= THE WORLD (persistent, full bleed) ======================= -->
+<div id="world">
+  <div class="w-layer" id="w-map"><svg class="vmap" id="vmap" aria-hidden="true"></svg><div class="credit" id="map-credit"></div></div>
+  <div class="w-layer" id="w-plan">
+    <div class="plan-frame" id="frame-a"><div class="plan-host" id="world-plan" style="position:absolute;inset:0"></div><span class="frame-tag" id="tag-a" style="display:none"></span></div>
+  </div>
+  <div class="w-layer" id="w-photo"><div id="photo-stack"></div><div class="credit" id="photo-credit"></div></div>
+</div>
+<div id="shade"></div>
+<!-- a render opened full size: ✕, Esc, a click beside it, or moving on closes it -->
+<div class="lightbox" id="lightbox" hidden><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-close" aria-label="Close">✕</button></div>
+
+<div class="progress" id="progress"></div>
+<div class="hint" id="hint">Copyright © 2026 Studiokon Ventures Pvt Ltd. All rights reserved</div>
+<!-- the deck's footer lockup; the logos switch decks: ACKO presentation ↔ About SKV -->
+<div class="lockup">
+  <button class="brand-btn" id="brand-main" data-track="main" title="Back to the presentation, where you left it">
+    <img class="logo-ink" src="assets/img/acko-ink.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-white.webp" alt="ACKO">
+  </button>
+  <i></i>
+  <button class="brand-btn" id="brand-skv" data-track="skv" title="About SKV">
+    <img class="logo-light" src="assets/img/skv-light.png" alt="SKV"><img class="logo-ink" src="assets/img/skv-ink.webp" alt="SKV">
+  </button>
+</div>
+
+<!-- the walk's controls, one set for every walk slide (s-w-*): moved into whichever is open -->
+<div id="walk-ui" hidden>
+  <div class="walk-ctl">
+    <span class="wk-vol"><button type="button" class="wk-btn" id="wk-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wave" d="M16 8a5 5 0 0 1 0 8"/><path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M3 3l18 18"/></svg>Music</button><input type="range" id="wk-level" min="0" max="100" value="35" aria-label="Volume" title="Volume"></span>
+    <button type="button" class="wk-btn" id="wk-pan" title="Pan mode: drag the render" aria-label="Pan mode"><svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.2L8 14"/></svg>Pan</button>
+    <button type="button" class="wk-btn on" id="wk-kp" title="Keyplan on / off" aria-label="Keyplan on / off"><svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Keyplan</button>
+    <button type="button" class="wk-btn" id="wk-full" title="Full view: the render alone (Esc to come back)" aria-label="Full view"><svg viewBox="0 0 24 24"><path class="grow" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="shrink" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg><span class="grow">Full view</span><span class="shrink">Exit full view</span></button>
+  </div>
+  <audio id="wk-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <!-- the keyplan: the deck's plan with the maroon camera mark (until the DXF's cameras replace it) -->
+  <div class="wk-kp" id="wk-kpimg"><div class="wk-kp-in"><img alt=""><i class="wk-cam"><svg viewBox="-10 -10 20 20"><path d="M-6 -7L0 6L6 -7"/></svg></i></div></div>
+  <div class="wk-name">
+    <div class="wk-kick" id="wk-kick">Visual Direction</div>
+    <h2 id="wk-n"></h2>
+    <div class="wk-opt" id="wk-opt"></div>
+    <p class="wk-q" id="wk-q"></p>
+    <p class="wk-p" id="wk-p"></p>
+  </div>
+  <nav class="wk-nav" id="wk-nav" aria-label="Spaces"></nav>
+</div>
+
+<main id="stage">
+
+<!-- We heard you (Ritika, 17 Nov: "before the concept slides, a 'we heard you' slide would come which would have the meetings mom and
+     then based on the mom we've worked on this presentation"). After the agenda, before Part 01. Only what you told us (Ritika,
+     17 Nov: "dont have so we part..just have what you told us"): the MoM's twelve points, in her words, two columns of six; the
+     space each one is about in the purple (the design system's key words). Date line dropped (Ritika, 17 Nov). The type follows
+     the agenda (s-agenda). -->
+<section class="scene" id="s-heard" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">We heard you · As now</div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <div class="hd-copy"><h2>We heard you.</h2></div>
+    <div class="hd-cols"><b>What you told us</b></div>
+    <ol class="hd-rows">
+      <li style="--i:0"><em>01</em><p class="hd-said">Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li style="--i:1"><em>02</em><p class="hd-said">Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li style="--i:2"><em>03</em><p class="hd-said">Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li style="--i:3"><em>04</em><p class="hd-said">Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li style="--i:4"><em>05</em><p class="hd-said">Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li style="--i:5"><em>06</em><p class="hd-said">Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li style="--i:6"><em>07</em><p class="hd-said">Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:7"><em>08</em><p class="hd-said">Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li style="--i:8"><em>09</em><p class="hd-said"><b>Crash/nap room</b>: mandatory</p></li>
+      <li style="--i:9"><em>10</em><p class="hd-said"><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li style="--i:10"><em>11</em><p class="hd-said"><b>Dealers room</b> to be added</p></li>
+      <li style="--i:11"><em>12</em><p class="hd-said"><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="hand hd-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<!-- We heard you · option 1, Twelve voices (Ritika, 17 Nov: "give variations in this slide. make it immersive so it catches client's
+     attention since its the very 1st slide"). Not in order.txt; index-heard.html (tools/acko/story/gen_heard_opts.py) shows it beside
+     the others. Black page. The MoM's twelve points arrive one at a time, large, over a voice's waveform, each then flying into its
+     place in a 4 × 3 grid; last, "We heard you." lands over the twelve and the hand line closes. ~9 s; a click settles it. -->
+<section class="scene" id="s-heard-1" data-part="cover" data-mode="dark" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">We heard you · 1 · Twelve voices</div>
+    <div class="vc-glow" aria-hidden="true"></div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <h2 class="vc-head">We heard <span>you.</span></h2>
+    <div class="vc-wave" aria-hidden="true"></div>
+    <ol class="vc-grid">
+      <li style="--i:0"><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li style="--i:1"><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li style="--i:2"><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li style="--i:3"><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li style="--i:4"><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li style="--i:5"><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li style="--i:6"><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:7"><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li style="--i:8"><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li style="--i:9"><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li style="--i:10"><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li style="--i:11"><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="hand vc-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<!-- We heard you · option 2, On your floor (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not in order.txt;
+     see index-heard.html. The real floor (PLAN_DXF's spaces on ACKO_FLOOR's plate, as s-loop-stops maps them) across the page; the
+     MoM's twelve points drop on it one by one as numbered pins on the rooms they are about, each with its leader and its words,
+     six above the floor and six below, west to east. 01 turns the whole floor to the Lean Nordic tone. Each li names its pin
+     (data-at, plan units) and the space types it lights (data-hi). Hover a point or a pin to light the pair. A click settles it. -->
+<section class="scene" id="s-heard-2" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, each on the room it is about; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">We heard you · 2 · On your floor</div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <div class="fl-copy"><h2>We heard you.</h2></div>
+    <svg class="fl-plan" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <svg class="fl-leads" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="fl-pins"></div>
+    <ol class="fl-notes">
+      <li class="ui" data-at="86560,35200" data-hi="Reception"><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li class="ui" data-at="195785,31695" data-hi="Coffee corner"><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li class="ui" data-at="188461,41891" data-hi="Collab|Collaboration huddle"><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li class="ui" data-at="55040,36382" data-hi="Studio|Green room"><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li class="ui" data-at="107226,42407" data-hi="Boardroom"><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li class="ui" data-at="154049,34927" data-hi="Departmental room|Quick sprint"><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li class="ui" data-at="68578,40416" data-hi="Cafeteria"><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li class="ui" data-at="178098,44078" data-hi="Terrace"><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li class="ui" data-at="211734,47417" data-hi="Nap room"><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li class="ui" data-at="137315,25827" data-hi="Medical room"><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li class="ui" data-at="52392,28566" data-hi="Dealer room"><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li class="ui" data-at="77515,34124" data-hi="Mail room"><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="hand fl-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<!-- We heard you · option 3, Twelve windows (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not in
+     order.txt; see index-heard.html. Black page: "We heard you." in a column on the left; the MoM's twelve points as a 4 × 3 wall of
+     the deck's own renders, one space per point, opening in a diagonal wave and drifting slowly. The three rooms with no render yet
+     (sick room, dealers room, mail room) are purple tiles with a line icon. Hover a window to bring it up. A click settles it. -->
+<section class="scene" id="s-heard-3" data-part="cover" data-mode="dark" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, each a space we have shaped for them; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">We heard you · 3 · Twelve windows</div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <div class="wn-side">
+      <b class="wn-k">What you told us</b>
+      <h2>We heard <span>you.</span></h2>
+      <p class="hand">Everything that follows is built on what you told us.</p>
+    </div>
+    <ol class="wn-wall">
+      <li class="ui" style="--c:0;--r:0;--img:url(assets/img/pal3-03.webp)"><i></i><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li class="ui" style="--c:1;--r:0;--img:url(assets/img/r3-coffee.webp)"><i></i><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li class="ui" style="--c:2;--r:0;--img:url(assets/img/r3-collab.webp)"><i></i><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li class="ui" style="--c:3;--r:0;--img:url(assets/img/r3-studio-op1.webp)"><i></i><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li class="ui" style="--c:0;--r:1;--img:url(assets/img/r3-board-op1.webp)"><i></i><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li class="ui" style="--c:1;--r:1;--img:url(assets/img/r3-sprint.webp)"><i></i><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li class="ui" style="--c:2;--r:1;--img:url(assets/img/r3-cafe1.webp)"><i></i><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li class="ui" style="--c:3;--r:1;--img:url(assets/img/r3-deck.webp)"><i></i><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li class="ui" style="--c:0;--r:2;--img:url(assets/img/r3-zen.webp)"><i></i><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li class="ui wn-new" style="--c:1;--r:2;--bg:#5222d0"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 36V12M5 28h38v8M43 28v-4a4 4 0 0 0-4-4H20v8M10 28v-3a3 3 0 0 1 3-3h4"/><path d="M33 6v10M28 11h10"/></svg><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li class="ui wn-new" style="--c:2;--r:2;--bg:#3f1aa6"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="14" r="5"/><circle cx="34" cy="14" r="5"/><path d="M5 31a9 9 0 0 1 18 0M25 31a9 9 0 0 1 18 0M3 37h42"/></svg><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li class="ui wn-new" style="--c:3;--r:2;--bg:#6f2f9f"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="11" width="36" height="26" rx="2"/><path d="M6 13l18 13 18-13"/></svg><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+  </div>
+</section>
+<!-- We heard you · option 4, The minutes, handwritten (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not
+     in order.txt; see index-heard.html. A warm paper page: the MoM's twelve points write themselves in the hand (Square Peg), word by
+     word, two columns of six; each gets a purple tick and its space is circled in a drawn stroke; then "We heard you." lands on top
+     like a stamp and the closing line follows. ~7 s; a click settles it. -->
+<section class="scene" id="s-heard-4" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, written as you said them; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">We heard you · 4 · The minutes</div>
+    <div class="mn-margin" aria-hidden="true"></div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <h2 class="mn-head">We heard you.</h2>
+    <b class="hand mn-k">What you told us</b>
+    <ol class="mn-rows">
+      <li><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="hand mn-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<!-- We heard you · option 5, One loop, twelve stops (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not in
+     order.txt; see index-heard.html. "We heard you." in the middle; round it a loop draws itself, clockwise from the top left, a
+     lilac ribbon with the purple line in it, and the MoM's twelve points come up as numbered stops as its head passes them (three
+     along the top, three down the right, three along the bottom, three up the left), so the first slide already hints at the Loop
+     the deck builds to. When it closes, a small light keeps going round. ~6 s; a click settles it. -->
+<section class="scene" id="s-heard-5" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, one loop round them; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="op-chip">We heard you · 5 · One loop</div>
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <svg class="lp-loop" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+      <defs><filter id="lp5-glow" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="7"/></filter></defs>
+      <path class="lp-rib" d="M560 370 H1360 A205 205 0 0 1 1360 780 H560 A205 205 0 0 1 560 370 Z"/>
+      <path class="lp-line" d="M560 370 H1360 A205 205 0 0 1 1360 780 H560 A205 205 0 0 1 560 370 Z"/>
+      <circle class="lp-halo" r="16" filter="url(#lp5-glow)"/><circle class="lp-head" r="7"/>
+    </svg>
+    <div class="lp-mid">
+      <b class="lp-k">What you told us</b>
+      <h2>We heard you.</h2>
+      <p class="hand">Everything that follows is built on what you told us.</p>
+    </div>
+    <ol class="lp-stops">
+      <li><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<div class="overview" id="overview"><div class="ov-kick">All chapters</div><div id="overview-grid"></div></div>
+<div class="notes" id="notes"><b><span>Speaker notes</span><span id="notes-time"></span></b><span id="notes-text"></span><span class="keys">← → beats · O index · N notes · F fullscreen · B blank · L laser</span></div>
+<div class="blank" id="blank"></div>
+<div class="cur" id="cur"><canvas class="cur-trail"></canvas><i class="cur-ring"></i><i class="cur-dot"></i><i class="cur-laser"></i></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="data/keyplans.js?v=1"></script>
+<script src="data/plan-dxf.js?v=1"></script>
+<script src="data/plan-base.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="data/axo-dxf.js?v=1"></script>
+<script src="assets/js/axo-model.js?v=1"></script>
+<script src="data/axo-layers.js?v=1"></script>
+<script src="data/loop-path.js?v=1"></script>
+<script src="assets/js/axo-layers.js?v=1"></script>
+<script src="data/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=1"></script>
+<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="data/site-floor.js?v=1"></script>
+<style>.scene .page > .op-chip { left: 2.2%; top: 3.2%; z-index: 9; padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #5222d0; color: #fff; font-size: calc(var(--pt) * 8); font-weight: 700; letter-spacing: .04em; white-space: nowrap; pointer-events: none; }</style>
+<style>/* the wording bar (option pages only) */
+#hw-bar { position: fixed; left: calc(var(--pl) + var(--pw) * .62); bottom: calc(var(--ptop) + var(--ph) * .012); transform: translateX(-50%); z-index: 130;
+  display: flex; align-items: center; gap: 3px; padding: 4px 5px 4px 11px; border-radius: 99px; background: rgba(255,255,255,.95);
+  box-shadow: 0 2px 14px rgba(20,10,60,.22); font: 600 12px/1 var(--body); color: #26213a; pointer-events: auto; white-space: nowrap; }
+#hw-bar .hw-l { margin-right: 5px; font-size: 9.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #5222d0; }
+#hw-bar button { min-width: 25px; height: 23px; padding: 0 7px; border: 1px solid #d6cdf3; border-radius: 99px; background: #fff; color: #5222d0;
+  font: 700 11px/1 var(--body); cursor: pointer; pointer-events: auto; }
+#hw-bar button:hover { border-color: #5222d0; }
+#hw-bar button.on { background: #5222d0; border-color: #5222d0; color: #fff; }
+#hw-bar .hw-now { max-width: 190px; margin: 0 7px; overflow: hidden; text-overflow: ellipsis; color: #26213a; }
+</style>
+<script>window.HEARD_WORDS = [{"id": "Now", "a": "We heard", "b": "you.", "kick": "What you told us", "hand": "Everything that follows is built on what you told us.", "title": "We heard you"}, {"id": "A", "a": "You spoke.", "b": "We listened.", "kick": "From our last meeting", "hand": "Each of these shaped what you’ll see today.", "title": "You spoke, we listened"}, {"id": "B", "a": "Your words,", "b": "our brief.", "kick": "Twelve points from our meeting", "hand": "Everything that follows answers these twelve.", "title": "Your words, our brief"}, {"id": "C", "a": "You asked.", "b": "We answered.", "kick": "What you asked of us", "hand": "Every one of them is in this design.", "title": "You asked, we answered"}, {"id": "D", "a": "It starts", "b": "with you.", "kick": "What we took away", "hand": "This is where today’s design begins.", "title": "It starts with you"}, {"id": "E", "a": "Noted.", "b": "Every word.", "kick": "The minutes of our meeting", "hand": "Now let us show you what we did with them.", "title": "Noted"}, {"id": "F", "a": "Straight from", "b": "the room.", "kick": "Our last meeting, in twelve points", "hand": "Each one is answered in the pages ahead.", "title": "Straight from the room"}, {"id": "G", "a": "First,", "b": "your words.", "kick": "Before our ideas", "hand": "Then, what we made of them.", "title": "First, your words"}, {"id": "H", "a": "Back to", "b": "your brief.", "kick": "Twelve points we carried forward", "hand": "Every page ahead began here.", "title": "Back to your brief"}]; window.HEARD_MAP = {"s-heard": {"title": ".hdr b", "kick": ".hd-cols b", "head": ".hd-copy h2", "hand": ".hd-close", "lines": 1}, "s-heard-1": {"title": ".hdr b", "kick": null, "head": ".vc-head", "hand": ".vc-close", "lines": 1}, "s-heard-2": {"title": ".hdr b", "kick": null, "head": ".fl-copy h2", "hand": ".fl-close", "lines": 1}, "s-heard-3": {"title": ".hdr b", "kick": ".wn-k", "head": ".wn-side h2", "hand": ".wn-side .hand", "lines": 2}, "s-heard-4": {"title": ".hdr b", "kick": ".mn-k", "head": ".mn-head", "hand": ".mn-close", "lines": 1}, "s-heard-5": {"title": ".hdr b", "kick": ".lp-k", "head": ".lp-mid h2", "hand": ".lp-mid .hand", "lines": 1}};</script>
+<script>
+(() => {
+  const W = window.HEARD_WORDS, M = window.HEARD_MAP, KEY = "acko-heard-words";
+  let cur = Math.max(0, W.findIndex((w) => w.id === null));
+  try { const i = W.findIndex((w) => w.id === localStorage.getItem(KEY)); if (i >= 0) cur = i; } catch (e) { /* no storage: start on the first */ }
+  const q = (sid, sel) => (sel ? document.querySelector("#" + sid + " " + sel) : null);
+  // shrink a headline 5% at a time (to 60% at most) until it keeps to its lines and no word runs over; in deck points, so it scales
+  function fit(el, lines) {
+    el.style.fontSize = "";
+    const page = el.closest(".page"), pt = page ? page.getBoundingClientRect().width / 720 : 1;
+    if (!pt) return;
+    const n = parseFloat(getComputedStyle(el).fontSize) / pt;
+    for (let f = 1; f >= .6; f -= .05) {
+      el.style.fontSize = `calc(var(--pt) * ${(n * f).toFixed(2)})`;
+      const lh = parseFloat(getComputedStyle(el).lineHeight) || n * f * pt * 1.12;
+      if (el.scrollWidth <= el.clientWidth + 1 && el.offsetHeight <= lh * lines + 2) return;
+    }
+  }
+  function apply(i) {
+    cur = i; const w = W[i];
+    for (const sid in M) {
+      const m = M[sid], t = q(sid, m.title), k = q(sid, m.kick), h = q(sid, m.head), c = q(sid, m.hand);
+      if (t) t.textContent = w.title;
+      if (k) k.textContent = w.kick;
+      if (c) c.textContent = w.hand;
+      if (h) { h.innerHTML = ""; h.append(w.a + " "); const s = document.createElement("span"); s.textContent = w.b; h.append(s); fit(h, m.lines); }
+    }
+    document.querySelectorAll("#hw-bar button").forEach((b) => b.classList.toggle("on", +b.dataset.i === i));
+    const now = document.querySelector("#hw-bar .hw-now"); if (now) now.textContent = w.a + " " + w.b;
+    try { localStorage.setItem(KEY, w.id); } catch (e) { /* not remembered, still shown */ }
+  }
+  function start() {
+    const bar = document.createElement("div");
+    bar.id = "hw-bar";
+    bar.innerHTML = '<span class="hw-l">Words</span>' + W.map((w, i) => `<button type="button" data-i="${i}" title="${w.a} ${w.b}">${w.id}</button>`).join("") + '<b class="hw-now"></b>';
+    bar.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { e.stopPropagation(); apply(+b.dataset.i); } });
+    document.body.appendChild(bar);
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => apply(cur));
+    addEventListener("resize", () => apply(cur));
+  }
+  window.__heard = { apply, words: W, map: M };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
+</script>
+<script>window.ACKO_WOW = true;</script>
+<script src="assets/js/app.js?v=1"></script>
+<script data-slide="s-heard">
+ACKO.slide("s-heard", ({ $, plain, later }) => ({
+  enter(_, sc) { plain(); },
+  step(k, sc) {
+    const p = $(".page", sc);
+    later(() => { p.classList.toggle("hd-on1", k >= 1); }, 40);
+  },
+  leave(_, sc) { const p = sc && $(".page", sc); if (p) p.classList.remove("hd-on1"); },
+}));
+</script>
+<script data-slide="s-heard-1">
+ACKO.slide("s-heard-1", ({ $, $$, plain, later, reduced }) => {
+  const GAP = 700;                                     // one voice every 0.7 s
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  function wave(p) {                                   // the bars, made once: heights shaped like speech (louder in the middle)
+    const w = $(".vc-wave", p); if (w.children.length) return;
+    let h = "";
+    for (let k = 0; k < 56; k++) {
+      const x = k / 55, env = .35 + .65 * Math.sin(Math.PI * x), r = Math.abs(Math.sin(k * 12.9898) * 43758.5453) % 1;
+      h += `<i style="--h:${(env * (.45 + .55 * r)).toFixed(3)};--s:${(.28 + .32 * r).toFixed(3)};--k:${(r * 2).toFixed(3)}"></i>`;
+    }
+    w.innerHTML = h;
+  }
+  function reset(p) {
+    run++;
+    $$(".vc-say", p).forEach((e) => e.remove());
+    p.classList.remove("vc-talk", "vc-done");
+    $$(".vc-grid li", p).forEach((li) => li.classList.remove("on"));
+  }
+  function settle(p) {
+    run++;
+    $$(".vc-say", p).forEach((e) => e.remove());
+    p.classList.remove("vc-talk"); p.classList.add("vc-done");
+  }
+  function play(p) {
+    const id = ++run, items = [...$$(".vc-grid li", p)];
+    p.classList.add("vc-talk");
+    items.forEach((li, i) => {
+      const t0 = 350 + i * GAP;
+      later(() => {
+        if (id !== run) return;
+        const say = document.createElement("div");
+        say.className = "vc-say";
+        say.innerHTML = `<em>${$("em", li).textContent}</em><p>${$("p", li).innerHTML}</p>`;
+        p.appendChild(say);
+        void say.offsetWidth; say.classList.add("in");
+        later(() => {                                  // then into its place in the grid, small
+          if (id !== run) return;
+          const a = $("p", say).getBoundingClientRect(), b = li.getBoundingClientRect();
+          const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2), s = Math.max(.2, Math.min(.5, b.width / a.width));
+          say.style.transition = "transform .55s cubic-bezier(.5,0,.2,1), opacity .5s ease .05s, filter .5s";
+          say.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${s.toFixed(3)})`;
+          say.style.opacity = "0";
+          later(() => { if (id === run) li.classList.add("on"); }, 260);
+          later(() => say.remove(), 650);
+        }, GAP * .68);
+      }, t0);
+    });
+    later(() => { if (id === run) settle(p); }, 350 + items.length * GAP + 250);
+  }
+  return {
+    enter(_, sc) {
+      plain();
+      const p = page(sc); wave(p); reset(p);
+      sc._skip = () => { if (p.classList.contains("vc-talk")) settle(p); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc);
+      if (p.classList.contains("vc-talk") || p.classList.contains("vc-done")) return;
+      if (reduced) settle(p); else play(p);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(page(sc));
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-2">
+ACKO.slide("s-heard-2", ({ $, $$, plain, later, reduced, plan }) => {
+  const DISP = [60, 430, 1860, 720], GAP = 520;         // the floor's frame on the page (px of 1920 × 1080); a pin every 0.52 s
+  let run = 0;
+  function build(sc) {
+    if (sc._fl) return sc._fl;
+    const D = window.PLAN_DXF, F = window.ACKO_FLOOR; if (!D) return null;
+    const [vx, vy, vw, vh] = D.viewBox, vb = plan.vbFor([vx, vy, vx + vw, vy + vh], DISP), k = 1920 / vb[2];
+    const P = (x, y) => [(x - vb[0]) * k, (y - vb[1]) * k];
+    const items = [...$$(".fl-notes li", sc)], hi = items.map((li) => new RegExp("^(" + li.dataset.hi + ")$"));
+    // the floor, in plan units (the svg's viewBox is the page's frame on the plan)
+    const svg = $(".fl-plan", sc); svg.setAttribute("viewBox", vb.map((v) => v.toFixed(1)).join(" "));
+    let h = "";
+    if (F) {
+      const FP = (q) => [q[0] * 50 + 8842, q[1] * 50 + 12775], d = (pts) => "M" + pts.map((q) => FP(q).map((v) => v.toFixed(0)).join(" ")).join("L") + "Z";
+      h += `<path class="plate" d="${d(F.plate)}"/>` + (F.cores || []).map((c) => `<path class="core" d="${d(c)}"/>`).join("");
+    }
+    h += D.spaces.map((s) => { const n = hi.findIndex((r) => r.test(s.type)); return `<path class="sp"${n >= 0 ? ` data-n="${n}"` : ""} d="${s.d}"/>`; }).join("");
+    svg.innerHTML = h;
+    // the pins on their rooms; the words six above and six below, in slots west to east, so no two leaders cross
+    const pts = items.map((li, n) => { const [x, y] = li.dataset.at.split(",").map(Number); return { li, n, p: P(x, y) }; });
+    const byX = pts.slice().sort((a, b) => a.p[0] - b.p[0]);
+    byX.filter((_, i) => i % 2 === 0).forEach((o, i) => { o.up = true; o.l = [210 + i * 300, 410]; });
+    byX.filter((_, i) => i % 2 === 1).forEach((o, i) => { o.up = false; o.l = [210 + i * 300, 740]; });
+    pts.forEach((o) => {
+      o.li.style.left = (o.l[0] / 19.2 - 7).toFixed(3) + "%"; o.li.style.top = (o.l[1] / 10.8).toFixed(3) + "%";
+      o.li.classList.toggle("up", o.up); o.li.dataset.n = o.n;
+    });
+    $(".fl-leads", sc).innerHTML = pts.map((o) => `<path data-n="${o.n}" pathLength="1" d="M${o.p[0].toFixed(1)} ${o.p[1].toFixed(1)}L${o.l[0]} ${o.l[1]}"/>`).join("");
+    $(".fl-pins", sc).innerHTML = pts.map((o) => `<i class="ui" data-n="${o.n}" style="left:${(o.p[0] / 19.2).toFixed(3)}%;top:${(o.p[1] / 10.8).toFixed(3)}%">${String(o.n + 1).padStart(2, "0")}</i>`).join("");
+    // hover: a point and its pin, its leader and its rooms light together
+    const hot = (n, on) => $$(`[data-n="${n}"]`, sc).forEach((e) => e.classList.toggle("hot", on));
+    $$(".fl-notes li, .fl-pins i", sc).forEach((e) => {
+      e.addEventListener("mouseenter", () => hot(e.dataset.n, true));
+      e.addEventListener("mouseleave", () => hot(e.dataset.n, false));
+    });
+    return (sc._fl = { n: items.length });
+  }
+  const light = (sc, n, on) => $$(`[data-n="${n}"]`, sc).forEach((e) => e.classList.toggle("on", on));
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("fl-in", "fl-nordic", "fl-done");
+    $$(".on, .hot", p).forEach((e) => e.classList.remove("on", "hot"));
+  }
+  function settle(sc) {
+    run++;
+    const p = $(".page", sc), B = build(sc); if (!B) return;
+    p.classList.add("fl-in", "fl-nordic", "fl-done");
+    for (let n = 0; n < B.n; n++) light(sc, n, true);
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc), B = build(sc); if (!B) return;
+    p.classList.add("fl-in");
+    for (let n = 0; n < B.n; n++) later(() => {
+      if (id !== run) return;
+      light(sc, n, true);
+      if (n === 0) p.classList.add("fl-nordic");
+    }, 700 + n * GAP);
+    later(() => { if (id === run) p.classList.add("fl-done"); }, 700 + B.n * GAP + 200);
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); reset(sc);
+      sc._skip = () => { const p = $(".page", sc); if (p.classList.contains("fl-in") && !p.classList.contains("fl-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("fl-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-3">
+ACKO.slide("s-heard-3", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  const fast = (p, on) => p.classList.toggle("wn-now", on);
+  return {
+    enter(_, sc) {
+      plain();
+      const p = page(sc); run++; p.classList.remove("wn-in", "wn-drift");
+      sc._skip = () => { if (p.classList.contains("wn-in") && !p.classList.contains("wn-drift")) { run++; p.classList.add("wn-now", "wn-drift"); } };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("wn-in")) return;
+      const id = ++run;
+      if (reduced) { p.classList.add("wn-now", "wn-in"); return; }
+      p.classList.remove("wn-now");
+      later(() => { if (id === run) p.classList.add("wn-in"); }, 120);
+      later(() => { if (id === run) p.classList.add("wn-drift"); }, 3600);   // after the wave, the renders drift slowly
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("wn-in", "wn-drift", "wn-now"); }
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-4">
+ACKO.slide("s-heard-4", ({ $, $$, plain, later, reduced }) => {
+  const WORD = 42, PAUSE = 140;                        // a word every 42 ms; a breath between points
+  let run = 0;
+  // each word its own span, keeping the space's <b>; then the tick and the ring, drawn later
+  function prep(sc) {
+    if (sc._mn) return;
+    sc._mn = 1;
+    $$(".mn-rows li", sc).forEach((li) => {
+      const p = $("p", li);
+      const wrap = (node) => [...node.childNodes].forEach((c) => {
+        if (c.nodeType === 3) {
+          const f = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach((t) => {
+            if (!t) return;
+            if (/^\s+$/.test(t)) f.appendChild(document.createTextNode(t));
+            else { const s = document.createElement("span"); s.className = "w"; s.textContent = t; f.appendChild(s); }
+          });
+          node.replaceChild(f, c);
+        } else if (c.nodeType === 1) wrap(c);
+      });
+      wrap(p);
+      li.insertAdjacentHTML("afterbegin", '<svg class="mn-tick" viewBox="0 0 20 16" aria-hidden="true"><path pathLength="1" d="M2 9 L7.5 14 L18 2"/></svg>');
+      const b = $("b", p);
+      if (b) b.insertAdjacentHTML("beforeend", '<svg class="mn-ring" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M10 25 C4 9 46 2 82 6 C99 9 100 30 80 35 C54 41 14 39 5 27 C1 19 14 9 30 7"/></svg>');
+    });
+  }
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("mn-in", "mn-done", "mn-thud");
+    $$(".mn-rows .on, .mn-rows .mk", p).forEach((e) => e.classList.remove("on", "mk"));
+  }
+  function settle(sc) {
+    run++;
+    const p = $(".page", sc);
+    $$(".mn-rows li, .mn-rows .w", p).forEach((e) => e.classList.add("on"));
+    $$(".mn-rows svg", p).forEach((e) => e.classList.add("mk"));
+    p.classList.add("mn-in", "mn-done");
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc);
+    p.classList.add("mn-in");
+    let t = 500;
+    $$(".mn-rows li", p).forEach((li) => {
+      const ws = [...$$(".w", li)], t0 = t;
+      later(() => { if (id === run) li.classList.add("on"); }, t0);
+      ws.forEach((w, i) => later(() => { if (id === run) w.classList.add("on"); }, t0 + 60 + i * WORD));
+      const end = t0 + 60 + ws.length * WORD;
+      later(() => { if (id === run) $(".mn-tick", li).classList.add("mk"); }, end);
+      later(() => { if (id !== run) return; const r = $(".mn-ring", li); if (r) r.classList.add("mk"); }, end + 120);
+      t = end + PAUSE;
+    });
+    later(() => { if (id === run) p.classList.add("mn-done", "mn-thud"); }, t + 450);
+  }
+  return {
+    enter(_, sc) {
+      plain(); prep(sc); reset(sc);
+      sc._skip = () => { const p = $(".page", sc); if (p.classList.contains("mn-in") && !p.classList.contains("mn-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("mn-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<script data-slide="s-heard-5">
+ACKO.slide("s-heard-5", ({ $, $$, plain, later, reduced }) => {
+  // the stadium (page px of 1920 × 1080): the top from x 560 to 1360 at y 370, the ends' radius 205, the bottom at y 780
+  const X0 = 560, X1 = 1360, Y0 = 370, R = 205, CY = 575, ARC = Math.PI * R, TOP = X1 - X0, L = 2 * TOP + 2 * ARC, DRAW = 5200, LAP = 14000;
+  // twelve stops clockwise from the top left: three along each side, the ends' at -55°, 0°, 55° from their middles
+  const STOPS = [];
+  [X0 + 90, 960, X1 - 90].forEach((x) => STOPS.push({ s: x - X0, x, y: Y0, side: "t" }));
+  [-55, 0, 55].forEach((a) => { const r = (a * Math.PI) / 180; STOPS.push({ s: TOP + ((a + 90) / 180) * ARC, x: X1 + R * Math.cos(r), y: CY + R * Math.sin(r), side: "r" }); });
+  [X1 - 90, 960, X0 + 90].forEach((x) => STOPS.push({ s: TOP + ARC + (X1 - x), x, y: Y0 + 2 * R, side: "b" }));
+  [125, 180, 235].forEach((a) => { const r = (a * Math.PI) / 180; STOPS.push({ s: 2 * TOP + ARC + ((a - 90) / 180) * ARC, x: X0 + R * Math.cos(r), y: CY + R * Math.sin(r), side: "l" }); });
+  const ease = (k) => (k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  let run = 0;
+  function place(sc) {
+    if (sc._lp) return;
+    sc._lp = 1;
+    $$(".lp-stops li", sc).forEach((li, i) => {
+      const o = STOPS[i]; li.classList.add(o.side);
+      li.style.left = (o.x / 19.2).toFixed(3) + "%"; li.style.top = (o.y / 10.8).toFixed(3) + "%";
+    });
+    $$(".lp-rib, .lp-line", sc).forEach((p) => { p.style.strokeDasharray = L.toFixed(1); });
+  }
+  const paths = (sc) => [...$$(".lp-rib, .lp-line", sc)];
+  function head(sc, len) {
+    const pt = $(".lp-line", sc).getPointAtLength(((len % L) + L) % L);
+    $$(".lp-head, .lp-halo", sc).forEach((c) => { c.setAttribute("cx", pt.x.toFixed(1)); c.setAttribute("cy", pt.y.toFixed(1)); });
+  }
+  function drawn(sc, len) { paths(sc).forEach((p) => (p.style.strokeDashoffset = (L - len).toFixed(1))); }
+  function idle(sc, id) {                              // once closed, a small light keeps going round
+    const p = $(".page", sc), t0 = performance.now();
+    p.classList.add("lp-idle");
+    const f = (now) => { if (id !== run) return; head(sc, ((now - t0) / LAP) * L); requestAnimationFrame(f); };
+    requestAnimationFrame(f);
+  }
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("lp-in", "lp-run", "lp-done", "lp-idle");
+    $$(".lp-stops li", p).forEach((li) => li.classList.remove("on"));
+    drawn(sc, 0); head(sc, 0);
+  }
+  function settle(sc) {
+    const id = ++run, p = $(".page", sc);
+    drawn(sc, L); p.classList.remove("lp-run"); p.classList.add("lp-in", "lp-done");
+    $$(".lp-stops li", p).forEach((li) => li.classList.add("on"));
+    if (!reduced) idle(sc, id);
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc), lis = [...$$(".lp-stops li", p)];
+    p.classList.add("lp-in");
+    later(() => {
+      if (id !== run) return;
+      p.classList.add("lp-run");
+      const t0 = performance.now();
+      const f = (now) => {
+        if (id !== run) return;
+        const k = Math.min(1, (now - t0) / DRAW), len = ease(k) * L;
+        drawn(sc, len); head(sc, len);
+        STOPS.forEach((o, i) => { if (len >= o.s) lis[i].classList.add("on"); });
+        if (k < 1) requestAnimationFrame(f);
+        else { p.classList.remove("lp-run"); p.classList.add("lp-done"); idle(sc, id); }
+      };
+      requestAnimationFrame(f);
+    }, 700);
+  }
+  return {
+    enter(_, sc) {
+      plain(); place(sc); reset(sc);
+      sc._skip = () => { const p = $(".page", sc); if (p.classList.contains("lp-in") && !p.classList.contains("lp-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("lp-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<script>ACKO.start();</script>
+</body>
+</html>

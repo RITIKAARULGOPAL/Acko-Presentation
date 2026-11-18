@@ -50,24 +50,38 @@
 #s-agenda .ap-steps .hand { margin-top: calc(var(--pt) * 3); font-size: calc(var(--pt) * 14); line-height: 1.05; color: var(--hand-ink); white-space: nowrap; }
 </style>
 <style data-slide="s-heard">
-/* the agenda's type (s-agenda): the 30 pt headline in the purple; then the points, two columns of six, read down */
-#s-heard .hd-copy { left: 8%; top: 13.5%; width: 60%; }
-#s-heard .hd-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple); }
-#s-heard .hd-cols { left: 8%; top: 31%; width: 84%; display: grid; grid-template-columns: calc(var(--pt) * 22.36) 1fr; font-size: calc(var(--pt) * 6.6); }   /* the rows' number column (2.6em at 8.6 pt) */
-#s-heard .hd-cols b { grid-column: 2; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }   /* in line with the points' text */
-#s-heard .hd-rows { left: 8%; top: 35.5%; width: 84%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: 4%; font-size: calc(var(--pt) * 8.6); }   /* shared rows keep the columns level */
-#s-heard .hd-rows li { display: grid; grid-template-columns: 2.6em 1fr; align-items: baseline; padding: .55em 0; border-top: 1px solid #e4def2; }
-#s-heard .hd-rows li:nth-child(6), #s-heard .hd-rows li:nth-child(12) { border-bottom: 1px solid #e4def2; }
-#s-heard .hd-rows em { font-style: normal; font-weight: 700; color: var(--purple); }
-#s-heard .hd-rows p { margin: 0; line-height: 1.35; }
-#s-heard .hd-rows b { font-weight: 600; color: var(--purple); }
-#s-heard .hd-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple); }
-/* the one beat: the points, one after another; then the closing line */
-#s-heard .hd-rows li, #s-heard .hd-close { opacity: 0; transform: translateY(8px);
-  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
-#s-heard .page.hd-on1 .hd-rows li { opacity: 1; transform: none; }
-#s-heard .page.hd-on1 .hd-close { opacity: 1; transform: none; transition-delay: 1.2s; }
+#s-heard .page { background: #fff; }
+/* the panel: deep purple, wiped in from the left; its words placed in it (the deck's concept type: a small italic label, the
+   headline in Figtree 400 with its key word 700, the closing line in italic) */
+#s-heard .hd-panel { left: 0; top: 9%; width: 34%; height: 82%; background: linear-gradient(155deg, #2e1585 0%, #4a22c2 60%, #5222d0 100%);
+  clip-path: inset(0 100% 0 0); transition: clip-path .9s cubic-bezier(.6, 0, .2, 1) .1s; }
+#s-heard .page.hd-in .hd-panel { clip-path: inset(0 0 0 0); }
+#s-heard .hd-panel > * { position: absolute; left: 16%; width: 72%; margin: 0; opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+#s-heard .hd-k { top: 22%; font-size: calc(var(--pt) * 9); font-style: italic; color: rgba(255, 255, 255, .74); transition-delay: .6s; }
+#s-heard .hd-head { top: 29%; font-size: calc(var(--pt) * 26); line-height: 1.12; font-weight: 400; color: #fff; letter-spacing: -.01em; transition-delay: .75s; }
+#s-heard .hd-head span { font-weight: 700; color: var(--lilac); }
+#s-heard .hd-close { top: 80%; font-size: calc(var(--pt) * 8.6); line-height: 1.4; font-style: italic; color: rgba(255, 255, 255, .82); transition-delay: 3.5s; }
+#s-heard .page.hd-in .hd-panel > * { opacity: 1; transform: none; }
+
+/* the twelve: two columns of six, read down, on hairline rules */
+#s-heard .hd-rows { left: 39%; top: 28%; width: 54%; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: 7%; font-size: calc(var(--pt) * 7.6); }
+#s-heard .hd-rows li { display: block; padding: .62em 0; border-top: 1px solid #e6e1f0;
+  opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i) * 60ms + 1s); }
+#s-heard .hd-rows li:nth-child(6), #s-heard .hd-rows li:nth-child(12) { border-bottom: 1px solid #e6e1f0; }
+#s-heard .page.hd-in .hd-rows li { opacity: 1; transform: none; }
+#s-heard .hd-rows p { margin: 0; line-height: 1.38; color: #3b3550; }
+
+/* the key words: bold purple, a little bigger than the sentence; an underline draws beneath each in turn once the points are in.
+   A keyframe animation, not a transition: it holds its first frame through its delay, so a fresh load or a replay starts clean. */
+#s-heard .hd-rows b { font-size: 1.12em; line-height: 1; font-weight: 800; color: var(--purple); -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(var(--purple), var(--purple)) 0 100% / 0% 2px no-repeat; }
+#s-heard .page.hd-kw .hd-rows b { animation: hd-line .6s cubic-bezier(.6, 0, .2, 1) calc(var(--k, 0) * 140ms + 1.6s) both; }
+@keyframes hd-line { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+
+/* a click: everything in at once */
+#s-heard .page.hd-now .hd-panel, #s-heard .page.hd-now .hd-panel > *, #s-heard .page.hd-now .hd-rows li { transition-delay: 0s !important; transition-duration: .3s !important; }
+#s-heard .page.hd-now .hd-rows b { animation-delay: 0s !important; animation-duration: .3s !important; }
 </style>
 <style data-slide="s-sec-1">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
@@ -1456,32 +1470,41 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
     </ol>
   </div>
 </section>
-<!-- We heard you (Ritika, 17 Nov: "before the concept slides, a 'we heard you' slide would come which would have the meetings mom and
-     then based on the mom we've worked on this presentation"). After the agenda, before Part 01. Only what you told us (Ritika,
-     17 Nov: "dont have so we part..just have what you told us"): the MoM's twelve points, in her words, two columns of six; the
-     space each one is about in the purple (the design system's key words). Date line dropped (Ritika, 17 Nov). The type follows
-     the agenda (s-agenda). -->
-<section class="scene" id="s-heard" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
-  data-notes="We heard you: twelve points from our meeting; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room. → Bridge: So we began with the people. Part 1.">
+<!-- Design inputs (was "We heard you"; Ritika, 17 Nov: "before the concept slides, a 'we heard you' slide would come which would
+     have the meetings mom and then based on the mom we've worked on this presentation"). After the agenda, before Part 01 (Story 2
+     moves it there; not in order.txt). The MoM's twelve points, word for word; no date line (17 Nov).
+     18 Nov (Ritika), picked from the options pages (index-heard*.html, slides/s-heard-1..5, 4a..4e, f1..f5):
+       - formal 3, the Panel ("we go with this option"): a deep purple panel on the left, between the header and the copyright,
+         holds the label, the headline in white with its key word in lilac, and the closing line, in the deck's concept type;
+         on the right the twelve points in two columns of six on hairline rules
+       - wording D ("design inputs so far works"): "Received from ACKO" / "Design inputs." / "These inputs have shaped the
+         revised proposal."
+       - the points not numbered; the key words bold purple, bolder and a little bigger than the sentence ("can the keywords be
+         bolder or bigger"), each underlined in turn once the points are in ("underline is nice")
+     The panel wipes in, the points follow, then the key words' underlines one by one, then the closing line. A click settles it. -->
+<section class="scene" id="s-heard" data-part="cover" data-title="Design inputs" data-steps="1" data-mins="0.6" data-beats="Received from ACKO"
+  data-notes="Design inputs: the twelve points received from ACKO at our meeting; they have shaped the revised proposal. 1 · The palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room. → Bridge: So we began with the people. Part 1.">
   <div class="page">
-    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
-    <div class="hd-copy"><h2>We heard you.</h2></div>
-    <div class="hd-cols"><b>What you told us</b></div>
+    <div class="hdr"><b>Design inputs</b><span>Before we begin</span></div>
+    <div class="hd-panel">
+      <p class="hd-k">Received from ACKO</p>
+      <h2 class="hd-head">Design <span>inputs.</span></h2>
+      <p class="hd-close">These inputs have shaped the revised proposal.</p>
+    </div>
     <ol class="hd-rows">
-      <li style="--i:0"><em>01</em><p class="hd-said">Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
-      <li style="--i:1"><em>02</em><p class="hd-said">Provide more variety in <b>breakout spaces</b>.</p></li>
-      <li style="--i:2"><em>03</em><p class="hd-said">Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
-      <li style="--i:3"><em>04</em><p class="hd-said">Increase the size of the <b>podcast room &amp; Green room</b></p></li>
-      <li style="--i:4"><em>05</em><p class="hd-said">Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
-      <li style="--i:5"><em>06</em><p class="hd-said">Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
-      <li style="--i:6"><em>07</em><p class="hd-said">Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
-      <li style="--i:7"><em>08</em><p class="hd-said">Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
-      <li style="--i:8"><em>09</em><p class="hd-said"><b>Crash/nap room</b>: mandatory</p></li>
-      <li style="--i:9"><em>10</em><p class="hd-said"><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
-      <li style="--i:10"><em>11</em><p class="hd-said"><b>Dealers room</b> to be added</p></li>
-      <li style="--i:11"><em>12</em><p class="hd-said"><b>Mail room</b> to be provided</p></li>
+      <li style="--i:0"><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li style="--i:1"><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li style="--i:2"><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li style="--i:3"><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li style="--i:4"><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li style="--i:5"><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:7"><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li style="--i:8"><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li style="--i:9"><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li style="--i:10"><p><b>Dealers room</b> to be added</p></li>
+      <li style="--i:11"><p><b>Mail room</b> to be provided</p></li>
     </ol>
-    <p class="hand hd-close">Everything that follows is built on what you told us.</p>
   </div>
 </section>
 <section class="scene" id="s-sec-1" data-part="s1" data-title="Part 01 · Belonging" data-steps="1" data-mins="0.3"
@@ -2722,14 +2745,28 @@ ACKO.slide("s-agenda", ({ $, plain, reveal }) => ({
 }));
 </script>
 <script data-slide="s-heard">
-ACKO.slide("s-heard", ({ $, plain, later }) => ({
-  enter(_, sc) { plain(); },
-  step(k, sc) {
-    const p = $(".page", sc);
-    later(() => { p.classList.toggle("hd-on1", k >= 1); }, 40);
-  },
-  leave(_, sc) { const p = sc && $(".page", sc); if (p) p.classList.remove("hd-on1"); },
-}));
+ACKO.slide("s-heard", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  return {
+    enter(_, sc) {
+      plain(); run++;
+      const p = page(sc); p.classList.remove("hd-in", "hd-kw", "hd-now");
+      sc.querySelectorAll(".hd-rows li").forEach((li, k) => { const b = li.querySelector("b"); if (b) b.style.setProperty("--k", k); });   // the underlines' order
+      sc._skip = () => { if (p.classList.contains("hd-in")) p.classList.add("hd-now"); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("hd-in")) return;
+      if (reduced) { p.classList.add("hd-now", "hd-in", "hd-kw"); return; }
+      const id = ++run; later(() => { if (id === run) p.classList.add("hd-in", "hd-kw"); }, 80);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("hd-in", "hd-kw", "hd-now"); }
+    },
+  };
+});
 </script>
 <script data-slide="s-sec-1">
 /* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.

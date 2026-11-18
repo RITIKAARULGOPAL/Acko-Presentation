@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We heard you · 2 · On your floor · ACKO slide s-heard-2</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · option 2, On your floor (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not in order.txt;
+     see index-heard.html. The real floor (PLAN_DXF's spaces on ACKO_FLOOR's plate, as s-loop-stops maps them) across the page; the
+     MoM's twelve points drop on it one by one as numbered pins on the rooms they are about, each with its leader and its words,
+     six above the floor and six below, west to east. 01 turns the whole floor to the Lean Nordic tone. Each li names its pin
+     (data-at, plan units) and the space types it lights (data-hi). Hover a point or a pin to light the pair. A click settles it. -->
+<section class="scene" id="s-heard-2" data-part="cover" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, each on the room it is about; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <div class="fl-copy"><h2>We heard you.</h2></div>
+    <svg class="fl-plan" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <svg class="fl-leads" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="fl-pins"></div>
+    <ol class="fl-notes">
+      <li class="ui" data-at="86560,35200" data-hi="Reception"><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li class="ui" data-at="195785,31695" data-hi="Coffee corner"><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li class="ui" data-at="188461,41891" data-hi="Collab|Collaboration huddle"><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li class="ui" data-at="55040,36382" data-hi="Studio|Green room"><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li class="ui" data-at="107226,42407" data-hi="Boardroom"><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li class="ui" data-at="154049,34927" data-hi="Departmental room|Quick sprint"><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li class="ui" data-at="68578,40416" data-hi="Cafeteria"><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li class="ui" data-at="178098,44078" data-hi="Terrace"><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li class="ui" data-at="211734,47417" data-hi="Nap room"><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li class="ui" data-at="137315,25827" data-hi="Medical room"><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li class="ui" data-at="52392,28566" data-hi="Dealer room"><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li class="ui" data-at="77515,34124" data-hi="Mail room"><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+    <p class="hand fl-close">Everything that follows is built on what you told us.</p>
+  </div>
+</section>
+<style>
+/* the agenda's headline (s-agenda), top left; the floor across the middle of the page */
+#s-heard-2 .page { background: #fff; }
+#s-heard-2 .fl-copy { left: 8%; top: 13.5%; width: 60%; }
+#s-heard-2 .fl-copy h2 { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.12; font-weight: 700; color: var(--purple);
+  opacity: 0; transform: translateY(10px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-heard-2 .page.fl-in .fl-copy h2 { opacity: 1; transform: none; }
+#s-heard-2 .fl-plan, #s-heard-2 .fl-leads, #s-heard-2 .fl-pins, #s-heard-2 .fl-notes { left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* the floor: its plate, cores and every space; 01 turns them to the Lean Nordic tone; a point lights its rooms in the violet */
+#s-heard-2 .fl-plan { opacity: 0; transform: scale(1.03); transition: opacity 1s var(--ease), transform 1.4s var(--ease); }
+#s-heard-2 .page.fl-in .fl-plan { opacity: 1; transform: none; }
+#s-heard-2 .fl-plan .plate { fill: #fbfaff; stroke: #c9bfee; stroke-width: 1.4; vector-effect: non-scaling-stroke; transition: fill .9s var(--ease), stroke .9s; }
+#s-heard-2 .fl-plan .core { fill: #e9e5f3; }
+#s-heard-2 .fl-plan .sp { fill: #f1eef8; stroke: #d8d0ee; stroke-width: .6; vector-effect: non-scaling-stroke; transition: fill .7s var(--ease), stroke .7s; }
+#s-heard-2 .page.fl-nordic .fl-plan .plate { fill: #f8f4ec; stroke: #d9ccb6; }
+#s-heard-2 .page.fl-nordic .fl-plan .sp { fill: #efe6d6; stroke: #ddd0bb; }
+#s-heard-2 .page .fl-plan .sp.on { fill: var(--violet); stroke: #7a55e6; }
+#s-heard-2 .page .fl-plan .sp.hot { fill: var(--purple); stroke: var(--purple); }
+
+/* the leaders, pin to words, drawn as the pin lands */
+#s-heard-2 .fl-leads path { fill: none; stroke: #b7a5ef; stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .55s var(--ease) .15s, stroke .3s; }
+#s-heard-2 .fl-leads path.on { stroke-dashoffset: 0; }
+#s-heard-2 .fl-leads path.hot { stroke: var(--purple); }
+
+/* the pins: numbered, dropping in with a little bounce and two rings */
+#s-heard-2 .fl-pins i { position: absolute; z-index: 2; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); margin: calc(var(--pt) * -5) 0 0 calc(var(--pt) * -5);
+  border-radius: 50%; background: var(--purple); color: #fff; font: 700 calc(var(--pt) * 4.4) / calc(var(--pt) * 10) var(--num); font-style: normal; text-align: center;
+  box-shadow: 0 0 0 calc(var(--pt) * 1.1) #fff, 0 calc(var(--pt) * 2) calc(var(--pt) * 6) rgba(82, 34, 208, .35);
+  opacity: 0; transform: translateY(calc(var(--pt) * -16)) scale(.5); transition: opacity .3s, transform .6s cubic-bezier(.3, 1.6, .5, 1), background .3s; }
+#s-heard-2 .fl-pins i.on { opacity: 1; transform: none; }
+#s-heard-2 .fl-pins i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--purple); opacity: 0; pointer-events: none; }
+#s-heard-2 .fl-pins i.on::after { animation: fl-ring 1.3s ease-out .25s 2; }
+#s-heard-2 .fl-pins i.hot { transform: scale(1.3); background: #3e17a8; z-index: 3; }
+@keyframes fl-ring { from { transform: scale(1); opacity: .65; } to { transform: scale(2.8); opacity: 0; } }
+
+/* the twelve points: six above the floor, six below, each at its leader's end */
+#s-heard-2 .fl-notes { margin: 0; padding: 0; list-style: none; font-size: calc(var(--pt) * 6.5); pointer-events: none; }
+#s-heard-2 .fl-notes li { position: absolute; width: 14%; text-align: center; padding-top: .55em; opacity: 0; transform: translateY(8px);
+  transition: opacity .5s var(--ease) .2s, transform .5s var(--ease) .2s; }
+#s-heard-2 .fl-notes li.up { padding: 0 0 .55em; transform: translateY(calc(-100% - 8px)); }
+#s-heard-2 .fl-notes li.on { opacity: 1; transform: none; }
+#s-heard-2 .fl-notes li.up.on { transform: translateY(-100%); }
+#s-heard-2 .fl-notes em { display: block; font: 700 calc(var(--pt) * 9) var(--num); font-style: normal; color: var(--purple); transition: transform .3s var(--ease); }
+#s-heard-2 .fl-notes p { margin: .2em 0 0; line-height: 1.32; color: #3b3550; transition: color .3s; }
+#s-heard-2 .fl-notes b { font-weight: 600; color: var(--purple); }
+#s-heard-2 .fl-notes li.hot p { color: #000; }
+#s-heard-2 .fl-notes li.hot em { transform: scale(1.15); }
+
+#s-heard-2 .fl-close { left: 8%; top: 86.5%; width: 84%; margin: 0; font-size: calc(var(--pt) * 13); color: var(--purple);
+  opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease) .4s, transform .7s var(--ease) .4s; }
+#s-heard-2 .page.fl-done .fl-close { opacity: 1; transform: none; }
+</style>
+<script>
+ACKO.slide("s-heard-2", ({ $, $$, plain, later, reduced, plan }) => {
+  const DISP = [60, 430, 1860, 720], GAP = 520;         // the floor's frame on the page (px of 1920 × 1080); a pin every 0.52 s
+  let run = 0;
+  function build(sc) {
+    if (sc._fl) return sc._fl;
+    const D = window.PLAN_DXF, F = window.ACKO_FLOOR; if (!D) return null;
+    const [vx, vy, vw, vh] = D.viewBox, vb = plan.vbFor([vx, vy, vx + vw, vy + vh], DISP), k = 1920 / vb[2];
+    const P = (x, y) => [(x - vb[0]) * k, (y - vb[1]) * k];
+    const items = [...$$(".fl-notes li", sc)], hi = items.map((li) => new RegExp("^(" + li.dataset.hi + ")$"));
+    // the floor, in plan units (the svg's viewBox is the page's frame on the plan)
+    const svg = $(".fl-plan", sc); svg.setAttribute("viewBox", vb.map((v) => v.toFixed(1)).join(" "));
+    let h = "";
+    if (F) {
+      const FP = (q) => [q[0] * 50 + 8842, q[1] * 50 + 12775], d = (pts) => "M" + pts.map((q) => FP(q).map((v) => v.toFixed(0)).join(" ")).join("L") + "Z";
+      h += `<path class="plate" d="${d(F.plate)}"/>` + (F.cores || []).map((c) => `<path class="core" d="${d(c)}"/>`).join("");
+    }
+    h += D.spaces.map((s) => { const n = hi.findIndex((r) => r.test(s.type)); return `<path class="sp"${n >= 0 ? ` data-n="${n}"` : ""} d="${s.d}"/>`; }).join("");
+    svg.innerHTML = h;
+    // the pins on their rooms; the words six above and six below, in slots west to east, so no two leaders cross
+    const pts = items.map((li, n) => { const [x, y] = li.dataset.at.split(",").map(Number); return { li, n, p: P(x, y) }; });
+    const byX = pts.slice().sort((a, b) => a.p[0] - b.p[0]);
+    byX.filter((_, i) => i % 2 === 0).forEach((o, i) => { o.up = true; o.l = [210 + i * 300, 410]; });
+    byX.filter((_, i) => i % 2 === 1).forEach((o, i) => { o.up = false; o.l = [210 + i * 300, 740]; });
+    pts.forEach((o) => {
+      o.li.style.left = (o.l[0] / 19.2 - 7).toFixed(3) + "%"; o.li.style.top = (o.l[1] / 10.8).toFixed(3) + "%";
+      o.li.classList.toggle("up", o.up); o.li.dataset.n = o.n;
+    });
+    $(".fl-leads", sc).innerHTML = pts.map((o) => `<path data-n="${o.n}" pathLength="1" d="M${o.p[0].toFixed(1)} ${o.p[1].toFixed(1)}L${o.l[0]} ${o.l[1]}"/>`).join("");
+    $(".fl-pins", sc).innerHTML = pts.map((o) => `<i class="ui" data-n="${o.n}" style="left:${(o.p[0] / 19.2).toFixed(3)}%;top:${(o.p[1] / 10.8).toFixed(3)}%">${String(o.n + 1).padStart(2, "0")}</i>`).join("");
+    // hover: a point and its pin, its leader and its rooms light together
+    const hot = (n, on) => $$(`[data-n="${n}"]`, sc).forEach((e) => e.classList.toggle("hot", on));
+    $$(".fl-notes li, .fl-pins i", sc).forEach((e) => {
+      e.addEventListener("mouseenter", () => hot(e.dataset.n, true));
+      e.addEventListener("mouseleave", () => hot(e.dataset.n, false));
+    });
+    return (sc._fl = { n: items.length });
+  }
+  const light = (sc, n, on) => $$(`[data-n="${n}"]`, sc).forEach((e) => e.classList.toggle("on", on));
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("fl-in", "fl-nordic", "fl-done");
+    $$(".on, .hot", p).forEach((e) => e.classList.remove("on", "hot"));
+  }
+  function settle(sc) {
+    run++;
+    const p = $(".page", sc), B = build(sc); if (!B) return;
+    p.classList.add("fl-in", "fl-nordic", "fl-done");
+    for (let n = 0; n < B.n; n++) light(sc, n, true);
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc), B = build(sc); if (!B) return;
+    p.classList.add("fl-in");
+    for (let n = 0; n < B.n; n++) later(() => {
+      if (id !== run) return;
+      light(sc, n, true);
+      if (n === 0) p.classList.add("fl-nordic");
+    }, 700 + n * GAP);
+    later(() => { if (id === run) p.classList.add("fl-done"); }, 700 + B.n * GAP + 200);
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); reset(sc);
+      sc._skip = () => { const p = $(".page", sc); if (p.classList.contains("fl-in") && !p.classList.contains("fl-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("fl-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

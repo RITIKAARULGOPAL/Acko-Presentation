@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We heard you · 3 · Twelve windows · ACKO slide s-heard-3</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · option 3, Twelve windows (Ritika, 17 Nov: "make it immersive so it catches client's attention"). Not in
+     order.txt; see index-heard.html. Black page: "We heard you." in a column on the left; the MoM's twelve points as a 4 × 3 wall of
+     the deck's own renders, one space per point, opening in a diagonal wave and drifting slowly. The three rooms with no render yet
+     (sick room, dealers room, mail room) are purple tiles with a line icon. Hover a window to bring it up. A click settles it. -->
+<section class="scene" id="s-heard-3" data-part="cover" data-mode="dark" data-title="We heard you" data-steps="1" data-mins="0.6" data-beats="What you told us"
+  data-notes="We heard you: twelve points from our meeting, each a space we have shaped for them; everything that follows is built on them. 1 · What you told us: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="hdr"><b>We heard you</b><span>Before we begin</span></div>
+    <div class="wn-side">
+      <b class="wn-k">What you told us</b>
+      <h2>We heard <span>you.</span></h2>
+      <p class="hand">Everything that follows is built on what you told us.</p>
+    </div>
+    <ol class="wn-wall">
+      <li class="ui" style="--c:0;--r:0;--img:url(assets/img/pal3-03.webp)"><i></i><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+      <li class="ui" style="--c:1;--r:0;--img:url(assets/img/r3-coffee.webp)"><i></i><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+      <li class="ui" style="--c:2;--r:0;--img:url(assets/img/r3-collab.webp)"><i></i><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+      <li class="ui" style="--c:3;--r:0;--img:url(assets/img/r3-studio-op1.webp)"><i></i><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+      <li class="ui" style="--c:0;--r:1;--img:url(assets/img/r3-board-op1.webp)"><i></i><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+      <li class="ui" style="--c:1;--r:1;--img:url(assets/img/r3-sprint.webp)"><i></i><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+      <li class="ui" style="--c:2;--r:1;--img:url(assets/img/r3-cafe1.webp)"><i></i><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li class="ui" style="--c:3;--r:1;--img:url(assets/img/r3-deck.webp)"><i></i><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+      <li class="ui" style="--c:0;--r:2;--img:url(assets/img/r3-zen.webp)"><i></i><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+      <li class="ui wn-new" style="--c:1;--r:2;--bg:#5222d0"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 36V12M5 28h38v8M43 28v-4a4 4 0 0 0-4-4H20v8M10 28v-3a3 3 0 0 1 3-3h4"/><path d="M33 6v10M28 11h10"/></svg><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+      <li class="ui wn-new" style="--c:2;--r:2;--bg:#3f1aa6"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="14" cy="14" r="5"/><circle cx="34" cy="14" r="5"/><path d="M5 31a9 9 0 0 1 18 0M25 31a9 9 0 0 1 18 0M3 37h42"/></svg><em>11</em><p><b>Dealers room</b> to be added</p></li>
+      <li class="ui wn-new" style="--c:3;--r:2;--bg:#6f2f9f"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="11" width="36" height="26" rx="2"/><path d="M6 13l18 13 18-13"/></svg><em>12</em><p><b>Mail room</b> to be provided</p></li>
+    </ol>
+  </div>
+</section>
+<style>
+/* the column on the left, black; the wall of windows on the right, edge to edge */
+#s-heard-3 .page { background: #000; overflow: hidden; }
+#s-heard-3 .wn-side { left: 0; top: 0; width: 31%; height: 100%; }
+#s-heard-3 .wn-side > * { position: absolute; left: 8.5%; width: 80%; margin: 0; opacity: 0; transform: translateY(12px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-heard-3 .wn-k { top: 30%; font-size: calc(var(--pt) * 6.6); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--violet); }
+#s-heard-3 .wn-side h2 { top: 35%; font-size: calc(var(--pt) * 38); line-height: 1.02; font-weight: 700; color: #fff; letter-spacing: -.015em; transition-delay: .12s; }
+#s-heard-3 .wn-side h2 span { display: block; color: var(--violet); }
+#s-heard-3 .wn-side .hand { top: 66%; font-size: calc(var(--pt) * 13); line-height: 1.05; color: var(--lilac); transition-delay: 2.4s; }
+#s-heard-3 .page.wn-in .wn-side > * { opacity: 1; transform: none; }
+
+#s-heard-3 .wn-wall { left: 31%; top: 0; width: 69%; height: 92%; margin: 0; padding: 0; list-style: none; display: grid;
+  grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 2px; font-size: calc(var(--pt) * 6.8); }
+/* a window: its render behind, darkened from the foot, opening upward in a wave from the top left */
+#s-heard-3 .wn-wall li { position: relative; overflow: hidden; background: var(--bg, #111); clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(.7, 0, .2, 1); transition-delay: calc((var(--c) + var(--r)) * 120ms + 450ms); }
+#s-heard-3 .page.wn-in .wn-wall li { clip-path: inset(0 0 0 0); }
+#s-heard-3 .wn-wall li > i { position: absolute; inset: 0; background: var(--img) center / cover no-repeat; transform: scale(1.22);
+  transition: transform 2.2s var(--ease), filter .5s; transition-delay: calc((var(--c) + var(--r)) * 120ms + 450ms), 0s; filter: brightness(.82) saturate(.95); }
+#s-heard-3 .page.wn-in .wn-wall li > i { transform: scale(1.04); }
+#s-heard-3 .page.wn-drift .wn-wall li > i { animation: wn-drift 16s ease-in-out infinite alternate; animation-delay: calc((var(--c) * 3 + var(--r) * 5) * -1.3s); }
+@keyframes wn-drift { from { transform: scale(1.04) translate(0, 0); } to { transform: scale(1.12) translate(-2%, -1.5%); } }
+#s-heard-3 .wn-wall li::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.55) 34%, rgba(0,0,0,.08) 66%, rgba(0,0,0,.25) 100%);
+  transition: opacity .5s var(--ease); }
+#s-heard-3 .wn-wall li.wn-new::after { background: linear-gradient(0deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,0) 50%); }
+#s-heard-3 .wn-wall em, #s-heard-3 .wn-wall p, #s-heard-3 .wn-wall svg { position: absolute; z-index: 1; opacity: 0; transform: translateY(8px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc((var(--c) + var(--r)) * 120ms + 1.2s); }
+#s-heard-3 .page.wn-in .wn-wall em, #s-heard-3 .page.wn-in .wn-wall p, #s-heard-3 .page.wn-in .wn-wall svg { opacity: 1; transform: none; }
+#s-heard-3 .wn-wall em { left: 9%; top: 7%; font: 700 calc(var(--pt) * 13) var(--num); font-style: normal; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+#s-heard-3 .wn-wall p { left: 9%; right: 9%; bottom: 8%; margin: 0; line-height: 1.34; color: rgba(255,255,255,.86); }
+#s-heard-3 .wn-wall b { font-weight: 700; color: #fff; }
+#s-heard-3 .wn-wall li:not(.wn-new) b { color: var(--lilac); }
+#s-heard-3 .wn-wall svg { left: 50%; top: 40%; width: 34%; margin: -17% 0 0 -17%; fill: none; stroke: rgba(255,255,255,.9); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+/* a click while the wave is still opening: everything in at once */
+#s-heard-3 .page.wn-now .wn-side > *, #s-heard-3 .page.wn-now .wn-wall li, #s-heard-3 .page.wn-now .wn-wall li > i,
+#s-heard-3 .page.wn-now .wn-wall em, #s-heard-3 .page.wn-now .wn-wall p, #s-heard-3 .page.wn-now .wn-wall svg { transition-delay: 0s !important; transition-duration: .35s !important; }
+/* hover: the window comes up */
+#s-heard-3 .wn-wall li:hover > i { filter: brightness(1.05) saturate(1.05); }
+#s-heard-3 .wn-wall li:hover::after { opacity: .7; }
+</style>
+<script>
+ACKO.slide("s-heard-3", ({ $, plain, later, reduced }) => {
+  let run = 0;
+  const page = (sc) => $(".page", sc);
+  const fast = (p, on) => p.classList.toggle("wn-now", on);
+  return {
+    enter(_, sc) {
+      plain();
+      const p = page(sc); run++; p.classList.remove("wn-in", "wn-drift");
+      sc._skip = () => { if (p.classList.contains("wn-in") && !p.classList.contains("wn-drift")) { run++; p.classList.add("wn-now", "wn-drift"); } };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      const p = page(sc); if (p.classList.contains("wn-in")) return;
+      const id = ++run;
+      if (reduced) { p.classList.add("wn-now", "wn-in"); return; }
+      p.classList.remove("wn-now");
+      later(() => { if (id === run) p.classList.add("wn-in"); }, 120);
+      later(() => { if (id === run) p.classList.add("wn-drift"); }, 3600);   // after the wave, the renders drift slowly
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) { run++; page(sc).classList.remove("wn-in", "wn-drift", "wn-now"); }
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

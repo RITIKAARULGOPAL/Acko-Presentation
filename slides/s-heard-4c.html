@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First, your words · C · Notebook · ACKO slide s-heard-4c</title>
+<!-- Open this file on its own to see and work on the slide (offline, no server). dev.js loads the deck's styles, data, chrome and
+     engine around it. The build (tools/build.py) takes only what sits between the two markers below. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<!-- We heard you · The minutes, C · Notebook (Ritika, 17 Nov: "this style and wording is fine. show variations taking this as
+     base"). Not in order.txt; see index-heard-minutes.html. A dark desk under a lamp; an open notebook whose right page swings open
+     from the gutter. The MoM's twelve points are written in word by word, 01–06 on the left page under the label, 07–12 on the right,
+     each ticked and its space circled; then "First, your words." stamped at the top of the left page and the hand line on the right.
+     A click settles it. -->
+<section class="scene" id="s-heard-4c" data-part="cover" data-mode="dark" data-title="First, your words" data-steps="1" data-mins="0.6" data-beats="Before our ideas"
+  data-notes="First, your words: twelve points from our meeting, written in our notebook as you said them; then, what we made of them. 1 · Before our ideas: the palette to Lean Nordic; more variety in breakouts; a collaborative space in every neighbourhood; bigger podcast and green rooms; the boardroom's capacity and location; meeting rooms toward the centre; the café, without vertical pumping; the landscape deck; a crash/nap room; a sick room; a dealers room; a mail room.">
+  <div class="page">
+    <div class="hdr"><b>First, your words</b><span>Before we begin</span></div>
+    <div class="nb-book">
+      <div class="nb-pg nb-left">
+        <h2 class="nb-head">First, your words.</h2>
+        <b class="hand nb-k">Before our ideas</b>
+        <ol class="nb-rows">
+          <li><em>01</em><p>Align the color and material palette with the updated design direction (<b>Lean nordic</b>).</p></li>
+          <li><em>02</em><p>Provide more variety in <b>breakout spaces</b>.</p></li>
+          <li><em>03</em><p>Ensure every neighborhood has a dedicated <b>collaborative space</b>.</p></li>
+          <li><em>04</em><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
+          <li><em>05</em><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
+          <li><em>06</em><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
+        </ol>
+      </div>
+      <div class="nb-pg nb-right">
+        <ol class="nb-rows">
+          <li><em>07</em><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+          <li><em>08</em><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
+          <li><em>09</em><p><b>Crash/nap room</b>: mandatory</p></li>
+          <li><em>10</em><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
+          <li><em>11</em><p><b>Dealers room</b> to be added</p></li>
+          <li><em>12</em><p><b>Mail room</b> to be provided</p></li>
+        </ol>
+        <p class="hand nb-close">Then, what we made of them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+/* a dark desk under a lamp */
+#s-heard-4c .page { background: radial-gradient(ellipse 72% 64% at 50% 34%, #3b3247 0%, #221c2a 55%, #110e16 100%); }
+
+/* the notebook: a purple cover peeking round two cream pages, faint rules, the gutter's shade; the right page swings open */
+#s-heard-4c .nb-book { left: 6.5%; top: 9.5%; width: 87%; height: 82%; perspective: 2400px; opacity: 0; transform: translateY(calc(var(--pt) * 14));
+  transition: opacity .7s var(--ease), transform .9s var(--ease); }
+#s-heard-4c .page.nb-in .nb-book { opacity: 1; transform: none; }
+#s-heard-4c .nb-book::before { content: ""; position: absolute; inset: calc(var(--pt) * -4) calc(var(--pt) * -5); border-radius: calc(var(--pt) * 4);
+  background: linear-gradient(180deg, #4d3a6c, #3a2b54); box-shadow: 0 calc(var(--pt) * 14) calc(var(--pt) * 30) rgba(0, 0, 0, .55); }
+#s-heard-4c .nb-pg { position: absolute; top: 0; width: 50%; height: 100%;
+  --rules: repeating-linear-gradient(180deg, transparent 0, transparent calc(var(--pt) * 15.5 - 1px), rgba(110, 95, 150, .15) calc(var(--pt) * 15.5 - 1px), rgba(110, 95, 150, .15) calc(var(--pt) * 15.5)); }
+#s-heard-4c .nb-pg > * { position: absolute; }
+#s-heard-4c .nb-left { left: 0; border-radius: 3px 0 0 3px; background: linear-gradient(90deg, rgba(0, 0, 0, 0) 84%, rgba(70, 50, 30, .2) 100%), var(--rules), #fbf6ea; }
+#s-heard-4c .nb-right { left: 50%; border-radius: 0 3px 3px 0; background: linear-gradient(90deg, rgba(70, 50, 30, .22) 0%, rgba(0, 0, 0, 0) 15%), var(--rules), #fbf6ea;
+  transform-origin: 0 50%; transform: rotateY(-112deg); backface-visibility: hidden; transition: transform 1.25s cubic-bezier(.25, .7, .2, 1) .45s; }
+#s-heard-4c .page.nb-in .nb-right { transform: none; }
+
+/* the headline lands last, like a stamp, at the top of the left page */
+#s-heard-4c .nb-head { left: 11%; top: 7%; margin: 0; font-size: calc(var(--pt) * 26); line-height: 1.1; font-weight: 700; color: var(--purple); transform-origin: 20% 60%;
+  opacity: 0; transform: rotate(-2deg) scale(1.7); }
+#s-heard-4c .page.nb-done .nb-head { opacity: 1; transform: rotate(-2deg); animation: nb-stamp .55s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes nb-stamp { 0% { opacity: 0; transform: rotate(-2deg) scale(1.7); } 60% { opacity: 1; transform: rotate(-2deg) scale(.96); } 100% { opacity: 1; transform: rotate(-2deg) scale(1); } }
+#s-heard-4c .nb-k { left: 11%; top: 21%; font-size: calc(var(--pt) * 14); font-weight: 400; color: var(--purple); opacity: 0; transition: opacity .6s var(--ease) 1s; }
+#s-heard-4c .page.nb-in .nb-k { opacity: 1; }
+
+/* the twelve, six a page, written in the hand word by word */
+#s-heard-4c .nb-rows { width: 81%; margin: 0; padding: 0; list-style: none; font-family: var(--hand); font-size: calc(var(--pt) * 13); color: #26213a; }
+#s-heard-4c .nb-left .nb-rows { left: 11%; top: 28%; }
+#s-heard-4c .nb-right .nb-rows { left: 9%; top: 9%; }
+#s-heard-4c .nb-rows li { position: relative; display: grid; grid-template-columns: 1.9em 1fr; align-items: baseline; padding: .3em 0 .36em; border-top: 1px dashed rgba(82, 34, 208, .2); }
+#s-heard-4c .nb-rows li:last-child { border-bottom: 1px dashed rgba(82, 34, 208, .2); }
+#s-heard-4c .nb-rows em { font-style: normal; color: var(--purple); opacity: 0; transition: opacity .3s; }
+#s-heard-4c .nb-rows li.on em { opacity: 1; }
+#s-heard-4c .nb-rows p { margin: 0; line-height: 1.04; }
+#s-heard-4c .nb-rows b { position: relative; padding: 0 .14em; font-weight: 400; color: var(--purple); white-space: nowrap; }
+#s-heard-4c .nb-rows .w { opacity: 0; filter: blur(2px); transition: opacity .22s ease, filter .22s ease; }
+#s-heard-4c .nb-rows .w.on { opacity: 1; filter: none; }
+#s-heard-4c .nb-rows svg { position: absolute; overflow: visible; pointer-events: none; fill: none; stroke: var(--purple); stroke-linecap: round; stroke-linejoin: round; }
+#s-heard-4c .nb-rows svg path { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset .45s cubic-bezier(.5, 0, .3, 1), opacity 0s; }
+#s-heard-4c .nb-rows .mk path { stroke-dashoffset: 0; opacity: 1; }
+#s-heard-4c .nb-tick { left: -1.45em; top: .45em; width: .95em; height: .8em; stroke-width: 2.2; }
+#s-heard-4c .nb-ring { left: -.1em; top: -.18em; width: calc(100% + .2em); height: calc(100% + .35em); stroke-width: 1.7; opacity: .75; }
+
+#s-heard-4c .nb-close { left: 9%; top: 66%; width: 82%; margin: 0; font-size: calc(var(--pt) * 14); color: var(--purple);
+  opacity: 0; transform: translateY(8px); transition: opacity .7s var(--ease) .9s, transform .7s var(--ease) .9s; }
+#s-heard-4c .page.nb-done .nb-close { opacity: 1; transform: none; }
+</style>
+<script>
+ACKO.slide("s-heard-4c", ({ $, $$, plain, later, reduced }) => {
+  const WORD = 42, PAUSE = 140;
+  let run = 0;
+  function nbPrep(sc) {
+    if (sc._nb) return;
+    sc._nb = 1;
+    $$(".nb-rows li", sc).forEach((li) => {
+      const p = $("p", li);
+      const wrap = (node) => [...node.childNodes].forEach((c) => {
+        if (c.nodeType === 3) {
+          const f = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach((t) => {
+            if (!t) return;
+            if (/^\s+$/.test(t)) f.appendChild(document.createTextNode(t));
+            else { const w = document.createElement("span"); w.className = "w"; w.textContent = t; f.appendChild(w); }
+          });
+          node.replaceChild(f, c);
+        } else if (c.nodeType === 1) wrap(c);
+      });
+      wrap(p);
+      li.insertAdjacentHTML("afterbegin", '<svg class="nb-tick" viewBox="0 0 20 16" aria-hidden="true"><path pathLength="1" d="M2 9 L7.5 14 L18 2"/></svg>');
+      const b = $("b", p);
+      if (b) b.insertAdjacentHTML("beforeend", '<svg class="nb-ring" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M4 23 C3 8 46 2 82 5 C99 8 100 30 80 35 C54 41 12 39 4 28 C1 20 11 7 32 5"/></svg>');
+    });
+  }
+  function reset(sc) {
+    run++;
+    const p = $(".page", sc); p.classList.remove("nb-in", "nb-done");
+    $$(".nb-rows .on, .nb-rows .mk", p).forEach((e) => e.classList.remove("on", "mk"));
+  }
+  function settle(sc) {
+    run++;
+    const p = $(".page", sc);
+    $$(".nb-rows li, .nb-rows .w", p).forEach((e) => e.classList.add("on"));
+    $$(".nb-rows svg", p).forEach((e) => e.classList.add("mk"));
+    p.classList.add("nb-in", "nb-done");
+  }
+  function play(sc) {
+    const id = ++run, p = $(".page", sc);
+    p.classList.add("nb-in");
+    let t = 1800;                                      // once the page is open
+    $$(".nb-rows li", p).forEach((li) => {
+      const ws = [...$$(".w", li)], t0 = t;
+      later(() => { if (id === run) li.classList.add("on"); }, t0);
+      ws.forEach((w, i) => later(() => { if (id === run) w.classList.add("on"); }, t0 + 60 + i * WORD));
+      const end = t0 + 60 + ws.length * WORD;
+      later(() => { if (id === run) $(".nb-tick", li).classList.add("mk"); }, end);
+      later(() => { if (id !== run) return; const r = $(".nb-ring", li); if (r) r.classList.add("mk"); }, end + 120);
+      t = end + PAUSE;
+    });
+    later(() => { if (id === run) p.classList.add("nb-done"); }, t + 450);
+  }
+  return {
+    enter(_, sc) {
+      plain(); nbPrep(sc); reset(sc);
+      sc._skip = () => { const p = $(".page", sc); if (p.classList.contains("nb-in") && !p.classList.contains("nb-done")) settle(sc); };
+      document.addEventListener("pointerdown", sc._skip);
+    },
+    step(k, sc) {
+      if ($(".page", sc).classList.contains("nb-in")) return;
+      if (reduced) settle(sc); else play(sc);
+    },
+    leave(_, sc) {
+      if (sc && sc._skip) document.removeEventListener("pointerdown", sc._skip);
+      if (sc) reset(sc);
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>
