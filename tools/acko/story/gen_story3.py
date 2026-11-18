@@ -22,7 +22,7 @@ SECTIONS = [
     ("p3", "", "Overview", "Presentation roadmap", ["s-overview"]),
     ("p4", "01", "Concept Framework", "Establishing the overarching design vision", ["s-div-1", "s-why-campus", "s-campus-loop"]),
     ("p5", "02", "Design Development", "Translating the concept into a spatial solution",
-     ["s-div-2", "s-site", "s-pitch", "s-layout-dd", "s-strategy", "s-layout-sp", "s-axo-detail", "s-wayday"]),
+     ["s-div-2", "s-site", "s-pitch", "s-site-dd", "s-strategy", "s-layout-sp", "s-axo-detail", "s-wayday"]),
     ("p6", "03", "Design Expression", "Materiality, visualisation and spatial experience", ["s-div-3", "s-material", "s-palette2", "s-walkthrough"] + RENDERS),
     ("p7", "04", "Integrated Performance", "Technical performance and added value", ["s-div-4", "s-esg", "s-wf-a6", "s-engage", "s-di"]),
     ("p8", "05", "Project Review", "Revisiting previous discussions and establishing alignment", ["s-div-5", "s-recap"]),
@@ -44,7 +44,7 @@ BRIDGE = {
     "s-campus-loop": "Now the floor itself. 02 · Design Development.",
     "s-site": "How big is this floor? Two football pitches.",
     "s-pitch": "And what we found on it: the due diligence.",
-    "s-layout-dd": "From the campus idea to the floor, in four moves.",
+    "s-site-dd": "From the campus idea to the floor, in four moves.",
     "s-strategy": "And here's the plan that makes it work.",
     "s-layout-sp": "Now the plan rises into the axonometric.",
     "s-axo-detail": "And over one day in ACKO…",
@@ -59,7 +59,7 @@ BRIDGE = {
     "s-di": "Last, back to where we started. 05 · Project Review.",
     "s-recap": "Thank you.",
 }
-NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-axo-detail", "s-recap"]
+NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-site-dd", "s-axo-detail", "s-recap"]
 
 # ---- the dividers: s-start's design (as gen_story.py makes the Part cards), the five sections ahead, this one lit, her line said
 st = open("slides/s-start.html", encoding="utf-8").read()
@@ -157,6 +157,11 @@ for sid in ORDER:
     if sid in BRIDGE: s = bridge(s, BRIDGE[sid])
     out.append(s)
 SEC2 = dict(zip(ORDER, out))
+
+# site due diligence (18 Nov, Ritika: one view, the sun path with it): its header names its section
+s = SEC2["s-site-dd"]
+s = re.sub(r'(<div class="hdr"><b>Site due diligence</b><span>)[^<]*(</span>)', lambda m: m.group(1) + LABEL[PART["s-site-dd"]] + m.group(2), s, count=1)
+SEC2["s-site-dd"] = s
 
 # the stand-ins, until her material is in
 s = SEC2["s-why-campus"]                    # Two Offices: Why a campus's first beat
