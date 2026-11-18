@@ -24,11 +24,8 @@ OPTS = [
     (12, "Two streams"),
 ]
 
-# option 1: the slide as it is, under its own id
-src = open("slides/s-why-campus.html", encoding="utf-8").read()
-assert src.count('ACKO.slide("s-why-campus"') == 1
-t = src.replace("s-why-campus", "s-wc-1").replace("<title>Why a campus · ACKO slide", "<title>Why a campus, option 1 · ACKO slide")
-open("slides/s-wc-1.html", "w", encoding="utf-8", newline="\n").write(t)
+# option 1 is the slide as it was on 17 Nov (copied then from slides/s-why-campus.html, now kept as it is: on 18 Nov her pick,
+# option 3, went into the deck)
 
 ids = []
 for n, label in OPTS:

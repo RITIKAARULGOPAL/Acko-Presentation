@@ -94,47 +94,47 @@
 #s-sec-1 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
 <style data-slide="s-why-campus">
-/* ---------- NEW 1 · Why a campus: the white page, the problem then the answer ---------- */
+/* ---------- Why a campus, option 3 · the merge ---------- */
 #s-why-campus .wc-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
 #s-why-campus .wc-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
 #s-why-campus .wc-h b { font-weight: 700; color: var(--accent); }
 #s-why-campus .wc-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
-/* the page comes in: the words, then the offices, then the footer */
 #s-why-campus .wc-in { opacity: 0; transition: opacity .7s var(--ease); }
 #s-why-campus .drawn .wc-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
-/* the diagram */
+/* the emblem */
 #s-why-campus .wc-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-#s-why-campus .wc-box-a { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
-#s-why-campus .wc-box-b { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
-#s-why-campus .wc-arrow { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-#s-why-campus .wc-floor { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
-#s-why-campus .wc-pf { fill: #fbfbfa; stroke: #d2d2d2; stroke-width: 1.5; }
-#s-why-campus .wc-common { fill: #f1efea; }
-#s-why-campus .wc-island { fill: #eee8fc; }
-#s-why-campus .wc-loop { fill: none; stroke: var(--purple); stroke-width: 3.4; stroke-linejoin: round; }
-#s-why-campus .wc-stub { fill: none; stroke: var(--purple); stroke-width: 2; }
+#s-why-campus .wc-ca { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2; }
+#s-why-campus .wc-cb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2; }
+#s-why-campus .wc-one { fill: #f7f5f1; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-why-campus .wc-common { fill: #eee8fc; }
+#s-why-campus .wc-common-t { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; fill: #8a7fc0; }
+#s-why-campus .wc-loop { fill: none; stroke: var(--purple); stroke-width: 4.4; }
+#s-why-campus .wc-stub { fill: none; stroke: var(--purple); stroke-width: 2.4; }
 #s-why-campus .wc-node { fill: var(--purple); }
-#s-why-campus .wc-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2; }
-#s-why-campus .wc-dots circle, #s-why-campus .wc-t circle { transform-box: view-box; transform-origin: 0 0; }
+#s-why-campus .wc-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-why-campus .wc-num text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-why-campus .wc-dots circle { transform-box: view-box; transform-origin: 0 0; }
 #s-why-campus .pa { fill: #5b34d6; }
 #s-why-campus .pb { fill: #bcae92; }
-/* stage 2 from beat 2, stage 3 from beat 3; going back, they go at once */
-#s-why-campus .wc-ar1, #s-why-campus .wc-s2, #s-why-campus .wc-ar2, #s-why-campus .wc-s3 { opacity: 0; transition: opacity .25s var(--ease); }
-#s-why-campus .b2 .wc-ar1, #s-why-campus .b2 .wc-s2 { opacity: 1; transition: opacity .7s var(--ease); }
-#s-why-campus .b3 .wc-ar2, #s-why-campus .b3 .wc-s3 { opacity: 1; transition: opacity .7s var(--ease); }
-#s-why-campus .b2 .wc-s2, #s-why-campus .b3 .wc-s3 { transition-delay: .15s; }
-/* what a stage held, left behind lighter once its people move on */
-#s-why-campus .wc-t { opacity: 0; transition: opacity .3s var(--ease); }
-#s-why-campus .b2 .wc-t1, #s-why-campus .b3 .wc-t2 { opacity: .42; transition: opacity 1.2s var(--ease) .6s; }
-/* the labels and the handwritten captions under each stage */
+/* beat 2: the two circles slide together and fade as the one comes up; beat 3: the one gives way to the ring */
+#s-why-campus .wc-ca, #s-why-campus .wc-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
+#s-why-campus .b2 .wc-ca { transform: translateX(260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-why-campus .b2 .wc-cb { transform: translateX(-260px); opacity: 0; transition: transform 1.8s cubic-bezier(.45,.05,.3,1), opacity .8s var(--ease) 1s; }
+#s-why-campus .wc-one, #s-why-campus .wc-s3 { opacity: 0; transition: opacity .25s var(--ease); }
+#s-why-campus .b2 .wc-one { opacity: 1; transition: opacity .9s var(--ease) 1s; }
+#s-why-campus .b3 .wc-one { opacity: 0; transition: opacity .6s var(--ease); }
+#s-why-campus .b3 .wc-s3 { opacity: 1; transition: opacity .7s var(--ease) .15s; }
+#s-why-campus .still .wc-ca, #s-why-campus .still .wc-cb, #s-why-campus .still .wc-one, #s-why-campus .still .wc-s3 { transition: none !important; }   /* arriving mid-way: no replay */
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
 #s-why-campus .wc-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
 #s-why-campus .wc-a { color: var(--accent); }
 #s-why-campus .wc-b { color: #a3967a; }
 #s-why-campus .wc-f { color: var(--ink); }
 #s-why-campus .wc-n { color: var(--accent); }
+#s-why-campus .page.b2 .wc-a.shown, #s-why-campus .page.b2 .wc-b.shown, #s-why-campus .page.b3 .wc-f.shown { opacity: 0; transition-delay: 0s; }
 #s-why-campus .wc-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
 #s-why-campus .wc-cap3 { color: var(--accent); }
-#s-why-campus .wc-f[data-step], #s-why-campus .wc-cap[data-step="2"] { transition-delay: .45s; }
+#s-why-campus .wc-f[data-step], #s-why-campus .wc-cap[data-step="2"] { transition-delay: 1.1s; }
 #s-why-campus .wc-n[data-step], #s-why-campus .wc-cap[data-step="3"] { transition-delay: 1.4s; }
 #s-why-campus .page:not(.b2) [data-step="2"], #s-why-campus .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
 /* the footer strip: the memory, and the research */
@@ -1507,44 +1507,30 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
     <h2 class="wc-h wc-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
     <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
 
-    <!-- the diagram, in a 1920 × 1080 frame over the page: two offices → one floor → six neighbourhoods on one loop -->
+    <!-- the emblem, in a 1920 × 1080 frame over the page, centred at x 960, y 595 -->
     <svg class="wc-dia" viewBox="0 0 1920 1080" aria-hidden="true">
-      <!-- stage 1 · the two offices -->
-      <g class="wc-s1 wc-in" style="--i:3">
-        <rect class="wc-box-a" x="120" y="476" width="226" height="292" rx="22"/>
-        <rect class="wc-box-b" x="380" y="476" width="226" height="292" rx="22"/>
+      <g class="wc-in" style="--i:3">
+        <circle class="wc-ca" cx="700" cy="595" r="150"/>
+        <circle class="wc-cb" cx="1220" cy="595" r="150"/>
       </g>
-      <path class="wc-arrow wc-ar1" d="M638 622 H684 M672 610 L684 622 L672 634"/>
-      <!-- stage 2 · one floor: the floor plate's own shape, its west end raked -->
-      <g class="wc-s2"><path class="wc-floor" d="M710 570 H1210 V674 H756 Z"/></g>
-      <path class="wc-arrow wc-ar2" d="M1238 622 H1284 M1272 610 L1284 622 L1272 634"/>
-      <!-- stage 3 · the same floor, six neighbourhoods where the plan has them (06 west, 05 · 04 · 03 south, 02 and 01 east), one loop -->
-      <g class="wc-s3" transform="translate(1310 570)">
-        <path class="wc-pf" d="M0 0 H500 V104 H46 Z"/>
-        <rect class="wc-common" x="108" y="4" width="256" height="26" rx="2.5"/>
-        <rect class="wc-common" x="108" y="74" width="72" height="26" rx="2.5"/>
-        <path class="wc-nb" style="fill:#f0d8e2" d="M7 4 H96 V100 H49 Z"/>
-        <rect class="wc-nb" style="fill:#ebedd6" x="184" y="74" width="78" height="26" rx="2.5"/>
-        <rect class="wc-nb" style="fill:#e0d3d3" x="266" y="74" width="74" height="26" rx="2.5"/>
-        <rect class="wc-nb" style="fill:#f3dcc4" x="344" y="74" width="94" height="26" rx="2.5"/>
-        <rect class="wc-nb" style="fill:#cfe9df" x="368" y="4" width="70" height="26" rx="2.5"/>
-        <rect class="wc-nb" style="fill:#c9eaf3" x="442" y="4" width="54" height="96" rx="2.5"/>
-        <rect class="wc-island" x="108" y="38" width="322" height="28" rx="14"/>
-        <path class="wc-stub" d="M96 52 H108 M430 52 H442 M403 30 V38 M223 66 V74 M303 66 V74 M391 66 V74"/>
-        <path class="wc-loop" d="M150 38 H416 A14 14 0 0 1 416 66 H122 A14 14 0 0 1 122 38 Z"/>
-        <g class="wc-node"><circle cx="108" cy="52" r="3"/><circle cx="430" cy="52" r="3"/><circle cx="403" cy="38" r="3"/><circle cx="223" cy="66" r="3"/><circle cx="303" cy="66" r="3"/><circle cx="391" cy="66" r="3"/></g>
-        <g class="wc-arr"><circle cx="150" cy="38" r="5.5"/><circle cx="330" cy="38" r="5.5"/></g>
+      <circle class="wc-one" cx="960" cy="595" r="172"/>
+      <g class="wc-s3">
+        <g class="wc-segs"></g>
+        <circle class="wc-common" cx="960" cy="595" r="78"/>
+        <text class="wc-common-t" x="960" y="600" text-anchor="middle">commons</text>
+        <path class="wc-stub"></path>
+        <path class="wc-loop" d="M960 495 A100 100 0 1 1 960 695 A100 100 0 1 1 960 495 Z"/>
+        <g class="wc-node"></g>
+        <g class="wc-arr"><circle cx="960" cy="495" r="8"/><circle cx="960" cy="695" r="8"/></g>
+        <g class="wc-num"></g>
       </g>
-      <!-- the people: what each stage held stays drawn, lighter, once they've moved on; the dots themselves go a → b → c -->
-      <g class="wc-t wc-t1"></g>
-      <g class="wc-t wc-t2"></g>
       <g class="wc-dots"></g>
     </svg>
 
-    <span class="wc-lb wc-a" data-step="1" style="left:6.25%;top:73.4%;width:11.8%">Office A</span>
-    <span class="wc-lb wc-b" data-step="1" style="left:19.8%;top:73.4%;width:11.8%">Office B</span>
+    <span class="wc-lb wc-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Office A</span>
+    <span class="wc-lb wc-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">Office B</span>
     <span class="wc-lb wc-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
-    <span class="wc-lb wc-n" data-step="3" style="left:68.2%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <span class="wc-lb wc-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
     <p class="wc-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
     <p class="wc-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
     <p class="wc-cap wc-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
@@ -2750,45 +2736,48 @@ ACKO.slide("s-sec-1", ({ $, plain, reveal, later, reduced }) => ({
 }));
 </script>
 <script data-slide="s-why-campus">
-/* NEW 1 · Why a campus. The people as dots (PRESENTATION-PATTERNS §5, from the old challenge slide): each dot keeps its three
-   places, data-a (its office), data-b (mixed on the one floor) and data-c (a seat in a neighbourhood on the loop), and a beat
-   moves it there with a CSS transform, staggered by (i % 16) * 25 ms. Every neighbourhood gets dots of both offices. */
+/* Why a campus, option 3 · the merge. The people as dots (PRESENTATION-PATTERNS §5): each keeps three places, data-a (in its office's
+   circle), data-b (mixed in the one circle) and data-c (a seat in one of the six neighbourhoods round the ring), and a beat moves it
+   there with a CSS transform, staggered. The offices alternate seat by seat, so every neighbourhood holds both. */
 ACKO.slide("s-why-campus", ({ $, $$, plain, raf2, reduced, drawPath }) => {
-  const N = 40, R = [8.5, 7, 3.6];                   // 20 per office; the dot's radius at each stage
+  const N = 40, R = [8, 7, 5.6], CX = 960, CY = 595;
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  const R0 = 115, R1 = 172, RING = 100;
   let built = false, fresh = true;
+  const pol = (r, deg) => { const a = (deg * Math.PI) / 180; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; };
+  const f = (p) => p.map((v) => v.toFixed(1)).join(" ");
+  // a sunflower: n points spread evenly over a disc
+  const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
   function build(sc) {
     if (built) return; built = true;
-    let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-    // a · the offices: a 4 × 5 grid in each box (A at x 120, B at x 380)
-    const A = [];
-    for (let o = 0; o < 2; o++) for (let r = 0; r < 5; r++) for (let j = 0; j < 4; j++) A.push([120 + o * 260 + 41 + j * 48, 476 + 46 + r * 50]);
-    // b · the one floor (x 710, y 570, 500 × 104, its west end raked 46): a jittered 14 × 3 grid, shuffled so the offices mix
-    const cells = [];
-    for (let r = 0; r < 3; r++) {
-      const v = 20 + r * 32, u0 = (46 * v) / 104 + 20, u1 = 482;
-      for (let j = 0; j < 14; j++) cells.push([710 + u0 + ((u1 - u0) * j) / 13 + (rnd() - .5) * 14, 570 + v + (rnd() - .5) * 14]);
+    let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    // the six neighbourhoods: sectors of the band round the ring, from the top, clockwise, with a small gap between
+    let segs = "", nums = "", stub = "", nodes = "";
+    for (let s = 0; s < 6; s++) {
+      const a0 = -90 + s * 60 + 3, a1 = -90 + (s + 1) * 60 - 3, m = (a0 + a1) / 2;
+      segs += `<path style="fill:${NB[s]}" d="M${f(pol(R1, a0))} A${R1} ${R1} 0 0 1 ${f(pol(R1, a1))} L${f(pol(R0, a1))} A${R0} ${R0} 0 0 0 ${f(pol(R0, a0))} Z"/>`;
+      const [x, y] = pol(R1 + 20, m); nums += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`;
+      stub += `M${f(pol(RING, m))} L${f(pol(R0, m))} `; const [nx, ny] = pol(RING, m); nodes += `<circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="4"/>`;
     }
-    for (let i = cells.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [cells[i], cells[k]] = [cells[k], cells[i]]; }
-    const B = cells.slice(0, N);
-    // c · a seat in a neighbourhood on the mini plan (x 1310, y 570): alternating offices, so every one holds both
-    const seats = [[], []], put = (pts) => pts.forEach((p, i) => seats[i % 2].push([1310 + p[0], 570 + p[1]]));
-    const row = (u, v, n, d) => Array.from({ length: n }, (_, j) => [u + (j - (n - 1) / 2) * d, v]);
-    const two = (u, n) => { const a = row(u, 81.5, n, 12), b = row(u, 92.5, n, 12); return a.flatMap((p, i) => (i % 2 ? [b[i], p] : [p, b[i]])); };   // a checkerboard
-    put([...row(62, 44, 4, 14), ...row(68, 60, 4, 14).reverse()]);                  // 06, the west end
-    put([[461, 28], [477, 28], [477, 44], [461, 44], [461, 60], [477, 60], [477, 76], [461, 76]]);   // 01, the east end
-    put([...row(403, 11.5, 3, 12), ...row(403, 22.5, 3, 12).reverse()]);            // 02, north
-    put(two(223, 3)); put(two(303, 3)); put(two(391, 3));                           // 05 · 04 · 03, south
-    // the move onto the plan keeps its order: each office's dots, left to right on the floor, take its seats left to right
-    const byX = (p, q) => p[0] - q[0], C = new Array(N);
+    $(".wc-segs", sc).innerHTML = segs; $(".wc-num", sc).innerHTML = nums; $(".wc-stub", sc).setAttribute("d", stub); $(".wc-node", sc).innerHTML = nodes;
+    // a · in each office's circle; b · mixed in the one circle; c · seats in the sectors, two rows, the offices alternating
+    const A = [...disc(700, CY, 112, N / 2), ...disc(1220, CY, 112, N / 2)];
+    const B = disc(CX, CY, 140, N);
+    for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
+    const seats = [];
+    WANT.forEach((n, s) => { const a0 = -90 + s * 60 + 7, a1 = -90 + (s + 1) * 60 - 7;
+      for (let j = 0; j < n; j++) seats.push(pol(j % 2 ? 157 : 131, a0 + ((j + .5) * (a1 - a0)) / n)); });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    // each office's dots take its seats in order round the ring, from where they stand in the one circle
+    const ang = (p) => (Math.atan2(p[1] - CY, p[0] - CX) + 2.5 * Math.PI) % (2 * Math.PI);
+    const C = new Array(N);
     for (let o = 0; o < 2; o++) {
-      const mine = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => B[i][0] - B[k][0]);
-      const s = seats[o].slice().sort(byX); mine.forEach((i, n) => (C[i] = s[n]));
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => ang(B[i]) - ang(B[k]));
+      const s = mine[o].slice().sort((p, q) => ang(p) - ang(q)); ids.forEach((i, n) => (C[i] = s[n]));
     }
     const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
-    const cls = (i) => (i < N / 2 ? "pa" : "pb");
-    $(".wc-t1", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" style="${at(p, R[0])}"/>`).join("");
-    $(".wc-t2", sc).innerHTML = B.map((p, i) => `<circle class="${cls(i)}" r="1" style="${at(p, R[1])}"/>`).join("");
-    $(".wc-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${p.map(Math.round)}" data-b="${B[i].map(Math.round)}" data-c="${C[i]}" style="${at(p, R[0])}"/>`).join("");
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".wc-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
   }
   function move(sc, k, ms) {
     const key = "abc"[k - 1];
@@ -2807,10 +2796,11 @@ ACKO.slide("s-why-campus", ({ $, $$, plain, raf2, reduced, drawPath }) => {
     step(k, sc) {
       const pg = $(".page", sc), loop = $(".wc-loop", sc), still = fresh || reduced;
       pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
-      move(sc, k, still ? 0 : k === 3 ? 2400 : 2600);
-      // the loop draws itself round from the first arrival as its plan comes up
+      if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      move(sc, k, still ? 0 : k === 3 ? 2400 : 2200);
+      // the ring draws itself round from the first arrival as the neighbourhoods come up
       if (k === 3 && !still) drawPath(loop, 1500, 250);
-      else if (k === 3) { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
       fresh = false;
     },
   };
