@@ -717,17 +717,39 @@ amber `#F2A33A`; "A day in ACKO".
 ## 31. One ribbon across two slides, making each figure as it passes (Why a campus → How it ties together, 18 Nov)
 **What (Ritika):** "the circle fill of the merged circle would move like a ribbon to next slide on beat and in the next slide neighbourhood split and its put together called as campus would come and the same ribbon would continue as mobius strip after '+' … and after '=' the acko loop animation on the site boundary will come."
 - **The hand-off:** `s-why-campus` ends on one drop (960, 590, r 210, under a goo filter) with its people at `disc(960, 590, 168, 40)` shuffled with seed 5. `s-campus-loop` opens on that frame exactly (the same filter, circle and dots), so the engine's cross-fade only changes the words. Both slides are white, so the page doesn't change under it.
+  - **The words never overlap:** the new slide's header and hand line wait for a `.drawn` class (added a frame after `enter`) plus 0.5 s, and its first headline span has a 0.6 s delay. So Why a campus's words have faded before these come in.
+  - **The drop glides** (Ritika, 18 Nov: "the transition between both slides should be smooth"). The goo-filtered drop and its outline sit in one group with an SVG `transform` eased per frame: `translate(c) scale(s) translate(−drop)`, from (960, 590) to the campus's centre, shrinking by R1/210. The filter's region moves with it, and the people ride along (each frame, their B position through the same transform).
+  - **Then it splits:** the neighbourhoods pop one after another as the drop fades. Its rim grows into a lavender ring just outside them (r 128 → 142, stroke 4 → 26), and the canvas ribbon takes over as that closed ring and opens.
+  - **On an options page,** put a copy of the first slide before every version (`s-wcx-2`, `s-wcx-3`), so each opens from its drop.
 - **One route, one ribbon:** the route is one polyline in page px, built from parts: arcs, cubic Béziers, a path's stretch through a map, the loop ring. Each part has a width and is in front or behind; each named part's start is kept (`R.at`). The ribbon is a stretch [tail, head] of it, drawn on a canvas with §20's renderer: tapered polygons, behind at 35% and in front at 75% with white edges, per-point width eased between parts. At rest it has a long soft tail and a short head, like a brushstroke.
 - **A beat runs it from one wait to the next** (cubic in-out), and figures are made as the head passes:
-  - **Campus:** the drop's fill gathers into its rim (an SVG ring whose stroke shrinks from 150 to 26 with its outer edge kept), and the canvas ribbon takes over as the closed ring, then opens (no taper at first). As it goes round the campus once, each neighbourhood pops (`.on`) when the head passes its middle angle, and the people move to their seats.
+  - **Campus:** the glide and the split above; the ribbon then opens off the campus's ring (no taper at first) and runs out to wait.
   - **The Möbius:** her path from `s-mobius` (pieces f1, bk, f2 in the render's own px), twice round from its left-most point.
     - **MOB 1:** the render is painted in under the ribbon: a wide stroke along the route so far, then `source-in` the image.
     - **MOB 2:** the ribbon leaves a trail that is the strip. The trail window and the ribbon window are joined while they overlap, and their tapers at the meeting point grow from 0 as they part, so nothing jumps.
     - **MOB 3:** ACKO's mark, its band's centre line traced from the image's three colours (a column or row run per colour, then smoothed). The back face is the "behind" pass. The ribbon is as wide as the band, and the paint stroke is drawn per segment at that width.
-  - **The ACKO Loop:** the floor's outline (option 6's plate) fades in with a zoning sketch on it, its zones one after another: neighbourhoods along both long edges, the shared spaces as islands down the middle. Ritika (18 Nov) asked for "an organic smooth loop instead of the defined path", so not `ACKO_LOOP.ring`.
-    - **The loop:** one closed centripetal Catmull-Rom spline through 24 points, nudged a few px (seeded). It runs east along the bottom and back west along the top, bulging round each island and pinching between them, so the islands sit inside it.
-    - **Drawing it:** the ribbon narrows into Arrival 1 and draws the loop on the canvas up to its head. The arrivals (the spline points nearest the real ones' x) appear as it passes them.
-    - **Direction:** pick the loop's direction so the ribbon arrives along it (here eastward on the bottom lane), or it has to U-turn into it.
+  - **The ACKO Loop, over four clicks** (Ritika, 18 Nov: "it is not based on beats"):
+    1. "=" and the floor's outline (option 6's plate); the ribbon runs on to the loop's west end and waits there, in the raked corner, clear of every zone;
+    2. the neighbourhoods (`.on-n`);
+    3. the shared spaces (`.on-s`);
+    4. the ribbon draws the loop up to its head, and the arrivals appear as it passes them.
+
+    The zones' own CSS staggers them in (`--i`); those clicks call `pose(k, false)`, which sets the classes without the no-transition class.
+    - **Not the real route:** Ritika asked for "an organic smooth loop instead of the defined path", so not `ACKO_LOOP.ring`.
+    - **The loop:** a closed centripetal Catmull-Rom spline through the layout's points, nudged a few px (seeded).
+    - **Direction:** the points start at the west end heading up (east along the top first), so the ribbon arrives along the loop. Otherwise it has to U-turn into it.
+    - **Six zonings** (`LAYOUTS`, picked by `LAYOUT`; copies `s-cz-2` … `s-cz-6` on `index-campus-zoning.html`), each a table of zones (`[x0, y0, x1, y1, label, shape]`) and loop points:
+
+      | # | Name | The zoning and the loop |
+      |---|---|---|
+      | 1 | Islands | the loop bulges round the shared spaces |
+      | 2 | Beads | the loop runs through them |
+      | 3 | Bubbles | ellipses, with a freer loop |
+      | 4 | Spine | segments down the middle, with a calm band round them |
+      | 5 | Courtyards | tall shared spaces between the neighbourhood pairs; the loop opens into a lobe in each |
+      | 6 | Staggered | a checkerboard, and a snake of two cosine lanes |
+
+    - **Labels:** check that each fits inside its zone and clear of the loop (a 3× close-up), above all at the loop's end turns.
 - **Entries:** entered at beat 1, it plays from the drop. Any other entry, a step back or reduced motion shows the beat's end at once (`pose(k)`). The frame loop stops on leave or a scene change. A `ResizeObserver` redraws the canvas at rest.
 - **Images on a canvas in the single file:** load them with `(window.ASSET_URLS && window.ASSET_URLS[p]) || p`, with the path written literally in the script, so `build.py --single` embeds them.
 - **Gotchas:**

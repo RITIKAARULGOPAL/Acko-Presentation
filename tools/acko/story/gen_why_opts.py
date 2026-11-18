@@ -73,10 +73,25 @@ page("index-why-merge.html", [("s-wc-3", "The merge · 3 · as chosen")] +
 # becomes the deck slide's MOB.
 MOBS = [(1, "the deck's render"), (2, "the ribbon becomes the strip"), (3, "ACKO's mark")]
 src = open("slides/s-campus-loop.html", encoding="utf-8").read()
-assert src.count("const MOB = 1;") == 1
+for t in ("const MOB = 1;", "const LAYOUT = 1;"): assert src.count(t) == 1, t
+def copy(sid, mob=1, layout=1, title=""):                # a copy of the deck slide under its own id (and filter id)
+    s = src.replace("s-campus-loop", sid).replace("cpl-goo", sid.replace("s-", "") + "-goo")
+    s = s.replace("const MOB = 1;", "const MOB = %d;" % mob).replace("const LAYOUT = 1;", "const LAYOUT = %d;" % layout)
+    s = s.replace("<title>How campus and loop tie together · ACKO slide", "<title>How it ties together, %s · ACKO slide" % title)
+    open("slides/%s.html" % sid, "w", encoding="utf-8", newline="\n").write(s)
+for n, _ in MOBS[1:]: copy("s-cl-%d" % n, mob=n, title="Möbius version %d" % n)
+# Why a campus before each version (18 Nov, Ritika: "the transition between both slides should be smooth"), so every version opens
+# from its drop: copies of the deck slide, s-wcx-2 and s-wcx-3, not in order.txt
+why = open("slides/s-why-campus.html", encoding="utf-8").read()
 for n, _ in MOBS[1:]:
-    s = src.replace("s-campus-loop", "s-cl-%d" % n).replace("cpl-goo", "cl%d-goo" % n).replace("const MOB = 1;", "const MOB = %d;" % n)
-    s = s.replace("<title>How campus and loop tie together · ACKO slide", "<title>How it ties together, Möbius version %d · ACKO slide" % n)
-    open("slides/s-cl-%d.html" % n, "w", encoding="utf-8", newline="\n").write(s)
-page("index-campus-loop.html", [("s-why-campus", "Why a campus · two drops")] +
-     [("s-campus-loop" if n == 1 else "s-cl-%d" % n, "How it ties together · Möbius %d · %s" % (n, label)) for n, label in MOBS])
+    s = why.replace("s-why-campus", "s-wcx-%d" % n).replace("wc-goo", "wcx%d-goo" % n)
+    open("slides/s-wcx-%d.html" % n, "w", encoding="utf-8", newline="\n").write(s)
+page("index-campus-loop.html", sum([[("s-why-campus" if n == 1 else "s-wcx-%d" % n, "Why a campus · before Möbius %d" % n),
+     ("s-campus-loop" if n == 1 else "s-cl-%d" % n, "How it ties together · Möbius %d · %s" % (n, label))] for n, label in MOBS], []))
+
+# index-campus-zoning.html (18 Nov, Ritika: "give variations for the layout zoning and loop"): How it ties together six ways, differing
+# only in the zoning on the floor and the loop through it (clicks 3–6). Layout 1 is the deck's own slide (LAYOUT = 1, Islands); 2–6
+# are copies, s-cz-2 … s-cz-6, not in order.txt. Her pick becomes the deck slide's LAYOUT.
+ZONINGS = [(1, "Islands"), (2, "Beads"), (3, "Bubbles"), (4, "Spine"), (5, "Courtyards"), (6, "Staggered")]
+for n, label in ZONINGS[1:]: copy("s-cz-%d" % n, layout=n, title="zoning %d · %s" % (n, label))
+page("index-campus-zoning.html", [("s-campus-loop" if n == 1 else "s-cz-%d" % n, "The ACKO Loop · zoning %d · %s" % (n, label)) for n, label in ZONINGS])
