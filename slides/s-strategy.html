@@ -63,13 +63,17 @@
 #s-strategy .st-s { position: absolute; transform: translate(-50%, -100%); text-align: center; white-space: nowrap; opacity: 0; transition: opacity .45s var(--ease);
   padding: calc(var(--pt) * 1.5) calc(var(--pt) * 4); background: rgba(255,255,255,.88); border-radius: 3px; }
 #s-strategy .st-s.on { opacity: 1; }
-/* the spaces' hotspots (beat 4): a dot with a pulsing ring, the name on a small chip */
-#s-strategy .st-s.hot { padding: calc(var(--pt) * 1) calc(var(--pt) * 3); }
-#s-strategy .st-s.hot b { font-size: calc(var(--pt) * 6); font-weight: 600; }
-#s-strategy .st-legs g.hot path { stroke: #9b86e0; stroke-width: 1.2; }
-#s-strategy .st-legs g.hot circle.pl { fill: none; stroke: var(--purple); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: st-pulse 1.8s ease-out infinite; }
-@keyframes st-pulse { 0% { transform: scale(.7); opacity: .9; } 100% { transform: scale(3.2); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { #s-strategy .st-legs g.hot circle.pl { animation: none; opacity: .5; } }
+/* the spaces' hotspots (beat 4): a dot on the Loop and a plain small name beside it, outside the ring; the dot reached last pulses while the
+   Loop draws, then all of them breathe softly */
+#s-strategy .st-s.hot { padding: 0; background: none; }
+#s-strategy .st-s.hot b { font-size: calc(var(--pt) * 5.4); font-weight: 600; color: #5b4a9a; letter-spacing: .01em;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
+#s-strategy .st-legs g.hot circle.pl { fill: none; stroke: var(--purple); stroke-width: 1.8; opacity: 0; transform-box: fill-box; transform-origin: center; }
+#s-strategy .st-legs g.hot.last circle.pl { animation: st-pulse 1.4s ease-out infinite; }
+#s-strategy .st-legs g.hot.calm circle.pl { animation: st-pulse-soft 3s ease-out infinite; }
+@keyframes st-pulse { 0% { transform: scale(.7); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
+@keyframes st-pulse-soft { 0% { transform: scale(.7); opacity: .5; } 100% { transform: scale(2.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { #s-strategy .st-legs g.hot circle.pl { animation: none !important; } }
 #s-strategy .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
 #s-strategy .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
 /* the names as the reference axo has them (29 Oct): condensed bold capitals, each in its own colour, standing upright on the floor
@@ -200,18 +204,18 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       let y = 0, f = 0;
       if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
-      if (k === 4) f = 1;   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses stay under the Loop; the spaces are hotspots, not masses
-      v.position.y = y; M.fade(v, f);
+      if (k === 4) f = 1 - 0.55 * win(t, 0, 1.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
+      v.position.y = y; M.fade(v, f); if (v.userData.num) v.userData.num.visible = k !== 4;
     });
     M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
       let f = 0;
       if (k === 2) f = win(t, 2.3, 3.0);
       if (k === 3) f = 1;
-      if (k === 4) f = 1;
+      if (k === 4) f = 1 - 0.5 * win(t, 0, 1.0);
       M.fade(v, f);
     });
     S.names = (k === 2 && t >= 3.0) || k === 3;
-    S.hotOn = k === 4 && t >= 4.5;                       // beat 4: once the Loop has drawn, the spaces light up as hotspots
+    S.hotOn = k === 4; S.reach = k === 4 ? win(t, 2.0, 7.0) : 0;   // beat 4: each space lights up as the Loop's stroke reaches it
     S.ent = k === 1 ? (WAVE ? win(t, W_ENT[0], W_ENT[1]) : win(t, 1.4, 2.0)) : 1;
     // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
     const R = M.routes, emp = R.employee, cli = R.client;
@@ -349,17 +353,23 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.innerHTML = '<path/><circle r="5"/>'; svg.appendChild(g);
       return { s, d, g };
     });
-    // the spaces' hotspots (beat 4): one of each chosen room type, its largest, at the point farthest from its walls
-    const HOT = [["Visitor hub", "Visitor Hub"], ["Executive corner cabin", "Executive Cabin"], ["Departmental room", "Departmental Room"], ["Collaboration huddle", "Collab Huddle"],
-      ["Zen room", "Zen Room"], ["Studio", "Studio"], ["The Hatchery", "The Hatchery"], ["Training room", "Training Room"], ["Nap room", "Nap Room"], ["Mother's room", "Mother’s Room"]];
+    // the spaces' hotspots (beat 4)
+    S.hot = spaces().map((sp) => {
+      const d = document.createElement("div"); d.className = "st-s hot"; d.innerHTML = `<b>${sp.name}</b>`; box.appendChild(d);
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.setAttribute("class", "hot"); g.innerHTML = '<path/><circle class="pl" r="5"/><circle r="3.6"/>'; svg.appendChild(g);
+      return { sp, d, g };
+    });
+  }
+  // the spaces called out on beat 4: one of each chosen room type (its largest), at the point farthest from its walls (model mm)
+  const SPACES = [["Visitor hub", "Visitor Hub"], ["Executive corner cabin", "Executive Cabin"], ["Departmental room", "Departmental Room"], ["Collaboration huddle", "Collab Huddle"],
+    ["Zen room", "Zen Room"], ["Mother's room", "Mother\u2019s Room"]];
+  function spaces() {
+    if (S.spc) return S.spc;
     const area = (r) => Math.abs(r.reduce((a, q, i) => a + q[0] * r[(i + 1) % r.length][1] - r[(i + 1) % r.length][0] * q[1], 0)) / 2;
-    S.hot = HOT.map(([type, name]) => {
-      const rings = A.floors.filter((f) => f[0] === type).map((f) => f[1]); if (!rings.length) return null;
-      const ring = rings.sort((a, b) => area(b) - area(a))[0], [x, y] = middle(ring);
-      const d = document.createElement("div"); d.className = "st-s hot"; d.innerHTML = `<b>${name}</b>`; box.appendChild(d);
-      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.setAttribute("class", "hot"); g.innerHTML = '<path/><circle class="pl" r="5"/><circle r="4"/>'; svg.appendChild(g);
-      return { x, y, d, g };
-    }).filter(Boolean);
+    return (S.spc = SPACES.map(([type, name]) => {
+      const rings = M.data.floors.filter((f) => f[0] === type).map((f) => f[1]); if (!rings.length) return null;
+      const [x, y] = middle(rings.sort((a, b) => area(b) - area(a))[0]); return { name, x, y };
+    }).filter(Boolean));
   }
   function overlay() {
     const A = M.data, k = 1920 / (host.clientWidth || 1920);
@@ -409,16 +419,22 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       o.d.style.left = ((left + o.w / 2) / 19.2) + "%"; o.d.style.top = (ly / 10.8) + "%";
       o.d.classList.toggle("on", it.on); o.g.classList.toggle("on", it.on);
     }
-    // the spaces' hotspots: placed after the Loop's labels, so they keep clear of them and of the copy
-    const hot = (S.hot || []).map((o) => { const [x, y] = px(o.x, o.y, 0.6); if (!o.w) { o.w = (o.d.offsetWidth || 110) * k; o.h = (o.d.offsetHeight || 30) * k; } return { o, x, y, on: !!S.hotOn && x > 20 && x < 1900 && y > 60 && y < 1060 }; }).sort((p1, p2) => p2.y - p1.y);
-    for (const it of hot) {
+    // the spaces' hotspots: a dot on the ring where the stroke reaches the space, its name beside it on the outer side; the dot reached last pulses
+    const R = typeof ribbon === "function" ? ribbon() : null, reach = S.reach || 0;
+    const hot = (S.hot || []).map((o, i) => {
+      const q = R && R.hot[i] ? R.hot[i].pos : [o.sp.x, o.sp.y], [x, y] = px(q[0], q[1], 0.6), at = R && R.hot[i] ? R.hot[i].at : 0;
+      if (!o.w) { o.w = (o.d.offsetWidth || 90) * k; o.h = (o.d.offsetHeight || 22) * k; }
+      return { o, x, y, at, north: o.sp.y < 214500, on: !!S.hotOn && reach >= at && (!R || reach > 0.001) && x > 20 && x < 1900 && y > 60 && y < 1000 };
+    });
+    const lastAt = Math.max(-1, ...hot.filter((h) => h.on).map((h) => h.at)), done = reach >= 0.999;
+    for (const it of hot.slice().sort((p1, p2) => p2.y - p1.y)) {
       const { o, x, y } = it;
+      o.g.classList.toggle("last", it.on && !done && it.at === lastAt); o.g.classList.toggle("calm", it.on && done);
       if (!it.on) { o.d.classList.remove("on"); o.g.classList.remove("on"); continue; }
-      const left = Math.max(10, Math.min(x - o.w / 2, 1900 - o.w));
-      const tries = [0, 1, 2, 3].map((n) => y + 30 + o.h + n * (o.h + 4)).concat([0, 1, 2, 3].map((n) => y - 24 - n * (o.h + 4)));
-      const ly = tries.find((b) => b - o.h > 14 && b < 1000 && !hit(left, b - o.h, left + o.w, b)) || tries.find((b) => b < 1000) || tries[0];   // clear of the copyright line
-      placed.push([left - 4, ly - o.h - 4, left + o.w + 4, ly + 4]);
-      o.g.querySelector("path").setAttribute("d", `M${x} ${y}L${x} ${ly > y ? ly - o.h : ly}`);
+      const left = Math.max(10, Math.min(x - o.w / 2, 1900 - o.w)), up = y - 13, dn = y + 15 + o.h;
+      const tries = it.north ? [up, up - o.h - 2, dn] : [dn, dn + o.h + 2, up];
+      const ly = tries.find((b) => b - o.h > 14 && b < 1000 && !hit(left, b - o.h, left + o.w, b)) || tries[0];
+      placed.push([left - 3, ly - o.h - 3, left + o.w + 3, ly + 3]);
       for (const c of o.g.querySelectorAll("circle")) { c.setAttribute("cx", x); c.setAttribute("cy", y); }
       o.d.style.left = ((left + o.w / 2) / 19.2) + "%"; o.d.style.top = (ly / 10.8) + "%";
       o.d.classList.add("on"); o.g.classList.add("on");
