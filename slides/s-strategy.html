@@ -67,10 +67,10 @@
 #s-strategy .st-s.hot { padding: 0; background: none; }
 #s-strategy .st-s.hot b { font-size: calc(var(--pt) * 5.4); font-weight: 600; color: #5b4a9a; letter-spacing: .01em;
   text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
-#s-strategy .st-legs g.hot circle.pl { fill: none; stroke: var(--purple); stroke-width: 2.6; opacity: 0; transform-box: fill-box; transform-origin: center; }
-#s-strategy .st-legs g.hot.on circle.pl { animation: st-pulse 1.7s ease-out infinite; animation-delay: var(--d, 0s); }
+#s-strategy .st-legs g circle.pl { fill: none; stroke: var(--purple); stroke-width: 2.6; opacity: 0; transform-box: fill-box; transform-origin: center; }
+#s-strategy .st-legs g.on circle.pl { animation: st-pulse 1.7s ease-out infinite; animation-delay: var(--d, 0s); }
 @keyframes st-pulse { 0% { transform: scale(.8); opacity: 1; } 100% { transform: scale(4.2); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { #s-strategy .st-legs g.hot circle.pl { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { #s-strategy .st-legs g circle.pl { animation: none !important; } }
 #s-strategy .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
 #s-strategy .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
 /* the names as the reference axo has them (29 Oct): condensed bold capitals, each in its own colour, standing upright on the floor
@@ -348,6 +348,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     S.labs = A.stops.map((s) => {
       const d = document.createElement("div"); d.className = "st-s"; d.innerHTML = `<b>${s.name}</b><span>${STOPS[s.name] || ""}</span>`; box.appendChild(d);
       const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.innerHTML = '<path/><circle r="5"/>'; svg.appendChild(g);
+      g.insertAdjacentHTML("afterbegin", '<circle class="pl" r="7"/>'); g.style.setProperty("--d", ((svg.childNodes.length * 0.41) % 1.7).toFixed(2) + "s");     // the stop's dot blinks while it is lit
       return { s, d, g };
     });
     // the spaces' hotspots (beat 4)
@@ -416,7 +417,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       const ly = tries.find((b) => b - o.h > 14 && b < 1066 && !hit(left, b - o.h, left + o.w, b)) || tries[0];   // on the page, clear of the copy and the tools      // the label's bottom (frame px)
       if (it.on) placed.push([left - 6, ly - o.h - 6, left + o.w + 6, ly + 6]);
       o.g.querySelector("path").setAttribute("d", `M${x} ${y}L${x} ${ly > y ? ly - o.h : ly}`);
-      o.g.querySelector("circle").setAttribute("cx", x); o.g.querySelector("circle").setAttribute("cy", y);
+      for (const c of o.g.querySelectorAll("circle")) { c.setAttribute("cx", x); c.setAttribute("cy", y); }
       o.d.style.left = ((left + o.w / 2) / 19.2) + "%"; o.d.style.top = (ly / 10.8) + "%";
       o.d.classList.toggle("on", it.on); o.g.classList.toggle("on", it.on);
     }
