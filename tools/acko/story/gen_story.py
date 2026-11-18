@@ -339,7 +339,11 @@ RIB_JS = _LWFN + r"""
   // the employees' route along the corridors through the seven stops (ACKO_LOOP.sweep, plan mm → model mm as flatten() has it), its
   // corners lightly rounded, lying on the floor in the model (walls overlap it), a deeper tone of the floor's circulation lilac on a
   // paler, wider edge strip; round ends
-  const RW = 1.1, RY = 0.06;   // 12 Nov: sleeker (the route ribbon should sleeker)
+  const RW = 1.5, RY = 0.06;   // 12 Nov: sleeker; 18 Nov: a little fuller, as a marker stroke
+  // 18 Nov (Ritika: "a conceptual loop path, not a defined path, which connects all the spaces"): every point of the Loop (both lanes, the faint
+  // lane, the call-outs' points) is moved by one smooth field, so the lanes stay parallel and the ring reads as a loose hand-drawn stroke
+  const hd = (p) => [p[0] + 1.2 * Math.sin(p[1] / 8 + 1) + 0.7 * Math.sin(p[0] / 23 + 2), p[1] + 1.2 * Math.sin(p[0] / 9 + 0.4) + 0.7 * Math.sin(p[1] / 25 + 3)];
+  const hdMm = (x, y) => { const X0 = M.X(x), Z0 = M.Z(y), q = hd([X0, Z0]); return [x + (q[0] - X0) * 1000, y + (q[1] - Z0) * 1000]; };
   function chaikin(P, it) { for (let k = 0; k < it; k++) { const Q = [P[0]];
     for (let i = 0; i + 1 < P.length; i++) { const a = P[i], b = P[i + 1]; Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); }
     Q.push(P[P.length - 1]); P = Q; } return P; }
@@ -373,7 +377,7 @@ RIB_JS = _LWFN + r"""
       return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE]; });
     const D = (LP.ringDash && LP.ringDash[0]) || [N - 1, 0];
     const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % N) { o.push(OFF[i]); if (i === i1) break; } return o; };
-    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m);
+    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m).map(hd);
     const P = prep(seq(D[1], D[0]), 1600), Q = prep(seq(D[0], D[1]), 80), n = P.length;
     const under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true);
     const dU = strip(Q, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.35, 8, -4, true), dT = strip(Q, RW, RY, 0x8f6cf0, 0.35, 9, -6, true);
@@ -384,7 +388,7 @@ RIB_JS = _LWFN + r"""
     const len = cum[D[0]] || cum[N - 1], idx = {};
     (LP.ringStops || []).forEach((s) => { if (s.kind === "stop") idx[s.name] = s.i; });
     const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, cum[idx[s.name]] / len)));
-    const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : [C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802]));
+    const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : hdMm(C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802)));
     const show = (on) => { under.visible = on; top.visible = on; };
     const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
       dU.visible = dT.visible = top.visible && e >= 0.995; };
@@ -436,7 +440,7 @@ def strat_loop(h):
     t2 = '<script src="assets/js/app.js'
     h = h.replace(t2, '<style>#s-strategy .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }</style>\n' + t2, 1)
     return _in_sec(h, "s-strategy", "4 Looping it all together: the floor in colour and the partitions rise.",
-                   "4 Looping it all together: the floor in colour and the partitions rise, then the Loop lies down on the floor as one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open.")
+                   "4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses and the rooms rising as soft masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open.")
 
 # Campus strategy (12 Nov): beat 1 is The Shell (the planning has begun on the slide before); beat 5 calls out the client's touchpoints
 # where the blue route reaches them (model mm, d m along the route, as data/axo-layers.js has it; named from the plan's rooms there)

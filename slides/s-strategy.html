@@ -25,7 +25,7 @@
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
-    <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-ms"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 11c1-5 4-8 7-7s4 4 5 7-5 3-8 2-4 0-4-2z"/></svg>Massing: blobs</button><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
+    <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
   </div>
 </section>
 <style>
@@ -102,8 +102,7 @@
    Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
    right-drag turns, the wheel zooms on the cursor, Reset view or a double-click goes back. Without WebGL, the deck's GIF. */
 ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
-  const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null,
-    blob: new URLSearchParams(location.search).get("massing") !== "floor" };   // beat 4: loose hand-drawn massing (default) or the coloured plan (?massing=floor, key M)
+  const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
   // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
   // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
   // copyright line clears them ("back on both, axos made smaller"). The entrances below were measured on the PPT's GIF, at FIT_MARKS
@@ -177,10 +176,10 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
   // ---------- the scene at beat k, t seconds in (the same t always gives the same picture) ----------
   function pose(k, t) {
     const G = M.groups;
-    M.tint(k <= 3 ? 0 : k === 4 ? (S.blob ? 0 : win(t, 0.3, 1.0)) : 1);
+    M.tint(k <= 3 ? 0 : k === 4 ? 0 : 1);
     for (const g of SHELL) grow(G[g], k === 1 && !WAVE ? win(t, 0.1, 1.5) : 1);
     if (WAVE) clip(k === 1 ? sweep(t, W_MASS) : 1e6, k === 1 ? sweep(t, W_FAC) : 1e6);
-    grow(G.partitions, k <= 3 ? 0 : k === 4 ? (S.blob ? 0 : win(t, 1.0, 2.0)) : 1);
+    grow(G.partitions, k <= 3 ? 0 : k === 4 ? 0 : 1);
     for (const g in FURNITURE) grow(G[g], k <= 5 ? 0 : win(t, FURNITURE[g][0], FURNITURE[g][1]));
     // beat 3: who sits where (the script while it plays, then the live arrangement); any other beat: the plan
     const live = k === 3 && t >= DUR[3];
@@ -194,16 +193,17 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       let y = 0, f = 0;
       if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
-      if (k === 4) { const e = win(t, 0, 0.7); if (S.blob) f = 1; else { y = 0; f = 1 - 0.5 * e; } }   // blobs: the hand-drawn masses stay under the Loop; floor: they soften to a wash over the coloured plan
+      if (k === 4) f = 1 - 0.3 * win(t, 1.0, 2.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses stay under the Loop, a little softer once the rooms' masses rise
       v.position.y = y; M.fade(v, f);
     });
     M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
       let f = 0;
       if (k === 2) f = win(t, 2.3, 3.0);
       if (k === 3) f = 1;
-      if (k === 4) f = S.blob ? 1 : 1 - 0.5 * win(t, 0, 0.6);
+      if (k === 4) f = 1;
       M.fade(v, f);
     });
+    if (M.rooms) M.fade(M.rooms, k === 4 ? win(t, 1.0, 2.0) : 0);      // the rooms, as soft masses, not walls (beat 4)
     S.names = (k === 2 && t >= 3.0) || k === 3;
     S.ent = k === 1 ? (WAVE ? win(t, W_ENT[0], W_ENT[1]) : win(t, 1.4, 2.0)) : 1;
     // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
@@ -470,9 +470,6 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
   // back to the beat's view, eased (Reset view, or a double-click as on the plans)
   function home() { S.moved = false; S.tween = { from: S.state, to: S.home, t0: performance.now(), ms: 900 }; need(); }
 
-  // beat 4's two looks for Ritika to pick between: loose blobs under the Loop, or the coloured plan (the button, or M)
-  function setMassLabel() { const b = $(".st-ms", sc); if (b) b.lastChild.textContent = "Massing: " + (S.blob ? "blobs" : "plan"); }
-  function toggleMass() { S.blob = !S.blob; setMassLabel(); if (S.k === 4) show(4); else need(); }
   function start() {
     host = $(".st-3d", sc);
     if (!window.AxoLayers || !window.AxoLayers.available()) return false;
@@ -550,7 +547,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
-      S.base.useSketch(true); setMassLabel();
+      S.base.useSketch(true);
       // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
       const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;
       if (fl && plan && plan.data) {
@@ -559,8 +556,6 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
         S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
       }
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
-      $(".st-ms", sc).onclick = (e) => { e.currentTarget.blur(); toggleMass(); };
-      if (!S.key) { S.key = 1; document.addEventListener("keydown", (e) => { if (document.body.dataset.scene === "s-strategy" && (e.key === "m" || e.key === "M") && !e.metaKey && !e.ctrlKey && !e.altKey) toggleMass(); }); }
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;

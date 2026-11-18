@@ -173,11 +173,11 @@
     const ring2 = (r) => { let a = 0, cx = 0, cy = 0; for (let i = 0; i < r.length; i++) { const [x0, y0] = r[i], [x1, y1] = r[(i + 1) % r.length], f = x0 * y1 - x1 * y0; a += f; cx += (x0 + x1) * f; cy += (y0 + y1) * f; } return [cx / (3 * a), cy / (3 * a)]; };
     // a hand-drawn ring (plan mm): the corners eased (Chaikin), the edge walked every ~1.4 m and pushed in and out along its normal by
     // smooth, seeded waves (whole waves round the ring, so it closes), as a pencil would draw a neighbourhood, never twice the same
-    function sketchRing(ring, seed) {
+    function sketchRing(ring, seed, ampOver) {
       let r = ring.slice(); const rnd = (() => { let s = (seed * 2654435761) >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); })();
       for (let it = 0; it < 2; it++) { const o = []; for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length]; o.push([p[0] * 0.75 + q[0] * 0.25, p[1] * 0.75 + q[1] * 0.25], [p[0] * 0.25 + q[0] * 0.75, p[1] * 0.25 + q[1] * 0.75]); } r = o; }
       const xs = r.map((q) => q[0]), ys = r.map((q) => q[1]), small = Math.min(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) < 9000;
-      const amp = small ? 330 : 780, seg = []; let P = 0;
+      const amp = ampOver || (small ? 330 : 780), seg = []; let P = 0;
       for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length], l = Math.hypot(q[0] - p[0], q[1] - p[1]); seg.push(l); P += l; }
       const waves = [[9000, 0.55], [3900, 0.3], [1700, 0.15]].map(([lam, w]) => [Math.max(1, Math.round(P / lam)), w, rnd() * 6.2832]);
       const out = []; let area = 0; for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length]; area += p[0] * q[1] - q[0] * p[1]; }
@@ -228,6 +228,19 @@
       terrace: A.terrace.map((r, i) => volume(r, "#8f8f6a", 0.55, H.zone * 0.5, null, null, 41 + i)),
       cafe: (A.cafezone || []).map((r, i) => volume(r, "#efe7a6", 0.8, H.zone * 0.5, null, null, 51 + i))
     };
+    // the rooms the glass partitions wall in, as one soft hand-drawn mass (a single mesh and one set of pencil edges)
+    {
+      const ra = acc(), rink = [], walled2 = new Set(A.walled); let n = 0;
+      for (const [t, r] of A.floors) if (walled2.has(t)) {
+        const w = sketchRing(r, 200 + n++, 170); prism(ra, w, 0.03, H.wall, rink, { corners: false });
+        const w2 = sketchRing(r, 700 + n, 170); for (let i = 0; i < w2.length; i++) { const P0 = w2[i], B = w2[(i + 1) % w2.length]; rink.push(X(P0[0]), H.wall, Z(P0[1]), X(B[0]), H.wall, Z(B[1])); }
+      }
+      const rg = new T.Group(), rm = new T.MeshLambertMaterial({ color: 0xb3a6d6, transparent: true, opacity: 0.42, depthWrite: false, side: T.DoubleSide });
+      const rmesh = mesh(ra, rm); rmesh.renderOrder = 7; rg.add(rmesh);
+      const rl = new T.LineBasicMaterial({ color: 0x7d6fa8, transparent: true, opacity: 0.5 }), rln = new T.LineSegments(new T.BufferGeometry(), rl);
+      rln.geometry.setAttribute("position", new T.Float32BufferAttribute(rink, 3)); rln.renderOrder = 8; rg.add(rln);
+      rg.userData.mats = [[rm, 0.42], [rl, 0.5]]; rg.visible = false; sk.rooms = rg; G.sketch.add(rg);
+    }
     sk.zones.concat(sk.atrium, sk.terrace, sk.cafe).forEach((v) => G.sketch.add(v));
 
     // ---------- the routes (renders 08 and 09): dashes on the floor, drawn on in order of their distance from the entrances ----------

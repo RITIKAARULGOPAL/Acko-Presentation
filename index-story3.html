@@ -1822,7 +1822,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 
 <section class="scene" id="s-strategy" data-part="p5" data-title="Campus strategy" data-steps="4" data-mins="1.9"
   data-beats="The Shell,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together"
-  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: the floor in colour and the partitions rise, then the Loop lies down on the floor as one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, Wellness, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work.">
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses and the rooms rising as soft masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, Wellness, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work.">
   <div class="page">
     <p class="dg-tag">Plan</p>
     <div class="st-anim"></div>
@@ -1836,7 +1836,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
-    <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-ms"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 11c1-5 4-8 7-7s4 4 5 7-5 3-8 2-4 0-4-2z"/></svg>Massing: blobs</button><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
+    <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
   </div>
 </section>
 
@@ -3357,8 +3357,7 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
    Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
    right-drag turns, the wheel zooms on the cursor, Reset view or a double-click goes back. Without WebGL, the deck's GIF. */
 ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) => {
-  const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null,
-    blob: new URLSearchParams(location.search).get("massing") !== "floor" };   // beat 4: loose hand-drawn massing (default) or the coloured plan (?massing=floor, key M)
+  const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
   // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
   // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
   // copyright line clears them ("back on both, axos made smaller"). The entrances below were measured on the PPT's GIF, at FIT_MARKS
@@ -3437,10 +3436,10 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // ---------- the scene at beat k, t seconds in (the same t always gives the same picture) ----------
   function pose(k, t) {
     const G = M.groups;
-    M.tint(k <= 3 ? 0 : k === 4 ? (S.blob ? 0 : win(t, 0.3, 1.0)) : 1);
+    M.tint(k <= 3 ? 0 : k === 4 ? 0 : 1);
     for (const g of SHELL) grow(G[g], k === 1 && !WAVE ? win(t, 0.1, 1.5) : 1);
     if (WAVE) clip(k === 1 ? sweep(t, W_MASS) : 1e6, k === 1 ? sweep(t, W_FAC) : 1e6);
-    grow(G.partitions, k <= 3 ? 0 : k === 4 ? (S.blob ? 0 : win(t, 1.0, 2.0)) : 1);
+    grow(G.partitions, k <= 3 ? 0 : k === 4 ? 0 : 1);
     for (const g in FURNITURE) grow(G[g], k <= 5 ? 0 : win(t, FURNITURE[g][0], FURNITURE[g][1]));
     // beat 3: who sits where (the script while it plays, then the live arrangement); any other beat: the plan
     const live = k === 3 && t >= DUR[3];
@@ -3454,16 +3453,17 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       let y = 0, f = 0;
       if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
-      if (k === 4) { const e = win(t, 0, 0.7); if (S.blob) f = 1; else { y = 0; f = 1 - 0.5 * e; } }   // blobs: the hand-drawn masses stay under the Loop; floor: they soften to a wash over the coloured plan
+      if (k === 4) f = 1 - 0.3 * win(t, 1.0, 2.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses stay under the Loop, a little softer once the rooms' masses rise
       v.position.y = y; M.fade(v, f);
     });
     M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
       let f = 0;
       if (k === 2) f = win(t, 2.3, 3.0);
       if (k === 3) f = 1;
-      if (k === 4) f = S.blob ? 1 : 1 - 0.5 * win(t, 0, 0.6);
+      if (k === 4) f = 1;
       M.fade(v, f);
     });
+    if (M.rooms) M.fade(M.rooms, k === 4 ? win(t, 1.0, 2.0) : 0);      // the rooms, as soft masses, not walls (beat 4)
     S.names = (k === 2 && t >= 3.0) || k === 3;
     S.ent = k === 1 ? (WAVE ? win(t, W_ENT[0], W_ENT[1]) : win(t, 1.4, 2.0)) : 1;
     // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
@@ -3645,7 +3645,11 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // the employees' route along the corridors through the seven stops (ACKO_LOOP.sweep, plan mm → model mm as flatten() has it), its
   // corners lightly rounded, lying on the floor in the model (walls overlap it), a deeper tone of the floor's circulation lilac on a
   // paler, wider edge strip; round ends
-  const RW = 1.1, RY = 0.06;   // 12 Nov: sleeker (the route ribbon should sleeker)
+  const RW = 1.5, RY = 0.06;   // 12 Nov: sleeker; 18 Nov: a little fuller, as a marker stroke
+  // 18 Nov (Ritika: "a conceptual loop path, not a defined path, which connects all the spaces"): every point of the Loop (both lanes, the faint
+  // lane, the call-outs' points) is moved by one smooth field, so the lanes stay parallel and the ring reads as a loose hand-drawn stroke
+  const hd = (p) => [p[0] + 1.2 * Math.sin(p[1] / 8 + 1) + 0.7 * Math.sin(p[0] / 23 + 2), p[1] + 1.2 * Math.sin(p[0] / 9 + 0.4) + 0.7 * Math.sin(p[1] / 25 + 3)];
+  const hdMm = (x, y) => { const X0 = M.X(x), Z0 = M.Z(y), q = hd([X0, Z0]); return [x + (q[0] - X0) * 1000, y + (q[1] - Z0) * 1000]; };
   function chaikin(P, it) { for (let k = 0; k < it; k++) { const Q = [P[0]];
     for (let i = 0; i + 1 < P.length; i++) { const a = P[i], b = P[i + 1]; Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); }
     Q.push(P[P.length - 1]); P = Q; } return P; }
@@ -3679,7 +3683,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE]; });
     const D = (LP.ringDash && LP.ringDash[0]) || [N - 1, 0];
     const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % N) { o.push(OFF[i]); if (i === i1) break; } return o; };
-    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m);
+    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m).map(hd);
     const P = prep(seq(D[1], D[0]), 1600), Q = prep(seq(D[0], D[1]), 80), n = P.length;
     const under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true);
     const dU = strip(Q, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.35, 8, -4, true), dT = strip(Q, RW, RY, 0x8f6cf0, 0.35, 9, -6, true);
@@ -3690,7 +3694,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const len = cum[D[0]] || cum[N - 1], idx = {};
     (LP.ringStops || []).forEach((s) => { if (s.kind === "stop") idx[s.name] = s.i; });
     const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, cum[idx[s.name]] / len)));
-    const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : [C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802]));
+    const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : hdMm(C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802)));
     const show = (on) => { under.visible = on; top.visible = on; };
     const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
       dU.visible = dT.visible = top.visible && e >= 0.995; };
@@ -3888,9 +3892,6 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // back to the beat's view, eased (Reset view, or a double-click as on the plans)
   function home() { S.moved = false; S.tween = { from: S.state, to: S.home, t0: performance.now(), ms: 900 }; need(); }
 
-  // beat 4's two looks for Ritika to pick between: loose blobs under the Loop, or the coloured plan (the button, or M)
-  function setMassLabel() { const b = $(".st-ms", sc); if (b) b.lastChild.textContent = "Massing: " + (S.blob ? "blobs" : "plan"); }
-  function toggleMass() { S.blob = !S.blob; setMassLabel(); if (S.k === 4) show(4); else need(); }
   function start() {
     host = $(".st-3d", sc);
     if (!window.AxoLayers || !window.AxoLayers.available()) return false;
@@ -3968,7 +3969,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
-      S.base.useSketch(true); setMassLabel();
+      S.base.useSketch(true);
       // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
       const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-challenges", 2500) : null;
       const im = $(".st-from", sc); im.style.transition = "none"; im.style.opacity = fc ? 1 : 0; S.fromCh = !!fc;
@@ -3980,8 +3981,6 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
         S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
       }
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
-      $(".st-ms", sc).onclick = (e) => { e.currentTarget.blur(); toggleMass(); };
-      if (!S.key) { S.key = 1; document.addEventListener("keydown", (e) => { if (document.body.dataset.scene === "s-strategy" && (e.key === "m" || e.key === "M") && !e.metaKey && !e.ctrlKey && !e.altKey) toggleMass(); }); }
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
