@@ -159,7 +159,8 @@ ACKO.slide("s-wm-1", ({ $, $$, plain, raf2, reduced, drawPath }) => {
   }
   const T = (p, r) => `translate(${p[0]}px,${p[1]}px) scale(${r})`;
   const pt = (c, k) => c.dataset[k].split(",").map(Number);
-  const stop = (els) => els.forEach((e) => e.getAnimations().forEach((a) => a.cancel()));
+  // only the script's own animations: getAnimations() also flushes the style, so it runs after the beat's classes are set
+  const stop = (els) => els.forEach((e) => e.getAnimations().forEach((a) => { if (!(window.CSSTransition && a instanceof CSSTransition)) a.cancel(); }));
   function move(sc, k, ms) {
     const key = "abc"[k - 1];
     $$(".m1-dots circle", sc).forEach((c, i) => {
@@ -188,9 +189,10 @@ ACKO.slide("s-wm-1", ({ $, $$, plain, raf2, reduced, drawPath }) => {
     },
     step(k, sc) {
       const pg = $(".page", sc), loop = $(".m1-loop", sc), still = fresh || reduced, from = last;
-      stop([...$$(".m1-dots circle", sc), $(".m1-ca", sc), $(".m1-cb", sc), $(".m1-lens", sc)]); last = k;
+      last = k;
       pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
       if (still) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
+      stop([...$$(".m1-dots circle", sc), $(".m1-ca", sc), $(".m1-cb", sc), $(".m1-lens", sc)]);
       if (k === 2 && from === 1 && !still) meet(sc);
       else move(sc, k, still ? 0 : k === 3 ? 2400 : 2200);
       // the ring draws itself round from the first arrival as the neighbourhoods come up
