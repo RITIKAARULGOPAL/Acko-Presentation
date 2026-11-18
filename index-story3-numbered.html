@@ -1286,18 +1286,12 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #s-site-dd .dd-sun .wall .g { stroke: #ffb347; }
 #s-site-dd .dd-sun .wall .w { stroke: #ff6a00; }
 /* A · wall glow, a gradient line */
-/* the sun's looks (18 Nov, Ritika: "show different variations of sun"): sm-1 orb, sm-2 rays, sm-3 pulse, sm-4 beam */
+/* the sun: the orb with the word SUN on it (18 Nov, Ritika picked the orb and dropped the other looks) */
 #s-site-dd .dd-sun .sunm .sun { fill: #ffb21f; stroke: #fff; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
 /* the orb carries the word SUN (18 Nov, Ritika: "orb works but write sun on it"): its own bigger core replaces the small dot */
-#s-site-dd.sm-1 .dd-sun .sunm .sun { display: none; }
+#s-site-dd .dd-sun .sunm .sun { display: none; }
 #s-site-dd .dd-sun .o-core { fill: #ffb21f; stroke: #fff; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
 #s-site-dd .dd-sun .o-lbl { font: 800 1450px/1 var(--body, Figtree, sans-serif); letter-spacing: 60px; text-anchor: middle; dominant-baseline: central; fill: #7a3a00; pointer-events: none; }
-#s-site-dd .dd-sun .o-rays { transform-box: fill-box; transform-origin: center; animation: dd-spin 9s linear infinite; }
-#s-site-dd .dd-sun .o-rays line { stroke: #f5a623; stroke-width: 2.4; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-@keyframes dd-spin { to { transform: rotate(360deg); } }
-#s-site-dd .dd-sun .o-ring { fill: none; stroke: #f5a623; stroke-width: 2; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; opacity: 0; animation: dd-ring 2.4s ease-out infinite; }
-#s-site-dd .dd-sun .o-ring:nth-child(2) { animation-delay: .8s; } #s-site-dd .dd-sun .o-ring:nth-child(3) { animation-delay: 1.6s; }
-@keyframes dd-ring { from { transform: scale(1); opacity: .85; } to { transform: scale(3.6); opacity: 0; } }
 #s-site-dd .dd-sun .lit g { opacity: 0; transition: opacity .45s linear; }
 #s-site-dd .dd-sun .lit g.on { opacity: 1; }
 #s-site-dd .dd-sun .lit path { fill: #ffc23a; fill-opacity: .6; mix-blend-mode: multiply; }
@@ -1719,7 +1713,7 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
   data-notes="Site due diligence: what the building brings, that the layout works around, drawn from the due diligence drawing: the fire exit staircases, the AHU rooms, the washrooms, the slab to be strengthened, the lift lobbies, and what is out of scope. The sun path is on the plan with it, the site sun study every half hour from 7 am to 6:30 pm (20 Mar / 23 Sep; 21 Jun and 21 Dec on the chips); the Sun path button turns it off and on. Hover a card to find its zones on the floor. The plan's tools, top right: Measure and Area (M, A; Esc clears), zoom, Reset, Hover, Egress, Occupancy. → Bridge: From the campus idea to the floor, in four moves.">
   <div class="page">
     <svg class="dd-sun" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"><g class="dd-sun-g">
-      <defs><linearGradient id="dd-sun-grad" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f7c948"/><stop offset=".5" stop-color="#e8500c"/><stop offset="1" stop-color="#f7c948"/></linearGradient><radialGradient id="dd-orb"><stop offset="0" stop-color="#ffd24a" stop-opacity=".95"/><stop offset=".35" stop-color="#ffb21f" stop-opacity=".55"/><stop offset="1" stop-color="#ffb21f" stop-opacity="0"/></radialGradient><linearGradient id="dd-beam" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ffd24a" stop-opacity=".8"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></linearGradient></defs>
+      <defs><linearGradient id="dd-sun-grad" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f7c948"/><stop offset=".5" stop-color="#e8500c"/><stop offset="1" stop-color="#f7c948"/></linearGradient><radialGradient id="dd-orb"><stop offset="0" stop-color="#ffd24a" stop-opacity=".95"/><stop offset=".35" stop-color="#ffb21f" stop-opacity=".55"/><stop offset="1" stop-color="#ffb21f" stop-opacity="0"/></radialGradient></defs>
       <path class="arc"/><g class="ticks"></g>
       <g class="lit" transform="matrix(50 0 0 50 8842 12775)"><g class="a"></g><g class="b"></g></g>
       <g class="wall"></g>
@@ -5400,7 +5394,6 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     });
   }
   const DD_ORDER = { oos: 0 };
-  function sc0_register() { const e = document.getElementById("s-site-dd"); if (e) e._sunLook = (n) => { SUN.look = +n; [1, 2, 3, 4].forEach((k) => e.classList.toggle("sm-" + k, k === SUN.look)); if (SUN.c && e.classList.contains("dd-on")) sunPlay(e, 0); }; }
   let sunOn = true;                                                     // the sun path plays with the due diligence; its button turns it off
   let bot = 670;                              // the bottom band's top on this beat (frame px; band() sets it)
   const box = () => [35, 157, 1885, bot];     // where the plan sits on the page (frame px): centred between the header's band and the bottom band
@@ -5642,7 +5635,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   // (8842, 12775)) on the plan. The day's arc round the floor by the sun's bearing (the building's grid turned ACKO_SITE.grid from
   // north), the sun on it with its light falling across the floor, the patches cross-fading; the day on the chips. All in plan mm,
   // over the plan's own view (so a zoom keeps it on the floor)
-  const SUN = { t: [], day: 0, raf: 0, c: null, walls: null, look: 1, u: 0, pi: -1, flow: 0, segs: null };
+  const SUN = { t: [], day: 0, raf: 0, c: null, walls: null, u: 0, pi: -1, flow: 0, segs: null };
   const GRID = (window.ACKO_SITE && window.ACKO_SITE.grid) || 11.52;
   function sunGeo() {
     if (SUN.c) return true; const F = window.ACKO_FLOOR; if (!F || !F.sun) return false;
@@ -5700,12 +5693,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     });
   }
   // the sun's looks: what travels along the line
-  const ORN = {
-    1: '<circle r="4400" fill="url(#dd-orb)"/><circle class="o-core" r="2300"/><text class="o-lbl" y="60">SUN</text>',
-    2: '<circle r="3000" fill="url(#dd-orb)" opacity=".7"/><g class="o-rays">' + Array.from({ length: 12 }, (_, k) => { const a = (k * Math.PI) / 6; return `<line x1="${(Math.cos(a) * 1800).toFixed(0)}" y1="${(Math.sin(a) * 1800).toFixed(0)}" x2="${(Math.cos(a) * (k % 2 ? 2700 : 3300)).toFixed(0)}" y2="${(Math.sin(a) * (k % 2 ? 2700 : 3300)).toFixed(0)}"/>`; }).join("") + "</g>",
-    3: '<circle r="2200" fill="url(#dd-orb)" opacity=".6"/><circle class="o-ring" r="1500"/><circle class="o-ring" r="1500"/><circle class="o-ring" r="1500"/>',
-    4: '<circle r="2600" fill="url(#dd-orb)" opacity=".65"/><path class="beam" d="M900 0L8200 -3000L8200 3000Z" fill="url(#dd-beam)"/>',
-  };
+  const ORN = '<circle r="4400" fill="url(#dd-orb)"/><circle class="o-core" r="2300"/><text class="o-lbl" y="60">SUN</text>';
   // the day plays back at an even pace along the line: in real time the sun swings fast past midday and crawls at dawn and dusk, which as a
   // flow would rush and stall; so the playback runs by length along the curve, and the clock, the glow and the sun still describe one instant
   function sunU(tau) {
@@ -5727,9 +5715,8 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
       off.innerHTML = D.frames[st.near].p.map((d) => `<path d="${d}"/>`).join(""); off.classList.add("on"); if (on) on.classList.remove("on");
     }
     const up = Math.max(0, Math.min(1, st.alt / 60)), m = $(".dd-sun .sunm", sc), orn = $(".orn", m);
-    if (!orn.childElementCount) orn.innerHTML = ORN[SUN.look];
+    if (!orn.childElementCount) orn.innerHTML = ORN;
     m.setAttribute("transform", `translate(${st.pos[0].toFixed(0)} ${st.pos[1].toFixed(0)}) scale(${(0.85 + 0.5 * up).toFixed(3)})`);
-    const bm = $(".beam", m); if (bm) { const d = sunDir(f); bm.setAttribute("transform", `rotate(${((Math.atan2(-d[1], -d[0]) * 180) / Math.PI).toFixed(1)}) scale(${(0.7 + 0.6 * up).toFixed(2)})`); }
     $(".dd-clock > b", sc).textContent = hhmm(st.mins);
     $(".dd-clock small", sc).textContent = st.alt < 1 ? `${D.label} · the sun setting in the ${compass(st.az)}` : `${D.label} · the sun ${Math.round(st.alt)}° up, in the ${compass(st.az)}`;
   }
@@ -5737,7 +5724,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   function sunPlay(sc, wait) {                                     // the sun flows along the line, 07:00 to 18:30, over about ten seconds
     sunStop(); sunArc(sc); SUN.pi = -1;
     $$(".dd-days button", sc).forEach((b) => b.classList.toggle("on", +b.dataset.d === SUN.day));
-    [1, 2, 3, 4].forEach((k) => sc.classList.toggle("sm-" + k, k === SUN.look)); $(".dd-sun .orn", sc).innerHTML = ORN[SUN.look];
+    $(".dd-sun .orn", sc).innerHTML = ORN;
     const N = window.ACKO_FLOOR.sun[SUN.day].frames.length;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return sunMove(sc, sunState(N - 1));
     sunMove(sc, sunState(0));
@@ -5745,7 +5732,6 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     const tick = (now) => { if (!sc.classList.contains("dd-on")) return; const k = Math.max(0, Math.min(1, (now - t0) / DUR)); sunMove(sc, sunState(sunU(0.85 * k + 0.15 * k * k * (3 - 2 * k)))); if (k < 1) SUN.flow = requestAnimationFrame(tick); };
     SUN.flow = requestAnimationFrame(tick);
   }
-  sc0_register();
   function sunFollow(sc) {                                // the drawing on the plan's current view (plan mm → page px)
     const v = plan.view, g = $(".dd-sun-g", sc);
     if (v) { const kk = Math.max(v[2] / 1920, v[3] / 1080), x0 = v[0] + v[2] / 2 - 960 * kk, y0 = v[1] + v[3] / 2 - 540 * kk;
