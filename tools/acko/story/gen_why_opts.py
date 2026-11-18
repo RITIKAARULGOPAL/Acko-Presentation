@@ -4,7 +4,8 @@
 # slides/s-wc-1..12.html (not in order.txt): 1 is the slide as it was on 17 Nov, 2-12 are written by hand. Her pick, option 3,
 # the merge, went into slides/s-why-campus.html on 18 Nov ("we can go with this option"), and Story 2 was rebuilt.
 # index-why-merge.html: the merge and six variants of it (18 Nov, Ritika: "give me more variants keeping this as base"), slides
-# s-wm-1..6.html (not in order.txt), each option 3 with only its picture changed. Her pick of these goes into s-why-campus.html.
+# s-wm-1..6.html (not in order.txt), each option 3 with only its picture changed. Her pick, 3.2 two drops, went into s-why-campus.html
+# on 18 Nov. index-campus-loop.html: the next slide's three Möbius versions (below).
 #   python tools/acko/story/gen_why_opts.py .
 import sys, os
 os.chdir(sys.argv[1] if len(sys.argv) > 1 else ".")
@@ -64,3 +65,18 @@ def page(OUT, items):
 page("index-why-campus.html", [("s-wc-%d" % n, "Why a campus · %d · %s" % (n, label)) for n, label in OPTS])
 page("index-why-merge.html", [("s-wc-3", "The merge · 3 · as chosen")] +
      [("s-wm-%d" % n, "The merge · 3.%d · %s" % (n, label)) for n, label in MERGE])
+
+# index-campus-loop.html (18 Nov, Ritika: "the circle fill of the merged circle would move like a ribbon to next slide … the same ribbon
+# would continue as mobius strip after '+' showing acko's mobius strip"; asked to see all three): Why a campus, then How it ties
+# together three ways, differing only after "+". Version 1 is the deck's own slides/s-campus-loop.html (MOB = 1, the deck's render);
+# 2 and 3 are copies of it made here (MOB = 2, the ribbon becomes the strip; MOB = 3, ACKO's mark), not in order.txt. Her pick
+# becomes the deck slide's MOB.
+MOBS = [(1, "the deck's render"), (2, "the ribbon becomes the strip"), (3, "ACKO's mark")]
+src = open("slides/s-campus-loop.html", encoding="utf-8").read()
+assert src.count("const MOB = 1;") == 1
+for n, _ in MOBS[1:]:
+    s = src.replace("s-campus-loop", "s-cl-%d" % n).replace("cpl-goo", "cl%d-goo" % n).replace("const MOB = 1;", "const MOB = %d;" % n)
+    s = s.replace("<title>How campus and loop tie together · ACKO slide", "<title>How it ties together, Möbius version %d · ACKO slide" % n)
+    open("slides/s-cl-%d.html" % n, "w", encoding="utf-8", newline="\n").write(s)
+page("index-campus-loop.html", [("s-why-campus", "Why a campus · two drops")] +
+     [("s-campus-loop" if n == 1 else "s-cl-%d" % n, "How it ties together · Möbius %d · %s" % (n, label)) for n, label in MOBS])
