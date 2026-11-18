@@ -68,9 +68,9 @@
 #s-why-campus .wc-cb { fill: #f1ebdf; stroke: #c4b89f; stroke-width: 3; }
 #s-why-campus .wc-drop { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 3; }
 #s-why-campus .wc-one { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
-#s-why-campus .wc-dots circle { transform-box: view-box; transform-origin: 0 0; }
-#s-why-campus .pa { fill: #1e9e95; }
-#s-why-campus .pb { fill: #bcae92; }
+#s-why-campus .wc-dots > g { transform-box: view-box; transform-origin: 0 0; }
+#s-why-campus .pa { fill: #1e9e95; color: #1e9e95; }
+#s-why-campus .pb { fill: #bcae92; color: #bcae92; }
 /* beat 2: the two drops flow together (the script plays it); here only where they end: the one drop, its outline dashed */
 #s-why-campus .wc-ca, #s-why-campus .wc-cb { transition: transform .3s var(--ease), opacity .3s var(--ease); }
 #s-why-campus .b2 .wc-ca { transform: translateX(260px); opacity: 0; transition: none; }
@@ -104,6 +104,16 @@
    is played with the Web Animations API; the CSS holds where each beat ends. The hand-off to s-campus-loop: the one drop at 960, 590,
    r 210, and the people at disc(960, 590, 168, 40) shuffled with seed 5, at scale 7; that slide computes the same. */
 ACKO.slide("s-why-campus", ({ $, $$, plain, raf2, reduced }) => {
+  // how a person is drawn, in the same unit as the dots were (a dot was r 1; a person is about 2.3 tall), scaled by the same transform:
+  // 1 pawns · 2 standing figures · 3 heads and shoulders · 4 top view · 5 sketched (index-campus-people.html shows the five)
+  const PEOPLE = 1;
+  const PERSON = (n) => ({
+    1: '<circle cy="-.85" r=".42"/><path d="M-.6 1.2V.2Q-.6-.35 0-.35Q.6-.35 .6 .2V1.2Z"/>',
+    2: '<circle cy="-1" r=".36"/><rect x="-.34" y="-.55" width=".68" height="1" rx=".2"/><rect x="-.64" y="-.5" width=".22" height=".85" rx=".11"/><rect x=".42" y="-.5" width=".22" height=".85" rx=".11"/><rect x="-.3" y=".4" width=".25" height=".85" rx=".12"/><rect x=".05" y=".4" width=".25" height=".85" rx=".12"/>',
+    3: '<circle cy="-.5" r=".46"/><path d="M-.95 1.1Q-.95 .25 0 .25Q.95 .25 .95 1.1Z"/>',
+    4: '<ellipse cy=".2" rx=".95" ry=".55"/><circle cy="-.05" r=".5" stroke="#fff" stroke-width=".09"/>',
+    5: '<g fill="none" stroke="currentColor" stroke-width=".2" stroke-linecap="round" stroke-linejoin="round"><circle cy="-.95" r=".36"/><path d="M.02-.55Q-.03-.1 0 .35M-.62-.18Q0-.4 .62-.2M0 .35Q-.15 .8-.42 1.2M0 .35Q.2 .8 .44 1.2"/></g>',
+  })[n];
   const N = 40, R = [8, 7], CX = 960, CY = 590, E = "cubic-bezier(.45,.05,.3,1)", FLOW = 2600;
   let built = false, fresh = true, last = 0;
   const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
@@ -116,11 +126,11 @@ ACKO.slide("s-why-campus", ({ $, $$, plain, raf2, reduced }) => {
     for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
     const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
     const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
-    $(".wc-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" style="${at(p, R[0])}"/>`).join("");
+    $(".wc-dots", sc).innerHTML = A.map((p, i) => `<g class="${cls(i)}" data-a="${r1(p)}" data-b="${r1(B[i])}" style="${at(p, R[0])}">${PERSON(PEOPLE)}</g>`).join("");
   }
   function move(sc, k, ms) {
     const key = "ab"[k - 1];
-    $$(".wc-dots circle", sc).forEach((c, i) => {
+    $$(".wc-dots > g", sc).forEach((c, i) => {
       const [x, y] = c.dataset[key].split(",").map(Number);
       c.style.transition = ms ? `transform ${ms}ms ${E} ${Math.round((i % 16) * 25)}ms` : "none";
       c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;

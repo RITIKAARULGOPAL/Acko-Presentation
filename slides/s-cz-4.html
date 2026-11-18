@@ -49,6 +49,7 @@
       <!-- 1 · the campus: six neighbourhoods, put together inside one shared outline -->
       <circle class="cpl-out" cx="288" cy="555" r="146"/>
       <g class="cpl-segs"></g>
+      <g class="cpl-flyers"></g>
       <!-- her Möbius path (the Möbius slide's, in the render's own px), for its geometry only -->
       <g class="cpl-geo">
         <path class="f1" d="M571 108.2C576 107.9 591 106.5 601 106.4C611 106.3 621 106.7 631 107.5C641 108.3 650.9 109.6 660.8 111.3C670.7 112.9 680.5 115.1 690.2 117.5C699.9 119.8 709.5 122.6 719.1 125.7C728.7 128.7 738.1 132 747.5 135.5C756.9 139 766.2 142.7 775.4 146.6C784.7 150.4 793.9 154.5 803 158.5C812.1 162.6 821.2 166.9 830.3 171.1C839.4 175.4 848.4 179.7 857.4 184C866.5 188.3 875.5 192.7 884.6 197C893.6 201.3 902.7 205.5 911.7 209.8C920.8 214 929.9 218.2 939 222.4C948.1 226.6 957.3 230.7 966.3 234.9C975.4 239.1 984.5 243.3 993.6 247.6C1002.6 251.9 1011.7 256.2 1020.7 260.6C1029.7 265.1 1038.6 269.5 1047.5 274.2C1056.4 278.8 1065.2 283.5 1074 288.4C1082.7 293.4 1091.4 298.4 1099.9 303.7C1108.4 309 1116.8 314.4 1125 320.2C1133.2 325.9 1141.3 331.8 1149 338.2C1156.8 344.5 1164.4 351 1171.6 358C1178.8 365 1185.7 372.3 1192.1 380C1198.4 387.7 1204.6 395.8 1209.7 404.3C1214.8 412.9 1219.8 421.9 1222.7 431.3C1225.6 440.8 1227.5 451.2 1226.9 460.9C1226.3 470.6 1222.8 480.6 1218.9 489.7C1215 498.8 1209.1 507.2 1203.3 515.4C1197.6 523.5 1191 531.2 1184.4 538.7C1177.8 546.2 1170.9 553.5 1163.8 560.5C1156.7 567.6 1149.3 574.4 1141.9 581.1C1134.4 587.8 1126.7 594.2 1118.9 600.5C1111.1 606.8 1103.2 612.9 1095.1 618.9C1087.1 624.8 1078.9 630.6 1070.6 636.2C1062.3 641.8 1053.9 647.3 1045.4 652.6C1036.9 657.8 1028.2 662.9 1019.5 667.9C1010.8 672.8 1002 677.5 993 682.1C984.1 686.6 975.1 691 966 695.2C956.9 699.3 947.7 703.3 938.4 707.1C929.1 710.9 919.8 714.5 910.4 718C901 721.4 891.5 724.7 882 727.8C872.5 730.9 862.9 733.9 853.3 736.7C843.7 739.5 834 742.2 824.3 744.8C814.6 747.3 804.9 749.8 795.2 752.1C785.5 754.5 775.7 756.8 765.9 759C756.2 761.2 746.4 763.4 736.6 765.5C726.8 767.6 712.1 770.7 707.2 771.7"/>
@@ -65,6 +66,7 @@
       <g class="cpl-dots"></g>
     </svg>
     <canvas class="cpl-strip"></canvas>
+    <svg class="cpl-dia" viewBox="0 0 1920 1080" aria-hidden="true"><g class="cpl-zones cpl-zt"></g></svg>
 
     <div class="cpl-op" data-step="2" style="left:22.9%">+</div>
     <div class="cpl-op" data-step="3" style="left:49.1%">=</div>
@@ -101,6 +103,11 @@
 #s-cz-4 .cpl-out.on { opacity: 1; }
 #s-cz-4 .cpl-seg { transform-box: view-box; transform-origin: 288px 555px; opacity: 0; transform: scale(.82); transition: opacity .5s var(--ease), transform .9s cubic-bezier(.3,1.35,.5,1); }
 #s-cz-4 .cpl-seg.on { opacity: 1; transform: none; }
+/* the campus's neighbourhoods are named (01–06, as on the floor); once they have flown onto the floor, their ghosts stay */
+#s-cz-4 .cpl-sn { fill: var(--ink); font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: .08em; }
+#s-cz-4 .cpl-seg.on.ghost { opacity: .26; transition: opacity .6s var(--ease); }
+#s-cz-4 .cpl-sn.on.ghost { opacity: .5; }
+#s-cz-4 .cpl-fly { stroke: none; }
 #s-cz-4 .cpl-plate { fill: #f7f6f3; stroke: #b5aea4; stroke-width: 1.4; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .9s var(--ease); }
 #s-cz-4 .cpl-plate.on { opacity: 1; }
 /* the zoning sketch on the floor: neighbourhoods (their numbers) and shared spaces (their names), one after another */
@@ -109,9 +116,13 @@
 #s-cz-4 .cpl-z text { font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: .08em; fill: var(--ink); opacity: .72; }
 #s-cz-4 .cpl-z.sh text { font-size: 8.4px; letter-spacing: .12em; text-transform: uppercase; fill: #7a6fb5; opacity: 1; }
 #s-cz-4 .still .cpl-z { transition: none !important; }
-#s-cz-4 .cpl-dots circle { transform-box: view-box; transform-origin: 0 0; }
-#s-cz-4 .pa { fill: #1e9e95; }
-#s-cz-4 .pb { fill: #bcae92; }
+/* a neighbourhood's fill is translucent and multiplied (Ritika, 18 Nov), so the site boundary shows through where it spills over it */
+#s-cz-4 .cpl-z.nb { mix-blend-mode: multiply; }   /* on the group itself: its opacity makes a layer, which would isolate a blend set on the shape */
+#s-cz-4 .cpl-z.nb path, #s-cz-4 .cpl-z.nb rect, #s-cz-4 .cpl-z.nb ellipse { fill-opacity: .72; }
+#s-cz-4 .cpl-zt text { paint-order: stroke; stroke: #f7f6f3; stroke-width: 3.2px; stroke-linejoin: round; }
+#s-cz-4 .cpl-dots > g { transform-box: view-box; transform-origin: 0 0; }
+#s-cz-4 .pa { fill: #1e9e95; color: #1e9e95; }
+#s-cz-4 .pb { fill: #bcae92; color: #bcae92; }
 /* + and = */
 #s-cz-4 .cpl-op { top: 49%; width: 6%; text-align: center; font-size: calc(var(--pt) * 22); font-weight: 300; line-height: 1; color: var(--accent); }
 /* the words under each figure, once the ribbon has made it */
@@ -148,6 +159,16 @@
    any other entry, a step back or reduced motion shows the beat's end at once. The frame loop stops on leave. */
 ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
   const MOB = 1;                                                   // after "+": 1 the deck's render · 2 the ribbon becomes the strip · 3 ACKO's mark
+  // how a person is drawn, in the same unit as the dots were (a dot was r 1; a person is about 2.3 tall), scaled by the same transform:
+  // 1 pawns · 2 standing figures · 3 heads and shoulders · 4 top view · 5 sketched (index-campus-people.html shows the five)
+  const PEOPLE = 1;
+  const PERSON = (n) => ({
+    1: '<circle cy="-.85" r=".42"/><path d="M-.6 1.2V.2Q-.6-.35 0-.35Q.6-.35 .6 .2V1.2Z"/>',
+    2: '<circle cy="-1" r=".36"/><rect x="-.34" y="-.55" width=".68" height="1" rx=".2"/><rect x="-.64" y="-.5" width=".22" height=".85" rx=".11"/><rect x=".42" y="-.5" width=".22" height=".85" rx=".11"/><rect x="-.3" y=".4" width=".25" height=".85" rx=".12"/><rect x=".05" y=".4" width=".25" height=".85" rx=".12"/>',
+    3: '<circle cy="-.5" r=".46"/><path d="M-.95 1.1Q-.95 .25 0 .25Q.95 .25 .95 1.1Z"/>',
+    4: '<ellipse cy=".2" rx=".95" ry=".55"/><circle cy="-.05" r=".5" stroke="#fff" stroke-width=".09"/>',
+    5: '<g fill="none" stroke="currentColor" stroke-width=".2" stroke-linecap="round" stroke-linejoin="round"><circle cy="-.95" r=".36"/><path d="M.02-.55Q-.03-.1 0 .35M-.62-.18Q0-.4 .62-.2M0 .35Q-.15 .8-.42 1.2M0 .35Q.2 .8 .44 1.2"/></g>',
+  })[n];
   const N = 40, CX = 960, CY = 590, RD = 210;                      // the hand-off: Why a campus's one drop
   const CC = [288, 555], RC = 142, R0 = 84, R1 = 128, GS = R1 / RD; // the campus: the ribbon's round (the drop's rim), the neighbourhoods' band; the drop shrinks by GS
   const KM = .27, MX = 543.7, MY = 431.3;                           // the Möbius render: its px → page px (her path centred at 760, 555)
@@ -155,8 +176,8 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
   const REST1 = [470, 690], REST2 = [1000, 640];                   // where the ribbon waits after Campus and after the Möbius
   const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
   const LAV = "rgb(190,164,245)", WID = 26, WM = MOB === 2 ? 30 : 12, WL = 8, STEP = 4, FADE = 40, LREST = 150;
-  const LAYOUT = 4;                                                // the zoning on the floor: one of LAYOUTS (index-campus-zoning.html shows the six)
-  const RUN = { 1: 1500, 2: 4600, 3: 2000, 6: 4800 };               // each beat's ribbon run, ms (beat 1's after its glide and split)
+  const LAYOUT = 4;                                                // the zoning on the floor: one of LAYOUTS (index-campus-zoning.html shows them; 5 Courtyards, Ritika's pick, 18 Nov)
+  const RUN = { 1: 1500, 2: 4600, 3: 2000, 4: 2100, 6: 4800 };               // each beat's ribbon run, ms (beat 1's after its glide and split)
   const MOBIMG = MOB === 3 ? "assets/img/acko-mark.webp" : "assets/img/mobius.webp";
   // ACKO's mark (MOB 3), 169 × 127 px, shown at KK from KX, KY: one band's centre line in the mark's px, traced from its colours
   // (scratch trace_mark.py): [x, y, band width, 1 front / 0 the lavender back face], up the back face, along the top band to the
@@ -172,6 +193,11 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
     const c = (x) => a + h * Math.cos((2 * Math.PI * (x - ph)) / p), top = [], bot = [];
     for (let x = x0 + 14; x <= x1 - 14; x += 24) { top.push([x, c(x) - 5.5]); bot.push([x, c(x) + 5.5]); }
     return [[x0, c(x0)], ...top, [x1, c(x1)], ...bot.reverse()];
+  };
+  const scrib = (xs, xe, cy, n, rx, ry) => {            // a cursive line: n loops east from (xs, cy) heading up (a trochoid), a turn round the east end, a calm lane back west
+    const v = (xe - xs) / (2 * Math.PI * n), P = [];
+    for (let t = -Math.PI / 2; t <= -Math.PI / 2 + 2 * Math.PI * n + 1e-6; t += Math.PI / 6) P.push([xs + v * (t + Math.PI / 2) - rx * (Math.sin(t) + 1), cy - ry * Math.cos(t)]);
+    return P.concat([[xe + 12, cy - 18], [xe + 26, cy + 4], [xe + 18, cy + 30], [xe - 10, cy + 44], [xe - 90, cy + 46], [xe - 190, cy + 43], [xe - 290, cy + 46], [xe - 400, cy + 43], [xe - 500, cy + 45], [xe - 560, cy + 38]]);
   };
   const LAYOUTS = {
     1: { name: "Islands", jit: [8, 3],                 // the shared spaces as islands inside the loop, which bulges round each
@@ -196,9 +222,9 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
       loop: [[1166, 561], [1176, 550], [1206, 545], [1245, 544.5], [1300, 546.5], [1367, 544.5], [1434, 546.5], [1490, 544.5], [1546, 546.5], [1600, 544.5], [1656, 546.5],
         [1711, 544.5], [1752, 545], [1780, 550], [1790, 561], [1780, 572], [1752, 577], [1711, 577.5], [1656, 575.5], [1600, 577.5], [1546, 575.5], [1490, 577.5],
         [1434, 575.5], [1367, 577.5], [1300, 575.5], [1245, 577.5], [1206, 577], [1176, 572]] },
-    5: { name: "Courtyards", jit: [2, 1],              // the neighbourhoods in pairs, tall shared spaces between them; the loop a thin band that opens into each
-      zones: [...NBH([[1226, 512, 1332, 546], [1408, 512, 1520, 546], [1616, 512, 1724, 546]], [[1226, 574, 1332, 608], [1408, 574, 1520, 608], [1616, 574, 1724, 608]]),
-        [1150, 512, 1218, 608, "Library", "t"], [1340, 512, 1398, 608, "Café", "t"], [1530, 512, 1606, 608, "Board room", "t"], [1732, 512, 1800, 608, "Terrace", "t"], [1092, 514, 1146, 532, "Garden"]],
+    5: { name: "Courtyards", jit: [2, 1], loose: true, spill: true,   // the neighbourhoods in pairs, tall shared spaces between them (each just "shared space"), all loosely drawn; the loop a thin band that opens into each
+      zones: [...NBH([[1222, 494, 1336, 546], [1404, 499, 1524, 546], [1612, 490, 1728, 546]], [[1222, 574, 1336, 630], [1404, 574, 1524, 625], [1612, 574, 1728, 634]]),   // the outer edges spill past the site boundary, unevenly
+        [1158, 518, 1218, 602, "shared space", "t"], [1340, 518, 1398, 602, "shared space", "t"], [1530, 518, 1606, 602, "shared space", "t"], [1732, 518, 1798, 602, "shared space", "t"]],
       loop: [[1155, 560], [1162, 537], [1176, 530], [1196, 532], [1212, 546], [1226, 556], [1279, 556], [1332, 556], [1340, 550], [1352, 532], [1369, 529], [1386, 532],
         [1398, 550], [1408, 556], [1464, 556], [1520, 556], [1530, 550], [1546, 532], [1568, 529], [1590, 532], [1606, 550], [1616, 556], [1670, 556], [1724, 556],
         [1732, 550], [1748, 532], [1768, 529], [1788, 534], [1796, 560], [1788, 586], [1768, 591], [1748, 588], [1732, 570], [1724, 564], [1670, 564], [1616, 564],
@@ -209,13 +235,19 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
         [1722, 512, 1798, 544, "Garden"], [1166, 576, 1264, 608, "Board room"], [1274, 576, 1382, 608, "04"], [1392, 576, 1486, 608, "Terrace"], [1496, 576, 1604, 608, "05"],
         [1614, 576, 1702, 608, "Studio"], [1712, 576, 1798, 608, "06"]],
       loop: snake(1152, 1796, 560, 6, 222, 1215) },
+    7: { name: "Scribble", jit: [1.2, 1.2], open: true,   // a hand-drawn line looping over itself like cursive, soft blobs behind it (Ritika's reference, 18 Nov)
+      line: { w: 1.5, col: "#554c75", arrow: true },
+      zones: [[1170, 514, 1300, 566, "01", "b"], [1290, 556, 1410, 604, "02", "b"], [1395, 514, 1515, 562, "03", "b"], [1530, 556, 1632, 602, "04", "b"],
+        [1610, 514, 1722, 562, "05", "b"], [1708, 560, 1796, 604, "06", "b"],
+        [1304, 534, 1370, 560, "Café", "b"], [1424, 566, 1502, 592, "Board room", "b"], [1530, 530, 1596, 556, "Library", "b"], [1640, 566, 1706, 592, "Terrace", "b"], [1186, 570, 1252, 596, "Garden", "b"]],
+      loop: scrib(1170, 1770, 558, 5, 34, 31) },
   };
   const LAY = LAYOUTS[LAYOUT] || LAYOUTS[1];
   // a closed centripetal Catmull-Rom through points, sampled about every step px
-  const cr = (P, step) => {
+  const cr = (P, step, open) => {                      // open: a line with two ends (the scribble), not a ring
     const out = [], n = P.length, tj = (a, b) => Math.sqrt(Math.hypot(b[0] - a[0], b[1] - a[1])) || 1e-3;
-    for (let i = 0; i < n; i++) {
-      const p0 = P[(i - 1 + n) % n], p1 = P[i], p2 = P[(i + 1) % n], p3 = P[(i + 2) % n];
+    for (let i = 0; i < (open ? n - 1 : n); i++) {
+      const p0 = open ? P[Math.max(i - 1, 0)] : P[(i - 1 + n) % n], p1 = P[i], p2 = open ? P[i + 1] : P[(i + 1) % n], p3 = open ? P[Math.min(i + 2, n - 1)] : P[(i + 2) % n];
       const t1 = tj(p0, p1), t2 = t1 + tj(p1, p2), t3 = t2 + tj(p2, p3), m = Math.max(2, Math.ceil(Math.hypot(p2[0] - p1[0], p2[1] - p1[1]) / step));
       for (let s = 0; s < m; s++) {
         const t = t1 + ((t2 - t1) * s) / m, L = (a, b, ta, tb) => [0, 1].map((j) => ((tb - t) * a[j] + (t - ta) * b[j]) / (tb - ta));
@@ -223,6 +255,7 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
         out.push(L(L(A1, A2, 0, t2), L(A2, A3, t1, t3), t1, t2));
       }
     }
+    if (open) out.push(P[n - 1]);
     return out;
   };
   const S = { built: false, fresh: true, last: 0, raf: 0, R: null, cur: null, img: null, sc: null };
@@ -262,7 +295,8 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
     if (S.built) return; S.built = true; S.sc = sc;
     // the campus: six neighbourhoods round its centre, from the top, clockwise, a small gap between
     $(".cpl-segs", sc).innerHTML = NB.map((c, s) => { const a0 = -90 + s * 60 + 3, a1 = -90 + (s + 1) * 60 - 3;
-      return `<path class="cpl-seg" style="fill:${c}" d="M${f1(pol(CC, R1, a0))} A${R1} ${R1} 0 0 1 ${f1(pol(CC, R1, a1))} L${f1(pol(CC, R0, a1))} A${R0} ${R0} 0 0 0 ${f1(pol(CC, R0, a0))} Z"/>`; }).join("");
+      return `<path class="cpl-seg" style="fill:${c}" d="M${f1(pol(CC, R1, a0))} A${R1} ${R1} 0 0 1 ${f1(pol(CC, R1, a1))} L${f1(pol(CC, R0, a1))} A${R0} ${R0} 0 0 0 ${f1(pol(CC, R0, a0))} Z"/>`; }).join("")
+      + NB.map((_, s) => { const [tx, ty] = pol(CC, R1 + 9.5, -90 + s * 60 + 30); return `<text class="cpl-seg cpl-sn" x="${tx.toFixed(1)}" y="${(ty + 4).toFixed(1)}" text-anchor="middle">0${s + 1}</text>`; }).join("");
     // the people: b · where Why a campus leaves them; c · their seats, two rows, the offices alternating
     let seed = 5; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
     const B = disc(CX, CY, 168, N);
@@ -278,10 +312,11 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
       const s = mine[o].slice().sort((p, q) => ang(p, CC) - ang(q, CC)); ids.forEach((i, n) => (C[i] = s[n]));
     }
     const r1 = (p) => p.map((v) => v.toFixed(1));
-    $(".cpl-dots", sc).innerHTML = B.map((p, i) => `<circle class="${i < N / 2 ? "pa" : "pb"}" r="1" data-b="${r1(p)}" data-c="${r1(C[i])}"/>`).join("");
+    $(".cpl-dots", sc).innerHTML = B.map((p, i) => `<g class="${i < N / 2 ? "pa" : "pb"}" data-b="${r1(p)}" data-c="${r1(C[i])}">${PERSON(PEOPLE)}</g>`).join("");
     // the floor's outline: its extent (rooms, zones, cores and lobbies), its west end raked as the plan's is (as option 6 draws it)
     const P = window.PLAN_DXF, FP = (x, y) => [LX + (x - VB[0]) * KL, LY + (y - VB[1]) * KL];
     const nums = (d) => { const n = d.match(/-?\d+(?:\.\d+)?/g).map(Number), p = []; for (let i = 0; i + 1 < n.length; i += 2) p.push([n[i], n[i + 1]]); return p; };
+    let fit = (p) => p, fitN = (p) => p;                 // keep a point inside the site boundary, or (a neighbourhood that spills) within 26 px of it (set from the outline below)
     if (P) {
       const box = (p) => { const xs = p.map((q) => q[0]), ys = p.map((q) => q[1]); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; };
       const area = (b) => (b[2] - b[0]) * (b[3] - b[1]);
@@ -290,22 +325,50 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
       const all = [...P.spaces.map((s) => outer(s.d)), ...P.zones.map((z) => z.zone), ...cores].flatMap((d) => nums(d));
       const top = Math.min(...all.map((p) => p[1])), bot = Math.max(...all.map((p) => p[1])), east = Math.max(...all.map((p) => p[0]));
       const west = (near) => Math.min(...all.filter((p) => Math.abs(p[1] - near) < 1500).map((p) => p[0]));
-      $(".cpl-plate", sc).setAttribute("d", "M" + [[west(top), top], [east, top], [east, bot], [west(bot), bot]].map((p) => f1(FP(...p))).join("L") + "Z");
+      const pc = [[west(top), top], [east, top], [east, bot], [west(bot), bot]].map((p) => FP(...p));    // NW, NE, SE, SW in page px
+      $(".cpl-plate", sc).setAttribute("d", "M" + pc.map(f1).join("L") + "Z");
+      // nothing may come outside the site boundary (Ritika, 18 Nov: "it can randomly come outside"): a point is pulled back to 6 px inside
+      // the outline, whose west end is raked (a straight edge from the NW corner to the SW one)
+      const M = 6;
+      fit = (p) => { const y = clamp(p[1], pc[0][1] + M, pc[3][1] - M), xw = pc[0][0] + ((pc[3][0] - pc[0][0]) * (y - pc[0][1])) / (pc[3][1] - pc[0][1]);
+        return [clamp(p[0], xw + M + 3, pc[1][0] - M), y]; };
+      // the neighbourhoods of a layout with `spill` may spill clearly past it (Ritika, 18 Nov: "roughly come out of the site boundary"),
+      // up to 26 px, but not further
+      fitN = (p) => { const y = clamp(p[1], pc[0][1] - 26, pc[3][1] + 26), xw = pc[0][0] + ((pc[3][0] - pc[0][0]) * (clamp(y, pc[0][1], pc[3][1]) - pc[0][1])) / (pc[3][1] - pc[0][1]);
+        return [clamp(p[0], xw - 26, pc[1][0] + 26), y]; };
     }
     // on it, a zoning sketch (illustrative, not the plan; 18 Nov, Ritika: "show random zoning diagram with neighbourhoods, shared
     // spaces and loop"): the neighbourhoods along both long edges, the shared spaces as islands down the middle
-    let ni = 0, si = 0;
+    let ni = 0, si = 0, lab = "";
+    const gb = (id, c) => `<radialGradient id="cpl-gb-${id}"><stop offset="0" stop-color="${c}"/><stop offset=".55" stop-color="${c}" stop-opacity=".9"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
+    $("defs", sc).insertAdjacentHTML("beforeend", NB.map((c, i) => gb(i, c)).join("") + gb("c", "#ddd2fa"));
     $(".cpl-zones", sc).innerHTML = LAY.zones.map(([x0, y0, x1, y1, n, shape]) => {
       const nb = /^\d/.test(n), w = x1 - x0, h = y1 - y0, fill = nb ? NB[+n - 1] : "#eee8fc";
-      const body = shape === "o" ? `<ellipse cx="${x0 + w / 2}" cy="${y0 + h / 2}" rx="${w / 2}" ry="${h / 2}" style="fill:${fill}"/>`
+      // loosely drawn (LAY.loose): a squircle's 16 points, each nudged a few px (seeded per zone), through a closed spline, with a faint
+      // darker outline, so it reads as a sketched shape
+      let lsd = 7 + 13 * (ni + si + (nb ? 0 : 50)); const lr = () => ((lsd = (lsd * 16807) % 2147483647) / 2147483647) - .5;
+      const sp = nb && LAY.spill, FF = sp ? fitN : fit;       // a spilling neighbourhood: a more ragged edge, and it may go past the boundary
+      const loose = () => { const P = Array.from({ length: 16 }, (_, q) => { const a = (q / 16) * 2 * Math.PI, c = Math.cos(a), s = Math.sin(a), e = .5;
+          return FF([x0 + w / 2 + (w / 2) * Math.sign(c) * Math.pow(Math.abs(c), e) + lr() * 5, y0 + h / 2 + (h / 2) * Math.sign(s) * Math.pow(Math.abs(s), e) + lr() * (sp ? 8 : 4)]); });
+        return "M" + cr(P, 2).map((p) => FF(p)).map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join("L") + "Z"; };
+      // no outline on a neighbourhood (Ritika, 18 Nov); a shared space keeps its faint one
+      const body = LAY.loose ? `<path d="${loose()}" style="fill:${fill}"${nb ? "" : ' stroke="#2a2440" stroke-opacity=".22" stroke-width=".9"'}/>`
+        : shape === "b" ? `<ellipse cx="${x0 + w / 2}" cy="${y0 + h / 2}" rx="${w / 2}" ry="${h / 2}" fill="url(#cpl-gb-${nb ? +n - 1 : "c"})"/>`   // a soft blob: solid in the middle, gone at the rim
+        : shape === "o" ? `<ellipse cx="${x0 + w / 2}" cy="${y0 + h / 2}" rx="${w / 2}" ry="${h / 2}" style="fill:${fill}"/>`
         : `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" rx="${shape === "s" ? 3 : shape === "t" ? 10 : nb ? 7 : h / 2}" style="fill:${fill}"/>`;
-      return `<g class="cpl-z ${nb ? "nb" : "sh"}" style="--i:${nb ? ni++ : si++}">${body}<text x="${x0 + w / 2}" y="${y0 + h / 2 + (nb ? 4 : 3)}" text-anchor="middle">${n}</text></g>`; }).join("");
+      const cls = `cpl-z ${nb ? "nb" : "sh"}`, st = `--i:${nb ? ni++ : si++}`, cx = x0 + w / 2, cyy = y0 + h / 2,
+        txt = LAY.loose && !nb ? `<text text-anchor="middle"><tspan x="${cx}" y="${cyy - 1}">shared</tspan><tspan x="${cx}" y="${cyy + 9}">space</tspan></text>`   // a shared space is just that, on two lines
+          : `<text x="${cx}" y="${cyy + (nb ? 4 : 3)}" text-anchor="middle">${n}</text>`;
+      if (LAY.line) { lab += `<g class="${cls}" style="${st}">${txt}</g>`; return `<g class="${cls}" style="${st}">${body}</g>`; }   // the scribble: its labels sit above the line, with a halo
+      return `<g class="${cls}" style="${st}">${body}${txt}</g>`; }).join("");
+    $(".cpl-zt", sc).innerHTML = lab;
     // and the ACKO Loop through it as one smooth, organic loop (a closed centripetal Catmull-Rom through the layout's points, nudged a
     // little), from its west end, east along the top and back along the bottom; the arrivals where the real ones are along the floor
     let sd = 11; const rn = () => ((sd = (sd * 16807) % 2147483647) / 2147483647) - .5;
-    const ring = cr(LAY.loop.map(([x, y], i) => (i ? [x + rn() * LAY.jit[0], y + rn() * LAY.jit[1]] : [x, y])), 3);
+    const ring = cr(LAY.loop.map(([x, y], i) => fit(i ? [x + rn() * LAY.jit[0], y + rn() * LAY.jit[1]] : [x, y])), 3, LAY.open).map((p) => fit(p));
+    sc.dataset.loopPts = ring.filter((_, i) => i % 3 === 0).map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");   // for the boundary test
     const near = (q) => ring.reduce((b, p, i) => (Math.hypot(p[0] - q[0], p[1] - q[1]) < Math.hypot(ring[b][0] - q[0], ring[b][1] - q[1]) ? i : b), 0);
-    const arr = [near([1272, 575]), near([1560, 548])];
+    const arr = LAY.open ? [1, near([1560, 548])] : [near([1272, 575]), near([1560, 548])];     // the scribble: Arrival 1 is its start ring (index 1: the route's first point is shared with the way in)
     // the route
     const geo = (c) => $(".cpl-geo ." + c, sc), toM = (p) => [MX + p.x * KM, MY + p.y * KM];
     const bk = geo("bk"), fa = geo("f1"), fb = geo("f2");
@@ -334,11 +397,11 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
       parts.push({ pts: bez(xp, [xp[0] + xt[0] * 50, xp[1] + xt[1] * 50], [REST2[0] - 40, REST2[1]], REST2), lead: FADE, w: [WM, WID] }); // out, to wait
     }
     // on to the floor's west end, along the loop's own way in (up), to wait; then round the loop from there, closed
-    const dir = (() => { const a = ring[ring.length - 1], b = ring[1], n = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return [(b[0] - a[0]) / n, (b[1] - a[1]) / n]; })();
+    const dir = (() => { const a = LAY.open ? ring[0] : ring[ring.length - 1], b = ring[1], n = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return [(b[0] - a[0]) / n, (b[1] - a[1]) / n]; })();
     const ai = ring[0];
     parts.push({ pts: bez(REST2, [REST2[0] + 70, REST2[1]], [ai[0] - dir[0] * 60, ai[1] - dir[1] * 60], ai), w: [WID, WL], tag: "rest2" });
-    const idx = [...ring.keys(), 0];
-    parts.push({ pts: idx.map((i) => ring[i]), w: WL, tag: "loop", flag: idx.map((i, j) => (j && arr.includes(i) ? 2 : 0)) });
+    const idx = LAY.open ? [...ring.keys()] : [...ring.keys(), 0];
+    parts.push({ pts: idx.map((i) => ring[i]), w: WL, tag: "loop", flag: idx.map((i, j) => ((j || LAY.open) && arr.includes(i) ? 2 : 0)) });
     const R = (S.R = route(parts));
     R.rest1 = R.at.rest1; R.rest2 = R.at.rest2 || R.end; R.mob0 = R.at.mob; R.mob1 = R.at.mobx; R.loop0 = R.at.loop || R.end;
     R.arrS = []; R.flag.forEach((f, i) => { if (f & 2 && R.ss[i] >= R.loop0) R.arrS.push(i); });
@@ -375,7 +438,8 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
     }
     // the loop, drawn as far as the ribbon has gone round it, its last stretch dashed; the arrivals once it has passed them
     if (st.loop > R.loop0) {
-      x.lineCap = x.lineJoin = "round"; x.strokeStyle = "#5222d0"; x.lineWidth = 3.4 * k;
+      const LN = LAY.line || { w: 3.4, col: "#5222d0" };                     // the scribble's line is thin and grey; the others' a purple loop
+      x.lineCap = x.lineJoin = "round"; x.strokeStyle = LN.col; x.lineWidth = LN.w * k;
       const e = idx(Math.min(st.loop, R.end));
       let i = idx(R.loop0);
       while (i < e) {
@@ -384,7 +448,13 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
         i = j + 1;
       }
       x.setLineDash([]);
-      R.arrS.forEach((i) => { if (R.ss[i] <= st.loop) { x.beginPath(); x.arc(R.pts[i][0] * k, R.pts[i][1] * k, 6.5 * k, 0, 2 * Math.PI); x.fillStyle = "#fff"; x.fill(); x.lineWidth = 2.2 * k; x.strokeStyle = "#1d1d1d"; x.stroke(); } });
+      R.arrS.forEach((i) => { if (R.ss[i] <= st.loop) { x.beginPath(); x.arc(R.pts[i][0] * k, R.pts[i][1] * k, (LAY.line ? 4.6 : 6.5) * k, 0, 2 * Math.PI); x.fillStyle = "#fff"; x.fill(); x.lineWidth = (LAY.line ? 1.5 : 2.2) * k; x.strokeStyle = LAY.line ? LN.col : "#1d1d1d"; x.stroke(); } });
+      if (LAY.line && LAY.line.arrow && st.loop >= R.end) {                      // an arrowhead where it ends, pointing on toward the start
+        const e = R.pts.length - 1, [px, py] = R.pts[e], [qx, qy] = R.pts[Math.max(0, e - 8)], a = Math.atan2(py - qy, px - qx), L = 11 * k, hw = 5 * k;
+        x.beginPath(); x.moveTo(px * k + Math.cos(a) * L * .4, py * k + Math.sin(a) * L * .4);
+        x.lineTo(px * k - Math.cos(a) * L * .6 + Math.sin(a) * hw, py * k - Math.sin(a) * L * .6 - Math.cos(a) * hw);
+        x.lineTo(px * k - Math.cos(a) * L * .6 - Math.sin(a) * hw, py * k - Math.sin(a) * L * .6 + Math.cos(a) * hw); x.closePath(); x.fillStyle = LN.col; x.fill();
+      }
     }
     // the ribbon: behind (filled) and in front (filled and edged in white), put down at 35% and 75%
     const wins = (st.wins || []).map(([a, b, ta, tb]) => [Math.max(0, a), Math.min(R.end, b), ta, tb]).filter(([a, b]) => b - a >= 1);
@@ -424,7 +494,7 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
   function glide(sc, e, ride) {
     const cx = CX + (CC[0] - CX) * e, cy = CY + (CC[1] - CY) * e, s = 1 + (GS - 1) * e;
     $(".cpl-glide", sc).setAttribute("transform", `translate(${cx.toFixed(2)} ${cy.toFixed(2)}) scale(${s.toFixed(4)}) translate(${-CX} ${-CY})`);
-    if (ride) $$(".cpl-dots circle", sc).forEach((c) => { const [x, y] = c.dataset.b.split(",").map(Number);
+    if (ride) $$(".cpl-dots > g", sc).forEach((c) => { const [x, y] = c.dataset.b.split(",").map(Number);
       c.style.transition = "none"; c.style.transform = `translate(${(cx + (x - CX) * s).toFixed(1)}px,${(cy + (y - CY) * s).toFixed(1)}px) scale(${(7 * s).toFixed(2)})`; });
   }
   // the end of beat k, at once (jump: no transitions; a click forward to 4, 5 or 7 lets its own CSS come in)
@@ -434,9 +504,10 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
     const R = S.R;
     glide(sc, k ? 1 : 0, false);
     $(".cpl-drop", sc).style.opacity = k ? 0 : 1; $(".cpl-one", sc).style.opacity = k ? 0 : 1; $(".cpl-cond", sc).style.opacity = 0;
-    $$(".cpl-seg", sc).forEach((e) => e.classList.toggle("on", k >= 1)); $(".cpl-out", sc).classList.toggle("on", k >= 1);
+    $$(".cpl-seg", sc).forEach((e) => { e.classList.toggle("on", k >= 1); e.classList.toggle("ghost", k >= 4); }); $(".cpl-out", sc).classList.toggle("on", k >= 1);
+    $(".cpl-flyers", sc).innerHTML = "";                                   // (the neighbourhoods have landed, or have not yet left)
     $(".cpl-plate", sc).classList.toggle("on", k >= 3);
-    const z = $(".cpl-zones", sc); z.classList.toggle("on-n", k >= 4); z.classList.toggle("on-s", k >= 5);
+    $$(".cpl-zones", sc).forEach((z) => { z.classList.toggle("on-n", k >= 4); z.classList.toggle("on-s", k >= 5); });
     if (jump || k <= 1) seat(sc, k >= 1, 0);
     const st = { wins: [], reveal: 0, loop: 0 };
     if (k === 1) st.wins = wins(R.rest1 - LREST, R.rest1, 130, 22);
@@ -447,20 +518,36 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
   }
   // the people: where the drop left them, or in their seats
   function seat(sc, on, ms, wait = 0) {
-    $$(".cpl-dots circle", sc).forEach((c, i) => {
+    $$(".cpl-dots > g", sc).forEach((c, i) => {
       const [x, y] = c.dataset[on ? "c" : "b"].split(",").map(Number);
       c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${wait + Math.round((i % 16) * 30)}ms` : "none";
       c.style.transform = `translate(${x}px,${y}px) scale(${on ? 4.6 : 7})`;
     });
   }
   function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; }
+  // click 4: each campus neighbourhood lifts off its ring, flies to its place on the floor and becomes that neighbourhood (Ritika, 18
+  // Nov: "that neighbourhood in campus can move to ACKO campus neighbourhoods"); the ring keeps a ghost of it. A flyer is a copy of the
+  // segment, moved and stretched (translate, scale) from its own box to the floor shape's box, fading out as the shape fades in
+  function flyers(sc) {
+    const segs = $$(".cpl-segs path", sc), zones = [...sc.querySelectorAll(".cpl-zones:not(.cpl-zt) .cpl-z.nb")];
+    $(".cpl-flyers", sc).innerHTML = segs.map((s, i) => `<path class="cpl-fly" style="${s.getAttribute("style")}" d="${s.getAttribute("d")}"/>`).join("");
+    const F = $$(".cpl-flyers path", sc);
+    return segs.map((s, i) => { const a = s.getBBox(), z = zones[i] && zones[i].querySelector("path,rect,ellipse"), b = z ? z.getBBox() : a;
+      return { el: F[i], c0: [a.x + a.width / 2, a.y + a.height / 2], c1: [b.x + b.width / 2, b.y + b.height / 2], sx: b.width / a.width, sy: b.height / a.height }; });
+  }
+  function fly(list, t) {
+    list.forEach((f, i) => { const e = ease(clamp((t - i * 110) / 1250, 0, 1)), x = f.c0[0] + (f.c1[0] - f.c0[0]) * e, y = f.c0[1] + (f.c1[1] - f.c0[1]) * e;
+      f.el.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(1 + (f.sx - 1) * e).toFixed(3)} ${(1 + (f.sy - 1) * e).toFixed(3)}) translate(${-f.c0[0].toFixed(1)} ${-f.c0[1].toFixed(1)})`);
+      f.el.style.opacity = (1 - clamp((e - .72) / .28, 0, 1)).toFixed(3); });
+  }
   // beat k, from the end of beat k − 1
   function play(sc, k) {
     stop();
     const R = S.R, T = RUN[k], t0 = performance.now(), LA = R.at.out1;
     const T0 = 250, TG = 1700, TS = 700;                                     // beat 1: a hold, the glide, the split
-    let split = false;
+    let split = false, FL = null, shown = false;
     if (k === 3) $(".cpl-plate", sc).classList.add("on");
+    if (k === 4) { FL = flyers(sc); fly(FL, 0); $$(".cpl-seg", sc).forEach((s) => s.classList.add("ghost")); }
     const frame = (now) => {
       if (document.body.dataset.scene && document.body.dataset.scene !== sc.id) { S.raf = 0; return; }
       const t = now - t0;
@@ -493,6 +580,10 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
         const u = clamp(t / T, 0, 1), e = ease(u), head = R.rest2 + (R.loop0 - R.rest2) * e;
         draw({ wins: wins(head - LREST, head, 130, 22), reveal: Infinity });
         done = u >= 1;
+      } else if (k === 4) {                                                    // the neighbourhoods fly onto the floor and land as its own
+        fly(FL, t); if (!shown && t > 500) { shown = true; $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-n")); }
+        draw({ wins: wins(R.loop0 - LREST, R.loop0, 130, 22), reveal: Infinity });
+        done = t >= T;
       } else if (k === 6) {                                                    // round the loop through the zoning, drawing it
         const u = clamp(t / T, 0, 1), e = ease(u), head = R.loop0 + (R.end - R.loop0) * e, len = LREST * (1 - u) + 160 * Math.sin(Math.PI * u);
         draw({ wins: wins(Math.max(R.loop0 - LREST, head - len), head, 130, 22), reveal: Infinity, loop: head });
@@ -514,7 +605,7 @@ ACKO.slide("s-cz-4", ({ $, $$, plain, raf2, reduced }) => {
       const still = reduced || (S.fresh ? k !== 1 : k !== S.last + 1);
       S.fresh = false; S.last = k;
       if (still) { stop(); pose(sc, k); }
-      else if (k === 1 || k === 2 || k === 3 || k === 6) play(sc, k);
+      else if (k === 1 || k === 2 || k === 3 || k === 4 || k === 6) play(sc, k);
       else { stop(); pose(sc, k, false); }                                     // 4, 5, 7: the zones or the summary come in on their own
     },
     leave() { stop(); },

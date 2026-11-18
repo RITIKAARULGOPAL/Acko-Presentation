@@ -65,6 +65,7 @@
       <g class="cpl-dots"></g>
     </svg>
     <canvas class="cpl-strip"></canvas>
+    <svg class="cpl-dia" viewBox="0 0 1920 1080" aria-hidden="true"><g class="cpl-zones cpl-zt"></g></svg>
 
     <div class="cpl-op" data-step="2" style="left:22.9%">+</div>
     <div class="cpl-op" data-step="3" style="left:49.1%">=</div>
@@ -109,6 +110,7 @@
 #s-cz-5 .cpl-z text { font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: .08em; fill: var(--ink); opacity: .72; }
 #s-cz-5 .cpl-z.sh text { font-size: 8.4px; letter-spacing: .12em; text-transform: uppercase; fill: #7a6fb5; opacity: 1; }
 #s-cz-5 .still .cpl-z { transition: none !important; }
+#s-cz-5 .cpl-zt text { paint-order: stroke; stroke: #f7f6f3; stroke-width: 3.2px; stroke-linejoin: round; }
 #s-cz-5 .cpl-dots circle { transform-box: view-box; transform-origin: 0 0; }
 #s-cz-5 .pa { fill: #1e9e95; }
 #s-cz-5 .pb { fill: #bcae92; }
@@ -173,6 +175,11 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
     for (let x = x0 + 14; x <= x1 - 14; x += 24) { top.push([x, c(x) - 5.5]); bot.push([x, c(x) + 5.5]); }
     return [[x0, c(x0)], ...top, [x1, c(x1)], ...bot.reverse()];
   };
+  const scrib = (xs, xe, cy, n, rx, ry) => {            // a cursive line: n loops east from (xs, cy) heading up (a trochoid), a turn round the east end, a calm lane back west
+    const v = (xe - xs) / (2 * Math.PI * n), P = [];
+    for (let t = -Math.PI / 2; t <= -Math.PI / 2 + 2 * Math.PI * n + 1e-6; t += Math.PI / 6) P.push([xs + v * (t + Math.PI / 2) - rx * (Math.sin(t) + 1), cy - ry * Math.cos(t)]);
+    return P.concat([[xe + 12, cy - 18], [xe + 26, cy + 4], [xe + 18, cy + 30], [xe - 10, cy + 44], [xe - 90, cy + 46], [xe - 190, cy + 43], [xe - 290, cy + 46], [xe - 400, cy + 43], [xe - 500, cy + 45], [xe - 560, cy + 38]]);
+  };
   const LAYOUTS = {
     1: { name: "Islands", jit: [8, 3],                 // the shared spaces as islands inside the loop, which bulges round each
       zones: [...NBH([[1162, 512, 1338, 540], [1352, 512, 1548, 540], [1562, 512, 1796, 540]], [[1172, 584, 1366, 608], [1380, 584, 1592, 608], [1606, 584, 1796, 608]]),
@@ -209,13 +216,19 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
         [1722, 512, 1798, 544, "Garden"], [1166, 576, 1264, 608, "Board room"], [1274, 576, 1382, 608, "04"], [1392, 576, 1486, 608, "Terrace"], [1496, 576, 1604, 608, "05"],
         [1614, 576, 1702, 608, "Studio"], [1712, 576, 1798, 608, "06"]],
       loop: snake(1152, 1796, 560, 6, 222, 1215) },
+    7: { name: "Scribble", jit: [1.2, 1.2], open: true,   // a hand-drawn line looping over itself like cursive, soft blobs behind it (Ritika's reference, 18 Nov)
+      line: { w: 1.5, col: "#554c75", arrow: true },
+      zones: [[1170, 514, 1300, 566, "01", "b"], [1290, 556, 1410, 604, "02", "b"], [1395, 514, 1515, 562, "03", "b"], [1530, 556, 1632, 602, "04", "b"],
+        [1610, 514, 1722, 562, "05", "b"], [1708, 560, 1796, 604, "06", "b"],
+        [1304, 534, 1370, 560, "Café", "b"], [1424, 566, 1502, 592, "Board room", "b"], [1530, 530, 1596, 556, "Library", "b"], [1640, 566, 1706, 592, "Terrace", "b"], [1186, 570, 1252, 596, "Garden", "b"]],
+      loop: scrib(1170, 1770, 558, 5, 34, 31) },
   };
   const LAY = LAYOUTS[LAYOUT] || LAYOUTS[1];
   // a closed centripetal Catmull-Rom through points, sampled about every step px
-  const cr = (P, step) => {
+  const cr = (P, step, open) => {                      // open: a line with two ends (the scribble), not a ring
     const out = [], n = P.length, tj = (a, b) => Math.sqrt(Math.hypot(b[0] - a[0], b[1] - a[1])) || 1e-3;
-    for (let i = 0; i < n; i++) {
-      const p0 = P[(i - 1 + n) % n], p1 = P[i], p2 = P[(i + 1) % n], p3 = P[(i + 2) % n];
+    for (let i = 0; i < (open ? n - 1 : n); i++) {
+      const p0 = open ? P[Math.max(i - 1, 0)] : P[(i - 1 + n) % n], p1 = P[i], p2 = open ? P[i + 1] : P[(i + 1) % n], p3 = open ? P[Math.min(i + 2, n - 1)] : P[(i + 2) % n];
       const t1 = tj(p0, p1), t2 = t1 + tj(p1, p2), t3 = t2 + tj(p2, p3), m = Math.max(2, Math.ceil(Math.hypot(p2[0] - p1[0], p2[1] - p1[1]) / step));
       for (let s = 0; s < m; s++) {
         const t = t1 + ((t2 - t1) * s) / m, L = (a, b, ta, tb) => [0, 1].map((j) => ((tb - t) * a[j] + (t - ta) * b[j]) / (tb - ta));
@@ -223,6 +236,7 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
         out.push(L(L(A1, A2, 0, t2), L(A2, A3, t1, t3), t1, t2));
       }
     }
+    if (open) out.push(P[n - 1]);
     return out;
   };
   const S = { built: false, fresh: true, last: 0, raf: 0, R: null, cur: null, img: null, sc: null };
@@ -294,18 +308,24 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
     }
     // on it, a zoning sketch (illustrative, not the plan; 18 Nov, Ritika: "show random zoning diagram with neighbourhoods, shared
     // spaces and loop"): the neighbourhoods along both long edges, the shared spaces as islands down the middle
-    let ni = 0, si = 0;
+    let ni = 0, si = 0, lab = "";
+    const gb = (id, c) => `<radialGradient id="cpl-gb-${id}"><stop offset="0" stop-color="${c}"/><stop offset=".55" stop-color="${c}" stop-opacity=".9"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
+    $("defs", sc).insertAdjacentHTML("beforeend", NB.map((c, i) => gb(i, c)).join("") + gb("c", "#ddd2fa"));
     $(".cpl-zones", sc).innerHTML = LAY.zones.map(([x0, y0, x1, y1, n, shape]) => {
       const nb = /^\d/.test(n), w = x1 - x0, h = y1 - y0, fill = nb ? NB[+n - 1] : "#eee8fc";
-      const body = shape === "o" ? `<ellipse cx="${x0 + w / 2}" cy="${y0 + h / 2}" rx="${w / 2}" ry="${h / 2}" style="fill:${fill}"/>`
+      const body = shape === "b" ? `<ellipse cx="${x0 + w / 2}" cy="${y0 + h / 2}" rx="${w / 2}" ry="${h / 2}" fill="url(#cpl-gb-${nb ? +n - 1 : "c"})"/>`   // a soft blob: solid in the middle, gone at the rim
+        : shape === "o" ? `<ellipse cx="${x0 + w / 2}" cy="${y0 + h / 2}" rx="${w / 2}" ry="${h / 2}" style="fill:${fill}"/>`
         : `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" rx="${shape === "s" ? 3 : shape === "t" ? 10 : nb ? 7 : h / 2}" style="fill:${fill}"/>`;
-      return `<g class="cpl-z ${nb ? "nb" : "sh"}" style="--i:${nb ? ni++ : si++}">${body}<text x="${x0 + w / 2}" y="${y0 + h / 2 + (nb ? 4 : 3)}" text-anchor="middle">${n}</text></g>`; }).join("");
+      const cls = `cpl-z ${nb ? "nb" : "sh"}`, st = `--i:${nb ? ni++ : si++}`, txt = `<text x="${x0 + w / 2}" y="${y0 + h / 2 + (nb ? 4 : 3)}" text-anchor="middle">${n}</text>`;
+      if (LAY.line) { lab += `<g class="${cls}" style="${st}">${txt}</g>`; return `<g class="${cls}" style="${st}">${body}</g>`; }   // the scribble: its labels sit above the line, with a halo
+      return `<g class="${cls}" style="${st}">${body}${txt}</g>`; }).join("");
+    $(".cpl-zt", sc).innerHTML = lab;
     // and the ACKO Loop through it as one smooth, organic loop (a closed centripetal Catmull-Rom through the layout's points, nudged a
     // little), from its west end, east along the top and back along the bottom; the arrivals where the real ones are along the floor
     let sd = 11; const rn = () => ((sd = (sd * 16807) % 2147483647) / 2147483647) - .5;
-    const ring = cr(LAY.loop.map(([x, y], i) => (i ? [x + rn() * LAY.jit[0], y + rn() * LAY.jit[1]] : [x, y])), 3);
+    const ring = cr(LAY.loop.map(([x, y], i) => (i ? [x + rn() * LAY.jit[0], y + rn() * LAY.jit[1]] : [x, y])), 3, LAY.open);
     const near = (q) => ring.reduce((b, p, i) => (Math.hypot(p[0] - q[0], p[1] - q[1]) < Math.hypot(ring[b][0] - q[0], ring[b][1] - q[1]) ? i : b), 0);
-    const arr = [near([1272, 575]), near([1560, 548])];
+    const arr = LAY.open ? [1, near([1560, 548])] : [near([1272, 575]), near([1560, 548])];     // the scribble: Arrival 1 is its start ring (index 1: the route's first point is shared with the way in)
     // the route
     const geo = (c) => $(".cpl-geo ." + c, sc), toM = (p) => [MX + p.x * KM, MY + p.y * KM];
     const bk = geo("bk"), fa = geo("f1"), fb = geo("f2");
@@ -334,11 +354,11 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
       parts.push({ pts: bez(xp, [xp[0] + xt[0] * 50, xp[1] + xt[1] * 50], [REST2[0] - 40, REST2[1]], REST2), lead: FADE, w: [WM, WID] }); // out, to wait
     }
     // on to the floor's west end, along the loop's own way in (up), to wait; then round the loop from there, closed
-    const dir = (() => { const a = ring[ring.length - 1], b = ring[1], n = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return [(b[0] - a[0]) / n, (b[1] - a[1]) / n]; })();
+    const dir = (() => { const a = LAY.open ? ring[0] : ring[ring.length - 1], b = ring[1], n = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return [(b[0] - a[0]) / n, (b[1] - a[1]) / n]; })();
     const ai = ring[0];
     parts.push({ pts: bez(REST2, [REST2[0] + 70, REST2[1]], [ai[0] - dir[0] * 60, ai[1] - dir[1] * 60], ai), w: [WID, WL], tag: "rest2" });
-    const idx = [...ring.keys(), 0];
-    parts.push({ pts: idx.map((i) => ring[i]), w: WL, tag: "loop", flag: idx.map((i, j) => (j && arr.includes(i) ? 2 : 0)) });
+    const idx = LAY.open ? [...ring.keys()] : [...ring.keys(), 0];
+    parts.push({ pts: idx.map((i) => ring[i]), w: WL, tag: "loop", flag: idx.map((i, j) => ((j || LAY.open) && arr.includes(i) ? 2 : 0)) });
     const R = (S.R = route(parts));
     R.rest1 = R.at.rest1; R.rest2 = R.at.rest2 || R.end; R.mob0 = R.at.mob; R.mob1 = R.at.mobx; R.loop0 = R.at.loop || R.end;
     R.arrS = []; R.flag.forEach((f, i) => { if (f & 2 && R.ss[i] >= R.loop0) R.arrS.push(i); });
@@ -375,7 +395,8 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
     }
     // the loop, drawn as far as the ribbon has gone round it, its last stretch dashed; the arrivals once it has passed them
     if (st.loop > R.loop0) {
-      x.lineCap = x.lineJoin = "round"; x.strokeStyle = "#5222d0"; x.lineWidth = 3.4 * k;
+      const LN = LAY.line || { w: 3.4, col: "#5222d0" };                     // the scribble's line is thin and grey; the others' a purple loop
+      x.lineCap = x.lineJoin = "round"; x.strokeStyle = LN.col; x.lineWidth = LN.w * k;
       const e = idx(Math.min(st.loop, R.end));
       let i = idx(R.loop0);
       while (i < e) {
@@ -384,7 +405,13 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
         i = j + 1;
       }
       x.setLineDash([]);
-      R.arrS.forEach((i) => { if (R.ss[i] <= st.loop) { x.beginPath(); x.arc(R.pts[i][0] * k, R.pts[i][1] * k, 6.5 * k, 0, 2 * Math.PI); x.fillStyle = "#fff"; x.fill(); x.lineWidth = 2.2 * k; x.strokeStyle = "#1d1d1d"; x.stroke(); } });
+      R.arrS.forEach((i) => { if (R.ss[i] <= st.loop) { x.beginPath(); x.arc(R.pts[i][0] * k, R.pts[i][1] * k, (LAY.line ? 4.6 : 6.5) * k, 0, 2 * Math.PI); x.fillStyle = "#fff"; x.fill(); x.lineWidth = (LAY.line ? 1.5 : 2.2) * k; x.strokeStyle = LAY.line ? LN.col : "#1d1d1d"; x.stroke(); } });
+      if (LAY.line && LAY.line.arrow && st.loop >= R.end) {                      // an arrowhead where it ends, pointing on toward the start
+        const e = R.pts.length - 1, [px, py] = R.pts[e], [qx, qy] = R.pts[Math.max(0, e - 8)], a = Math.atan2(py - qy, px - qx), L = 11 * k, hw = 5 * k;
+        x.beginPath(); x.moveTo(px * k + Math.cos(a) * L * .4, py * k + Math.sin(a) * L * .4);
+        x.lineTo(px * k - Math.cos(a) * L * .6 + Math.sin(a) * hw, py * k - Math.sin(a) * L * .6 - Math.cos(a) * hw);
+        x.lineTo(px * k - Math.cos(a) * L * .6 - Math.sin(a) * hw, py * k - Math.sin(a) * L * .6 + Math.cos(a) * hw); x.closePath(); x.fillStyle = LN.col; x.fill();
+      }
     }
     // the ribbon: behind (filled) and in front (filled and edged in white), put down at 35% and 75%
     const wins = (st.wins || []).map(([a, b, ta, tb]) => [Math.max(0, a), Math.min(R.end, b), ta, tb]).filter(([a, b]) => b - a >= 1);
@@ -436,7 +463,7 @@ ACKO.slide("s-cz-5", ({ $, $$, plain, raf2, reduced }) => {
     $(".cpl-drop", sc).style.opacity = k ? 0 : 1; $(".cpl-one", sc).style.opacity = k ? 0 : 1; $(".cpl-cond", sc).style.opacity = 0;
     $$(".cpl-seg", sc).forEach((e) => e.classList.toggle("on", k >= 1)); $(".cpl-out", sc).classList.toggle("on", k >= 1);
     $(".cpl-plate", sc).classList.toggle("on", k >= 3);
-    const z = $(".cpl-zones", sc); z.classList.toggle("on-n", k >= 4); z.classList.toggle("on-s", k >= 5);
+    $$(".cpl-zones", sc).forEach((z) => { z.classList.toggle("on-n", k >= 4); z.classList.toggle("on-s", k >= 5); });
     if (jump || k <= 1) seat(sc, k >= 1, 0);
     const st = { wins: [], reveal: 0, loop: 0 };
     if (k === 1) st.wins = wins(R.rest1 - LREST, R.rest1, 130, 22);

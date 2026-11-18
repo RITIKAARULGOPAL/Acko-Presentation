@@ -748,6 +748,25 @@ amber `#F2A33A`; "A day in ACKO".
       | 4 | Spine | segments down the middle, with a calm band round them |
       | 5 | Courtyards | tall shared spaces between the neighbourhood pairs; the loop opens into a lobe in each |
       | 6 | Staggered | a checkerboard, and a snake of two cosine lanes |
+      | 7 | Scribble | Ritika's reference (18 Nov): one thin grey line looping over itself like cursive (a trochoid, `scrib()`), a calm lane back, a start ring and an arrow; soft radial-gradient blobs |
+
+      Zoning 5 is the deck's (Ritika, 18 Nov): its zones are **loosely drawn** (`loose: true`: a squircle's 16 points nudged a few px by a seeded jitter per zone, through a closed `cr()` spline, with a faint darker outline), and each shared space says just "shared space" on two lines, not a name. `gen_why_opts.py` reads the deck's `LAYOUT` and makes copies for the others.
+
+      **Nothing may come outside the site boundary** (Ritika, 18 Nov: "it can randomly come outside"): `fit(p)` pulls a point back to 6 px inside the outline (the raked west edge is a straight line from the NW corner to the SW one). It is applied to every jittered point of a loose shape and its spline, and to the loop's control points and its sampled spline. A headless check (every zone point and the loop's points inside the `.cpl-plate` polygon, on every layout) keeps it so; the loop's points are in `data-loop-pts` on the section for it.
+
+      **Except the neighbourhoods of a layout with `spill: true`** (zoning 5, Ritika, 18 Nov: "make the neighbourhood boundaries roughly come out of the site boundary and also remove neighbourhood outline"): they are drawn with no outline, and their outer edges spill 9–20 px past the site boundary, unevenly, with a more ragged jitter (`fitN()` allows up to 26 px, no further). Shared spaces keep their faint outline and stay inside. The test: shared spaces and the loop inside; neighbourhoods within 28 px.
+
+      **A neighbourhood's fill is translucent and multiplied** (Ritika, 18 Nov: "so the site boundary is seen"): `mix-blend-mode: multiply` on the zone's group (not on its shape: the group's opacity makes a layer, which would isolate the blend), with `fill-opacity .72`, so the outline shows through where it spills over it.
+
+      **The neighbourhoods fly** (Ritika, 18 Nov: "that neighbourhood in campus can move to ACKO campus neighbourhoods"): the campus's six ring segments are named 01–06 (text pieces with the same pop-in class), and on click 4 each is copied as a "flyer" that is translated and stretched, per frame, from its own box to its floor shape's box (staggered 110 ms), fading out as the shape fades in; the ring keeps ghosts at 26% (their numbers at 50%). Entering later, going back or reduced motion: the end state at once.
+
+      **People as figures** (Ritika, 18 Nov: "instead of dots give variations to show humans"): a person is a `<g>` holding a small shape in the dots' own unit (a dot was r 1; a person is about 2.3 tall), scaled by the same transform, so every move is unchanged. `PERSON(n)` draws five: pawns, standing figures, heads and shoulders, top view, sketched (a stroked figure in `currentColor`). Both slides carry the same `PEOPLE`.
+
+      The scribble needs a few things the others don't:
+      - **An open spline** (`cr(P, step, true)`): a closed one would join the arrow to the start.
+      - **A per-layout `line`:** width, colour and an arrowhead, drawn on the canvas at the head's end.
+      - **Labels on a layer above the canvas,** with a paper-coloured halo (`paint-order: stroke`), since the line crosses the blobs.
+      - **The start ring on route index 1:** the route drops the first point of a part it shares with the last.
 
     - **Labels:** check that each fits inside its zone and clear of the loop (a 3× close-up), above all at the loop's end turns.
 - **Entries:** entered at beat 1, it plays from the drop. Any other entry, a step back or reduced motion shows the beat's end at once (`pose(k)`). The frame loop stops on leave or a scene change. A `ResizeObserver` redraws the canvas at rest.
