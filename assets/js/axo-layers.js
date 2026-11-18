@@ -228,19 +228,6 @@
       terrace: A.terrace.map((r, i) => volume(r, "#8f8f6a", 0.55, H.zone * 0.5, null, null, 41 + i)),
       cafe: (A.cafezone || []).map((r, i) => volume(r, "#efe7a6", 0.8, H.zone * 0.5, null, null, 51 + i))
     };
-    // the rooms the glass partitions wall in, as one soft hand-drawn mass (a single mesh and one set of pencil edges)
-    {
-      const ra = acc(), rink = [], walled2 = new Set(A.walled); let n = 0;
-      for (const [t, r] of A.floors) if (walled2.has(t)) {
-        const w = sketchRing(r, 200 + n++, 170); prism(ra, w, 0.03, H.wall, rink, { corners: false });
-        const w2 = sketchRing(r, 700 + n, 170); for (let i = 0; i < w2.length; i++) { const P0 = w2[i], B = w2[(i + 1) % w2.length]; rink.push(X(P0[0]), H.wall, Z(P0[1]), X(B[0]), H.wall, Z(B[1])); }
-      }
-      const rg = new T.Group(), rm = new T.MeshLambertMaterial({ color: 0xb3a6d6, transparent: true, opacity: 0.42, depthWrite: false, side: T.DoubleSide });
-      const rmesh = mesh(ra, rm); rmesh.renderOrder = 7; rg.add(rmesh);
-      const rl = new T.LineBasicMaterial({ color: 0x7d6fa8, transparent: true, opacity: 0.5 }), rln = new T.LineSegments(new T.BufferGeometry(), rl);
-      rln.geometry.setAttribute("position", new T.Float32BufferAttribute(rink, 3)); rln.renderOrder = 8; rg.add(rln);
-      rg.userData.mats = [[rm, 0.42], [rl, 0.5]]; rg.visible = false; sk.rooms = rg; G.sketch.add(rg);
-    }
     sk.zones.concat(sk.atrium, sk.terrace, sk.cafe).forEach((v) => G.sketch.add(v));
 
     // ---------- the routes (renders 08 and 09): dashes on the floor, drawn on in order of their distance from the entrances ----------
