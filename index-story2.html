@@ -3917,7 +3917,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // the employees' route along the corridors through the seven stops (ACKO_LOOP.sweep, plan mm → model mm as flatten() has it), its
   // corners lightly rounded, lying on the floor in the model (walls overlap it), a deeper tone of the floor's circulation lilac on a
   // paler, wider edge strip; round ends
-  const RW = 1.7, RY = 0.06;   // 12 Nov: sleeker; 18 Nov: a little fuller, as a marker stroke
+  const RW = 1.2, RY = 0.06;   // 12 Nov: sleeker; 18 Nov: a little fuller, as a marker stroke
   // 18 Nov (Ritika: "a conceptual loop path, not a defined path, which connects all the spaces"): every point of the Loop (both lanes, the faint
   // lane, the call-outs' points) is moved by one smooth field, so the lanes stay parallel and the ring reads as a loose hand-drawn stroke
   const hd = (p) => [p[0] + 1.2 * Math.sin(p[1] / 8 + 1) + 0.7 * Math.sin(p[0] / 23 + 2), p[1] + 1.2 * Math.sin(p[0] / 9 + 0.4) + 0.7 * Math.sin(p[1] / 25 + 3)];
@@ -3944,47 +3944,46 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // as two lanes (each point set 0.8 m to the ring's left: it runs clockwise, so out east the lane is north of the street, back west
   // south of it), round the meeting island at each end, no ends; the lane 02A has yet to open (ringDash) faint; each stop's call-out on
   // the ring, at its share of the way round
-  // 18 Nov (Ritika: "the loop should connect all spaces and look like a loop"; "it is running on the neighbourhood zones"): ONE smooth
-  // closed ring, drawn in the one stretch of floor the neighbourhood masses leave open (the north band, x -124 to +14 m, y 198 to 212 m,
-  // model mm), eased (Chaikin) and hand-drawn (hd); it starts at Arrival's end and draws round. Every stop and space hangs off it by a
-  // thin hand-drawn spur from the ring's nearest point to the place itself, grown as the stroke passes; the dot sits at the place.
+  // 18 Nov (Ritika: "the loop should connect all spaces and look like a loop"; "in the corridor zone, no branching out; the spaces should
+  // come in the loop's path"): the Loop is the corridor route itself (ACKO_LOOP.ring: the main street out and back, through the seven
+  // stops, past the spaces), as ONE closed ring, its two directions parted into lanes 3 m apart so it reads as an oval track, eased,
+  // with only a faint hand-drawn tremor. No spurs: each space's dot is the nearest point on the ring, so the spaces sit on the path.
   function ribbon() {
     if (S.rb !== undefined) return S.rb;
-    S.rb = null; if (!M || typeof spaces !== "function") return null;
-    let ctrl = [[-119000, 208500], [-96000, 208000], [-76000, 205000], [-52000, 205000], [-30000, 208500], [-6000, 208500], [9000, 208500], [14500, 204500], [9000, 200500],
-      [-12000, 200500], [-40000, 200500], [-70000, 200500], [-100000, 200500], [-118000, 200500], [-123000, 204500]];
-    const places = M.data.stops.map((s) => ({ x: s.x, y: s.y })), sp = spaces();
-    const ar0 = M.data.stops.find((s) => s.name === "Arrival") || M.data.stops[0];
-    let i0 = 0, bd = 1e18; ctrl.forEach((q, i) => { const d = Math.hypot(q[0] - ar0.x, q[1] - ar0.y); if (d < bd) { bd = d; i0 = i; } });
-    ctrl = ctrl.slice(i0).concat(ctrl.slice(0, i0));
-    const closed = (P, it) => { for (let k = 0; k < it; k++) { const Q = []; for (let i = 0; i < P.length; i++) { const a = P[i], b = P[(i + 1) % P.length]; Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } P = Q; } return P; };
-    const C = closed(ctrl, 4).map((q) => { const a = [M.X(q[0]), M.Z(q[1])], h = hd(a); return [a[0] + (h[0] - a[0]) * 0.5, a[1] + (h[1] - a[1]) * 0.5]; }); C.push(C[0]);
-    const P = resample(C, 1600), n = P.length;
+    S.rb = null;
+    const LP = window.ACKO_LOOP; if (!LP || !LP.ring || !M || typeof spaces !== "function") return null;
+    const N = LP.ring.length, LANE = 1500;
+    let C = LP.ring.map((p) => p.slice());
+    for (let it = 0; it < 6; it++) C = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N]; return [0.25 * a[0] + 0.5 * p[0] + 0.25 * b[0], 0.25 * a[1] + 0.5 * p[1] + 0.25 * b[1]]; });
+    const OFF = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+      return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE]; });
+    const D = (LP.ringDash && LP.ringDash[0]) || [N - 1, 0];
+    const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % N) { o.push(OFF[i]); if (i === i1) break; } return o; };
+    const tremor = (p) => { const h = hd(p); return [p[0] + (h[0] - p[0]) * 0.2, p[1] + (h[1] - p[1]) * 0.2]; };
+    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m).map(tremor);
+    const P = prep(seq(D[1], D[0]), 1600), Q = prep(seq(D[0], D[1]), 80), n = P.length;
     const under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true);
-    M.scene.add(under, top);
-    // each place: where the ring reaches it (share of the way round) and a spur from there to the place, a hand-drawn quadratic
-    const link = (q, k) => {
-      const b = [M.X(q.x), M.Z(q.y)]; let j = 0, d0 = 1e18; for (let i = 0; i < n; i++) { const d = (P[i][0] - b[0]) ** 2 + (P[i][1] - b[1]) ** 2; if (d < d0) { d0 = d; j = i; } }
-      const a = P[j], dx = b[0] - a[0], dz = b[1] - a[1], L = Math.hypot(dx, dz) || 1, bow = (k % 2 ? 1 : -1) * 0.14 * L, cx = (a[0] + b[0]) / 2 - dz / L * bow, cz = (a[1] + b[1]) / 2 + dx / L * bow;
-      const pts = []; for (let t = 0; t <= 1.0001; t += 1 / 22) pts.push([(1 - t) * (1 - t) * a[0] + 2 * (1 - t) * t * cx + t * t * b[0], (1 - t) * (1 - t) * a[1] + 2 * (1 - t) * t * cz + t * t * b[1]]);
-      const m = strip(pts, 0.8, RY - 0.005, 0xa88cf5, 0.9, 8, -5, false); m.visible = false;
-      M.scene.add(m); return { at: j / (n - 1), pos: [q.x, q.y], m, np: pts.length };
-    };
-    const all = places.concat(sp).map(link), sr = all.slice(0, places.length), hot = all.slice(places.length);
-    const at = sr.map((r) => r.at), pos = sr.map((r) => r.pos);
+    const dU = strip(Q, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.35, 8, -4, true), dT = strip(Q, RW, RY, 0x8f6cf0, 0.35, 9, -6, true);
+    dU.geometry.setDrawRange(0, Infinity); dT.geometry.setDrawRange(0, Infinity);
+    M.scene.add(under, top, dU, dT);
+    // each stop's and space's place on the ring: the share of the way round (its place on the ring) and the point there (model mm, on the corridor)
+    const cum = [0]; for (let i = 1; i < N; i++) cum.push(cum[i - 1] + Math.hypot(OFF[i][0] - OFF[i - 1][0], OFF[i][1] - OFF[i - 1][1]));
+    const len = cum[D[0]] || cum[N - 1], idx = {};
+    (LP.ringStops || []).forEach((s) => { if (s.kind === "stop") idx[s.name] = s.i; });
+    const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, cum[idx[s.name]] / len)));
+    const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : [C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802]));
+    const hot = spaces().map((q) => { let j = 0, d0 = 1e18; for (let i = 0; i < N; i++) { const d = (C[i][0] - 185842 - q.x) ** 2 + (C[i][1] + 182802 - q.y) ** 2; if (d < d0) { d0 = d; j = i; } }
+      return { at: Math.min(1, cum[j] / len), pos: [C[j][0] - 185842, C[j][1] + 182802] }; });
     // a few white chevrons on the stroke say which way round it runs
-    const ar = [0.12, 0.38, 0.62, 0.88].map((f) => {
-      const j = Math.round(f * (n - 1)), a = P[Math.max(0, j - 6)], b = P[Math.min(n - 1, j + 6)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], L = 1.7, W = 1.1, Y = RY + 0.03;
+    const ar = [0.1, 0.3, 0.5, 0.7, 0.9].map((f) => {
+      const j = Math.round(f * (n - 1)), a = P[Math.max(0, j - 6)], b = P[Math.min(n - 1, j + 6)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], L = 1.5, W = 0.95, Y = RY + 0.03;
       const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute([c[0] + ux * L, Y, c[1] + uz * L, c[0] - ux * L * 0.5 - uz * W, Y, c[1] - uz * L * 0.5 + ux * W, c[0] - ux * L * 0.5 + uz * W, Y, c[1] - uz * L * 0.5 - ux * W], 3));
       const m = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, side: T.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -8, polygonOffsetUnits: -16 }));
       m.renderOrder = 10; m.visible = false; m.frustumCulled = false; M.scene.add(m); return { m, f };
     });
-    const show = (on) => { under.visible = on; top.visible = on; if (!on) { ar.forEach((x) => { x.m.visible = false; }); all.forEach((x) => { x.m.visible = false; }); } };
-    const to = (e) => {
-      const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
-      ar.forEach((x) => { x.m.visible = top.visible && e >= x.f + 0.01; });
-      all.forEach((x) => { const f = Math.max(0, Math.min(1, (e - x.at) / 0.04)); x.m.visible = top.visible && f > 0; x.m.geometry.setDrawRange(0, 6 * Math.round(f * (x.np - 1))); });
-    };
+    const show = (on) => { under.visible = on; top.visible = on; if (!on) ar.forEach((x) => { x.m.visible = false; }); };
+    const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
+      dU.visible = dT.visible = top.visible && e >= 0.995; ar.forEach((x) => { x.m.visible = top.visible && e >= x.f + 0.01; }); };
     return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
   }
   function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
