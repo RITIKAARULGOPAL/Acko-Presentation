@@ -98,20 +98,3 @@ ZONINGS = [(1, "Islands"), (2, "Beads"), (3, "Bubbles"), (4, "Spine"), (5, "Cour
 for n, label in ZONINGS:
     if n != DECK: copy("s-cz-%d" % n, layout=n, title="zoning %d · %s" % (n, label))
 page("index-campus-zoning.html", [("s-campus-loop" if n == DECK else "s-cz-%d" % n, "The ACKO Loop · zoning %d · %s" % (n, label)) for n, label in ZONINGS])
-
-# index-campus-people.html (18 Nov, Ritika: "instead of dots give variations to show humans"): Why a campus and How it ties together
-# for each of five ways to draw a person (PEOPLE in both deck slides; 1 is the deck's until she picks). Copies s-wcp-n and s-cp-n,
-# not in order.txt, made from the deck slides with PEOPLE set; her pick becomes PEOPLE in both.
-PEOPLEV = [(6, "Mixed heights"), (7, "Dressed"), (8, "Walking"), (9, "Pairs"), (10, "Outline"), (11, "Inclusive"),
-           (1, "Pawns"), (2, "Standing figures"), (3, "Heads and shoulders"), (4, "Top view"), (5, "Sketched")]   # the new six first (18 Nov, "give variations for humans")
-items = []
-for n, label in PEOPLEV:
-    w = why.replace("s-why-campus", "s-wcp-%d" % n).replace("wc-goo", "wcp%d-goo" % n)
-    w = re.sub(r"const PEOPLE = \d+;", "const PEOPLE = %d;" % n, w)
-    open("slides/s-wcp-%d.html" % n, "w", encoding="utf-8", newline="\n").write(w)
-    c = src.replace("s-campus-loop", "s-cp-%d" % n).replace("cpl-goo", "cp%d-goo" % n)
-    c = re.sub(r"const PEOPLE = \d+;", "const PEOPLE = %d;" % n, c)
-    c = c.replace("<title>How campus and loop tie together · ACKO slide", "<title>How it ties together, people %d · ACKO slide" % n)
-    open("slides/s-cp-%d.html" % n, "w", encoding="utf-8", newline="\n").write(c)
-    items += [("s-wcp-%d" % n, "People %d · %s · Why a campus" % (n, label)), ("s-cp-%d" % n, "People %d · %s · How it ties together" % (n, label))]
-page("index-campus-people.html", items)
