@@ -15,7 +15,7 @@
      loop animation on the site boundary will come"). White, so the ribbon carries over from Why a campus with the page unchanged.
      It opens on Why a campus's last frame (the one drop at 960, 590, r 210, the people mixed in it); then, a click each (Ritika, 18
      Nov: "it is not based on beats … the transition between both slides should be smooth"):
-     The ribbon runs by itself, 1 · 2 · 3 one after another without clicks (Ritika, 18 Nov: "the ribbon animation should happen without beat"); the
+     The whole run flows by itself, 1 · 2 · 3 · 4 · 5 · 6, no clicks, then a Replay button (Ritika, 18 Nov); it began with 1 · 2 · 3 one after another without clicks (Ritika, 18 Nov: "the ribbon animation should happen without beat"); the
      Loop figure's own steps, 4 · 5 · 6, are clicks.
      1 · Campus (on arrival): the drop glides left and shrinks into the campus's place, the people riding in it; it splits into the six
          neighbourhoods, the people taking their seats (both offices in every one); its rim stays as a lavender ring, which opens and
@@ -67,6 +67,7 @@
       <g class="cpl-dots"></g>
     </svg>
     <canvas class="cpl-strip"></canvas>
+    <button type="button" class="cpl-replay" tabindex="-1">↻ Replay</button>
     <svg class="cpl-dia" viewBox="0 0 1920 1080" aria-hidden="true"><g class="cpl-zones cpl-zt"></g></svg>
 
     <div class="cpl-op" data-step="2" style="left:22.9%">+</div>
@@ -85,7 +86,7 @@
 #s-cz-2 .cpl-h span { display: inline-block; }
 #s-cz-2 .cpl-h b { font-weight: 700; color: var(--accent); }
 #s-cz-2 .cpl-h [data-step="2"].shown, #s-cz-2 .cpl-h [data-step="3"].shown { transition-delay: .15s; }
-#s-cz-2 .cpl-h [data-step="6"].shown { transition-delay: 2.4s; }
+#s-cz-2 .cpl-h [data-step="6"].shown { transition-delay: .3s; }
 /* coming in from Why a campus: this slide's words wait until that slide's have faded, so the two never overlap */
 #s-cz-2 .hdr, #s-cz-2 .cpl-hand { opacity: 0; transition: opacity .6s var(--ease); }
 #s-cz-2 .drawn .hdr, #s-cz-2 .drawn .cpl-hand { opacity: 1; transition-delay: .5s; }
@@ -121,6 +122,10 @@
 #s-cz-2 .cpl-dots > g { transform-box: view-box; transform-origin: 0 0; }
 #s-cz-2 .pa { fill: #1e9e95; color: #1e9e95; }
 #s-cz-2 .pb { fill: #bcae92; color: #bcae92; }
+/* the Replay button: shown once the run has ended */
+#s-cz-2 .cpl-replay { right: 4.8%; top: 88.2%; font: 600 calc(var(--pt) * 6.4) var(--body); letter-spacing: .06em; color: var(--accent); background: #fff; border: 1px solid #cfc3f3; border-radius: 99px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 8); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
+#s-cz-2 .page.end .cpl-replay { opacity: 1; pointer-events: auto; }
+#s-cz-2 .cpl-replay:hover { background: #f3effd; }
 /* + and = */
 #s-cz-2 .cpl-op { top: 49%; width: 6%; text-align: center; font-size: calc(var(--pt) * 22); font-weight: 300; line-height: 1; color: var(--accent); }
 /* the words under each figure, once the ribbon has made it */
@@ -130,8 +135,8 @@
 #s-cz-2 .cpl-w em { display: block; margin-top: calc(var(--pt) * 3); font-style: normal; font-size: calc(var(--pt) * 5.4); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
 #s-cz-2 .cpl-w p { margin: calc(var(--pt) * 4) auto 0; max-width: 94%; font-size: calc(var(--pt) * 8); line-height: 1.4; color: var(--soft); }
 #s-cz-2 .cpl-w.w1.shown { transition-delay: 2.9s; }
-#s-cz-2 .cpl-w.w2.shown { transition-delay: 3.6s; }
-#s-cz-2 .cpl-w.w3.shown { transition-delay: 3.2s; }
+#s-cz-2 .cpl-w.w2.shown { transition-delay: .9s; }
+#s-cz-2 .cpl-w.w3.shown { transition-delay: .9s; }
 #s-cz-2 .still .cpl-w.shown, #s-cz-2 .still .cpl-h .shown, #s-cz-2 .still .cpl-seg, #s-cz-2 .still .cpl-out, #s-cz-2 .still .cpl-plate { transition: none !important; }
 /* the line under a hairline */
 @media (prefers-reduced-motion: reduce) { #s-cz-2 * { transition-duration: 0s !important; transition-delay: 0s !important; } }
@@ -145,7 +150,7 @@
    loop drawn). The people (PRESENTATION-PATTERNS §5): data-b, where Why a campus leaves them (the same disc and seed), and data-c,
    a seat in a neighbourhood, the offices alternating, so every neighbourhood holds both. Entered at beat 1 it plays from the drop;
    any other entry, a step back or reduced motion shows the beat's end at once. The frame loop stops on leave. */
-ACKO.slide("s-cz-2", ({ $, $$, plain, raf2, reduced, later, next }) => {
+ACKO.slide("s-cz-2", ({ $, $$, plain, raf2, reduced, later, next, setStep, state }) => {
   const MOB = 1;                                                   // after "+": 1 the deck's render · 2 the ribbon becomes the strip · 3 ACKO's mark
   // who a person is, drawn in the same unit as the dots were (a dot was r 1; a person is about 2.3 tall), scaled by the same transform;
   // i is the person's index (0-39, the same on both slides): 2 pregnant women, 4 wheelchair users (male and female alternating), the rest
@@ -497,6 +502,7 @@ ACKO.slide("s-cz-2", ({ $, $$, plain, raf2, reduced, later, next }) => {
     const pg = $(".page", sc);
     if (jump) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
     const R = S.R;
+    pg.classList.toggle("end", k >= 6);                                    // the Replay button, once the loop is drawn
     glide(sc, k ? 1 : 0, false);
     $(".cpl-drop", sc).style.opacity = k ? 0 : 1; $(".cpl-one", sc).style.opacity = k ? 0 : 1; $(".cpl-cond", sc).style.opacity = 0;
     $$(".cpl-seg", sc).forEach((e) => { e.classList.toggle("on", k >= 1); e.classList.toggle("ghost", k >= 4); }); $(".cpl-out", sc).classList.toggle("on", k >= 1);
@@ -519,7 +525,16 @@ ACKO.slide("s-cz-2", ({ $, $$, plain, raf2, reduced, later, next }) => {
       c.style.transform = `translate(${x}px,${y}px) scale(${on ? 4.6 : 7})`;
     });
   }
-  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; }
+  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; }
+  // after stage k, the next one by itself, unless a click got there first or the slide was left (?noauto switches it off, for the walk test)
+  const AUTO = !/[?&]noauto/.test(location.search), PAUSE = { 1: 650, 2: 650, 3: 700, 4: 500, 5: 1000 };
+  function auto(sc, k) { if (AUTO && PAUSE[k]) later(() => { if (S.last === k && document.body.dataset.scene === sc.id) next(); }, PAUSE[k]); }
+  // Replay (Ritika, 18 Nov: "we can have a replay button"): back to the opening frame, then the run from the top
+  function replay(sc) {
+    stop(); S.fresh = true; S.last = 0; pose(sc, 0);
+    const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");
+    raf2(() => pg.classList.add("drawn")); setStep(1);
+  }
   // click 4: each campus neighbourhood lifts off its ring, flies to its place on the floor and becomes that neighbourhood (Ritika, 18
   // Nov: "that neighbourhood in campus can move to ACKO campus neighbourhoods"); the ring keeps a ghost of it. A flyer is a copy of the
   // segment, moved and stretched (translate, scale) from its own box to the floor shape's box, fading out as the shape fades in
@@ -535,7 +550,50 @@ ACKO.slide("s-cz-2", ({ $, $$, plain, raf2, reduced, later, next }) => {
       f.el.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(1 + (f.sx - 1) * e).toFixed(3)} ${(1 + (f.sy - 1) * e).toFixed(3)}) translate(${-f.c0[0].toFixed(1)} ${-f.c0[1].toFixed(1)})`);
       f.el.style.opacity = (1 - clamp((e - .72) / .28, 0, 1)).toFixed(3); });
   }
-  // beat k, from the end of beat k − 1
+  // The whole run as ONE continuous movement (Ritika, 18 Nov: "the animation can be continuous instead of pause"): the drop glides and splits
+  // into the campus as before, then the ribbon's head runs the whole route, from the campus's rim to the end of the loop, at a steady
+  // pace (a short ease in and out), and each figure is made as the head passes it: the words and steps (+ Möbius, =, the neighbourhoods,
+  // the shared spaces, The ACKO Loop) are moved on by it (setStep, only forward), the render is painted in, the floor's outline comes
+  // up, the neighbourhoods fly on, the shared spaces come up, the loop is drawn; at the end the ribbon retires into its line
+  function run(sc) {
+    stop(); S.run = true;
+    const R = S.R, t0 = performance.now(), LA = R.at.out1, T0 = 250, TG = 1700, TS = 700, TR = T0 + TG + TS;
+    const L = R.end - LA, DUR = clamp(L / .95, 9000, 15000), A = .1, B = .12, V = 1 / (1 - A / 2 - B / 2);
+    const pos = (u) => (u < A ? (V * u * u) / (2 * A) : u < 1 - B ? V * (A / 2 + u - A) : 1 - (V * (1 - u) * (1 - u)) / (2 * B));
+    const to = (n) => { if (state.step < n) setStep(n); };
+    let split = false, FL = null, tF = 0, plate = false, shared = false;
+    const frame = (now) => {
+      if (document.body.dataset.scene && document.body.dataset.scene !== sc.id) { S.raf = 0; S.run = false; return; }
+      const t = now - t0;
+      if (t < T0) draw({ wins: [] });                                          // the drop, as Why a campus left it
+      else if (t < T0 + TG) { glide(sc, ease((t - T0) / TG), true); draw({ wins: [] }); }   // it glides into the campus's place
+      else if (t < TR) {                                                       // it splits into the six neighbourhoods; its rim stays
+        if (!split) { split = true; glide(sc, 1, true); seat(sc, true, 900); }
+        const u = (t - T0 - TG) / TS, e = ease(clamp(u / .85, 0, 1));
+        if (u > .4) $(".cpl-out", sc).classList.add("on");
+        $$(".cpl-seg", sc).forEach((g, i) => { if (u > i * .1) g.classList.add("on"); });
+        $(".cpl-drop", sc).style.opacity = clamp(1 - u * 1.6, 0, 1); $(".cpl-one", sc).style.opacity = clamp(1 - u * 2, 0, 1);
+        const cd = $(".cpl-cond", sc), sw = 4 + (WID - 4) * e;
+        cd.setAttribute("r", (R1 + (RC - R1) * e).toFixed(1)); cd.style.strokeWidth = sw.toFixed(1); cd.style.opacity = (.75 * e).toFixed(3);
+        draw({ wins: [] });
+      } else {                                                                 // the rim opens, and the ribbon runs the whole way
+        if (!plate) { $(".cpl-drop", sc).style.opacity = 0; $(".cpl-one", sc).style.opacity = 0; $(".cpl-cond", sc).style.opacity = 0; $$(".cpl-seg", sc).forEach((g) => g.classList.add("on")); }
+        const u = clamp((t - TR) / DUR, 0, 1), head = LA + L * pos(u), g = clamp((head - LA) / 220, 0, 1);
+        const len = Math.min(head - LA, LREST + 40) * (1 - clamp((u - .88) / .12, 0, 1));    // a soft tail, which catches the head at the end
+        if (head > R.rest1 - 150) to(2);
+        if (head > R.mob1 - 200) { to(3); if (!plate) { plate = true; $(".cpl-plate", sc).classList.add("on"); } }
+        if (head > R.mob1 && !FL) { FL = flyers(sc); tF = t; $$(".cpl-seg", sc).forEach((g2) => g2.classList.add("ghost")); to(4); }
+        if (FL) { fly(FL, t - tF); if (t - tF > 500) $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-n")); }
+        if (!shared && head > R.loop0 - 120) { shared = true; $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-s")); to(5); }
+        if (head > R.loop0 + (R.end - R.loop0) * .12) to(6);
+        draw({ wins: wins(Math.max(LA, head - len), head, 130 * g, 22 * g), reveal: head, loop: head });
+        if (u >= 1) { S.raf = 0; S.run = false; pose(sc, 6); to(6); return; }
+      }
+      S.raf = requestAnimationFrame(frame);
+    };
+    S.raf = requestAnimationFrame(frame);
+  }
+  // beat k, from the end of beat k − 1 (the click-by-click way, ?noauto)
   function play(sc, k) {
     stop();
     const R = S.R, T = RUN[k], t0 = performance.now(), LA = R.at.out1;
@@ -586,8 +644,8 @@ ACKO.slide("s-cz-2", ({ $, $$, plain, raf2, reduced, later, next }) => {
       } else done = true;
       if (done) {
         S.raf = 0; pose(sc, k);
-        // the ribbon runs without clicks (Ritika, 18 Nov: "the ribbon animation should happen without beat"): Campus, then + Möbius, then = the floor, one after another
-        if (k === 1 || k === 2) later(() => { if (S.last === k && document.body.dataset.scene === sc.id) next(); }, 650);
+        // the ribbon runs without clicks (Ritika, 18 Nov: "the ribbon flows without beat"): every stage hands on to the next after a short pause
+        auto(sc, k);
         return;
       }
       S.raf = requestAnimationFrame(frame);
@@ -597,16 +655,19 @@ ACKO.slide("s-cz-2", ({ $, $$, plain, raf2, reduced, later, next }) => {
   return {
     enter(_, sc) {
       plain(); build(sc); stop(); S.fresh = true; S.last = 0;
+      const rb = $(".cpl-replay", sc); if (!rb.dataset.on) { rb.dataset.on = 1; ["click", "mousedown", "pointerdown", "dblclick"].forEach((t) => rb.addEventListener(t, (e) => { e.stopPropagation(); if (t === "click") { e.preventDefault(); replay(sc); rb.blur(); } })); }
       pose(sc, 0);
       const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");   // reset at once, but let the words keep their delays
       raf2(() => pg.classList.add("drawn"));                                   // the header and hand line, once Why a campus's words have gone
     },
     step(k, sc) {
+      if (S.run) { S.last = k; return; }                                        // the run is moving the steps itself
       const still = reduced || (S.fresh ? k !== 1 : k !== S.last + 1);
       S.fresh = false; S.last = k;
       if (still) { stop(); pose(sc, k); }
+      else if (k === 1 && AUTO) run(sc);
       else if (k === 1 || k === 2 || k === 3 || k === 4 || k === 6) play(sc, k);
-      else { stop(); pose(sc, k, false); }                                     // 4, 5, 7: the zones or the summary come in on their own
+      else { stop(); pose(sc, k, false); auto(sc, k); }                         // 5: the shared spaces come in on their own, then the loop
     },
     leave() { stop(); },
   };
