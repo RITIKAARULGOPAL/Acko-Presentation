@@ -102,7 +102,8 @@ page("index-campus-zoning.html", [("s-campus-loop" if n == DECK else "s-cz-%d" %
 # index-campus-people.html (18 Nov, Ritika: "instead of dots give variations to show humans"): Why a campus and How it ties together
 # for each of five ways to draw a person (PEOPLE in both deck slides; 1 is the deck's until she picks). Copies s-wcp-n and s-cp-n,
 # not in order.txt, made from the deck slides with PEOPLE set; her pick becomes PEOPLE in both.
-PEOPLEV = [(1, "Pawns"), (2, "Standing figures"), (3, "Heads and shoulders"), (4, "Top view"), (5, "Sketched")]
+PEOPLEV = [(6, "Mixed heights"), (7, "Dressed"), (8, "Walking"), (9, "Pairs"), (10, "Outline"), (11, "Inclusive"),
+           (1, "Pawns"), (2, "Standing figures"), (3, "Heads and shoulders"), (4, "Top view"), (5, "Sketched")]   # the new six first (18 Nov, "give variations for humans")
 items = []
 for n, label in PEOPLEV:
     w = why.replace("s-why-campus", "s-wcp-%d" % n).replace("wc-goo", "wcp%d-goo" % n)

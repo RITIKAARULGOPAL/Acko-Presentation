@@ -104,16 +104,37 @@
    is played with the Web Animations API; the CSS holds where each beat ends. The hand-off to s-campus-loop: the one drop at 960, 590,
    r 210, and the people at disc(960, 590, 168, 40) shuffled with seed 5, at scale 7; that slide computes the same. */
 ACKO.slide("s-wcp-5", ({ $, $$, plain, raf2, reduced }) => {
-  // how a person is drawn, in the same unit as the dots were (a dot was r 1; a person is about 2.3 tall), scaled by the same transform:
-  // 1 pawns · 2 standing figures · 3 heads and shoulders · 4 top view · 5 sketched (index-campus-people.html shows the five)
+  // how a person is drawn, in the same unit as the dots were (a dot was r 1; a person is about 2.3 tall), scaled by the same transform; i is
+  // the person's index (0-39, the same on both slides), which picks a variant where a style varies. 1 pawns · 2 standing figures · 3 heads
+  // and shoulders · 4 top view · 5 sketched · 6 mixed heights · 7 dressed · 8 walking · 9 pairs · 10 outline · 11 inclusive
+  // (index-campus-people.html shows them)
   const PEOPLE = 5;
-  const PERSON = (n) => ({
-    1: '<circle cy="-.85" r=".42"/><path d="M-.6 1.2V.2Q-.6-.35 0-.35Q.6-.35 .6 .2V1.2Z"/>',
-    2: '<circle cy="-1" r=".36"/><rect x="-.34" y="-.55" width=".68" height="1" rx=".2"/><rect x="-.64" y="-.5" width=".22" height=".85" rx=".11"/><rect x=".42" y="-.5" width=".22" height=".85" rx=".11"/><rect x="-.3" y=".4" width=".25" height=".85" rx=".12"/><rect x=".05" y=".4" width=".25" height=".85" rx=".12"/>',
-    3: '<circle cy="-.5" r=".46"/><path d="M-.95 1.1Q-.95 .25 0 .25Q.95 .25 .95 1.1Z"/>',
-    4: '<ellipse cy=".2" rx=".95" ry=".55"/><circle cy="-.05" r=".5" stroke="#fff" stroke-width=".09"/>',
-    5: '<g fill="none" stroke="currentColor" stroke-width=".2" stroke-linecap="round" stroke-linejoin="round"><circle cy="-.95" r=".36"/><path d="M.02-.55Q-.03-.1 0 .35M-.62-.18Q0-.4 .62-.2M0 .35Q-.15 .8-.42 1.2M0 .35Q.2 .8 .44 1.2"/></g>',
-  })[n];
+  const PAWN = '<circle cy="-.85" r=".42"/><path d="M-.6 1.2V.2Q-.6-.35 0-.35Q.6-.35 .6 .2V1.2Z"/>';
+  const PERSON = (n, i = 0) => {
+    switch (n) {
+      case 2: return '<circle cy="-1" r=".36"/><rect x="-.34" y="-.55" width=".68" height="1" rx=".2"/><rect x="-.64" y="-.5" width=".22" height=".85" rx=".11"/><rect x=".42" y="-.5" width=".22" height=".85" rx=".11"/><rect x="-.3" y=".4" width=".25" height=".85" rx=".12"/><rect x=".05" y=".4" width=".25" height=".85" rx=".12"/>';
+      case 3: return '<circle cy="-.5" r=".46"/><path d="M-.95 1.1Q-.95 .25 0 .25Q.95 .25 .95 1.1Z"/>';
+      case 4: return '<ellipse cy=".2" rx=".95" ry=".55"/><circle cy="-.05" r=".5" stroke="#fff" stroke-width=".09"/>';
+      case 5: return '<g fill="none" stroke="currentColor" stroke-width=".2" stroke-linecap="round" stroke-linejoin="round"><circle cy="-.95" r=".36"/><path d="M.02-.55Q-.03-.1 0 .35M-.62-.18Q0-.4 .62-.2M0 .35Q-.15 .8-.42 1.2M0 .35Q.2 .8 .44 1.2"/></g>';
+      case 6: {                                                   // mixed heights and builds, a bun or a cap on some
+        const [r, hy, w, ty] = [[.36, -1, .46, -.55], [.4, -.6, .62, -.2], [.4, -.85, .74, -.4]][i % 3];
+        return `<circle cy="${hy}" r="${r}"/><path d="M${-w} 1.2V${ty + .4}Q${-w} ${ty} 0 ${ty}Q${w} ${ty} ${w} ${ty + .4}V1.2Z"/>`
+          + (i % 4 === 0 ? `<circle cx=".02" cy="${(hy - r - .1).toFixed(2)}" r=".17"/>` : i % 5 === 0 ? `<path d="M${-r} ${hy - .04}A${r} ${r} 0 0 1 ${r} ${hy - .04}Z" fill-opacity=".55"/>` : "");
+      }
+      case 7: return '<circle cy="-.85" r=".42" fill-opacity=".55"/><path d="M-.7 1.2V.1Q-.7-.38 0-.38Q.7-.38 .7 .1V1.2Z"/><path d="M-.2-.36L0 .25L.2-.36" fill="none" stroke="#fff" stroke-width=".09" stroke-linejoin="round"/><path d="M0 .25V1.2" stroke="#fff" stroke-width=".06"/>';
+      case 8: return '<circle cx=".12" cy="-1" r=".36"/><g fill="none" stroke="currentColor" stroke-width=".26" stroke-linecap="round" stroke-linejoin="round"><path d="M.1-.55L0 .3M-.5-.05L.1-.4L.6.05M0 .3L-.4 1.15M0 .3L.5 1.1"/></g>';
+      case 9: return i % 2 ? PAWN : '<g transform="translate(-.62 .12) scale(.82)">' + PAWN + '</g><g transform="translate(.62 .12) scale(.82)">' + PAWN + '</g>';   // every other person is a pair
+      case 10: return '<g fill-opacity=".28" stroke="currentColor" stroke-width=".12" stroke-linejoin="round">' + PAWN + '</g>';
+      case 11: {                                                  // inclusive: a wheelchair, a cane, a long kurta among the pawns
+        const k = i % 8;
+        if (k === 3) return '<circle cx="-.2" cy="-.8" r=".4"/><path d="M-.62 .35V-.3Q-.62-.42 -.2-.42Q.22-.42 .22-.3V.35H.75" fill="none" stroke="currentColor" stroke-width=".3" stroke-linejoin="round"/><circle cx=".0" cy=".72" r=".58" fill="none" stroke="currentColor" stroke-width=".2"/>';
+        if (k === 5) return PAWN + '<path d="M.95 -.1Q1.12 -.1 1.12 .08V1.2" fill="none" stroke="currentColor" stroke-width=".2" stroke-linecap="round"/>';
+        if (k === 6) return '<circle cy="-.85" r=".42"/><path d="M-.62 1.2L-.4-.2Q0-.4 .4-.2L.62 1.2Z"/>';
+        return PAWN;
+      }
+      default: return PAWN;
+    }
+  };
   const N = 40, R = [8, 7], CX = 960, CY = 590, E = "cubic-bezier(.45,.05,.3,1)", FLOW = 2600;
   let built = false, fresh = true, last = 0;
   const disc = (cx, cy, r, n) => Array.from({ length: n }, (_, i) => { const t = i * 2.39996, s = r * Math.sqrt((i + .5) / n); return [cx + s * Math.cos(t), cy + s * Math.sin(t)]; });
@@ -126,7 +147,7 @@ ACKO.slide("s-wcp-5", ({ $, $$, plain, raf2, reduced }) => {
     for (let i = B.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [B[i], B[k]] = [B[k], B[i]]; }
     const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
     const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
-    $(".wc-dots", sc).innerHTML = A.map((p, i) => `<g class="${cls(i)}" data-a="${r1(p)}" data-b="${r1(B[i])}" style="${at(p, R[0])}">${PERSON(PEOPLE)}</g>`).join("");
+    $(".wc-dots", sc).innerHTML = A.map((p, i) => `<g class="${cls(i)}" data-a="${r1(p)}" data-b="${r1(B[i])}" style="${at(p, R[0])}">${PERSON(PEOPLE, i)}</g>`).join("");
   }
   function move(sc, k, ms) {
     const key = "ab"[k - 1];
