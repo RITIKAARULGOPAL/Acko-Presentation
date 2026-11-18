@@ -467,16 +467,13 @@ body[data-scene="s-layout-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-strategy .st-s { position: absolute; transform: translate(-50%, -100%); text-align: center; white-space: nowrap; opacity: 0; transition: opacity .45s var(--ease);
   padding: calc(var(--pt) * 1.5) calc(var(--pt) * 4); background: rgba(255,255,255,.88); border-radius: 3px; }
 #s-strategy .st-s.on { opacity: 1; }
-/* the spaces' hotspots (beat 4): a dot on the Loop and a plain small name beside it, outside the ring; the dot reached last pulses while the
-   Loop draws, then all of them breathe softly */
+/* the spaces' hotspots (beat 4): a dot at the space, a plain small name beside it; every dot blinks, a little out of step */
 #s-strategy .st-s.hot { padding: 0; background: none; }
 #s-strategy .st-s.hot b { font-size: calc(var(--pt) * 5.4); font-weight: 600; color: #5b4a9a; letter-spacing: .01em;
   text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
-#s-strategy .st-legs g.hot circle.pl { fill: none; stroke: var(--purple); stroke-width: 1.8; opacity: 0; transform-box: fill-box; transform-origin: center; }
-#s-strategy .st-legs g.hot.last circle.pl { animation: st-pulse 1.4s ease-out infinite; }
-#s-strategy .st-legs g.hot.calm circle.pl { animation: st-pulse-soft 3s ease-out infinite; }
-@keyframes st-pulse { 0% { transform: scale(.7); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
-@keyframes st-pulse-soft { 0% { transform: scale(.7); opacity: .5; } 100% { transform: scale(2.6); opacity: 0; } }
+#s-strategy .st-legs g.hot circle.pl { fill: none; stroke: var(--purple); stroke-width: 2.6; opacity: 0; transform-box: fill-box; transform-origin: center; }
+#s-strategy .st-legs g.hot.on circle.pl { animation: st-pulse 1.7s ease-out infinite; animation-delay: var(--d, 0s); }
+@keyframes st-pulse { 0% { transform: scale(.8); opacity: 1; } 100% { transform: scale(4.2); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { #s-strategy .st-legs g.hot circle.pl { animation: none !important; } }
 #s-strategy .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
 #s-strategy .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
@@ -3464,7 +3461,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       let y = 0, f = 0;
       if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
-      if (k === 4) f = 1 - 0.55 * win(t, 0, 1.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
+      if (k === 4) f = 1 - 0.7 * win(t, 0, 1.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
       v.position.y = y; M.fade(v, f); if (v.userData.num) v.userData.num.visible = k !== 4;
     });
     M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
@@ -3683,21 +3680,16 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // as two lanes (each point set 0.8 m to the ring's left: it runs clockwise, so out east the lane is north of the street, back west
   // south of it), round the meeting island at each end, no ends; the lane 02A has yet to open (ringDash) faint; each stop's call-out on
   // the ring, at its share of the way round
-  // 18 Nov (Ritika: "the loop should connect all spaces and look like a loop"): ONE smooth closed ring, a racetrack the floor's length:
-  // the north lane east-bound, round the east end, the south lane west-bound, round the west end. Its control polygon bows 45% of the
-  // way toward each place on its side (the seven stops and the spaces' hotspots), then eased (Chaikin) and hand-drawn (hd), so every
-  // place sits on or beside the one ring. It starts at Arrival and draws round. Each place's dot is its nearest point on the ring.
+  // 18 Nov (Ritika: "the loop should connect all spaces and look like a loop"; "it is running on the neighbourhood zones"): ONE smooth
+  // closed ring, drawn in the one stretch of floor the neighbourhood masses leave open (the north band, x -124 to +14 m, y 198 to 212 m,
+  // model mm), eased (Chaikin) and hand-drawn (hd); it starts at Arrival's end and draws round. Every stop and space hangs off it by a
+  // thin hand-drawn spur from the ring's nearest point to the place itself, grown as the stroke passes; the dot sits at the place.
   function ribbon() {
     if (S.rb !== undefined) return S.rb;
     S.rb = null; if (!M || typeof spaces !== "function") return null;
-    const NY = 202500, SY = 220500, MID = 214500, bow = (y, lane, x) => Math.min(lane + (y - lane) * 0.45, (x > -96000 && x < -82000) || (x > -28000 && x < -14000) ? 221000 : 229000);   // inside the slab (its west end tapers, its south edge has two notches)
+    let ctrl = [[-119000, 208500], [-96000, 208000], [-76000, 205000], [-52000, 205000], [-30000, 208500], [-6000, 208500], [9000, 208500], [14500, 204500], [9000, 200500],
+      [-12000, 200500], [-40000, 200500], [-70000, 200500], [-100000, 200500], [-118000, 200500], [-123000, 204500]];
     const places = M.data.stops.map((s) => ({ x: s.x, y: s.y })), sp = spaces();
-    const N = [], Sx = [];
-    places.concat(sp).forEach((p) => { if (p.x > 58000) return; if (p.y < MID) N.push([p.x, bow(p.y, NY, p.x)]); else Sx.push([p.x, bow(p.y, SY, p.x)]); });
-    const fill = (arr, lane) => { for (let x = -120000; x <= 50000; x += 45000) if (!arr.some((q) => Math.abs(q[0] - x) < 28000)) arr.push([x, lane]); };
-    fill(N, NY); fill(Sx, SY);
-    const dedupe = (arr) => { arr.sort((p, q) => p[0] - q[0]); const o = []; for (const q of arr) if (!o.length || q[0] - o[o.length - 1][0] > 7000) o.push(q); return o; };
-    let ctrl = [[-158500, 212500]].concat(dedupe(N), [[62500, 207500], [66000, 214000], [62500, 220500]], dedupe(Sx).reverse(), [[-153000, 219500]]);
     const ar0 = M.data.stops.find((s) => s.name === "Arrival") || M.data.stops[0];
     let i0 = 0, bd = 1e18; ctrl.forEach((q, i) => { const d = Math.hypot(q[0] - ar0.x, q[1] - ar0.y); if (d < bd) { bd = d; i0 = i; } });
     ctrl = ctrl.slice(i0).concat(ctrl.slice(0, i0));
@@ -3706,19 +3698,29 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const P = resample(C, 1600), n = P.length;
     const under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true);
     M.scene.add(under, top);
-    // each place's dot: its nearest point on the ring (model mm), and the share of the way round where the ring reaches it
-    const onRing = (q) => { const a = M.X(q.x), z = M.Z(q.y); let j = 0, d0 = 1e18; for (let i = 0; i < n; i++) { const d = (P[i][0] - a) ** 2 + (P[i][1] - z) ** 2; if (d < d0) { d0 = d; j = i; } } return { at: j / (n - 1), pos: [P[j][0] * 1000 + M.CX, P[j][1] * 1000 + M.CY] }; };
-    const sr = M.data.stops.map(onRing), hot = sp.map(onRing);
+    // each place: where the ring reaches it (share of the way round) and a spur from there to the place, a hand-drawn quadratic
+    const link = (q, k) => {
+      const b = [M.X(q.x), M.Z(q.y)]; let j = 0, d0 = 1e18; for (let i = 0; i < n; i++) { const d = (P[i][0] - b[0]) ** 2 + (P[i][1] - b[1]) ** 2; if (d < d0) { d0 = d; j = i; } }
+      const a = P[j], dx = b[0] - a[0], dz = b[1] - a[1], L = Math.hypot(dx, dz) || 1, bow = (k % 2 ? 1 : -1) * 0.14 * L, cx = (a[0] + b[0]) / 2 - dz / L * bow, cz = (a[1] + b[1]) / 2 + dx / L * bow;
+      const pts = []; for (let t = 0; t <= 1.0001; t += 1 / 22) pts.push([(1 - t) * (1 - t) * a[0] + 2 * (1 - t) * t * cx + t * t * b[0], (1 - t) * (1 - t) * a[1] + 2 * (1 - t) * t * cz + t * t * b[1]]);
+      const m = strip(pts, 0.8, RY - 0.005, 0xa88cf5, 0.9, 8, -5, false); m.visible = false;
+      M.scene.add(m); return { at: j / (n - 1), pos: [q.x, q.y], m, np: pts.length };
+    };
+    const all = places.concat(sp).map(link), sr = all.slice(0, places.length), hot = all.slice(places.length);
     const at = sr.map((r) => r.at), pos = sr.map((r) => r.pos);
     // a few white chevrons on the stroke say which way round it runs
     const ar = [0.12, 0.38, 0.62, 0.88].map((f) => {
-      const j = Math.round(f * (n - 1)), a = P[Math.max(0, j - 6)], b = P[Math.min(n - 1, j + 6)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], L = 1.9, W = 1.2, Y = RY + 0.03;
+      const j = Math.round(f * (n - 1)), a = P[Math.max(0, j - 6)], b = P[Math.min(n - 1, j + 6)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], L = 1.7, W = 1.1, Y = RY + 0.03;
       const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute([c[0] + ux * L, Y, c[1] + uz * L, c[0] - ux * L * 0.5 - uz * W, Y, c[1] - uz * L * 0.5 + ux * W, c[0] - ux * L * 0.5 + uz * W, Y, c[1] - uz * L * 0.5 - ux * W], 3));
       const m = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, side: T.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -8, polygonOffsetUnits: -16 }));
       m.renderOrder = 10; m.visible = false; m.frustumCulled = false; M.scene.add(m); return { m, f };
     });
-    const show = (on) => { under.visible = on; top.visible = on; if (!on) ar.forEach((x) => { x.m.visible = false; }); };
-    const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k); ar.forEach((x) => { x.m.visible = top.visible && e >= x.f + 0.01; }); };
+    const show = (on) => { under.visible = on; top.visible = on; if (!on) { ar.forEach((x) => { x.m.visible = false; }); all.forEach((x) => { x.m.visible = false; }); } };
+    const to = (e) => {
+      const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
+      ar.forEach((x) => { x.m.visible = top.visible && e >= x.f + 0.01; });
+      all.forEach((x) => { const f = Math.max(0, Math.min(1, (e - x.at) / 0.04)); x.m.visible = top.visible && f > 0; x.m.geometry.setDrawRange(0, 6 * Math.round(f * (x.np - 1))); });
+    };
     return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
   }
   function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
@@ -3786,9 +3788,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       return { s, d, g };
     });
     // the spaces' hotspots (beat 4)
-    S.hot = spaces().map((sp) => {
+    S.hot = spaces().map((sp, i) => {
       const d = document.createElement("div"); d.className = "st-s hot"; d.innerHTML = `<b>${sp.name}</b>`; box.appendChild(d);
-      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.setAttribute("class", "hot"); g.innerHTML = '<path/><circle class="pl" r="5"/><circle r="3.6"/>'; svg.appendChild(g);
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.setAttribute("class", "hot"); g.innerHTML = '<path/><circle class="pl" r="7"/><circle r="4.2"/>'; svg.appendChild(g); g.style.setProperty("--d", ((i * 0.37) % 1.7).toFixed(2) + "s");
       return { sp, d, g };
     });
   }
@@ -3858,10 +3860,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       if (!o.w) { o.w = (o.d.offsetWidth || 90) * k; o.h = (o.d.offsetHeight || 22) * k; }
       return { o, x, y, at, north: o.sp.y < 214500, on: !!S.hotOn && reach >= at && (!R || reach > 0.001) && x > 20 && x < 1900 && y > 60 && y < 1000 };
     });
-    const lastAt = Math.max(-1, ...hot.filter((h) => h.on).map((h) => h.at)), done = reach >= 0.999;
     for (const it of hot.slice().sort((p1, p2) => p2.y - p1.y)) {
       const { o, x, y } = it;
-      o.g.classList.toggle("last", it.on && !done && it.at === lastAt); o.g.classList.toggle("calm", it.on && done);
       if (!it.on) { o.d.classList.remove("on"); o.g.classList.remove("on"); continue; }
       const left = Math.max(10, Math.min(x - o.w / 2, 1900 - o.w)), up = y - 13, dn = y + 15 + o.h;
       const tries = it.north ? [up, up - o.h - 2, dn] : [dn, dn + o.h + 2, up];
