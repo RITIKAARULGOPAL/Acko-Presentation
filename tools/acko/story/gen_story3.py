@@ -15,6 +15,33 @@ import build
 SRC, OUT = "index-story2.html", "index-story3.html"
 RENDERS = ("s-w-reception s-w-recoffee s-w-cafe1 s-w-cafe2 s-w-deck s-w-coffee s-w-board s-w-exec s-w-dept s-w-sprint s-w-collab "
            "s-w-garden s-w-arena s-w-arena2a s-w-mothers s-w-zen s-w-studio").split()
+# the Previous meeting recap (19 Nov, Ritika's 03.11.26 proposal PDF, pages 6-29): one slide per page, made by tools/acko/make_proposal_slides.py
+RECAP = [
+    "s-recap-reception-option-a",
+    "s-recap-reception-option-b",
+    "s-recap-arrival-coffee-shop-option-a",
+    "s-recap-arrival-coffee-shop-option-b",
+    "s-recap-secondary-arrival-reception",
+    "s-recap-state-room-boardroom-32pax-option-01",
+    "s-recap-state-room-boardroom-32pax-option-02",
+    "s-recap-departmental-room-meeting-room-20pax",
+    "s-recap-departmental-room-meeting-room-20pax-2",
+    "s-recap-quick-sprint-room-04-pax-meeting-room-option-01",
+    "s-recap-quick-sprint-room-04-pax-meeting-room-option-01-2",
+    "s-recap-work-arena-the-neighbourhood-option-01",
+    "s-recap-work-arena-the-neighbourhood-option-02",
+    "s-recap-work-arena-library",
+    "s-recap-work-arena-the-acker-garden",
+    "s-recap-cafe-option-01",
+    "s-recap-cafe-option-01-2",
+    "s-recap-cafe-option-02",
+    "s-recap-cafe-option-02-2",
+    "s-recap-coffee-point",
+    "s-recap-mother-s-room",
+    "s-recap-executive-room",
+    "s-recap-zen-room",
+    "s-recap-studio-room",
+]
 # (part key, number, name, her line, slides)
 SECTIONS = [
     ("cover", "", "Project Vision", "Opening & project introduction", ["s-cover", "s-team"]),
@@ -25,7 +52,7 @@ SECTIONS = [
      ["s-div-2", "s-site", "s-pitch", "s-site-dd", "s-strategy", "s-layout-sp", "s-axo-detail", "s-wayday"]),
     ("p6", "03", "Design Expression", "Materiality, visualisation and spatial experience", ["s-div-3", "s-material", "s-palette2", "s-walkthrough"] + RENDERS),
     ("p7", "04", "Integrated Performance", "Technical performance and added value", ["s-div-4", "s-esg", "s-wf-a6", "s-engage", "s-di"]),
-    ("p8", "05", "Project Review", "Revisiting previous discussions and establishing alignment", ["s-div-5", "s-recap"]),
+    ("p8", "05", "Project Review", "Revisiting previous discussions and establishing alignment", ["s-div-5", "s-recap"] + RECAP),
     ("close", "", "Thank you", "", ["s-thanks-w"]),
     ("A", "", "Appendix · Kit of parts", "", ["s-typologies", "s-memories", "s-wellbeing"]),
     ("0", "", "About SKV", "", ["s-skv"]),
@@ -57,9 +84,11 @@ BRIDGE = {
     "s-wf-a6": "And at every stop, something for the Acker: their engagement points.",
     "s-engage": "And designed for everyone.",
     "s-di": "Last, back to where we started. 05 · Project Review.",
-    "s-recap": "Thank you.",
+    "s-recap": "A quick recap of what we have already seen.",
 }
-NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-site-dd", "s-axo-detail", "s-recap"]
+BRIDGE[RECAP[-1]] = "Thank you."
+# the four value slides are rebuilt from the same PDF (pages 1-4), so they come in fresh too
+NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-site-dd", "s-axo-detail", "s-material", "s-palette2", "s-esg", "s-di", "s-recap"] + RECAP
 
 # ---- the dividers: s-start's design (as gen_story.py makes the Part cards), the five sections ahead, this one lit, her line said
 st = open("slides/s-start.html", encoding="utf-8").read()
@@ -177,8 +206,8 @@ if beats: s = attr(s, "data-beats", ",".join(beats.group(1).split(",")[:4]))
 SEC2["s-strategy"] = bridge(notes_cut(s, "5 ·"), BRIDGE["s-strategy"])
 
 h = h[:i] + "\n" + "\n\n".join(LEAD[sid] + SEC2[sid] for sid in ORDER) + "\n" + h[j:]
-# the dropped slides' styles and scripts go; the new slides' come in
-for sid in dropped:
+# the dropped slides' styles and scripts go (and the old ones of a rebuilt slide); the new slides' come in
+for sid in dropped + [x for x in NEW if x in SEC and ('data-slide="%s"' % x) in h]:
     h = re.sub(r'<(style|script) data-slide="%s">.*?</\1>\n' % re.escape(sid), "", h, flags=re.S)
 st_new = "".join(b for sid in NEW for b in blocks(t, "style", sid))
 js_new = "".join(b for sid in NEW for b in blocks(t, "script", sid))

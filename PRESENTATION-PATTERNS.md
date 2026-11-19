@@ -784,3 +784,10 @@ amber `#F2A33A`; "A day in ACKO".
   - **`getAnimations()` flushes the style.** Call it after setting the beat's classes, or a `[data-step]` label is shown under the "not yet this beat" rule and loses its delay. And cancel only Web Animations, not `CSSTransition`s.
   - **The no-transition class** a slide uses to jump to a state: don't leave it on through `enter`. The engine sets `.shown` right after `enter`, so the beat's words would lose their delays. Flush and remove it in `enter`.
   - **Filming:** film on the virtual clock (§19), starting from the slide's own entry (no pre-steps) for beat 1. CSS transitions still run on the real clock.
+
+## 33. A deck page rebuilt from a PDF (19 Nov, the 03.11.26 Design Proposal: pages 1-4 and the recap)
+- **Tool:** `python tools/acko/make_proposal_slides.py ["path/to/proposal.pdf"]` (add `--debug DIR` to see the boxes it found). It rewrites `s-material`, `s-palette2`, `s-esg`, `s-di` in place, makes `s-recap` (the divider) and one `s-recap-<space>-<option>` per PDF page 6-29, and prints the recap ids for `RECAP` in `tools/acko/story/gen_story3.py`.
+- **Pictures:** the page is rendered with its text taken off, and each picture and flat block found on it is cropped to `assets/img/{mat4,pal4,esg4,di4}-NN.webp` (recap renders: `assets/img/recap/<slide-id>-01.webp`). A flat block becomes a CSS colour, not an image. The page's own near-white boxes are dropped.
+- **Words:** each line keeps the PDF's font, size, colour and place in deck points (`calc(var(--pt) * size)`), stacked lines of one paragraph share a block, and a word of another weight or colour is a `<span>`.
+- **Reveal:** left to right, `--i` = which eighth of the page the piece sits in.
+- **Re-running** overwrites those slides: edit the PDF, not the slide files, or edit the slide and don't re-run.
