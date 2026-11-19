@@ -6455,16 +6455,25 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     };
     const chaikin = (Q, it) => { for (let k = 0; k < it; k++) { const O = [Q[0]]; for (let i = 0; i + 1 < Q.length; i++) { const a = Q[i], b = Q[i + 1]; O.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } O.push(Q[Q.length - 1]); Q = O; } return Q; };
     const dense = (Q) => { const o = [Q[0]]; for (let i = 1; i < Q.length; i++) { const a = Q[i - 1], b = Q[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.25)); for (let k = 1; k <= n; k++) o.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); } return o; };
+    const VIA = { 5: [[84216, 43565], [85500, 31500]], 6: [[85500, 31500]] };          // by the beat he is walking to: the terrace and Reception (plan mm)
+    const clear = (A, B) => { const n = Math.max(2, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1000)); for (let k = 0; k <= n; k++) if (!inRing([A[0] + (B[0] - A[0]) * k / n, A[1] + (B[1] - A[1]) * k / n], M.slab)) return false; return true; };
+    const seg = (A, B) => {                                                              // points (m) from plan spot A to plan spot B, both ends included
+      const prev = [M.X(A[0]), M.Z(A[1])], here = [M.X(B[0]), M.Z(B[1])];
+      if (!ring) return [prev, here];
+      const ia = near(A), ib = near(B), ca = Math.hypot(ring[ia][0] - A[0], ring[ia][1] - A[1]), cb = Math.hypot(ring[ib][0] - B[0], ring[ib][1] - B[1]), r = dij(ia, ib);
+      const straight = Math.hypot(B[0] - A[0], B[1] - A[1]), ok = ca < 12000 && cb < 12000, free = clear(A, B);
+      const viaRing = [prev].concat(r.path.map((q) => [M.X(ring[q][0]), M.Z(ring[q][1])]), [here]);
+      if (ok && (r.len + ca + cb <= 1.4 * straight + 8000 || !free)) return viaRing;
+      return free || !ok ? [prev, here] : viaRing;
+    };
     P = []; legEnd = [0];
     BEATS.forEach((b, i) => {
       const here = [b.p.x, b.p.z]; if (i === 0) { P.push(here); return; }
-      const prev = [BEATS[i - 1].p.x, BEATS[i - 1].p.z];
-      let pts = [prev, here];
-      if (ring) {
-        const A = BEATS[i - 1].at, B = b.at, straight = Math.hypot(B[0] - A[0], B[1] - A[1]), ia = near(A), ib = near(B);
-        const ca = Math.hypot(ring[ia][0] - A[0], ring[ia][1] - A[1]), cb = Math.hypot(ring[ib][0] - B[0], ring[ib][1] - B[1]), r = dij(ia, ib);
-        if (ca < 12000 && cb < 12000 && r.len + ca + cb <= 1.4 * straight + 8000) pts = [prev].concat(r.path.map((k) => [M.X(ring[k][0]), M.Z(ring[k][1])]), [here]);
-      }
+      // via points (Ritika, 19 Nov): from the Café to the Board Room he goes out by the terrace and in through Reception, and from the Board Room
+      // to the terrace back through Reception; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
+      const stops = [BEATS[i - 1].at].concat(VIA[i] || [], [b.at]);
+      let pts = [[M.X(stops[0][0]), M.Z(stops[0][1])]];
+      for (let k = 1; k < stops.length; k++) pts.push(...seg(stops[k - 1], stops[k]).slice(1));
       const leg = dense(chaikin(pts, 2)); P.push(...leg.slice(1)); legEnd.push(P.length - 1);
     });
     // the ribbon: the Loop's lilac stroke on a paler, wider edge, drawn as far as he has walked
