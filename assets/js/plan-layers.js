@@ -6,7 +6,29 @@
    What shows is set on the plan host: data-pl = "spaces" | "nb" | "bio" | "ac" | "dd" (none: off), data-pb = the biophilia step. */
 (function () {
   "use strict";
-  const rings = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
+  // the path strings are loops "M x y L x y … Z": scanned by hand (no regex, split or per-point temporaries: the same rings as before, about 3x faster) and kept per string, so a space's loops are parsed once however many layers ask (19 Nov, "lag": the first
+  // Biophilia click spent 490 ms in the old parser, and the mount parsed every space again for the measure tool's corners)
+  const RC = new Map();
+  /* rings:begin */
+  const parseRings = (d) => {
+    const out = [], n = d.length; let cur = null, i = 0;
+    const num = () => {
+      let neg = false, v = 0, c = d.charCodeAt(i);
+      if (c === 45) { neg = true; c = d.charCodeAt(++i); }
+      while (c >= 48 && c <= 57) { v = v * 10 + (c - 48); c = d.charCodeAt(++i); }
+      if (c === 46) { let f = 0.1; c = d.charCodeAt(++i); while (c >= 48 && c <= 57) { v += (c - 48) * f; f /= 10; c = d.charCodeAt(++i); } }
+      return neg ? -v : v;
+    };
+    while (i < n) {
+      const c = d.charCodeAt(i);
+      if (c === 77) { cur = []; out.push(cur); i++; }                 // M: a new loop
+      else if ((c >= 48 && c <= 57) || c === 45) { const x = num(); while (d.charCodeAt(i) === 32) i++; const y = num(); if (cur) cur.push([x, y]); }
+      else i++;                                                       // L, Z, spaces
+    }
+    return out;
+  };
+  /* rings:end */
+  const rings = (d) => { let r = RC.get(d); if (!r) RC.set(d, (r = parseRings(d))); return r; };
   const inPoly = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
   const inside = (p, d) => rings(d).filter((r) => inPoly(p, r)).length % 2 === 1;
   const dpath = (pts, close) => "M" + pts.map((q) => q[0].toFixed(0) + " " + q[1].toFixed(0)).join("L") + (close ? "Z" : "");
@@ -217,7 +239,8 @@
     const api = {
       types,
       desks, seats,
-      set(layer) { host.dataset.pl = layer || ""; if (layer === "ac") buildWaves(); if (layer === "bio") buildBio(); if (layer !== "bio") cancelAnimationFrame(BIO.raf); },
+      // buildWaves: not where a slide draws the rings itself (.sp3, Story 3's layout: its own canvas, the shared ones hidden: 237 animated circles and ~400 ms for nothing)
+      set(layer) { host.dataset.pl = layer || ""; if (layer === "ac" && !host.classList.contains("sp3")) buildWaves(); if (layer === "bio") buildBio(); if (layer !== "bio") cancelAnimationFrame(BIO.raf); },
       type(t) { ["T1", "T2", "T3", "T4"].forEach((x) => host.classList.toggle("pl-t-" + x, x === t)); },
       bio(step, animate, onCov) { buildBio(); host.dataset.pb = step || ""; BIO.show(step, animate, onCov); },
       get bioStats() { buildBio(); return BIO.stats; },
