@@ -243,7 +243,7 @@ ACKO.slide("s-walk", ({ $, $$, plain, reveal, later, reduced, asset, plan, cue }
   }
   function size() {
     const Wd = host.clientWidth, Hd = host.clientHeight; if (!Wd || !Hd) return false;
-    const pr = r.getPixelRatio(); if (r.domElement.width !== Math.round(Wd * pr) || r.domElement.height !== Math.round(Hd * pr)) r.setSize(Wd, Hd, false);
+    const pr = r.getPixelRatio(); if (r.domElement.width !== Math.floor(Wd * pr) || r.domElement.height !== Math.floor(Hd * pr)) r.setSize(Wd, Hd, false);
     S.asp = Wd / Hd; return true;
   }
   function frame(now) {

@@ -206,7 +206,7 @@ ACKO.slide("s-pin-3", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => {
   function sizeUp() {
     const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return false;           // a hidden pane: wait for a real size
     const pr = R.getPixelRatio();
-    if (R.domElement.width !== Math.round(W * pr) || R.domElement.height !== Math.round(H * pr) || !S.home) {
+    if (R.domElement.width !== Math.floor(W * pr) || R.domElement.height !== Math.floor(H * pr) || !S.home) {
       R.setSize(W, H, false); S.asp = W / H; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
     }
     if (!S.view || !isFinite(S.view.half)) S.view = S.home;

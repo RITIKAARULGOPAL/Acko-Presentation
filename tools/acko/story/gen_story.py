@@ -412,7 +412,9 @@ RIB_JS = _LWFN + r"""
     const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
     const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
       ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
-    return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
+    // a fade of the whole ring and its chevrons (1 = as drawn), for the Detailed axo's glide into A day in ACKO
+    const fade = (a) => { arcs.forEach((x) => { x.under.material.opacity = 0.9 * a; x.top.material.opacity = 0.9 * a; }); ar.forEach((x) => { x.m.material.opacity = 0.95 * a; }); };
+    return (S.rb = { show, to, fade, at, pos, hot, miss: at.map(() => 0) });
   }
 """
 FROM_CSS = ('<style>#s-strategy .st-from { left: 0; top: 1%; width: 89.8%; height: 98.4%; pointer-events: none; opacity: 0;'
@@ -466,7 +468,6 @@ def strat_loop(h):
 # where the blue route reaches them (model mm, d m along the route, as data/axo-layers.js has it; named from the plan's rooms there)
 CLIENT_JS = """  const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
     { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
-    { name: "Wellness", q: "Room to pause", x: -133687, y: 203833, d: 54.4 },
     { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
     { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
 """
@@ -487,7 +488,7 @@ def strat_more(h):
     i, j = _sec(h, "s-strategy"); s = h[i:j]
     for x, y in [('data-beats="How it started,', 'data-beats="The Shell,'),
                  ("1 How it started: the bare shell", "1 The shell: the bare floor we were given"),
-                 ("5 The client's journey: the client's route from the entrance.", "5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, Wellness, the east Reception, Collab.")]:
+                 ("5 The client's journey: the client's route from the entrance.", "5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, the east Reception, Collab.")]:
         if x not in s: x = x.replace("'", "&#x27;"); y = y.replace("'", "&#x27;")
         assert x in s, ("strategy head", x[:50]); s = s.replace(x, y, 1)
     h = h[:i] + s + h[j:]

@@ -167,7 +167,7 @@ ACKO.slide("s-axo", ({ $, $$, asset, reduced, plan, plain }) => {
     const host = AX.host, W = host.clientWidth, Hh = host.clientHeight;
     if (!W || !Hh) return;
     const pr = AX.r.getPixelRatio();
-    if (AX.r.domElement.width !== Math.round(W * pr) || AX.r.domElement.height !== Math.round(Hh * pr)) {
+    if (AX.r.domElement.width !== Math.floor(W * pr) || AX.r.domElement.height !== Math.floor(Hh * pr)) {
       AX.r.setSize(W, Hh, false);
       const a = W / Hh; if (Math.abs(a - AX.asp) > 1e-3) { AX.asp = a; AX.frames = null; }
     }
