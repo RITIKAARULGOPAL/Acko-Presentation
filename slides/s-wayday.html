@@ -100,7 +100,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   // the SketchUp model when its data is in, else the DXF model
   const SKP = !!(window.AxoSkp && window.AxoSkp.available()), MODEL = SKP ? window.AxoSkp : window.AxoModel;
   const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
-  const RW = 1.2, RY = 0.07, PACE = 1.4;                            // the path's width (m) and height, his walking pace (m/s)
+  const RW = 1.2, RY = 0.07;                                        // the path's width (m) and height
   const S = { built: false, beat: 0, view: null, follow: true, raf: 0, fresh: true, jump: false, asp: 1, home: null, user: false, wired: false, open: -1 };
   let T, M, R, cam, host, sc, group, W, man, trail, P = [], legEnd = [];
   const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
@@ -174,7 +174,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     man.position.set(a[0] + (b[0] - a[0]) * f, 0, a[1] + (b[1] - a[1]) * f);
     trail.children.forEach((m) => m.geometry.setDrawRange(0, 6 * Math.max(0, Math.min(P.length - 1, Math.floor(k)))));
   }
-  // the next beat: he walks the path to its spot (at least PACE m/s, never more than 6 s for a stretch); on arriving at a beat from outside, or
+  // the next beat: he walks the path to its spot (a stretch takes its length at 5 m/s, between 1.8 and 4 s); on arriving at a beat from outside, or
   // with reduced motion, he is simply there
   function walkTo(i) { S.pt = legEnd[i] || 0; if (S.fresh || reduced) S.p = S.pt; S.last = 0; }
   // the Acker Garden's foosball (white, as in Ritika's view of the model; it is not in the model's file), where FOOSBALL puts
@@ -247,7 +247,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const dt = S.last ? Math.min(0.25, (now - S.last) / 1000) : 0; S.last = now;
     const head = man.userData.head; let dx = 0, dz = 0;
     if (S.p !== S.pt) {
-      const span = Math.abs(S.pt - S.p), speed = Math.max(PACE, (Math.abs(S.pt - (legEnd[S.beat - 1] ?? 0)) * 0.25) / 7);   // m/s: at least PACE, no stretch longer than ~7 s
+      const span = Math.abs(S.pt - S.p), len = Math.abs(S.pt - (legEnd[S.beat - 1] ?? 0)) * 0.25, speed = len / Math.max(1.8, Math.min(4, len / 5));   // m/s: a stretch takes length / 5 m/s, between 1.8 and 4 s
       const slow = Math.min(1, 0.25 + (span * 0.25) / 2);                                                              // slows over the last 2 m
       const step = (speed / 0.25) * dt * slow, dir = S.p < S.pt ? 1 : -1;
       S.p = span <= Math.max(step, 0.05) ? S.pt : S.p + dir * step;
