@@ -6441,9 +6441,17 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     // his route: from each beat's spot to the next along the Loop's own route (ACKO_LOOP.ring, plan mm; the shorter way round), eased
     const LP = window.ACKO_LOOP, ring = LP && LP.ring && LP.ring.length > 3 ? LP.ring : null, N = ring ? ring.length : 0;
     const near = (q) => { let j = 0, d0 = 1e18; for (let i = 0; i < N; i++) { const d = (ring[i][0] - q[0]) ** 2 + (ring[i][1] - q[1]) ** 2; if (d < d0) { d0 = d; j = i; } } return j; };
-    const arc = (a, b) => {                                       // ring indices a to b, the shorter way round
-      const walkIt = (step) => { const o = []; let L = 0; for (let i = a; ; i = (i + step + N) % N) { o.push(ring[i]); if (i === b) break; if (o.length > 1) L += Math.hypot(o[o.length - 1][0] - o[o.length - 2][0], o[o.length - 1][1] - o[o.length - 2][1]); } return { o, L }; };
-      const f = walkIt(1), r = walkIt(-1); return (f.L <= r.L ? f : r).o;
+    // the shortest way along the Loop's corridors (Ritika, 19 Nov: "he's walking a lot in the Collab area, cut down unnecessary walking"): the ring's
+    // points joined to their neighbours and to any other ring point within 2.5 m (the out and back lanes of one corridor), then Dijkstra; and the
+    // straight line instead when the corridors are no shorter than it plus a little (or a spot is far from them)
+    const nb = ring ? ring.map((q, i) => { const o = [[(i + 1) % N, 0], [(i - 1 + N) % N, 0]];
+      for (let j = 0; j < N; j++) if (j !== i && Math.hypot(ring[j][0] - q[0], ring[j][1] - q[1]) < 2500) o.push([j, 0]);
+      return o.map(([j]) => [j, Math.hypot(ring[j][0] - q[0], ring[j][1] - q[1])]); }) : null;
+    const dij = (a, b) => {
+      const D = new Float64Array(N).fill(1e18), prv = new Int32Array(N).fill(-1), done = new Uint8Array(N); D[a] = 0;
+      for (;;) { let u = -1, best = 1e18; for (let i = 0; i < N; i++) if (!done[i] && D[i] < best) { best = D[i]; u = i; }
+        if (u < 0 || u === b) break; done[u] = 1; for (const [v, w] of nb[u]) if (D[u] + w < D[v]) { D[v] = D[u] + w; prv[v] = u; } }
+      const path = []; for (let i = b; i !== -1; i = prv[i]) path.push(i); return { path: path.reverse(), len: D[b] };
     };
     const chaikin = (Q, it) => { for (let k = 0; k < it; k++) { const O = [Q[0]]; for (let i = 0; i + 1 < Q.length; i++) { const a = Q[i], b = Q[i + 1]; O.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } O.push(Q[Q.length - 1]); Q = O; } return Q; };
     const dense = (Q) => { const o = [Q[0]]; for (let i = 1; i < Q.length; i++) { const a = Q[i - 1], b = Q[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.25)); for (let k = 1; k <= n; k++) o.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); } return o; };
@@ -6451,9 +6459,12 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     BEATS.forEach((b, i) => {
       const here = [b.p.x, b.p.z]; if (i === 0) { P.push(here); return; }
       const prev = [BEATS[i - 1].p.x, BEATS[i - 1].p.z];
-      let pts = [prev];
-      if (ring) pts = pts.concat(arc(near(BEATS[i - 1].at), near(b.at)).map((q) => [M.X(q[0]), M.Z(q[1])]));
-      pts.push(here);
+      let pts = [prev, here];
+      if (ring) {
+        const A = BEATS[i - 1].at, B = b.at, straight = Math.hypot(B[0] - A[0], B[1] - A[1]), ia = near(A), ib = near(B);
+        const ca = Math.hypot(ring[ia][0] - A[0], ring[ia][1] - A[1]), cb = Math.hypot(ring[ib][0] - B[0], ring[ib][1] - B[1]), r = dij(ia, ib);
+        if (ca < 12000 && cb < 12000 && r.len + ca + cb <= 1.4 * straight + 8000) pts = [prev].concat(r.path.map((k) => [M.X(ring[k][0]), M.Z(ring[k][1])]), [here]);
+      }
       const leg = dense(chaikin(pts, 2)); P.push(...leg.slice(1)); legEnd.push(P.length - 1);
     });
     // the ribbon: the Loop's lilac stroke on a paler, wider edge, drawn as far as he has walked
