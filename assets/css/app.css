@@ -447,3 +447,8 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 @keyframes rise { to { opacity: 1; } }
 /* ---------- the site: a vector map (Overture / OSM) ---------- */
 #w-map { background: #f2f1f5; }
+/* the walk's renders are shown whole (no crop), so there is nothing to pan */
+#wk-pan { display: none !important; }
+/* the walk's renders: the camera pushes in slowly from the whole picture, centred */
+.cover[data-fit].kb { animation: kbfit 26s cubic-bezier(.25, .1, .25, 1) forwards; transform-origin: 50% 50%; }
+@keyframes kbfit { from { transform: scale(1); } to { transform: scale(1.07); } }

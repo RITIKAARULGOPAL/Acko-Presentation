@@ -99,7 +99,7 @@
       $("#photo-credit").textContent = o.credit || "";
       if (this.cur && this.cur.dataset.src === src) return this.cur;
       const f = document.createElement("div"); f.className = "shot-frame"; f.dataset.src = src;
-      f.innerHTML = `<div class="cover${o.kb ? " kb" : ""}" data-ar="${o.ar || 2.0}">${src ? `<div class="shot" style="background-image:url('${src}')"></div>` : ""}</div>`;
+      f.innerHTML = `<div class="cover${o.kb ? " kb" : ""}" data-ar="${o.ar || 2.0}"${o.fit ? ' data-fit="1"' : ""}>${src ? `<div class="shot" style="background-image:url('${src}')"></div>` : ""}</div>`;
       f.style.opacity = 0;
       this.stack.appendChild(f); layoutCovers();
       raf2(() => { f.style.opacity = 1; });
@@ -110,9 +110,10 @@
   };
   // cover-fit frames: the image always fills the window, whatever its shape
   function layoutCovers() {
-    const W = innerWidth, H = innerHeight;
+    const W = innerWidth, H = innerHeight, FW = Math.min(W, H * 16 / 9), FH = FW * 9 / 16;      // FW x FH: the page's 16:9 frame
     $$(".cover").forEach((c) => {
       const ar = +c.dataset.ar; let w = W, h = W / ar; if (h < H) { h = H; w = H * ar; }
+      if (c.dataset.fit) { w = FW; h = FW / ar; if (h > FH) { h = FH; w = FH * ar; } }   // the walk's renders: the whole picture, never cropped
       Object.assign(c.style, { position: "absolute", width: w + "px", height: h + "px", left: (W - w) / 2 + "px", top: (H - h) / 2 + "px" });
     });
   }
@@ -148,7 +149,7 @@
   const firstOf = (p) => scenes.findIndex((s) => s.dataset.part === p);
   function topicMark(track) {
     const tp = (TOPICS[track] || TOPICS.main).filter(([p]) => firstOf(p) >= 0), n = tp.length;   // only sections that have slides
-    $("#tm-list").innerHTML = (track === "main" ? `<button type="button" data-part="cover"><b>—</b>Cover</button>` : "") +
+    $("#tm-list").innerHTML = "" +
       tp.map(([p, nm, num], k) => `<button type="button" data-part="${p}"><b>${num != null ? num : n > 1 ? String(k + 1).padStart(2, "0") : ""}</b>${nm}</button>`).join("");   // a page may give each section its own number
     $$("#topic-mark [data-part]").forEach((el) => (el.onclick = (e) => {
       e.stopPropagation(); if (document.activeElement) document.activeElement.blur();
@@ -666,7 +667,7 @@
   }
   function walkShow(s, k) {
     const key = s.r[k - 1];
-    const f = PHOTO.show(key, { kb: true, ar: AR[key] || 2.1 });
+    const f = PHOTO.show(key, { fit: true, kb: true, ar: AR[key] || 2.1 });
     if (!AR[key]) { const im = new Image(); im.onload = () => { AR[key] = im.naturalWidth / im.naturalHeight; $$(".cover", f).forEach((c) => (c.dataset.ar = AR[key])); layoutCovers(); }; im.src = PHOTO.src(key); }
     world("photo"); shade("photo");
     $$("#wk-opt span").forEach((b, i) => b.classList.toggle("on", i === k - 1));

@@ -547,14 +547,11 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 /* ---- Story 3 (18 Nov, Ritika's review of the proposed layout; on with window.ACKO_SP3, set by gen_story3.py: .v3 here, .sp3 on the
    plan's host while the slide is on). Elsewhere (Story 2, the approach page) none of this shows ---- */
 #s-layout-sp:not(.v3) :is(.sp3-fold, .sp3-nbkey, .sp3-view, .sp3-tr, .sp3-rings) { display: none !important; }
-#world-plan:not(.sp3) .sp3-arr { display: none; }
 /* Spaces: no people ("remove the neighbourhood people colour coding and animation", the count with them); the floor in greys,
    the greens kept (JS); outside the contract dark grey, cross-hatched; Arrival by each entrance's arrow */
 #s-layout-sp.v3 :is(.ly-ppl, .ly-ppl-n) { display: none !important; }
 #world-plan.sp3 .dx-nic path { fill: url(#sp3-nic); fill-opacity: 1; }
 #world-plan.sp3 svg.dx-nic { mix-blend-mode: multiply; }      /* 19 Nov, Ritika: "not in contract fill should multiply so the base plan is seen" */
-#world-plan .sp3-arr text { fill: #c40000; font-family: var(--body, sans-serif); font-weight: 600; paint-order: stroke; stroke: #fff; stroke-linejoin: round; opacity: 0; transition: opacity .6s; }   /* size and halo: JS arrLay, a constant 14.5 px on screen */
-#world-plan.sp3.show-entry .sp3-arr text { opacity: 1; }
 /* the types: in order 516, 69, 48, 13, renumbered 1–4 (JS); each its plan beside its 3D; hovered or pinned, purple */
 #s-layout-sp.v3 .chip .ty-vis { display: flex; align-items: center; gap: calc(var(--pt) * 4); height: calc(var(--pt) * 38); margin-bottom: calc(var(--pt) * 2); }
 #s-layout-sp.v3 .chip .ty-vis .ty-svg { height: calc(var(--pt) * 17); max-width: 34%; margin: 0; flex: none; transition: color .2s; }
@@ -701,6 +698,26 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 /* ---------- walkthrough (2 Nov): before Thank you, in its look ---------- */
 .wt-h { left: 0; width: 100%; top: 40%; text-align: center; font-size: calc(var(--pt) * 46); font-weight: 700; color: #fff; }
 .wt-p { left: 0; width: 100%; top: 56%; text-align: center; font-size: calc(var(--pt) * 26); color: var(--lilac); }
+</style>
+<style data-slide="s-walkthrough-film">
+/* the walkthrough film: full bleed, the controls laid over the foot of the picture */
+#s-walkthrough-film { background: #000; }
+#s-walkthrough-film video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; cursor: pointer; }
+.wt-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: calc(var(--pt) * 2); padding: calc(var(--pt) * 14) 2.2% calc(var(--pt) * 24); background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0)); color: #fff; font-size: calc(var(--pt) * 6.2); transition: opacity .5s var(--ease); }
+#s-walkthrough-film.idle .wt-bar { opacity: 0; pointer-events: none; }
+#s-walkthrough-film.idle { cursor: none; }
+body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; pointer-events: none; }
+.wt-b { display: flex; align-items: center; gap: calc(var(--pt) * 1.6); height: calc(var(--pt) * 11); padding: 0 calc(var(--pt) * 4); border: 1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.25); color: #fff; font: inherit; font-weight: 600; letter-spacing: .04em; cursor: pointer; }
+.wt-b:hover { background: rgba(255,255,255,.18); }
+.wt-b.on { background: #5222d0; border-color: #5222d0; }
+.wt-b svg { width: calc(var(--pt) * 5.4); height: calc(var(--pt) * 5.4); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.wt-b:focus { outline: none; }
+.wt-sp { display: flex; }
+.wt-sp .wt-b { border-left-width: 0; padding: 0 calc(var(--pt) * 3.2); }
+.wt-sp .wt-b:first-child { border-left-width: 1px; }
+.wt-prog { flex: 1; height: calc(var(--pt) * 1.8); background: rgba(255,255,255,.28); cursor: pointer; position: relative; }
+.wt-prog i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--lilac); }
+.wt-t { min-width: calc(var(--pt) * 24); text-align: right; opacity: .85; font-variant-numeric: tabular-nums; }
 </style>
 <style data-slide="s-thanks-w">
 /* ---------- thank you ---------- */
@@ -936,7 +953,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 </style>
 <style data-slide="s-div-1">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-1 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-1 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
 #s-div-1 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
 #s-div-1 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
 #s-div-1 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
@@ -944,23 +961,25 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-div-1 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
 #s-div-1 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
 #s-div-1 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-1 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-1 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-1 .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
 #s-div-1 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
 #s-div-1 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
 #s-div-1 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-div-1 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-1 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-1 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-1 .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
 #s-div-1 .page.lit .ap-steps li:not(:nth-child(1)) { opacity: .26 !important; }
 #s-div-1 .page.lit .ap-steps li:nth-child(1) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-div-1 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-div-1 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-1 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-1 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-1 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-1 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
 <style data-slide="s-div-2">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-2 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-2 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
 #s-div-2 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
 #s-div-2 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
 #s-div-2 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
@@ -968,23 +987,25 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-div-2 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
 #s-div-2 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
 #s-div-2 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-2 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-2 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-2 .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
 #s-div-2 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
 #s-div-2 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
 #s-div-2 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-div-2 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-2 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-2 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-2 .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
 #s-div-2 .page.lit .ap-steps li:not(:nth-child(2)) { opacity: .26 !important; }
 #s-div-2 .page.lit .ap-steps li:nth-child(2) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-div-2 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-div-2 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-2 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-2 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-2 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-2 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
 <style data-slide="s-div-3">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-3 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-3 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
 #s-div-3 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
 #s-div-3 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
 #s-div-3 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
@@ -992,23 +1013,25 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-div-3 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
 #s-div-3 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
 #s-div-3 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-3 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-3 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-3 .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
 #s-div-3 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
 #s-div-3 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
 #s-div-3 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-div-3 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-3 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-3 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-3 .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
 #s-div-3 .page.lit .ap-steps li:not(:nth-child(3)) { opacity: .26 !important; }
 #s-div-3 .page.lit .ap-steps li:nth-child(3) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-div-3 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-div-3 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-3 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-3 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-3 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-3 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
 <style data-slide="s-div-4">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-4 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-4 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
 #s-div-4 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
 #s-div-4 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
 #s-div-4 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
@@ -1016,23 +1039,25 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-div-4 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
 #s-div-4 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
 #s-div-4 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-4 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-4 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-4 .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
 #s-div-4 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
 #s-div-4 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
 #s-div-4 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-div-4 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-4 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-4 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-4 .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
 #s-div-4 .page.lit .ap-steps li:not(:nth-child(4)) { opacity: .26 !important; }
 #s-div-4 .page.lit .ap-steps li:nth-child(4) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-div-4 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-div-4 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-4 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-4 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-4 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-4 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
 <style data-slide="s-div-5">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-5 .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-div-5 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
 #s-div-5 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
 #s-div-5 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
 #s-div-5 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
@@ -1040,23 +1065,26 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-div-5 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
 #s-div-5 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
 #s-div-5 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-5 .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-div-5 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-5 .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
 #s-div-5 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
 #s-div-5 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
 #s-div-5 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-div-5 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-5 .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-div-5 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-div-5 .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
 #s-div-5 .page.lit .ap-steps li:not(:nth-child(5)) { opacity: .26 !important; }
 #s-div-5 .page.lit .ap-steps li:nth-child(5) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-div-5 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-div-5 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-5 .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-div-5 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-5 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-5 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
 <style data-slide="s-overview">
+.ap-still, .ap-still > * { transition: none !important; opacity: 1 !important; transform: none !important; }
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-overview .st-k small { display: block; font-size: calc(var(--pt) * 9); font-style: italic; color: #555; }
+#s-overview .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
 #s-overview .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
 #s-overview .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
 #s-overview .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
@@ -1064,17 +1092,19 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-overview .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
 #s-overview .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
 #s-overview .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-overview .ap-steps .hand { margin-top: calc(var(--pt) * 2); font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
+#s-overview .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-overview .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
 #s-overview .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
 #s-overview .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
 #s-overview .ap-steps li::before { top: calc(var(--pt) * 6.5); }
 #s-overview .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-overview .ap-steps .hand { font-size: calc(var(--pt) * 15); }   /* the longer names */
+#s-overview .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
+#s-overview .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
 #s-overview .page.lit .ap-steps li:not(:first-child) { opacity: .26 !important; }
 #s-overview .page.lit .ap-steps li:first-child i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
 #s-overview .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 #s-overview .page.said .st-line { opacity: 1; transform: none; }
-#s-overview .st-line p { margin: 0; font-size: calc(var(--pt) * 22); line-height: 1.2; color: var(--purple-2); }
+#s-overview .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-overview .st-line b { font-weight: 700; color: var(--purple); }
 #s-overview .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
@@ -1661,7 +1691,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <div><span>Site</span><b>Regalium Building, Koramangala Industrial Layout, Bengaluru</b></div>
       <div><span>Floor plate</span><b>91,000 sqft, single floor</b></div>
       <div><span>Submitted to</span><b>Anarock PMES, for ACKO</b></div>
-      <div><span>Due</span><b>31st October 2026</b></div>
+      <div><span>Due</span><b>23rd November 2026</b></div>
     </div>
   </div>
 </section>
@@ -1729,11 +1759,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span>Project Review</span></li>
           </ol>
       </div>
 </section>
@@ -1743,13 +1773,13 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">01 · Concept Framework</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span>Project Review</span></li>
           </ol>
-    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Establishing the overarching design vision.</p><span class="hand"></span></div>
+    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Establishing the overarching design vision.</p></div>
   </div>
 </section>
 
@@ -1867,13 +1897,13 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">02 · Design Development</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span>Project Review</span></li>
           </ol>
-    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Translating the concept into a spatial solution.</p><span class="hand"></span></div>
+    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Translating the concept into a spatial solution.</p></div>
   </div>
 </section>
 
@@ -2320,13 +2350,13 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">03 · Design Expression</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span>Project Review</span></li>
           </ol>
-    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Materiality, visualisation and spatial experience.</p><span class="hand"></span></div>
+    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Materiality, visualisation and spatial experience.</p></div>
   </div>
 </section>
 
@@ -2413,12 +2443,25 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene walk" id="s-w-reception" data-walk="{&quot;n&quot;: &quot;Reception&quot;, &quot;sub&quot;: &quot;Arrival&quot;, &quot;q&quot;: &quot;I feel welcomed&quot;, &quot;r&quot;: [&quot;r3-reception-op1&quot;, &quot;r3-reception-op2&quot;], &quot;kp&quot;: []}" data-part="p6" data-mode="dark" data-title="Reception" data-steps="2" data-mins="0.3" data-beats="OP 01,OP 02"
+<section class="scene" id="s-walkthrough-film" data-part="p6" data-mode="dark" data-nonum data-title="Walkthrough film" data-steps="1" data-mins="3.7"
+  data-notes="The walkthrough film, full screen.">
+  <video id="wt-video" src="assets/video/walkthrough.mp4" poster="assets/video/walkthrough-poster.jpg" preload="metadata" playsinline></video>
+  <div class="wt-bar">
+    <button type="button" class="wt-b" id="wt-play" title="Play / pause" aria-label="Play / pause"><svg viewBox="0 0 24 24"><path class="pl" d="M7 4l13 8-13 8z"/><path class="pa" d="M8 5v14M16 5v14" style="display:none"/></svg><span>Play</span></button>
+    <button type="button" class="wt-b" id="wt-replay" title="Replay from the start" aria-label="Replay"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Replay</span></button>
+    <div class="wt-prog" id="wt-prog"><i></i></div>
+    <span class="wt-t" id="wt-t">0:00 / 0:00</span>
+    <button type="button" class="wt-b on" id="wt-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wv" d="M16 8a5 5 0 0 1 0 8"/><path class="wx" d="M17 9l5 6M22 9l-5 6" style="display:none"/></svg><span>Music</span></button>
+    <div class="wt-sp" id="wt-sp"><button type="button" class="wt-b" data-r="0.5">0.5x</button><button type="button" class="wt-b on" data-r="1">1x</button><button type="button" class="wt-b" data-r="1.5">1.5x</button><button type="button" class="wt-b" data-r="2">2x</button></div>
+  </div>
+</section>
+
+<section class="scene walk" id="s-w-reception" data-walk="{&quot;n&quot;: &quot;Reception&quot;, &quot;sub&quot;: &quot;Arrival · View 1&quot;, &quot;q&quot;: &quot;I feel welcomed&quot;, &quot;r&quot;: [&quot;r3-reception-op1&quot;, &quot;r3-reception-op2&quot;], &quot;kp&quot;: []}" data-part="p6" data-mode="dark" data-title="Reception" data-steps="2" data-mins="0.3" data-beats="OP 01,OP 02"
   data-notes="Reception, where the Loop begins: I feel welcomed. Option 01 and Option 02.">
 </section>
 
-<section class="scene walk" id="s-w-recoffee" data-walk="{&quot;n&quot;: &quot;Reception Coffee Point&quot;, &quot;sub&quot;: &quot;Arrival&quot;, &quot;q&quot;: &quot;I feel welcomed&quot;, &quot;r&quot;: [&quot;r3-recoffee-op1&quot;, &quot;r3-recoffee-op2&quot;], &quot;kp&quot;: []}" data-part="p6" data-mode="dark" data-title="Reception Coffee Point" data-steps="2" data-mins="0.15" data-beats="OP 01,OP 02"
-  data-notes="The coffee point at reception: a first coffee as you arrive. Option 01 and Option 02.">
+<section class="scene walk" id="s-w-recoffee" data-walk="{&quot;n&quot;: &quot;Reception&quot;, &quot;sub&quot;: &quot;Arrival · View 2&quot;, &quot;q&quot;: &quot;I feel welcomed&quot;, &quot;r&quot;: [&quot;r3-recoffee-op1&quot;, &quot;r3-recoffee-op2&quot;], &quot;kp&quot;: []}" data-part="p6" data-mode="dark" data-title="Reception · View 2" data-steps="2" data-mins="0.15" data-beats="OP 01,OP 02"
+  data-notes="Reception, second view: the arrival from the other side. Option 01 and Option 02.">
 </section>
 
 <section class="scene walk" id="s-w-cafe1" data-walk="{&quot;n&quot;: &quot;Cafe&quot;, &quot;sub&quot;: &quot;Café · View 1&quot;, &quot;q&quot;: &quot;Hey, we finally meet!&quot;, &quot;r&quot;: [&quot;r3-cafe1&quot;], &quot;kp&quot;: [40]}" data-part="p6" data-mode="dark" data-title="Cafe · View 1" data-steps="1" data-mins="0.3" data-beats="Render"
@@ -2431,10 +2474,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <section class="scene walk" id="s-w-deck" data-walk="{&quot;n&quot;: &quot;Outdoor Deck&quot;, &quot;sub&quot;: &quot;Café · Out in the open&quot;, &quot;q&quot;: &quot;Hey, we finally meet!&quot;, &quot;r&quot;: [&quot;r3-deck&quot;], &quot;kp&quot;: []}" data-part="p6" data-mode="dark" data-title="Outdoor Deck" data-steps="1" data-mins="0.15" data-beats="Render"
   data-notes="The outdoor deck: a pause in the open air, under the canopies.">
-</section>
-
-<section class="scene walk" id="s-w-coffee" data-walk="{&quot;n&quot;: &quot;Coffee Point&quot;, &quot;sub&quot;: &quot;Café · Coffee corner&quot;, &quot;q&quot;: &quot;Hey, we finally meet!&quot;, &quot;r&quot;: [&quot;r3-coffee&quot;], &quot;kp&quot;: [42]}" data-part="p6" data-mode="dark" data-title="Coffee Point" data-steps="1" data-mins="0.15" data-beats="Render"
-  data-notes="A coffee point: hey, we finally meet.">
 </section>
 
 <section class="scene walk" id="s-w-board" data-walk="{&quot;n&quot;: &quot;State Room&quot;, &quot;sub&quot;: &quot;Board Room · Boardroom · 32 pax&quot;, &quot;q&quot;: &quot;This is my big moment&quot;, &quot;r&quot;: [&quot;r3-board-op1&quot;, &quot;r3-board-op2&quot;], &quot;kp&quot;: [25, 25]}" data-part="p6" data-mode="dark" data-title="State Room · Boardroom" data-steps="2" data-mins="0.3" data-beats="OP 01,OP 02"
@@ -2453,8 +2492,8 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   data-notes="Quick sprint rooms, 4 pax: the everyday meeting.">
 </section>
 
-<section class="scene walk" id="s-w-collab" data-walk="{&quot;n&quot;: &quot;Collab&quot;, &quot;sub&quot;: &quot;Collab · Come together&quot;, &quot;q&quot;: &quot;Wow, worth the commute&quot;, &quot;r&quot;: [&quot;r3-collab&quot;], &quot;kp&quot;: []}" data-part="p6" data-mode="dark" data-title="Collab" data-steps="1" data-mins="0.15" data-beats="Render"
-  data-notes="Collab: a space to come together around ideas. Worth the commute.">
+<section class="scene walk" id="s-w-collab" data-walk="{&quot;n&quot;: &quot;Collab&quot;, &quot;sub&quot;: &quot;Collab · Come together&quot;, &quot;q&quot;: &quot;Wow, worth the commute&quot;, &quot;r&quot;: [&quot;r3-collab-op1&quot;, &quot;r3-collab-op2&quot;], &quot;kp&quot;: []}" data-part="p6" data-mode="dark" data-title="Collab" data-steps="2" data-mins="0.15" data-beats="OP 01,OP 02"
+  data-notes="Collab: a space to come together around ideas. Worth the commute. Option 01 and Option 02.">
 </section>
 
 <section class="scene walk" id="s-w-garden" data-walk="{&quot;n&quot;: &quot;The Acker Garden&quot;, &quot;sub&quot;: &quot;Collab · Work area&quot;, &quot;q&quot;: &quot;Wow, worth the commute&quot;, &quot;r&quot;: [&quot;r3-garden&quot;], &quot;kp&quot;: [36]}" data-part="p6" data-mode="dark" data-title="The Acker Garden" data-steps="1" data-mins="0.3" data-beats="Render"
@@ -2477,8 +2516,8 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   data-notes="The zen room: a space to unwind, relax and keep the mind creative, under a night-sky optic-fibre ceiling in the brand&#x27;s hues.">
 </section>
 
-<section class="scene walk" id="s-w-studio" data-walk="{&quot;n&quot;: &quot;Studio Room&quot;, &quot;sub&quot;: &quot;Wellness · A space for Acko&#x27;s voice&quot;, &quot;r&quot;: [&quot;r3-studio-op1&quot;, &quot;r3-studio-op2&quot;], &quot;kp&quot;: [45, 45], &quot;q&quot;: &quot;They thought of me too!&quot;}" data-part="p6" data-mode="dark" data-title="Studio Room" data-steps="2" data-mins="0.15" data-beats="OP 01,OP 02"
-  data-notes="The studio: a space for ACKO&#x27;s voice, the podcast set. Option 01 and Option 02. → Bridge: How it performs. 04 · Integrated Performance.">
+<section class="scene walk" id="s-w-studio" data-walk="{&quot;n&quot;: &quot;Studio Room&quot;, &quot;sub&quot;: &quot;Wellness · A space for Acko&#x27;s voice&quot;, &quot;r&quot;: [&quot;r3-studio-op1&quot;], &quot;kp&quot;: [45], &quot;q&quot;: &quot;They thought of me too!&quot;}" data-part="p6" data-mode="dark" data-title="Studio Room" data-steps="1" data-mins="0.15" data-beats="Render"
+  data-notes="The studio: a space for ACKO&#x27;s voice, the podcast set. → Bridge: How it performs. 04 · Integrated Performance.">
 </section>
 
 <section class="scene" id="s-div-4" data-part="p7" data-title="04 · Integrated Performance" data-steps="1" data-mins="0.3"
@@ -2486,13 +2525,13 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">04 · Integrated Performance</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span>Project Review</span></li>
           </ol>
-    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Technical performance and added value.</p><span class="hand"></span></div>
+    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Technical performance and added value.</p></div>
   </div>
 </section>
 
@@ -2703,13 +2742,13 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">05 · Project Review</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span class="hand">Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>02</b><span class="hand">Design Development</span></li>
-      <li style="--i:5"><i></i><b>03</b><span class="hand">Design Expression</span></li>
-      <li style="--i:6"><i></i><b>04</b><span class="hand">Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>05</b><span class="hand">Project Review</span></li>
+      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
+      <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
+      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span></li>
+      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span></li>
+      <li style="--i:7"><i></i><b>05</b><span>Project Review</span></li>
           </ol>
-    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Revisiting previous discussions and establishing alignment.</p><span class="hand"></span></div>
+    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Revisiting previous discussions and establishing alignment.</p></div>
   </div>
 </section>
 
@@ -3260,6 +3299,76 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }#s-layout-sp .sp2-nav { display: none; left: 34%; top: 3.4%; z-index: 7; align-items: center; gap: calc(var(--pt) * 8); }#s-layout-sp.nb-open .sp2-nav { display: flex; }#s-layout-sp .sp2-nav button { border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 9); font: 600 calc(var(--pt) * 8) var(--body); cursor: pointer; }#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 8.5); color: #333; }</style>
 <style>.scene .page > .dg-tag { right: 12.6%; top: 95.1%; margin: 0; padding: .25em .9em; border: 1px solid currentColor; border-radius: 99px; font-size: calc(var(--pt) * 5); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; line-height: 1.3; opacity: .5; pointer-events: none; }</style>
 <script>window.ACKO_WOW = true;   /* the big moments (9 Nov): this page only */</script>
+<script>
+/* the hand-off between slides (the definition the other pages carry inline): mark on leave, take on enter */
+window.ACKO_MORPH = window.ACKO_MORPH || (() => {
+  const M = {
+    from: null,
+    AXO: [5.26830, -3.93087, 5.71554, 3.60689, 104.64709, 973.48117],                                    // plan (m) → the challenges axo on the page
+    HOME: [48, 284, 1872, 542],                                   // the Layout's plate on the page (px)
+    BOX: [0.47, 1.79, 245.53, 36.03],                      // the plate's box (m): x0, y0, x1, y1
+    mark(id, data) { M.from = Object.assign({ id, t: performance.now() }, data || {}); },
+    take(id, ms) { const f = M.from; if (!f || f.id !== id || performance.now() - f.t > (ms || 1500)) return null; M.from = null; return f; },
+    mul: (P, Q) => [P[0] * Q[0] + P[2] * Q[1], P[1] * Q[0] + P[3] * Q[1], P[0] * Q[2] + P[2] * Q[3], P[1] * Q[2] + P[3] * Q[3], P[0] * Q[4] + P[2] * Q[5] + P[4], P[1] * Q[4] + P[3] * Q[5] + P[5]],
+    inv(P) { const D = P[0] * P[3] - P[1] * P[2]; return [P[3] / D, -P[1] / D, -P[2] / D, P[0] / D, (P[2] * P[5] - P[3] * P[4]) / D, (P[1] * P[4] - P[0] * P[5]) / D]; },
+    rect(r) { const [x0, y0, x1, y1] = M.BOX, sx = (r[2] - r[0]) / (x1 - x0), sy = (r[3] - r[1]) / (y1 - y0); return [sx, 0, 0, sy, r[0] - sx * x0, r[1] - sy * y0]; },
+    // an element's user space → page px (the page frame is 1920 wide on every slide)
+    page(el, pg) { const m = el.getScreenCTM(), r = pg.getBoundingClientRect(), s = r.width / 1920; return [m.a / s, m.b / s, m.c / s, m.d / s, (m.e - r.left) / s, (m.f - r.top) / s]; },
+    // the bare floor, in metres, into a <g>
+    draw(g) {
+      if (g.childElementCount) return;
+      const F = window.ACKO_FLOOR; if (!F) return;
+      const k = F.unit, P = (pts) => pts.map(([x, y]) => `${(x * k).toFixed(2)} ${(y * k).toFixed(2)}`).join("L"), ns = 'vector-effect="non-scaling-stroke"';
+      g.innerHTML = (F.terraces || []).map((t) => `<path d="M${P(t)}Z" fill="#e3efd9" stroke="#8a83a3" stroke-width="1" ${ns}/>`).join("") +
+        `<path d="M${P(F.plate)}Z" fill="#f4f0ff" stroke="#5222d0" stroke-width="2.4" stroke-linejoin="round" ${ns}/>` +
+        (F.cores || []).map((q) => `<path d="M${P(q)}Z" fill="#dcd7e8" stroke="#8a83a3" stroke-width="1" ${ns}/>`).join("");
+    },
+    // a <g>'s matrix from P to Q over ms (eased); the end state is set by a timer too, so it lands even without frames
+    anim(g, P, Q, ms, done, wait) {
+      const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2), set = (u) => g.setAttribute("transform", `matrix(${P.map((v, i) => (v + (Q[i] - v) * ease(u)).toFixed(4)).join(" ")})`);
+      let end = false, t0 = 0; set(0);
+      const fin = () => { if (end) return; end = true; set(1); if (done) done(); };
+      const tick = (now) => { if (end) return; const u = Math.min(1, (now - t0) / ms); set(u); if (u < 1) requestAnimationFrame(tick); else fin(); };
+      setTimeout(() => { t0 = performance.now(); requestAnimationFrame(tick); setTimeout(fin, ms + 150); }, wait == null ? 450 : wait);   // after the slides' cross-fade has begun
+    },
+  };
+  return M;
+})();
+/* continuing from one slide into the next (Ritika, 19 Nov): the object (plate, plan, model) carries on; the old slide's words and tools go
+   first (out), the new slide's wait until the object has moved (hold, then reveal) */
+window.ACKO_FLOW = window.ACKO_FLOW || {
+  out(sc) { if (!sc) return; sc.classList.remove("fl-in", "fl-fade"); sc.classList.add("fl-out"); },
+  // the plan we leave stays drawn for an instant, so the model that rises out of it can fade in over it: the next slide may take the
+  // switching-off (take) and do it when it lands; otherwise it happens at once (not if the next slide is itself a plan slide)
+  off(fn) {
+    const tok = { fn }; ACKO_FLOW._off = tok;
+    setTimeout(() => { if (ACKO_FLOW._off !== tok) return; ACKO_FLOW._off = null; if (!/^s-(layout-sp|site-dd)$/.test(document.body.dataset.scene || "")) fn(); }, 80);
+  },
+  take() { const t = ACKO_FLOW._off; ACKO_FLOW._off = null; return t ? t.fn : null; },
+  // the hand-drawn neighbourhoods stay on the model until it has turned flat and faded into the Layout's plan (Ritika, 19 Nov): the
+  // strategy hands over its switch back to the exact volumes; the Layout runs it when the model has gone, anything else at once
+  sketchOff(fn) {
+    const tok = { fn }; ACKO_FLOW._sk = tok;
+    setTimeout(() => { if (ACKO_FLOW._sk !== tok || document.body.dataset.scene === "s-layout-sp") return; ACKO_FLOW._sk = null; fn(); }, 100);
+    setTimeout(() => { if (ACKO_FLOW._sk === tok) { ACKO_FLOW._sk = null; fn(); } }, 5000);
+  },
+  runSketchOff() { const t = ACKO_FLOW._sk; ACKO_FLOW._sk = null; if (t) t.fn(); },
+  hold(sc) { if (!sc) return; sc.classList.remove("fl-out", "fl-fade"); sc.classList.add("fl-in"); },
+  clear(sc) { if (!sc) return; sc.classList.remove("fl-out", "fl-in", "fl-fade"); },
+  reveal(sc, delay) {
+    if (!sc) return;
+    setTimeout(() => { if (!sc.classList.contains("fl-in")) return; sc.classList.add("fl-fade"); sc.classList.remove("fl-in"); setTimeout(() => sc.classList.remove("fl-fade"), 2200); }, delay || 0);
+  },
+};
+
+</script>
+<style>
+/* ACKO_FLOW: the words and tools of the slide we leave go at once; the next slide's come in after the object has moved */
+.scene.fl-out .page > * { opacity: 0 !important; transition: opacity .25s ease !important; }
+.scene.fl-in .page > * { opacity: 0 !important; transition: none !important; }
+.scene.fl-fade .page > * { transition: opacity .9s ease calc(var(--i, 0) * 90ms) !important; }
+.scene.fl-in .page > .st-3d, .scene.fl-out .page > .st-3d, .scene.fl-fade .page > .st-3d { opacity: 1 !important; transition: none !important; }
+</style>
 <script>window.ACKO_SECTIONS = {"names": {"cover": "Project Vision", "p2": "Design Drivers", "p3": "Overview", "p4": "01 · Concept Framework", "p5": "02 · Design Development", "p6": "03 · Design Expression", "p7": "04 · Integrated Performance", "p8": "05 · Project Review", "close": "Thank you", "A": "Appendix · Kit of parts"}, "main": [["cover", "Project Vision", ""], ["p2", "Design Drivers", ""], ["p3", "Overview", ""], ["p4", "Concept Framework", ""], ["p5", "Design Development", ""], ["p6", "Design Expression", ""], ["p7", "Integrated Performance", ""], ["p8", "Project Review", ""], ["close", "Thank you", ""]]}; window.ACKO_SP3 = true;</script>
 <style>/* the beat number (index-story2-numbered.html only) */
 #beat-no { position: fixed; left: 50%; top: calc(var(--ptop) + var(--ph) * .022); transform: translateX(-50%); z-index: 140; display: flex; align-items: center; gap: 8px;
@@ -4008,7 +4117,7 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
   function glide(sc, k) {
     cancelAnimationFrame(raf); draw(sc, k >= 2 ? 1 : 0);
     const pg = $(".page", sc), sh = $(".pp-shell", sc), M = ACKO_MORPH;
-    const from = M.mul(M.inv(M.page($(".pp-svg", sc), pg)), M.rect(M.HOME));
+    const from = M.mul(M.inv(M.page($(".pp-svg", sc), pg)), M.rect((sc._from && sc._from.box) || M.HOME));
     pg.classList.add("pp-arrive");
     M.anim(sh, from, [1, 0, 0, 1, 0, 0], 1500, () => {
       sh.removeAttribute("transform"); pg.classList.remove("pp-arrive");
@@ -4017,10 +4126,11 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
   }
   return {
     enter(_, sc) {
+      if (window.ACKO_FLOW) ACKO_FLOW.clear(sc);
       plain();
       if (!G) build(sc);
       reveal($(".pp-head", sc), 60);
-      sc._fresh = true; sc._from = !reduced && window.ACKO_MORPH ? ACKO_MORPH.take("s-layout-dd") : null;
+      sc._fresh = true; sc._from = !reduced && window.ACKO_MORPH ? ACKO_MORPH.take("s-site-dd") : null;
     },
     step(k, sc) {
       if (sc._fresh && sc._from) { sc._fresh = false; return glide(sc, k); }
@@ -4033,7 +4143,10 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
     },
     leave(_, sc) {
       cancelAnimationFrame(raf);
-      if (sc && window.ACKO_MORPH) { const pg = $(".page", sc), sh = $(".pp-shell", sc); pg.classList.remove("pp-arrive"); sh.removeAttribute("transform"); ACKO_MORPH.mark("s-pitch", { m: ACKO_MORPH.page(sh, pg) }); }
+      if (sc && window.ACKO_MORPH) { const pg = $(".page", sc), sh = $(".pp-shell", sc); pg.classList.remove("pp-arrive"); sh.removeAttribute("transform"); const pl = $(".plate", sh), bb = pl ? pl.getBBox() : null, st = ["fill", "stroke", "stroke-width", "stroke-dasharray", "stroke-linejoin"];
+        const html = [...sh.children].map((e) => { const c = e.cloneNode(true), cs = getComputedStyle(e); c.removeAttribute("class"); st.forEach((p) => c.style.setProperty(p, cs.getPropertyValue(p))); return c.outerHTML; }).join("");
+        ACKO_MORPH.mark("s-pitch", { m: ACKO_MORPH.page(sh, pg), bb: bb ? [bb.x, bb.y, bb.width, bb.height] : null, html }); }
+      if (sc && window.ACKO_FLOW) ACKO_FLOW.out(sc);
     },
   };
 });
@@ -4582,7 +4695,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     if (document.body.dataset.scene !== "s-strategy" || !r) return;
     const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
     const pr = r.getPixelRatio();
-    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    if (r.domElement.parentNode !== host && !S.tiltHost) host.appendChild(r.domElement);      // not while it rises out of the plan in its own host
     if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(Hh * pr)) {
       r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
     }
@@ -4715,21 +4828,48 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
       r.render(M.scene, cam);
     };
-    let t0 = 0, end = false;
+    // the turn plays out whole even if the page stalls while the plan's page is made (a stalled frame counts as 50 ms at most)
+    let t0 = 0, last = 0, acc = 0, end = false;
     const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); if (done) done(h); };
-    const tick = (now) => { if (end) return; if (!t0) t0 = now; const k = Math.min(1, (now - t0) / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
-    paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 500);
+    const tick = (now) => { if (end) return; if (!t0) { t0 = now; last = now; } acc += Math.min(now - last, 50); last = now; const k = Math.min(1, acc / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
+    paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 3000);
+    return true;
+  }
+
+  // from the plan lying flat (Ritika, 19 Nov): the model comes up on the plan's footprint (vb: the plan's view, plan mm) in a host outside the
+  // slides, fades in over the plan, rises into the axo, and only then does this slide's text come in
+  function endTilt() {
+    if (S.offFn) { const f = S.offFn; S.offFn = null; try { f(); } catch (e) { /* the plan is already off */ } }
+    const h = S.tiltHost; if (!h) return; S.tiltHost = null;
+    const cv = r && r.domElement, st3 = $(".st-3d", sc);
+    if (cv && st3 && cv.parentNode === h) { st3.appendChild(cv); cv.style.width = ""; cv.style.height = ""; }
+    h.remove();
+  }
+  function tiltUp(vb) {
+    const stage = document.getElementById("stage"); if (!stage || !M || !r) return false;
+    S.offFn = window.ACKO_FLOW && ACKO_FLOW.take ? ACKO_FLOW.take() : null;
+    const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+    const h = document.createElement("div"); h.className = "st-flat-host";
+    h.style.cssText = "position:fixed;left:var(--pl);top:var(--ptop);width:var(--pw);height:var(--ph);pointer-events:none;z-index:0;opacity:0;transition:opacity .5s ease";
+    stage.insertBefore(h, stage.firstChild); S.tiltHost = h;
+    const cv = r.domElement; h.appendChild(cv); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block";
+    S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2600 }; need();
+    const wp = document.getElementById("w-plan"); wp.style.transition = "none"; wp.style.opacity = "1";      // the plan stays whole under the model while it fades in
+    requestAnimationFrame(() => requestAnimationFrame(() => { h.style.opacity = "1"; }));
+    later(() => { wp.style.transition = ""; wp.style.opacity = ""; }, 650);
+    later(() => { if (S.tiltHost === h) { endTilt(); if (window.ACKO_FLOW) ACKO_FLOW.reveal(sc, 0); } }, 2800);
     return true;
   }
 
   return {
     enter(_, s) {
+      if (window.ACKO_FLOW) ACKO_FLOW.clear(s);
       sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
       S.fresh = true; S.k = 0;
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
-      S.base.useSketch(true);
+      S.base.useSketch(true); ACKO_FLOW._sk = null;
       // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
       const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-challenges", 2500) : null;
       const im = $(".st-from", sc); im.style.transition = "none"; im.style.opacity = fc ? 1 : 0; S.fromCh = !!fc;
@@ -4740,6 +4880,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
         const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
         S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
       }
+      const fd = window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-site-dd", 2500) : null;
+      if (fd && fd.vb && tiltUp(fd.vb) && window.ACKO_FLOW) ACKO_FLOW.hold(sc);
+      later(() => { const Lc = document.getElementById("s-layout-sp"); try { if (Lc && Lc._prebuild && document.body.dataset.scene === sc.id) Lc._prebuild(); } catch (e) { /* built when it is opened */ } }, 2500);
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
     },
     step(k) {
@@ -4747,7 +4890,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       S.fresh = false;
       play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+    leave() { endTilt(); if (window.ACKO_FLOW) ACKO_FLOW.out(sc); if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.rb) S.rb.show(false); if (S.base) ACKO_FLOW.sketchOff(() => S.base.useSketch(false));   // Layout · Spaces flattens the floor from here (9 Nov)
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },
@@ -4996,7 +5139,6 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     if (nbf && !nbf.querySelector(".sp3-common")) nbf.insertAdjacentHTML("beforeend", `<g class="sp3-common">` + plan.data.spaces.filter((s) => COMMON.test(s.type))
       .map((s) => `<path class="f" d="${s.d}"/><path class="e" d="${outer(s.d)}"/>`).join("") + `</g>`);
     const mk = root.querySelector("svg.dx-marks"), E = (plan.data.overlays && plan.data.overlays.entry) || [];   // "mark arrival near the arrow"
-    if (mk && !mk.querySelector(".sp3-arr")) mk.insertAdjacentHTML("beforeend", `<g class="sp3-arr">${E.map(() => `<text>Arrival</text>`).join("")}</g>`);
     arrLay(root, plan.view); V3S.ac = (e) => arrLay(root, e.detail); root.addEventListener("ph:commit", V3S.ac);     // the label keeps its size on screen as the layers redraw
     V3S.z = false; V3S.man = null; fold(sc);
     V3S.mo = () => fold(sc); root.addEventListener("ph:view", V3S.mo);     // every zoom step (the plan's own event; the layers redraw only once it rests)
@@ -5461,23 +5603,29 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     NBX.raf = requestAnimationFrame(tick);
     later(() => { if (NBX.on && NBX.cur && !(E && !reduced)) { NBX.cur = { st: to, bx }; nbDraw(sc, to, bx); } }, MS + 200);      // lands even without frames (E turns on)
   }
+  try { const SCN = document.getElementById("s-layout-sp"); if (SCN) SCN._prebuild = () => { try { build(SCN); } catch (e) { built = false; } }; } catch (e) { /* none */ }
   return self = {
     enter(_, sc) {
+      if (window.ACKO_FLOW) ACKO_FLOW.clear(sc);
       // straight from the site (3 Nov): its map closes in on Regalium's plate till it lies where the plan does, the plan takes
       // the plate's place slowly, then the page's header, tools, pills and panel come in round it
       // The plan's build and first drawing are heavy (a few hundred ms), so they wait till the zoom has landed and the plate stands
       // still: done at once, they froze the zoom's start (3 Nov: "not smooth")
       arriving = document.body.classList.contains("si-left"); pend = 0; PPL.on = false; sc.classList.remove("ppl-on");
-      const ax = !arriving && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? (ACKO_MORPH.take("s-strategy") || ACKO_MORPH.take("s-walk")) : null;
+      const ax = !arriving && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? (ACKO_MORPH.take("s-strategy") || ACKO_MORPH.take("s-axo-detail") || ACKO_MORPH.take("s-walk")) : null;
       const st = ax && document.getElementById(ax.id);          // the strategy's axo, or the walk's view from above
       if (st && st._flatten) {                          // from the Employees Journey: the model turns down onto the plan, then the plan
         arriving = true; document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
+        // the page's plan is made while the model is still turning (not after it has landed), under the model, so it is there as it lands
+        let pre = false; const early = () => { if (pre || document.body.dataset.scene !== sc.id) return; pre = true; arriving = false; build(sc); self.step(pend || 1, sc); };
+        later(early, 700);
         const ok = st._flatten(home(), 1700, (h) => {
           if (document.body.dataset.scene !== sc.id) { h.remove(); return; }
-          arriving = false; build(sc); self.step(pend || 1, sc);          // planOn: the 2D plan fades in under the model
+          early(); arriving = false;                                       // (planOn: the 2D plan fades in under the model)
           sc._h3 = h; h.style.transition = "opacity 1.1s ease-in-out";
           later(() => { h.style.opacity = "0"; }, 300);                   // the model fades off the plan it now lies on
           later(() => { h.remove(); sc._h3 = null; }, 1600);
+          later(() => { if (window.ACKO_FLOW) ACKO_FLOW.runSketchOff(); }, 1700);
           later(() => sc.classList.remove("ly-arrive"), 1100);
           later(() => document.body.classList.remove("ly-arrive"), 1800);
         });
@@ -5564,13 +5712,15 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       ppl(sc, k === 1 || k === 2, k === 1);              // Spaces: the people come in; Neighbourhoods: they stay, in their colours (10 Nov)
     },
     leave(_, sc) {
+      if (window.ACKO_MORPH) ACKO_MORPH.mark("s-layout-sp", { vb: home() });
+      if (window.ACKO_FLOW) ACKO_FLOW.out(sc);
       SH = null; if (sc) sc.classList.remove("nb-open");
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
       if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
       v3Leave(sc); acPin = null; if (V3 && sc) ringsOn(sc, false);
-      sheet(sc, null); plan.planOff(); cancelAnimationFrame(PPL.raf); if (sc) sc.classList.remove("ppl-on");
+      sheet(sc, null); ACKO_FLOW.off(() => plan.planOff()); cancelAnimationFrame(PPL.raf); if (sc) sc.classList.remove("ppl-on");
       if (sc && sc._h3) { sc._h3.remove(); sc._h3 = null; }   // left mid-turn: the model's host goes
     },
   };
@@ -5908,81 +6058,40 @@ ACKO.slide("s-walkthrough", ({ $, plain, reveal }) => ({
   enter(_, sc) { plain(); reveal($(".page", sc), 100); },
 }));
 </script>
-<script data-slide="s-thanks-w">
-/* thank you: the Appendix and About SKV from here. The re-ordered deck (9 Nov): first the Loop closes. The route on the floor (ACKO_LOOP's
-   west-to-east sweep, as it lay on the Loop slide and the plans) traces itself across the page, then folds point by point into ACKO's
-   Möbius (s-mobius's centre line: behind, front, front, behind, from her left-most point) and closes; then the words */
-ACKO.slide("s-thanks-w", ({ $, plain, reveal, go, trackIdx, sceneIx, later, reduced, cue }) => {
-  const N = 520, LAV = "rgb(190,164,245)", R = { raf: 0, A: null, B: null };
-  const ease = (u) => (u <= 0 ? 0 : u >= 1 ? 1 : u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
-  function resample(P, n) {
-    const ss = [0]; for (let i = 1; i < P.length; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
-    const L = ss[ss.length - 1], out = []; let j = 0;
-    for (let k = 0; k < n; k++) { const s = (k / (n - 1)) * L; while (j < ss.length - 2 && ss[j + 1] < s) j++; const f = ss[j + 1] > ss[j] ? (s - ss[j]) / (ss[j + 1] - ss[j]) : 0; out.push([P[j][0] + (P[j + 1][0] - P[j][0]) * f, P[j][1] + (P[j + 1][1] - P[j][1]) * f]); }
-    return out;
+<script data-slide="s-walkthrough-film">
+/* the walkthrough film: full bleed; play / pause, replay, music on / off, speed; the bar rests when the mouse does; stops when the slide is left */
+ACKO.slide("s-walkthrough-film", ({ $, plain }) => {
+  const V = () => document.getElementById("wt-video"), T = (s) => { s = Math.max(0, s | 0); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+  let wired = false, idle = 0, SC = null;
+  const EV = ["mousemove", "pointerdown", "touchstart", "keydown"];
+  const wake = () => { if (!SC) return; SC.classList.remove("idle"); clearTimeout(idle); idle = setTimeout(() => { const v = V(); if (v && !v.paused) SC.classList.add("idle"); }, 2500); };
+  function sync() {
+    const v = V(); if (!v) return;
+    $("#wt-play .pl", document).style.display = v.paused ? "" : "none"; $("#wt-play .pa", document).style.display = v.paused ? "none" : "";
+    $("#wt-play span", document).textContent = v.paused ? "Play" : "Pause";
+    $("#wt-prog i", document).style.width = (v.duration ? (v.currentTime / v.duration) * 100 : 0) + "%";
+    $("#wt-t", document).textContent = T(v.currentTime) + " / " + T(v.duration || 0);
+    $("#wt-mute", document).classList.toggle("on", !v.muted); $("#wt-mute .wx", document).style.display = v.muted ? "" : "none"; $("#wt-mute .wv", document).style.display = v.muted ? "none" : "";
+    if (v.paused) { clearTimeout(idle); if (SC) SC.classList.remove("idle"); }
   }
-  const fit = (P, box) => {                              // P scaled into box [x0, y0, x1, y1], centred, keeping its shape
-    const xs = P.map((p) => p[0]), ys = P.map((p) => p[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
-    const k = Math.min((box[2] - box[0]) / (x1 - x0), (box[3] - box[1]) / (y1 - y0)), cx = (box[0] + box[2]) / 2, cy = (box[1] + box[3]) / 2;
-    return P.map(([x, y]) => [cx + (x - (x0 + x1) / 2) * k, cy + (y - (y0 + y1) / 2) * k]);
-  };
-  function build(sc) {
-    if (R.A) return true;
-    const LP = window.ACKO_LOOP; if (!LP) return false;
-    const toPage = (p) => [149.76 + 1.055 * p.x, 1.0547 * p.y];
-    const smp = (el, a, b) => { const out = [], L = el.getTotalLength(); a = a || 0; b = b == null ? L : b; const n = Math.max(2, Math.ceil((b - a) / 6)); for (let i = 0; i <= n; i++) out.push(toPage(el.getPointAtLength(a + ((b - a) * i) / n))); return out; };
-    const f1 = $(".g-f1", sc), bk = $(".g-bk", sc), f2 = $(".g-f2", sc);
-    // her left-most point on the behind part: where the strip starts and closes (s-mobius CUT)
-    const CUT = [344.19, 543.99], Lb = bk.getTotalLength(); let c = 0, best = 1e9;
-    for (let l = 0; l <= Lb; l += 3) { const p = toPage(bk.getPointAtLength(l)), d = Math.hypot(p[0] - CUT[0], p[1] - CUT[1]); if (d < best) { best = d; c = l; } }
-    const mob = smp(bk, c).concat(smp(f2), smp(f1), smp(bk, 0, c));
-    R.B = resample(fit(mob, [660, 80, 1260, 410]), N);
-    R.A = resample(fit(window.ACKO_LOOP_SMOOTH ? window.ACKO_LOOP_SMOOTH(LP) : LP.sweep, [180, 150, 1740, 300]), N);   // the smooth Loop (10 Nov)
-    return true;
-  }
-  function rib(cv, pts, wid, head) {                     // the ribbon along pts up to share head of its length, ends tapering
-    const r = Math.min(2, devicePixelRatio || 1), W = Math.round(cv.clientWidth * r), H = Math.round(cv.clientHeight * r);
-    if (!W || !H) return; if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
-    const k = W / 1920, x = cv.getContext("2d"); x.clearRect(0, 0, W, H);
-    if (!pts) return;
-    const m = Math.max(2, Math.round(pts.length * head)), P = pts.slice(0, m), n = P.length, ss = [0];
-    for (let i = 1; i < n; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
-    const L = ss[n - 1], TAP = Math.min(160, L * 0.1);
-    const E = P.map((p, i) => {
-      const a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
-      const u = Math.min(1, Math.min(ss[i], L - ss[i]) / TAP), e = u * u * (3 - 2 * u), w = wid * (0.1 + 0.9 * e) / 2;
-      return [[(p[0] - dy / l * w) * k, (p[1] + dx / l * w) * k], [(p[0] + dy / l * w) * k, (p[1] - dx / l * w) * k]];
+  function wire(sc) {
+    if (wired) return; wired = true; const v = V();
+    const toggle = () => (v.paused ? v.play() : v.pause());
+    ["play", "pause", "timeupdate", "loadedmetadata", "ended", "volumechange"].forEach((e) => v.addEventListener(e, sync));
+    v.addEventListener("play", wake);
+    v.addEventListener("click", toggle);
+        $("#wt-play", document).addEventListener("click", toggle);
+    $("#wt-replay", document).addEventListener("click", () => { v.currentTime = 0; v.play(); });
+    $("#wt-mute", document).addEventListener("click", () => { v.muted = !v.muted; });
+    $("#wt-prog", document).addEventListener("click", (e) => { const r = e.currentTarget.getBoundingClientRect(); if (v.duration) v.currentTime = ((e.clientX - r.left) / r.width) * v.duration; });
+    $("#wt-sp", document).addEventListener("click", (e) => {
+      const b = e.target.closest("[data-r]"); if (!b) return; v.playbackRate = +b.dataset.r;
+      $("#wt-sp", document).querySelectorAll(".wt-b").forEach((x) => x.classList.toggle("on", x === b));
     });
-    x.globalAlpha = 0.85; x.fillStyle = LAV; x.beginPath(); E.forEach((e) => x.lineTo(e[0][0], e[0][1])); for (let i = n - 1; i >= 0; i--) x.lineTo(E[i][1][0], E[i][1][1]); x.closePath(); x.fill();
-    x.globalAlpha = 0.9; x.strokeStyle = "rgba(255,255,255,.8)"; x.lineWidth = 1.3 * k; x.lineJoin = "round";
-    [0, 1].forEach((j) => { x.beginPath(); E.forEach((e) => x.lineTo(e[j][0], e[j][1])); x.stroke(); });
-    x.globalAlpha = 1;
   }
-  const at = (e) => R.A.map((a, i) => [a[0] + (R.B[i][0] - a[0]) * e, a[1] + (R.B[i][1] - a[1]) * e]);
-  const words = (sc) => sc.classList.remove("tw-wait");
   return {
-    enter(_, sc) {
-      plain(); reveal($(".page", sc), 100);
-      $("#to-appendix").onclick = () => go(trackIdx("appendix")[0], 1);
-      $("#to-skv").onclick = () => go(sceneIx("s-skv"), 1);
-      cancelAnimationFrame(R.raf);
-      const cv = $(".tw-rib", sc);
-      if (!build(sc)) return;
-      if (reduced) { rib(cv, R.B, 30, 1); return; }
-      sc.classList.add("tw-wait"); rib(cv, null);
-      // 0.3–1.6 s the floor's Loop traces itself; 1.9–4.1 s it folds into the Möbius, widening; closed, then the words
-      const t0 = performance.now(); let shut = false;
-      const close = () => { if (shut) return; shut = true; rib(cv, R.B, 30, 1); cue("close"); later(() => words(sc), 350); };
-      const frame = (now) => {
-        if (document.body.dataset.scene !== sc.id || shut) return;
-        const t = (now - t0) / 1000;
-        if (t < 1.9) rib(cv, R.A, 12, ease(Math.min(1, Math.max(0, (t - 0.3) / 1.3))));
-        else { const e = ease(Math.min(1, (t - 1.9) / 2.2)); rib(cv, at(e), 12 + 18 * e, 1); if (e >= 1) return close(); }
-        R.raf = requestAnimationFrame(frame);
-      };
-      R.raf = requestAnimationFrame(frame); later(close, 4600);
-    },
-    leave(_, sc) { cancelAnimationFrame(R.raf); if (sc) sc.classList.remove("tw-wait"); },
+    enter(_, sc) { plain(); SC = sc; wire(sc); document.body.classList.add("wt-film"); EV.forEach((e) => document.addEventListener(e, wake, true)); const v = V(); v.currentTime = 0; sync(); const p = v.play(); if (p && p.catch) p.catch(() => {}); wake(); },
+    leave() { const v = V(); if (v) v.pause(); clearTimeout(idle); document.body.classList.remove("wt-film"); EV.forEach((e) => document.removeEventListener(e, wake, true)); if (SC) SC.classList.remove("idle"); },
   };
 });
 </script>
@@ -6323,12 +6432,14 @@ ACKO.slide("s-skv", ({ $, $$, later, plain, countUp, asset }) => {
 ACKO.slide("s-div-1", ({ $, plain, reveal, later, reduced }) => ({
   enter(_, sc) {
     plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
-    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
+    if (window.__apHold && Date.now() - window.__apHold < 1500) { window.__apHold = 0; [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => { e.classList.add("ap-still", "go"); later(() => e.classList.remove("ap-still"), 150); }); }
+    else { [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => e.classList.remove("ap-still")); reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90); }
     if (reduced) { pg.classList.add("lit", "said"); return; }
     later(() => pg.classList.add("lit"), 1300);
     later(() => pg.classList.add("said"), 2000);
   },
   leave(_, sc) {
+    window.__apHold = Date.now();
     if (!sc || !window.ACKO_MORPH) return;
     const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(1) i", sc).getBoundingClientRect();
     window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
@@ -6413,9 +6524,12 @@ ACKO.slide("s-div-5", ({ $, plain, reveal, later, reduced }) => ({
 ACKO.slide("s-overview", ({ $, plain, reveal, later, reduced }) => ({
   enter(_, sc) {
     plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
+    if (window.__apHold && Date.now() - window.__apHold < 1500) { window.__apHold = 0; [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => { e.classList.add("ap-still", "go"); later(() => e.classList.remove("ap-still"), 150); }); return; }
+    [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => e.classList.remove("ap-still"));
     reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
   },
   leave(_, sc) {
+    window.__apHold = Date.now();
     if (!sc || !window.ACKO_MORPH) return;
     const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li i", sc).getBoundingClientRect();
     window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
@@ -6809,8 +6923,32 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     $$(".dd-days button", sc).forEach((b) => (b.onclick = () => { b.blur(); SUN.day = +b.dataset.d; sunPlay(sc, 0); }));
     cancelAnimationFrame(SUN.raf); sunFollow(sc); sunPlay(sc, 700);
   }
+  // from the football pitches (Ritika, 19 Nov): the floor's drawing from the pitches slide, at its place there, glides onto the plan's
+  // outline, then gives way to the plan under it
+  function ddBox(vb) {                                  // the plan's outline (the glazing) in page px, for the plan's view vb
+    const b = bboxOf(DD_GLAZE), kk = Math.max(vb[2] / 1920, vb[3] / 1080), x0 = vb[0] + vb[2] / 2 - 960 * kk, y0 = vb[1] + vb[3] / 2 - 540 * kk;
+    return [(b[0] - x0) / kk, (b[1] - y0) / kk, (b[2] - x0) / kk, (b[3] - y0) / kk];
+  }
+  function ghostIn(sc, mk) {
+    const stage = document.getElementById("stage"), M = window.ACKO_MORPH; if (!stage || !M || !mk || !mk.m || !mk.bb || !mk.html) return false;
+    const tb = ddBox(home()), b = mk.bb, s = (tb[2] - tb[0]) / b[2], cx = (tb[0] + tb[2]) / 2, cy = (tb[1] + tb[3]) / 2;
+    const Q = [s, 0, 0, s, cx - s * (b[0] + b[2] / 2), cy - s * (b[1] + b[3] / 2)];
+    const host = document.createElement("div"); host.className = "pd-ghost";
+    host.style.cssText = "position:fixed;left:var(--pl);top:var(--ptop);width:var(--pw);height:var(--ph);pointer-events:none;z-index:0;transition:opacity .7s ease";
+    host.innerHTML = '<svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><g>' + mk.html + "</g></svg>";
+    stage.insertBefore(host, stage.firstChild);
+    const wp = document.getElementById("w-plan"); wp.style.transition = "none"; wp.style.opacity = "0";      // the plan waits: only the plate is on the page while it glides
+    M.anim(host.querySelector("svg > g"), mk.m, Q, 1500, () => {
+      wp.style.transition = "opacity .9s ease"; wp.style.opacity = ""; host.style.opacity = "0";
+      setTimeout(() => { host.remove(); wp.style.transition = ""; }, 1100);
+      if (window.ACKO_FLOW) ACKO_FLOW.reveal(sc, 700);
+    }, 350);
+    return true;
+  }
   return self = {
     enter(_, sc) {
+      sc._pitch = window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? ACKO_MORPH.take("s-pitch", 2500) : null;
+      if (window.ACKO_FLOW) { ACKO_FLOW.clear(sc); if (sc._pitch) ACKO_FLOW.hold(sc); }
       // straight from the site (3 Nov): its map closes in on Regalium's plate till it lies where the plan does, the plan takes
       // the plate's place slowly, then the page's header, tools, pills and panel come in round it
       // The plan's build and first drawing are heavy (a few hundred ms), so they wait till the zoom has landed and the plate stands
@@ -6876,18 +7014,22 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
         $(".b-vw", sc).textContent = st.views + "%";
         $(".b-vwp", sc).innerHTML = `of the seats have a plant in view within 8 m · median <b>${st.median.toFixed(1)} m</b>`;
       }
-      band(sc); plan.planHome(home(), was ? 700 : 0);        // the plan centred in what this beat's panel leaves it
+      band(sc); plan.planHome(home(), was ? 700 : 0);
+      if (sc._pitch && !was) { const mk = sc._pitch; sc._pitch = null; if (!ghostIn(sc, mk) && window.ACKO_FLOW) ACKO_FLOW.reveal(sc, 0); }        // the plan centred in what this beat's panel leaves it
       sunDD(sc, sunOn);                                  // the sun path, with the due diligence (the button turns it off)
       if (tools) $('[data-t="sun"]', tools).classList.toggle("on", sunOn);
     },
     leave(_, sc) {
+      const mvb = home(), mbox = ddBox(mvb);
+      { const wpl = document.getElementById("w-plan"); if (wpl) { wpl.style.transition = ""; wpl.style.opacity = ""; } }
+      if (window.ACKO_FLOW) ACKO_FLOW.out(sc);
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
       if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
-      plan.planOff(); if (sc) { sunDD(sc, false); coHide(sc); }
-      ddShell(false);                                   // the fit-out back for the slides after
-      if (window.ACKO_MORPH) ACKO_MORPH.mark("s-layout-dd");   // the pitches pick the floor up from here
+      if (sc) { sunDD(sc, false); coHide(sc); }
+      ACKO_FLOW.off(() => { plan.planOff(); ddShell(false); });                                   // the fit-out back for the slides after
+      if (window.ACKO_MORPH) ACKO_MORPH.mark("s-site-dd", { vb: mvb, box: mbox });   // the pitches pick the floor up from here
     },
   };
 });
@@ -7448,7 +7590,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     if (document.body.dataset.scene !== "s-axo-detail" || !r) return;
     const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
     const pr = r.getPixelRatio();
-    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    if (r.domElement.parentNode !== host && !S.tiltHost) host.appendChild(r.domElement);      // not while it rises out of the plan in its own host
     if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(Hh * pr)) {
       r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
     }
@@ -7582,10 +7724,11 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
       if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
       r.render(M.scene, cam);
     };
-    let t0 = 0, end = false;
+    // the turn plays out whole even if the page stalls while the plan's page is made (a stalled frame counts as 50 ms at most)
+    let t0 = 0, last = 0, acc = 0, end = false;
     const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); if (done) done(h); };
-    const tick = (now) => { if (end) return; if (!t0) t0 = now; const k = Math.min(1, (now - t0) / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
-    paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 500);
+    const tick = (now) => { if (end) return; if (!t0) { t0 = now; last = now; } acc += Math.min(now - last, 50); last = now; const k = Math.min(1, acc / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
+    paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 3000);
     return true;
   }
 
@@ -7613,8 +7756,34 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
       if (S.day) { document.body.classList.add("ax-hand"); setTimeout(() => document.body.classList.remove("ax-hand"), 2600); }   // a cut, not a fade, into the day
     } catch (e) { /* no hand-over: A day in ACKO just opens */ }
   }
+  // from the plan lying flat (Ritika, 19 Nov): the model comes up on the plan's footprint (vb: the plan's view, plan mm) in a host outside the
+  // slides, fades in over the plan, rises into the axo, and only then does this slide's text come in
+  function endTilt() {
+    if (S.offFn) { const f = S.offFn; S.offFn = null; try { f(); } catch (e) { /* the plan is already off */ } }
+    const h = S.tiltHost; if (!h) return; S.tiltHost = null;
+    const cv = r && r.domElement, st3 = $(".st-3d", sc);
+    if (cv && st3 && cv.parentNode === h) { st3.appendChild(cv); cv.style.width = ""; cv.style.height = ""; }
+    h.remove();
+  }
+  function tiltUp(vb) {
+    const stage = document.getElementById("stage"); if (!stage || !M || !r) return false;
+    S.offFn = window.ACKO_FLOW && ACKO_FLOW.take ? ACKO_FLOW.take() : null;
+    const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+    const h = document.createElement("div"); h.className = "st-flat-host";
+    h.style.cssText = "position:fixed;left:var(--pl);top:var(--ptop);width:var(--pw);height:var(--ph);pointer-events:none;z-index:0;opacity:0;transition:opacity .5s ease";
+    stage.insertBefore(h, stage.firstChild); S.tiltHost = h;
+    const cv = r.domElement; h.appendChild(cv); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block";
+    S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2600 }; need();
+    const wp = document.getElementById("w-plan"); wp.style.transition = "none"; wp.style.opacity = "1";      // the plan stays whole under the model while it fades in
+    requestAnimationFrame(() => requestAnimationFrame(() => { h.style.opacity = "1"; }));
+    later(() => { wp.style.transition = ""; wp.style.opacity = ""; }, 650);
+    later(() => { if (S.tiltHost === h) { endTilt(); if (window.ACKO_FLOW) ACKO_FLOW.reveal(sc, 0); } }, 2800);
+    return true;
+  }
+
   return {
     enter(_, s) {
+      if (window.ACKO_FLOW) ACKO_FLOW.clear(s);
       sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
       S.fresh = true; S.k = 0; S.day = false; S.dayT = 0; sc.classList.remove("ax-day"); if (S.rb) S.rb.fade(1);
       const ok = start();
@@ -7632,6 +7801,8 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
         const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
         S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
       }
+      const fm = window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-layout-sp", 2500) : null;
+      if (fm && fm.vb && tiltUp(fm.vb) && window.ACKO_FLOW) ACKO_FLOW.hold(sc);
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
     },
     step(k) {
@@ -7639,7 +7810,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
       S.fresh = false;
       if (k === 3) toDay(); else { clearDay(); play(MAP[k]); }                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() { handoff(); S.day = false; if (window.ACKO_MORPH) ACKO_MORPH.mark("s-axo-detail"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+    leave() { endTilt(); if (window.ACKO_FLOW) ACKO_FLOW.out(sc); handoff(); S.day = false; if (window.ACKO_MORPH) ACKO_MORPH.mark("s-axo-detail"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },
