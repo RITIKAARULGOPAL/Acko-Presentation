@@ -6,6 +6,8 @@
 #   1 The neighbourhoods  (strategy's beat 2: the six, numbered west to east, ACKO Home ... ACKO Auto, with the atriums, terraces, café)
 #   2 The Loop            (beat 4: the floor in colour, the partitions rise, the arrows land, the Loop grows out of them)
 #   3 The client's journey, 4 The employees' journey   (beats 5 and 6)
+# It is drawn on the furnished SketchUp model A day in ACKO uses (AxoSkp), the Layers volumes, Loop and routes over it (two passes: the
+# model first, then the Layers scene with the depth cleared, its camera shifted by the plan offset).
 # On leaving it keeps its last frame and camera (window.ACKO_AXO_HAND) for A day in ACKO, which glides from that view and dissolves the
 # frame away (slides/s-wayday.html).
 #   python tools/acko/story/gen_story.py .      (first: it builds index-story2.html)
@@ -33,7 +35,7 @@ def sub(s, old, new, n=1):
 # ---------- the section: its own words ----------
 head = '<section class="scene" id="%s" data-part="cover" data-title="Detailed axonometric" data-steps="4" data-mins="2.5"\n' \
        '  data-beats="The Neighbourhoods,The Loop,The Client’s journey,The Employees’ journey"\n' \
-       '  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods, the Loop, and the client’s and employees’ journeys are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 The client’s journey from the entrances, its touchpoints called out. 4 The employees’ journey through the Loop’s seven stops, the furniture in. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It then glides into A day in ACKO.">' % NEW
+       '  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods, the Loop, and the client’s and employees’ journeys are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 The client’s journey from the entrances, its touchpoints called out. 4 The employees’ journey through the Loop’s seven stops, the furniture in. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it.">' % NEW
 sec = head + sec[sec.index("\n  <div class=\"page\">"):]
 sec = sec.replace('<div class="page">', '<div class="page">\n    <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>', 1)
 sec = re.sub(r"<h3 style=\"--i:0\">.*?</h3>", '<h3 style="--i:0">Detailed Axonometric</h3>', sec, count=1, flags=re.S)
@@ -60,6 +62,26 @@ js = sub(js, "M.tint(k <= 3 ? 0 : k === 4 ? 0 : 1);", "M.tint(k <= 3 ? 0 : k ===
 js = sub(js, "grow(G.partitions, k <= 3 ? 0 : k === 4 ? 0 : 1);", "grow(G.partitions, k <= 3 ? 0 : k === 4 ? win(t, 1.0, 2.0) : 1);")
 js = sub(js, "      if (k === 4) f = 1 - 0.7 * win(t, 0, 1.0);", "      if (k === 4) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }")
 js = sub(js, "      if (k === 4) f = 1 - 0.5 * win(t, 0, 1.0);\n", "      if (k === 4) f = 1 - win(t, 0, 0.6);\n")
+# the furnished model underneath (the one A day in ACKO uses), the Layers scene over it
+js = sub(js, "ACKO.slide(\"%s\", ({ $, $$, reduced, plain, reveal, cue, plan, later }) => {" % NEW, "ACKO.slide(\"%s\", ({ $, $$, reduced, plain, reveal, cue, plan, later, asset }) => {" % NEW)
+js = sub(js, "  let T, M, cam, r, asp = 16 / 9, host, sc, view;", "  let T, M, cam, r, asp = 16 / 9, host, sc, view, SK = null, camS = null;")
+js = sub(js, "M = S.base;", "M = S.base; SK = window.AxoSkp && window.AxoSkp.available() ? window.AxoSkp.get(asset) : null; camS = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);")
+js = sub(js, "      if (!ok) return;\n", "      if (!ok) return;\n      if (SK) { window.AxoSkp.look(\"sketchup\"); SK.reset(); }\n")
+js = sub(js, "v.position.y = y; M.fade(v, f);", "v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1));")
+js = sub(js, "    r.render(M.scene, cam);\n    overlay();", "    paint();\n    overlay();")
+js = sub(js, "window.AxoModel.apply(cam, S.state, asp); r.render(M.scene, cam);", "window.AxoModel.apply(cam, S.state, asp); paint();")
+js = sub(js, "  function draw(now) {", """  // two passes: the furnished model (its own frame: the plan, the Layers floor is the plan + (185842, -182802) mm), then the Layers scene over
+  // it with the depth cleared, so the neighbourhoods, the Loop and the journeys always show on the furniture. The Layers floor itself is hidden
+  const OWN = ["base", "mass", "partitions", "rooms", "cafe", "terrace", "work", "plants", "facade"];
+  function paint() {
+    if (!SK) { r.render(M.scene, cam); return; }
+    OWN.forEach((g) => { if (M.groups[g]) M.groups[g].visible = false; });
+    const dx = (185842 + M.CX - SK.CX) / 1000, dz = (-182802 + M.CY - SK.CY) / 1000, st = S.state;
+    window.AxoModel.apply(camS, { theta: st.theta, phi: st.phi, half: st.half, t: [st.t[0] + dx, st.t[1], st.t[2] + dz] }, asp); camS.updateMatrixWorld();
+    const ac = r.autoClear; r.autoClear = false; r.clear(); r.render(SK.scene, camS); r.clearDepth(); r.render(M.scene, cam); r.autoClear = ac;
+  }
+  function draw(now) {""")
+
 # the hand-over: its last frame and camera, for A day in ACKO to glide from
 js = sub(js, "  return {\n    enter(_, s) {", """  // the hand-over to A day in ACKO: this frame (the model drawn once more, copied out) and the camera it was drawn from
   function handoff() {
