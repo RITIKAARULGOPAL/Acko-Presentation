@@ -20,6 +20,8 @@
     teams: true,            // team hovers (workstation seats, by team)
     interactive: true,      // wheel zoom, drag pan, double-click to fit
     labels: true,           // name label on hover
+    fastZoom: false,        // zoom by scaling the drawn layers (a CSS transform) and redraw sharp once it rests, not on every wheel step
+    prepare: null,          // fastZoom: prepare(view, done) -> cancel; makes what a redraw at view needs ahead, done() when the swap is cheap
     labelPlacement: "centre", // "centre": on the hovered room / team; "above": just above it (below if no room), clear of it
     onHover: null,          // callback({ kind: "room"|"team", item }) / callback(null)
   };
@@ -75,25 +77,72 @@
       svgs.forEach(s => s.setAttribute("preserveAspectRatio", "xMidYMid meet"));
       home = opt.viewBox.split(/\s+/).map(Number);
       vb = home.slice();
-      hideLabel(); apply();
+      hideLabel(); apply(true);
       wire(opt);
     }
 
-    function apply() {
-      const s = vb.join(" ");
-      svgs.forEach(x => x.setAttribute("viewBox", s));
-      placeLabel();
+    // fastZoom (19 Nov, "there's lag while zooming"): vb is always the view (get view, the hovers, the tools); cvb is the view the layers
+    // are drawn at. Between the two the stage is scaled and moved by a CSS transform, so a zoom step costs a compositor frame, not a redraw.
+    // Redrawing the layers at the view is a request: o.prepare(view, done) makes what the redraw needs ahead (the base canvas' picture, painted
+    // in slices while the page carries on) and calls done() when the swap is cheap; only then are the layers' viewBoxes set and the transform
+    // cleared, in one frame. Requested 140 ms after the last change, as soon as the preview would blur past 3.5x or leave 4% of the plan
+    // undrawn at an edge (one at a time: a gesture that goes on lets the running one land first), and on landings (commit()).
+    // Without o.prepare the redraw is simply immediate.
+    let cvb = null, ctimer = 0, cancelPrep = null, want = null, flying = false;
+    const fast = !!o.fastZoom;
+    const box = () => (fast ? el : stage).getBoundingClientRect();     // the stage itself carries the transform: measure its parent
+    const same = (a, b) => !!a && !!b && a.every((x, i) => x === b[i]);
+    const near = (a, b) => !!a && !!b && Math.abs(a[2] / b[2] - 1) < 0.03 && Math.abs(a[0] + a[2] / 2 - b[0] - b[2] / 2) < 0.03 * b[2] && Math.abs(a[1] + a[3] / 2 - b[1] - b[3] / 2) < 0.03 * b[3];
+    function cancelPrepare() { if (cancelPrep) cancelPrep(); cancelPrep = null; want = null; }
+    function commitTo(v) {                    // the layers are drawn at v from here
+      clearTimeout(ctimer); ctimer = 0;
+      cvb = v.slice(); stage.style.transform = "";
+      const s = cvb.join(" "); svgs.forEach(x => x.setAttribute("viewBox", s));
+      el.dispatchEvent(new CustomEvent("ph:commit", { detail: cvb }));
+      if (!same(vb, cvb)) apply(); else placeLabel();                  // the view moved on while it was being prepared: the preview from here
     }
+    function request() {                      // the layers should be drawn at vb
+      clearTimeout(ctimer); ctimer = 0;
+      if (!fast || (cvb && same(cvb, vb))) return;
+      if (!cvb || !o.prepare) return commitTo(vb);
+      if (want && near(want, vb)) return;                              // what is being prepared will do
+      cancelPrepare();
+      const v = vb.slice(); want = v; let fin = false;
+      const c = o.prepare(v, () => { fin = true; if (want !== v) return; want = null; cancelPrep = null; commitTo(v); });
+      if (!fin) cancelPrep = c;
+    }
+    function apply(force) {
+      if (!fast) {
+        const s = vb.join(" ");
+        svgs.forEach(x => x.setAttribute("viewBox", s));
+        placeLabel();
+        return;
+      }
+      const r = el.getBoundingClientRect();
+      if (force === true || !cvb || !r.width || !r.height) { cancelPrepare(); commitTo(vb.slice()); }
+      else {
+        const kC = Math.max(cvb[2] / r.width, cvb[3] / r.height), kV = Math.max(vb[2] / r.width, vb[3] / r.height), s = kC / kV;
+        const tx = ((cvb[0] + cvb[2] / 2 - (r.width * kC) / 2) - (vb[0] + vb[2] / 2 - (r.width * kV) / 2)) / kV;
+        const ty = ((cvb[1] + cvb[3] / 2 - (r.height * kC) / 2) - (vb[1] + vb[3] / 2 - (r.height * kV) / 2)) / kV;
+        stage.style.transformOrigin = "0 0"; stage.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+        placeLabel();
+        const unc = Math.max(0, tx / r.width, ty / r.height, (r.width - tx - s * r.width) / r.width, (r.height - ty - s * r.height) / r.height);   // the share of the view the drawing no longer covers
+        if (!want && (unc > 0.3 || s > 8 || (!flying && (unc > 0.04 || s > 3.5)))) request();
+        else { clearTimeout(ctimer); if (!flying) ctimer = setTimeout(request, 140); }
+      }
+      el.dispatchEvent(new CustomEvent("ph:view", { detail: vb }));
+    }
+    if (fast) stage.style.willChange = "transform";
     function scale() {
-      const r = stage.getBoundingClientRect();
+      const r = box();
       return Math.max(vb[2] / r.width, vb[3] / r.height);
     }
     function toPlan(cx, cy) {
-      const r = stage.getBoundingClientRect(), k = scale();
+      const r = box(), k = scale();
       return [vb[0] + vb[2] / 2 - (r.width * k) / 2 + (cx - r.left) * k, vb[1] + vb[3] / 2 - (r.height * k) / 2 + (cy - r.top) * k];
     }
     function toScreen(x, y) {
-      const r = stage.getBoundingClientRect(), k = scale();
+      const r = box(), k = scale();
       return [(x - (vb[0] + vb[2] / 2 - (r.width * k) / 2)) / k, (y - (vb[1] + vb[3] / 2 - (r.height * k) / 2)) / k];
     }
 
@@ -102,7 +151,7 @@
       label.style.display = "block";
       if (o.labelPlacement === "above" && labelEl) {
         // above the hovered shape's on-screen box, centred on it; below it when there is no room above
-        const st = stage.getBoundingClientRect(), r = labelEl.getBoundingClientRect(), w = label.offsetWidth, h = label.offsetHeight, gap = 8;
+        const st = box(), r = labelEl.getBoundingClientRect(), w = label.offsetWidth, h = label.offsetHeight, gap = 8;
         const x = Math.max(w / 2 + 4, Math.min(st.width - w / 2 - 4, r.left + r.width / 2 - st.left));
         const below = r.top - st.top - gap - h < 0;
         label.classList.toggle("ph-above", !below); label.classList.toggle("ph-below", below);
@@ -166,7 +215,7 @@
     };
     const onUp = () => { drag = null; el.classList.remove("ph-dragging"); };
     const onDbl = () => fit();
-    const onResize = () => vb && apply();
+    const onResize = () => vb && apply(true);
     if (o.interactive) {
       stage.addEventListener("wheel", onWheel, { passive: false });
       stage.addEventListener("pointerdown", onDown);
@@ -177,12 +226,12 @@
     }
     window.addEventListener("resize", onResize);
 
-    function fit() { vb = home.slice(); apply(); }
+    function fit() { vb = home.slice(); if (fast) { apply(); request(); } else apply(); }
     function zoomTo(x, y, w, h) { vb = [x, y, w, h]; apply(); }
 
     // ---- extra layers (e.g. coloured rooms beneath the plan, annotations above it); they follow the view ----
     function placeExtra(x, viewBox) {
-      x.svg.setAttribute("viewBox", viewBox);
+      x.svg.setAttribute("viewBox", fast && cvb ? cvb.join(" ") : viewBox);      // fastZoom: a new layer is drawn at the layers' view
       x.svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
       if (x.below) stage.insertBefore(x.svg, stage.firstChild); else stage.appendChild(x.svg);
       if (!svgs.includes(x.svg)) svgs.push(x.svg);
@@ -218,6 +267,8 @@
       get option() { return current; },
       setOption: key => load(key),
       fit,
+      commit: request,                          // fastZoom: have the layers redrawn sharp at the view (a flight that has landed): at once if it is ready, else as soon as it is
+      set flying(f) { flying = !!f; },          // fastZoom: a flight is under way: only a preview that can't stand is redrawn mid-way
       zoomTo,                                   // plan units are mm in the SVG frame
       get view() { return vb.slice(); },        // the current viewBox [x, y, w, h]
       setHome(x, y, w, h) { home = [x, y, w, h]; },   // where fit() and a double-click return to
@@ -228,6 +279,7 @@
       teams: () => data.options[current].teams.map(({ desks, zone, ...t }) => t),
       rooms: () => data.options[current].rooms.map(({ d, ...s }) => s),
       destroy() {
+        clearTimeout(ctimer); cancelPrepare();
         window.removeEventListener("resize", onResize);
         el.innerHTML = ""; el.classList.remove("ph-root", "ph-dragging");
       },

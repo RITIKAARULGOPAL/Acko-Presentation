@@ -363,7 +363,8 @@
   const nbLine = nbFill;
   let HOVER = true;                                   // the Hover pill's state, deck-wide (planHover)
   const DP = { ph: null, root: null, raf: 0, lvRaf: 0, home: null, cur: null, P: null, onZone: null, zone: null };   // home: the beat's view; cur: what Reset returns to
-  function deckPlan() {
+  // quiet: built ahead at idle (planWarm), not for a slide that is about to show it: no first drawing, no sharper pictures decoded for the fallback
+  function deckPlan(quiet) {
     if (DP.ph) return DP;
     const P = (DP.P = window.PLAN_DXF), host = $("#world-plan"), [vx, vy, vw, vh] = P.viewBox, vb = P.viewBox.join(" ");
     // with the plan's own drawing (data/plan-base.js) it is drawn as vector on a canvas (below); the pictures are the fallback
@@ -375,7 +376,8 @@
     host.classList.add("dxplan");
     host.classList.toggle("no-hover", !HOVER);
     DP.root = host;
-    DP.ph = PlanHover.mount(host, { data, labelPlacement: "above" });     // the label above a space, never on it
+    DP.ph = PlanHover.mount(host, { data, labelPlacement: "above", fastZoom: true,     // the label above a space, never on it; a zoom scales the drawn layers and redraws once it rests (19 Nov)
+      prepare: (v, done) => (DP.base ? DP.base.prepare(v, done) : (done(), null)) });     // the base drawing's picture of the view, made in slices while the page carries on
     DP.ph.addLayer("dx-fill", (P.floor ? `<image href="${asset(P.floor)}" x="${vx}" y="${vy}" width="${vw}" height="${vh}" preserveAspectRatio="none"/>` : "") +
       P.spaces.map((r) => `<path d="${r.d}" style="fill:${r.colour}"/>`).join(""), { below: true });
     // the furniture cut out of the neighbourhoods' fills: every placed block's desks, chairs, sofas and storage (data/axo-dxf.js), in
@@ -410,8 +412,8 @@
       // redrawn whenever the plan's view moves (every SVG layer shares one viewBox)
       const st = host.querySelector(".ph-stage"), rooms = st.querySelector(".ph-rooms");
       DP.base = PlanCanvas.mount(st, window.PLAN_BASE, { before: st.querySelector(".ph-plan") });
-      new MutationObserver(() => DP.base.draw(DP.ph.view)).observe(rooms, { attributes: true, attributeFilter: ["viewBox"] });
-      DP.base.draw(DP.ph.view);
+      host.addEventListener("ph:commit", (e) => DP.base.draw(e.detail, true));     // the layers' view changed (fastZoom: not on every zoom step): paint at once
+      if (!quiet) DP.base.draw(DP.ph.view);
     } else if (window.PLAN_VEC) {
       const svg = DP.ph.addLayer("ph-plan dx-vec", ""), st = host.querySelector(".ph-stage");
       st.insertBefore(svg, st.querySelector(".ph-teams"));
@@ -444,7 +446,7 @@
       if (i >= 0) DP.onZone(P.zones[i]);
     });
     // decode the sharper pictures ahead, so the first zoom into them doesn't stall
-    P.levels.slice(1).forEach((l) => { const im = new Image(); im.src = asset(l.src); if (im.decode) im.decode().catch(() => {}); });
+    if (!BASE) P.levels.slice(1).forEach((l) => { const im = new Image(); im.src = asset(l.src); if (im.decode) im.decode().catch(() => {}); });      // only the fallback uses these pictures: decoding them for the vector canvas was 100 MB for nothing
     return DP;
   }
   // zoomed in (past 16 device px per m: a neighbourhood, a blow-up, a wheel-zoom) the vector tiles take over from the picture.
@@ -478,11 +480,11 @@
   function fitVb(v, ms) {
     cancelAnimationFrame(DP.raf);
     const from = DP.ph.view, t0 = performance.now();
-    if (!ms || reduced) { DP.root.classList.remove("vec-fly"); DP.ph.zoomTo(...v); return DP.level(); }
-    DP.root.classList.add("vec-fly");
+    if (!ms || reduced) { DP.ph.flying = false; DP.root.classList.remove("vec-fly"); DP.ph.zoomTo(...v); DP.ph.commit(); return DP.level(); }
+    DP.root.classList.add("vec-fly"); DP.ph.flying = true;
     const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
       DP.ph.zoomTo(...from.map((a, i) => a + (v[i] - a) * e));
-      if (k < 1) DP.raf = requestAnimationFrame(run); else { DP.root.classList.remove("vec-fly"); DP.level(); } };
+      if (k < 1) DP.raf = requestAnimationFrame(run); else { DP.ph.flying = false; DP.ph.commit(); DP.root.classList.remove("vec-fly"); DP.level(); } };
     DP.raf = requestAnimationFrame(run);
   }
   // the viewBox (plan mm) that shows box [x0, y0, x1, y1] (plan mm) inside the display rect disp (frame px of the 1920 × 1080 page)
@@ -510,6 +512,20 @@
   // the layout's value-addition layers (assets/js/plan-layers.js), mounted on the deck plan the first time a slide asks
   // the bare shell (10 Nov, Layout · Due Diligence): the plan's drawing without the fit-out, and its fit-out layers hidden (.bare)
   function planBare(on, re) { deckPlan(); if (DP.base && DP.base.bare) DP.base.bare(on, re); DP.root.classList.toggle("bare", !!on); }
+  // ---- built ahead (19 Nov, "as soon as I open the layout slide it has to load clearly and smoothly"): a slide says which views it opens on
+  // (plan.warm(() => view)); once the page is idle the plan, its layers and a picture of each such view are made, a little at a time ----
+  const WARM = { fns: [], on: false };
+  const idleCb = (f, t) => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: t }) : setTimeout(f, 400));
+  function warmStep() {
+    if (!window.PLAN_DXF || !window.PlanHover) return idleCb(warmStep, 2000);
+    if (!DP.ph) { deckPlan(true); return idleCb(warmStep, 1500); }           // about half a second of script, once
+    if (!DP.layers) { planLayers(); return idleCb(warmStep, 1500); }
+    const f = WARM.fns.shift(); if (!f) { WARM.on = false; return; }
+    if (!DP.base) return idleCb(warmStep, 1500);
+    let v = null; try { v = f(); } catch (e) { v = null; }
+    if (v) DP.base.warm(v, () => idleCb(warmStep, 1500)); else idleCb(warmStep, 1500);
+  }
+  function planWarm(viewFn) { WARM.fns.push(viewFn); if (!WARM.on) { WARM.on = true; idleCb(warmStep, 3000); } }
   function planLayers() { deckPlan(); return DP.layers || (DP.layers = window.PlanLayers ? window.PlanLayers.mount({ ph: DP.ph, host: DP.root, P: DP.P, A: window.AXO_DXF || { blocks: {}, plants: [] } }) : null); }
   // one neighbourhood picked out: the plan flies to it (inside disp, frame px), the others dim, its rooms can be hovered;
   // focusZone(null) flies back to the beat's view
@@ -753,7 +769,7 @@
     reveal, countUp, typeWords, drawPath, inPoly,
     plain, world, shade, PHOTO, layoutCovers, lightbox, lightboxOff,
     go, next, prev, setStep, state, scenes, sceneIx, trackIdx,
-    plan: { deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planBare, planNb, planFill, planHover, planReset, planHome, layers: planLayers, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; }, onPlanClick: (fn) => { deckPlan(); DP.onPoint = fn || null; },
+    plan: { warm: planWarm, deckPlan, planOn, planOff, planEgress, planView, vbFor, fitVb, nbHover, focusZone, planBare, planNb, planFill, planHover, planReset, planHome, layers: planLayers, keyplan: zoneKey, onZoneClick: (fn) => { deckPlan(); DP.onZone = fn || null; }, onPlanClick: (fn) => { deckPlan(); DP.onPoint = fn || null; },
             get zone() { return DP.zone; }, get view() { return DP.ph ? DP.ph.view : null; }, get hoverOn() { return HOVER; }, get root() { return DP.root; }, get data() { return window.PLAN_DXF; } },
   };
   for (const id in FACTORIES) {
