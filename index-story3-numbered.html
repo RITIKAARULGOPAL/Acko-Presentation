@@ -1365,7 +1365,7 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 .vm-hosur { fill: none; stroke: #cfc6e6; stroke-width: 9; stroke-linecap: round; }
 .vm-bld path { fill: #dcd8e3; stroke: #cdc8d6; stroke-width: .4; }
 .vm-foot { fill: #c9b3f3; stroke: #5222d0; stroke-width: 1.4; }
-.vm-plate { fill: #5222d0; opacity: .55; }
+.vm-plate { fill: #5222d0; fill-opacity: .55; stroke: #5222d0; stroke-width: 1.4; }   /* 19 Nov: the plate alone (no footprint block behind it) */
 /* beat 2, into the floor (3 Nov): the neighbourhood and the copy fade, the plate alone stays, lighter, where the plan will be */
 #vmap .vm-fade { transition: opacity .5s var(--ease); }
 body.si-into #vmap .vm-fade { opacity: 0; }
@@ -6794,9 +6794,8 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
       roads.map((r) => `<path class="vm-road c" d="${r.d}" style="stroke-width:${r.w + 2.4}"/>`).join("") +
       roads.map((r) => `<path class="vm-road" d="${r.d}" style="stroke-width:${r.w}"/>`).join("") + rail + hosur +
       `<g class="vm-bld">${S.buildings.map((d) => `<path d="${d}"/>`).join("")}</g>` +
-      `<path class="vm-foot" transform="translate(${BX} ${BY})" d="${S.footprint.d}"/>` +
       `${labels}${marks}` +
-      `<g class="vm-pin" data-t="translate(${BX} ${10 + BY})" transform="translate(${BX} ${10 + BY})"><text y="-62" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
+      `<g class="vm-pin" data-t="translate(${BX} ${10 + BY})" transform="translate(${BX} ${10 + BY})"><text y="-32" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
       `<path class="vm-plate" transform="translate(${BX} ${BY})" d="${S.onSite.plate}"/></g>`;
     $("#map-credit").textContent = S.attribution || "© OpenStreetMap contributors, Overture Maps";
     $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"} walk</span></li>`).join("");

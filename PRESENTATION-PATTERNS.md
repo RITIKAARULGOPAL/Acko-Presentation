@@ -801,3 +801,4 @@ amber `#F2A33A`; "A day in ACKO".
 - **Lighter (19 Nov):** the surfaces use the accent lifted 32% toward white (`lift`); the chips keep the logo colours.
 - **Five stops (19 Nov):** team, art and carpet, meeting room (the Nalanda sign beside its door), workstation (he sits: a `sit` pose, desk-screen privacy panels), Collab. The rings are drawn by the script (`RINGS`/`ringD`), not hard-coded.
 - **Site map (19 Nov):** Regalium's footprint, plate and label are moved together into the plot Ritika outlined (`BX, BY` in s-site.html), translate only; the walk figures were measured from the old position.
+- **Site map, later:** only the dark plate is drawn (outlined); the light footprint block with its wings is gone.
