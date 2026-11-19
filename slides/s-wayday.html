@@ -12,8 +12,8 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-wayday" data-part="5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
-  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Board Room,Wellness"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day.">
+  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Wellness,Board Room"
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Wellness: a pause on the terrace garden, they thought of me too. 17:00 Board Room: the review, my big moment. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
@@ -62,6 +62,25 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-wayday .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
 #s-wayday.wd-fallback .wd-nogl { display: block; }
 #s-wayday.wd-fallback .wd-gl, #s-wayday.wd-fallback .lt-tools { display: none; }
+/* one focus: a lilac ground, the title small, the subtitle and header gone, and the quote, the stop's line, the clock and the stop's name stacked
+   in one block top left; the time ticks on between stops with a fill along the day (Ritika, 20 Nov: "go with D") */
+#s-wayday .page { background: #e3ddf3; }
+#s-wayday .wd-veil { background: linear-gradient(90deg, rgba(227,221,243,.9) 0, rgba(227,221,243,.6) 22%, rgba(227,221,243,0) 38%), linear-gradient(0deg, rgba(227,221,243,.92) 0, rgba(227,221,243,.7) 15%, rgba(227,221,243,0) 24%), linear-gradient(180deg, rgba(227,221,243,.8) 0, rgba(227,221,243,0) 10%); }
+#s-wayday .wd-title p, #s-wayday .hdr { display: none; }
+#s-wayday .wd-title { top: 6%; }
+#s-wayday .wd-title h1 { font-size: calc(var(--pt) * 8); font-style: normal; color: var(--mute); }
+#s-wayday .lt-tools { opacity: .25; transition: opacity .3s; } #s-wayday .lt-tools:hover { opacity: 1; }
+#s-wayday .wd-now { left: 1.8%; top: 11%; width: 29%; display: flex; flex-direction: column; }
+#s-wayday .wd-now q { order: 1; font-size: calc(var(--pt) * 13); line-height: 1.15; text-wrap: balance; color: var(--purple-2); margin: 0; }
+#s-wayday .wd-now span { order: 2; font-size: calc(var(--pt) * 7.2); color: var(--soft); margin: calc(var(--pt) * 2) 0 0; }
+#s-wayday .wd-now .t { order: 3; font-size: calc(var(--pt) * 15); font-variant-numeric: tabular-nums; margin-top: calc(var(--pt) * 5); }
+#s-wayday .wd-now b { order: 4; font-size: calc(var(--pt) * 8.5); margin-top: calc(var(--pt) * 1); }
+#s-wayday .wd-now q:not(:empty)::before { content: "\201C"; } #s-wayday .wd-now q:not(:empty)::after { content: "\201D"; }
+#s-wayday .wd-now.wd-sw span, #s-wayday .wd-now.wd-sw q { animation: wd-swap .7s ease both; }
+@keyframes wd-swap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+#s-wayday .wd-day button { border-top-color: rgba(82,34,208,.18); }
+#s-wayday .wd-day button.on, #s-wayday .wd-day button.done { border-top-color: transparent; }
+#s-wayday .wd-ph { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--purple); pointer-events: none; }
 </style>
 <script>
 /* a day in ACKO (Ritika, 22–23 Oct: "wayfinding will be in axo"; 26 Oct: "build the axo based on this skp file", "go with sample
@@ -92,8 +111,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     { t: "11:00", n: "Meeting Rooms", s: "A team review in the departmental room", q: "My impact", at: [36745, 24148], half: 11, sp: "Departmental room", spot: 2 },
     { t: "12:00", n: "Collab", s: "In the Acker Garden: the swing, a punch bag and foosball", q: "Wow, worth the commute", at: [18279, 18618], half: 6.5, theta: 1.68, sp: "Collab", spot: 4 },
     { t: "13:00", n: "Café", s: "Lunch together in the café", q: "Hey, we finally meet!", at: [67562, 40539], half: 15, sp: "Cafeteria", spot: 5 },
-    { t: "15:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
-    { t: "17:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: 6 },
+    { t: "15:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: 6 },
+    { t: "17:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
   ];
   // the Acker Garden's foosball (a prop, not a person): plan mm, angle in centiradians, the deck's height in mm
   const FOOSBALL = [19539, 17138, -157, 130];
@@ -145,7 +164,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     };
     const chaikin = (Q, it) => { for (let k = 0; k < it; k++) { const O = [Q[0]]; for (let i = 0; i + 1 < Q.length; i++) { const a = Q[i], b = Q[i + 1]; O.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } O.push(Q[Q.length - 1]); Q = O; } return Q; };
     const dense = (Q) => { const o = [Q[0]]; for (let i = 1; i < Q.length; i++) { const a = Q[i - 1], b = Q[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.25)); for (let k = 1; k <= n; k++) o.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); } return o; };
-    const VIA = { 5: [[84216, 43565], [85500, 31500]], 6: [[85500, 31500]] };          // by the beat he is walking to: the terrace and Reception (plan mm)
+    const VIA = { 6: [[85500, 31500]] };                                                  // by the beat he is walking to: Reception, on the way from the terrace to the Board Room (plan mm)
     const clear = (A, B) => { const n = Math.max(2, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1000)); for (let k = 0; k <= n; k++) if (!inRing([A[0] + (B[0] - A[0]) * k / n, A[1] + (B[1] - A[1]) * k / n], M.slab)) return false; return true; };
     const seg = (A, B) => {                                                              // points (m) from plan spot A to plan spot B, both ends included
       const prev = [M.X(A[0]), M.Z(A[1])], here = [M.X(B[0]), M.Z(B[1])];
@@ -159,8 +178,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     P = []; legEnd = [0];
     BEATS.forEach((b, i) => {
       const here = [b.p.x, b.p.z]; if (i === 0) { P.push(here); return; }
-      // via points (Ritika, 19 Nov): from the Café to the Board Room he goes out by the terrace and in through Reception, and from the Board Room
-      // to the terrace back through Reception; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
+      // via points (Ritika, 19 Nov): from the Café he goes out to the terrace (Wellness), and from there in through Reception to the Board Room; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
       const stops = [BEATS[i - 1].at].concat(VIA[i] || [], [b.at]);
       let pts = [[M.X(stops[0][0]), M.Z(stops[0][1])]];
       for (let k = 1; k < stops.length; k++) pts.push(...seg(stops[k - 1], stops[k]).slice(1));
@@ -244,9 +262,25 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     requestAnimationFrame(() => requestAnimationFrame(() => { c.style.opacity = 0; }));
     setTimeout(() => { if (c.parentNode) c.parentNode.removeChild(c); }, 2000);
   }
+  // the clock: the time counts on from the last stop to this one (a minute at a time, easing out) and a fill runs along the day's line with it
+  const mins = (t) => +t.slice(0, 2) * 60 + +t.slice(3);
+  const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(Math.round(m % 60)).padStart(2, "0");
+  let clk = 0;
+  function clockTo(el, t, i) {
+    cancelAnimationFrame(clk);
+    const day = $(".wd-day", sc); let ph = $(".wd-ph", day); if (!ph) { ph = document.createElement("i"); ph.className = "wd-ph"; day.appendChild(ph); }
+    const pct = (i / BEATS.length) * 100;
+    if (reduced || S.clockT === undefined) { el.textContent = t; ph.style.transition = "none"; ph.style.width = pct + "%"; S.clockT = mins(t); return; }
+    const from = S.clockT, to = mins(t), t0 = performance.now(), dur = 1300;
+    ph.style.transition = "width " + dur + "ms cubic-bezier(.2,.7,.2,1)"; ph.style.width = pct + "%";
+    const step = (now) => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = hhmm(from + (to - from) * e); if (k < 1) clk = requestAnimationFrame(step); else S.clockT = to; };
+    clk = requestAnimationFrame(step);
+  }
   function setNow(i) {
     const b = BEATS[i], now = $(".wd-now", sc);
-    $(".t", now).textContent = b.t; $("b", now).textContent = b.n; $("span", now).textContent = b.s; $("q", now).textContent = b.q;
+    $("b", now).textContent = b.n; $("span", now).textContent = b.s; $("q", now).textContent = b.q;
+    clockTo($(".t", now), b.t, i);
+    now.classList.remove("wd-sw"); void now.offsetWidth; now.classList.add("wd-sw");
     $$(".wd-day button", sc).forEach((el, k) => { el.classList.toggle("on", k === i); el.classList.toggle("done", k < i); });
     if (MODEL.focus) { if (b.ring === undefined) b.ring = spaceOf(b); MODEL.focus(b.ring); }
   }
