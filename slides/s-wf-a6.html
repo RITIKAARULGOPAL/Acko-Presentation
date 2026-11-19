@@ -65,17 +65,15 @@
           <g class="m-collab"><rect x="1454" y="352" width="106" height="62" rx="14"/><rect x="1440" y="400" width="120" height="70" rx="12"/><rect x="1440" y="372" width="26" height="98" rx="13"/><rect x="1534" y="372" width="26" height="98" rx="13"/></g>
           <rect class="m-ctable" x="1392" y="403" width="42" height="9" rx="4" fill="url(#wfa6-t-wood)"/>
         </g><rect class="hat" x="40" y="470" width="1520" height="46" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><g class="lead">
-          <path d="M235 80V36"/><path d="M200 432V560"/><path d="M555 160V36"/><path d="M555 310V560"/><path d="M794 110V36"/><path d="M820 330V560"/>
-          <path d="M1010 210V36"/><path d="M1006 282V560"/><path d="M1500 352V560"/><path d="M110 516V560"/><path d="M1328 318V36"/><path d="M1276 448V560"/>
+          <path d="M235 80V36"/><path d="M200 432V560"/><path d="M555 160V36"/><path d="M555 310V560"/><path d="M794 110V36"/>
+          <path d="M1010 210V36"/><path d="M1006 282V560"/><path d="M1500 352V560"/><path d="M110 516V560"/><path d="M1328 318V36"/>
         </g>
         <g class="lab">
           <text x="235" y="28" text-anchor="middle">Paint accent</text><text x="200" y="582" text-anchor="middle">Wall graphic</text>
           <text x="555" y="28" text-anchor="middle">Artwork</text><text x="555" y="582" text-anchor="middle">Artwork tonality</text>
-          <text x="794" y="28" text-anchor="middle">Meeting-room acoustics</text><text x="820" y="582" text-anchor="middle">Privacy film</text>
-          <text class="gen" x="1010" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1006" y="582" text-anchor="middle">Inclusive · braille</text>
+          <text x="794" y="28" text-anchor="middle">Meeting-room acoustics</text>          <text class="gen" x="1010" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1006" y="582" text-anchor="middle">Inclusive · braille</text>
           <text x="1500" y="582" text-anchor="middle">Collab area</text><text x="60" y="582" text-anchor="start">Carpet</text>
-          <text x="1328" y="28" text-anchor="middle">Privacy panel</text><text x="1276" y="582" text-anchor="middle">Modesty panel</text>
-        </g>
+          <text x="1328" y="28" text-anchor="middle">Privacy panel</text>        </g>
       <g class="ring" data-s="0" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="1" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="2" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="3" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="4" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="who"><g transform="scale(1.18)"><g class="face"><g class="bob" filter="url(#wfa6-pen)"><g transform="translate(0 -98)"><g class="limb l2"><path d="M0 0L-1 94L13 97"/></g></g><g transform="translate(0 -166)"><g class="limb a2"><path d="M0 0L1 68"/></g></g><path class="torso" d="M-15 -171C-6 -177 6 -177 15 -171L14 -97C5 -93 -5 -93 -14 -97Z"/><path class="strap" d="M-11 -170L12 -116"/><rect class="bag" x="4" y="-120" width="22" height="18" rx="3"/><g transform="translate(0 -98)"><g class="limb l1"><path d="M0 0L1 94L15 97"/></g></g><g class="sitlegs"><path d="M0 -98L52 -98L54 -45L68 -42"/><path d="M-4 -98L46 -98L48 -45L62 -42"/></g><g class="headg"><circle class="head" cx="0" cy="-196" r="19"/><path class="hair" d="M-19 -197C-17 -216 8 -221 19 -203"/><path class="nose" d="M18 -197l7 5l-6 2"/></g><g transform="translate(0 -166)"><g class="limb a1"><path d="M0 0L-1 68"/><circle class="hand" cx="-1" cy="72" r="4.5"/></g></g><g class="mycup"><rect x="63" y="-171" width="15" height="19" rx="3"/><path class="steam" d="M67 -178c-6 -10 6 -14 0 -24M75 -178c-6 -10 6 -14 0 -24"/></g></g></g></g></g><g class="bub"><g class="tail"><circle r="7"/><circle r="10"/><circle r="13"/></g><rect class="bb" height="124" rx="46" filter="url(#wfa6-pen)"/><text class="q" x="34" y="54"></text><text class="ans" x="34" y="100"></text></g></svg></div>
     <div class="wf-bar" style="left:1.8%;top:85%;width:96.4%"><span class="wf-k">Pick a neighbourhood</span><div class="wf-chips"></div><span class="wf-look" title="How the walls are drawn"><button type="button" data-look="sk" class="on">Sketch</button><button type="button" data-look="mat">Material</button></span><b class="wf-name"></b><span class="wf-close">Known before a sign is read.</span><button type="button" class="wf-again" title="Play this stop again">&#8635;</button></div>
   </div>
@@ -221,10 +219,10 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   // the stops: where he stands (x on the carpet), which way he faces, his pose, the question, the answer, which labels ink in
   const STOPS = [
     { x: 450, face: -1, side: 1, q: "Where's my team?", a: (w, n) => `${w}, ${n}. That's us!`, labs: [0, 1], lit: ["paint"] },
-    { x: 675, face: -1, side: 1, q: "Still us?", a: (w) => `Our art, our ${w.toLowerCase()} floor.`, labs: [2, 3, 9], lit: ["t1", "t2", "carpet"] },
-    { x: 1062, face: -1, side: 1, pose: "reach", q: "Which room is my 3 pm?", a: () => "Nalanda. Found it by touch.", labs: [4, 5, 6, 7], lit: ["privacy", "dot", "acoustic"] },
-    { x: 1160, face: 1, side: 1, pose: "sit", q: "And my desk?", a: () => "Our desk, our privacy panel.", labs: [10, 11], lit: ["ws"] },
-    { x: 1366, face: 1, side: 1, pose: "hold", q: "Where can we huddle?", a: () => "Collab area, right here.", labs: [8], lit: ["collab"] }];
+    { x: 675, face: -1, side: 1, q: "Still us?", a: (w) => `Our art, our ${w.toLowerCase()} floor.`, labs: [2, 3, 8], lit: ["t1", "t2", "carpet"] },
+    { x: 1062, face: -1, side: 1, pose: "reach", q: "Which room is my 3 pm?", a: () => "Nalanda. Found it by touch.", labs: [4, 5, 6], lit: ["privacy", "dot", "acoustic"] },
+    { x: 1160, face: 1, side: 1, pose: "sit", q: "And my desk?", a: () => "Our desk, our privacy panel.", labs: [9], lit: ["ws"] },
+    { x: 1366, face: 1, side: 1, pose: "hold", q: "Where can we huddle?", a: () => "Collab area, right here.", labs: [7], lit: ["collab"] }];
   // the rings, drawn here: centre and radii of what each stop circles, a hand-drawn loop that overshoots its start
   const RINGS = [[235, 305, 172, 126], [555, 235, 128, 104], [997, 247, 78, 60], [1280, 395, 96, 92], [1500, 420, 90, 90]];
   const ringD = (cx, cy, rx, ry, k) => {
