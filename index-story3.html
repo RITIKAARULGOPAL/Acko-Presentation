@@ -2099,9 +2099,9 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
   </div>
 </section>
 
-<section class="scene" id="s-axo-detail" data-part="p5" data-title="Detailed axonometric" data-steps="4" data-mins="2.5"
-  data-beats="The Neighbourhoods,The Loop,The Client’s journey,The Employees’ journey"
-  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods, the Loop, and the client’s and employees’ journeys are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 The client’s journey from the entrances, its touchpoints called out. 4 The employees’ journey through the Loop’s seven stops, the furniture in. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it. → Bridge: And over one day in ACKO…">
+<section class="scene" id="s-axo-detail" data-part="p5" data-title="Detailed axonometric" data-steps="2" data-mins="1.5"
+  data-beats="The Neighbourhoods,The Loop"
+  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it. → Bridge: And over one day in ACKO…">
   <div class="page">
     <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>
     <p class="dg-tag">Plan</p>
@@ -2112,7 +2112,7 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
     <div class="st-veil"></div>
     <div class="st-t rv">
       <h3 style="--i:0">Detailed Axonometric</h3>
-      <p style="--i:1"><span>With defined boundaries: the proposed layout becomes an axonometry where the neighbourhoods, the Loop, and the client and employee journeys are all defined.</span></p>
+      <p style="--i:1"><span>With defined boundaries: the proposed layout becomes an axonometry where the neighbourhoods and the Loop are both defined.</span></p>
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
@@ -6487,13 +6487,13 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
    Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
    right-drag turns, the wheel zooms on the cursor, Reset view or a double-click goes back. Without WebGL, the deck's GIF. */
 ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, asset }) => {
-  const MAP = [0, 2, 4, 5, 6];       // this slide's beats are the strategy's: the neighbourhoods, the Loop, the client's and the employees' journeys
+  const MAP = [0, 2, 4];       // this slide's beats are the strategy's: the neighbourhoods, the Loop (the journeys are out, Ritika 19 Nov)
   const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
   // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
   // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
   // copyright line clears them ("back on both, axos made smaller"). The entrances below were measured on the PPT's GIF, at FIT_MARKS
   const FIT14 = [0.0134, 0.0028, 0.8385, 0.9852], SHRINK = 0.95, AT = [1606 / 1920, 10.8 / 1080];
-  const FIT = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2])), FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
+  const FIT = [0.30, 0.07, 0.99, 0.71], FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
   const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
     "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
   // beat 2's entrances where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model
@@ -6859,7 +6859,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
   const pw = (x, y, z) => { const v = v3().set(x, y, z).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
   // a page point at the home view, back on the model: where the camera's ray through it meets the level h (m)
   function pin() {
-    window.AxoModel.apply(cam, window.AxoLayers.frame(M, view, FIT_MARKS, asp), asp); cam.updateMatrixWorld();      // the marks' own frame
+    window.AxoModel.apply(cam, window.AxoLayers.frame(M, M.data.view, FIT_MARKS, asp), asp); cam.updateMatrixWorld();      // the marks' own frame
     const d = v3(); cam.getWorldDirection(d);
     const at = (x, y, h) => { const o = v3().set(x / 960 - 1, 1 - y / 540, -1).unproject(cam), t = (h - o.y) / d.y; return [o.x + d.x * t, h, o.z + d.z * t]; };
     S.entAt = MARKS.ent.map(([x, y]) => at(x, y, 4.5));
@@ -7099,7 +7099,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     r = window.AxoModel.renderer(); if (!r) return false;
     T = window.THREE;
     if (!M) {
-      S.base = window.AxoLayers.get(); view = S.base.data.view;
+      S.base = window.AxoLayers.get(); view = { theta: -0.62, phi: 0.92 };      // A day in ACKO's angle, so the hand-over is a zoom and a pan (Ritika, 19 Nov)
       M = S.base; SK = window.AxoSkp && window.AxoSkp.available() ? window.AxoSkp.get(asset) : null; camS = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);       // the shared model, its volumes hand-drawn here (the conceptual beats); other slides keep the exact ones
       cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
       S.veil = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthTest: false, depthWrite: false }));
