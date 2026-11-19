@@ -164,9 +164,9 @@ s = re.sub(r'(<div class="hdr"><b>Site due diligence</b><span>)[^<]*(</span>)', 
 SEC2["s-site-dd"] = s
 
 # the stand-ins, until her material is in
-s = SEC2["s-why-campus"]                    # Two Offices: Why a campus's first beat
-s = attr(attr(attr(s, "data-steps", "1"), "data-beats", "Two offices"), "data-title", "Two Offices")
-s = notes_cut(s, "2 ·").replace('<div class="hdr"><b>Why a campus</b>', '<div class="hdr"><b>Two Offices</b>', 1)
+s = SEC2["s-why-campus"]                    # Two Offices: Why a campus, both beats (Leela and HSR, then the two flowing into one drop, which the next slide turns into the ribbon; 19 Nov: "the merging is not happening")
+s = attr(s, "data-title", "Two Offices")
+s = s.replace('<div class="hdr"><b>Why a campus</b>', '<div class="hdr"><b>Two Offices</b>', 1)
 SEC2["s-why-campus"] = bridge(s, BRIDGE["s-why-campus"])
 s = SEC2["s-campus-loop"]                   # The ACKO Campus: Campus + Möbius = The ACKO Loop
 SEC2["s-campus-loop"] = attr(s, "data-title", "The ACKO Campus").replace('<div class="hdr"><b>How it ties together</b>', '<div class="hdr"><b>The ACKO Campus</b>', 1)
