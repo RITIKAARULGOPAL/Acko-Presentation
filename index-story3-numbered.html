@@ -549,8 +549,11 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 /* ---------- a day in ACKO: the campus in use, on the live axo (the shared model) ---------- */
 #s-wayday .wd-gl { left: 0; top: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; }
 #s-wayday .wd-gl.drag { cursor: grabbing; }
-#s-wayday .wd-gl.hot { cursor: pointer; }                       /* over a hotspot's light */
 #s-wayday .wd-gl canvas { display: block; width: 100%; height: 100%; }
+/* arriving from the Detailed axo's day beat: the veil, the title, the clock and the timeline come in over the same frame */
+body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand #s-wayday .wd-now, body.ax-hand #s-wayday .wd-day, body.ax-hand #s-wayday .lt-tools, body.ax-hand #s-wayday .hdr { animation: wd-axin 1.6s ease .15s both; }
+@keyframes wd-axin { from { opacity: 0; } to { opacity: 1; } }
+#s-wayday .wd-gl canvas.wd-hand { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 1; transition: opacity 1.8s ease .25s; }
 #s-wayday .wd-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .5s;
   background: linear-gradient(90deg, rgba(255,255,255,.96) 0, rgba(255,255,255,.9) 24%, rgba(255,255,255,0) 40%), linear-gradient(0deg, rgba(255,255,255,.97) 0, rgba(255,255,255,.92) 17%, rgba(255,255,255,0) 26%), linear-gradient(180deg, rgba(255,255,255,.95) 0, rgba(255,255,255,0) 12%); }
 #s-wayday.wd-whole .wd-veil { opacity: 0; }
@@ -564,18 +567,6 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-wayday .wd-now span { display: block; font-size: calc(var(--pt) * 6.2); color: var(--soft); margin-top: calc(var(--pt) * 1); }
 #s-wayday .wd-now q { display: block; quotes: none; font-style: italic; font-weight: 600; color: var(--plum); font-size: calc(var(--pt) * 7.4); margin-top: calc(var(--pt) * 3); }
 #s-wayday .wd-now q:not(:empty)::before { content: "\201C "; } #s-wayday .wd-now q:not(:empty)::after { content: " \201D"; }
-/* a hotspot's pop-up, beside its light: Ritika's signage concept sketch goes in the frame */
-#s-wayday .wd-card { width: calc(var(--pt) * 120); background: #fff; border-radius: calc(var(--pt) * 5); box-shadow: 0 12px 32px rgba(40, 20, 90, .2); padding: calc(var(--pt) * 5);
-  opacity: 0; transform: translateY(6px); transition: opacity .35s var(--ease), transform .35s var(--ease); pointer-events: none; }
-#s-wayday .wd-card.on { opacity: 1; transform: none; }
-#s-wayday .wd-card.on.away { opacity: 0; }                     /* its light out of the open part of the view */
-#s-wayday .wd-card .sk { height: calc(var(--pt) * 62); border: 1.5px dashed rgba(82, 34, 208, .45); border-radius: calc(var(--pt) * 3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 2);
-  background: repeating-linear-gradient(135deg, #faf8ff 0 calc(var(--pt) * 4), #f3effd calc(var(--pt) * 4) calc(var(--pt) * 8)); color: var(--purple); text-align: center; font-size: calc(var(--pt) * 5.6); }
-#s-wayday .wd-card .sk em { font-family: var(--hand); font-style: normal; font-size: calc(var(--pt) * 13); color: var(--plum); }
-#s-wayday .wd-card b { display: block; margin-top: calc(var(--pt) * 3.5); font-size: calc(var(--pt) * 7); }
-#s-wayday .wd-card p { margin: calc(var(--pt) * 1.5) 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); line-height: 1.4; }
-#s-wayday .wd-lead { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-#s-wayday .wd-lead line { stroke: #c97f12; stroke-width: 1.2; stroke-dasharray: 3 3; transition: opacity .3s; }
 /* the day, along the bottom: each part a button */
 #s-wayday .wd-day { left: 1.8%; right: 1.8%; top: 84.5%; display: flex; gap: calc(var(--pt) * 2); }
 #s-wayday .wd-day button { flex: 1; text-align: left; border: 0; border-top: 2px solid #e2ddf0; background: none; padding: calc(var(--pt) * 2.5) 0 0; cursor: pointer; color: var(--mute); font-family: var(--body); transition: color .25s, border-color .25s; }
@@ -590,7 +581,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-wayday.wd-user .lt-tools .wd-rs { display: inline-flex; }
 #s-wayday .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
 #s-wayday.wd-fallback .wd-nogl { display: block; }
-#s-wayday.wd-fallback .wd-gl, #s-wayday.wd-fallback .wd-card, #s-wayday.wd-fallback .wd-lead, #s-wayday.wd-fallback .lt-tools { display: none; }
+#s-wayday.wd-fallback .wd-gl, #s-wayday.wd-fallback .lt-tools { display: none; }
 </style>
 <style data-slide="s-engage">
 /* ---------- Acker's engagement points (deck 46): the PPT collage as a lens, one group lit per beat, then all ---------- */
@@ -1225,16 +1216,74 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #world-plan.bare .pl-dd [data-k="slab"] { fill: url(#dd-hatch); fill-opacity: 1; stroke: #3a9a46; stroke-width: 2; stroke-dasharray: none; }
 </style>
 <style data-slide="s-axo-detail">
-#s-axo-detail .page { background: #fff; }
-#s-axo-detail .ph-k { left: 8%; top: 14%; margin: 0; padding: .3em .9em; border: 1px dashed #b9a8ee; border-radius: 99px; font-size: calc(var(--pt) * 6.4); font-weight: 700;
-  letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }
-#s-axo-detail .ph-head { left: 8%; top: 21%; margin: 0; font-size: calc(var(--pt) * 26); line-height: 1.12; font-weight: 400; color: #16131f; }
-#s-axo-detail .ph-head span { font-weight: 700; color: var(--purple); }
-#s-axo-detail .ph-box { left: 8%; top: 36%; width: 84%; height: 46%; display: flex; flex-direction: column; justify-content: center; padding: 0 8%;
-  border: 1.5px dashed #c9bcf0; border-radius: calc(var(--pt) * 6); background: repeating-linear-gradient(135deg, #faf8ff 0, #faf8ff 10px, #f5f2fd 10px, #f5f2fd 20px); }
-#s-axo-detail .ph-box p { margin: 0; max-width: 46em; font-size: calc(var(--pt) * 11); line-height: 1.45; color: #3b3550; }
-#s-axo-detail .ph-box b { font-weight: 700; color: var(--purple); }
-#s-axo-detail .ph-box small { margin-top: 1.4em; font-size: calc(var(--pt) * 7); font-style: italic; color: #8d86a0; }
+
+/* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
+/* without WebGL: the deck's animation, where the PPT has it (its picture box less the crop's padding) */
+#s-axo-detail .st-anim { left: 7.62%; top: 9.07%; width: 78.04%; height: 78.04%; background: url(assets/img/strategy-anim.webp) center / 100% 100% no-repeat; }
+#s-axo-detail:not(.st-fallback) .st-anim { display: none; }
+#s-axo-detail.st-fallback .st-3d, #s-axo-detail.st-fallback .st-ov, #s-axo-detail.st-fallback .st-tools, #s-axo-detail.st-fallback .st-cap, #s-axo-detail.st-fallback .st-veil { display: none; }
+#s-axo-detail .st-3d { left: 0; top: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+#s-axo-detail .st-3d.drag { cursor: grabbing; }
+#s-axo-detail .st-3d canvas { display: block; width: 100%; height: 100%; }
+/* a soft white wash behind the copy, where the floor's west end runs under it */
+#s-axo-detail .st-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
+  background: radial-gradient(ellipse 30% 22% at 22% 30%, rgba(255,255,255,.92), rgba(255,255,255,.6) 60%, rgba(255,255,255,0)); }
+/* the copy at the PPT's boxes (its insets, anchors and sizes), the title and paragraph 10 % higher so they clear the floor at
+   slide 14's size (Ritika, 26 Oct: "move the text") */
+#s-axo-detail .st-t { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+#s-axo-detail .st-t > * { position: absolute; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; margin: 0; padding: calc(var(--pt) * 7.2); }
+#s-axo-detail .st-t h3 { left: 1.82%; top: 17.01%; width: 44.29%; height: 8.21%; font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple-2); white-space: nowrap; }
+#s-axo-detail .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.4;   /* 29 Oct: "the line spacing is off" */ font-style: italic; font-weight: 300; color: #666; }
+#s-axo-detail .st-t p b { font-weight: 500; }
+#s-axo-detail .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); justify-content: flex-start; }   /* rows from the top: placed under the name (placeLine) */   /* 29 Oct: "use 1.2 spacing" */
+/* the beat's name, bottom right of the floor, as the deck's animation writes it */
+#s-axo-detail .st-cap { left: 47.62%; top: 68.32%;   /* on the handwritten line's left edge; the same place on every beat, where The Client's journey had it (29 Oct: "keep this position as constant") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
+  opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+#s-axo-detail .st-cap.on { opacity: 1; transform: none; }
+/* the overlay: the entrances' maroon marks, the neighbourhoods' names, the Loop's stops (a dot, a leader, the name and its words) */
+#s-axo-detail .st-ov { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }   /* the names stop at the page's edge, as the model does */
+#s-axo-detail .st-ov > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#s-axo-detail .st-ent path { fill: var(--maroon, #980000); transition: opacity .4s var(--ease); }
+#s-axo-detail .st-legs path { stroke: var(--purple); stroke-width: 1.2; fill: none; vector-effect: non-scaling-stroke; }
+#s-axo-detail .st-legs circle { fill: var(--purple); stroke: #fff; stroke-width: 1.5; }
+#s-axo-detail .st-legs g { opacity: 0; transition: opacity .45s var(--ease); }
+#s-axo-detail .st-legs g.on { opacity: 1; }
+#s-axo-detail .st-s { position: absolute; transform: translate(-50%, -100%); text-align: center; white-space: nowrap; opacity: 0; transition: opacity .45s var(--ease);
+  padding: calc(var(--pt) * 1.5) calc(var(--pt) * 4); background: rgba(255,255,255,.88); border-radius: 3px; }
+#s-axo-detail .st-s.on { opacity: 1; }
+/* the spaces' hotspots (beat 4): a dot at the space, a plain small name beside it; every dot blinks, a little out of step */
+#s-axo-detail .st-s.hot { padding: 0; background: none; }
+#s-axo-detail .st-s.hot b { font-size: calc(var(--pt) * 5.4); font-weight: 600; color: #5b4a9a; letter-spacing: .01em;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
+#s-axo-detail .st-legs g circle.pl { fill: none; stroke: var(--purple); stroke-width: 2.6; opacity: 0; transform-box: fill-box; transform-origin: center; }
+#s-axo-detail .st-legs g.on circle.pl { animation: st-pulse 1.7s ease-out infinite; animation-delay: var(--d, 0s); }
+@keyframes st-pulse { 0% { transform: scale(.8); opacity: 1; } 100% { transform: scale(4.2); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { #s-axo-detail .st-legs g circle.pl { animation: none !important; } }
+#s-axo-detail .st-s b { display: block; font-size: calc(var(--pt) * 7.4); font-weight: 700; color: var(--purple); }
+#s-axo-detail .st-s span { display: block; font-family: var(--hand); font-size: calc(var(--pt) * 9); line-height: 1; color: #333; }
+/* the names as the reference axo has them (29 Oct): condensed bold capitals, each in its own colour, standing upright on the floor
+   along its long axis (--m: the floor's east axis and the vertical as the page shows them), zooming with it */
+#s-axo-detail .st-z { position: absolute; transform: translate(-50%, -50%) matrix(var(--m, 1, 0, 0, 1, 0, 0)) scaleX(var(--sx, .66)); white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); user-select: none;
+  font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 800; letter-spacing: 0; text-transform: uppercase; line-height: 1; }
+#s-axo-detail .st-z.small { font-size: calc(var(--pt) * 9); --sx: .72; }
+#s-axo-detail .st-z.on { opacity: 1; }
+/* beat 3: the departments are configurable (Ritika, 23 Oct; no text, her note 26 Oct): the names clickable once it has played */
+#s-axo-detail.st-cfg-live .st-z.dept.on { pointer-events: auto; cursor: pointer; }
+#s-axo-detail .st-z.picked { text-decoration: underline; text-decoration-color: #5222d0; text-decoration-thickness: .12em; text-underline-offset: .14em; }
+/* the tools as the plan pages have theirs (s-layout .ly-tools, 3 Nov): one white bar just left of the ACKO symbol */
+#s-axo-detail .st-tools { display: flex; border: 1px solid #e3def2; border-radius: calc(var(--pt) * 3); background: #fff; overflow: hidden; }
+#s-axo-detail .st-tool { display: flex; align-items: center; gap: calc(var(--pt) * 2); height: calc(var(--pt) * 11); padding: 0 calc(var(--pt) * 4); border: 0; border-left: 1px solid #e3def2;
+  background: none; color: #3b3550; font: 500 calc(var(--pt) * 5.2) var(--body); white-space: nowrap; cursor: pointer; transition: background .2s, color .2s; }
+#s-axo-detail .st-tool:first-child { border-left: 0; }
+#s-axo-detail .st-tool svg { flex: none; width: calc(var(--pt) * 5.6); height: calc(var(--pt) * 5.6); fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+#s-axo-detail .st-tool:hover { color: var(--purple); background: rgba(82, 34, 208, .05); }
+#s-axo-detail .st-tool:focus { outline: none; }
+#s-axo-detail.st-flat .st-ov, #s-axo-detail.st-flat .st-cap { opacity: 0; transition: opacity .3s; }   /* turning onto the plan: the names go at once */
+#s-axo-detail .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }
+#s-axo-detail .st-s.cl b { color: #1a2cf0; }
+/* the third beat: the words and the ring fade as the camera glides in; then A day in ACKO takes over with no slide fade */
+#s-axo-detail.ax-day .st-t, #s-axo-detail.ax-day .st-cap, #s-axo-detail.ax-day .st-ov, #s-axo-detail.ax-day .st-tools, #s-axo-detail.ax-day .hdr { opacity: 0 !important; transition: opacity 1.2s ease !important; }
+body.ax-hand .scene { transition: none !important; }
 </style>
 <style data-slide="s-material">
 #s-material .page { background: #fff; }
@@ -1621,7 +1670,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-why-campus" data-part="p4" data-title="Two Offices" data-steps="1" data-mins="0.6" data-beats="Two offices"
+<section class="scene" id="s-why-campus" data-part="p4" data-title="Two Offices" data-steps="2" data-mins="0.6" data-beats="Two offices,One floor"
   data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 640 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: Two offices, one floor: so we made it one campus.">
   <div class="page">
     <p class="dg-tag">Concept</p>
@@ -1945,7 +1994,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <section class="scene" id="s-strategy" data-part="p5" data-title="Campus strategy" data-steps="4" data-mins="1.9"
   data-beats="The Shell,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together"
-  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, Wellness, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work.">
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work.">
   <div class="page">
     <p class="dg-tag">Plan</p>
     <div class="st-anim"></div>
@@ -2133,31 +2182,37 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-axo-detail" data-part="p5" data-title="Detailed axonometric" data-steps="1" data-mins="0.5" data-beats="Placeholder"
-  data-notes="PLACEHOLDER. Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the loop, the neighbourhoods, and the client's and employees' journeys are defined. To be built. → Bridge: And over one day in ACKO…">
+<section class="scene" id="s-axo-detail" data-part="p5" data-title="Detailed axonometric" data-steps="3" data-mins="2"
+  data-beats="The Neighbourhoods,The Loop,A day in ACKO"
+  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 A day in ACKO: the camera glides in, the Loop and the words fade away, and A day in ACKO takes over on the same frame. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it. → Bridge: And over one day in ACKO…">
   <div class="page">
     <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>
-    <p class="ph-k">Placeholder</p>
-    <h2 class="ph-head">Detailed <span>axonometric.</span></h2>
-    <div class="ph-box">
-      <p>With defined boundaries: the proposed layout transforms into an axonometry where the <b>loop</b>, the <b>neighbourhoods</b>, and the <b>client</b> and <b>employee journeys</b> are defined.</p>
-      <small>To be built</small>
+    <p class="dg-tag">Plan</p>
+    <div class="st-anim"></div>
+    <div class="st-3d ui"></div>
+    <div class="st-from"></div>
+    <div class="st-ov"><svg viewBox="0 0 1920 1080" preserveAspectRatio="none"><g class="st-ent"></g><g class="st-legs"></g></svg></div>
+    <div class="st-veil"></div>
+    <div class="st-t rv">
+      <h3 style="--i:0">Detailed Axonometric</h3>
+      <p style="--i:1"><span>With defined boundaries: the proposed layout becomes an axonometry where the neighbourhoods and the Loop are both defined.</span></p>
+      <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
+    <p class="st-cap"></p>
+    <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
   </div>
 </section>
 
 <section class="scene" id="s-wayday" data-part="p5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
   data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Board Room,Wellness"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop's seven stops by the clock, each a space in use, its people small and in grey. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The amber light columns are the wayfinding hotspots at Ritika's marked spots (the Reception sign, the corridor sign, the neighbourhood's graphic, the workhall, the Collab, the art wall): click one for its pop-up (signage concepts to come). Whole floor shows the whole campus; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: What it&#x27;s made of. 03 · Design Expression.">
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: What it&#x27;s made of. 03 · Design Expression.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
-    <svg class="wd-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"/></svg>
     <div class="hdr"><b>A day in ACKO</b><span>02 · Design Development</span></div>
     <div class="lt-tools ui"><button type="button" class="wd-rs" title="Back to the day's view"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button><button type="button" class="wd-play on">The day</button><button type="button" class="wd-all">Whole floor</button></div>
-    <div class="wd-title"><small>Wayfinding</small><h1>A day in ACKO</h1><p>From arrival to the evening: the campus in use through the day. Tap a light for the wayfinding at that spot.</p></div>
+    <div class="wd-title"><h1>A day in ACKO</h1><p>From arrival to the evening: one Acker’s day, walked along the Loop.</p></div>
     <div class="wd-now"><div class="t"></div><b></b><span></span><q></q></div>
-    <div class="wd-card"><div class="sk"><em>Signage concept</em><span>Ritika's sketch here</span></div><b></b><p></p></div>
     <div class="wd-day ui"></div>
     <p class="wd-nogl">The live model needs WebGL on this machine.</p>
   </div>
@@ -3916,7 +3971,6 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // there so a drag or zoom carries it (the maroon ▲)
   const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
     { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
-    { name: "Wellness", q: "Room to pause", x: -133687, y: 203833, d: 54.4 },
     { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
     { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
   const MARKS = { ent: [[686, 714], [1094, 408]] };
@@ -4265,7 +4319,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
     const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
       ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
-    return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
+    // a fade of the whole ring and its chevrons (1 = as drawn), for the Detailed axo's glide into A day in ACKO
+    const fade = (a) => { arcs.forEach((x) => { x.under.material.opacity = 0.9 * a; x.top.material.opacity = 0.9 * a; }); ar.forEach((x) => { x.m.material.opacity = 0.95 * a; }); };
+    return (S.rb = { show, to, fade, at, pos, hot, miss: at.map(() => 0) });
   }
   function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
 
@@ -4430,7 +4486,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
     const pr = r.getPixelRatio();
     if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
-    if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(Hh * pr)) {
+    if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(Hh * pr)) {
       r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
     }
     if (S.playing) { const t = (now - S.t0) / 1000; pose(S.k, Math.min(t, DUR[S.k])); if (t >= DUR[S.k]) S.playing = false; }
@@ -4948,7 +5004,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const r = window.AxoModel.renderer(), host = $(".nb-3d", sc);
     if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
     const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return;
-    const pr = r.getPixelRatio(); if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(H * pr)) r.setSize(W, H, false);
+    const pr = r.getPixelRatio(); if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(H * pr)) r.setSize(W, H, false);
     nbSet(bx); window.AxoModel.apply(NBX.cam, sc.dataset.nbv === "e" ? nbView(st) : st, W / H); r.render(NBX.M.scene, NBX.cam);
     if (sc.dataset.nbv === "e") { nbPins(sc, W, H); nbMarks(sc); }
   }
@@ -5234,8 +5290,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   // Acker Garden, its own angle (Ritika, 27 Oct: "do it like the render"); @NB is the neighbourhood's name. sp: the space in focus,
   // the only one in purple (29 Oct: "the only purple theme elements in this axo should be highlighted at each time interval"):
   // the plan's room of that type at the beat's point (or nearest it), or the beat's neighbourhood (@NB). spot: the one hotspot
-  // that shows on the beat (SPOTS / STOPS, by its place; none on Board Room), 29 Oct: "only show the corresponding one"; the
-  // terrace's, 29 Oct: "the hotspot is missing in the terrace portion"
+  // that shows on the beat (kept in the data, not shown: no wayfinding here, Ritika 19 Nov)
   const BEATS = [
     { t: "09:00", n: "Arrival", s: "Through the lift lobby to Reception", q: "I feel welcomed", at: [85500, 31500], half: 14, sp: "Reception", spot: 0 },
     { t: "09:30", n: "Work", s: "At their desks in @NB", q: "These are my folks!", at: [33300, 33500], half: 14, sp: "@NB", spot: 3 },
@@ -5245,31 +5300,14 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     { t: "15:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
     { t: "17:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: 6 },
   ];
-  // the wayfinding hotspots: her marked spots (WAY.stops, in her order), each a light column; a click opens its pop-up (title,
-  // what the sign does; her sketch to come)
-  const SPOTS = [
-    ["The Reception sign", "The ACKO welcome, and the way to the six neighbourhoods, the café and the rooms."],
-    ["The corridor sign", "The neighbourhoods, the café and the rooms, signed where the corridor sets off."],
-    ["@NB's graphic", "The neighbourhood's graphic wraps the corner, seen from down the corridor."],
-    ["The workhall", "Desk clusters numbered and signed, in the neighbourhood's colour."],
-    ["The Collab", "The team's collab corner, signed by the neighbourhood."],
-    ["The art wall", "Three artworks along the corridor to the café."],
-    ["The terrace garden", "The way out to the terrace garden, for a pause in the open air."],
-  ];
-  // generated by tools/acko/wayday_marks.py from her marked blocks (plan mm, y down): the stops (the hotspots), the legs between
-  // them (walked on the SketchUp model; the route check's), the marks
-  const WAY = {"stops":[[83304,33429],[68468,31325],[33643,29251],[27352,24221],[17952,17921],[67451,31384]],"legs":[[[83304,33429],[77552,31521],[68468,31325]],[[68468,31325],[45152,31921],[43852,33221],[42552,34421],[41052,35221],[38652,33521],[34752,29721],[33643,29251]],[[33643,29251],[32952,28121],[31852,26921],[28352,23621],[27952,23621],[27352,24221]],[[27352,24221],[27652,23321],[27752,22621],[27752,22321],[27452,22121],[25652,21621],[25152,20721],[25152,20521],[24852,20221],[23652,19121],[23352,18921],[23252,18921],[23152,18921],[23052,18921],[22952,18921],[22852,18921],[22752,18921],[22652,18921],[21352,18821],[21052,18521],[20952,18421],[20852,18321],[20752,18221],[20652,18121],[20552,18021],[17952,17921]],[[17952,17921],[20552,18021],[20652,18121],[20752,18221],[20852,18321],[20952,18421],[21052,18521],[22352,18921],[22652,18921],[22752,18921],[22852,18921],[22952,18921],[23052,18921],[23152,18921],[23252,18921],[23352,18921],[24152,19521],[25552,20921],[25552,21521],[25652,21621],[27552,22121],[36052,30821],[36352,31121],[40952,35221],[42752,34621],[43052,34321],[44752,32721],[45652,31921],[67451,31384]]],"marks":[{"k":"Signage","stop":0,"shape":"panel","rings":[[[84954,30451],[86455,30451],[86455,30407],[84954,30407]]],"h":[0.0,2.2]},{"k":"Signage","stop":1,"shape":"panel","rings":[[[67717,30447],[69218,30447],[69218,30403],[67717,30403]]],"h":[0.0,2.2]},{"k":"Graphics","stop":2,"shape":"wrap","line":[[32590,26772],[32553,26806],[36005,30508],[36041,30473]],"h":[0.0,2.4]},{"k":"Workhall","stop":3,"shape":"floor","rings":[[[19713,18686],[19535,18958],[19286,19097],[18123,19140],[17954,19185],[17806,19277],[17661,19458],[16681,21341],[16695,21460],[16537,21611],[23108,28658],[23136,28820],[23179,28733],[37343,43923],[38981,42395],[45675,42395],[31242,27408],[31136,27225],[30981,26834],[30906,26419],[30913,25998],[31002,25586],[31177,25186],[31430,24829],[40187,16759],[40644,16507],[41152,16389],[41704,16419],[42066,16530],[42550,16825],[46642,21248],[46824,21370],[47040,21409],[47202,21377],[47347,21298],[50108,18686],[54246,18686],[54246,15486],[22843,15486],[22843,17086],[23843,17086],[23843,18686]],[[45466,32725],[41950,36044],[41820,36269],[41749,36296],[41870,36606],[42029,36845],[42064,36822],[46120,41144],[46316,41195],[47818,41195],[47818,40692],[47700,40707],[47636,40667],[47481,40651],[47454,40609],[47454,40403],[48509,41195],[50843,41195],[50843,32461],[46002,32461],[45691,32572]]]},{"k":"Collab","stop":4,"shape":"floor","rings":[[[17848,19105],[18010,18938],[18223,18846],[19496,18809],[19682,18714],[21202,15486],[18564,15486],[18623,15505],[18662,15565],[18659,15717],[18595,15781],[17453,15800],[16920,15909],[16664,16003],[16188,16266],[15774,16619],[15596,16825],[15306,17286],[15115,17795],[15029,18332],[15053,18876],[15186,19404],[15421,19894],[15750,20327],[16679,21339]]]},{"k":"Artwork","stop":5,"shape":"wall","rings":[[[63358,32333],[65306,32333],[65306,32236],[63358,32236]]],"h":[0.9,2.1]},{"k":"Artwork","stop":5,"shape":"wall","rings":[[[66477,32333],[68425,32333],[68425,32236],[66477,32236]]],"h":[0.9,2.1]},{"k":"Artwork","stop":5,"shape":"wall","rings":[[[69596,32333],[71544,32333],[71544,32236],[69596,32236]]],"h":[0.9,2.1]}]};
-  // the hotspots' places: her marked spots, then the terrace garden's (its middle, where the Wellness beat looks)
-  const STOPS = [...WAY.stops, [84216, 43565]];
-  // generated by tools/acko/wayday_people.py (plan mm, y down; angles in centiradians; a 4th value: what they sit or stand on, mm):
-  // the seated, the standing, presenters, on the floor, walkers' paths, and the garden's foosball (props)
-  const PEOPLE = {"sit":[[52987,42274,75],[53196,42136,94],[53578,42274,120],[53787,42136,144],[52987,41255,111],[53196,41117,123],[53578,41255,139],[54191,42274,188],[54400,42136,202],[54191,41255,172],[54400,41117,181],[55012,42136,240],[54803,41255,201],[55012,41117,207],[52987,40236,126],[53578,40236,145],[54191,40236,167],[54400,40099,173],[54803,40236,187],[55012,40099,192],[55416,42274,262],[55625,42136,261],[55416,41255,224],[55416,40236,205],[55625,40099,208],[52396,42274,51],[52605,42136,65],[52396,41255,89],[52605,41117,99],[52396,40236,109],[52605,40099,116],[52987,43292,-17],[53196,43155,-3],[53578,43292,-44],[53787,43155,-18],[54191,43292,-261],[54400,43155,-309],[54803,43292,-296],[55012,43155,-312],[55416,43292,-304],[55625,43155,-313],[52396,43292,-11],[52605,43155,-2],[52987,46287,-128],[53196,46149,-134],[53578,46287,-146],[53787,46149,-153],[52987,45268,-116],[53196,45130,-123],[53578,45268,-141],[53787,45130,-151],[54191,46287,-166],[54400,46149,-173],[54191,45268,-170],[54400,45130,-181],[54803,46287,-185],[55012,46149,-192],[54803,45268,-196],[55012,45130,-207],[52987,44249,-88],[53578,44249,-128],[54400,44112,-203],[54803,44249,-224],[55012,44112,-241],[55416,46287,-201],[55625,46149,-209],[55416,45268,-218],[55625,45130,-228],[55416,44249,-250],[55625,44112,-262],[52396,46287,-112],[52605,46149,-116],[52605,45130,-99],[52396,44249,-63],[52605,44112,-64],[52987,47305,-135],[53196,47168,-139],[53787,47168,-154],[54191,47305,-164],[54400,47168,-169],[54803,47305,-178],[55012,47168,-184],[55625,47168,-197],[52396,47305,-122],[52605,47168,-126],[66066,35005,-152],[65091,35016,-160],[64767,35020,-312],[66391,35001,-158],[70222,35024,-4],[76472,39121,2],[76472,37621,88],[73809,39121,249],[68430,40519,-216],[67608,40519,-59],[68430,39697,216],[69858,41872,59],[70680,42694,-216],[65321,44130,138],[68229,45208,-130],[68229,44130,142],[67671,44130,135],[67113,45208,-179],[70785,40659,-234],[65242,39595,82],[67492,41766,82],[68557,41771,240],[66180,42694,-216],[70933,38289,-307],[70933,37689,-307],[69587,38295,-2],[67337,37693,-8],[68683,37687,-307],[67337,38293,-2],[66433,37689,-307],[65087,38295,-2],[63108,40519,-59],[62985,42830,-80],[64183,38287,-307],[62837,38293,-2],[70785,44145,234],[70778,45209,-232],[58699,47092,9],[70594,47682,19],[58699,46558,-5],[76410,47690,303],[76410,48253,-314],[76410,46549,311],[73518,42309,-307],[74792,45280,-80],[74800,44215,82],[73220,45139,-216],[72399,45139,-59],[59412,39697,255],[58590,40519,-98],[58590,39697,98],[61785,40659,-234],[61777,39595,232],[60713,39600,74],[60840,42694,-98],[58337,38287,-7],[59683,37693,-307],[59412,44906,-255],[58590,44084,98],[58590,44906,-98],[61777,45008,-232],[60713,45003,-74],[60712,43942,75],[53388,35729,306],[53388,34229,306],[51742,35728,-8],[51742,34228,-8],[53388,34979,306],[51742,34978,-8],[213484,44136,311],[85800,40218,-166],[85443,40700,-159],[84303,46494,-143],[87299,42425,240],[180060,43420,-83],[183589,47279,-260],[183097,46936,-260],[183107,47636,-251],[83036,43411,33],[82488,43411,25],[84234,41854,137],[85799,47047,-192],[175033,47542,-86],[179872,46475,-218],[179872,45314,-249],[181429,47060,-239],[181429,46341,-252],[225790,46885,-34],[157622,36845,229],[157645,37386,-312],[22613,17411,-3],[22590,16869,106],[22508,18422,-5],[96105,33286,-166],[94511,33286,-150],[93156,30604,-163],[93698,30627,-244],[92146,30710,-159],[117206,47235,-268],[117288,45683,-138],[253478,16915,179],[251034,15976,86],[251057,16517,159],[194709,32032,71],[197980,30710,-26],[93705,33277,-149],[197873,32504,264],[252850,17318,305],[159195,36310,189],[185804,33028,151],[184895,33033,148],[47039,44616,-8],[47039,46118,8],[47039,46869,8],[47039,43866,-8],[48835,44616,306],[47039,45367,8],[48835,46118,307],[48835,45367,306],[48835,46869,307],[40861,25628,-229],[41510,24979,-237],[38187,17984,-156],[51825,17806,313],[250341,28417,158],[253341,28417,158],[253336,29767,-158],[29445,22520,124],[30810,23153,133],[29824,20687,130],[28743,21608,121],[28481,20126,123],[33247,21958,153],[32123,22959,144],[33476,19387,155],[36066,19596,-124],[23998,23563,86],[24440,22213,94],[22969,22532,-313],[25243,23904,91],[25550,22517,99],[22932,19935,94],[35174,38814,-159],[36560,39126,-216],[42735,40606,-257],[33997,34027,187],[34885,35135,-291],[37618,35117,-308],[36265,35550,-288],[36594,34081,287],[34060,31381,166],[35137,32432,209],[37539,40183,-219],[36364,41123,-197],[26328,17074,240],[27350,18170,238],[26348,19104,-74],[29251,32462,49],[30637,32773,59],[29609,33873,24],[31616,33831,45],[30441,34771,3],[22642,25375,71],[25007,26743,75],[23832,27684,63],[27202,26299,81],[28136,27302,-231],[33551,37822,-158],[33551,36452,158],[26896,29317,158],[29733,18078,134],[32351,17294,149],[31174,18090,142],[45225,16821,214],[44198,17921,212],[46205,17879,220],[35383,16665,313],[242382,19207,78],[243756,19688,83],[241535,18236,78],[242648,17354,88],[241245,16810,83],[246275,19467,102],[247445,18662,115],[245596,18372,102],[246837,17681,114],[245539,16918,107],[252528,23372,171],[251723,25983,154],[253225,25875,208],[245643,20600,91],[245572,22018,80],[246907,21322,97],[249473,21317,126],[250752,20621,144],[253255,21317,177],[252084,22122,162],[249402,25045,96],[247552,24756,72],[248793,24064,97],[247496,23301,87],[217536,44290,-64],[217644,45791,-88],[215686,44001,-41],[215733,46228,-71],[215663,47647,-84],[216997,46951,-92],[222750,44853,-208],[224252,44962,-1],[223555,47465,-199],[224252,46186,-220],[222456,43005,-241],[221771,44249,-186],[221001,42956,-156],[218143,40589,37],[220505,39394,136],[220087,40840,76],[219415,46050,91],[220909,46050,219],[219415,47547,-85],[220909,47547,-225],[223581,39708,248],[225082,39816,271],[224386,42319,-296],[223581,41149,293],[223287,37860,210],[222602,39104,212],[221832,37810,178],[223901,36518,208],[217168,33533,-239],[215667,33424,-231],[216363,30922,-253],[215667,32200,-239],[209893,26768,-240],[211269,26417,-274],[210852,27863,-236],[213441,28076,-263],[212001,28287,-246],[212528,24450,301],[213904,24099,298],[213487,25545,-305],[216076,25758,-305],[215257,24598,308],[215230,30289,-251],[214508,31553,-236],[215879,27575,66],[215879,29069,-62],[217376,29069,-247],[202054,19377,76],[203240,18596,93],[203318,20099,81],[201369,16814,89],[201399,20498,60],[201300,21915,44],[201694,25066,0],[202416,23801,22],[200587,25723,-9],[199920,24468,7],[202815,25720,-13],[203562,24471,13],[205727,19377,119],[206991,20099,137],[206324,17603,135],[205042,16814,123],[206321,21245,115],[210622,18596,196],[210700,20099,207],[210033,17603,184],[208682,21915,178],[210030,21245,206],[200853,28082,15],[202888,28661,-297],[213011,19566,-170],[214197,18785,235],[214276,20288,249],[212258,22104,254],[208509,23761,195],[209771,24488,284],[207218,23756,102],[205951,24474,27],[194689,45784,-81],[194021,43288,-34],[192740,42499,-14],[192770,46183,-66],[192671,47600,-79],[194019,46930,-86],[194231,39310,51],[193674,40616,22],[195167,40425,36],[196593,38115,107],[196175,39561,73],[198966,38515,170],[200323,39044,216],[198592,41135,164],[195866,42082,91],[197360,42082,219],[195866,43579,-85],[203087,46632,-231],[204257,47437,-235],[206869,46632,-261],[205698,47437,-247],[201753,42928,-278],[204256,43624,-282],[202978,42928,-287],[202066,41151,299],[202521,39716,268],[198149,46990,-149],[196764,47305,-126],[197220,45870,-126],[200986,47305,-198],[229311,19193,39],[230497,18412,44],[229908,17419,47],[228626,16630,47],[228656,20314,34],[234170,18412,52],[234248,19915,45],[233581,17419,54],[232329,20314,40],[233578,21061,39],[236693,19193,55],[237957,19915,-50],[236035,18086,58],[235939,21731,40],[237287,21061,47],[249943,34707,-128],[251445,34804,-151],[248959,34110,-111],[250765,37092,-145],[251471,38365,-154],[248206,36383,-115],[251894,36451,-158],[253312,36370,-176],[252625,37710,-166],[244828,35215,-77],[243018,33272,-50],[242342,34521,-57],[245982,34560,-81],[243352,38679,-88],[244854,38776,-98],[243045,36832,-76],[242369,38082,-80],[241589,36794,-69],[245277,36862,-91],[246695,36781,-102],[246009,38121,-103],[248253,39876,-127],[248178,41295,-130],[246962,39872,-117],[247027,41291,-121],[245695,40590,-110],[240639,39876,-80],[239377,40603,-77],[243197,40590,-95],[238596,35664,-50],[236425,39503,-62],[236359,40922,-68],[237691,40221,-70],[29857,27647,108],[31243,27959,122],[30215,29058,103],[32222,29016,132],[240033,38273,-70],[247585,35486,-103],[204913,23297,51],[37112,37373,-250],[26164,20956,107],[47146,16632,220],[250255,23627,126],[125220,45140,-219],[124034,45921,-201],[123956,44418,-210],[128921,33402,255],[130118,34167,267],[128281,34523,262],[129548,35166,274],[126983,34510,253],[126954,35966,270],[126365,33376,236],[125153,34116,232],[125876,46253,-218],[125974,42603,-253],[124626,43272,-230],[112556,40117,-15],[113304,37569,18],[115812,36893,39],[115934,43074,-71],[114764,42269,-51],[115368,41290,-42],[112153,43075,-45],[113431,43771,-59],[127528,39079,-312],[130145,38295,308],[112472,46710,-85],[114425,46154,229],[115423,46154,85],[116036,47380,-178],[129341,42338,-276],[127923,42405,-269],[128622,41072,-287],[129341,43626,-264],[127923,43559,-257],[128622,44892,146],[18326,20761,85],[230440,24572,18],[229659,23386,22],[229333,25230,14],[228666,23975,19],[227877,25257,13],[232308,23978,23],[229125,28325,1],[120639,44103,-1],[122010,45601,313],[122610,47103,-313],[121239,47103,-1],[122610,42601,313],[121239,42601,1],[117909,42032,-84],[117988,40579,-55],[119365,34731,125],[120399,33636,151],[119052,35838,107],[123105,33842,201],[124231,37738,-219],[122737,36241,85],[124231,36241,225],[122572,40590,-240],[121274,39121,-275],[119995,39738,-84],[120510,26087,313],[121110,27589,-313],[119740,27589,-1],[118671,28495,-313],[214308,33167,-223],[230927,44468,-65],[229147,45047,-63],[228367,43759,-58],[232055,43827,-66],[233625,47853,-313],[232255,47853,-1],[121110,29087,313],[141501,43148,7],[140314,43929,-19],[140237,42426,25],[142157,44261,-59],[142176,45717,-104],[142156,42028,72],[142255,40611,111],[140907,41280,64],[138540,39843,60],[137821,38577,69],[150572,39003,259],[149334,39698,258],[150633,40458,276],[149885,37910,243],[147255,43375,-312],[148425,42570,299],[148533,44072,-299],[147821,41591,276],[151036,43376,-313],[149866,42571,303],[143981,41760,182],[140711,37873,108],[141875,38687,121],[141995,37187,132],[144492,37903,174],[143315,38699,151],[143219,37197,151],[189541,31048,-158],[190040,38368,-113],[190622,36334,192],[138596,34481,106],[137896,33148,106],[137177,35702,87],[137896,36968,84],[138590,45142,-35],[137403,44361,-17],[137326,45865,-39],[139344,47679,-80],[138540,41130,41],[137121,41063,33],[149204,47787,-156],[162101,35306,-313],[160731,36804,1],[161331,38306,-1],[168613,35306,-313],[168613,36804,313],[169213,38306,-313],[164990,35753,119],[163726,35031,81],[164388,37526,-60],[143896,47820,-91],[145390,47820,-219],[143896,46323,85],[145390,46323,225],[146481,45267,-299],[193895,35986,301],[193147,33437,209],[191983,34252,179],[191862,32751,167],[189365,33468,92],[190542,34264,112],[190638,32761,133],[251980,39782,66],[251980,41276,-62],[253477,39782,242],[253477,41276,-247],[129491,47749,-219],[131105,46302,-1],[45377,37245,-16],[45785,38694,-110],[43507,37329,-9],[45785,35548,-170],[46842,34492,-298],[44727,34490,7],[48173,34548,-91],[49667,34548,-219],[48173,33052,85],[47780,40411,1],[49150,38912,-313],[141820,47814,-120],[38940,44989,252],[39494,21990,238],[40005,22540,248],[38381,25056,-238],[37283,26074,-230],[40032,23524,-226],[39482,24034,-230],[36732,26584,-234],[38931,24545,-234],[37833,25563,-226],[34757,25557,89],[38056,22498,80],[36408,24026,77],[35307,25047,84],[35858,24537,81],[37506,23009,84],[36955,23519,88],[38606,21988,76],[199010,20270,-187],[199009,20663,-159],[199020,19038,-152],[199016,19431,-154],[198878,31240,-155],[226371,21458,-45],[226371,21851,-151],[56111,29135,-154],[56862,29135,-155],[55520,27736,3],[55520,26985,1],[55520,26234,-2],[55520,28486,7],[57466,28485,307],[57466,27735,310],[57466,26984,313],[57466,26233,-312],[231134,31962,-78],[232395,30904,236],[232878,31478,236],[238231,32322,-235],[237657,32805,-235],[238806,31839,-219],[236502,31428,79],[237077,30946,79],[233486,29290,-63],[233969,29865,-72],[235329,26972,85],[233604,28420,94],[234178,27938,91],[234753,27455,88],[234855,29910,-234],[235430,29428,-231],[236005,28945,-228],[212121,16367,155],[213344,16366,198],[48795,24896,-163],[48007,24189,-5],[48714,23402,152],[49501,24108,309],[175044,36977,-211],[85021,32782,52],[84878,32898,47],[89268,32288,299],[85960,32288,15],[88380,33594,-162],[86933,30651,160],[85958,32616,5],[94591,36657,-284],[176741,37636,-151],[175760,36552,5],[175763,36224,15],[241520,45604,3],[241520,46355,2],[248165,44863,149],[247415,44863,149],[245913,44863,165],[244418,46960,-150],[245168,44863,150],[246664,46960,-165],[245913,46960,-165],[244417,44863,149],[245169,46960,-150],[248165,46960,-165],[242165,44863,165],[242166,46960,-149],[243666,44863,149],[243667,46960,-149],[242916,46960,-149],[237688,45028,-308],[207945,36134,-66],[208547,36825,-73],[211146,37045,-62],[210673,36463,-65],[212183,35234,243],[211709,34651,246],[209726,35297,-71],[211236,34068,249],[209252,34714,-74],[207388,44640,-78],[206906,44066,-78],[207871,45216,-62],[209320,46941,-63],[208354,45791,-62],[208837,46366,-62],[210328,45115,237],[208397,42815,236],[209362,43965,236],[210811,45690,237],[213967,39421,-79],[213966,38363,78],[215024,38362,235],[215025,39420,-236],[205522,38651,241],[204363,39598,-64],[205047,38070,250],[203888,39017,-73],[207106,40583,241],[205947,41530,-64],[206631,40003,250],[205472,40950,-73],[183314,35371,306],[181367,35373,8],[183314,33870,-306],[183314,34620,-306],[181367,33872,8],[183314,36122,306],[183314,36873,307],[181367,36875,7],[181367,37626,7],[183314,37624,307],[178283,35360,-79],[178282,34301,78],[179340,34301,235],[179341,35359,-236],[178906,32385,-239],[179588,32385,-139],[134371,38606,306],[132274,39354,-8],[132275,38604,-8],[134371,37855,-306],[132275,37853,-8],[134372,37104,-306],[134372,35606,306],[134373,34855,-306],[132276,35606,8],[132275,36357,8],[132276,34105,8],[134372,36357,306],[132881,33455,160],[133632,33456,160],[50564,25247,-42],[50849,24977,236],[49728,26037,-59],[50013,25767,237],[48056,27617,-63],[46720,26893,-163],[45933,26186,-5],[46639,25399,152],[47427,26106,309],[47506,28136,303],[44325,26742,239],[43484,27526,239],[44659,30428,-228],[44112,30941,-237],[42986,29740,86],[43533,29226,78],[42355,28578,13],[42643,28310,236],[41802,29095,239],[42049,32315,-238],[42528,31866,-232],[249979,30453,0],[249945,30028,3],[213488,46542,-156],[225822,47823,137],[213488,44957,-313],[198999,27920,-290],[198999,28313,158],[199030,21539,-163],[21296,23724,-160],[21296,24117,-159],[50206,15754,-117],[50206,16147,-156],[108098,47295,-162],[109122,46315,-174],[109175,44816,-178],[109202,44067,-181],[109228,43317,-184],[109255,42568,-189],[109282,41818,-195],[109335,40317,-215],[109362,39568,-232],[109388,38818,-258],[107321,47295,-154],[106297,46315,-141],[106270,45566,-140],[106244,44816,-137],[106190,43317,-131],[106164,42568,-127],[106137,41818,-121],[106110,41069,-114],[106084,40317,-102],[106057,39568,-85],[106030,38818,313],[156766,43136,-145],[132771,44125,-8],[132771,44876,8],[132771,47129,7],[132771,45627,8],[132771,46378,8],[134717,46379,307],[134717,43376,306],[134717,44877,306],[134717,47130,307],[134717,44126,306],[221368,33007,289],[219998,33007,26],[221368,34505,313],[219998,34505,1],[221968,31505,313],[220598,31505,1],[224956,31505,313],[223586,31505,1],[223139,32398,92],[41444,20148,-163],[40657,19441,-5],[41363,18654,152],[42151,19361,309],[153481,37534,288],[153482,37141,163],[168238,31553,306],[168238,30803,306],[166742,30802,-8],[136351,30115,144],[136352,29314,-129],[136352,28921,156],[156395,37695,-4],[156401,38604,0],[154795,37695,-4],[154801,38604,0],[160790,31646,4],[160767,30736,0],[101527,31129,152],[100777,31129,160],[101525,32625,-165],[100775,32625,-165],[98798,38423,-79],[99856,37364,236],[99857,38422,-236],[82699,49330,124],[82885,49191,-117],[61871,49329,-157],[62056,49187,-163],[54342,49187,-61],[17359,19768,-50,150],[17349,17588,-90,30],[18539,16488,255,30],[17649,18898,-146,130]],"stand":[[253543,19432,-9],[118007,47271,149],[171534,46329,353],[197049,31632,33],[174567,36834,-35],[175327,36794,-50],[174608,34514,66],[176724,37971,-161],[46431,38027,120],[219975,45005,69],[179171,47443,7],[179969,47500,321],[178627,47351,401],[181183,43289,511],[181493,42551,825],[80959,43596,61],[81614,44055,375],[85038,42947,135],[85216,43727,449],[82397,45575,160],[82556,24892,23],[81739,23041,269],[79393,25021,158],[85492,33198,-66],[85524,31263,59],[86832,29867,157],[87970,29967,205],[198585,42757,318],[196061,36986,820],[171380,20119,-30],[172002,20451,62],[170654,23475,204],[138659,43511,173],[143503,44199,497],[143708,43425,811],[146154,46197,696],[207824,22738,623],[208623,22697,937],[203898,21358,941],[211065,21864,694],[214923,27820,879],[118851,43661,383],[118236,43150,698],[112022,47924,20],[112806,48081,334],[125067,36688,559],[117448,36141,613],[72376,44261,319],[64548,37093,409],[64081,36443,723],[67400,36787,519],[67770,36078,833],[64645,36809,437],[64373,36056,751],[71098,42372,427],[70756,41649,741],[32002,36651,172],[31885,37442,486],[29622,29702,116],[29940,30436,430],[27050,32212,354],[26313,31901,668],[32672,33851,474],[36113,36866,594],[36866,36597,908],[27096,28385,484],[250272,27179,722],[251047,27596,560],[246476,25175,27],[249343,23214,528],[249223,22584,707],[250405,27144,102],[18789,17138,0,130],[20289,17138,314,130]],"present":[[47940,47771,-157],[34819,26961,-76],[56511,25326,158],[236662,27148,245],[240617,45944,-1],[209443,33395,89],[207070,42752,87],[182343,32970,157],[133347,40264,-158],[107709,37918,157],[133742,42474,157],[218877,34376,-53],[18054,18336,-293,130]],"yoga":[[43460,22610,213],[115050,30104,274],[246860,30523,20],[210705,39805,29],[51732,21167,-310]],"walk":[[[177552,31721],[177552,31621],[177652,31521],[178152,31421],[186852,31421],[187152,31621],[189752,40921],[191052,43421],[191152,47421]],[[36652,32521],[38352,33221],[40952,35221],[41252,35121],[42652,34321],[47852,29521]],[[45352,41521],[46452,38721],[47752,37521],[49552,35621],[49252,31321],[48652,30721],[48352,30121],[48352,29821],[48552,29021],[48852,28121],[48952,28021],[49052,27921],[49152,27821],[50352,26721],[50652,26421],[50752,26321],[50852,26221],[51752,25421],[53252,23921],[53452,20621]],[[227952,42821],[227852,42821],[226452,42821],[226352,42721],[226352,42121],[226352,42021],[226352,41921],[226452,41821],[226452,41421],[226252,41221],[226152,41221],[226052,41121],[226052,41021],[226052,40921],[226052,39921],[226052,39821],[226052,39721],[226052,39621],[226052,39521],[226052,39421],[226052,39321],[226152,39221],[226252,39121],[226352,39121],[226452,39021],[227152,31021],[227152,30821],[233652,26321],[236752,23121],[236952,22621]],[[238352,22521],[230652,28721],[229252,29321]],[[214352,34521],[216352,35721],[222752,35721],[224252,34221],[224652,34221],[226252,35221],[226452,35321],[226752,35621],[226452,39121],[226352,39121],[226252,39121],[226152,39221],[226152,39321],[226152,39421],[226152,39521],[226052,39621],[226052,39721],[226052,39821],[226052,39921],[226052,40921],[226052,41021],[226052,41121],[226152,41221],[226252,41321],[226452,41521],[226452,41821],[226352,41921],[226352,42021],[226352,42121],[226352,42721],[226452,42821],[227952,42921],[228052,42921],[228152,42921],[228252,42921],[228352,42921],[228452,42921],[228552,42921],[228652,42921],[228752,42921],[228852,42821],[228952,42721],[229052,42621],[229152,42521],[229252,42421],[229352,42421],[231552,40221]],[[226652,42221],[226552,42221],[226452,42221],[226352,42121],[226352,42021],[226352,41921],[226452,41821],[226452,41521],[226252,41221],[226152,41221],[226052,41121],[226052,41021],[226052,40921],[226052,39921],[226052,39821],[226052,39721],[226052,39621],[226052,39521],[226052,39421],[226052,39321],[226152,39221],[226252,39121],[226352,39121],[226452,39021],[226752,35621],[226452,35321],[224852,34321],[224552,34221],[223452,34321],[222052,35721],[213952,42121],[213652,42321],[211052,42321],[210852,42221],[207052,38421],[207052,37721],[205652,36621]],[[224652,34221],[223452,34321],[222052,35721],[216352,35721],[214352,34421],[211852,32521],[211752,32521],[211652,32521],[211552,32521],[211452,32521],[211352,32521],[211252,32521],[211152,32521],[211052,32521],[210952,32621],[210152,31821],[210152,31621],[210152,31521],[210252,31421],[210352,31321],[210352,31221],[210452,31121],[210452,31021],[210552,30921],[210552,30821],[208252,28021],[208052,27821],[207452,27621],[205652,27921],[204452,28721]],[[37352,31521],[42852,38421],[42852,38521],[42952,38521],[43052,38621],[43152,38721],[44552,40421]],[[176452,31521],[176552,31421],[186852,31421],[187152,31621],[187352,32221],[187952,35821]],[[226552,31521],[226052,32421],[220552,36921],[216752,38021]],[[83452,35021],[79152,32021],[59952,31021],[58952,30521]],[[227352,42421],[227352,42521],[227352,42621],[227352,42721],[227252,42821],[226452,42821],[226352,42721],[226352,42121],[226352,42021],[226352,41921],[226452,41821],[226452,41521],[226252,41221],[226152,41221],[226052,41121],[226052,41021],[226052,40921],[226052,39921],[226052,39821],[226052,39721],[226052,39621],[226052,39521],[226052,39421],[226052,39321],[226152,39221],[226252,39121],[226352,39121],[226452,39021],[226752,35621],[226452,35321],[224852,34321],[224552,34221],[223452,34321],[222052,35721],[216352,35721],[214352,34421],[211852,32521],[211752,32521],[211652,32521],[211552,32521],[211452,32521],[211352,32521],[211252,32521],[211152,32521],[211052,32521],[210952,32621],[210552,32221],[210152,31721],[210152,31621],[210152,31521],[210252,31421],[210352,31321],[210352,31221],[210452,31121],[210452,31021],[210552,30921],[210552,30821],[208652,27921]],[[161452,34121],[158452,34221],[154852,36121],[150752,36021],[148652,35721],[142052,35421],[141652,35221],[141152,34721],[140452,33621],[139452,30221],[139352,26321]],[[240752,21321],[237052,23321],[233752,26221],[229752,29021],[227152,30621],[227052,30621],[226952,30621],[226852,30621],[226752,30621],[226652,30621],[226552,30621],[226452,30621],[226352,30621],[226252,30621],[226152,30621],[226052,30621],[225952,30621],[225852,30621],[225752,30621],[225652,30621],[225552,30621],[225452,30621],[225352,30621],[225252,30621],[225152,30621],[225052,30621],[224952,30621],[224852,30621],[224752,30621],[224652,30621],[224552,30621],[224452,30621],[224352,30621],[224252,30621],[224152,30621],[224052,30621],[223952,30621],[223852,30621],[223752,30621],[223652,30621],[223552,30621],[223452,30621],[223352,30621],[223252,30621],[223152,30621],[223052,30621],[222952,30621],[222852,30621],[222752,30621],[222652,30621],[222552,30621],[222452,30621],[222352,30621],[222252,30621],[222152,30621],[222052,30621],[221952,30621],[221852,30621],[221752,30621],[221652,30621],[221552,30621],[221452,30621],[221352,30621],[221252,30621],[221152,30621],[221052,30621],[220952,30621],[220852,30621],[220752,30621],[220652,30621],[220552,30621],[220452,30621],[220352,30621],[220252,30621],[220152,30621],[220052,30621],[219952,30621],[219852,30621],[219752,30621],[219652,30621],[219552,30621],[219452,30621],[219352,30621],[219252,30521],[219152,30421],[219052,30321],[218952,30221],[218452,25821]],[[184352,31321],[186952,31421],[188352,32821],[188352,33921],[188852,34421],[192252,36221],[192352,36221],[192452,36221],[192552,36221],[192652,36221],[192752,36221],[192852,36221],[192952,36221],[193052,36221],[193152,36221],[193252,36221],[193352,36221],[193452,36221],[193552,36221],[193652,36221],[193752,36221],[193852,36221],[193952,36221],[194052,36221],[194152,36221],[194252,36221],[194352,36221],[194452,36221],[194552,36221],[194652,36221],[194752,36221],[194852,36221],[194952,36221],[195052,36221],[195152,36221],[205652,27921],[207552,27621],[208052,27821],[209052,28821],[209152,29121]],[[138752,27921],[140552,33821],[141252,34821],[141652,35221],[142152,35421],[149652,35821],[151752,37821]],[[199152,32621],[206052,27621],[207552,27621],[208052,27821],[211152,30121]],[[188452,38921],[191052,39321],[204052,29521],[205652,27921],[207552,27621],[208052,27821],[210552,30321],[210552,30821],[210652,30821],[210752,30821],[210852,30821],[210952,30821]],[[231852,40721],[233252,38721],[241652,31621],[247752,31521],[247952,31421],[248152,31121],[248152,28621],[246352,25121]],[[83952,35121],[79152,32021],[60152,31221]],[[117552,33721],[116152,34921],[115852,35021],[97152,35921],[96152,36421]],[[226452,38721],[226752,35621],[226452,35321],[224852,34321],[224552,34221],[224152,34221],[213652,42321],[211052,42321],[210852,42221],[207052,38421],[207052,37721],[206952,37621],[206152,37321]],[[218552,37721],[218252,32921],[217952,32621],[217952,32521],[217852,32421],[217752,32321],[217652,32221],[217652,32121],[217652,32021],[217652,31921],[217652,31821],[217652,31721],[217652,31621],[217652,31521],[217652,31421],[217652,31321],[217652,31221],[217652,31121],[217652,31021],[217752,29921],[218052,29621],[218152,26421]],[[151952,44121],[152152,43221],[152252,39921],[149952,36121],[149652,35821],[142052,35421],[140852,34821]],[[234452,24921],[233752,26221],[227452,30721],[227252,30721],[226052,32421],[222052,35721],[216852,37821]],[[139452,28121],[138452,30321],[136852,31221],[128152,31321],[127852,31621],[126452,31621],[126352,31621],[126252,31621],[126152,31621],[126052,31621],[125952,31621],[125852,31621],[125752,31621],[125652,31621],[125552,31621],[125452,31621],[125352,31621],[125252,31621],[123952,31621],[123852,31521],[123852,31421],[123852,31321]],[[50352,19821],[52652,19721],[52952,19921],[53052,20021],[53152,20121],[53252,20421],[53252,23921],[50952,26221],[50852,26221],[50752,26321],[50652,26421],[49252,27821],[49152,27821],[49052,27921],[48952,28021],[48852,28121],[48552,29121],[48352,30021],[48552,30521],[48752,30821],[51352,31921]],[[245652,24621],[248152,28621],[248152,31121],[247952,31421],[247352,31621],[241652,31621],[232852,38921]],[[238052,34221],[237552,34721],[235652,36321],[235352,36521],[235252,36421],[235152,36321],[235052,36221],[235052,36121],[234952,36021],[234952,35921],[234952,35821],[234952,35721],[234952,35321],[234852,35121],[233352,33321],[233252,33321],[233152,33321],[233052,33321],[232952,33221],[232952,33121],[232952,33021],[232852,32921],[232552,32921],[232452,33021],[232352,33021],[232252,33121],[232152,33221],[232052,33121],[231952,33021],[231852,32921],[231752,32821],[231652,32721],[231552,32621],[231552,32521],[231452,32421],[231352,32321],[231252,32221],[231152,32121],[231052,32021],[230952,31921],[230852,31821],[230752,31721],[230652,31621],[230552,31521],[229852,30821],[229752,30721],[229652,30621],[229552,30521],[229452,30421],[229352,30321],[229252,30221],[227252,30721],[226052,32421],[222052,35721],[216352,35821]],[[219552,38421],[218352,38921],[213652,42321],[211052,42321],[210852,42221],[207952,39621]],[[208852,28421],[210552,30821],[210552,30921],[210552,31021],[210552,31121],[210552,31221],[210452,31321],[210352,31421],[210252,31521],[210152,31621],[210152,31721],[210652,32321],[210952,32621],[211052,32621],[211152,32621],[211252,32621],[211352,32621],[211452,32621],[211552,32621],[211652,32621],[211752,32621],[211852,32521],[215852,35621],[216752,35721],[218052,35421],[218252,35321]],[[226152,34621],[227652,34921],[229552,34321],[229652,34221],[229752,34121],[229852,34021],[229952,33921],[230052,33921],[230152,33821],[230252,33721],[230352,33621],[230452,33521],[230552,33421],[230752,33321],[230852,33321],[230952,33321],[231052,33321],[231152,33321],[231252,33221],[231352,33321],[231452,33421],[231552,33521],[231652,33621],[231752,33521],[231852,33521],[231952,33421],[232352,33021],[232452,33021],[232552,32921],[232952,32921],[232952,33021],[232952,33121],[232952,33221],[233052,33321],[233152,33321],[233252,33321],[233352,33421],[234952,35021],[234952,35721],[234952,35821],[234952,35921],[234952,36021],[234952,36121],[235052,36221],[235152,36321],[235252,36421],[235352,36521],[241652,31621],[247552,31921]],[[186952,41121],[193852,37021],[195552,35921],[198052,33521]],[[94352,37321],[98252,35821],[115952,35021],[118852,33021]],[[176452,31421],[173052,31721],[170952,33221],[160552,34021],[160052,34121],[159652,34521]],[[185552,31121],[173052,31521],[170952,33221],[169152,33321]],[[52552,31721],[45552,31921],[42552,34421],[41052,35221],[39752,34321],[37952,32121],[37952,31721],[38852,30321],[39652,30021]],[[74252,31021],[79152,32021],[80852,33221],[85852,37721]],[[215252,35021],[216352,35721],[216952,35721],[218252,33721],[218252,32921],[217952,32621],[217952,32521],[217852,32421],[217752,32321],[217652,32221],[217652,32121],[217652,32021],[217652,31921],[217652,31821],[217652,31721],[217652,31621],[217652,31521],[217652,31421],[217652,31321],[217652,31221],[217652,31121],[217652,31021],[217752,29921],[218052,29621],[218052,25121],[217852,24721]]],"props":{"foosball":[19539,17138,-157,130]}};
+  // the Acker Garden's foosball (a prop, not a person): plan mm, angle in centiradians, the deck's height in mm
+  const FOOSBALL = [19539, 17138, -157, 130];
   // the SketchUp model when its data is in, else the DXF model
   const SKP = !!(window.AxoSkp && window.AxoSkp.available()), MODEL = SKP ? window.AxoSkp : window.AxoModel;
   const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
-  const AMBER = 0xf2a33a, GREY = 0x4a4a4a, CLOSE = 30;             // the lights (her text's amber); the people; shown below this half-height
+  const RW = 1.2, RY = 0.07;                                        // the path's width (m) and height
   const S = { built: false, beat: 0, view: null, follow: true, raf: 0, fresh: true, jump: false, asp: 1, home: null, user: false, wired: false, open: -1 };
-  let T, M, R, cam, host, sc, group, W, crowd, lights = [], marks = [], walkers = [];
+  let T, M, R, cam, host, sc, group, W, man, trail, P = [], legEnd = [];
   const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
   const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
   // the neighbourhood of the day's desks, by the drawing's own name ("06 · Home")
@@ -5286,75 +5324,74 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     return r ? ringsOf(r.d) : null;
   };
 
-  // the people: one low-poly figure per pose, merged from simple solids, facing +z, about 1.7 m standing (a seated one's origin
-  // the seat), all in one dark grey
-  function figure(pose) {
-    const parts = [];
-    const put = (g, rx, rz, x, y, z) => { if (rx) g.rotateX(rx); if (rz) g.rotateZ(rz); g.translate(x, y, z); parts.push(g.index ? g.toNonIndexed() : g); };
-    const limb = (r, h, rx, rz, x, y, z) => { const g = new T.CylinderGeometry(r, r * 0.85, h, 7); g.translate(0, -h / 2, 0); put(g, rx, rz, x, y, z); };   // hung from (x, y, z)
-    const torso = (y, z = 0, lean = 0) => put(new T.CylinderGeometry(0.16, 0.13, 0.56, 9), lean, 0, 0, y, z);
-    const head = (y, z = 0) => put(new T.SphereGeometry(0.105, 10, 8), 0, 0, 0, y, z);
-    if (pose === "sit") {
-      for (const s of [-1, 1]) { limb(0.068, 0.44, -Math.PI / 2, 0, s * 0.09, 0.47, -0.08); limb(0.058, 0.45, 0, 0, s * 0.09, 0.47, 0.34); limb(0.045, 0.36, -1.15, 0, s * 0.2, 1.0, 0.0); }
-      torso(0.76, -0.06); head(1.17, -0.06);
-    } else if (pose === "yoga") {
-      put(new T.BoxGeometry(0.56, 0.13, 0.36), 0, 0, 0, 0.065, 0.06); for (const s of [-1, 1]) limb(0.045, 0.42, 0.25, s * 0.5, s * 0.19, 0.62, 0.02);
-      torso(0.42); head(0.83);
-    } else {
-      const walk = pose === "walk", sw = walk ? 0.32 : 0;
-      for (const s of [-1, 1]) limb(0.066, 0.84, s * sw, 0, s * 0.09, 0.84, 0);
-      limb(0.045, 0.6, pose === "present" ? -1.9 : -sw, 0, 0.21, 1.36, 0); limb(0.045, 0.6, sw, 0, -0.21, 1.36, 0);
-      torso(1.12); head(1.53);
-    }
-    const n = parts.reduce((a, g) => a + g.getAttribute("position").count, 0), pos = new Float32Array(n * 3), nor = new Float32Array(n * 3);
-    let o = 0; for (const g of parts) { pos.set(g.getAttribute("position").array, o * 3); nor.set(g.getAttribute("normal").array, o * 3); o += g.getAttribute("position").count; }
-    const out = new T.BufferGeometry(); out.setAttribute("position", new T.BufferAttribute(pos, 3)); out.setAttribute("normal", new T.BufferAttribute(nor, 3)); return out;
+  // one Acker (Ritika, 19 Nov: "make a human, remove other humans, a triangular body and a spherical face ... he can move and his path
+  // would come as the Loop's ribbon ... to scale"): a cone body and a sphere head, 1.7 m in all (the model is in metres), in the deck's
+  // purple, with a soft round shadow; and the path he has walked, drawn behind him as the Loop's ribbon
+  function human() {
+    man = new T.Group(); man.name = "acker";
+    const body = new T.Mesh(new T.ConeGeometry(0.28, 1.4, 28).translate(0, 0.7, 0), new T.MeshLambertMaterial({ color: 0x5222d0 }));
+    const head = new T.Mesh(new T.SphereGeometry(0.125, 24, 16).translate(0, 1.565, 0), new T.MeshLambertMaterial({ color: 0xb9a6f0 }));
+    const disc = new T.Mesh(new T.CircleGeometry(0.38, 24).rotateX(-Math.PI / 2).translate(0, 0.03, 0), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.16, depthWrite: false }));
+    body.castShadow = head.castShadow = true; disc.renderOrder = 3; man.add(body, head, disc); man.userData.head = head; man.frustumCulled = false; group.add(man);
+    // his route: from each beat's spot to the next along the Loop's own route (ACKO_LOOP.ring, plan mm; the shorter way round), eased
+    const LP = window.ACKO_LOOP, ring = LP && LP.ring && LP.ring.length > 3 ? LP.ring : null, N = ring ? ring.length : 0;
+    const near = (q) => { let j = 0, d0 = 1e18; for (let i = 0; i < N; i++) { const d = (ring[i][0] - q[0]) ** 2 + (ring[i][1] - q[1]) ** 2; if (d < d0) { d0 = d; j = i; } } return j; };
+    // the shortest way along the Loop's corridors (Ritika, 19 Nov: "he's walking a lot in the Collab area, cut down unnecessary walking"): the ring's
+    // points joined to their neighbours and to any other ring point within 2.5 m (the out and back lanes of one corridor), then Dijkstra; and the
+    // straight line instead when the corridors are no shorter than it plus a little (or a spot is far from them)
+    const nb = ring ? ring.map((q, i) => { const o = [[(i + 1) % N, 0], [(i - 1 + N) % N, 0]];
+      for (let j = 0; j < N; j++) if (j !== i && Math.hypot(ring[j][0] - q[0], ring[j][1] - q[1]) < 2500) o.push([j, 0]);
+      return o.map(([j]) => [j, Math.hypot(ring[j][0] - q[0], ring[j][1] - q[1])]); }) : null;
+    const dij = (a, b) => {
+      const D = new Float64Array(N).fill(1e18), prv = new Int32Array(N).fill(-1), done = new Uint8Array(N); D[a] = 0;
+      for (;;) { let u = -1, best = 1e18; for (let i = 0; i < N; i++) if (!done[i] && D[i] < best) { best = D[i]; u = i; }
+        if (u < 0 || u === b) break; done[u] = 1; for (const [v, w] of nb[u]) if (D[u] + w < D[v]) { D[v] = D[u] + w; prv[v] = u; } }
+      const path = []; for (let i = b; i !== -1; i = prv[i]) path.push(i); return { path: path.reverse(), len: D[b] };
+    };
+    const chaikin = (Q, it) => { for (let k = 0; k < it; k++) { const O = [Q[0]]; for (let i = 0; i + 1 < Q.length; i++) { const a = Q[i], b = Q[i + 1]; O.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } O.push(Q[Q.length - 1]); Q = O; } return Q; };
+    const dense = (Q) => { const o = [Q[0]]; for (let i = 1; i < Q.length; i++) { const a = Q[i - 1], b = Q[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.25)); for (let k = 1; k <= n; k++) o.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); } return o; };
+    const VIA = { 5: [[84216, 43565], [85500, 31500]], 6: [[85500, 31500]] };          // by the beat he is walking to: the terrace and Reception (plan mm)
+    const clear = (A, B) => { const n = Math.max(2, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1000)); for (let k = 0; k <= n; k++) if (!inRing([A[0] + (B[0] - A[0]) * k / n, A[1] + (B[1] - A[1]) * k / n], M.slab)) return false; return true; };
+    const seg = (A, B) => {                                                              // points (m) from plan spot A to plan spot B, both ends included
+      const prev = [M.X(A[0]), M.Z(A[1])], here = [M.X(B[0]), M.Z(B[1])];
+      if (!ring) return [prev, here];
+      const ia = near(A), ib = near(B), ca = Math.hypot(ring[ia][0] - A[0], ring[ia][1] - A[1]), cb = Math.hypot(ring[ib][0] - B[0], ring[ib][1] - B[1]), r = dij(ia, ib);
+      const straight = Math.hypot(B[0] - A[0], B[1] - A[1]), ok = ca < 12000 && cb < 12000, free = clear(A, B);
+      const viaRing = [prev].concat(r.path.map((q) => [M.X(ring[q][0]), M.Z(ring[q][1])]), [here]);
+      if (ok && (r.len + ca + cb <= 1.4 * straight + 8000 || !free)) return viaRing;
+      return free || !ok ? [prev, here] : viaRing;
+    };
+    P = []; legEnd = [0];
+    BEATS.forEach((b, i) => {
+      const here = [b.p.x, b.p.z]; if (i === 0) { P.push(here); return; }
+      // via points (Ritika, 19 Nov): from the Café to the Board Room he goes out by the terrace and in through Reception, and from the Board Room
+      // to the terrace back through Reception; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
+      const stops = [BEATS[i - 1].at].concat(VIA[i] || [], [b.at]);
+      let pts = [[M.X(stops[0][0]), M.Z(stops[0][1])]];
+      for (let k = 1; k < stops.length; k++) pts.push(...seg(stops[k - 1], stops[k]).slice(1));
+      const leg = dense(chaikin(pts, 2)); P.push(...leg.slice(1)); legEnd.push(P.length - 1);
+    });
+    // the ribbon: the Loop's lilac stroke on a paler, wider edge, drawn as far as he has walked
+    const strip = (wid, col, op, ro, off) => {
+      const n = P.length, E = P.map((q, i) => { const a = P[Math.max(0, i - 2)], c = P[Math.min(n - 1, i + 2)], dx = c[0] - a[0], dz = c[1] - a[1], l = Math.hypot(dx, dz) || 1; return [[q[0] - dz / l * wid / 2, q[1] + dx / l * wid / 2], [q[0] + dz / l * wid / 2, q[1] - dx / l * wid / 2]]; });
+      const pos = []; for (let i = 0; i + 1 < n; i++) { const [a, b] = E[i], [c, d] = E[i + 1]; for (const q of [a, b, c, b, d, c]) pos.push(q[0], RY + off, q[1]); }
+      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); g.setDrawRange(0, 0);
+      const m = new T.Mesh(g, new T.MeshBasicMaterial({ color: col, transparent: true, opacity: op, side: T.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: off ? -6 : -4, polygonOffsetUnits: off ? -12 : -8 }));
+      m.renderOrder = ro; m.frustumCulled = false; return m;
+    };
+    trail = new T.Group(); trail.add(strip(RW + 0.35, 0xd9cbfa, 0.9, 8, -0.01), strip(RW, 0x8f6cf0, 0.9, 9, 0)); group.add(trail);
+    S.p = 0; S.pt = 0; S.last = 0; place();
   }
-  // facing: a plan angle (centiradians) to a turn about y for a figure facing +z
-  const turn = (x, y, a) => { const d = W([x + Math.cos(a / 100) * 1000, y + Math.sin(a / 100) * 1000]).sub(W([x, y])); return Math.atan2(d.x, d.z); };
-  // who shows (29 Oct: "the people have to be translucent ... too many humans ... and some outside the building"): only those on
-  // the floor, and none standing within EDGE mm of its edge (outside the façade's glass); of the rest a share by kind (KEEP),
-  // picked by their place, so it is the same people every time and every room keeps some
-  const KEEP = { sit: 0.35, stand: 0.6, present: 1, yoga: 1, walk: 0.5 }, EDGE = 1500, SEE = 0.65;    // SEE: their opacity
-  const onFloor = (p, standing) => {
-    const r = M.slab; if (!inRing(p, r)) return false; if (!standing) return true;
-    for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
-      const [x0, y0] = r[j], [x1, y1] = r[i], ux = x1 - x0, uy = y1 - y0, t = Math.max(0, Math.min(1, ((p[0] - x0) * ux + (p[1] - y0) * uy) / (ux * ux + uy * uy || 1)));
-      if (Math.hypot(p[0] - x0 - t * ux, p[1] - y0 - t * uy) < EDGE) return false;
-    }
-    return true;
-  };
-  const picked = (p, k) => { const h = Math.sin(p[0] * 12.9898 + p[1] * 78.233) * 43758.5453; return h - Math.floor(h) < KEEP[k]; };
-  function people() {
-    crowd = new T.Group(); crowd.name = "people";
-    // in the areas the 28.10 plan changed (the model's furniture there is that plan's, AXO_SKP.changes): its seats, not the old ones
-    const CHG = SKP && window.AXO_SKP.changes, AR = CHG && (M.areas || CHG.areas), old = (q) => !CHG || !AR.some((r) => inRing(q, r));
-    const who = Object.fromEntries(["sit", "stand", "present", "yoga"].map((k) => [k, (PEOPLE[k] || []).filter((q) => old(q) && onFloor(q, k !== "sit") && picked(q, k))]));
-    if (CHG) who.sit.push(...CHG.seats.filter((q) => picked(q, "sit")));
-    const mat = new T.MeshLambertMaterial({ color: GREY, transparent: true, opacity: SEE }), disc = new T.CircleGeometry(0.3, 14).rotateX(-Math.PI / 2);
-    const dmat = new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.12, depthWrite: false });
-    const m4 = new T.Matrix4(), q = new T.Quaternion(), one = new T.Vector3(1, 1, 1), Y = new T.Vector3(0, 1, 0);
-    const stills = ["sit", "stand", "present", "yoga"].filter((k) => who[k].length);
-    const all = stills.reduce((a, k) => a + who[k].length, 0), discs = new T.InstancedMesh(disc, dmat, Math.max(1, all)); let d = 0;
-    for (const k of stills) {
-      const im = new T.InstancedMesh(figure(k), mat, who[k].length);
-      who[k].forEach(([x, y, a, h = 0], i) => { const p = W([x, y]); p.y = h / 1000;             // h: what they stand or sit on (mm; the garden's deck)
-        m4.compose(p, q.setFromAxisAngle(Y, turn(x, y, a)), one); im.setMatrixAt(i, m4);
-        p.y += 0.03; m4.compose(p, q.identity(), one); discs.setMatrixAt(d++, m4); });
-      im.receiveShadow = true; im.frustumCulled = false; crowd.add(im);
-    }
-    discs.count = d; discs.renderOrder = 3; discs.frustumCulled = false; crowd.add(discs);
-    // the walkers: there and back along their paths, 1.2 m/s
-    const paths = (PEOPLE.walk || []).filter((path) => path.every((q) => onFloor(q, true)) && picked(path[0], "walk"));
-    if (paths.length) {
-      const wm = new T.InstancedMesh(figure("walk"), mat, paths.length), wd = new T.InstancedMesh(disc, dmat, paths.length);
-      walkers = paths.map((path, i) => { const pts = path.map((p) => W(p)), cum = [0]; for (let j = 1; j < pts.length; j++) cum.push(cum[j - 1] + pts[j].distanceTo(pts[j - 1])); return { pts, cum, L: cum[cum.length - 1], ph: i * 7.3 }; });
-      wm.receiveShadow = true; wd.renderOrder = 3; wm.frustumCulled = wd.frustumCulled = false; crowd.add(wm, wd); walkers.mesh = wm; walkers.disc = wd; walk(0);
-    }
-    group.add(crowd);
-    const fb = (PEOPLE.props || {}).foosball; if (fb) group.add(foosball(fb));
+  // where he stands and how much of the path shows
+  function place() {
+    const k = Math.max(0, Math.min(P.length - 1, S.p)), i = Math.floor(k), f = k - i, a = P[i], b = P[Math.min(P.length - 1, i + 1)];
+    man.position.set(a[0] + (b[0] - a[0]) * f, 0, a[1] + (b[1] - a[1]) * f);
+    trail.children.forEach((m) => m.geometry.setDrawRange(0, 6 * Math.max(0, Math.min(P.length - 1, Math.floor(k)))));
   }
-  // the Acker Garden's foosball (white, as in Ritika's view of the model; it is not in the model's file), where PEOPLE.props puts
+  // the next beat: he walks the path to its spot (a stretch takes its length at 5 m/s, between 1.8 and 4 s); on arriving at a beat from outside, or
+  // with reduced motion, he is simply there
+  function walkTo(i) { S.pt = legEnd[i] || 0; if (S.fresh || reduced) S.p = S.pt; S.last = 0; }
+  // the Acker Garden's foosball (white, as in Ritika's view of the model; it is not in the model's file), where FOOSBALL puts
   // it, on the deck: a body on four legs, eight rods across it with dark grips, its long side along the plan angle
   function foosball([x, y, a, h]) {
     const g = new T.Group(), white = new T.MeshLambertMaterial({ color: 0xf4f4f2 }), steel = new T.MeshLambertMaterial({ color: 0x9c9c9c }), grip = new T.MeshLambertMaterial({ color: 0x2f2f2f });
@@ -5369,60 +5406,18 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     g.position.set(p.x, h / 1000, p.z); g.rotation.y = Math.atan2(-d.z, d.x);      // its x along the plan angle
     return g;
   }
-  function walk(now) {
-    const m4 = new T.Matrix4(), q = new T.Quaternion(), one = new T.Vector3(1, 1, 1), Y = new T.Vector3(0, 1, 0);
-    walkers.forEach((w, i) => {
-      let s = ((now / 1000) * 1.2 + w.ph) % (2 * w.L); const back = s > w.L; if (back) s = 2 * w.L - s;
-      let j = 1; while (j < w.cum.length - 1 && w.cum[j] < s) j++;
-      const a = w.pts[j - 1], b = w.pts[j], f = (s - w.cum[j - 1]) / ((w.cum[j] - w.cum[j - 1]) || 1), p = a.clone().lerp(b, Math.max(0, Math.min(1, f)));
-      const d = back ? a.clone().sub(b) : b.clone().sub(a); p.y = reduced ? 0 : Math.abs(Math.sin(now / 170 + i)) * 0.025;
-      m4.compose(p, q.setFromAxisAngle(Y, Math.atan2(d.x, d.z)), one); walkers.mesh.setMatrixAt(i, m4);
-      p.y = 0.03; m4.compose(p, q.identity(), one); walkers.disc.setMatrixAt(i, m4);
-    });
-    walkers.mesh.instanceMatrix.needsUpdate = true; walkers.disc.instanceMatrix.needsUpdate = true;
-  }
 
   function build() {
     T = window.THREE; M = MODEL.get(asset);
     cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
     W = (p) => new T.Vector3(M.X(p[0]), 0, M.Z(p[1]));
     const NB = nbName();
-    BEATS.forEach((b) => { b.s = b.s.replace("@NB", NB); b.p = W(b.at); }); SPOTS.forEach((c) => (c[0] = c[0].replace("@NB", NB)));
+    BEATS.forEach((b) => { b.s = b.s.replace("@NB", NB); b.p = W(b.at); });
     group = new T.Group(); group.name = "wayday";
-    // the hotspots: light columns in amber at her marked spots, a soft beam rising from a ring on the floor and fading upward
-    // (the pin samples' 5); all breathing a little, the open one taller and brighter
-    const gc = document.createElement("canvas"); gc.width = 4; gc.height = 64; const gx = gc.getContext("2d"), gr = gx.createLinearGradient(0, 0, 0, 64);
-    gr.addColorStop(0, "#000"); gr.addColorStop(0.5, "#5a5a5a"); gr.addColorStop(1, "#fff"); gx.fillStyle = gr; gx.fillRect(0, 0, 4, 64);
-    const fade = new T.CanvasTexture(gc), beamG = new T.CylinderGeometry(0.42, 0.42, 1, 36, 1, true), ringG = new T.RingGeometry(0.42, 0.53, 48), glowG = new T.CircleGeometry(0.42, 36);
-    beamG.translate(0, 0.5, 0);
-    const flat = (geo, y, op) => { const m = new T.Mesh(geo, new T.MeshBasicMaterial({ color: AMBER, transparent: true, opacity: op, side: T.DoubleSide, depthWrite: false }));
-      m.rotation.x = -Math.PI / 2; m.position.y = y; m.renderOrder = 6; return m; };
-    lights = STOPS.map((at) => { const g = new T.Group(), beam = new T.Mesh(beamG, new T.MeshBasicMaterial({ color: AMBER, alphaMap: fade, transparent: true, opacity: 0.6, side: T.DoubleSide, depthWrite: false }));
-      beam.renderOrder = 6; const ring = flat(ringG, 0.08, 0.8), glow = flat(glowG, 0.075, 0.25); g.add(beam, ring, glow); g.position.copy(W(at)); group.add(g); return { g, beam, ring, glow }; });
-    // her marks: signs and artworks as panels, the graphic as a wall wrap, the Collab and the workhall as tinted floor, one even
-    // tint over all their outlines (each pixel once, by the stencil) and no outlines (30 Oct: "the floor highlight is looking
-    // patchy.. the corridor is looking fine"); in the deck's purple until her wayfinding colours (the open hotspot's strongest)
-    const P3 = (q, y) => [M.X(q[0]), y, M.Z(q[1])];
-    marks = WAY.marks.map((mk) => {
-      const solid = mk.shape !== "floor", tri = [], g = new T.Group();
-      const side = (a, b, y0, y1) => tri.push(...P3(a, y0), ...P3(b, y0), ...P3(b, y1), ...P3(a, y0), ...P3(b, y1), ...P3(a, y1));
-      if (mk.shape === "wrap") for (let i = 0; i < mk.line.length - 1; i++) side(mk.line[i], mk.line[i + 1], mk.h[0], mk.h[1]);
-      else for (const ring of mk.rings) {
-        let faces = []; try { faces = T.ShapeUtils.triangulateShape(ring.map(([x, y]) => new T.Vector2(M.X(x), M.Z(y))), []); } catch (e) { /* a broken ring: sides only */ }
-        for (const y of solid ? mk.h : [0.03]) for (const [a, b, c] of faces) tri.push(...P3(ring[a], y), ...P3(ring[b], y), ...P3(ring[c], y));
-        if (solid) ring.forEach((q, i) => side(q, ring[(i + 1) % ring.length], mk.h[0], mk.h[1]));
-      }
-      const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(tri, 3)); geo.computeVertexNormals();
-      const mat = new T.MeshLambertMaterial({ color: 0x5222d0, transparent: true, side: T.DoubleSide, depthWrite: solid });
-      if (!solid) Object.assign(mat, { stencilWrite: true, stencilRef: 1, stencilFunc: T.NotEqualStencilFunc, stencilZPass: T.ReplaceStencilOp });
-      const mesh = new T.Mesh(geo, mat); mesh.castShadow = solid; if (!solid) mesh.renderOrder = 4; g.add(mesh); group.add(g);
-      return { stop: mk.stop, solid, mat, pts: mk.shape === "wrap" ? mk.line : mk.rings.flat() };
-    });
-    people();
+    human(); group.add(foosball(FOOSBALL));
     // the strip of the day
     $(".wd-day", sc).innerHTML = BEATS.map((b, i) => `<button type="button" data-k="${i + 1}"><b>${b.t}</b><span>${b.n}</span></button>`).join("");
     $$(".wd-day button", sc).forEach((b) => (b.onclick = () => { b.blur(); go(sceneIx("s-wayday"), +b.dataset.k); }));
-    shine(-1);
     S.built = true;
   }
   // a beat's view: its space right of the copy, at the deck's angle or its own (the Acker Garden: from inside, toward the glass,
@@ -5435,11 +5430,24 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   function sizeUp() {
     const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return false;           // a hidden pane: wait for a real size
     const pr = R.getPixelRatio();
-    if (R.domElement.width !== Math.round(w * pr) || R.domElement.height !== Math.round(h * pr) || !S.home) {
+    if (R.domElement.width !== Math.floor(w * pr) || R.domElement.height !== Math.floor(h * pr) || !S.home) {
       R.setSize(w, h, false); S.asp = w / h; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
     }
     if (!S.view || !isFinite(S.view.half)) S.view = S.home;
+    if (S.hand) handOver();
     return true;
+  }
+  // arriving from the Detailed axonometric (window.ACKO_AXO_HAND): this model starts from that camera (the AxoLayers floor is the plan + (185842, -182802)
+  // mm, as the walk reads it), glides to the beat's view, and the detailed axo's last frame stays over it a moment and dissolves away
+  function handOver() {
+    const H = S.hand; S.hand = null; if (!H || !H.st) return;
+    const AL = window.AxoLayers && window.AxoLayers.get(); if (!AL || M.CX === undefined) return;
+    const dx = (185842 + AL.CX - M.CX) / 1000, dz = (-182802 + AL.CY - M.CY) / 1000, st = H.st;
+    S.view = { theta: st.theta, phi: st.phi, half: st.half, t: [st.t[0] + dx, st.t[1], st.t[2] + dz] }; S.user = false; S.follow = true;
+    if (!H.snap || H.day) return;                         // from the day beat of the Detailed axo: the frame is already this one, nothing to dissolve
+    const c = H.snap; c.className = "wd-hand"; host.appendChild(c);
+    requestAnimationFrame(() => requestAnimationFrame(() => { c.style.opacity = 0; }));
+    setTimeout(() => { if (c.parentNode) c.parentNode.removeChild(c); }, 2000);
   }
   function setNow(i) {
     const b = BEATS[i], now = $(".wd-now", sc);
@@ -5447,73 +5455,46 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     $$(".wd-day button", sc).forEach((el, k) => { el.classList.toggle("on", k === i); el.classList.toggle("done", k < i); });
     if (MODEL.focus) { if (b.ring === undefined) b.ring = spaceOf(b); MODEL.focus(b.ring); }
   }
-  // a hotspot's pop-up: open (its light taller and brighter, its mark strongest), or none (-1)
-  function shine(i) {
-    S.open = i; const card = $(".wd-card", sc);
-    if (i >= 0) { $("b", card).textContent = SPOTS[i][0]; $("p", card).textContent = SPOTS[i][1]; }
-    card.classList.toggle("on", i >= 0);
-    // her marks in purple only in the beat's space, at its hotspot or while their own pop-up is open, grey elsewhere (29 Oct:
-    // "too much purple")
-    const rings = BEATS[S.beat].ring || [], held = (m) => m.pts.some((q) => rings.filter((r) => inRing(q, r)).length % 2 === 1);
-    marks.forEach((m) => {
-      const on = m.stop === i, col = on || shown(m.stop) || held(m) ? 0x5222d0 : 0x8f8f8f;
-      m.mat.color.setHex(col); m.mat.opacity = m.solid ? (on ? 1 : 0.5) : (on ? 0.38 : 0.16);
-    });
-  }
-  // each frame: the beat's light breathes, of one size in the model whatever the zoom (29 Oct: "it has to be constant"); the
-  // others hidden; the people show once close
-  const shown = (i) => BEATS[S.beat].spot === i;
+  // each frame: he walks toward the current beat's spot, slowing into the stop, and the path shows as far as he has gone
   function tick(now) {
-    const b = reduced ? 0 : Math.sin(now / 600);
-    lights.forEach((l, i) => { const on = i === S.open; l.g.visible = shown(i); l.g.scale.setScalar(1); l.beam.scale.y = on ? 4.6 : 3.2;
-      l.beam.material.opacity = (on ? 0.85 : 0.58) + (on ? 0.1 : 0.08) * b; l.glow.material.opacity = (on ? 0.38 : 0.24) + 0.08 * b; l.ring.material.opacity = on ? 1 : 0.75; });
-    crowd.visible = S.view.half < CLOSE;
-    if (crowd.visible && walkers.length && !reduced) walk(now);
+    if (!man) return;
+    const dt = S.last ? Math.min(0.25, (now - S.last) / 1000) : 0; S.last = now;
+    const head = man.userData.head; let dx = 0, dz = 0;
+    if (S.p !== S.pt) {
+      const span = Math.abs(S.pt - S.p), len = Math.abs(S.pt - (legEnd[S.beat - 1] ?? 0)) * 0.25, speed = len / Math.max(1.8, Math.min(4, len / 5));   // m/s: a stretch takes length / 5 m/s, between 1.8 and 4 s
+      const slow = Math.min(1, 0.25 + (span * 0.25) / 2);                                                              // slows over the last 2 m
+      const step = (speed / 0.25) * dt * slow, dir = S.p < S.pt ? 1 : -1;
+      S.p = span <= Math.max(step, 0.05) ? S.pt : S.p + dir * step;
+      const i = Math.max(0, Math.min(P.length - 2, Math.floor(S.p))), a = P[i], b = P[i + 1], l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+      dx = dir * (b[0] - a[0]) / l; dz = dir * (b[1] - a[1]) / l;
+    }
+    if (head) head.position.set(dx * 0.04, 0, dz * 0.04);                                                              // a small lean the way he walks; upright when he stops
+    place();
   }
-  const top = (i) => lights[i].g.position.clone().add(new T.Vector3(0, lights[i].beam.scale.y * lights[i].g.scale.y, 0));
-  const anchor = (i) => lights[i].g.position.clone().add(new T.Vector3(0, lights[i].beam.scale.y * 0.55 * lights[i].g.scale.y, 0));
+  // the camera goes with his walk: from the previous beat's view to the next by how far along the stretch he is, its target his own position,
+  // so it settles on the beat's framing exactly as he stops (at rest this is the beat's view)
+  function walkView() {
+    const q = S.p; let k = 1; while (k < legEnd.length - 1 && q > legEnd[k]) k++;                                       // the stretch from beat k-1 to beat k
+    const a = legEnd[k - 1], b = legEnd[k], f = b > a ? Math.max(0, Math.min(1, (q - a) / (b - a))) : 1, e = f * f * (3 - 2 * f);
+    const v = mix(beatView(k - 1), beatView(k), e), { right, up } = window.AxoModel.basis(v), h = v.half;
+    const off = right.clone().multiplyScalar(-h * S.asp * 0.18).add(up.clone().multiplyScalar(h * 0.05));
+    return { theta: v.theta, phi: v.phi, half: h, t: [man.position.x + off.x, 0.8 + off.y, man.position.z + off.z] };
+  }
   function frame(now) {
     S.raf = 0;
     if (document.body.dataset.scene !== "s-wayday" || !R) return;
     if (!sizeUp()) { S.raf = requestAnimationFrame(frame); return; }
     if (S.jump) { S.view = S.follow ? beatView(S.beat) : S.home; S.jump = false; }
-    if (!S.user) S.view = mix(S.view, S.follow ? beatView(S.beat) : S.home, reduced ? 1 : 0.07);
+    if (!S.user) S.view = mix(S.view, S.follow ? (man && P.length ? walkView() : beatView(S.beat)) : S.home, reduced ? 1 : S.p !== S.pt ? 0.2 : 0.07);
     window.AxoModel.apply(cam, S.view, S.asp); cam.updateMatrixWorld(); tick(now); R.render(M.scene, cam);
-    // the open hotspot's pop-up beside its light, with a dashed leader to it
-    const card = $(".wd-card", sc), ln = $(".wd-lead line", sc);
-    if (S.open >= 0) {
-      const v = anchor(S.open).project(cam);
-      const bw = host.clientWidth, bh = host.clientHeight, sx = ((v.x + 1) / 2) * bw, sy = ((1 - v.y) / 2) * bh, cw = card.offsetWidth, ch = card.offsetHeight;
-      const right = sx + bw * 0.06 + cw < bw - 12, cx = right ? sx + bw * 0.06 : sx - bw * 0.06 - cw, cy = Math.max(bh * 0.15, Math.min(bh * 0.8 - ch, sy - ch - bh * 0.04));
-      card.style.left = cx + "px"; card.style.top = cy + "px";
-      const away = !(sx > bw * 0.3 && sx < bw && sy > bh * 0.12 && sy < bh * 0.82); card.classList.toggle("away", away);
-      ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", right ? cx : cx + cw); ln.setAttribute("y2", cy + ch * 0.6);
-      ln.style.opacity = away ? 0 : 1;
-    } else ln.style.opacity = 0;
     S.raf = requestAnimationFrame(frame);
   }
   const loop = () => { if (!S.raf) S.raf = requestAnimationFrame(frame); };
   // the view hers (turned, panned or zoomed: the day's camera stops) or the day's again
   const user = (on) => { S.user = on; sc.classList.toggle("wd-user", on); };
-  // the light under the pointer (on screen: each beam's line from the floor to its top, within its width or 14 px), or -1
-  function pick(e) {
-    if (!cam || !lights.length || !S.view) return -1;                // (not before the first view)
-    const r = host.getBoundingClientRect(), bw = host.clientWidth, bh = host.clientHeight, px = ((e.clientX - r.left) / r.width) * bw, py = ((e.clientY - r.top) / r.height) * bh;
-    const sp = (v) => { v.project(cam); return [((v.x + 1) / 2) * bw, ((1 - v.y) / 2) * bh]; };
-    let best = -1, bd = 1e9;
-    lights.forEach((l, i) => {
-      if (!shown(i)) return;
-      const [ax, ay] = sp(l.g.position.clone()), [tx, ty] = sp(top(i)), dx = tx - ax, dy = ty - ay, L2 = dx * dx + dy * dy || 1;
-      const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)), d = Math.hypot(px - ax - t * dx, py - ay - t * dy);
-      const w = Math.max(14, ((0.42 * l.g.scale.x) / (2 * S.view.half)) * bh);
-      if (d < w && d < bd) { bd = d; best = i; }
-    });
-    return best;
-  }
   // the same mouse on every axo (29 Oct: "LMB for pan, mouse wheel for zoom in zoom out and RMB for rotate"): a left-drag pans
   // (in the axo's right/up), a right-drag (or Shift-drag, for a trackpad) turns it (all the way round; 0.35-1.22 from the
-  // vertical), the wheel zooms on the cursor (its point on the floor stays put); a click on a light opens its pop-up (elsewhere,
-  // closes it); a double-click gives the view back
+  // vertical), the wheel zooms on the cursor (its point on the floor stays put); a double-click gives the view back
   function wire() {
     S.wired = true; let drag = null;
     const ground = (e, v) => {
@@ -5524,7 +5505,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     };
     host.addEventListener("pointerdown", (e) => { if (!S.view || e.button > 2) return; drag = { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false, turn: e.button === 2 || e.shiftKey, b: e.button }; try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ } });
     host.addEventListener("pointermove", (e) => {
-      if (!drag) { host.classList.toggle("hot", pick(e) >= 0); return; }
+      if (!drag) return;
       if (!drag.on && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 3) return;        // a click, not a drag
       drag.on = true; host.classList.add("drag"); user(true);
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y, v = S.view; drag.x = e.clientX; drag.y = e.clientY;
@@ -5535,7 +5516,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       }
       loop();
     });
-    const up = (e) => { if (drag && !drag.on && drag.b === 0 && e.type === "pointerup") { const i = pick(e); shine(i === S.open ? -1 : i); loop(); } drag = null; host.classList.remove("drag"); };
+    const up = () => { drag = null; host.classList.remove("drag"); };
     host.addEventListener("pointerup", up); host.addEventListener("pointercancel", up);
     host.addEventListener("contextmenu", (e) => e.preventDefault());
     host.addEventListener("wheel", (e) => {
@@ -5544,11 +5525,6 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       const after = ground(e, w); w.t = [w.t[0] + before.x - after.x, w.t[1], w.t[2] + before.z - after.z]; S.view = w; loop();
     }, { passive: false });
     host.addEventListener("dblclick", () => user(false));
-    // Esc closes an open pop-up (before the deck's own keys)
-    document.addEventListener("keydown", (e) => {
-      if (e.key !== "Escape" || document.body.dataset.scene !== "s-wayday" || S.open < 0) return;
-      shine(-1); e.stopImmediatePropagation(); e.preventDefault();
-    }, true);
   }
   function whole(on) {
     user(false); S.follow = !on; sc.classList.toggle("wd-whole", on);
@@ -5564,7 +5540,10 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
       M.reset(); M.scene.add(group);
       if (SKP) window.AxoSkp.look("sketchup");
-      S.fresh = true; whole(false); shine(-1);
+      S.fresh = true; whole(false);
+      const H = window.ACKO_AXO_HAND; window.ACKO_AXO_HAND = null;
+      S.hand = H && !reduced && performance.now() - H.t < 6000 ? H : null;
+      if (!S.hand) document.body.classList.remove("ax-hand");
       $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
       $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };
       $(".wd-rs", sc).onclick = (e) => { e.currentTarget.blur(); user(false); };
@@ -5574,11 +5553,11 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     step(k, s) {
       if (!S.built || sc.classList.contains("wd-fallback")) return;
       if (!S.follow) whole(false); else user(false);
-      S.beat = Math.max(0, Math.min(BEATS.length - 1, k - 1)); setNow(S.beat); shine(-1);
+      S.beat = Math.max(0, Math.min(BEATS.length - 1, k - 1)); setNow(S.beat); walkTo(S.beat);
       S.jump = false; S.fresh = false; loop();                       // entering (from either side) moves to that part of the day, as a step does (28 Oct)
     },
     leave() {
-      cancelAnimationFrame(S.raf); S.raf = 0; shine(-1);
+      cancelAnimationFrame(S.raf); S.raf = 0;
       if (M && group) { M.scene.remove(group); M.reset(); }
       if (MODEL.focus) MODEL.focus(null);
     },
@@ -6606,7 +6585,758 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
 });
 </script>
 <script data-slide="s-axo-detail">
-ACKO.slide("s-axo-detail", ({ plain }) => ({ enter() { plain(); } }));
+/* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), at the 3D renders' camera
+   (axo_update/acko2A_model*.png), in five beats: "a complete evolution of planning and massing" (Ritika, 26 Oct), from the bare
+   shell to the furnished floor:
+     1 How it started                 the bare shell as a white model: slab, core band and columns, façade; the two entrances
+     2 Planning Acko's Neighbourhood  the six neighbourhoods drop in, 01 to 06, with their numbers, then the atriums, terraces and
+                                      the café's zone; their names (the boundaries from ACKO_NEI.dxf)
+     3 Configuring the Neighbourhoods the departments are configurable (Ritika; no text, 26 Oct): a department's name and
+                                      colour travel together (the numbers stay), stepping along the floor and back (the carousel); then two clicks swap them
+     4 Looping it all Together        the volumes lift away, the floor goes to colour (render 01), the partitions rise (02) (beat 4
+                                      without its route, 29 Oct)
+     5 The Client's Journey           on that floor, the model dimmed a little, the blue route draws (render 09)
+     6 The Employee's Journey         the furniture rises: the rooms' (02), the café (03), the terraces (04), the workstations (05),
+                                      the plants (06); the red route draws from the entrances (render 08), the Loop's seven stops
+                                      named as it reaches them; the blue route fades
+   Each beat plays going forward and going back, and only then (a click does not replay it); a left-drag pans, a
+   right-drag turns, the wheel zooms on the cursor, Reset view or a double-click goes back. Without WebGL, the deck's GIF. */
+ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, asset }) => {
+  const MAP = [0, 2, 4];       // this slide's beats are the strategy's: the neighbourhoods, the Loop (the journeys are out, Ritika 19 Nov)
+  const S = { raf: 0, t0: 0, k: 0, playing: false, fresh: true, state: null, home: null, tween: null };
+  // the floor where slide 14's axo has it (Ritika, 26 Oct: "size of axo should be same in both the slides"): its west and east
+  // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
+  // copyright line clears them ("back on both, axos made smaller"). The entrances below were measured on the PPT's GIF, at FIT_MARKS
+  const FIT14 = [0.0134, 0.0028, 0.8385, 0.9852], SHRINK = 0.95, AT = [1606 / 1920, 10.8 / 1080];
+  const FIT = [0.15, 0.22, 0.86, 0.74], FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
+  const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
+    "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
+  // beat 2's entrances where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model
+  // there so a drag or zoom carries it (the maroon ▲)
+  const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
+    { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
+    { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
+    { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
+  const MARKS = { ent: [[686, 714], [1094, 408]] };
+  // beat 2's names and numbers as the reference axo has them (29 Oct), worked out from the zones, so they follow the drawing. Each
+  // name runs along the long axis at the middle of its zone's outermost north or south edge (moved along it by dx mm, or per ring, clear
+  // of its neighbours), its capitals CAP[size] m tall, in its zone's
+  // colour made deeper (tone(); "acko home ... the pink of 06"): on a north (N) edge it stands up just outside the edge, on a
+  // south (S) edge it hangs from it, below the floor, clear of the façade (as the reference's Drive and Terrace). Health hangs
+  // from its south edge (here Life wraps round its north); the atriums are named on their north edge, east of their middle (clear
+  // of the entrances), the terraces and the café on their south edge. Each number lies on the floor at its zone's middle (the
+  // point farthest from its edge), NUM_H m (its plane's height)
+  const LABELS = [["ACKO Auto", "AUTO", "S"], ["ACKO Life", "LIFE", "N"], ["ACKO Health", "HEALTH", "S", null, 0, 7000],
+    ["ACKO Travel", "TRAVEL", "N", null, 0, -6000], ["ACKO Drive", "DRIVE", "S"], ["ACKO Home", "HOME", "N"],
+    ["Atrium", "atrium", "N", "#737373", 1, [4000, 9000]], ["Terrace", "terrace", "S", "#6f7356", 2], ["Café", "cafezone", "S", "#8f8a5c", 2]];
+  const CAP = [5, 3.8, 2.8], OUT = { N: 1200, S: 300 }, NUM_H = 16;      // m (names, atriums, terraces and café); mm outside the edge; m
+  const LIFT = [2.5, 0, 0];     // m a department's name stands above the floor, or hangs below it, clear of the façade (29 Oct: "a bit up/down for clarity")
+  // the handwritten line under each beat's name, on the name's left edge (29 Oct: "change the alignment and text", beats 1, 2,
+  // 5 and 6); the name stays put, and the line's first row lands GAP pt under it, however many rows it runs to (placeLine)
+  const GAP = 12;
+  const HAND = ["", "One long floor and two entrances: the ground the Loop is laid on.",
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.",
+    "The client journey is envisioned as a seamless transition through ACKO’s neighbourhood, where each touchpoint unfolds a distinct experience while maintaining a continuous sense of connection, discovery, and belonging.",
+    "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
+  const NAMES = ["", "The Shell", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
+  NAMES[2] = "The Neighbourhoods"; NAMES[4] = "The Loop"; NAMES[6] = "The Employees’ journey";
+  const DUR = [0, 2.4, 4.4, 6.4, 7.5, 4.2, 7.0];   // beat 4 longer: the Loop's ribbon draws on after the partitions (12 Nov)
+  // the building assembles (9 Nov, the re-ordered deck only, window.ACKO_WOW): on beat 1 the core and columns come up in a wave from
+  // the west end to the east, the façade following them, then the entrances drop in: a clipping plane on each group's materials
+  // sweeping along x (world m, the slab −122.5…122.5), set far off (nothing cut) on every other beat and on leaving
+  const WAVE = !!window.ACKO_WOW, W_MASS = [0.1, 1.9], W_FAC = [0.7, 2.7], W_ENT = [2.6, 3.2];
+  if (WAVE) DUR[1] = 3.4;
+  let CLIP = null;
+  function clip(sxM, sxF) {                         // keep x ≤ sx (world m); 1e6: keep all
+    if (!WAVE) return;
+    if (!CLIP) {
+      const T3 = window.THREE; CLIP = { m: new T3.Plane(new T3.Vector3(-1, 0, 0), 1e6), f: new T3.Plane(new T3.Vector3(-1, 0, 0), 1e6) };
+      const put = (g, pl) => g.traverse((o) => { if (!o.material) return; (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { m.clippingPlanes = [pl]; m.needsUpdate = true; }); });
+      put(M.groups.mass, CLIP.m); put(M.groups.facade, CLIP.f);
+      r.localClippingEnabled = true;
+    }
+    CLIP.m.constant = sxM; CLIP.f.constant = sxF;
+  }
+  const sweep = (t, w) => { const e = win(t, w[0], w[1]); return e >= 1 ? 1e6 : -126 + 252 * e; };
+  const DIM = 0.45;                                    // the model's dimming under a route (the veil's opacity)             // each beat's play (s)
+  // beat 3: a department's name and colour travel together to another zone (the numbers stay: 01-06 are places). The play is the
+  // carousel (Ritika's pick of six, index-configure.html): every department steps one zone along the floor, west to east, twice,
+  // then steps back home; then two clicks on names swap them live
+  const DEPTS = ["AUTO", "LIFE", "HEALTH", "TRAVEL", "DRIVE", "HOME"];
+  const FLOOR = ["HOME", "DRIVE", "TRAVEL", "HEALTH", "LIFE", "AUTO"];        // the zones, west to east
+  const PLAN = Object.fromEntries(DEPTS.map((d) => [d, d]));                  // department -> the zone (its key) it sits in
+  const swapped = (A, pairs) => { const B = Object.assign({}, A); for (const [a, b] of pairs) [B[a], B[b]] = [A[b], A[a]]; return B; };
+  const shift = (A, n) => Object.fromEntries(DEPTS.map((d) => [d, FLOOR[(FLOOR.indexOf(A[d]) + n + 6) % 6]]));
+  const STEP1 = shift(PLAN, 1), STEP2 = shift(PLAN, 2);
+  const SCRIPT = [[0.6, 1.8, PLAN, STEP1], [2.4, 3.6, STEP1, STEP2], [4.4, 6.0, STEP2, PLAN]];
+  const SWAP_MS = 900;
+  // the evolution: the shell from beat 1, the partitions with the colour on 4, the furniture on 5 (each group's rise, s)
+  const SHELL = ["mass", "facade"], FURNITURE = { rooms: [0.2, 1.0], cafe: [0.6, 1.4], terrace: [1.0, 1.8], work: [1.4, 2.5], plants: [2.2, 3.0] };
+  let T, M, cam, r, asp = 16 / 9, host, sc, view, SK = null, camS = null;
+
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+  const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  const win = (t, a, b) => ease(clamp01((t - a) / (b - a)));
+  const grow = (g, k) => { g.visible = k > 0.002; g.scale.set(1, Math.max(0.001, k), 1); };
+
+  // ---------- the scene at beat k, t seconds in (the same t always gives the same picture) ----------
+  function pose(k, t) {
+    const G = M.groups;
+    M.tint(k <= 3 ? 0 : k === 4 ? win(t, 0.3, 1.0) : 1);
+    for (const g of SHELL) grow(G[g], k === 1 && !WAVE ? win(t, 0.1, 1.5) : 1);
+    if (WAVE) clip(k === 1 ? sweep(t, W_MASS) : 1e6, k === 1 ? sweep(t, W_FAC) : 1e6);
+    grow(G.partitions, k <= 3 ? 0 : k === 4 ? win(t, 1.0, 2.0) : 1);
+    for (const g in FURNITURE) grow(G[g], k <= 5 ? 0 : win(t, FURNITURE[g][0], FURNITURE[g][1]));
+    // beat 3: who sits where (the script while it plays, then the live arrangement); any other beat: the plan
+    const live = k === 3 && t >= DUR[3];
+    if (k !== 3) { S.cur = PLAN; S.swap = null; pick(null); }
+    arrange(k === 3 && !live ? scriptAt(t) : liveAt(performance.now()));
+    sc.classList.toggle("st-cfg-on", k === 3); sc.classList.toggle("st-cfg-live", live);
+    for (const z of S.zl) if (z.dept) z.d.classList.toggle("click", live);
+    // the neighbourhoods: drop in one by one, 01 to 06; the atriums and terraces after; they stay for the configuring; they lift
+    // away as the colour comes
+    M.zones.forEach((v, i) => {
+      let y = 0, f = 0;
+      if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
+      if (k === 3) f = 1;
+      if (k === 4) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
+      v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (SK && v.userData.mats[2]) v.userData.mats[2][0].opacity = f;     // the mass at 55%, its number solid if (v.userData.num) v.userData.num.visible = k !== 4;
+    });
+    M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
+      let f = 0;
+      if (k === 2) f = win(t, 2.3, 3.0);
+      if (k === 3) f = 1;
+      if (k === 4) f = 1 - win(t, 0, 0.6);
+      M.fade(v, f);
+    });
+    S.names = (k === 2 && t >= 3.0) || k === 3;
+    S.hotOn = k === 4; S.reach = k === 4 ? win(t, 1.5, 6.5) : 0; S.pulse = k === 4 ? clamp01(t / 1.3) : 1;   // beat 4: each space lights up as the Loop's stroke reaches it
+    S.ent = k === 1 ? (WAVE ? win(t, W_ENT[0], W_ENT[1]) : win(t, 1.4, 2.0)) : 1;
+    // the routes: drawn on by distance from the entrances; the client's on 5 (fading on 6), the employee's on 6
+    const R = M.routes, emp = R.employee, cli = R.client;
+    cli.visible = k === 5 || (k === 6 && t < 1.0); emp.visible = k === 6;
+    cli.userData.to(k === 5 ? cli.userData.max * win(t, 0.3, DUR[5] - 0.2) : k > 5 ? cli.userData.max : 0);
+    cli.material.opacity = k === 6 ? 1 - win(t, 0.2, 1.0) : 1;
+    S.d = k === 6 ? emp.userData.max * win(t, 1.0, DUR[6] - 0.3) : 0;
+    emp.userData.to(S.d); emp.material.opacity = 1;
+    const RB = ribbon(), re = k === 4 ? win(t, 1.5, 6.5) : 0;   // 12 Nov: slower, as Ritika asked; 18 Nov: after the arrows have landed
+    if (RB) { RB.show(k === 4 && re > 0.001); RB.to(re); }
+    const cd = k === 5 ? cli.userData.max * win(t, 0.3, DUR[5] - 0.2) : 0;
+    S.lit = S.labs.map((o, i) => o.s.client ? k === 5 && cd >= o.s.d - 0.5 : (k === 6 && S.d >= o.s.d - 0.5) || (k === 4 && !!RB && re > 0.001 && re >= RB.at[i] - 0.002));
+    // while a route draws (5, 6), the model a little dimmed under it (29 Oct): fading in on 5, held on 6
+    S.dim = k === 5 ? DIM * win(t, 0, 0.6) : k === 6 ? DIM : 0;
+    caption(NAMES[k]);
+  }
+
+  // ---------- beat 3: configuring the neighbourhoods ----------
+  // the arrangement at t into the play: from A to B, e of the way
+  function scriptAt(t) {
+    let c = { A: PLAN, B: PLAN, e: 1 };
+    for (const [a, b, A, B] of SCRIPT) if (t >= a) c = { A, B, e: win(t, a, b) };
+    return c;
+  }
+  function liveAt(now) {
+    const w = S.swap;
+    return w ? { A: w.A, B: w.B, e: ease(clamp01((now - w.t0) / SWAP_MS)) } : { A: S.cur || PLAN, B: S.cur || PLAN, e: 1 };
+  }
+  // each department's name on a low arc between its zones' anchors; each zone in the colour of the department in it
+  function arrange(c) {
+    if (!S.anchor) return;
+    const e = c.e, inA = {}, inB = {};
+    S.np = {};
+    for (const d of DEPTS) {
+      const p0 = S.anchor[c.A[d]], p1 = S.anchor[c.B[d]], lift = c.A[d] !== c.B[d] ? 5 * Math.sin(Math.PI * e) : 0;
+      S.np[d] = [p0[0] + (p1[0] - p0[0]) * e, p0[1] + (p1[1] - p0[1]) * e + lift, p0[2] + (p1[2] - p0[2]) * e];
+      inA[c.A[d]] = d; inB[c.B[d]] = d;
+    }
+    for (const v of M.zones) {
+      const z = v.userData.zone.key, a = S.look[inA[z]], b = S.look[inB[z]], [m, lm] = [v.userData.mats[0][0], v.userData.mats[1][0]];
+      m.color.lerpColors(a.col, b.col, e); lm.color.copy(m.color).multiplyScalar(0.7);
+      v.userData.mats[0][1] = a.op + (b.op - a.op) * e;
+    }
+  }
+  // two clicks on names swap them; a click on the marked name unmarks it
+  function pick(d) {
+    if (!S.zl) return;
+    if (d && (!sc.classList.contains("st-cfg-live") || S.swap)) return;
+    if (d && S.pick && S.pick !== d) { S.swap = { A: S.cur, B: swapped(S.cur, [[S.pick, d]]), t0: performance.now() }; d = null; need(); }
+    else if (d && S.pick === d) d = null;
+    S.pick = d;
+    for (const z of S.zl) if (z.dept) z.d.classList.toggle("picked", z.dept === d);
+  }
+  function caption(txt) {
+    const cap = $(".st-cap", sc), hand = $(".st-hand", sc), line = HAND[NAMES.indexOf(txt)] || hand.textContent;
+    if (cap.dataset.t === txt) return;
+    cap.classList.remove("on"); cap.dataset.t = txt;
+    setTimeout(() => {
+      if (hand.textContent !== line) { hand.textContent = line; S.obs = null; need(); }
+      cap.textContent = txt; placeLine(); cap.classList.add("on");
+    }, 120);
+  }
+  // the line's top (% of the page) so its first row starts GAP pt under the name's letters, both measured as laid out (each
+  // against its own box, so a reveal's or the name's own slide-in doesn't count)
+  function placeLine() {
+    const cap = $(".st-cap", sc), hand = $(".st-hand", sc), page = $(".page", sc), H = page.clientHeight, pt = page.clientWidth / 720;
+    const first = (e) => { const rg = document.createRange(); rg.selectNodeContents(e); const r = rg.getClientRects(); return r.length ? r : null; };
+    const hr = first(hand), cr = first(cap); if (!hr || !cr || !H) return;
+    const capBottom = cap.offsetTop + (cr[cr.length - 1].bottom - cap.getBoundingClientRect().top), rowOff = hr[0].top - hand.getBoundingClientRect().top;
+    hand.style.top = ((capBottom + GAP * pt - rowOff - hand.offsetParent.offsetTop) / H) * 100 + "%";
+  }
+  function play(k) {
+    if (k === 1 && S.fromCh) { S.fromCh = false; show(1); return; }   // from The Opportunity: the shell already stands
+    if (WAVE && k === 1 && !reduced) cue("swell");
+    S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
+    pose(k, reduced ? DUR[k] : 0); need();
+  }
+  function resample(P, n) {
+    const ss = [0]; for (let i = 1; i < P.length; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
+    const L = ss[ss.length - 1], out = []; let j = 0;
+    for (let k = 0; k < n; k++) { const s = (k / (n - 1)) * L; while (j < ss.length - 2 && ss[j + 1] < s) j++; const f = ss[j + 1] > ss[j] ? (s - ss[j]) / (ss[j + 1] - ss[j]) : 0; out.push([P[j][0] + (P[j + 1][0] - P[j][0]) * f, P[j][1] + (P[j + 1][1] - P[j][1]) * f]); }
+    return out;
+  }
+  // the Loop, smooth (10 Nov, Ritika: "make the loop look smooth"): the route's corridor zig-zags gone, its course kept. Through every
+  // stop exactly (the sweep passes them at sweepStops), with a few of the route's own points between (one every 30 m, none near a stop),
+  // a centripetal Catmull-Rom spline, then eased a few times with the stops held. Plan mm in, plan mm out; also for the Thank-you slide
+  window.ACKO_LOOP_SMOOTH = window.ACKO_LOOP_SMOOTH || function (LP) {
+    const S = LP.sweep, idx = (LP.sweepStops || []).map((o) => o.i).sort((a, b) => a - b);
+    if (!S || idx.length < 2) return S;
+    const keys = [], pin = [], d = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+    for (let s = 0; s < idx.length - 1; s++) {
+      const a = idx[s], b = idx[s + 1], arc = [0];
+      for (let i = a + 1; i <= b; i++) arc.push(arc[arc.length - 1] + d(S[i], S[i - 1]));
+      keys.push(S[a]); pin.push(true);
+      const L = arc[arc.length - 1], n = Math.floor(L / 30000);
+      for (let k = 1; k <= n; k++) { const at = (k * L) / (n + 1); if (at < 12000 || L - at < 12000) continue;
+        let j = 1; while (j < arc.length - 1 && arc[j] < at) j++; keys.push(S[a + j]); pin.push(false); }
+    }
+    keys.push(S[idx[idx.length - 1]]); pin.push(true);
+    const out = [], hold = [], SEG = 16;                      // centripetal Catmull-Rom through the keys
+    for (let i = 0; i < keys.length - 1; i++) {
+      const p0 = keys[Math.max(0, i - 1)], p1 = keys[i], p2 = keys[i + 1], p3 = keys[Math.min(keys.length - 1, i + 2)];
+      const t1 = Math.sqrt(d(p0, p1)) || 1, t2 = t1 + (Math.sqrt(d(p1, p2)) || 1), t3 = t2 + (Math.sqrt(d(p2, p3)) || 1);
+      for (let k = 0; k < SEG; k++) {
+        const t = t1 + ((t2 - t1) * k) / SEG, L = (A, B, ta, tb) => [0, 1].map((c) => (tb - t) / (tb - ta) * A[c] + (t - ta) / (tb - ta) * B[c]);
+        const A1 = L(p0, p1, 0, t1), A2 = L(p1, p2, t1, t2), A3 = L(p2, p3, t2, t3), B1 = L(A1, A2, 0, t2), B2 = L(A2, A3, t1, t3);
+        out.push(k === 0 ? p1.slice() : L(B1, B2, t1, t2)); hold.push(k === 0 && pin[i]);
+      }
+    }
+    out.push(keys[keys.length - 1].slice()); hold.push(true);
+    for (let it = 0; it < 4; it++) for (let i = 1; i < out.length - 1; i++) if (!hold[i])   // eased, the stops held
+      out[i] = [0, 1].map((c) => (out[i - 1][c] + 2 * out[i][c] + out[i + 1][c]) / 4);
+    return out;
+  };
+
+  // closing the Loop on the floor (11 Nov, Ritika: "close the loop"): mode "ring" (out, U-turn at Work, back beside itself, U-turn
+  // at Collab) or "hooks" (each end curls round, back into the ribbon). Page px in, page px out; the "down" side is the path's left
+  // normal, which points down the page as it runs west to east (where her hooks are drawn)
+  const CLOSE = "hooks";
+  function closeLoop(B, mode) {
+    const n = B.length, nrm = B.map((p, i) => { const a = B[Math.max(0, i - 1)], b = B[Math.min(n - 1, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; });
+    const tan = (i) => [nrm[i][1], -nrm[i][0]];
+    const smooth = (P, it) => { for (let k = 0; k < it; k++) for (let i = 1; i < P.length - 1; i++) P[i] = [0, 1].map((c) => (P[i - 1][c] + 2 * P[i][c] + P[i + 1][c]) / 4); return P; };
+    if (mode === "ring") {
+      const OFF = 34;
+      const back = smooth(B.map((p, i) => [p[0] + nrm[i][0] * OFF, p[1] + nrm[i][1] * OFF]), 14);
+      const uturn = (P, Q, t) => {                      // a half circle from P round to Q, bulging along t
+        const c = [(P[0] + Q[0]) / 2, (P[1] + Q[1]) / 2], r = Math.hypot(Q[0] - P[0], Q[1] - P[1]) / 2 || 1, v = [(P[0] - c[0]) / r, (P[1] - c[1]) / r], out = [];
+        for (let k = 1; k < 16; k++) { const a = (Math.PI * k) / 16; out.push([c[0] + (v[0] * Math.cos(a) + t[0] * Math.sin(a)) * r, c[1] + (v[1] * Math.cos(a) + t[1] * Math.sin(a)) * r]); }
+        return out;
+      };
+      const t0 = tan(0), tn = tan(n - 1);
+      return B.concat(uturn(B[n - 1], back[n - 1], tn), back.slice().reverse(), uturn(back[0], B[0], [-t0[0], -t0[1]]), [B[0].slice()]);
+    }
+    // hooks, as she drew them: from the end's dot the ribbon drops below itself, swings round inward (toward the rest of the path)
+    // and comes back up into the ribbon, a curl of ~300° on a circle beside and under the end
+    // then (11 Nov, "blend it together", her red marks): the curl turns back after ~220°, runs into the ribbon along the ribbon's own
+    // direction at her mark (back px in from the end), and carries on exactly along the ribbon's points, where its tip tapers out of sight
+    const R = 42, hook = (P, back) => {                 // the hook at P's last point
+      const m = P.length, E = P[m - 1], d2 = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+      const nv = (i) => { const a = P[Math.max(0, i - 1)], b = P[Math.min(m - 1, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; };
+      const tE = nv(m - 1), tin = [-tE[0], -tE[1]];
+      let dn = [-tE[1], tE[0]]; if (dn[1] < 0) dn = [-dn[0], -dn[1]];     // the side below the ribbon
+      const C = [E[0] + tin[0] * R * 0.85 + dn[0] * R * 0.5, E[1] + tin[1] * R * 0.85 + dn[1] * R * 0.5], r = d2(E, C), f0 = Math.atan2(E[1] - C[1], E[0] - C[0]);
+      const s = Math.sign(dn[0] * -Math.sin(f0) + dn[1] * Math.cos(f0)) || 1, out = [], SW = 220 * Math.PI / 180;   // leaving the dot downward
+      for (let k = 1; k <= 28; k++) { const f = f0 + s * (k / 28) * SW; out.push([C[0] + r * Math.cos(f), C[1] + r * Math.sin(f)]); }
+      let j = m - 1, acc = 0; while (j > 2 && acc < back) { acc += d2(P[j], P[j - 1]); j--; }
+      const A = out[out.length - 1], fa = f0 + s * SW, ta = [-Math.sin(fa) * s, Math.cos(fa) * s], Q = P[j];
+      const tq = (() => { const a = P[j + 1], b = P[j - 1], l = d2(a, b) || 1; return [(b[0] - a[0]) / l, (b[1] - a[1]) / l]; })();   // along the ribbon, back toward its start
+      const dd = d2(A, Q) / 2.4, c1 = [A[0] + ta[0] * dd, A[1] + ta[1] * dd], c2 = [Q[0] - tq[0] * dd, Q[1] - tq[1] * dd];
+      for (let k = 1; k <= 20; k++) { const t = k / 20, v = 1 - t; out.push([0, 1].map((c) => v * v * v * A[c] + 3 * v * v * t * c1[c] + 3 * v * t * t * c2[c] + t * t * t * Q[c])); }
+      for (let i = j - 1, a2 = 0; i > 0 && a2 < 60; i--) { a2 += d2(P[i], P[i + 1]); out.push(P[i].slice()); }
+      return out;
+    };
+    return hook(B.slice().reverse(), 90).reverse().concat(B, hook(B, 70));
+  }
+  function wbuild(sc) {
+    if (sc._lw) return sc._lw;
+    const LP = window.ACKO_LOOP, F = window.ACKO_FLOOR, D = window.PLAN_DXF; if (!LP || !F || !D) return null;
+    const [vx, vy, vw, vh] = D.viewBox, vb = plan.vbFor([vx, vy, vx + vw, vy + vh], [35, 157, 1885, 670]), k = 1920 / vb[2], P = (x, y) => [(x - vb[0]) * k, (y - vb[1]) * k];
+    const FP = (q) => P(q[0] * 50 + 8842, q[1] * 50 + 12775), d = (pts) => "M" + pts.map((q) => FP(q).map((v) => v.toFixed(1)).join(" ")).join("L") + "Z";
+    const T = track(sc);
+    const B = resample(closeLoop(resample(window.ACKO_LOOP_SMOOTH(LP).map((q) => P(q[0], q[1])), N3), CLOSE), 640), A = resample(T.pts.slice(Math.ceil(40 / 6), T.pts.length - Math.ceil(40 / 6)), B.length);
+    // the stops: on their spots, the labels above or below the floor, alternately west to east, clear of each other
+    const top = Math.min(...F.plate.map((q) => FP(q)[1])), bot = Math.max(...F.plate.map((q) => FP(q)[1]));
+    const QUOTE = { "Arrival": "I feel welcomed", "Café": "Hey We finally meet !", "Board Room": "This is my big moment", "Meeting Rooms": "My Impact", "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
+    const st = LP.stops.map((o) => ({ name: o.name, q: QUOTE[o.name] || "", p: P(o.x, o.y) })).sort((a, b) => a.p[0] - b.p[0]);
+    st.forEach((o, i) => { o.up = i % 2 === 0; o.l = [Math.max(110, Math.min(1810, o.p[0])), o.up ? top - 58 : bot + 58]; });
+    const svg = $(".lw-floor", sc);
+    svg.innerHTML = `<path class="plate" d="${d(F.plate)}"/>` + (F.cores || []).map((c) => `<path class="core" d="${d(c)}"/>`).join("") +
+      st.map((o, i) => `<path class="lead" data-k="${i}" d="M${o.p[0].toFixed(1)} ${o.p[1].toFixed(1)}L${o.l[0].toFixed(1)} ${(o.l[1] + (o.up ? 22 : -22)).toFixed(1)}"/>`).join("");
+    $(".lw-stops", sc).innerHTML = st.map((o) => `<div class="lw-stop" style="left:${(o.p[0] / 19.2).toFixed(3)}%;top:${(o.p[1] / 10.8).toFixed(3)}%"><i></i>` +
+      `<div class="lab" style="left:calc(${((o.l[0] - o.p[0]) / 19.2).toFixed(3)} * var(--pw) / 100);top:calc(${((o.l[1] - o.p[1]) / 10.8).toFixed(3)} * var(--ph) / 100)"><b>${o.name}</b><q>${o.q}</q></div></div>`).join("");
+    return (sc._lw = { A, B, st });
+  }
+
+  // the Loop as a path on the floor (12 Nov, Ritika: "loop ribbon is not looking like a path. it is not blending with the axos angle"):
+  // the employees' route along the corridors through the seven stops (ACKO_LOOP.sweep, plan mm → model mm as flatten() has it), its
+  // corners lightly rounded, lying on the floor in the model (walls overlap it), a deeper tone of the floor's circulation lilac on a
+  // paler, wider edge strip; round ends
+  const RW = 1.2, RY = 0.06;   // 12 Nov: sleeker; 18 Nov: a little fuller, as a marker stroke
+  // 18 Nov (Ritika: "a conceptual loop path, not a defined path, which connects all the spaces"): every point of the Loop (both lanes, the faint
+  // lane, the call-outs' points) is moved by one smooth field, so the lanes stay parallel and the ring reads as a loose hand-drawn stroke
+  const hd = (p) => [p[0] + 1.2 * Math.sin(p[1] / 8 + 1) + 0.7 * Math.sin(p[0] / 23 + 2), p[1] + 1.2 * Math.sin(p[0] / 9 + 0.4) + 0.7 * Math.sin(p[1] / 25 + 3)];
+  const hdMm = (x, y) => { const X0 = M.X(x), Z0 = M.Z(y), q = hd([X0, Z0]); return [x + (q[0] - X0) * 1000, y + (q[1] - Z0) * 1000]; };
+  function chaikin(P, it) { for (let k = 0; k < it; k++) { const Q = [P[0]];
+    for (let i = 0; i + 1 < P.length; i++) { const a = P[i], b = P[i + 1]; Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); }
+    Q.push(P[P.length - 1]); P = Q; } return P; }
+  function strip(P, wid, y, col, op, ro, off, flat) {
+    const n = P.length, ss = [0]; for (let i = 1; i < n; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
+    const L = ss[n - 1], R = wid / 2;
+    const E = P.map((p, i) => {
+      const a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)], dx = b[0] - a[0], dz = b[1] - a[1], l = Math.hypot(dx, dz) || 1;
+      const u = flat ? 1 : Math.min(1, Math.min(ss[i], L - ss[i]) / R), w = R * Math.sqrt(Math.max(0, 1 - (1 - u) * (1 - u)));   // a round end (none on the closed ring)
+      return [[p[0] - dz / l * w, p[1] + dx / l * w], [p[0] + dz / l * w, p[1] - dx / l * w]];
+    });
+    const pos = []; for (let i = 0; i + 1 < n; i++) { const [a, b] = E[i], [c, d] = E[i + 1]; for (const q of [a, b, c, b, d, c]) pos.push(q[0], y, q[1]); }
+    const geo = new T.BufferGeometry(); geo.setAttribute("position", new T.Float32BufferAttribute(pos, 3)); geo.setDrawRange(0, 0);
+    const m = new T.Mesh(geo, new T.MeshBasicMaterial({ color: col, transparent: true, opacity: op, side: T.DoubleSide, depthWrite: false,
+      polygonOffset: true, polygonOffsetFactor: off, polygonOffsetUnits: 2 * off }));
+    m.renderOrder = ro; m.visible = false; m.frustumCulled = false; return m;
+  }
+  // 17 Nov (the 16 Nov concept note: "a path with two ends is a corridor with dead ends … redraw the campus strategy route as the same
+  // loop"): the ribbon is the Loop as ONE closed ring (ACKO_LOOP.ring), as The loop on our floor draws it: the main street out and back
+  // as two lanes (each point set 0.8 m to the ring's left: it runs clockwise, so out east the lane is north of the street, back west
+  // south of it), round the meeting island at each end, no ends; the lane 02A has yet to open (ringDash) faint; each stop's call-out on
+  // the ring, at its share of the way round
+  // 18 Nov (Ritika: "the loop should connect all spaces and look like a loop"; "in the corridor zone, no branching out; the spaces should
+  // come in the loop's path"; "first show the arrival arrow and the loop should start from them"): the Loop is the corridor route itself
+  // (ACKO_LOOP.ring: the main street out and back, through the seven stops, past the spaces), as ONE closed ring, its two directions parted
+  // into lanes 3 m apart so it reads as an oval track, eased, with only a faint hand-drawn tremor. It is split at the two entrances
+  // (Arrival 1 and 2, where the maroon arrows stand) into two arcs that draw together, each growing out of its own arrow and meeting at the
+  // other. No spurs: each space's dot is the nearest point on the ring, so the spaces sit on the path.
+  function ribbon() {
+    if (S.rb !== undefined) return S.rb;
+    S.rb = null;
+    const LP = window.ACKO_LOOP; if (!LP || !LP.ring || !M || typeof spaces !== "function") return null;
+    const N = LP.ring.length, LANE = 1500, ARR = (LP.ringStops || []).filter((s) => s.kind === "arrival").map((s) => s.i);
+    if (ARR.length < 2) return null;
+    const A1 = ARR[0], A2 = ARR[1];
+    let C = LP.ring.map((p) => p.slice());
+    for (let it = 0; it < 6; it++) C = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N]; return [0.25 * a[0] + 0.5 * p[0] + 0.25 * b[0], 0.25 * a[1] + 0.5 * p[1] + 0.25 * b[1]]; });
+    const OFF = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+      return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE]; });
+    const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % N) { o.push(OFF[i]); if (i === i1) break; } return o; };
+    const tremor = (p) => { const h = hd(p); return [p[0] + (h[0] - p[0]) * 0.2, p[1] + (h[1] - p[1]) * 0.2]; };
+    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m).map(tremor);
+    // the ring's length from Arrival 1 round to each point, to split it into the two arcs
+    const cum = [0]; for (let i = 1; i < N; i++) cum.push(cum[i - 1] + Math.hypot(OFF[i][0] - OFF[i - 1][0], OFF[i][1] - OFF[i - 1][1]));
+    const L = cum[N - 1] + Math.hypot(OFF[0][0] - OFF[N - 1][0], OFF[0][1] - OFF[N - 1][1]), sOf = (j) => (cum[j] - cum[A1] + L) % L, sA = sOf(A2);
+    const nA = Math.max(200, Math.round(1600 * sA / L)), nB = Math.max(200, 1600 - nA);
+    const arcs = [prep(seq(A1, A2), nA), prep(seq(A2, A1), nB)].map((P) => ({ P, n: P.length,
+      under: strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top: strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true) }));
+    arcs.forEach((a) => M.scene.add(a.under, a.top));
+    // each place's share of ITS arc (the stroke front growing out of the nearer arrow reaches it then) and its point on the ring (model mm)
+    const share = (j) => { const s0 = sOf(j); return s0 <= sA ? s0 / sA : (s0 - sA) / (L - sA); };
+    const idx = {};
+    (LP.ringStops || []).forEach((s) => { if (s.kind === "stop") idx[s.name] = s.i; });
+    const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, share(idx[s.name]))));
+    const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : [C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802]));
+    const hot = spaces().map((q) => { let j = 0, d0 = 1e18; for (let i = 0; i < N; i++) { const d = (C[i][0] - 185842 - q.x) ** 2 + (C[i][1] + 182802 - q.y) ** 2; if (d < d0) { d0 = d; j = i; } }
+      return { at: Math.min(1, share(j)), pos: [C[j][0] - 185842, C[j][1] + 182802] }; });
+    // white chevrons say which way each arc runs
+    const ar = [];
+    arcs.forEach((a, ai) => (ai ? [0.2, 0.5, 0.8] : [0.5]).forEach((f) => {
+      const P = a.P, n = a.n, j = Math.round(f * (n - 1)), p0 = P[Math.max(0, j - 6)], p1 = P[Math.min(n - 1, j + 6)], dx = p1[0] - p0[0], dz = p1[1] - p0[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], Ln = 1.5, W = 0.95, Y = RY + 0.03;
+      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute([c[0] + ux * Ln, Y, c[1] + uz * Ln, c[0] - ux * Ln * 0.5 - uz * W, Y, c[1] - uz * Ln * 0.5 + ux * W, c[0] - ux * Ln * 0.5 + uz * W, Y, c[1] - uz * Ln * 0.5 - ux * W], 3));
+      const m = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, side: T.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -8, polygonOffsetUnits: -16 }));
+      m.renderOrder = 10; m.visible = false; m.frustumCulled = false; M.scene.add(m); ar.push({ m, f, ai });
+    }));
+    const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
+    const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
+      ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
+    // a fade of the whole ring and its chevrons (1 = as drawn), for the Detailed axo's glide into A day in ACKO
+    const fade = (a) => { arcs.forEach((x) => { x.under.material.opacity = 0.9 * a; x.top.material.opacity = 0.9 * a; }); ar.forEach((x) => { x.m.material.opacity = 0.95 * a; }); };
+    return (S.rb = { show, to, fade, at, pos, hot, miss: at.map(() => 0) });
+  }
+  function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
+
+  // ---------- the overlay: entrances, neighbourhood names, the Loop's stops ----------
+  const v3 = () => new T.Vector3();
+  const px = (x, y, h) => { const v = v3().set(M.X(x), h, M.Z(y)).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
+  const pw = (x, y, z) => { const v = v3().set(x, y, z).project(cam); return [(v.x + 1) * 960, (1 - v.y) * 540]; };
+  // a page point at the home view, back on the model: where the camera's ray through it meets the level h (m)
+  function pin() {
+    window.AxoModel.apply(cam, window.AxoLayers.frame(M, M.data.view, FIT_MARKS, asp), asp); cam.updateMatrixWorld();      // the marks' own frame
+    const d = v3(); cam.getWorldDirection(d);
+    const at = (x, y, h) => { const o = v3().set(x / 960 - 1, 1 - y / 540, -1).unproject(cam), t = (h - o.y) / d.y; return [o.x + d.x * t, h, o.z + d.z * t]; };
+    S.entAt = MARKS.ent.map(([x, y]) => at(x, y, 4.5));
+    for (const z of S.zl) z.p = [M.X(z.at[0]), (z.side === "N" ? 1 : -1) * (CAP[z.size] * 0.55 + 0.4 + LIFT[z.size]), M.Z(z.at[1])];   // standing on the floor, or hanging below it
+    S.anchor = {}; for (const z of S.zl) if (z.dept) S.anchor[z.dept] = z.p;      // each zone's name point: where its own department is named
+    for (const v of M.zones) {
+      const num = v.userData.num; if (!num) continue;
+      const [x, y] = middle(v.userData.zone.ring); num.position.x = M.X(x); num.position.z = M.Z(y); num.scale.setScalar(NUM_H / v.userData.numH);
+    }
+  }
+  // a ring's middle (plan mm): its point farthest from its edge, on a 1 m grid, then a 0.1 m one round the best
+  function middle(ring) {
+    const n = ring.length, xs = ring.map((q) => q[0]), ys = ring.map((q) => q[1]);
+    const inside = (x, y) => { let c = false; for (let i = 0, j = n - 1; i < n; j = i++) { const [x0, y0] = ring[i], [x1, y1] = ring[j]; if ((y0 > y) !== (y1 > y) && x < x0 + ((y - y0) * (x1 - x0)) / (y1 - y0)) c = !c; } return c; };
+    const edge = (x, y) => {
+      let d = Infinity;
+      for (let i = 0, j = n - 1; i < n; j = i++) {
+        const [x0, y0] = ring[j], [x1, y1] = ring[i], ux = x1 - x0, uy = y1 - y0, t = Math.max(0, Math.min(1, ((x - x0) * ux + (y - y0) * uy) / (ux * ux + uy * uy || 1)));
+        d = Math.min(d, Math.hypot(x - x0 - t * ux, y - y0 - t * uy));
+      }
+      return d;
+    };
+    let best = [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2], bd = -1;
+    const scan = (x0, x1, y0, y1, st) => { for (let x = x0; x <= x1; x += st) for (let y = y0; y <= y1; y += st) if (inside(x, y)) { const d = edge(x, y); if (d > bd) { bd = d; best = [x, y]; } } };
+    scan(Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys), 1000);
+    const [bx, by] = best; scan(bx - 1000, bx + 1000, by - 1000, by + 1000, 100);
+    return best;
+  }
+
+  function overlayBuild() {
+    const box = $(".st-ov", sc), A = M.data;
+    $$(".st-s, .st-z", box).forEach((e) => e.remove());
+    // the entrances: the deck's maroon ▲ (its apex a little right of centre)
+    $(".st-ent", sc).innerHTML = MARKS.ent.map(() => '<circle class="rp" r="16" style="fill:none;stroke:#980000;stroke-width:2.5;opacity:0"/><path d="M5.8 -10.9 L12.8 4.7 L-18.4 6.2 Z"/>').join("");
+    // the names (LABELS), each at the middle of its zone's (or atrium's, terrace's, café's) outermost edge on its side
+    S.zl = [];
+    const tone = (hex) => { const c = new T.Color(hex), h = {}; c.getHSL(h); return "#" + c.setHSL(h.h, Math.min(0.35, h.s) * 0.7, 0.55).getHexString(); };
+    for (const [txt, where, side, col, size, dx] of LABELS) {
+      const zone = A.zones.find((z) => z.key === where), rings = zone ? [zone.ring] : A[where] || [];
+      rings.forEach((ring, i) => {
+        const ys = ring.map((q) => q[1]), e = side === "N" ? Math.min(...ys) : Math.max(...ys), xs = ring.filter((q) => Math.abs(q[1] - e) < 300).map((q) => q[0]);
+        const x = (Math.min(...xs) + Math.max(...xs)) / 2 + ((Array.isArray(dx) ? dx[i] : dx) || 0), y = e + (side === "N" ? -OUT.N : OUT.S);
+        const d = document.createElement("div"); d.className = "st-z" + (size ? " small" : ""); d.textContent = txt; d.style.color = col || tone(zone.colour); box.appendChild(d);
+        const dept = zone ? where : null;
+        if (dept) { d.classList.add("dept"); d.addEventListener("click", () => pick(dept)); }
+        S.zl.push({ d, at: [x, y], size: size || 0, side, dept });
+      });
+    }
+    // the Loop's stops
+    const svg = $(".st-legs", sc); svg.innerHTML = "";
+    S.labs = A.stops.concat(CLIENT).map((s) => {
+      const d = document.createElement("div"); d.className = "st-s"; d.innerHTML = `<b>${s.name}</b><span>${s.q || STOPS[s.name] || ""}</span>`; if (s.client) d.classList.add("cl"); box.appendChild(d);
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.innerHTML = '<path/><circle r="5"/>'; if (s.name === "Arrival") g.classList.add("arr"); svg.appendChild(g);
+      g.insertAdjacentHTML("afterbegin", '<circle class="pl" r="7"/>'); g.style.setProperty("--d", ((svg.childNodes.length * 0.41) % 1.7).toFixed(2) + "s");     // the stop's dot blinks while it is lit
+      return { s, d, g };
+    });
+    // the spaces' hotspots (beat 4)
+    S.hot = spaces().map((sp, i) => {
+      const d = document.createElement("div"); d.className = "st-s hot"; d.innerHTML = `<b>${sp.name}</b>`; box.appendChild(d);
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.setAttribute("class", "hot"); g.innerHTML = '<path/><circle class="pl" r="7"/><circle r="4.2"/>'; svg.appendChild(g); g.style.setProperty("--d", ((i * 0.37) % 1.7).toFixed(2) + "s");
+      return { sp, d, g };
+    });
+  }
+  // the spaces that could be called out on beat 4 as hotspots, [room type, name] (model mm; the room's largest, at the point farthest from its
+  // walls). None for now (Ritika, 18 Nov: "remove the departmental room and the other text-only rooms"): beat 4 is the Loop and its seven stops;
+  // the rooms come with the layout and the axos after. Add pairs here, e.g. ["Zen room", "Zen Room"], to bring hotspots back.
+  const SPACES = [];
+  function spaces() {
+    if (S.spc) return S.spc;
+    const area = (r) => Math.abs(r.reduce((a, q, i) => a + q[0] * r[(i + 1) % r.length][1] - r[(i + 1) % r.length][0] * q[1], 0)) / 2;
+    return (S.spc = SPACES.map(([type, name]) => {
+      const rings = M.data.floors.filter((f) => f[0] === type).map((f) => f[1]); if (!rings.length) return null;
+      const [x, y] = middle(rings.sort((a, b) => area(b) - area(a))[0]); return { name, x, y };
+    }).filter(Boolean));
+  }
+  function overlay() {
+    const A = M.data, k = 1920 / (host.clientWidth || 1920);
+    // entrances: of a size in the model, so they zoom with it as the names do (29 Oct: "the 2 arrows should also be constant size")
+    const ek = S.home.half / S.state.half;
+    // beat 4 opens on them: they swell and a ripple goes out, then the Loop grows from them
+    const lead = S.k === 4 && S.pulse < 1, bump = lead ? 1 + 0.6 * Math.sin(Math.PI * S.pulse) : 1;
+    $$(".st-ent path", sc).forEach((p, i) => {
+      const q = S.entAt[i], [x, y] = pw(q[0], q[1] + 6 * (1 - S.ent), q[2]), rp = $$(".st-ent circle", sc)[i];
+      p.setAttribute("transform", `translate(${x} ${y}) scale(${(ek * bump).toFixed(4)})`); p.style.opacity = S.ent;
+      if (rp) { rp.setAttribute("transform", `translate(${x} ${y}) scale(${(ek * (1 + 3 * (lead ? S.pulse : 1))).toFixed(4)})`); rp.style.opacity = lead ? (0.7 * (1 - S.pulse)).toFixed(3) : 0; }
+    });
+    // names: standing upright on the floor along its east (long) axis, as the axo shows such a wall (one matrix: the camera is
+    // orthographic; seen from the other side they turn round, so they never read backwards), CAP m tall in the model, so they
+    // zoom with it as the numbers do (29 Oct: "it should be in a fixed axo angle", "the text size ... should be constant", and
+    // the reference axo)
+    const [ox, oy] = pw(0, 0, 0), [ex, ey] = pw(1, 0, 0), [dx, dy] = pw(0, -1, 0), D = [dx - ox, dy - oy];
+    let E = [ex - ox, ey - oy]; if (E[0] * D[1] - E[1] * D[0] < 0) E = [-E[0], -E[1]];
+    const fs = S.zl.map((z) => parseFloat(getComputedStyle(z.d).fontSize) || 16);
+    S.zl.forEach((z, i) => {
+      const u = CAP[z.size] / (0.72 * fs[i]) / k;                      // m per CSS px of the name's type; frame px to CSS px
+      z.mx = [E[0], E[1], D[0], D[1]].map((v) => (v * u).toFixed(4)).join(", ") + ", 0, 0";
+    });
+    for (const z of S.zl) {
+      const [x, y] = pw(...(z.dept && S.np && S.np[z.dept] ? S.np[z.dept] : z.p));
+      z.d.style.left = (x / 19.2) + "%"; z.d.style.top = (y / 10.8) + "%"; z.d.style.setProperty("--m", z.mx);
+      z.d.classList.toggle("on", !!S.names);
+    }
+    // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
+    // the page's right edge hangs to the left
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
+      const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
+      return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
+    }).filter((b) => b[2] > b[0]);
+    const placed = [];
+    const hit = (L, top, R, bot) => placed.concat(S.obs).some((b) => L < b[2] && R > b[0] && top < b[3] && bot > b[1]);
+    const items = S.labs.map((o, i) => {
+      const q = S.k === 4 && S.rb && S.rb.pos && S.rb.pos[i] ? S.rb.pos[i] : [o.s.x, o.s.y]; const [x, y] = px(q[0], q[1], 0.6);
+      if (!o.w) { o.w = (o.d.offsetWidth || 150) * k; o.h = (o.d.offsetHeight || 44) * k; }
+      return { o, x, y, on: !!(S.lit && S.lit[i]) && x > 20 && x < 1900 && y > 60 && y < 1060 };
+    }).sort((p1, p2) => p2.y - p1.y);
+    for (const it of items) {
+      const { o, x, y } = it;
+      const left = x + o.w / 2 > 1890 ? Math.min(x + 12, 1890) - o.w : x - o.w / 2;
+      const tries = [0, 1, 2, 3, 4, 5].map((n) => y - 64 - n * (o.h + 4)).concat([0, 1, 2].map((n) => y + 40 + o.h + n * (o.h + 4)));
+      const ly = tries.find((b) => b - o.h > 14 && b < 1066 && !hit(left, b - o.h, left + o.w, b)) || tries[0];   // on the page, clear of the copy and the tools      // the label's bottom (frame px)
+      if (it.on) placed.push([left - 6, ly - o.h - 6, left + o.w + 6, ly + 6]);
+      o.g.querySelector("path").setAttribute("d", `M${x} ${y}L${x} ${ly > y ? ly - o.h : ly}`);
+      for (const c of o.g.querySelectorAll("circle")) { c.setAttribute("cx", x); c.setAttribute("cy", y); }
+      o.d.style.left = ((left + o.w / 2) / 19.2) + "%"; o.d.style.top = (ly / 10.8) + "%";
+      o.d.classList.toggle("on", it.on); o.g.classList.toggle("on", it.on);
+    }
+    // the spaces' hotspots: a dot on the ring where the stroke reaches the space, its name beside it on the outer side; the dot reached last pulses
+    const R = typeof ribbon === "function" ? ribbon() : null, reach = S.reach || 0;
+    const hot = (S.hot || []).map((o, i) => {
+      const q = R && R.hot[i] ? R.hot[i].pos : [o.sp.x, o.sp.y], [x, y] = px(q[0], q[1], 0.6), at = R && R.hot[i] ? R.hot[i].at : 0;
+      if (!o.w) { o.w = (o.d.offsetWidth || 90) * k; o.h = (o.d.offsetHeight || 22) * k; }
+      return { o, x, y, at, north: o.sp.y < 214500, on: !!S.hotOn && reach >= at && (!R || reach > 0.001) && x > 20 && x < 1900 && y > 60 && y < 1000 };
+    });
+    for (const it of hot.slice().sort((p1, p2) => p2.y - p1.y)) {
+      const { o, x, y } = it;
+      if (!it.on) { o.d.classList.remove("on"); o.g.classList.remove("on"); continue; }
+      const left = Math.max(10, Math.min(x - o.w / 2, 1900 - o.w)), up = y - 13, dn = y + 15 + o.h;
+      const tries = it.north ? [up, up - o.h - 2, dn] : [dn, dn + o.h + 2, up];
+      const ly = tries.find((b) => b - o.h > 14 && b < 1000 && !hit(left, b - o.h, left + o.w, b)) || tries[0];
+      placed.push([left - 3, ly - o.h - 3, left + o.w + 3, ly + 3]);
+      for (const c of o.g.querySelectorAll("circle")) { c.setAttribute("cx", x); c.setAttribute("cy", y); }
+      o.d.style.left = ((left + o.w / 2) / 19.2) + "%"; o.d.style.top = (ly / 10.8) + "%";
+      o.d.classList.add("on"); o.g.classList.add("on");
+    }
+  }
+
+  // ---------- drawing on demand ----------
+  function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
+  // two passes: the furnished model (its own frame: the plan, the Layers floor is the plan + (185842, -182802) mm), then the Layers scene over
+  // it with the depth cleared, so the neighbourhoods, the Loop and the journeys always show on the furniture. The Layers floor itself is hidden
+  const OWN = ["base", "mass", "partitions", "rooms", "cafe", "terrace", "work", "plants", "facade"];
+  function paint() {
+    if (!SK) { r.render(M.scene, cam); return; }
+    OWN.forEach((g) => { if (M.groups[g]) M.groups[g].visible = false; });
+    const dx = (185842 + M.CX - SK.CX) / 1000, dz = (-182802 + M.CY - SK.CY) / 1000, st = S.state;
+    window.AxoModel.apply(camS, { theta: st.theta, phi: st.phi, half: st.half, t: [st.t[0] + dx, st.t[1], st.t[2] + dz] }, asp); camS.updateMatrixWorld();
+    const ac = r.autoClear; r.autoClear = false; r.clear(); r.render(SK.scene, camS); r.clearDepth(); r.render(M.scene, cam); r.autoClear = ac;
+  }
+  function draw(now) {
+    S.raf = 0;
+    if (document.body.dataset.scene !== "s-axo-detail" || !r) return;
+    const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
+    const pr = r.getPixelRatio();
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(Hh * pr)) {
+      r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
+    }
+    if (S.playing) { const t = (now - S.t0) / 1000; pose(S.k, Math.min(t, DUR[S.k])); if (t >= DUR[S.k]) S.playing = false; }
+    if (S.swap) {                                       // a live swap on beat 3
+      arrange(liveAt(now)); for (const v of M.zones) M.fade(v, 1);
+      if (now - S.swap.t0 >= SWAP_MS) { S.cur = S.swap.B; S.swap = null; }
+    }
+    if (S.dayT && S.rb) S.rb.fade(Math.max(0, 1 - (now - S.dayT) / 1200));
+    if (S.tween) {
+      const tw = S.tween, k = Math.min(1, (now - tw.t0) / tw.ms), e = ease(k), L = (a, b) => a + (b - a) * e;
+      S.state = { theta: L(tw.from.theta, tw.to.theta), phi: L(tw.from.phi, tw.to.phi), half: L(tw.from.half, tw.to.half), t: tw.from.t.map((x, i) => L(x, tw.to.t[i])) };
+      if (k >= 1) S.tween = null;
+    }
+    window.AxoModel.apply(cam, S.state, asp);
+    // the dimming: a white veil just in front of the camera, over all it has drawn, under the routes (renderOrder 9)
+    S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
+    if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
+    paint();
+    overlay();
+    if (S.playing || S.tween || S.swap) need();
+  }
+
+  // ---------- panning, turning, zooming ----------
+  // the same mouse on every axo (29 Oct: "LMB for pan, mouse wheel for zoom in zoom out and RMB for rotate"): a left-drag pans (in the axo's right/up), a right-drag (or Shift-drag, for a
+  // trackpad) turns it, the wheel zooms on the cursor (its point on the floor stays put), a double-click goes back to the beat's view
+  function wire() {
+    let drag = null;
+    const ground = (e, v) => {
+      const b = host.getBoundingClientRect(), nx = ((e.clientX - b.left) / b.width) * 2 - 1, ny = -((e.clientY - b.top) / b.height) * 2 + 1;
+      window.AxoModel.apply(cam, v, asp); const { f, right, up } = window.AxoModel.basis(v);
+      const o = cam.position.clone().add(right.multiplyScalar(nx * v.half * asp)).add(up.multiplyScalar(ny * v.half));
+      return o.add(f.multiplyScalar(-o.y / f.y));
+    };
+    host.addEventListener("pointerdown", (e) => {
+      if (e.button > 2) return;
+      drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, turn: e.button === 2 || e.shiftKey };
+      try { host.setPointerCapture(e.pointerId); } catch (_) { /* not an active pointer */ }
+      host.classList.add("drag");
+    });
+    host.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+      if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 4) return;
+      S.moved = true; S.tween = null;
+      const v = S.state;
+      if (drag.turn) S.state = Object.assign({}, v, { theta: Math.max(view.theta - 0.8, Math.min(view.theta + 0.8, v.theta - dx * 0.005)), phi: Math.max(0.35, Math.min(1.22, v.phi - dy * 0.004)) });
+      else {
+        const { right, up } = window.AxoModel.basis(v), k = (2 * v.half) / host.clientHeight, m = right.multiplyScalar(-dx * k).add(up.multiplyScalar(dy * k));
+        S.state = Object.assign({}, v, { t: [v.t[0] + m.x, v.t[1] + m.y, v.t[2] + m.z] });
+      }
+      need();
+    });
+    const up = (e) => {
+      if (!drag) return;
+      drag = null; host.classList.remove("drag");
+    };
+    host.addEventListener("pointerup", up); host.addEventListener("pointercancel", () => { drag = null; host.classList.remove("drag"); });
+    host.addEventListener("contextmenu", (e) => e.preventDefault());
+    host.addEventListener("dblclick", home);
+    host.addEventListener("wheel", (e) => {
+      e.preventDefault(); S.moved = true; S.tween = null;
+      const v = S.state, before = ground(e, v), w = Object.assign({}, v, { half: Math.max(4, Math.min(140, v.half * Math.exp(e.deltaY * 0.0012))) });
+      const after = ground(e, w); w.t = [w.t[0] + before.x - after.x, w.t[1], w.t[2] + before.z - after.z]; S.state = w; need();
+    }, { passive: false });
+  }
+
+  // back to the beat's view, eased (Reset view, or a double-click as on the plans)
+  function home() { S.moved = false; S.tween = { from: S.state, to: S.home, t0: performance.now(), ms: 900 }; need(); }
+
+  function start() {
+    host = $(".st-3d", sc);
+    if (!window.AxoLayers || !window.AxoLayers.available()) return false;
+    r = window.AxoModel.renderer(); if (!r) return false;
+    T = window.THREE;
+    if (!M) {
+      S.base = window.AxoLayers.get(); view = { theta: -0.62, phi: 0.92 };      // A day in ACKO's angle, so the hand-over is a zoom and a pan (Ritika, 19 Nov)
+      M = S.base; SK = window.AxoSkp && window.AxoSkp.available() ? window.AxoSkp.get(asset) : null; camS = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);       // the shared model, its volumes hand-drawn here (the conceptual beats); other slides keep the exact ones
+      cam = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+      S.veil = new T.Mesh(new T.PlaneGeometry(1, 1), new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthTest: false, depthWrite: false }));
+      S.veil.renderOrder = 8; S.veil.frustumCulled = false; S.veil.visible = false; M.scene.add(S.veil);
+      // each department's look: its own zone's colour and opacity as built
+      S.look = Object.fromEntries(M.zones.map((v) => [v.userData.zone.key, { col: new T.Color(v.userData.zone.colour), op: v.userData.mats[0][1] }]));
+      overlayBuild(); wire();
+      // the names' sizes once their fonts are in
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { S.obs = null; S.labs.forEach((o) => { o.w = 0; }); placeLine(); need(); });
+      window.AxoLayers.listeners.add(() => { if (document.body.dataset.scene === "s-axo-detail") need(); });
+      const again = () => { if (document.body.dataset.scene === "s-axo-detail") need(); };
+      addEventListener("resize", () => { placeLine(); again(); }); document.addEventListener("visibilitychange", again);
+      sc._strategy = () => ({ k: S.k, playing: S.playing, cap: $(".st-cap", sc).textContent, lit: (S.lit || []).filter(Boolean).length,
+        stops: M.data.stops.map((s) => s.name), d: S.d, state: S.state, home: S.home, names: !!S.names, cur: Object.assign({}, S.cur || PLAN), pick: S.pick || null,
+        employee: M.routes.employee.geometry.drawRange.count, rb: S.rb ? { at: S.rb.at, miss: S.rb.miss } : null, client: M.routes.client.geometry.drawRange.count });
+    }
+    if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
+    asp = (host.clientWidth || 16) / (host.clientHeight || 9);
+    S.home = window.AxoLayers.frame(M, view, FIT, asp); S.state = S.home; S.moved = false; S.tween = null;
+    if (!S.entAt) pin();
+    return true;
+  }
+
+  // Layout · Spaces, arriving from here (9 Nov, the re-ordered deck): the furnished model, route and all, turns straight down until it
+  // lies on the plan's home view (vb, plan mm). The 3D floor and the plan differ by a translation in mm: world x = (plan x − 185842 −
+  // M.CX)/1000, z = (plan y + 182802 − M.CY)/1000; φ from vertical, so straight down is φ ≈ 0 (exactly 0 is degenerate), θ 0 is north up.
+  // The canvas goes into a host of its own, first in #stage under both pages, so it never blinks in the slides' cross-fade; its own
+  // frames (this slide's draw() stops once it isn't the scene); the names and leaders go at once; done(host) when it lands
+  // the walk (s-walk, 9 Nov), opening on this view: the model drawn once more as it was and copied out, in the same task (the
+  // drawing buffer is only readable until it is shown)
+  function snap() {
+    if (!M || !r || !cam) return null;
+    window.AxoModel.apply(cam, S.state, asp); paint();
+    const c = document.createElement("canvas"); c.width = r.domElement.width; c.height = r.domElement.height; c.getContext("2d").drawImage(r.domElement, 0, 0);
+    return c;
+  }
+  function flatten(vb, ms, done) {
+    if (!M || !r || !cam) return false;
+    const stage = document.getElementById("stage"); if (!stage) return false;
+    const h = document.createElement("div"); h.className = "st-flat-host";
+    h.style.cssText = "position:fixed;left:var(--pl);top:var(--ptop);width:var(--pw);height:var(--ph);pointer-events:none;z-index:0";
+    stage.insertBefore(h, stage.firstChild);
+    const cv = r.domElement; h.appendChild(cv); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block";
+    sc.classList.add("st-flat");
+    cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; S.tween = null;
+    const from = { theta: S.state.theta, phi: S.state.phi, half: S.state.half, t: S.state.t.slice() }, d0 = S.dim || 0;
+    const to = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+    const paint = (e) => {
+      const L = (a, b) => a + (b - a) * e;
+      S.state = { theta: L(from.theta, to.theta), phi: L(from.phi, to.phi), half: L(from.half, to.half), t: from.t.map((x, i) => L(x, to.t[i])) };
+      S.dim = d0 * (1 - e);                            // the veil lifts: the furniture at full strength, as the plan's
+      window.AxoModel.apply(cam, S.state, asp);
+      S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
+      if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
+      r.render(M.scene, cam);
+    };
+    let t0 = 0, end = false;
+    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); if (done) done(h); };
+    const tick = (now) => { if (end) return; if (!t0) t0 = now; const k = Math.min(1, (now - t0) / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
+    paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 500);
+    return true;
+  }
+
+  // A day in ACKO's first camera (s-wayday: Arrival at plan (85500, 31500) mm, half 14, its offset), in this slide's frame
+  function dayView() {
+    const v = { theta: -0.62, phi: 0.92 }, h = 14, { right, up } = window.AxoModel.basis(v);
+    const off = right.clone().multiplyScalar(-h * asp * 0.18).add(up.clone().multiplyScalar(h * 0.05));
+    const dx = (185842 + M.CX - SK.CX) / 1000, dz = (-182802 + M.CY - SK.CY) / 1000;
+    return { theta: v.theta, phi: v.phi, half: h, t: [SK.X(85500) + off.x - dx, 0.8 + off.y, SK.Z(31500) + off.z - dz] };
+  }
+  function toDay() {
+    if (!SK) return;
+    S.day = true; S.dayT = performance.now(); S.playing = false; S.moved = true; sc.classList.add("ax-day");
+    S.tween = { from: Object.assign({}, S.state), to: dayView(), t0: S.dayT, ms: 3200 }; need();
+  }
+  function clearDay() {                                  // back from the day to the Loop: the ring and the words return, the camera goes home
+    if (!S.day) return;
+    S.day = false; S.dayT = 0; sc.classList.remove("ax-day"); if (S.rb) S.rb.fade(1); home();
+  }
+  // the hand-over to A day in ACKO: this frame (the model drawn once more, copied out) and the camera it was drawn from
+  function handoff() {
+    try {
+      if (!S.state) return;
+      window.ACKO_AXO_HAND = { st: Object.assign({}, S.state), snap: S.day ? null : snap(), day: !!S.day, t: performance.now() };
+      if (S.day) { document.body.classList.add("ax-hand"); setTimeout(() => document.body.classList.remove("ax-hand"), 2600); }   // a cut, not a fade, into the day
+    } catch (e) { /* no hand-over: A day in ACKO just opens */ }
+  }
+  return {
+    enter(_, s) {
+      sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
+      S.fresh = true; S.k = 0; S.day = false; S.dayT = 0; sc.classList.remove("ax-day"); if (S.rb) S.rb.fade(1);
+      const ok = start();
+      sc.classList.toggle("st-fallback", !ok);
+      if (!ok) return;
+      if (SK) { window.AxoSkp.look("sketchup"); SK.reset(); }
+
+      // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
+      const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? null : null;
+      const im = $(".st-from", sc); im.style.transition = "none"; im.style.opacity = fc ? 1 : 0; S.fromCh = !!fc;
+      if (fc) later(() => { im.style.transition = "opacity 1.3s var(--ease)"; im.style.opacity = 0; }, 500);
+      const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? null : null;
+      if (fl && plan && plan.data) {
+        const [x, y, w, h] = plan.data.viewBox, vb = plan.vbFor([x, y, x + w, y + h], [35, 157, 1885, 670]);
+        const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
+      }
+      $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
+    },
+    step(k) {
+      if (!M || sc.classList.contains("st-fallback")) return;
+      S.fresh = false;
+      if (k === 3) toDay(); else { clearDay(); play(MAP[k]); }                                         // every beat plays, forward or back (28 Oct: back played nothing)
+    },
+    leave() { handoff(); S.day = false; if (window.ACKO_MORPH) ACKO_MORPH.mark("s-axo-detail"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+      cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
+      if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
+    },
+  };
+});
 </script>
 <script data-slide="s-wf-a6">
 ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
