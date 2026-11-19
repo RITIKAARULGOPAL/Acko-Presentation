@@ -1025,6 +1025,9 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-wayday .wd-gl.drag { cursor: grabbing; }
 #s-wayday .wd-gl.hot { cursor: pointer; }                       /* over a hotspot's light */
 #s-wayday .wd-gl canvas { display: block; width: 100%; height: 100%; }
+/* arriving from the Detailed axo's day beat: the veil, the title, the clock and the timeline come in over the same frame */
+body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand #s-wayday .wd-now, body.ax-hand #s-wayday .wd-day, body.ax-hand #s-wayday .lt-tools, body.ax-hand #s-wayday .hdr { animation: wd-axin 1.6s ease .15s both; }
+@keyframes wd-axin { from { opacity: 0; } to { opacity: 1; } }
 #s-wayday .wd-gl canvas.wd-hand { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 1; transition: opacity 1.8s ease .25s; }
 #s-wayday .wd-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .5s;
   background: linear-gradient(90deg, rgba(255,255,255,.96) 0, rgba(255,255,255,.9) 24%, rgba(255,255,255,0) 40%), linear-gradient(0deg, rgba(255,255,255,.97) 0, rgba(255,255,255,.92) 17%, rgba(255,255,255,0) 26%), linear-gradient(180deg, rgba(255,255,255,.95) 0, rgba(255,255,255,0) 12%); }
@@ -4509,7 +4512,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
     const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
       ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
-    return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
+    // a fade of the whole ring and its chevrons (1 = as drawn), for the Detailed axo's glide into A day in ACKO
+    const fade = (a) => { arcs.forEach((x) => { x.under.material.opacity = 0.9 * a; x.top.material.opacity = 0.9 * a; }); ar.forEach((x) => { x.m.material.opacity = 0.95 * a; }); };
+    return (S.rb = { show, to, fade, at, pos, hot, miss: at.map(() => 0) });
   }
   function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
 
@@ -5834,10 +5839,11 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   // arriving from the Detailed axonometric (window.ACKO_AXO_HAND): this model starts from that camera (the AxoLayers floor is the plan + (185842, -182802)
   // mm, as the walk reads it), glides to the beat's view, and the detailed axo's last frame stays over it a moment and dissolves away
   function handOver() {
-    const H = S.hand; S.hand = null; if (!H || !H.st || !H.snap) return;
+    const H = S.hand; S.hand = null; if (!H || !H.st) return;
     const AL = window.AxoLayers && window.AxoLayers.get(); if (!AL || M.CX === undefined) return;
     const dx = (185842 + AL.CX - M.CX) / 1000, dz = (-182802 + AL.CY - M.CY) / 1000, st = H.st;
     S.view = { theta: st.theta, phi: st.phi, half: st.half, t: [st.t[0] + dx, st.t[1], st.t[2] + dz] }; S.user = false; S.follow = true;
+    if (!H.snap || H.day) return;                         // from the day beat of the Detailed axo: the frame is already this one, nothing to dissolve
     const c = H.snap; c.className = "wd-hand"; host.appendChild(c);
     requestAnimationFrame(() => requestAnimationFrame(() => { c.style.opacity = 0; }));
     setTimeout(() => { if (c.parentNode) c.parentNode.removeChild(c); }, 2000);
@@ -5968,6 +5974,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       S.fresh = true; whole(false); shine(-1);
       const H = window.ACKO_AXO_HAND; window.ACKO_AXO_HAND = null;
       S.hand = H && !reduced && performance.now() - H.t < 6000 ? H : null;
+      if (!S.hand) document.body.classList.remove("ax-hand");
       $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
       $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };
       $(".wd-rs", sc).onclick = (e) => { e.currentTarget.blur(); user(false); };

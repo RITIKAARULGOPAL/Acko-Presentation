@@ -412,7 +412,9 @@ RIB_JS = _LWFN + r"""
     const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
     const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
       ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
-    return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
+    // a fade of the whole ring and its chevrons (1 = as drawn), for the Detailed axo's glide into A day in ACKO
+    const fade = (a) => { arcs.forEach((x) => { x.under.material.opacity = 0.9 * a; x.top.material.opacity = 0.9 * a; }); ar.forEach((x) => { x.m.material.opacity = 0.95 * a; }); };
+    return (S.rb = { show, to, fade, at, pos, hot, miss: at.map(() => 0) });
   }
 """
 FROM_CSS = ('<style>#s-strategy .st-from { left: 0; top: 1%; width: 89.8%; height: 98.4%; pointer-events: none; opacity: 0;'

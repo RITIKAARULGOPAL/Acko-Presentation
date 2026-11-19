@@ -11,9 +11,9 @@
 </head>
 <body>
 <!-- slide:start -->
-<section class="scene" id="s-axo-detail" data-part="cover" data-title="Detailed axonometric" data-steps="2" data-mins="1.5"
-  data-beats="The Neighbourhoods,The Loop"
-  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it.">
+<section class="scene" id="s-axo-detail" data-part="cover" data-title="Detailed axonometric" data-steps="3" data-mins="2"
+  data-beats="The Neighbourhoods,The Loop,A day in ACKO"
+  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 A day in ACKO: the camera glides in, the Loop and the words fade away, and A day in ACKO takes over on the same frame. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it.">
   <div class="page">
     <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>
     <p class="dg-tag">Plan</p>
@@ -97,6 +97,9 @@
 #s-axo-detail.st-flat .st-ov, #s-axo-detail.st-flat .st-cap { opacity: 0; transition: opacity .3s; }   /* turning onto the plan: the names go at once */
 #s-axo-detail .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }
 #s-axo-detail .st-s.cl b { color: #1a2cf0; }
+/* the third beat: the words and the ring fade as the camera glides in; then A day in ACKO takes over with no slide fade */
+#s-axo-detail.ax-day .st-t, #s-axo-detail.ax-day .st-cap, #s-axo-detail.ax-day .st-ov, #s-axo-detail.ax-day .st-tools, #s-axo-detail.ax-day .hdr { opacity: 0 !important; transition: opacity 1.2s ease !important; }
+body.ax-hand .scene { transition: none !important; }
 </style>
 <script>
 /* campus strategy (deck slide 13): the floor of the 22.10.26 layout, live (assets/js/axo-layers.js), at the 3D renders' camera
@@ -478,7 +481,9 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
     const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
       ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
-    return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
+    // a fade of the whole ring and its chevrons (1 = as drawn), for the Detailed axo's glide into A day in ACKO
+    const fade = (a) => { arcs.forEach((x) => { x.under.material.opacity = 0.9 * a; x.top.material.opacity = 0.9 * a; }); ar.forEach((x) => { x.m.material.opacity = 0.95 * a; }); };
+    return (S.rb = { show, to, fade, at, pos, hot, miss: at.map(() => 0) });
   }
   function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
 
@@ -661,6 +666,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
       arrange(liveAt(now)); for (const v of M.zones) M.fade(v, 1);
       if (now - S.swap.t0 >= SWAP_MS) { S.cur = S.swap.B; S.swap = null; }
     }
+    if (S.dayT && S.rb) S.rb.fade(Math.max(0, 1 - (now - S.dayT) / 1200));
     if (S.tween) {
       const tw = S.tween, k = Math.min(1, (now - tw.t0) / tw.ms), e = ease(k), L = (a, b) => a + (b - a) * e;
       S.state = { theta: L(tw.from.theta, tw.to.theta), phi: L(tw.from.phi, tw.to.phi), half: L(tw.from.half, tw.to.half), t: tw.from.t.map((x, i) => L(x, tw.to.t[i])) };
@@ -792,14 +798,34 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     return true;
   }
 
+  // A day in ACKO's first camera (s-wayday: Arrival at plan (85500, 31500) mm, half 14, its offset), in this slide's frame
+  function dayView() {
+    const v = { theta: -0.62, phi: 0.92 }, h = 14, { right, up } = window.AxoModel.basis(v);
+    const off = right.clone().multiplyScalar(-h * asp * 0.18).add(up.clone().multiplyScalar(h * 0.05));
+    const dx = (185842 + M.CX - SK.CX) / 1000, dz = (-182802 + M.CY - SK.CY) / 1000;
+    return { theta: v.theta, phi: v.phi, half: h, t: [SK.X(85500) + off.x - dx, 0.8 + off.y, SK.Z(31500) + off.z - dz] };
+  }
+  function toDay() {
+    if (!SK) return;
+    S.day = true; S.dayT = performance.now(); S.playing = false; S.moved = true; sc.classList.add("ax-day");
+    S.tween = { from: Object.assign({}, S.state), to: dayView(), t0: S.dayT, ms: 3200 }; need();
+  }
+  function clearDay() {                                  // back from the day to the Loop: the ring and the words return, the camera goes home
+    if (!S.day) return;
+    S.day = false; S.dayT = 0; sc.classList.remove("ax-day"); if (S.rb) S.rb.fade(1); home();
+  }
   // the hand-over to A day in ACKO: this frame (the model drawn once more, copied out) and the camera it was drawn from
   function handoff() {
-    try { const c = snap(); if (c && S.state) window.ACKO_AXO_HAND = { st: Object.assign({}, S.state), snap: c, t: performance.now() }; } catch (e) { /* no hand-over: A day in ACKO just opens */ }
+    try {
+      if (!S.state) return;
+      window.ACKO_AXO_HAND = { st: Object.assign({}, S.state), snap: S.day ? null : snap(), day: !!S.day, t: performance.now() };
+      if (S.day) { document.body.classList.add("ax-hand"); setTimeout(() => document.body.classList.remove("ax-hand"), 2600); }   // a cut, not a fade, into the day
+    } catch (e) { /* no hand-over: A day in ACKO just opens */ }
   }
   return {
     enter(_, s) {
       sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
-      S.fresh = true; S.k = 0;
+      S.fresh = true; S.k = 0; S.day = false; S.dayT = 0; sc.classList.remove("ax-day"); if (S.rb) S.rb.fade(1);
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
@@ -820,9 +846,9 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
       S.fresh = false;
-      play(MAP[k]);                                         // every beat plays, forward or back (28 Oct: back played nothing)
+      if (k === 3) toDay(); else { clearDay(); play(MAP[k]); }                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() { handoff(); if (window.ACKO_MORPH) ACKO_MORPH.mark("s-axo-detail"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+    leave() { handoff(); S.day = false; if (window.ACKO_MORPH) ACKO_MORPH.mark("s-axo-detail"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },

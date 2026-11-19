@@ -6,6 +6,8 @@
 #   1 The neighbourhoods  (strategy's beat 2: the six, numbered west to east, ACKO Home ... ACKO Auto, with the atriums, terraces, café)
 #   2 The Loop            (beat 4: the floor in colour, the partitions rise, the arrows land, the Loop grows out of them)
 #   (the client's and employees' journeys are not on this slide: Ritika, 19 Nov)
+#   3 A day in ACKO        the camera glides (3.2 s) to the day's Arrival view, the Loop and the words fading; then a cut with no slide fade to
+#                          A day in ACKO on the identical frame (window.ACKO_AXO_HAND, day: true; body.ax-hand)
 # It is drawn on the furnished SketchUp model A day in ACKO uses (AxoSkp), the Layers volumes, Loop and routes over it (two passes: the
 # model first, then the Layers scene with the depth cleared, its camera shifted by the plan offset).
 # On leaving it keeps its last frame and camera (window.ACKO_AXO_HAND) for A day in ACKO, which glides from that view and dissolves the
@@ -33,9 +35,9 @@ def sub(s, old, new, n=1):
     return s.replace(old, new)
 
 # ---------- the section: its own words ----------
-head = '<section class="scene" id="%s" data-part="cover" data-title="Detailed axonometric" data-steps="2" data-mins="1.5"\n' \
-       '  data-beats="The Neighbourhoods,The Loop"\n' \
-       '  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it.">' % NEW
+head = '<section class="scene" id="%s" data-part="cover" data-title="Detailed axonometric" data-steps="3" data-mins="2"\n' \
+       '  data-beats="The Neighbourhoods,The Loop,A day in ACKO"\n' \
+       '  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 A day in ACKO: the camera glides in, the Loop and the words fade away, and A day in ACKO takes over on the same frame. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it.">' % NEW
 sec = head + sec[sec.index("\n  <div class=\"page\">"):]
 sec = sec.replace('<div class="page">', '<div class="page">\n    <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>', 1)
 sec = re.sub(r"<h3 style=\"--i:0\">.*?</h3>", '<h3 style="--i:0">Detailed Axonometric</h3>', sec, count=1, flags=re.S)
@@ -92,7 +94,36 @@ js = sub(js, "  return {\n    enter(_, s) {", """  // the hand-over to A day in 
   }
   return {
     enter(_, s) {""")
-js = sub(js, "    leave() { ", "    leave() { handoff(); ")
+js = sub(js, "    leave() { ", "    leave() { handoff(); S.day = false; ")
+
+# the third beat: the camera glides to A day in ACKO's first view (its beatView(0), in this slide's frame), the ring and the words fading
+js = js.replace("play(MAP[k]);", "if (k === 3) toDay(); else { clearDay(); play(MAP[k]); }", 1)
+js = sub(js, "      S.fresh = true; S.k = 0;", "      S.fresh = true; S.k = 0; S.day = false; S.dayT = 0; sc.classList.remove(\"ax-day\"); if (S.rb) S.rb.fade(1);")
+js = sub(js, "    if (S.tween) {\n      const tw = S.tween,", "    if (S.dayT && S.rb) S.rb.fade(Math.max(0, 1 - (now - S.dayT) / 1200));\n    if (S.tween) {\n      const tw = S.tween,")
+js = sub(js, "  // the hand-over to A day in ACKO: this frame", """  // A day in ACKO's first camera (s-wayday: Arrival at plan (85500, 31500) mm, half 14, its offset), in this slide's frame
+  function dayView() {
+    const v = { theta: -0.62, phi: 0.92 }, h = 14, { right, up } = window.AxoModel.basis(v);
+    const off = right.clone().multiplyScalar(-h * asp * 0.18).add(up.clone().multiplyScalar(h * 0.05));
+    const dx = (185842 + M.CX - SK.CX) / 1000, dz = (-182802 + M.CY - SK.CY) / 1000;
+    return { theta: v.theta, phi: v.phi, half: h, t: [SK.X(85500) + off.x - dx, 0.8 + off.y, SK.Z(31500) + off.z - dz] };
+  }
+  function toDay() {
+    if (!SK) return;
+    S.day = true; S.dayT = performance.now(); S.playing = false; S.moved = true; sc.classList.add("ax-day");
+    S.tween = { from: Object.assign({}, S.state), to: dayView(), t0: S.dayT, ms: 3200 }; need();
+  }
+  function clearDay() {                                  // back from the day to the Loop: the ring and the words return, the camera goes home
+    if (!S.day) return;
+    S.day = false; S.dayT = 0; sc.classList.remove("ax-day"); if (S.rb) S.rb.fade(1); home();
+  }
+  // the hand-over to A day in ACKO: this frame""")
+js = sub(js, "    try { const c = snap(); if (c && S.state) window.ACKO_AXO_HAND = { st: Object.assign({}, S.state), snap: c, t: performance.now() }; } catch (e) { /* no hand-over: A day in ACKO just opens */ }",
+  "    try {\n      if (!S.state) return;\n      window.ACKO_AXO_HAND = { st: Object.assign({}, S.state), snap: S.day ? null : snap(), day: !!S.day, t: performance.now() };\n      if (S.day) { document.body.classList.add(\"ax-hand\"); setTimeout(() => document.body.classList.remove(\"ax-hand\"), 2600); }   // a cut, not a fade, into the day\n    } catch (e) { /* no hand-over: A day in ACKO just opens */ }")
+css += """/* the third beat: the words and the ring fade as the camera glides in; then A day in ACKO takes over with no slide fade */
+#%s.ax-day .st-t, #%s.ax-day .st-cap, #%s.ax-day .st-ov, #%s.ax-day .st-tools, #%s.ax-day .hdr { opacity: 0 !important; transition: opacity 1.2s ease !important; }
+body.ax-hand .scene { transition: none !important; }
+""" % ((NEW,) * 5)
+
 
 # ---------- the file ----------
 top = open("slides/s-axo-detail.html", encoding="utf-8").read().split("<!-- slide:start -->")[0]
