@@ -1025,6 +1025,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-wayday .wd-gl.drag { cursor: grabbing; }
 #s-wayday .wd-gl.hot { cursor: pointer; }                       /* over a hotspot's light */
 #s-wayday .wd-gl canvas { display: block; width: 100%; height: 100%; }
+#s-wayday .wd-gl canvas.wd-hand { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 1; transition: opacity 1.8s ease .25s; }
 #s-wayday .wd-veil { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity .5s;
   background: linear-gradient(90deg, rgba(255,255,255,.96) 0, rgba(255,255,255,.9) 24%, rgba(255,255,255,0) 40%), linear-gradient(0deg, rgba(255,255,255,.97) 0, rgba(255,255,255,.92) 17%, rgba(255,255,255,0) 26%), linear-gradient(180deg, rgba(255,255,255,.95) 0, rgba(255,255,255,0) 12%); }
 #s-wayday.wd-whole .wd-veil { opacity: 0; }
@@ -5871,7 +5872,19 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       R.setSize(w, h, false); S.asp = w / h; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
     }
     if (!S.view || !isFinite(S.view.half)) S.view = S.home;
+    if (S.hand) handOver();
     return true;
+  }
+  // arriving from the Detailed axonometric (window.ACKO_AXO_HAND): this model starts from that camera (the AxoLayers floor is the plan + (185842, -182802)
+  // mm, as the walk reads it), glides to the beat's view, and the detailed axo's last frame stays over it a moment and dissolves away
+  function handOver() {
+    const H = S.hand; S.hand = null; if (!H || !H.st || !H.snap) return;
+    const AL = window.AxoLayers && window.AxoLayers.get(); if (!AL || M.CX === undefined) return;
+    const dx = (185842 + AL.CX - M.CX) / 1000, dz = (-182802 + AL.CY - M.CY) / 1000, st = H.st;
+    S.view = { theta: st.theta, phi: st.phi, half: st.half, t: [st.t[0] + dx, st.t[1], st.t[2] + dz] }; S.user = false; S.follow = true;
+    const c = H.snap; c.className = "wd-hand"; host.appendChild(c);
+    requestAnimationFrame(() => requestAnimationFrame(() => { c.style.opacity = 0; }));
+    setTimeout(() => { if (c.parentNode) c.parentNode.removeChild(c); }, 2000);
   }
   function setNow(i) {
     const b = BEATS[i], now = $(".wd-now", sc);
@@ -5997,6 +6010,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       M.reset(); M.scene.add(group);
       if (SKP) window.AxoSkp.look("sketchup");
       S.fresh = true; whole(false); shine(-1);
+      const H = window.ACKO_AXO_HAND; window.ACKO_AXO_HAND = null;
+      S.hand = H && !reduced && performance.now() - H.t < 6000 ? H : null;
       $(".wd-play", sc).onclick = (e) => { e.currentTarget.blur(); whole(false); };
       $(".wd-all", sc).onclick = (e) => { e.currentTarget.blur(); whole(true); };
       $(".wd-rs", sc).onclick = (e) => { e.currentTarget.blur(); user(false); };

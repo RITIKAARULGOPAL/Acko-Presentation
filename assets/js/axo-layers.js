@@ -213,7 +213,9 @@
       }
       return grp;
     }
-    const zones = A.zones.map((z) => { const v = volume(z.ring, z.colour, z.n === "03" ? 0.78 : 0.62, H.zone, z.n, "#ffffff"); v.userData.zone = z; return v; });
+    // the neighbourhoods are numbered west to east, 01 ACKO Home ... 06 ACKO Auto (Ritika, 18 Nov), on the exact volumes and the hand-drawn ones
+    const NUM = { HOME: "01", DRIVE: "02", TRAVEL: "03", HEALTH: "04", LIFE: "05", AUTO: "06" };
+    const zones = A.zones.map((z) => { const v = volume(z.ring, z.colour, z.n === "03" ? 0.78 : 0.62, H.zone, NUM[z.key] || z.n, "#ffffff"); v.userData.zone = z; return v; });
     const atrium = A.atrium.map((r) => volume(r, "#929292", 0.85, H.zone * 0.5));
     const terr = A.terrace.map((r) => volume(r, "#8f8f6a", 0.55, H.zone * 0.5));
     const cafe = (A.cafezone || []).map((r) => volume(r, "#efe7a6", 0.8, H.zone * 0.5));     // the café's own zone (ACKO_NEI.dxf), in the renders' cream
@@ -221,7 +223,6 @@
     // the same volumes hand-drawn, for the conceptual beats (Campus strategy); numbered left to right (west 01 … east 06). They live in
     // their own group, off until a slide asks (M.useSketch), so every other slide keeps the exact boundaries
     G.sketch = new T.Group(); G.sketch.name = "sketch"; G.sketch.visible = false; scene.add(G.sketch);
-    const NUM = { HOME: "01", DRIVE: "02", TRAVEL: "03", HEALTH: "04", LIFE: "05", AUTO: "06" };
     const sk = {
       zones: A.zones.map((z, i) => { const v = volume(z.ring, z.colour, z.n === "03" ? 0.78 : 0.62, H.zone, NUM[z.key] || z.n, "#ffffff", 11 + i); v.userData.zone = z; return v; }),
       atrium: A.atrium.map((r, i) => volume(r, "#929292", 0.85, H.zone * 0.5, null, null, 31 + i)),
