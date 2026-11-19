@@ -67,7 +67,7 @@ js = sub(js, "ACKO.slide(\"%s\", ({ $, $$, reduced, plain, reveal, cue, plan, la
 js = sub(js, "  let T, M, cam, r, asp = 16 / 9, host, sc, view;", "  let T, M, cam, r, asp = 16 / 9, host, sc, view, SK = null, camS = null;")
 js = sub(js, "M = S.base;", "M = S.base; SK = window.AxoSkp && window.AxoSkp.available() ? window.AxoSkp.get(asset) : null; camS = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);")
 js = sub(js, "      if (!ok) return;\n", "      if (!ok) return;\n      if (SK) { window.AxoSkp.look(\"sketchup\"); SK.reset(); }\n")
-js = sub(js, "v.position.y = y; M.fade(v, f);", "v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1));")
+js = sub(js, "v.position.y = y; M.fade(v, f);", "v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (SK && v.userData.mats[2]) v.userData.mats[2][0].opacity = f;     // the mass at 55%, its number solid")
 js = sub(js, "    r.render(M.scene, cam);\n    overlay();", "    paint();\n    overlay();")
 js = sub(js, "window.AxoModel.apply(cam, S.state, asp); r.render(M.scene, cam);", "window.AxoModel.apply(cam, S.state, asp); paint();")
 js = sub(js, "  function draw(now) {", """  // two passes: the furnished model (its own frame: the plan, the Layers floor is the plan + (185842, -182802) mm), then the Layers scene over

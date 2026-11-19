@@ -129,7 +129,6 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
   // there so a drag or zoom carries it (the maroon ▲)
   const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
     { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
-    { name: "Wellness", q: "Room to pause", x: -133687, y: 203833, d: 54.4 },
     { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
     { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
   const MARKS = { ent: [[686, 714], [1094, 408]] };
@@ -215,7 +214,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
       if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
       if (k === 4) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
-      v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (v.userData.num) v.userData.num.visible = k !== 4;
+      v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (SK && v.userData.mats[2]) v.userData.mats[2][0].opacity = f;     // the mass at 55%, its number solid if (v.userData.num) v.userData.num.visible = k !== 4;
     });
     M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
       let f = 0;

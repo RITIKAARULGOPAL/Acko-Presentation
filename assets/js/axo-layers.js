@@ -162,8 +162,9 @@
       const draw = () => {
         const c = cv.getContext("2d"); c.clearRect(0, 0, 512, 320);
         c.font = "700 250px Figtree, Poppins, Arial, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
-        c.shadowColor = "rgba(0,0,0,.22)"; c.shadowBlur = 8; c.shadowOffsetY = 3; c.fillStyle = col; c.fillText(txt, 256, 168);
-        c.shadowColor = "transparent"; c.lineWidth = 3; c.strokeStyle = "rgba(90,90,90,.45)"; c.strokeText(txt, 256, 168);
+        // a dark violet edge under the white, so the numbers read on any ground (Ritika, 19 Nov: "01, 02 can be in white, it's not legible")
+        c.lineJoin = "round"; c.shadowColor = "rgba(30,20,70,.45)"; c.shadowBlur = 14; c.shadowOffsetY = 4; c.lineWidth = 16; c.strokeStyle = "rgba(48,36,92,.8)"; c.strokeText(txt, 256, 168);
+        c.shadowColor = "transparent"; c.fillStyle = col; c.fillText(txt, 256, 168);
         tex.needsUpdate = true; if (M) changed();
       };
       const tex = new T.CanvasTexture(cv); tex.anisotropy = 4; draw();
@@ -258,7 +259,9 @@
       m.userData.to = (d) => { const ds = m.userData.ds; let lo = 0, hi = ds.length; while (lo < hi) { const mid = (lo + hi) >> 1; if (ds[mid] <= d) lo = mid + 1; else hi = mid; } g.setDrawRange(0, lo * 6); };
       return m;
     }
-    const routes = { employee: dashes(A.routes.employee, 0xe0141e), client: dashes(A.routes.client, 0x1a2cf0) };
+    // the client's journey stops at Reception, the Visitor Hub and Board Room, the east Reception and Collab: the run to Wellness (west of x = -120 m) is out (Ritika, 19 Nov)
+    const clientRuns = A.routes.client.filter((run) => run[run.length - 1][0] > -120000);
+    const routes = { employee: dashes(A.routes.employee, 0xe0141e), client: dashes(clientRuns, 0x1a2cf0) };
     G.routes.add(routes.employee, routes.client);
 
     // soft light from above and the south-west: the faces we see stay close to the tops, as in the renders

@@ -1911,7 +1911,7 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 
 <section class="scene" id="s-strategy" data-part="p5" data-title="Campus strategy" data-steps="4" data-mins="1.9"
   data-beats="The Shell,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together"
-  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, Wellness, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work.">
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work.">
   <div class="page">
     <p class="dg-tag">Plan</p>
     <div class="st-anim"></div>
@@ -3632,7 +3632,6 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // there so a drag or zoom carries it (the maroon ▲)
   const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
     { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
-    { name: "Wellness", q: "Room to pause", x: -133687, y: 203833, d: 54.4 },
     { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
     { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
   const MARKS = { ent: [[686, 714], [1094, 408]] };
@@ -6501,7 +6500,6 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
   // there so a drag or zoom carries it (the maroon ▲)
   const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
     { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
-    { name: "Wellness", q: "Room to pause", x: -133687, y: 203833, d: 54.4 },
     { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
     { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
   const MARKS = { ent: [[686, 714], [1094, 408]] };
@@ -6587,7 +6585,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
       if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
       if (k === 4) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
-      v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (v.userData.num) v.userData.num.visible = k !== 4;
+      v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (SK && v.userData.mats[2]) v.userData.mats[2][0].opacity = f;     // the mass at 55%, its number solid if (v.userData.num) v.userData.num.visible = k !== 4;
     });
     M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
       let f = 0;

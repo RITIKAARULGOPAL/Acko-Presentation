@@ -466,7 +466,6 @@ def strat_loop(h):
 # where the blue route reaches them (model mm, d m along the route, as data/axo-layers.js has it; named from the plan's rooms there)
 CLIENT_JS = """  const CLIENT = [{ name: "Reception", q: "I was expected", x: -97319, y: 216565, d: 10.1 },
     { name: "Visitor Hub · Board Room", q: "A room ready for me", x: -77629, y: 217623, d: 30.3 },
-    { name: "Wellness", q: "Room to pause", x: -133687, y: 203833, d: 54.4 },
     { name: "Reception · East", q: "Welcome at either door", x: -9798, y: 222950, d: 40.3 },
     { name: "Collab", q: "I see who ACKO is", x: 1914, y: 221390, d: 24.8 }].map((s) => Object.assign(s, { client: true }));
 """
@@ -487,7 +486,7 @@ def strat_more(h):
     i, j = _sec(h, "s-strategy"); s = h[i:j]
     for x, y in [('data-beats="How it started,', 'data-beats="The Shell,'),
                  ("1 How it started: the bare shell", "1 The shell: the bare floor we were given"),
-                 ("5 The client's journey: the client's route from the entrance.", "5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, Wellness, the east Reception, Collab.")]:
+                 ("5 The client's journey: the client's route from the entrance.", "5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, the east Reception, Collab.")]:
         if x not in s: x = x.replace("'", "&#x27;"); y = y.replace("'", "&#x27;")
         assert x in s, ("strategy head", x[:50]); s = s.replace(x, y, 1)
     h = h[:i] + s + h[j:]
