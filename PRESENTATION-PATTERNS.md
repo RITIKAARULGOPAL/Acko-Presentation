@@ -791,3 +791,9 @@ amber `#F2A33A`; "A day in ACKO".
 - **Words:** each line keeps the PDF's font, size, colour and place in deck points (`calc(var(--pt) * size)`), stacked lines of one paragraph share a block, and a word of another weight or colour is a `<span>`.
 - **Reveal:** left to right, `--i` = which eighth of the page the piece sits in.
 - **Re-running** overwrites those slides: edit the PDF, not the slide files, or edit the slide and don't re-run.
+
+## 34. A sketch that can show its real finishes (s-wf-a6, 19 Nov)
+- **Two looks, one drawing:** a `<g class="mat">` of overlays sits over the sketch's flat fills; `.wf-el[data-look="mat"]` fades it in, switches the ink wobble and hatching off and the washes to crisp fills. A small Sketch | Material toggle in the slide's bar sets `data-look`.
+- **Finishes** are textures cropped from the project's own material and render images (`assets/img/s-wf-a6/`): tiled `<pattern>` images for carpet, slats and wood, multiplied over the neighbourhood's accent; a feTurbulence plaster over the paint; a framed artwork per neighbourhood, tinted with the light accent and greyed until its stop.
+- **Colour:** six dusty accents (violet, sage, ochre, each deep and light) instead of the logo's pure colours; the page's jarring contrast was the saturated green and mustard.
+- **Single file:** artwork paths are written out whole and go through `window.ASSET_URLS`.

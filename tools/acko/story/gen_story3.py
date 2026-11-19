@@ -87,8 +87,8 @@ BRIDGE = {
     "s-recap": "A quick recap of what we have already seen.",
 }
 BRIDGE[RECAP[-1]] = "Thank you."
-# the four value slides are rebuilt from the same PDF (pages 1-4), so they come in fresh too
-NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-site-dd", "s-axo-detail", "s-material", "s-palette2", "s-esg", "s-di", "s-recap"] + RECAP
+# the four value slides are rebuilt from the same PDF (pages 1-4), (and s-wf-a6, muted and with its Material look, 19 Nov) so they come in fresh too
+NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-site-dd", "s-axo-detail", "s-material", "s-palette2", "s-esg", "s-di", "s-wf-a6", "s-recap"] + RECAP
 
 # ---- the dividers: s-start's design (as gen_story.py makes the Part cards), the five sections ahead, this one lit, her line said
 st = open("slides/s-start.html", encoding="utf-8").read()
