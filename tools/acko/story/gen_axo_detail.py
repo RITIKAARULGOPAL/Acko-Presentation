@@ -69,7 +69,7 @@ js = sub(js, "ACKO.slide(\"%s\", ({ $, $$, reduced, plain, reveal, cue, plan, la
 js = sub(js, "  let T, M, cam, r, asp = 16 / 9, host, sc, view;", "  let T, M, cam, r, asp = 16 / 9, host, sc, view, SK = null, camS = null;")
 js = sub(js, "view = S.base.data.view;", "view = { theta: -0.62, phi: 0.92 };      // A day in ACKO's angle, so the hand-over is a zoom and a pan (Ritika, 19 Nov)")
 js = sub(js, "window.AxoModel.apply(cam, window.AxoLayers.frame(M, view, FIT_MARKS, asp), asp);", "window.AxoModel.apply(cam, window.AxoLayers.frame(M, M.data.view, FIT_MARKS, asp), asp);")
-js = sub(js, "  const FIT = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2])), FIT_MARKS", "  const FIT = [0.30, 0.07, 0.99, 0.71], FIT_MARKS")
+js = sub(js, "  const FIT = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2])), FIT_MARKS", "  const FIT = [0.15, 0.22, 0.86, 0.74], FIT_MARKS")
 js = sub(js, "M = S.base;", "M = S.base; SK = window.AxoSkp && window.AxoSkp.available() ? window.AxoSkp.get(asset) : null; camS = new T.OrthographicCamera(-1, 1, 1, -1, 1, 900);")
 js = sub(js, "      if (!ok) return;\n", "      if (!ok) return;\n      if (SK) { window.AxoSkp.look(\"sketchup\"); SK.reset(); }\n")
 js = sub(js, "v.position.y = y; M.fade(v, f);", "v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (SK && v.userData.mats[2]) v.userData.mats[2][0].opacity = f;     // the mass at 55%, its number solid")
