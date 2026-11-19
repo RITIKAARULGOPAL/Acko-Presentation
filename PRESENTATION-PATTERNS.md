@@ -798,3 +798,4 @@ amber `#F2A33A`; "A day in ACKO".
 - **Colour:** the logo's violet, green and yellow pairs (deep and light), so the six read apart; only the wall paint is eased toward the paper. Muting the hues themselves (tried 19 Nov) lost the differentiation.
 - **Single file:** artwork paths are written out whole and go through `window.ASSET_URLS`.
 - **Update (19 Nov, later):** the carpet stays grey in every neighbourhood and the accent is worked in as grunge (a feTurbulence mask, `wfa6-grunge`); the artwork is a monochrome in the accent (`mix-blend-mode: color`); the last stop is the Collab area (soft seating, fabric texture in the Material look) instead of the coffee point.
+- **Lighter (19 Nov):** the surfaces use the accent lifted 32% toward white (`lift`); the chips keep the logo colours.

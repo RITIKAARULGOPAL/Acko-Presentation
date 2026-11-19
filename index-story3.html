@@ -6660,6 +6660,8 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
     ["05", "#f2ae00", "Yellow"], ["06", "#ffd866", "Yellow, light"]];
   const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)), toh = (c) => "#" + c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
   const mix = (a, b, t) => toh(hx(a).map((v, i) => v + (hx(b)[i] - v) * t));
+  // 19 Nov (Ritika: "two tones lighter"): the surfaces use the accent lifted toward white; the chips keep the logo colours
+  const lift = (c) => mix(c, "#ffffff", 0.32);
   // each layer's tone from the accent
   const LAYERS = [
     ["paint", "Paint accent", "the neighbourhood's own wall", (c) => mix(c, "#fbf8f1", 0.06)],
@@ -6707,11 +6709,11 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   }
   function paint(sc, i) {
     nb = i;
-    const [n, c, name] = NB[i], t = tones(c), el = $(".wf-el", sc);
+    const [n, c0, name] = NB[i], c = lift(c0), t = tones(c), el = $(".wf-el", sc);
     TONE = { paint: t.paint, carpet: t.carpet, privacy: t.privacy, acoustic: t.acoustic, collab: t.collab, dot: t.paint,
       t1: mix(c, "#ffffff", 0.55), t2: mix(c, "#1d1733", 0.35) };
     light(sc); $(".m-img", sc).setAttribute("href", ART[i]);
-    el.style.setProperty("--mark", mix(c, "#1d1733", [1, 3, 5].includes(i) ? 0.5 : 0.12));
+    el.style.setProperty("--mark", mix(c0, "#1d1733", [1, 3, 5].includes(i) ? 0.5 : 0.12));
     $$(".graphic", sc).forEach((g) => (g.textContent = n)); $(".wf-name", sc).textContent = `Neighbourhood ${n} · ${name}`;
     if (cur >= 0) bubble(sc, cur, $(".bub", sc).classList.contains("ok"));
   }
