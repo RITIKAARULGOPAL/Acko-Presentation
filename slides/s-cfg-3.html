@@ -366,7 +366,7 @@ ACKO.slide("s-cfg-3", ({ $, $$, reduced, plain, reveal }) => {
     const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
     const pr = r.getPixelRatio();
     if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
-    if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(Hh * pr)) {
+    if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(Hh * pr)) {
       r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
     }
     if (S.playing) { const t = (now - S.t0) / 1000; pose(S.k, Math.min(t, DUR[S.k])); if (t >= DUR[S.k]) S.playing = false; }

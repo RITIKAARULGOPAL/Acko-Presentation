@@ -301,7 +301,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   function sizeUp() {
     const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return false;           // a hidden pane: wait for a real size
     const pr = R.getPixelRatio();
-    if (R.domElement.width !== Math.round(w * pr) || R.domElement.height !== Math.round(h * pr) || !S.home) {
+    if (R.domElement.width !== Math.floor(w * pr) || R.domElement.height !== Math.floor(h * pr) || !S.home) {
       R.setSize(w, h, false); S.asp = w / h; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
     }
     if (!S.view || !isFinite(S.view.half)) S.view = S.home;

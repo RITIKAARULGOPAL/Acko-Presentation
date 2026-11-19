@@ -4722,7 +4722,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const W = host.clientWidth, Hh = host.clientHeight; if (!W || !Hh) return;
     const pr = r.getPixelRatio();
     if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
-    if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(Hh * pr)) {
+    if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(Hh * pr)) {
       r.setSize(W, Hh, false); S.obs = null; const a = W / Hh; if (Math.abs(a - asp) > 1e-3) { asp = a; S.home = window.AxoLayers.frame(M, view, FIT, asp); if (!S.moved) S.state = S.home; }
     }
     if (S.playing) { const t = (now - S.t0) / 1000; pose(S.k, Math.min(t, DUR[S.k])); if (t >= DUR[S.k]) S.playing = false; }
@@ -5240,7 +5240,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const r = window.AxoModel.renderer(), host = $(".nb-3d", sc);
     if (r.domElement.parentNode !== host) host.appendChild(r.domElement);
     const W = host.clientWidth, H = host.clientHeight; if (!W || !H) return;
-    const pr = r.getPixelRatio(); if (r.domElement.width !== Math.round(W * pr) || r.domElement.height !== Math.round(H * pr)) r.setSize(W, H, false);
+    const pr = r.getPixelRatio(); if (r.domElement.width !== Math.floor(W * pr) || r.domElement.height !== Math.floor(H * pr)) r.setSize(W, H, false);
     nbSet(bx); window.AxoModel.apply(NBX.cam, sc.dataset.nbv === "e" ? nbView(st) : st, W / H); r.render(NBX.M.scene, NBX.cam);
     if (sc.dataset.nbv === "e") { nbPins(sc, W, H); nbMarks(sc); }
   }
@@ -5872,7 +5872,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   function sizeUp() {
     const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return false;           // a hidden pane: wait for a real size
     const pr = R.getPixelRatio();
-    if (R.domElement.width !== Math.round(w * pr) || R.domElement.height !== Math.round(h * pr) || !S.home) {
+    if (R.domElement.width !== Math.floor(w * pr) || R.domElement.height !== Math.floor(h * pr) || !S.home) {
       R.setSize(w, h, false); S.asp = w / h; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
     }
     if (!S.view || !isFinite(S.view.half)) S.view = S.home;
