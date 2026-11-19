@@ -11,44 +11,71 @@
 </head>
 <body>
 <!-- slide:start -->
-<section class="scene" id="s-wf-a6" data-part="5" data-title="Wayfinding · A6 · The walk" data-steps="4" data-mins="1" data-beats="My team,Still us,My 3 pm,Coffee"
-  data-notes="Wayfinding, walked: someone new to the floor, looking for their team, one stop per click. 1 · Where's my team? The wall answers: its colour and its number. 2 · Still us? The artwork and the carpet underfoot carry the same accent. 3 · Which room is my 3 pm? Nalanda, the same signage family everywhere, with braille at reach. 4 · Coffee? Their own point, in its own tone. Known before a sign is read.">
+<section class="scene" id="s-wf-a6" data-part="5" data-title="Wayfinding · A6 · The walk" data-steps="5" data-mins="1.2" data-beats="My team,Still us,My 3 pm,My desk,Collab"
+  data-notes="Wayfinding, walked: someone new to the floor, looking for their team, one stop per click. 1 · Where's my team? The wall answers: its colour and its number. 2 · Still us? The artwork and the carpet underfoot carry the same accent. 3 · Which room is my 3 pm? Nalanda, the same signage family everywhere, with braille at reach. 4 · And my desk? Privacy panels in its own tone, acoustic screens, a place to focus. 5 · Where can we huddle? The collab area, in its own tone. Known before a sign is read.">
   <div class="page">
     <div class="hdr"><b>Wayfinding</b><span>One language, six accents</span></div>
     <div class="wf-stage" style="left:1.8%;top:14%;width:96.4%;height:68%"><svg class="wf-el" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <defs><filter id="wfa6-pen" x="-30%" y="-10%" width="160%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter><filter id="wfa6-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><filter id="wfa6-wash" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><pattern id="wfa6-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" class="hatch"/></pattern>
+        <defs><filter id="wfa6-pen" x="-30%" y="-10%" width="160%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter><filter id="wfa6-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><filter id="wfa6-wash" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><filter id="wfa6-plaster" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="4" seed="3"/><feColorMatrix type="matrix" values="0 0 0 0 .25  0 0 0 0 .22  0 0 0 0 .2  0 0 0 .7 -.3"/></filter>
+          <pattern id="wfa6-t-carpet" width="130" height="110" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/carpet.webp" width="130" height="110" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-t-slats" width="190" height="165" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/slats.webp" width="190" height="165" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-t-wood" width="450" height="228" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/wood.webp" width="450" height="228" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-t-stone" width="368" height="220" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/stone.webp" width="368" height="220" preserveAspectRatio="none"/></pattern>
+          <linearGradient id="wfa6-brass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ede4"/><stop offset=".5" stop-color="#d9d3c4"/><stop offset="1" stop-color="#ece7da"/></linearGradient>
+          <linearGradient id="wfa6-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dfe8ee" stop-opacity=".5"/><stop offset=".45" stop-color="#ffffff" stop-opacity=".12"/><stop offset="1" stop-color="#c9d6df" stop-opacity=".4"/></linearGradient>
+          <clipPath id="wfa6-c-art"><rect x="470" y="160" width="170" height="150"/></clipPath>
+          <filter id="wfa6-grunge" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".011 .12" numOctaves="3" seed="6" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 7 -3.8" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+          <pattern id="wfa6-t-fabric" width="130" height="90" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/fabric.webp" width="130" height="90" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" class="hatch"/></pattern>
           <linearGradient id="wfa6-art" x1="0" x2="1"><stop offset="0" class="s1"/><stop offset="1" class="s2"/></linearGradient>
           <pattern id="wfa6-film" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" class="film"/><ellipse cx="13" cy="13" rx="9" ry="4.5" class="filmdot"/></pattern>
         </defs>
-        <g filter="url(#wfa6-ink)"><rect class="wall" x="40" y="80" width="1520" height="390"/>
-        <rect class="paint" x="40" y="80" width="460" height="390"/>
-        <text class="graphic" x="270" y="380" text-anchor="middle">03</text>
-        <path class="graphic-l" d="M80 410H460M80 425H360"/>
-        <rect class="art" x="560" y="150" width="210" height="170" fill="url(#wfa6-art)"/><rect class="frame" x="560" y="150" width="210" height="170"/>
-        <rect class="room" x="840" y="80" width="330" height="390"/>
-        <g class="acoustic"><rect x="870" y="110" width="44" height="150"/><rect x="922" y="110" width="44" height="150"/><rect x="974" y="110" width="44" height="150"/><rect x="1026" y="110" width="44" height="150"/><rect x="1078" y="110" width="44" height="150"/></g>
-        <rect class="table" x="905" y="330" width="200" height="16"/>
-        <rect class="glass" x="840" y="80" width="330" height="390"/>
-        <rect x="840" y="250" width="330" height="80" fill="url(#wfa6-film)" class="filmband"/>
-        <rect class="sign" x="1192" y="210" width="110" height="74" rx="6"/><text class="signt" x="1247" y="244" text-anchor="middle">Nalanda</text>
-        <g class="braille"><circle cx="1222" cy="266" r="3.4"/><circle cx="1232" cy="266" r="3.4"/><circle cx="1222" cy="274" r="3.4"/><circle cx="1246" cy="266" r="3.4"/><circle cx="1256" cy="274" r="3.4"/><circle cx="1270" cy="266" r="3.4"/><circle cx="1270" cy="274" r="3.4"/></g>
-        <rect class="coffee" x="1340" y="330" width="210" height="140"/><rect class="coffee-top" x="1330" y="318" width="230" height="14"/>
-        <path class="ln" d="M1445 80V180M1420 180H1470L1460 205H1430Z"/><rect class="cup" x="1370" y="296" width="16" height="22" rx="3"/><rect class="cup" x="1394" y="300" width="14" height="18" rx="3"/>
-        <rect class="carpet" x="40" y="470" width="1520" height="46"/>
+        <g class="ink0" filter="url(#wfa6-ink)"><rect class="wall" x="40" y="80" width="1520" height="390"/>
+        <rect class="paint" x="40" y="80" width="390" height="390"/>
+        <text class="graphic" x="235" y="380" text-anchor="middle">03</text>
+        <path class="graphic-l" d="M70 410H400M70 425H320"/>
+        <rect class="art" x="470" y="160" width="170" height="150" fill="url(#wfa6-art)"/><rect class="frame" x="470" y="160" width="170" height="150"/>
+        <rect class="room" x="700" y="80" width="240" height="390"/>
+        <g class="acoustic"><rect x="722" y="110" width="40" height="150"/><rect x="774" y="110" width="40" height="150"/><rect x="826" y="110" width="40" height="150"/><rect x="878" y="110" width="40" height="150"/></g>
+        <rect class="table" x="735" y="330" width="170" height="16"/>
+        <rect class="glass" x="700" y="80" width="240" height="390"/>
+        <rect x="700" y="250" width="240" height="80" fill="url(#wfa6-film)" class="filmband"/>
+        <rect class="sign" x="952" y="210" width="90" height="74" rx="6"/><text class="signt" x="997" y="244" text-anchor="middle">Nalanda</text>
+        <g class="braille"><circle cx="982" cy="266" r="3.4"/><circle cx="992" cy="266" r="3.4"/><circle cx="982" cy="274" r="3.4"/><circle cx="1006" cy="266" r="3.4"/><circle cx="1016" cy="274" r="3.4"/><circle cx="1030" cy="266" r="3.4"/><circle cx="1030" cy="274" r="3.4"/></g>
+        <g class="ws-g"><rect class="chair" x="1120" y="352" width="9" height="72" rx="3"/><rect class="chair" x="1122" y="413" width="58" height="10" rx="4"/><path class="ln" d="M1150 423V470"/>
+          <rect class="wsdesk" x="1226" y="380" width="100" height="10" rx="3"/><path class="ln" d="M1234 390V470M1318 390V470"/>
+          <rect class="wsmon" x="1252" y="326" width="52" height="38" rx="3"/><path class="ln" d="M1278 364V380"/>
+          <rect class="modesty" x="1226" y="392" width="100" height="56" rx="5"/><rect class="wsscreen" x="1322" y="318" width="12" height="62" rx="3"/></g>
+        <g class="collab-g"><rect class="collab" x="1454" y="352" width="106" height="62" rx="14"/><rect class="collab" x="1440" y="400" width="120" height="70" rx="12"/><rect class="collab" x="1440" y="372" width="26" height="98" rx="13"/><rect class="collab" x="1534" y="372" width="26" height="98" rx="13"/></g>
+        <path class="ln" d="M1412 410V470"/><rect class="ctable" x="1392" y="403" width="42" height="9" rx="4"/>
+        <path class="ln" d="M1500 80V180M1475 180H1525L1515 205H1485Z"/><rect class="cup" x="1396" y="388" width="28" height="15" rx="2"/>
+        <rect class="carpet" x="40" y="470" width="1520" height="46"/><rect class="grunge" x="40" y="470" width="1520" height="46" filter="url(#wfa6-grunge)"/>
         <line class="floor" x1="40" y1="516" x2="1560" y2="516"/>
-        </g><rect x="40" y="470" width="1520" height="46" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><rect x="1340" y="330" width="210" height="140" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><g class="lead">
-          <path d="M270 80V36"/><path d="M330 432V560"/><path d="M665 150V36"/><path d="M720 320V560"/><path d="M1005 110V36"/><path d="M890 290V560"/>
-          <path d="M1247 210V36"/><path d="M1290 284V560"/><path d="M1445 318V560"/><path d="M110 516V560"/>
+        </g><g class="mat">
+          <rect x="40" y="80" width="390" height="390" filter="url(#wfa6-plaster)"/>
+          <rect class="m-carpet" x="40" y="470" width="1520" height="46" fill="url(#wfa6-t-carpet)"/>
+          <g class="m-art"><image class="m-img" href="assets/img/s-wf-a6/art-3.webp" x="470" y="160" width="170" height="150" preserveAspectRatio="xMidYMid slice" clip-path="url(#wfa6-c-art)"/><rect class="m-tint" x="470" y="160" width="170" height="150"/><rect class="frame" x="470" y="160" width="170" height="150" fill="none"/></g>
+          <g class="m-slats"><rect x="722" y="110" width="40" height="150"/><rect x="774" y="110" width="40" height="150"/><rect x="826" y="110" width="40" height="150"/><rect x="878" y="110" width="40" height="150"/></g>
+          <rect x="700" y="80" width="240" height="390" fill="url(#wfa6-glass)"/>
+          <rect class="m-film" x="700" y="250" width="240" height="80"/>
+          <rect class="m-sign" x="952" y="210" width="90" height="74" rx="6"/><text class="signt" x="997" y="244" text-anchor="middle">Nalanda</text>
+          <g class="braille"><circle cx="982" cy="266" r="3.4"/><circle cx="992" cy="266" r="3.4"/><circle cx="982" cy="274" r="3.4"/><circle cx="1006" cy="266" r="3.4"/><circle cx="1016" cy="274" r="3.4"/><circle cx="1030" cy="266" r="3.4"/><circle cx="1030" cy="274" r="3.4"/></g>
+          <g class="m-wsg"><rect x="1322" y="318" width="12" height="62" rx="3"/></g><rect class="m-modesty" x="1226" y="392" width="100" height="56" rx="5" fill="url(#wfa6-t-fabric)"/>
+          <rect class="m-ctable" x="1226" y="380" width="100" height="10" rx="3" fill="url(#wfa6-t-wood)"/>
+          <g class="m-collab"><rect x="1454" y="352" width="106" height="62" rx="14"/><rect x="1440" y="400" width="120" height="70" rx="12"/><rect x="1440" y="372" width="26" height="98" rx="13"/><rect x="1534" y="372" width="26" height="98" rx="13"/></g>
+          <rect class="m-ctable" x="1392" y="403" width="42" height="9" rx="4" fill="url(#wfa6-t-wood)"/>
+        </g><rect class="hat" x="40" y="470" width="1520" height="46" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><g class="lead">
+          <path d="M235 80V36"/><path d="M200 432V560"/><path d="M555 160V36"/><path d="M555 310V560"/><path d="M794 110V36"/>
+          <path d="M1010 210V36"/><path d="M1006 282V560"/><path d="M1500 352V560"/><path d="M110 516V560"/><path d="M1328 318V36"/>
         </g>
         <g class="lab">
-          <text x="270" y="28" text-anchor="middle">Paint accent</text><text x="330" y="582" text-anchor="middle">Wall graphic</text>
-          <text x="665" y="28" text-anchor="middle">Artwork</text><text x="720" y="582" text-anchor="middle">Artwork tonality</text>
-          <text x="1005" y="28" text-anchor="middle">Meeting-room acoustics</text><text x="890" y="582" text-anchor="middle">Privacy panel</text>
-          <text class="gen" x="1247" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1290" y="582" text-anchor="middle">Inclusive · braille</text>
-          <text x="1445" y="582" text-anchor="middle">Coffee point</text><text x="60" y="582" text-anchor="start">Carpet</text>
-        </g>
-      <g class="ring" data-s="0" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M152.3 196.5L176.7 186.0L203.3 177.8L231.7 172.2L261.3 169.4L291.3 169.3L321.1 172.2L350.0 177.9L377.4 186.3L402.6 197.3L424.9 210.6L443.9 225.9L459.2 242.9L470.2 261.2L476.8 280.3L478.8 299.9L476.2 319.4L469.1 338.3L457.6 356.4L442.0 373.0L422.8 387.9L400.4 400.7L375.4 411.2L348.4 419.1L320.1 424.4L291.0 426.8L261.9 426.5L233.4 423.4L206.1 417.8L180.6 409.6L157.5 399.3L137.0 387.1L119.8 373.1L105.9 357.9L95.7 341.6L89.3 324.7L86.8 307.5L88.1 290.3L93.1 273.6L101.8 257.5L113.9 242.4L129.1 228.7L147.2 216.4L167.7 206.0L190.3 197.5L214.5 191.1L240.0 186.9L266.1 185.1L292.4 185.7"/><path pathLength="1" d="M152.3 196.5L176.7 186.0L203.3 177.8L231.7 172.2L261.3 169.4L291.3 169.3L321.1 172.2L350.0 177.9L377.4 186.3L402.6 197.3L424.9 210.6L443.9 225.9L459.2 242.9L470.2 261.2L476.8 280.3L478.8 299.9L476.2 319.4L469.1 338.3L457.6 356.4L442.0 373.0L422.8 387.9L400.4 400.7L375.4 411.2L348.4 419.1L320.1 424.4L291.0 426.8L261.9 426.5L233.4 423.4L206.1 417.8L180.6 409.6L157.5 399.3L137.0 387.1L119.8 373.1L105.9 357.9L95.7 341.6L89.3 324.7L86.8 307.5L88.1 290.3L93.1 273.6L101.8 257.5L113.9 242.4L129.1 228.7L147.2 216.4L167.7 206.0L190.3 197.5L214.5 191.1L240.0 186.9L266.1 185.1L292.4 185.7"/></g><g class="ring" data-s="1" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M576.7 142.2L595.0 132.7L615.0 125.3L636.3 120.2L658.4 117.6L681.0 117.6L703.3 120.2L725.0 125.3L745.5 132.9L764.4 142.9L781.2 155.0L795.5 168.8L806.9 184.3L815.2 200.8L820.1 218.2L821.6 235.9L819.7 253.6L814.3 270.7L805.7 287.1L794.0 302.2L779.6 315.7L762.8 327.3L744.1 336.8L723.8 344.0L702.6 348.7L680.8 350.9L658.9 350.6L637.5 347.9L617.1 342.7L598.0 335.4L580.6 326.0L565.3 314.9L552.3 302.3L541.9 288.4L534.3 273.7L529.5 258.4L527.6 242.8L528.5 227.2L532.3 212.0L538.8 197.5L547.9 183.8L559.3 171.3L572.9 160.3L588.3 150.8L605.2 143.1L623.4 137.3L642.5 133.5L662.1 131.9L681.8 132.4"/><path pathLength="1" d="M576.7 142.2L595.0 132.7L615.0 125.3L636.3 120.2L658.4 117.6L681.0 117.6L703.3 120.2L725.0 125.3L745.5 132.9L764.4 142.9L781.2 155.0L795.5 168.8L806.9 184.3L815.2 200.8L820.1 218.2L821.6 235.9L819.7 253.6L814.3 270.7L805.7 287.1L794.0 302.2L779.6 315.7L762.8 327.3L744.1 336.8L723.8 344.0L702.6 348.7L680.8 350.9L658.9 350.6L637.5 347.9L617.1 342.7L598.0 335.4L580.6 326.0L565.3 314.9L552.3 302.3L541.9 288.4L534.3 273.7L529.5 258.4L527.6 242.8L528.5 227.2L532.3 212.0L538.8 197.5L547.9 183.8L559.3 171.3L572.9 160.3L588.3 150.8L605.2 143.1L623.4 137.3L642.5 133.5L662.1 131.9L681.8 132.4"/></g><g class="ring" data-s="2" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M1209.6 203.1L1218.4 198.3L1228.0 194.6L1238.2 192.1L1248.9 190.8L1259.7 190.8L1270.4 192.1L1280.8 194.7L1290.7 198.5L1299.7 203.4L1307.8 209.5L1314.6 216.4L1320.1 224.1L1324.1 232.4L1326.5 241.1L1327.2 249.9L1326.2 258.8L1323.7 267.4L1319.5 275.5L1313.9 283.1L1307.0 289.8L1299.0 295.6L1290.0 300.4L1280.2 304.0L1270.0 306.4L1259.6 307.5L1249.1 307.3L1238.8 305.9L1229.0 303.4L1219.8 299.7L1211.5 295.0L1204.1 289.4L1197.9 283.1L1192.9 276.2L1189.3 268.8L1186.9 261.2L1186.0 253.4L1186.5 245.6L1188.3 238.0L1191.4 230.7L1195.8 223.9L1201.3 217.7L1207.8 212.1L1215.2 207.4L1223.3 203.5L1232.0 200.6L1241.2 198.8L1250.6 197.9L1260.1 198.2"/><path pathLength="1" d="M1209.6 203.1L1218.4 198.3L1228.0 194.6L1238.2 192.1L1248.9 190.8L1259.7 190.8L1270.4 192.1L1280.8 194.7L1290.7 198.5L1299.7 203.4L1307.8 209.5L1314.6 216.4L1320.1 224.1L1324.1 232.4L1326.5 241.1L1327.2 249.9L1326.2 258.8L1323.7 267.4L1319.5 275.5L1313.9 283.1L1307.0 289.8L1299.0 295.6L1290.0 300.4L1280.2 304.0L1270.0 306.4L1259.6 307.5L1249.1 307.3L1238.8 305.9L1229.0 303.4L1219.8 299.7L1211.5 295.0L1204.1 289.4L1197.9 283.1L1192.9 276.2L1189.3 268.8L1186.9 261.2L1186.0 253.4L1186.5 245.6L1188.3 238.0L1191.4 230.7L1195.8 223.9L1201.3 217.7L1207.8 212.1L1215.2 207.4L1223.3 203.5L1232.0 200.6L1241.2 198.8L1250.6 197.9L1260.1 198.2"/></g><g class="ring" data-s="3" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M1379.4 314.2L1394.0 305.9L1410.0 299.5L1427.0 295.2L1444.8 292.9L1462.8 292.9L1480.7 295.1L1498.0 299.6L1514.4 306.2L1529.5 314.7L1543.0 325.1L1554.4 337.1L1563.5 350.4L1570.1 364.7L1574.1 379.6L1575.3 394.9L1573.7 410.1L1569.4 425.0L1562.5 439.0L1553.2 452.0L1541.7 463.7L1528.3 473.7L1513.3 481.9L1497.1 488.1L1480.0 492.2L1462.6 494.1L1445.1 493.8L1428.0 491.4L1411.7 487.0L1396.4 480.7L1382.5 472.6L1370.2 463.0L1359.9 452.1L1351.5 440.2L1345.4 427.5L1341.6 414.3L1340.1 400.8L1340.8 387.4L1343.9 374.3L1349.1 361.8L1356.3 350.0L1365.5 339.3L1376.3 329.7L1388.6 321.5L1402.2 314.9L1416.7 309.9L1432.0 306.7L1447.6 305.2L1463.4 305.7"/><path pathLength="1" d="M1379.4 314.2L1394.0 305.9L1410.0 299.5L1427.0 295.2L1444.8 292.9L1462.8 292.9L1480.7 295.1L1498.0 299.6L1514.4 306.2L1529.5 314.7L1543.0 325.1L1554.4 337.1L1563.5 350.4L1570.1 364.7L1574.1 379.6L1575.3 394.9L1573.7 410.1L1569.4 425.0L1562.5 439.0L1553.2 452.0L1541.7 463.7L1528.3 473.7L1513.3 481.9L1497.1 488.1L1480.0 492.2L1462.6 494.1L1445.1 493.8L1428.0 491.4L1411.7 487.0L1396.4 480.7L1382.5 472.6L1370.2 463.0L1359.9 452.1L1351.5 440.2L1345.4 427.5L1341.6 414.3L1340.1 400.8L1340.8 387.4L1343.9 374.3L1349.1 361.8L1356.3 350.0L1365.5 339.3L1376.3 329.7L1388.6 321.5L1402.2 314.9L1416.7 309.9L1432.0 306.7L1447.6 305.2L1463.4 305.7"/></g><g class="who"><g transform="scale(1.18)"><g class="face"><g class="bob" filter="url(#wfa6-pen)"><g transform="translate(0 -98)"><g class="limb l2"><path d="M0 0L-1 94L13 97"/></g></g><g transform="translate(0 -166)"><g class="limb a2"><path d="M0 0L1 68"/></g></g><path class="torso" d="M-15 -171C-6 -177 6 -177 15 -171L14 -97C5 -93 -5 -93 -14 -97Z"/><path class="strap" d="M-11 -170L12 -116"/><rect class="bag" x="4" y="-120" width="22" height="18" rx="3"/><g transform="translate(0 -98)"><g class="limb l1"><path d="M0 0L1 94L15 97"/></g></g><g class="headg"><circle class="head" cx="0" cy="-196" r="19"/><path class="hair" d="M-19 -197C-17 -216 8 -221 19 -203"/><path class="nose" d="M18 -197l7 5l-6 2"/></g><g transform="translate(0 -166)"><g class="limb a1"><path d="M0 0L-1 68"/><circle class="hand" cx="-1" cy="72" r="4.5"/></g></g><g class="mycup"><rect x="63" y="-171" width="15" height="19" rx="3"/><path class="steam" d="M67 -178c-6 -10 6 -14 0 -24M75 -178c-6 -10 6 -14 0 -24"/></g></g></g></g></g><g class="bub"><g class="tail"><circle r="7"/><circle r="10"/><circle r="13"/></g><rect class="bb" height="124" rx="46" filter="url(#wfa6-pen)"/><text class="q" x="34" y="54"></text><text class="ans" x="34" y="100"></text></g></svg></div>
-    <div class="wf-bar" style="left:1.8%;top:85%;width:96.4%"><span class="wf-k">Pick a neighbourhood</span><div class="wf-chips"></div><b class="wf-name"></b><span class="wf-close">Known before a sign is read.</span><button type="button" class="wf-again" title="Play this stop again">&#8635;</button></div>
+          <text x="235" y="28" text-anchor="middle">Paint accent</text><text x="200" y="582" text-anchor="middle">Wall graphic</text>
+          <text x="555" y="28" text-anchor="middle">Artwork</text><text x="555" y="582" text-anchor="middle">Artwork tonality</text>
+          <text x="794" y="28" text-anchor="middle">Meeting-room acoustics</text>          <text class="gen" x="1010" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1006" y="582" text-anchor="middle">Inclusive · braille</text>
+          <text x="1500" y="582" text-anchor="middle">Collab area</text><text x="60" y="582" text-anchor="start">Carpet</text>
+          <text x="1328" y="28" text-anchor="middle">Privacy panel</text>        </g>
+      <g class="ring" data-s="0" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="1" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="2" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="3" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="4" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="who"><g transform="scale(1.18)"><g class="face"><g class="bob" filter="url(#wfa6-pen)"><g transform="translate(0 -98)"><g class="limb l2"><path d="M0 0L-1 94L13 97"/></g></g><g transform="translate(0 -166)"><g class="limb a2"><path d="M0 0L1 68"/></g></g><path class="torso" d="M-15 -171C-6 -177 6 -177 15 -171L14 -97C5 -93 -5 -93 -14 -97Z"/><path class="strap" d="M-11 -170L12 -116"/><rect class="bag" x="4" y="-120" width="22" height="18" rx="3"/><g transform="translate(0 -98)"><g class="limb l1"><path d="M0 0L1 94L15 97"/></g></g><g class="sitlegs"><path d="M0 -98L52 -98L54 -45L68 -42"/><path d="M-4 -98L46 -98L48 -45L62 -42"/></g><g class="headg"><circle class="head" cx="0" cy="-196" r="19"/><path class="hair" d="M-19 -197C-17 -216 8 -221 19 -203"/><path class="nose" d="M18 -197l7 5l-6 2"/></g><g transform="translate(0 -166)"><g class="limb a1"><path d="M0 0L-1 68"/><circle class="hand" cx="-1" cy="72" r="4.5"/></g></g><g class="mycup"><rect x="63" y="-171" width="15" height="19" rx="3"/><path class="steam" d="M67 -178c-6 -10 6 -14 0 -24M75 -178c-6 -10 6 -14 0 -24"/></g></g></g></g></g><g class="bub"><g class="tail"><circle r="7"/><circle r="10"/><circle r="13"/></g><rect class="bb" height="124" rx="46" filter="url(#wfa6-pen)"/><text class="q" x="34" y="54"></text><text class="ans" x="34" y="100"></text></g></svg></div>
+    <div class="wf-bar" style="left:1.8%;top:85%;width:96.4%"><span class="wf-k">Pick a neighbourhood</span><div class="wf-chips"></div><span class="wf-look" title="How the walls are drawn"><button type="button" data-look="sk" class="on">Sketch</button><button type="button" data-look="mat">Material</button></span><b class="wf-name"></b><span class="wf-close">Known before a sign is read.</span><button type="button" class="wf-again" title="Play this stop again">&#8635;</button></div>
   </div>
 </section>
 <style>
@@ -57,6 +84,9 @@
   padding: calc(var(--pt) * 1.8) calc(var(--pt) * 4.5); font: 600 calc(var(--pt) * 6) / 1.1 var(--num, inherit); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
 #s-wf-a6 .wf-chips button::before { content: ""; width: calc(var(--pt) * 5); height: calc(var(--pt) * 5); border-radius: 50%; background: var(--c); }
 #s-wf-a6 .wf-chips button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+#s-wf-a6 .wf-look { display: inline-flex; border: 1px solid #ddd6f2; border-radius: 999px; overflow: hidden; background: #fff; }
+#s-wf-a6 .wf-look button { border: 0; background: none; color: var(--ink); padding: calc(var(--pt) * 1.8) calc(var(--pt) * 4.5); font: 600 calc(var(--pt) * 5.4) / 1.1 var(--num, inherit); cursor: pointer; transition: background .2s, color .2s; }
+#s-wf-a6 .wf-look button.on { background: var(--ink); color: #fff; }
 #s-wf-a6 .wf-note { font-size: calc(var(--pt) * 5.2); color: var(--mute); font-style: italic; }
 #s-wf-a6 .wf-k { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .16em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
 
@@ -76,18 +106,20 @@
 #s-wf-a6 .film { fill: var(--privacy); } #s-wf-a6 .filmdot { fill: var(--paint); opacity: .35; }
 #s-wf-a6 .sign { fill: #fff; stroke: #2b2440; stroke-width: 2.5; } #s-wf-a6 .signt { font: 600 20px var(--body, sans-serif); fill: #2b2440; }
 #s-wf-a6 .braille circle { fill: #2b2440; }
-#s-wf-a6 .coffee { fill: var(--coffee); } #s-wf-a6 .coffee-top { fill: #2b2440; } #s-wf-a6 .cup { fill: #fff; stroke: #2b2440; stroke-width: 2; }
+#s-wf-a6 .chair { fill: #efeaf6; } #s-wf-a6 .wsdesk { fill: #e7dfd0; } #s-wf-a6 .wsmon { fill: #2b2440; } #s-wf-a6 .wsscreen { fill: var(--ws); } #s-wf-a6 .modesty { fill: #bdbac1; }
+#s-wf-a6 .m-modesty { mix-blend-mode: multiply; opacity: .5; }
+#s-wf-a6 .collab { fill: var(--collab); stroke: #2b2440; stroke-width: 3.2; } #s-wf-a6 .ctable { fill: #2b2440; stroke: #2b2440; stroke-width: 3; } #s-wf-a6 .cup { fill: #fff; stroke: #2b2440; stroke-width: 2; }
 #s-wf-a6 .ln { fill: #fff; stroke: #2b2440; stroke-width: 2.5; }
-#s-wf-a6 .carpet { fill: var(--carpet); } #s-wf-a6 .floor { stroke: #2b2440; stroke-width: 2; }
+#s-wf-a6 .carpet { fill: #8d8b90; } #s-wf-a6 .grunge { fill: var(--carpet); opacity: .85; } #s-wf-a6 .floor { stroke: #2b2440; stroke-width: 2; }
 #s-wf-a6 .lead path { stroke: #8a83a3; stroke-width: 1.4; stroke-dasharray: 3 4; fill: none; }
 #s-wf-a6 .lab text { font: 600 21px var(--body, sans-serif); fill: #2b2440; } #s-wf-a6 .lab text.gen { fill: #8a83a3; }
 #s-wf-a6 .wf-bar { display: flex; align-items: center; gap: calc(var(--pt) * 6); }
 #s-wf-a6 .wf-bar .wf-k { margin: 0; }
 #s-wf-a6 .wf-name { font-size: calc(var(--pt) * 7); color: var(--ink); }
 
-#s-wf-a6 :is(.paint, .carpet, .coffee, .art, .acoustic) { filter: url(#wfa6-wash); opacity: .88; }
+#s-wf-a6 :is(.paint, .carpet, .collab, .wsscreen, .art, .acoustic) { filter: url(#wfa6-wash); opacity: .88; }
 #s-wf-a6 .wall { fill: #fbf8f1; } #s-wf-a6 .room { fill: #fdfbf6; }
-#s-wf-a6 .frame, #s-wf-a6 .floor, #s-wf-a6 .glass, #s-wf-a6 .sign, #s-wf-a6 .ln, #s-wf-a6 .cup, #s-wf-a6 .coffee-top { stroke: #2b2440; stroke-width: 3.2; }
+#s-wf-a6 .frame, #s-wf-a6 .floor, #s-wf-a6 .glass, #s-wf-a6 .sign, #s-wf-a6 .ln, #s-wf-a6 :is(.cup, .chair, .wsdesk, .wsmon, .wsscreen, .modesty) { stroke: #2b2440; stroke-width: 3.2; }
 #s-wf-a6 .hatch { stroke: rgba(43, 36, 64, .28); stroke-width: 1.4; }
 #s-wf-a6 .lab text { font: 400 34px var(--hand, cursive); fill: #2b2440; } #s-wf-a6 .lab text.gen { fill: #6f6a85; }
 #s-wf-a6 .lead path { stroke: #2b2440; stroke-dasharray: none; stroke-width: 1.2; }
@@ -116,7 +148,9 @@
 #s-wf-a6 .face { transition: transform .35s; } #s-wf-a6 .left .face { transform: scaleX(-1); }
 #s-wf-a6 .headg { transition: transform .5s; } #s-wf-a6 .wonder .headg { transform: translate(0, -196px) rotate(-9deg) translate(0, 196px); }
 #s-wf-a6 .reach .a1 { transform: rotate(-100deg); } #s-wf-a6 .hold .a1 { transform: rotate(-78deg); }
-#s-wf-a6 .mycup { opacity: 0; transition: opacity .3s; } #s-wf-a6 .hold .mycup { opacity: 1; transition-delay: .35s; }
+#s-wf-a6 .sitlegs { display: none; } #s-wf-a6 .sit .sitlegs { display: block; } #s-wf-a6 .sit :is(.l1, .l2) { display: none; }
+#s-wf-a6 .bob { transition: transform .4s; } #s-wf-a6 .sit .bob { transform: translateY(43px); } #s-wf-a6 .sit .a1 { transform: rotate(-55deg); } #s-wf-a6 .sit .a2 { transform: rotate(-45deg); }
+#s-wf-a6 .mycup { opacity: 0; transition: opacity .3s; } #s-wf-a6 .hold .mycup { opacity: 0; }
 #s-wf-a6 .mycup rect { fill: #fff; stroke-width: 3; } #s-wf-a6 .steam { stroke-width: 2.4; opacity: .55; animation: wf6-steam 1.6s ease-in-out infinite; }
 @keyframes wf6-steam { 0% { transform: translateY(4px); opacity: 0; } 50% { opacity: .6; } 100% { transform: translateY(-8px); opacity: 0; } }
 #s-wf-a6 .bub { opacity: 0; transition: opacity .35s; } #s-wf-a6 .bub.on { opacity: 1; }
@@ -128,25 +162,45 @@
 #s-wf-a6 .wf-close.on { opacity: 1; transform: none; }
 #s-wf-a6 .wf-again { opacity: .55; border: 1px solid #ddd6f2; background: #fff; color: var(--ink); border-radius: 999px; padding: calc(var(--pt) * 1.8) calc(var(--pt) * 5);
   font: 600 calc(var(--pt) * 5.6) / 1.1 inherit; cursor: pointer; }
+/* the Material look: the same drawing, its surfaces in real finishes (textures cropped from the project's own material and render images) */
+#s-wf-a6 .mat { opacity: 0; pointer-events: none; transition: opacity .7s; }
+#s-wf-a6 .wf-el[data-look="mat"] .mat { opacity: 1; }
+#s-wf-a6 .wf-el[data-look="mat"] :is(.paint, .carpet, .collab, .wsscreen, .art, .acoustic) { filter: none; opacity: 1; }
+#s-wf-a6 .wf-el[data-look="mat"] .ink0 { filter: none; }
+#s-wf-a6 .wf-el[data-look="mat"] .hat { opacity: 0; }
+#s-wf-a6 .hat { transition: opacity .7s; }
+#s-wf-a6 .mat :is(.m-slats rect, .m-collab rect, .m-wsg rect, .m-ctable) { mix-blend-mode: multiply; }
+#s-wf-a6 .m-collab rect, #s-wf-a6 .m-wsg rect { fill: url(#wfa6-t-fabric); opacity: .7; } #s-wf-a6 .m-ctable { stroke: #2b2440; stroke-width: 3; }
+#s-wf-a6 .m-slats rect { fill: url(#wfa6-t-slats); opacity: .8; }
+#s-wf-a6 .m-img { filter: grayscale(1) brightness(1.12) contrast(1.05); }
+#s-wf-a6 .m-tint { fill: var(--t2, #888); opacity: .92; mix-blend-mode: color; transition: fill .7s; }
+#s-wf-a6 .m-film { fill: rgba(255, 255, 255, .5); stroke: none; }
+#s-wf-a6 .m-sign { fill: url(#wfa6-brass); stroke: #2b2440; stroke-width: 2.5; }
+#s-wf-a6 .m-carpet { mix-blend-mode: multiply; opacity: .75; }
+#s-wf-a6 .wf-el[data-look="mat"] .grunge { opacity: 1; }
 #s-wf-a6 .wf-again:hover { border-color: var(--purple); color: var(--purple); }
 </style>
 <script>
 ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   // the six accents (ACKO's logo colours: violet, green, yellow; deep and light), one per neighbourhood; indicative
+  // the ACKO logo's colours, deep and light (violet, green, yellow): the six read apart at a glance; the wall paint is eased toward the paper below
   const NB = [["01", "#5222d0", "Violet"], ["02", "#a98bf2", "Violet, light"], ["03", "#0fa458", "Green"], ["04", "#8fd8ae", "Green, light"],
     ["05", "#f2ae00", "Yellow"], ["06", "#ffd866", "Yellow, light"]];
   const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)), toh = (c) => "#" + c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
   const mix = (a, b, t) => toh(hx(a).map((v, i) => v + (hx(b)[i] - v) * t));
+  // 19 Nov (Ritika: "two tones lighter"): the surfaces use the accent lifted toward white; the chips keep the logo colours
+  const lift = (c) => mix(c, "#ffffff", 0.32);
   // each layer's tone from the accent
   const LAYERS = [
-    ["paint", "Paint accent", "the neighbourhood's own wall", (c) => c],
+    ["paint", "Paint accent", "the neighbourhood's own wall", (c) => mix(c, "#fbf8f1", 0.06)],
     ["graphic", "Wall graphics", "its number, large, at the way in", (c) => c],
-    ["carpet", "Carpet", "underfoot, a deeper, quieter tone", (c) => mix(c, "#4a4652", 0.55)],
+    ["carpet", "Carpet", "grey underfoot, the accent worked into it", (c) => c],
     ["privacy", "Privacy panels", "the film on the glass, a light tint", (c) => mix(c, "#ffffff", 0.68)],
     ["art", "Artwork", "a piece chosen for the neighbourhood", (c) => mix(c, "#ffffff", 0.2)],
     ["tone", "Artwork tonality", "light to deep, in its colour", (c) => `linear-gradient(90deg, ${mix(c, "#ffffff", 0.55)}, ${mix(c, "#1d1733", 0.35)})`],
     ["acoustic", "Meeting-room acoustics", "the panels inside its rooms", (c) => mix(c, "#ffffff", 0.35)],
-    ["coffee", "Collab / coffee point", "the counter, a warmer tone", (c) => mix(c, "#c8a27a", 0.45)]];
+    ["collab", "Collab area", "the soft seating, in its own tone", (c) => mix(c, "#ffffff", 0.18)],
+    ["ws", "Privacy panel", "the desk screens, in its own tone", (c) => mix(c, "#ffffff", 0.12)]];
   const GENERAL = [["Signage", "one family across the floor: rooms named for a Modern Indian Institution (Nalanda, Sabha, Takshashila)"],
     ["Inclusivity", "braille and tactile signs, high contrast, at reach height"]];
   const tones = (c) => Object.fromEntries(LAYERS.map(([k, , , f]) => [k, f(c)]));
@@ -164,10 +218,25 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   const WORD = ["Violet", "Light violet", "Green", "Light green", "Yellow", "Light yellow"];
   // the stops: where he stands (x on the carpet), which way he faces, his pose, the question, the answer, which labels ink in
   const STOPS = [
-    { x: 530, face: -1, side: 1, q: "Where's my team?", a: (w, n) => `${w}, ${n}. That's us!`, labs: [0, 1], lit: ["paint"] },
-    { x: 805, face: -1, side: 1, q: "Still us?", a: (w) => `Our art, our ${w.toLowerCase()} floor.`, labs: [2, 3, 9], lit: ["t1", "t2", "carpet"] },
-    { x: 1150, face: 1, side: 1, pose: "reach", q: "Which room is my 3 pm?", a: () => "Nalanda. Found it by touch.", labs: [4, 5, 6, 7], lit: ["privacy", "dot", "acoustic"] },
-    { x: 1325, face: 1, side: 1, pose: "hold", q: "Coffee?", a: () => "Ours, right here.", labs: [8], lit: ["coffee"] }];
+    { x: 450, face: -1, side: 1, q: "Where's my team?", a: (w, n) => `${w}, ${n}. That's us!`, labs: [0, 1], lit: ["paint"] },
+    { x: 675, face: -1, side: 1, q: "Still us?", a: (w) => `Our art, our ${w.toLowerCase()} floor.`, labs: [2, 3, 8], lit: ["t1", "t2", "carpet"] },
+    { x: 1062, face: -1, side: 1, pose: "reach", q: "Which room is my 3 pm?", a: () => "Nalanda. Found it by touch.", labs: [4, 5, 6], lit: ["privacy", "dot", "acoustic"] },
+    { x: 1160, face: 1, side: 1, pose: "sit", q: "And my desk?", a: () => "Our desk, our privacy panel.", labs: [9], lit: ["ws"] },
+    { x: 1366, face: 1, side: 1, pose: "hold", q: "Where can we huddle?", a: () => "Collab area, right here.", labs: [7], lit: ["collab"] }];
+  // the rings, drawn here: centre and radii of what each stop circles, a hand-drawn loop that overshoots its start
+  const RINGS = [[235, 305, 172, 126], [555, 235, 128, 104], [997, 247, 78, 60], [1280, 395, 96, 92], [1500, 420, 90, 90]];
+  const ringD = (cx, cy, rx, ry, k) => {
+    const pts = [], n = 60, a0 = -2.3 + k * 0.9, sweep = Math.PI * 2.1;
+    for (let i = 0; i <= n; i++) {
+      const a = a0 + (sweep * i) / n, f = 1 + 0.028 * Math.sin(3 * a + k) + 0.02 * Math.sin(5 * a + 2 * k) + 0.03 * (i / n);
+      pts.push((i ? "L" : "M") + (cx + rx * f * Math.cos(a)).toFixed(1) + " " + (cy + ry * f * Math.sin(a)).toFixed(1));
+    }
+    return pts.join("");
+  };
+  document.querySelectorAll("#s-wf-a6 .ring").forEach((g, k) => g.querySelectorAll("path").forEach((pa) => pa.setAttribute("d", ringD(RINGS[k][0], RINGS[k][1], RINGS[k][2], RINGS[k][3], k))));
+  // the framed artwork per neighbourhood: pieces that hang in the project's own renders (tapestry, carved panel, painting, living wall, rug, planting); paths written out so the single file embeds them
+  const ART = ["assets/img/s-wf-a6/art-1.webp", "assets/img/s-wf-a6/art-2.webp", "assets/img/s-wf-a6/art-3.webp", "assets/img/s-wf-a6/art-4.webp", "assets/img/s-wf-a6/art-5.webp", "assets/img/s-wf-a6/art-6.webp"]
+    .map((p) => (window.ASSET_URLS && window.ASSET_URLS[p]) || p);
   const SPEED = 230, START = -70;
   let T = [], cur = -1, nb = 2, X = START;
   const at = (fn, ms) => T.push(setTimeout(fn, ms)), stop = () => { T.forEach(clearTimeout); T = []; };
@@ -177,14 +246,15 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
     if (keys) lit = keys;
     const el = $(".wf-el", sc);
     Object.entries(TONE).forEach(([k, c]) => el.style.setProperty("--" + k, lit === "all" || lit.includes(k) ? c : grey(c)));
+    el.style.setProperty("--artg", lit === "all" || lit.includes("t1") ? 0 : 1);
   }
   function paint(sc, i) {
     nb = i;
-    const [n, c, name] = NB[i], t = tones(c), el = $(".wf-el", sc);
-    TONE = { paint: t.paint, carpet: t.carpet, privacy: t.privacy, acoustic: t.acoustic, coffee: t.coffee, dot: t.paint,
+    const [n, c0, name] = NB[i], c = lift(c0), t = tones(c), el = $(".wf-el", sc);
+    TONE = { paint: t.paint, carpet: t.carpet, privacy: t.privacy, acoustic: t.acoustic, collab: t.collab, ws: t.ws, dot: t.paint,
       t1: mix(c, "#ffffff", 0.55), t2: mix(c, "#1d1733", 0.35) };
-    light(sc);
-    el.style.setProperty("--mark", mix(c, "#1d1733", [1, 3, 5].includes(i) ? 0.5 : 0.12));
+    light(sc); $(".m-img", sc).setAttribute("href", ART[i]);
+    el.style.setProperty("--mark", mix(c0, "#1d1733", [1, 3, 5].includes(i) ? 0.5 : 0.12));
     $$(".graphic", sc).forEach((g) => (g.textContent = n)); $(".wf-name", sc).textContent = `Neighbourhood ${n} · ${name}`;
     if (cur >= 0) bubble(sc, cur, $(".bub", sc).classList.contains("ok"));
   }
@@ -196,7 +266,7 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
     const h = 124, top = 58, left = Math.max(16, Math.min(1584 - w, s.side > 0 ? s.x + 18 : s.x - 18 - w));
     $(".bb", b).setAttribute("width", w); $(".bb", b).setAttribute("x", 0); b.setAttribute("transform", `translate(${left} ${top})`);
     // three little circles rising from his head to the bubble
-    const hx = s.x + s.side * 14 - left, hy = 212 - top, ex = Math.max(40, Math.min(w - 40, s.x + s.side * 40 - left)), ey = h + 6;
+    const hx = s.x + s.side * 14 - left, hy = 212 - top + (s.pose === "sit" ? 50 : 0), ex = Math.max(40, Math.min(w - 40, s.x + s.side * 40 - left)), ey = h + 6;
     $$(".tail circle", b).forEach((c, j) => { const f = (j + 1) / 3.4; c.setAttribute("cx", hx + (ex - hx) * f); c.setAttribute("cy", hy + (ey - hy) * f); });
     b.classList.toggle("ok", !!ok);
   }
@@ -210,7 +280,7 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
     const el = $(".wf-el", sc), who = $(".who", sc);
     el.classList.add("walk"); $$(".seen", el).forEach((e) => e.classList.remove("seen")); $$(".ring", el).forEach((r) => r.classList.remove("on", "done"));
     $(".bub", sc).classList.remove("on", "ok"); $(".wf-close", sc).classList.remove("on");
-    who.classList.remove("walking", "left", "reach", "hold", "wonder"); who.style.opacity = 1; place(sc, START, 0);
+    who.classList.remove("walking", "left", "reach", "hold", "sit", "wonder"); who.style.opacity = 1; place(sc, START, 0);
   }
   function found(sc, k, settled) {
     const labs = $$(".lab text", sc), leads = $$(".lead path", sc), r = $(`.ring[data-s="${k}"]`, sc);
@@ -247,6 +317,8 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   return {
     enter(_, sc) {
       plain(); chips(sc, paint); pick(sc, 2, paint); reset(sc);
+      // Sketch | Material: how the walls are drawn
+      $$(".wf-look button", sc).forEach((b) => (b.onclick = (e) => { e.stopPropagation(); b.blur(); $$(".wf-look button", sc).forEach((o) => o.classList.toggle("on", o === b)); $(".wf-el", sc).dataset.look = b.dataset.look; }));
       // the small replay plays the stop on screen again, from the one before
       const again = $(".wf-again", sc);
       again.onclick = (e) => { e.stopPropagation(); again.blur(); if (reduced || !shown) return; const k = shown; if (k > 1) jump(sc, k - 1); else reset(sc); walkTo(sc, k); };

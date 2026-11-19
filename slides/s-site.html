@@ -37,7 +37,7 @@
 .vm-hosur { fill: none; stroke: #cfc6e6; stroke-width: 9; stroke-linecap: round; }
 .vm-bld path { fill: #dcd8e3; stroke: #cdc8d6; stroke-width: .4; }
 .vm-foot { fill: #c9b3f3; stroke: #5222d0; stroke-width: 1.4; }
-.vm-plate { fill: #5222d0; opacity: .55; }
+.vm-plate { fill: #5222d0; fill-opacity: .55; stroke: #5222d0; stroke-width: 1.4; }   /* 19 Nov: the plate alone (no footprint block behind it) */
 /* beat 2, into the floor (3 Nov): the neighbourhood and the copy fade, the plate alone stays, lighter, where the plan will be */
 #vmap .vm-fade { transition: opacity .5s var(--ease); }
 body.si-into #vmap .vm-fade { opacity: 0; }
@@ -65,6 +65,9 @@ body.si-into #vmap .vm-plate { opacity: .22; }
    building lines up with the plans. Drawn in the world's map layer (#vmap) */
 ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) => {
   const SV = { built: false, vb: [-760, -590, 1520, 1180], rot: 0, raf: 0 };
+  // 19 Nov (Ritika: the site boundary is the plot she outlined, south of where the building was drawn): the building, its plate and its
+  // label moved together into it, in the map's own (turned) frame; the shape and the turn are unchanged
+  const BX = -6, BY = 68, BS = 1.2;   // BS: the plate a little bigger (19 Nov), grown from its bottom edge
   function siteMap() {
     if (SV.built || !window.ACKO_SITE) return;
     const S = window.ACKO_SITE, svg = $("#vmap");
@@ -80,10 +83,9 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
       roads.map((r) => `<path class="vm-road c" d="${r.d}" style="stroke-width:${r.w + 2.4}"/>`).join("") +
       roads.map((r) => `<path class="vm-road" d="${r.d}" style="stroke-width:${r.w}"/>`).join("") + rail + hosur +
       `<g class="vm-bld">${S.buildings.map((d) => `<path d="${d}"/>`).join("")}</g>` +
-      `<path class="vm-foot" d="${S.footprint.d}"/>` +
       `${labels}${marks}` +
-      `<g class="vm-pin" data-t="translate(0 10)" transform="translate(0 10)"><text y="-62" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
-      `<path class="vm-plate" d="${S.onSite.plate}"/></g>`;
+      `<g class="vm-pin" data-t="translate(${BX} ${10 + BY})" transform="translate(${BX} ${10 + BY})"><text y="-50" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
+      `<path class="vm-plate" transform="translate(${BX} ${BY}) translate(-4.6 50) scale(${BS}) translate(4.6 -50)" d="${S.onSite.plate}"/></g>`;
     $("#map-credit").textContent = S.attribution || "© OpenStreetMap contributors, Overture Maps";
     $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"} walk</span></li>`).join("");
     SV.built = true;

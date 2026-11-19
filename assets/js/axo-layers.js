@@ -11,6 +11,7 @@
      zones     the six neighbourhoods 01-06 as translucent volumes with their numbers, the atriums, the terraces and the café's
                zone (-01, 00; the boundaries from ACKO_NEI.dxf)
      routes    the employee's journey (red dashes, 08) and the client's (blue, 09), drawn on from the entrances
+   M.sketch holds hand-drawn copies of the same volumes (own group, off by default): M.useSketch(true) swaps them in.
    M.tint(k) takes the whole model from the white model (k = 0, render -02) to the renders' colours (k = 1).
    Plan mm, y down; the model's metres: x east, y up, z south (X(), Z()). It shares AxoModel's renderer and camera helpers. */
 (function () {
@@ -170,9 +171,34 @@
       return tex;
     }
     const ring2 = (r) => { let a = 0, cx = 0, cy = 0; for (let i = 0; i < r.length; i++) { const [x0, y0] = r[i], [x1, y1] = r[(i + 1) % r.length], f = x0 * y1 - x1 * y0; a += f; cx += (x0 + x1) * f; cy += (y0 + y1) * f; } return [cx / (3 * a), cy / (3 * a)]; };
-    function volume(ring, col, op, h, number, numCol) {
+    // a hand-drawn ring (plan mm): the corners eased (Chaikin), the edge walked every ~1.4 m and pushed in and out along its normal by
+    // smooth, seeded waves (whole waves round the ring, so it closes), as a pencil would draw a neighbourhood, never twice the same
+    function sketchRing(ring, seed, ampOver) {
+      let r = ring.slice(); const rnd = (() => { let s = (seed * 2654435761) >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); })();
+      for (let it = 0; it < 2; it++) { const o = []; for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length]; o.push([p[0] * 0.75 + q[0] * 0.25, p[1] * 0.75 + q[1] * 0.25], [p[0] * 0.25 + q[0] * 0.75, p[1] * 0.25 + q[1] * 0.75]); } r = o; }
+      const xs = r.map((q) => q[0]), ys = r.map((q) => q[1]), small = Math.min(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) < 9000;
+      const amp = ampOver || (small ? 330 : 780), seg = []; let P = 0;
+      for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length], l = Math.hypot(q[0] - p[0], q[1] - p[1]); seg.push(l); P += l; }
+      const waves = [[9000, 0.55], [3900, 0.3], [1700, 0.15]].map(([lam, w]) => [Math.max(1, Math.round(P / lam)), w, rnd() * 6.2832]);
+      const out = []; let area = 0; for (let i = 0; i < r.length; i++) { const p = r[i], q = r[(i + 1) % r.length]; area += p[0] * q[1] - q[0] * p[1]; }
+      const sgn = area > 0 ? 1 : -1;
+      let acc_ = 0;
+      for (let i = 0; i < r.length; i++) {
+        const p = r[i], q = r[(i + 1) % r.length], l = seg[i], n = Math.max(1, Math.round(l / 1400));
+        const tx = (q[0] - p[0]) / (l || 1), ty = (q[1] - p[1]) / (l || 1);
+        for (let k = 0; k < n; k++) {
+          const f = k / n, s0 = acc_ + l * f; let d = 0; for (const [m, w, ph] of waves) d += w * Math.sin(6.2832 * m * s0 / P + ph);
+          out.push([p[0] + (q[0] - p[0]) * f + ty * sgn * d * amp, p[1] + (q[1] - p[1]) * f - tx * sgn * d * amp]);
+        }
+        acc_ += l;
+      }
+      return out;
+    }
+    function volume(ring, col, op, h, number, numCol, sketch) {
       const grp = new T.Group(), a = acc(), ink = [];
-      prism(a, ring, 0.03, h, ink, { corners: true });
+      const orig = ring; if (sketch != null) ring = sketchRing(orig, sketch);
+      prism(a, ring, 0.03, h, ink, { corners: sketch == null });
+      if (sketch != null) { const r2 = sketchRing(orig, sketch + 97); for (let i = 0; i < r2.length; i++) { const P0 = r2[i], B = r2[(i + 1) % r2.length]; ink.push(X(P0[0]), h, Z(P0[1]), X(B[0]), h, Z(B[1])); } }
       const mat = new T.MeshLambertMaterial({ color: col, transparent: true, opacity: op, depthWrite: false, side: T.DoubleSide });
       const m = mesh(a, mat); m.renderOrder = 6; grp.add(m);
       const lm = new T.LineBasicMaterial({ color: new T.Color(col).multiplyScalar(0.7), transparent: true, opacity: 0.7 }), ln = new T.LineSegments(new T.BufferGeometry(), lm);
@@ -192,6 +218,17 @@
     const terr = A.terrace.map((r) => volume(r, "#8f8f6a", 0.55, H.zone * 0.5));
     const cafe = (A.cafezone || []).map((r) => volume(r, "#efe7a6", 0.8, H.zone * 0.5));     // the café's own zone (ACKO_NEI.dxf), in the renders' cream
     zones.concat(atrium, terr, cafe).forEach((v) => G.zones.add(v));
+    // the same volumes hand-drawn, for the conceptual beats (Campus strategy); numbered left to right (west 01 … east 06). They live in
+    // their own group, off until a slide asks (M.useSketch), so every other slide keeps the exact boundaries
+    G.sketch = new T.Group(); G.sketch.name = "sketch"; G.sketch.visible = false; scene.add(G.sketch);
+    const NUM = { HOME: "01", DRIVE: "02", TRAVEL: "03", HEALTH: "04", LIFE: "05", AUTO: "06" };
+    const sk = {
+      zones: A.zones.map((z, i) => { const v = volume(z.ring, z.colour, z.n === "03" ? 0.78 : 0.62, H.zone, NUM[z.key] || z.n, "#ffffff", 11 + i); v.userData.zone = z; return v; }),
+      atrium: A.atrium.map((r, i) => volume(r, "#929292", 0.85, H.zone * 0.5, null, null, 31 + i)),
+      terrace: A.terrace.map((r, i) => volume(r, "#8f8f6a", 0.55, H.zone * 0.5, null, null, 41 + i)),
+      cafe: (A.cafezone || []).map((r, i) => volume(r, "#efe7a6", 0.8, H.zone * 0.5, null, null, 51 + i))
+    };
+    sk.zones.concat(sk.atrium, sk.terrace, sk.cafe).forEach((v) => G.sketch.add(v));
 
     // ---------- the routes (renders 08 and 09): dashes on the floor, drawn on in order of their distance from the entrances ----------
     function dashes(runs, col) {
@@ -228,6 +265,9 @@
     const key = new T.DirectionalLight(0xffffff, 0.35); key.position.set(-50, 80, 50); scene.add(key);
 
     M = { scene, groups: G, X, Z, CX, CY, slab: A.slab, zones, atrium, terrace: terr, cafe, routes, data: A };
+    M.sketch = sk;
+    // true: the hand-drawn volumes show (and the exact ones hide); false: the other way round
+    M.useSketch = (on) => { G.zones.visible = !on; G.sketch.visible = !!on; };
     // the white model (0) to the renders' colours (1)
     M.tint = (k) => { for (const m of tinted) { m.color.lerpColors(m.userData.white, m.userData.col, k); if (m.userData.op) m.opacity = m.userData.op[0] + (m.userData.op[1] - m.userData.op[0]) * k; } };
     // a volume's fade (0..1)

@@ -339,7 +339,11 @@ RIB_JS = _LWFN + r"""
   // the employees' route along the corridors through the seven stops (ACKO_LOOP.sweep, plan mm → model mm as flatten() has it), its
   // corners lightly rounded, lying on the floor in the model (walls overlap it), a deeper tone of the floor's circulation lilac on a
   // paler, wider edge strip; round ends
-  const RW = 1.1, RY = 0.06;   // 12 Nov: sleeker (the route ribbon should sleeker)
+  const RW = 1.2, RY = 0.06;   // 12 Nov: sleeker; 18 Nov: a little fuller, as a marker stroke
+  // 18 Nov (Ritika: "a conceptual loop path, not a defined path, which connects all the spaces"): every point of the Loop (both lanes, the faint
+  // lane, the call-outs' points) is moved by one smooth field, so the lanes stay parallel and the ring reads as a loose hand-drawn stroke
+  const hd = (p) => [p[0] + 1.2 * Math.sin(p[1] / 8 + 1) + 0.7 * Math.sin(p[0] / 23 + 2), p[1] + 1.2 * Math.sin(p[0] / 9 + 0.4) + 0.7 * Math.sin(p[1] / 25 + 3)];
+  const hdMm = (x, y) => { const X0 = M.X(x), Z0 = M.Z(y), q = hd([X0, Z0]); return [x + (q[0] - X0) * 1000, y + (q[1] - Z0) * 1000]; };
   function chaikin(P, it) { for (let k = 0; k < it; k++) { const Q = [P[0]];
     for (let i = 0; i + 1 < P.length; i++) { const a = P[i], b = P[i + 1]; Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); }
     Q.push(P[P.length - 1]); P = Q; } return P; }
@@ -362,33 +366,53 @@ RIB_JS = _LWFN + r"""
   // as two lanes (each point set 0.8 m to the ring's left: it runs clockwise, so out east the lane is north of the street, back west
   // south of it), round the meeting island at each end, no ends; the lane 02A has yet to open (ringDash) faint; each stop's call-out on
   // the ring, at its share of the way round
+  // 18 Nov (Ritika: "the loop should connect all spaces and look like a loop"; "in the corridor zone, no branching out; the spaces should
+  // come in the loop's path"; "first show the arrival arrow and the loop should start from them"): the Loop is the corridor route itself
+  // (ACKO_LOOP.ring: the main street out and back, through the seven stops, past the spaces), as ONE closed ring, its two directions parted
+  // into lanes 3 m apart so it reads as an oval track, eased, with only a faint hand-drawn tremor. It is split at the two entrances
+  // (Arrival 1 and 2, where the maroon arrows stand) into two arcs that draw together, each growing out of its own arrow and meeting at the
+  // other. No spurs: each space's dot is the nearest point on the ring, so the spaces sit on the path.
   function ribbon() {
     if (S.rb !== undefined) return S.rb;
     S.rb = null;
-    const LP = window.ACKO_LOOP; if (!LP || !LP.ring || !M) return null;
-    const N = LP.ring.length, LANE = 800;
+    const LP = window.ACKO_LOOP; if (!LP || !LP.ring || !M || typeof spaces !== "function") return null;
+    const N = LP.ring.length, LANE = 1500, ARR = (LP.ringStops || []).filter((s) => s.kind === "arrival").map((s) => s.i);
+    if (ARR.length < 2) return null;
+    const A1 = ARR[0], A2 = ARR[1];
     let C = LP.ring.map((p) => p.slice());
     for (let it = 0; it < 6; it++) C = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N]; return [0.25 * a[0] + 0.5 * p[0] + 0.25 * b[0], 0.25 * a[1] + 0.5 * p[1] + 0.25 * b[1]]; });
     const OFF = C.map((p, i) => { const a = C[(i - 1 + N) % N], b = C[(i + 1) % N], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
       return [p[0] + (dy / l) * LANE, p[1] - (dx / l) * LANE]; });
-    const D = (LP.ringDash && LP.ringDash[0]) || [N - 1, 0];
     const seq = (i0, i1) => { const o = []; for (let i = i0; ; i = (i + 1) % N) { o.push(OFF[i]); if (i === i1) break; } return o; };
-    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m);
-    const P = prep(seq(D[1], D[0]), 1600), Q = prep(seq(D[0], D[1]), 80), n = P.length;
-    const under = strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top = strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true);
-    const dU = strip(Q, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.35, 8, -4, true), dT = strip(Q, RW, RY, 0x8f6cf0, 0.35, 9, -6, true);
-    dU.geometry.setDrawRange(0, Infinity); dT.geometry.setDrawRange(0, Infinity);
-    M.scene.add(under, top, dU, dT);
-    // each stop's share of the way round (its place on the ring), and the call-out's point there (between the lanes, model frame)
+    const tremor = (p) => { const h = hd(p); return [p[0] + (h[0] - p[0]) * 0.2, p[1] + (h[1] - p[1]) * 0.2]; };
+    const prep = (Q, m) => resample(chaikin(Q.map((q) => [M.X(q[0] - 185842), M.Z(q[1] + 182802)]).filter((p, i, A) => !i || Math.hypot(p[0] - A[i - 1][0], p[1] - A[i - 1][1]) > 0.05), 4), m).map(tremor);
+    // the ring's length from Arrival 1 round to each point, to split it into the two arcs
     const cum = [0]; for (let i = 1; i < N; i++) cum.push(cum[i - 1] + Math.hypot(OFF[i][0] - OFF[i - 1][0], OFF[i][1] - OFF[i - 1][1]));
-    const len = cum[D[0]] || cum[N - 1], idx = {};
+    const L = cum[N - 1] + Math.hypot(OFF[0][0] - OFF[N - 1][0], OFF[0][1] - OFF[N - 1][1]), sOf = (j) => (cum[j] - cum[A1] + L) % L, sA = sOf(A2);
+    const nA = Math.max(200, Math.round(1600 * sA / L)), nB = Math.max(200, 1600 - nA);
+    const arcs = [prep(seq(A1, A2), nA), prep(seq(A2, A1), nB)].map((P) => ({ P, n: P.length,
+      under: strip(P, RW + 0.35, RY - 0.01, 0xd9cbfa, 0.9, 8, -4, true), top: strip(P, RW, RY, 0x8f6cf0, 0.9, 9, -6, true) }));
+    arcs.forEach((a) => M.scene.add(a.under, a.top));
+    // each place's share of ITS arc (the stroke front growing out of the nearer arrow reaches it then) and its point on the ring (model mm)
+    const share = (j) => { const s0 = sOf(j); return s0 <= sA ? s0 / sA : (s0 - sA) / (L - sA); };
+    const idx = {};
     (LP.ringStops || []).forEach((s) => { if (s.kind === "stop") idx[s.name] = s.i; });
-    const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, cum[idx[s.name]] / len)));
+    const at = M.data.stops.map((s) => (idx[s.name] === undefined ? 1 : Math.min(1, share(idx[s.name]))));
     const pos = M.data.stops.map((s) => (idx[s.name] === undefined ? null : [C[idx[s.name]][0] - 185842, C[idx[s.name]][1] + 182802]));
-    const show = (on) => { under.visible = on; top.visible = on; };
-    const to = (e) => { const k = Math.max(0, Math.min(n - 1, Math.round(e * (n - 1)))); under.geometry.setDrawRange(0, 6 * k); top.geometry.setDrawRange(0, 6 * k);
-      dU.visible = dT.visible = top.visible && e >= 0.995; };
-    return (S.rb = { show, to, at, pos, miss: at.map(() => 0) });
+    const hot = spaces().map((q) => { let j = 0, d0 = 1e18; for (let i = 0; i < N; i++) { const d = (C[i][0] - 185842 - q.x) ** 2 + (C[i][1] + 182802 - q.y) ** 2; if (d < d0) { d0 = d; j = i; } }
+      return { at: Math.min(1, share(j)), pos: [C[j][0] - 185842, C[j][1] + 182802] }; });
+    // white chevrons say which way each arc runs
+    const ar = [];
+    arcs.forEach((a, ai) => (ai ? [0.2, 0.5, 0.8] : [0.5]).forEach((f) => {
+      const P = a.P, n = a.n, j = Math.round(f * (n - 1)), p0 = P[Math.max(0, j - 6)], p1 = P[Math.min(n - 1, j + 6)], dx = p1[0] - p0[0], dz = p1[1] - p0[1], l = Math.hypot(dx, dz) || 1, ux = dx / l, uz = dz / l, c = P[j], Ln = 1.5, W = 0.95, Y = RY + 0.03;
+      const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute([c[0] + ux * Ln, Y, c[1] + uz * Ln, c[0] - ux * Ln * 0.5 - uz * W, Y, c[1] - uz * Ln * 0.5 + ux * W, c[0] - ux * Ln * 0.5 + uz * W, Y, c[1] - uz * Ln * 0.5 - ux * W], 3));
+      const m = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, side: T.DoubleSide, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -8, polygonOffsetUnits: -16 }));
+      m.renderOrder = 10; m.visible = false; m.frustumCulled = false; M.scene.add(m); ar.push({ m, f, ai });
+    }));
+    const show = (on) => { arcs.forEach((a) => { a.under.visible = on; a.top.visible = on; }); if (!on) ar.forEach((x) => { x.m.visible = false; }); };
+    const to = (e) => { arcs.forEach((a) => { const k = Math.max(0, Math.min(a.n - 1, Math.round(e * (a.n - 1)))); a.under.geometry.setDrawRange(0, 6 * k); a.top.geometry.setDrawRange(0, 6 * k); });
+      ar.forEach((x) => { x.m.visible = arcs[0].top.visible && e >= x.f + 0.01; }); };
+    return (S.rb = { show, to, at, pos, hot, miss: at.map(() => 0) });
   }
 """
 FROM_CSS = ('<style>#s-strategy .st-from { left: 0; top: 1%; width: 89.8%; height: 98.4%; pointer-events: none; opacity: 0;'
@@ -418,7 +442,7 @@ def strat_loop(h):
     a = h.index('ACKO.slide("s-strategy"'); b = h.index("</script>", a); js = h[a:b]
     R = [("  const DUR = [0, 2.4, 4.4, 6.4, 2.4, 4.2, 7.0];\n", "  const DUR = [0, 2.4, 4.4, 6.4, 7.5, 4.2, 7.0];   // beat 4 longer: the Loop's ribbon draws on after the partitions (12 Nov)\n"),
          ("    S.lit = M.data.stops.map((s) => k === 6 && S.d >= s.d - 0.5);",
-          "    const RB = ribbon(), re = k === 4 ? win(t, 2.0, 7.0) : 0;   // 12 Nov: slower, as Ritika asked\n"
+          "    const RB = ribbon(), re = k === 4 ? win(t, 1.5, 6.5) : 0;   // 12 Nov: slower, as Ritika asked; 18 Nov: after the arrows have landed\n"
           "    if (RB) { RB.show(k === 4 && re > 0.001); RB.to(re); }\n"
           "    S.lit = M.data.stops.map((s, i) => (k === 6 && S.d >= s.d - 0.5) || (k === 4 && !!RB && re > 0.001 && re >= RB.at[i] - 0.002));"),
          ("  function show(k) {", RIB_JS + "  function show(k) {"),
@@ -436,7 +460,7 @@ def strat_loop(h):
     t2 = '<script src="assets/js/app.js'
     h = h.replace(t2, '<style>#s-strategy .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }</style>\n' + t2, 1)
     return _in_sec(h, "s-strategy", "4 Looping it all together: the floor in colour and the partitions rise.",
-                   "4 Looping it all together: the floor in colour and the partitions rise, then the Loop lies down on the floor as one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open.")
+                   "4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open.")
 
 # Campus strategy (12 Nov): beat 1 is The Shell (the planning has begun on the slide before); beat 5 calls out the client's touchpoints
 # where the blue route reaches them (model mm, d m along the route, as data/axo-layers.js has it; named from the plan's rooms there)

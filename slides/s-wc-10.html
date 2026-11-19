@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why a campus, option 10 · ACKO slide s-wc-10</title>
+<!-- Why a campus, option 10 of 12: a village of homes (Ritika, 17 Nov: "give more options"; the options page is index-why-campus.html,
+     tools/acko/story/gen_why_opts.py). The words, footer and beats are the slide's own (s-why-campus); only the picture changes,
+     echoing the agenda's "Every team a home": 1 · two towns, each a house with its people; 2 · everyone on one long ground, mixed;
+     3 · six homes in the neighbourhood colours round one ring road, the loop, both offices in every home. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-wc-10" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="w10-hand hand w10-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="w10-h w10-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="w10-sub w10-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the village, in a 1920 × 1080 frame over the page -->
+    <svg class="w10-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <!-- beat 1 · two towns, a house each -->
+      <g class="w10-s1">
+        <path class="w10-ha" d="M510 720 V520 L490 520 L640 420 L790 520 L770 520 V720 Z"/>
+        <path class="w10-hb" d="M1150 720 V520 L1130 520 L1280 420 L1430 520 L1410 520 V720 Z"/>
+      </g>
+      <!-- beat 2 · one long ground -->
+      <path class="w10-ground" d="M450 550 H1470 V690 H520 Z"/>
+      <!-- beat 3 · six homes round one ring road -->
+      <g class="w10-s3">
+        <g class="w10-homes"></g>
+        <path class="w10-stub" d="M690 533 V560 M960 533 V560 M1230 533 V560 M690 630 V657 M960 630 V657 M1230 630 V657"/>
+        <path class="w10-road" d="M825 560 H1325 A35 35 0 0 1 1325 630 H595 A35 35 0 0 1 595 560 Z"/>
+        <g class="w10-arr"><circle cx="825" cy="560" r="8"/><circle cx="1095" cy="560" r="8"/></g>
+      </g>
+      <g class="w10-dots"></g>
+    </svg>
+
+    <span class="w10-lb w10-a" data-step="1" style="left:27.4%;top:73.4%;width:11.8%">Office A</span>
+    <span class="w10-lb w10-b" data-step="1" style="left:60.8%;top:73.4%;width:11.8%">Office B</span>
+    <span class="w10-lb w10-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="w10-lb w10-n" data-step="3" style="left:36.9%;top:73.4%;width:26.2%">6 homes · 1 loop</span>
+    <p class="w10-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="w10-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="w10-cap w10-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…every team a home, on one loop.</p>
+
+    <i class="w10-rule w10-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="w10-ft-l w10-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="w10-ft-r w10-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<style>
+/* ---------- Why a campus, option 10 · a village of homes ---------- */
+#s-wc-10 .w10-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wc-10 .w10-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wc-10 .w10-h b { font-weight: 700; color: var(--accent); }
+#s-wc-10 .w10-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wc-10 .w10-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wc-10 .drawn .w10-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the village */
+#s-wc-10 .w10-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wc-10 .w10-ha { fill: #efe9fb; stroke: #7a5ae3; stroke-width: 2.2; stroke-linejoin: round; }
+#s-wc-10 .w10-hb { fill: #f5f1e8; stroke: #cdc3b0; stroke-width: 2.2; stroke-linejoin: round; }
+#s-wc-10 .w10-ground { fill: #faf9f6; stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 6 6; }
+#s-wc-10 .w10-homes path { stroke: #fff; stroke-width: 2; stroke-linejoin: round; }
+#s-wc-10 .w10-homes text { font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); opacity: .7; }
+#s-wc-10 .w10-road { fill: none; stroke: var(--purple); stroke-width: 4.4; stroke-linejoin: round; }
+#s-wc-10 .w10-stub { fill: none; stroke: var(--purple); stroke-width: 2.4; }
+#s-wc-10 .w10-arr circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.4; }
+#s-wc-10 .w10-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wc-10 .pa { fill: #5b34d6; }
+#s-wc-10 .pb { fill: #bcae92; }
+/* a stage a beat: the towns give way to the ground, the ground to the village */
+#s-wc-10 .w10-s1, #s-wc-10 .w10-ground, #s-wc-10 .w10-s3 { opacity: 0; transition: opacity .25s var(--ease); }
+#s-wc-10 .b1 .w10-s1 { opacity: 1; transition: opacity .7s var(--ease) .15s; }
+#s-wc-10 .b2 .w10-s1 { opacity: 0; transition: opacity .8s var(--ease) .3s; }
+#s-wc-10 .b2 .w10-ground { opacity: 1; transition: opacity .9s var(--ease) .4s; }
+#s-wc-10 .b3 .w10-ground { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wc-10 .b3 .w10-s3 { opacity: 1; transition: opacity .7s var(--ease) .15s; }
+#s-wc-10 .still .w10-s1, #s-wc-10 .still .w10-ground, #s-wc-10 .still .w10-s3 { transition: none !important; }
+/* the labels and the handwritten captions; each beat's label gives way to the next in the same place */
+#s-wc-10 .w10-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wc-10 .w10-a { color: var(--accent); }
+#s-wc-10 .w10-b { color: #a3967a; }
+#s-wc-10 .w10-f { color: var(--ink); }
+#s-wc-10 .w10-n { color: var(--accent); }
+#s-wc-10 .page.b2 .w10-a.shown, #s-wc-10 .page.b2 .w10-b.shown, #s-wc-10 .page.b3 .w10-f.shown { opacity: 0; transition-delay: 0s; }
+#s-wc-10 .w10-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wc-10 .w10-cap3 { color: var(--accent); }
+#s-wc-10 .w10-f[data-step], #s-wc-10 .w10-cap[data-step="2"] { transition-delay: .9s; }
+#s-wc-10 .w10-n[data-step], #s-wc-10 .w10-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wc-10 .page:not(.b2) [data-step="2"], #s-wc-10 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wc-10 .w10-rule { height: 1px; background: var(--line); }
+#s-wc-10 .w10-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wc-10 .w10-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wc-10 .w10-ft-r { text-align: right; line-height: 1.3; }
+#s-wc-10 .w10-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wc-10 .w10-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wc-10 .w10-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<script>
+/* Why a campus, option 10 · a village of homes. The people as dots (PRESENTATION-PATTERNS §5): each keeps three places, data-a (in
+   its office's house), data-b (mixed on the one ground) and data-c (a seat in one of the six homes), and a beat moves it there
+   with a CSS transform, staggered. The offices alternate home by home, so every home holds both. */
+ACKO.slide("s-wc-10", ({ $, $$, plain, raf2, reduced, drawPath, later }) => {
+  const N = 40, R = [8.5, 7, 6.4];
+  const NB = ["#c9eaf3", "#cfe9df", "#f3dcc4", "#e0d3d3", "#ebedd6", "#f0d8e2"], WANT = [7, 7, 6, 7, 7, 6];
+  const HOMES = [[690, 415], [960, 415], [1230, 415], [690, 657], [960, 657], [1230, 657]];   // centre x, roof apex y
+  let built = false, fresh = true;
+  // a house: roof apex at y, eaves 40 below, a body 78 tall and 170 wide
+  const house = (x, y) => `M${x - 85} ${y + 118} V${y + 40} H${x - 95} L${x} ${y} L${x + 95} ${y + 40} H${x + 85} V${y + 118} Z`;
+  function build(sc) {
+    if (built) return; built = true;
+    let seed = 13; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    $(".w10-homes", sc).innerHTML = HOMES.map(([x, y], i) => `<path d="${house(x, y)}" style="fill:${NB[i]}"/><text x="${x}" y="${y + 32}" text-anchor="middle">0${i + 1}</text>`).join("");
+    // a · in each office's house, a 5 × 4 grid (A at x 640, B at x 1280)
+    const A = [];
+    for (let o = 0; o < 2; o++) for (let r = 0; r < 4; r++) for (let j = 0; j < 5; j++) A.push([640 + o * 640 - 96 + j * 48, 562 + r * 44]);
+    // b · on the one ground (x 450–1470, its west end raked): a jittered 14 × 3 grid, shuffled so the offices mix
+    const cells = [];
+    for (let r = 0; r < 3; r++) { const y = 584 + r * 38, x0 = 450 + 70 * (y - 550) / 140 + 30;
+      for (let j = 0; j < 14; j++) cells.push([x0 + ((1440 - x0) * j) / 13 + (rnd() - .5) * 16, y + (rnd() - .5) * 12]); }
+    for (let i = cells.length - 1; i > 0; i--) { const k = Math.floor(rnd() * (i + 1)); [cells[i], cells[k]] = [cells[k], cells[i]]; }
+    const B = cells.slice(0, N);
+    // c · seats in the homes' bodies, two rows of four, a checkerboard first; the offices alternate
+    const slots = [[-51, 0], [-17, 1], [17, 0], [51, 1], [-51, 1], [-17, 0], [17, 1], [51, 0]];
+    const seats = [];
+    HOMES.forEach(([x, y], h) => { for (let i = 0; i < WANT[h]; i++) seats.push([x + slots[i][0], y + 62 + slots[i][1] * 30]); });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, k) => B[i][0] - B[k][0]);
+      const s = mine[o].slice().sort((p, q) => p[0] - q[0] || p[1] - q[1]); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb"), r1 = (p) => p.map((v) => v.toFixed(1));
+    $(".w10-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${r1(p)}" data-b="${r1(B[i])}" data-c="${r1(C[i])}" style="${at(p, R[0])}"/>`).join("");
+  }
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".w10-dots circle", sc).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${Math.round((i % 16) * 25)}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;
+    });
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b1", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), road = $(".w10-road", sc), still = fresh || reduced;
+      if (still) { pg.classList.add("still"); later(() => pg.classList.remove("still"), 60); }
+      pg.classList.toggle("b1", k >= 1); pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      move(sc, k, still ? 0 : k === 3 ? 2400 : 2400);
+      // the ring road draws itself round from the first arrival as the homes come up
+      if (k === 3 && !still) drawPath(road, 1500, 250);
+      else { road.style.transition = "none"; road.style.strokeDasharray = ""; road.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>

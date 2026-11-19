@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why a campus, option 6 · ACKO slide s-wc-6</title>
+<!-- Why a campus, option 6 of 6: the campus map (Ritika, 17 Nov: "give multiple variations in depicting this slide"; the options page
+     is index-why-campus.html, tools/acko/story/gen_why_opts.py). The words, footer and beats are the slide's own (s-why-campus);
+     only the picture changes: the real floor drawn wide like a campus map, from the plan's own data (PLAN_DXF's extent and zones,
+     ACKO_LOOP's ring). The floor is one plain plate, no rooms or furniture, and the neighbourhoods are soft bubbles, not boundaries
+     (Ritika, 17 Nov). Its café, board room and terraces are named like a campus's places; the loop is everyone's pathway.
+     1 · the two offices wait at the two arrivals; 2 · they come in along the loop; 3 · they settle into the six neighbourhoods,
+     both offices in every one. -->
+<base href="../">
+<script src="assets/js/dev.js"></script>
+</head>
+<body>
+<!-- slide:start -->
+<section class="scene" id="s-wc-6" data-part="1" data-title="Why a campus" data-steps="3" data-mins="0.8" data-beats="Two offices,One floor,Six neighbourhoods on one loop"
+  data-notes="Two offices’ people merge onto one 245 m floor, then settle into six neighbourhoods on one loop. Every neighbourhood mixes both offices: one community, not two camps that happen to share a floor.">
+  <div class="page">
+    <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
+    <p class="w6-hand hand w6-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
+    <h2 class="w6-h w6-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
+    <p class="w6-sub w6-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+
+    <!-- the map, in a 1920 × 1080 frame over the page: the floor 1700 wide from x 110, y 500 (249 × 38.25 m of plan) -->
+    <svg class="w6-dia" viewBox="0 0 1920 1080" aria-hidden="true">
+      <defs class="w6-defs"></defs>
+      <g class="w6-plan w6-in" style="--i:3"></g>
+      <g clip-path="url(#w6-clip)">
+        <g class="w6-cbub w6-in" style="--i:3"></g>
+        <g class="w6-bub"></g>
+      </g>
+      <g class="w6-marks w6-in" style="--i:3"></g>
+      <g class="w6-scale w6-in" style="--i:3">
+        <path d="M1469 478 H1810 M1469 471 V485 M1639.5 474 V482 M1810 471 V485"/>
+        <text x="1469" y="462" text-anchor="middle">0</text><text x="1810" y="462" text-anchor="middle">50 m</text>
+      </g>
+      <path class="w6-dash"/>
+      <path class="w6-loop"/>
+      <g class="w6-way w6-in" style="--i:3"></g>
+      <g class="w6-nums"></g>
+      <g class="w6-dots"></g>
+    </svg>
+
+    <span class="w6-lb w6-f" data-step="2" style="left:36.9%;top:73.4%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
+    <span class="w6-lb w6-n" data-step="3" style="left:68.2%;top:73.4%;width:26.2%">6 neighbourhoods · 1 loop</span>
+    <p class="w6-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
+    <p class="w6-cap hand" data-step="2" style="left:36.9%;top:78.4%;width:26.2%">…we arrive on one floor…</p>
+    <p class="w6-cap w6-cap3 hand" data-step="3" style="left:64%;top:78.4%;width:34.6%">…and live as neighbourhoods on one loop.</p>
+
+    <i class="w6-rule w6-in" style="--i:4;left:4.8%;top:86.4%;width:90.4%"></i>
+    <p class="w6-ft-l w6-in" style="--i:4;left:4.8%;top:88.2%;width:52%">Like the campus where we first belonged: <b>your own department, everyone’s pathways, courtyards and cafés.</b></p>
+    <p class="w6-ft-r w6-in" style="--i:5;right:4.8%;top:87.6%;width:40%"><span><b>58%</b> of employees in India come back to the office to feel they belong</span><cite>Cisco, “From Mandate to Magnet”, hybrid work study: 9,200 employees across Asia Pacific incl. India, Nov 2023</cite></p>
+  </div>
+</section>
+<style>
+/* ---------- Why a campus, option 6 · the campus map ---------- */
+#s-wc-6 .w6-hand { margin: 0; font-size: calc(var(--pt) * 19); color: var(--soft); white-space: nowrap; }
+#s-wc-6 .w6-h { font-family: var(--display); font-size: calc(var(--pt) * 33); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+#s-wc-6 .w6-h b { font-weight: 700; color: var(--accent); }
+#s-wc-6 .w6-sub { font-size: calc(var(--pt) * 9.4); line-height: 1.5; color: var(--soft); }
+#s-wc-6 .w6-in { opacity: 0; transition: opacity .7s var(--ease); }
+#s-wc-6 .drawn .w6-in { opacity: 1; transition-delay: calc(var(--i, 0) * 140ms); }
+/* the map (Ritika, 17 Nov: "show neighborhoods as bubbles and not definite boundaries. Don't have furniture layout also"): the floor
+   as one plain warm-grey plate (rooms' outlines only, their joints closed by a stroke of the same grey); the commons as small
+   lavender bubbles; the neighbourhoods as soft bubbles, fading at the rim, that bloom in at beat 3 */
+#s-wc-6 .w6-dia { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#s-wc-6 .w6-plan path { fill: #f1efea; stroke: #f1efea; stroke-width: 3; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+#s-wc-6 .w6-bub ellipse { transform-box: fill-box; transform-origin: center; transform: scale(.82); opacity: 0; transition: opacity .25s var(--ease), transform .25s var(--ease); }
+#s-wc-6 .b3 .w6-bub ellipse { transform: none; opacity: 1; transition: opacity 1s var(--ease) .4s, transform 1.4s cubic-bezier(.2,.7,.2,1) .4s; }
+#s-wc-6 .w6-marks text, #s-wc-6 .w6-scale text, #s-wc-6 .w6-way text, #s-wc-6 .w6-nums text { font-family: var(--label); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+#s-wc-6 .w6-marks text { font-size: 12.5px; fill: #6a5aa8; }
+#s-wc-6 .w6-scale path { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+#s-wc-6 .w6-scale text { font-size: 12px; fill: var(--soft); letter-spacing: .1em; }
+/* the loop: drawn round at beat 2; its last stretch (the lane still to open) dashed */
+#s-wc-6 .w6-loop, #s-wc-6 .w6-dash { fill: none; stroke: var(--purple); stroke-linejoin: round; stroke-linecap: round; opacity: 0; transition: opacity .25s var(--ease); }
+#s-wc-6 .w6-loop { stroke-width: 3.4; }
+#s-wc-6 .w6-dash { stroke-width: 2.4; stroke-dasharray: 6 7; }
+#s-wc-6 .b2 .w6-loop { opacity: 1; transition: none; }
+#s-wc-6 .b2 .w6-dash { opacity: .55; transition: opacity .7s var(--ease) 1.4s; }
+/* the two offices: their names, the dashed way down to their arrival, the arrivals as open rings */
+#s-wc-6 .w6-way path { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 3 5; opacity: .55; transition: opacity .4s var(--ease); }
+#s-wc-6 .b2 .w6-way path { opacity: 0; }
+#s-wc-6 .w6-way text { font-size: 15px; transition: opacity .4s var(--ease); }
+#s-wc-6 .b2 .w6-way text { opacity: 0; }
+#s-wc-6 .w6-way .ta { fill: var(--accent); }
+#s-wc-6 .w6-way .tb { fill: #a3967a; }
+#s-wc-6 .w6-way circle { fill: #fff; stroke: #1d1d1d; stroke-width: 2.2; }
+/* the neighbourhoods' numbers, with the colours at beat 3 */
+#s-wc-6 .w6-nums text { font-size: 15px; fill: var(--ink); opacity: 0; transition: opacity .25s var(--ease); }
+#s-wc-6 .b3 .w6-nums text { opacity: .8; transition: opacity .8s var(--ease) 1.2s; }
+#s-wc-6 .w6-dots circle { transform-box: view-box; transform-origin: 0 0; }
+#s-wc-6 .pa { fill: #5b34d6; }
+#s-wc-6 .pb { fill: #bcae92; }
+/* the labels and the handwritten captions under the map */
+#s-wc-6 .w6-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+#s-wc-6 .w6-f { color: var(--ink); }
+#s-wc-6 .w6-n { color: var(--accent); }
+#s-wc-6 .w6-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
+#s-wc-6 .w6-cap3 { color: var(--accent); }
+#s-wc-6 .w6-f[data-step], #s-wc-6 .w6-cap[data-step="2"] { transition-delay: .45s; }
+#s-wc-6 .w6-n[data-step], #s-wc-6 .w6-cap[data-step="3"] { transition-delay: 1.4s; }
+#s-wc-6 .page:not(.b2) [data-step="2"], #s-wc-6 .page:not(.b3) [data-step="3"] { transition-delay: 0s !important; }
+/* the footer strip: the memory, and the research */
+#s-wc-6 .w6-rule { height: 1px; background: var(--line); }
+#s-wc-6 .w6-ft-l { font-size: calc(var(--pt) * 7.2); line-height: 1.4; color: var(--soft); }
+#s-wc-6 .w6-ft-l b { font-weight: 700; color: var(--ink); }
+#s-wc-6 .w6-ft-r { text-align: right; line-height: 1.3; }
+#s-wc-6 .w6-ft-r span { display: block; font-size: calc(var(--pt) * 7.2); color: var(--soft); }
+#s-wc-6 .w6-ft-r span b { font-family: var(--num); font-size: calc(var(--pt) * 10); font-weight: 700; color: var(--accent); margin-right: calc(var(--pt) * 1.5); }
+#s-wc-6 .w6-ft-r cite { display: block; margin-top: calc(var(--pt) * 1.5); font-style: normal; font-size: calc(var(--pt) * 5.2); color: var(--faint); }
+</style>
+<script>
+/* Why a campus, option 6 · the campus map. The floor comes from the plan's own data: PLAN_DXF's rooms and six zones (mm), ACKO_LOOP's
+   ring (smoothed a little) and its two arrivals. The people are dots, as on the slide (PRESENTATION-PATTERNS §5): each keeps three
+   places, data-a (waiting above its office's arrival), data-b (on the loop, the two offices alternating) and data-c (a seat in a
+   neighbourhood: about one dot per 16 desks, the offices alternating, so every neighbourhood holds both). */
+ACKO.slide("s-wc-6", ({ $, $$, plain, raf2, reduced, drawPath, inPoly }) => {
+  const N = 40, R = [7, 5.2, 4.6], X0 = 110, Y0 = 500, W = 1700;
+  const VB = [7500, 12500, 249000, 38250], k = W / VB[2];
+  const F = (x, y) => [X0 + (x - VB[0]) * k, Y0 + (y - VB[1]) * k];
+  const NB = { "01": "#c9eaf3", "02": "#cfe9df", "03": "#f3dcc4", "04": "#e0d3d3", "05": "#ebedd6", "06": "#f0d8e2" };
+  const SEATS = { "06": 8, "05": 6, "04": 5, "03": 4, "02": 8, "01": 9 };          // 123 · 103 · 83 · 65 · 137 · 140 desks, west to east
+  const LAND = { Cafeteria: "Café", Boardroom: "Board room", Terrace: "Terrace" };    // the commons, named like a campus's places
+  let built = false, fresh = true;
+  const pts = (d) => { const n = d.match(/-?\d+(?:\.\d+)?/g).map(Number), p = []; for (let i = 0; i + 1 < n.length; i += 2) p.push([n[i], n[i + 1]]); return p; };
+  const line = (a) => "M" + a.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join("L");
+  function build(sc) {
+    const P = window.PLAN_DXF, L = window.ACKO_LOOP;
+    if (built || !P || !L) return; built = true;
+    // the floor: each room's outline alone (its largest ring; the furniture inside it is left out) and the zones, all one grey
+    const box = (p) => { const xs = p.map((q) => q[0]), ys = p.map((q) => q[1]); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; };
+    const area = (b) => (b[2] - b[0]) * (b[3] - b[1]);
+    const outer = (d) => d.split(/(?=M)/).reduce((best, s) => (area(box(pts(s))) > area(box(pts(best))) ? s : best));
+    const g = $(".w6-plan", sc);
+    g.setAttribute("transform", `translate(${X0} ${Y0}) scale(${k}) translate(${-VB[0]} ${-VB[1]})`);
+    // one plain plate: the floor's extent (rooms, zones, cores and lobbies), its west end raked as the plan's is
+    const ov = P.overlays || {}, cores = (ov.dd || []).filter((d) => d.k !== "slab").map((d) => d.d).concat(ov.arrival || []);
+    const all = [...P.spaces.map((s) => outer(s.d)), ...P.zones.map((z) => z.zone), ...cores].flatMap((d) => pts(d));
+    const top = Math.min(...all.map((p) => p[1])), bot = Math.max(...all.map((p) => p[1])), east = Math.max(...all.map((p) => p[0]));
+    const west = (near) => Math.min(...all.filter((p) => Math.abs(p[1] - near) < 1500).map((p) => p[0]));
+    const plate = `M${west(top)} ${top} H${east} V${bot} H${west(bot)} Z`;
+    g.innerHTML = `<path d="${plate}"/>`;
+    // the bubbles' colours: solid in the middle, gone at the rim
+    const grad = (id, c) => `<radialGradient id="${id}"><stop offset="0" stop-color="${c}"/><stop offset=".55" stop-color="${c}" stop-opacity=".92"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
+    $(".w6-defs", sc).innerHTML = Object.keys(NB).map((n) => grad("w6-g-" + n, NB[n])).join("") + grad("w6-g-c", "#ddd2fa")
+      + `<clipPath id="w6-clip"><path transform="translate(${X0} ${Y0}) scale(${k}) translate(${-VB[0]} ${-VB[1]})" d="${plate}"/></clipPath>`;   // the bubbles stay on the floor
+    // the commons: a small round lavender bubble on each, sized by its room's area
+    $(".w6-cbub", sc).innerHTML = P.spaces.filter((s) => LAND[s.type]).map((s) => {
+      const [x, y] = F(s.x, s.y), r = Math.max(18, Math.sqrt((s.m2 * 1e6) / Math.PI) * k * .85);
+      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="url(#w6-g-c)"/>`; }).join("");
+    // the neighbourhoods: a bubble at each zone's centroid, sized from its extent
+    const cen = (p) => { let a = 0, cx = 0, cy = 0; for (let i = 0; i < p.length; i++) { const [x0, y0] = p[i], [x1, y1] = p[(i + 1) % p.length], c = x0 * y1 - x1 * y0; a += c; cx += (x0 + x1) * c; cy += (y0 + y1) * c; } return [cx / (3 * a), cy / (3 * a)]; };
+    const BUB = {};
+    P.zones.forEach((z) => { const p = pts(z.zone), b = box(p), [x, y] = F(...cen(p));
+      BUB[z.n] = { x, y, rx: ((b[2] - b[0]) / 2) * k * .9, ry: ((b[3] - b[1]) / 2) * k * .9 }; });
+    $(".w6-bub", sc).innerHTML = P.zones.map((z) => { const o = BUB[z.n];
+      return `<ellipse cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" rx="${o.rx.toFixed(1)}" ry="${o.ry.toFixed(1)}" fill="url(#w6-g-${z.n})"/>`; }).join("");
+    $(".w6-marks", sc).innerHTML = P.spaces.filter((s) => LAND[s.type]).map((s) => {
+      const [x, y] = F(s.x, s.y); return `<text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="middle">${LAND[s.type]}</text>`; }).join("");
+    $(".w6-nums", sc).innerHTML = P.zones.map((z) => { const o = BUB[z.n]; return `<text x="${o.x.toFixed(1)}" y="${(o.y + 5).toFixed(1)}" text-anchor="middle">${z.n}</text>`; }).join("");
+    // the loop, in the frame, smoothed (index-keeping, closed); its last stretch dashed
+    let ring = L.ring.map((p) => F(p[0], p[1]));
+    for (let t = 0; t < 3; t++) ring = ring.map((p, i, a) => { const q = a[(i - 1 + a.length) % a.length], r = a[(i + 1) % a.length]; return [p[0] / 2 + (q[0] + r[0]) / 4, p[1] / 2 + (q[1] + r[1]) / 4]; });
+    const d0 = (L.ringDash && L.ringDash[0] && L.ringDash[0][0]) || ring.length - 1;
+    const solid = ring.slice(0, d0 + 1);
+    $(".w6-loop", sc).setAttribute("d", line(solid));
+    $(".w6-dash", sc).setAttribute("d", line([...ring.slice(d0), ring[0]]));
+    // a · the two offices wait above their arrivals (A at Arrival 1, B at Arrival 2), ten by two
+    const arr = L.ringStops.filter((s) => s.kind === "arrival").map((s) => ring[s.i]);
+    const A = [];
+    arr.forEach((p, o) => { for (let r = 0; r < 2; r++) for (let j = 0; j < 10; j++) A.push([p[0] - 99 + j * 22, 426 + r * 22]); });
+    $(".w6-way", sc).innerHTML = arr.map((p, o) => `<path d="M${p[0].toFixed(1)} 462 V${(p[1] - 9).toFixed(1)}"/>`
+      + `<text class="${o ? "tb" : "ta"}" x="${(p[0] - 118).toFixed(1)}" y="${442}" text-anchor="end">Office ${o ? "B" : "A"}</text>`
+      + `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="7"/>`).join("");
+    // b · on the loop: 40 places evenly along its solid part, the offices alternating
+    const cum = [0]; for (let i = 1; i < solid.length; i++) cum.push(cum[i - 1] + Math.hypot(solid[i][0] - solid[i - 1][0], solid[i][1] - solid[i - 1][1]));
+    const along = (s) => { let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const t = (s - cum[i - 1]) / (cum[i] - cum[i - 1] || 1);
+      return [solid[i - 1][0] + (solid[i][0] - solid[i - 1][0]) * t, solid[i - 1][1] + (solid[i][1] - solid[i - 1][1]) * t]; };
+    const slots = Array.from({ length: N }, (_, j) => along(((j + .5) / N) * cum[cum.length - 1]));
+    const B = A.map((_, i) => slots[i < N / 2 ? 2 * i : 2 * (i - N / 2) + 1]);
+    // c · seats: a sunflower inside each bubble (its inner 70%, the middle left to the number); the offices alternate along the floor
+    const seats = [];
+    ["06", "05", "04", "03", "02", "01"].forEach((n) => {
+      const o = BUB[n], want = SEATS[n];
+      for (let i = 0; i < want; i++) { const t = i * 2.39996 + .6, s = .72 * Math.sqrt((i + 1.2) / (want + .2));
+        seats.push([o.x + o.rx * s * Math.cos(t), o.y + o.ry * s * Math.sin(t)]); }
+    });
+    const mine = [[], []]; seats.forEach((p, i) => mine[i % 2].push(p));
+    const C = new Array(N);
+    for (let o = 0; o < 2; o++) {
+      const ids = Array.from({ length: N / 2 }, (_, i) => o * (N / 2) + i).sort((i, j) => B[i][0] - B[j][0]);
+      const s = mine[o].slice().sort((p, q) => p[0] - q[0]); ids.forEach((i, n) => (C[i] = s[n]));
+    }
+    const at = (p, r) => `transform:translate(${p[0].toFixed(1)}px,${p[1].toFixed(1)}px) scale(${r})`;
+    const cls = (i) => (i < N / 2 ? "pa" : "pb");
+    $(".w6-dots", sc).innerHTML = A.map((p, i) => `<circle class="${cls(i)}" r="1" data-a="${p.map((v) => v.toFixed(1))}" data-b="${B[i].map((v) => v.toFixed(1))}" data-c="${C[i].map((v) => v.toFixed(1))}" style="${at(p, R[0])}"/>`).join("");
+  }
+  function move(sc, k, ms) {
+    const key = "abc"[k - 1];
+    $$(".w6-dots circle", sc).forEach((c, i) => {
+      const [x, y] = c.dataset[key].split(",").map(Number);
+      // onto the loop they come in one after another, as through a door; into the neighbourhoods all together
+      const wait = k === 2 ? Math.round((i % (N / 2)) * 45) : Math.round((i % 16) * 25);
+      c.style.transition = ms ? `transform ${ms}ms cubic-bezier(.45,.05,.3,1) ${wait}ms` : "none";
+      c.style.transform = `translate(${x}px,${y}px) scale(${R[k - 1]})`;
+    });
+  }
+  return {
+    enter(_, sc) {
+      plain(); build(sc); fresh = true;
+      const pg = $(".page", sc); pg.classList.remove("drawn", "b2", "b3"); void pg.offsetWidth;
+      raf2(() => pg.classList.add("drawn"));
+    },
+    step(k, sc) {
+      const pg = $(".page", sc), loop = $(".w6-loop", sc), still = fresh || reduced;
+      pg.classList.toggle("b2", k >= 2); pg.classList.toggle("b3", k >= 3);
+      move(sc, k, still ? 0 : k === 2 ? 1800 : 2200);
+      // the loop draws itself round from the first arrival as the people come in
+      if (k === 2 && !still) drawPath(loop, 1800, 0);
+      else { loop.style.transition = "none"; loop.style.strokeDasharray = ""; loop.style.strokeDashoffset = ""; }
+      fresh = false;
+    },
+  };
+});
+</script>
+<!-- slide:end -->
+</body>
+</html>
