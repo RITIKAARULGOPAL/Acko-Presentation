@@ -204,6 +204,26 @@ beats = re.search(r'data-beats="([^"]*)"', s[:s.index(">")])
 s = attr(s, "data-steps", "4")
 if beats: s = attr(s, "data-beats", ",".join(beats.group(1).split(",")[:4]))
 SEC2["s-strategy"] = bridge(notes_cut(s, "5 ·"), BRIDGE["s-strategy"])
+# the proposed layout, reworked (18 Nov, Ritika's review; Story 3 only, "story 3 only"): five clicks, Views to green out (its
+# numbers now a small visual in Planting's legend); the slide's own V3 code (window.ACKO_SP3, set below) does the rest
+LAYOUT_NOTES = ("The proposed layout in five clicks; the pills under the plan jump to any of them (the first back to the due diligence). "
+    "The tools, top right: Measure and Area (M, A; Esc clears), zoom, Reset view, Names on hover, Fire egress, Occupancy chart (the brief "
+    "against Option 2A). Zoom in and the panel folds away to give the plan the page; Reset view or the Legend button brings it back. "
+    "1 · Spaces: the floor in greys, the greens kept; the area outside our contract hatched in dark grey; Arrival at both lift lobbies. "
+    "Four workstation types, each its plan and its 3D: Type 1, 516 seats; Type 2, 69; Type 3, 48; Type 4, 13. Hover one: its desks light up "
+    "in purple. 2 · Neighbourhoods: six, outlined in a deeper tone of their colour and named in the legend, and the common spaces (the café, the two terraces, the two receptions, the visitor hubs) tinted gold, also in the legend; click a neighbourhood, on the plan or in the legend, to open its sheet. "
+    "3 · Biophilia, the heat: where people gather, CO₂ gathers; service rooms counted too. 4 · Planting: the plants placed where people "
+    "gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); views to green, beside the legend: "
+    "nearly every seat has a plant in view within 8 m. 5 · Acoustics: four categories of treatment, from carpet in the workhall to three "
+    "panelled walls and a soft ceiling in the phone booths and the podcast studio; the rings show each space's sound, kept inside it; "
+    "hover a category to see only its spaces. Beneath, the treatments: ceiling, walls, partitions, HVAC noise, sound masking, doors and "
+    "glazing (NRC 0.70–0.90 across the floor; an acoustic consultant can refine the specification).")
+s = SEC2["s-layout-sp"]
+s = attr(attr(s, "data-steps", "5"), "data-beats", "Spaces,Neighbourhoods,Biophilia · the heat,Biophilia · planting,Acoustics")
+s = attr(s, "data-notes", _h.escape(LAYOUT_NOTES, quote=True))
+x = '<button type="button" data-go="5"><small>3</small>Views to green</button>'
+assert s.count(x) == 1, "views to green tab"; s = s.replace(x, "")
+SEC2["s-layout-sp"] = bridge(s, BRIDGE["s-layout-sp"])
 
 h = h[:i] + "\n" + "\n\n".join(LEAD[sid] + SEC2[sid] for sid in ORDER) + "\n" + h[j:]
 # the dropped slides' styles and scripts go (and the old ones of a rebuilt slide); the new slides' come in
@@ -218,8 +238,15 @@ h = h[:k] + js_new + h[k:]
 # the page's sections: the menu, the overview's headings, the renders' kicker
 names = {key: LABEL[key] for key, *_ in SECTIONS if key != "0"}
 main = [[key, name, ""] for key, num, name, _, _ in SECTIONS if key not in ("close", "A", "0")] + [["close", "Thank you", ""]]   # the dropdown: no numbers (18 Nov, Ritika)
-h, n = re.subn(r"<script>window\.ACKO_SECTIONS = .*?;</script>", lambda m: "<script>window.ACKO_SECTIONS = %s;</script>" % json.dumps({"names": names, "main": main}, ensure_ascii=False), h, count=1)
+h, n = re.subn(r"<script>window\.ACKO_SECTIONS = .*?;</script>", lambda m: "<script>window.ACKO_SECTIONS = %s; window.ACKO_SP3 = true;</script>" % json.dumps({"names": names, "main": main}, ensure_ascii=False), h, count=1)
 assert n == 1, "sections"
+# the layout's five clicks in its script, and the due diligence's pills into them (they still counted the twelve-beat layout)
+def in_js(h, sid, x, y):
+    a = h.index('ACKO.slide("%s"' % sid); b = h.index("</script>", a); js = h[a:b]
+    assert js.count(x) == 1, (sid, x[:60], js.count(x)); return h[:a] + js.replace(x, y) + h[b:]
+h = in_js(h, "s-layout-sp", "const ORDER = [1, 2, 3, 4, 5, 6], SHEET = [null, null, null, null, null, null];", "const ORDER = [1, 2, 3, 4, 6], SHEET = [null, null, null, null, null];")
+h = in_js(h, "s-layout-sp", "[1, 2, 3, 4, 5, 6].indexOf(g) + 1", "[1, 2, 3, 4, 6].indexOf(g) + 1")
+# (s-layout-dd, the older due diligence, is out of this deck: s-site-dd replaced it, so its pills need no patch)
 open(OUT, "w", encoding="utf-8").write(h)
 steps = [int((re.search(r'data-steps="(\d+)"', a) or [0, 1])[1]) for a in re.findall(r'<section class="scene[^"]*" id="[^"]+"([^>]*)>', h)]
 print("ok", OUT, len(ORDER), "slides,", sum(steps), "beats; dropped:", " ".join(dropped))
