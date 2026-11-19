@@ -13,7 +13,7 @@
 <!-- slide:start -->
 <section class="scene" id="s-wayday" data-part="5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
   data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Board Room,Wellness"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day.">
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
@@ -127,7 +127,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const body = new T.Mesh(new T.ConeGeometry(0.28, 1.4, 28).translate(0, 0.7, 0), new T.MeshLambertMaterial({ color: 0x5222d0 }));
     const head = new T.Mesh(new T.SphereGeometry(0.125, 24, 16).translate(0, 1.565, 0), new T.MeshLambertMaterial({ color: 0xb9a6f0 }));
     const disc = new T.Mesh(new T.CircleGeometry(0.38, 24).rotateX(-Math.PI / 2).translate(0, 0.03, 0), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.16, depthWrite: false }));
-    body.castShadow = head.castShadow = true; disc.renderOrder = 3; man.add(body, head, disc); man.frustumCulled = false; group.add(man);
+    body.castShadow = head.castShadow = true; disc.renderOrder = 3; man.add(body, head, disc); man.userData.head = head; man.frustumCulled = false; group.add(man);
     // his route: from each beat's spot to the next along the Loop's own route (ACKO_LOOP.ring, plan mm; the shorter way round), eased
     const LP = window.ACKO_LOOP, ring = LP && LP.ring && LP.ring.length > 3 ? LP.ring : null, N = ring ? ring.length : 0;
     const near = (q) => { let j = 0, d0 = 1e18; for (let i = 0; i < N; i++) { const d = (ring[i][0] - q[0]) ** 2 + (ring[i][1] - q[1]) ** 2; if (d < d0) { d0 = d; j = i; } } return j; };
@@ -230,22 +230,37 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     $$(".wd-day button", sc).forEach((el, k) => { el.classList.toggle("on", k === i); el.classList.toggle("done", k < i); });
     if (MODEL.focus) { if (b.ring === undefined) b.ring = spaceOf(b); MODEL.focus(b.ring); }
   }
-  // each frame: he walks toward the current beat's spot, and the path shows as far as he has gone
+  // each frame: he walks toward the current beat's spot, slowing into the stop, and the path shows as far as he has gone
   function tick(now) {
     if (!man) return;
     const dt = S.last ? Math.min(0.25, (now - S.last) / 1000) : 0; S.last = now;
+    const head = man.userData.head; let dx = 0, dz = 0;
     if (S.p !== S.pt) {
-      const from = Math.min(S.p, S.pt), to = Math.max(S.p, S.pt), span = to - from, speed = Math.max(PACE, (span * 0.25) / 6);   // m/s
-      const step = (speed / 0.25) * dt; S.p = S.p < S.pt ? Math.min(S.pt, S.p + step) : Math.max(S.pt, S.p - step);
+      const span = Math.abs(S.pt - S.p), speed = Math.max(PACE, (Math.abs(S.pt - (legEnd[S.beat - 1] ?? 0)) * 0.25) / 7);   // m/s: at least PACE, no stretch longer than ~7 s
+      const slow = Math.min(1, 0.25 + (span * 0.25) / 2);                                                              // slows over the last 2 m
+      const step = (speed / 0.25) * dt * slow, dir = S.p < S.pt ? 1 : -1;
+      S.p = span <= Math.max(step, 0.05) ? S.pt : S.p + dir * step;
+      const i = Math.max(0, Math.min(P.length - 2, Math.floor(S.p))), a = P[i], b = P[i + 1], l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+      dx = dir * (b[0] - a[0]) / l; dz = dir * (b[1] - a[1]) / l;
     }
+    if (head) head.position.set(dx * 0.04, 0, dz * 0.04);                                                              // a small lean the way he walks; upright when he stops
     place();
+  }
+  // the camera goes with his walk: from the previous beat's view to the next by how far along the stretch he is, its target his own position,
+  // so it settles on the beat's framing exactly as he stops (at rest this is the beat's view)
+  function walkView() {
+    const q = S.p; let k = 1; while (k < legEnd.length - 1 && q > legEnd[k]) k++;                                       // the stretch from beat k-1 to beat k
+    const a = legEnd[k - 1], b = legEnd[k], f = b > a ? Math.max(0, Math.min(1, (q - a) / (b - a))) : 1, e = f * f * (3 - 2 * f);
+    const v = mix(beatView(k - 1), beatView(k), e), { right, up } = window.AxoModel.basis(v), h = v.half;
+    const off = right.clone().multiplyScalar(-h * S.asp * 0.18).add(up.clone().multiplyScalar(h * 0.05));
+    return { theta: v.theta, phi: v.phi, half: h, t: [man.position.x + off.x, 0.8 + off.y, man.position.z + off.z] };
   }
   function frame(now) {
     S.raf = 0;
     if (document.body.dataset.scene !== "s-wayday" || !R) return;
     if (!sizeUp()) { S.raf = requestAnimationFrame(frame); return; }
     if (S.jump) { S.view = S.follow ? beatView(S.beat) : S.home; S.jump = false; }
-    if (!S.user) S.view = mix(S.view, S.follow ? beatView(S.beat) : S.home, reduced ? 1 : 0.07);
+    if (!S.user) S.view = mix(S.view, S.follow ? (man && P.length ? walkView() : beatView(S.beat)) : S.home, reduced ? 1 : S.p !== S.pt ? 0.2 : 0.07);
     window.AxoModel.apply(cam, S.view, S.asp); cam.updateMatrixWorld(); tick(now); R.render(M.scene, cam);
     S.raf = requestAnimationFrame(frame);
   }
