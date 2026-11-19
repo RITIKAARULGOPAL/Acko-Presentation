@@ -799,3 +799,4 @@ amber `#F2A33A`; "A day in ACKO".
 - **Single file:** artwork paths are written out whole and go through `window.ASSET_URLS`.
 - **Update (19 Nov, later):** the carpet stays grey in every neighbourhood and the accent is worked in as grunge (a feTurbulence mask, `wfa6-grunge`); the artwork is a monochrome in the accent (`mix-blend-mode: color`); the last stop is the Collab area (soft seating, fabric texture in the Material look) instead of the coffee point.
 - **Lighter (19 Nov):** the surfaces use the accent lifted 32% toward white (`lift`); the chips keep the logo colours.
+- **Five stops (19 Nov):** team, art and carpet, meeting room (the Nalanda sign beside its door), workstation (he sits: a `sit` pose, desk-screen privacy panels), Collab. The rings are drawn by the script (`RINGS`/`ringD`), not hard-coded.
