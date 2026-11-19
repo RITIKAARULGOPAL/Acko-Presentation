@@ -17,6 +17,8 @@
     <!-- the people (9 Nov, the re-ordered deck): 640 come in at the two entrances and walk the Loop to their desks -->
     <canvas class="ly-ppl" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></canvas>
     <div class="ly-ppl-n" style="left:3%;top:18.6%;width:50%"><b>0</b><span>people, one floor: each to their own desk</span></div>
+    <!-- Story 3 (18–19 Nov): the acoustics' sound rings, each inside its own space, drawn through the plan's view -->
+    <canvas class="sp3-rings" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></canvas>
     <div class="ly-top"></div>
     <!-- the neighbourhood sheets (10 Nov): its plan (the shared plan, framed on it, left) beside its axonometric (right) -->
     <div class="nb-3d" aria-hidden="true" style="left:50.78%;top:14.54%;width:47.4%;height:47.5%"></div>
@@ -57,6 +59,8 @@
     </div>
     <svg class="ly-north" viewBox="0 0 40 40" role="img" aria-label="North"><circle cx="20" cy="20" r="18.5"/><line x1="20" y1="20" x2="8.2" y2="8.2"/></svg>
     <div class="lt-read"></div>
+    <!-- Story 3 (18 Nov, window.ACKO_SP3): zooming in folds the panel away; this shows or hides it any time -->
+    <button type="button" class="sp3-fold ui"></button>
 
     <!-- 01 · spaces: the workstation types -->
     <div class="ly-p" data-p="1">
@@ -76,6 +80,8 @@
           <div data-k="dis"><span class="pre">&nbsp;</span><b>Disorientation</b><div class="fig">2 <small>arrival zones</small></div><p>Arrival at both lift lobbies, and meeting rooms, booths and planting inside every neighbourhood.</p></div>
           <div data-k="dist"><span class="pre">&nbsp;</span><b>Distance</b><div class="fig f-dist">– <small>m</small></div><p class="f-distp"></p></div>
         </div>
+        <!-- Story 3 (18 Nov, Ritika: "remove the text and only have legend labelling the neighbourhoods"): a click opens one -->
+        <div class="sp3-nbkey ui"></div>
         <div class="zone"><div class="nbc"></div><div class="kp"><b>Key plan</b><div class="kp-in"></div></div><div class="occ"></div></div>
       </div>
     </div>
@@ -115,6 +121,12 @@
         <div data-b="3"><span class="big b-vw">–</span><span class="b-vwp"></span></div>
         <div data-b="3"><span class="sw seat"></span><span><b class="b-ns">–</b> seats: with a plant in view, and without</span></div>
         <div data-b="3"><span class="sw view"></span><span><b>Sight line</b> from a seat to its nearest plant in view</span></div>
+        <!-- Story 3 (18 Nov, Ritika: "remove views to green layout and instead give a visual representation for it near legend space") -->
+        <div data-b="2" class="sp3-view"><svg viewBox="0 0 150 40" aria-hidden="true">
+            <path class="dk" d="M6 31h22M10 31v6M24 31v6"/><circle class="st" cx="17" cy="24" r="4.2"/>
+            <path class="ey" d="M22 22L118 17"/><path class="dm" d="M17 6H122M17 3v6M122 3v6"/><text x="70" y="4.4" text-anchor="middle">within 8 m</text>
+            <path class="pot" d="M114 28h16l-2 9h-12z"/><path class="pl" d="M122 28c-3-6-8-9-12-9 4 2 7 5 9 9zM122 28c0-8 2-13 5-16-2 5-2 10-3 16zM122 28c3-5 7-8 12-9-4 3-7 6-9 9z"/>
+          </svg><span><b class="sp3-vw">–</b> of the seats see a plant within 8 m · median <b class="sp3-vm">–</b></span></div>
       </div>
     </div>
     <!-- 04 · acoustics -->
@@ -123,6 +135,8 @@
         <p>Four levels of treatment, matched to how loud and how private each space is. <b>Hover a level</b> to find its rooms.</p>
         <p>The rings show sound: wide and lingering in the open workhall, cut short in the treated rooms.</p></div>
       <div class="acs"></div>
+      <!-- Story 3 (18 Nov, Ritika: "also try include this with acoustic slide"): the PPT page's six treatments, a strip of photos -->
+      <div class="sp3-tr ui"></div>
     </div>
     <!-- 05 · due diligence: the due diligence drawing's outlines (plan_deck.py, overlays.dd) -->
     <div class="ly-p" data-p="7">
@@ -455,6 +469,89 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .bv-eh b { color: var(--purple); font-weight: 700; }
 #s-layout-sp:is([data-bv="b"], [data-bv="c"], [data-bv="d"], [data-bv="e"]) .bio > div:is(:has(.sw.seat), :has(.sw.view)),
 #s-layout-sp:is([data-bv="b"], [data-bv="c"], [data-bv="d"], [data-bv="e"]) .bio-p p.concept[data-b="3"] { display: none; }
+/* ---- Story 3 (18 Nov, Ritika's review of the proposed layout; on with window.ACKO_SP3, set by gen_story3.py: .v3 here, .sp3 on the
+   plan's host while the slide is on). Elsewhere (Story 2, the approach page) none of this shows ---- */
+#s-layout-sp:not(.v3) :is(.sp3-fold, .sp3-nbkey, .sp3-view, .sp3-tr, .sp3-rings) { display: none !important; }
+#world-plan:not(.sp3) .sp3-arr { display: none; }
+/* Spaces: no people ("remove the neighbourhood people colour coding and animation", the count with them); the floor in greys,
+   the greens kept (JS); outside the contract dark grey, cross-hatched; Arrival by each entrance's arrow */
+#s-layout-sp.v3 :is(.ly-ppl, .ly-ppl-n) { display: none !important; }
+#world-plan.sp3 .dx-nic path { fill: url(#sp3-nic); fill-opacity: 1; }
+#world-plan.sp3 svg.dx-nic { mix-blend-mode: multiply; }      /* 19 Nov, Ritika: "not in contract fill should multiply so the base plan is seen" */
+#world-plan .sp3-arr text { fill: #c40000; font-family: var(--body, sans-serif); font-weight: 600; paint-order: stroke; stroke: #fff; stroke-linejoin: round; opacity: 0; transition: opacity .6s; }   /* size and halo: JS arrLay, a constant 14.5 px on screen */
+#world-plan.sp3.show-entry .sp3-arr text { opacity: 1; }
+/* the types: in order 516, 69, 48, 13, renumbered 1–4 (JS); each its plan beside its 3D; hovered or pinned, purple */
+#s-layout-sp.v3 .chip .ty-vis { display: flex; align-items: center; gap: calc(var(--pt) * 4); height: calc(var(--pt) * 38); margin-bottom: calc(var(--pt) * 2); }
+#s-layout-sp.v3 .chip .ty-vis .ty-svg { height: calc(var(--pt) * 17); max-width: 34%; margin: 0; flex: none; transition: color .2s; }
+#s-layout-sp.v3 .chip .ty-3w { flex: none; height: 100%; aspect-ratio: 1.85; max-width: 64%; overflow: hidden; }
+#s-layout-sp.v3 .chip .ty-3w img { width: 100%; height: 100%; margin: 0; object-fit: contain; transform: scale(1.22); mix-blend-mode: multiply; }
+#s-layout-sp.v3 .chip b { transition: color .2s; }
+#s-layout-sp.v3 .chip:is(:hover, .pin) :is(b, .ty-svg) { color: var(--purple); }
+/* Neighbourhoods: the three answers' text out; a legend of the six, each a click to its sheet */
+#s-layout-sp.v3 .ly-p[data-p="2"] .three { display: none; }
+#s-layout-sp .sp3-nbkey { display: grid; grid-template-columns: repeat(6, auto); justify-content: start; gap: calc(var(--pt) * 4) calc(var(--pt) * 5); padding-top: calc(var(--pt) * 7); }
+#s-layout-sp .sp3-nbkey button { display: inline-flex; align-items: center; gap: calc(var(--pt) * 3); border: 1px solid #e3def2; background: #fff; color: var(--ink); border-radius: 999px;
+  padding: calc(var(--pt) * 2.4) calc(var(--pt) * 6) calc(var(--pt) * 2.4) calc(var(--pt) * 3); font: 500 calc(var(--pt) * 6.2) / 1.1 var(--body); cursor: pointer; pointer-events: auto; transition: border-color .2s, box-shadow .2s; }
+#s-layout-sp .sp3-nbkey button::before { content: ""; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
+#s-layout-sp .sp3-nbkey button:hover { border-color: var(--purple); box-shadow: 0 4px 12px rgba(82, 34, 208, .12); }
+#s-layout-sp .sp3-nbkey button:focus { outline: none; }
+/* the common spaces: a chip like the others but not a button, with its spaces named beside it; the same gold as on the plan */
+#s-layout-sp .sp3-nbkey .cm { grid-column: 1 / -1; display: flex; align-items: center; gap: calc(var(--pt) * 5); }
+#s-layout-sp .sp3-nbkey .cm-chip { display: inline-flex; align-items: center; gap: calc(var(--pt) * 3); border: 1px solid #e3def2; background: #fff; color: var(--ink); border-radius: 999px;
+  padding: calc(var(--pt) * 2.4) calc(var(--pt) * 6) calc(var(--pt) * 2.4) calc(var(--pt) * 3); font: 500 calc(var(--pt) * 6.2) / 1.1 var(--body); }
+#s-layout-sp .sp3-nbkey .cm-chip::before { content: ""; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); border-radius: 50%; background: #f3d878; box-shadow: inset 0 0 0 1.5px #b58a14; }
+#s-layout-sp .sp3-nbkey .cm small { font-size: calc(var(--pt) * 5.6); color: var(--mute); letter-spacing: .02em; }
+#world-plan:not(.sp3) .sp3-common, #world-plan:not([data-pl="nb"]) .sp3-common, #world-plan.focus-zone .sp3-common { display: none; }
+#world-plan .sp3-common .f { fill: #f3d878; fill-opacity: .55; stroke: none; }
+#world-plan .sp3-common .e { fill: none; stroke: #b58a14; stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+#s-layout-sp.nb-sheet .sp3-nbkey, #s-layout-sp .ly-p.zoned .sp3-nbkey { display: none; }      /* an open sheet has its own key plan and table */
+/* Biophilia: the heat's paragraph out; views to green as a small drawing in Planting's legend (a seat, its sight line, a plant) */
+#s-layout-sp.v3 .bio-p .lead > p { display: none !important; }      /* 19 Nov, Ritika: "remove the text under the heading in Biophilia" (the heat's, the planting's and its conceptual note) */
+#s-layout-sp.v3 .bio-p .bsteps { display: none; }                   /* "no need to have heat and planting capsule, instead it can come with beat": the two are separate clicks */
+#s-layout-sp .bio > .sp3-view { grid-column: 1 / -1; grid-template-columns: calc(var(--pt) * 86) 1fr; }
+#s-layout-sp .sp3-view svg { width: 100%; height: auto; overflow: visible; }
+#s-layout-sp .sp3-view .dk { fill: none; stroke: #8f8a9e; stroke-width: 1.4; stroke-linecap: round; }
+#s-layout-sp .sp3-view .st { fill: #5222d0; }
+#s-layout-sp .sp3-view .ey { fill: none; stroke: #5222d0; stroke-width: 1.3; stroke-dasharray: 3.2 2.4; }
+#s-layout-sp .sp3-view .dm { fill: none; stroke: #c9bdf0; stroke-width: 1; }
+#s-layout-sp .sp3-view text { font: 500 6.4px var(--body, sans-serif); fill: #8a83a3; }
+#s-layout-sp .sp3-view .pot { fill: #d8cbbb; } #s-layout-sp .sp3-view .pl { fill: #3f9a5f; }
+#s-layout-sp .sp3-view b { color: var(--purple); font-family: var(--num); font-weight: 400; }
+#s-layout-sp .sp3-view .sp3-vw { font-size: 1.5em; font-weight: 300; }
+/* Acoustics: the text out; "Carpet"; each category a room in section (JS cut()); the six treatments beneath, the words on hover */
+#s-layout-sp.v3 .ly-p[data-p="6"] .lead > :not(small):not(h2) { display: none !important; }
+#s-layout-sp.v3 .ly-p[data-p="6"] { row-gap: calc(var(--pt) * 5); }
+#s-layout-sp.v3 .ac { cursor: pointer; }
+#s-layout-sp.v3 .ac.pin { border-color: var(--purple); box-shadow: 0 6px 18px rgba(82, 34, 208, .14); }
+#s-layout-sp .ac svg.cut { width: 100%; height: calc(var(--pt) * 27); display: block; margin: calc(var(--pt) * 1.5) 0 calc(var(--pt) * 2); }
+#s-layout-sp .sp3-tr { grid-column: 2; display: grid; grid-template-columns: auto repeat(6, 1fr); gap: calc(var(--pt) * 4); align-items: center; }
+#s-layout-sp .sp3-tr > small { font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); line-height: 1.5; padding-right: calc(var(--pt) * 2); }
+#s-layout-sp .sp3-tr > small b { display: block; font-family: var(--num); letter-spacing: 0; text-transform: none; font-weight: 400; color: var(--purple); font-size: 1.2em; }
+#s-layout-sp .sp3-tr .t { position: relative; display: flex; align-items: center; gap: calc(var(--pt) * 3); border: 1px solid var(--line); border-radius: calc(var(--pt) * 4); padding: calc(var(--pt) * 2);
+  pointer-events: auto; cursor: default; transition: border-color .2s, box-shadow .2s; }
+#s-layout-sp .sp3-tr .t:hover { border-color: var(--purple); box-shadow: 0 6px 18px rgba(82, 34, 208, .14); z-index: 3; }
+#s-layout-sp .sp3-tr .t i { flex: none; width: calc(var(--pt) * 19); height: calc(var(--pt) * 19); border-radius: calc(var(--pt) * 2.5); background: #eee center / cover no-repeat; }
+#s-layout-sp .sp3-tr .t b { font-size: calc(var(--pt) * 5.6); line-height: 1.25; font-weight: 600; color: var(--purple-2); }
+#s-layout-sp .sp3-tr .t p { position: absolute; left: 50%; bottom: calc(100% + var(--pt) * 3); width: calc(var(--pt) * 120); transform: translate(-50%, 4px); margin: 0; padding: calc(var(--pt) * 3.5) calc(var(--pt) * 5);
+  background: #1d1733; color: #fff; border-radius: calc(var(--pt) * 2.5); font-size: calc(var(--pt) * 5.4); line-height: 1.45; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+#s-layout-sp .sp3-tr .t:hover p { opacity: 1; transform: translate(-50%, 0); }
+#s-layout-sp .sp3-tr .t:first-of-type p { left: 0; transform: translate(0, 4px); } #s-layout-sp .sp3-tr .t:first-of-type:hover p { transform: none; }
+#s-layout-sp .sp3-tr .t:last-of-type p { left: auto; right: 0; transform: translate(0, 4px); } #s-layout-sp .sp3-tr .t:last-of-type:hover p { transform: none; }
+/* the rings: from each marked space, inside its own outline, on all four categories; a category hovered or pinned, only its own
+   (one canvas over the plan, JS ringsDraw; the shared SVG rings off) */
+#world-plan.sp3 .pl-wv { display: none; }
+#s-layout-sp .sp3-rings { pointer-events: none; opacity: 0; transition: opacity .45s var(--ease); }
+#s-layout-sp.v3.ac-rings .sp3-rings { opacity: 1; }
+/* zoomed in, the panel folds away and the plan has the page (pills, north and the Legend button drop to the foot); the button or
+   Reset view brings it back */
+#s-layout-sp .sp3-fold { left: 1.8%; top: calc(var(--ly-top, 70%) - 6.4%); height: calc(var(--pt) * 11); display: flex; align-items: center; border: 1px solid #e3def2; border-radius: 999px; background: #fff;
+  color: #3b3550; padding: 0 calc(var(--pt) * 5); font: 500 calc(var(--pt) * 5.4) var(--body); cursor: pointer; pointer-events: auto; transition: top .45s var(--ease), color .2s, border-color .2s; z-index: 4; }
+#s-layout-sp .sp3-fold:hover { color: var(--purple); border-color: var(--purple); }
+#s-layout-sp .sp3-fold:focus { outline: none; }
+#s-layout-sp.v3.fold:not(.nb-sheet) :is(.ly-bot, .ly-p.on) { opacity: 0 !important; visibility: hidden !important; transform: translateY(10px); transition: opacity .35s var(--ease), transform .35s var(--ease), visibility 0s linear .35s; }
+#s-layout-sp.v3.fold:not(.nb-sheet) :is(.ly-pills, .ly-north, .sp3-fold) { top: 89.6%; }
+#s-layout-sp.v3.fold:not(.nb-sheet) .lt-read { top: 90.4%; }
+#s-layout-sp.v3.nb-sheet .sp3-fold { display: none; }
 </style>
 <script>
 /* layout Option 02A (deck slides 53–54, and 61's brief) in four layers on the shared plan (K.plan; its value-addition layers are
@@ -468,11 +565,17 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
   const ORDER = [1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6], SHEET = [null, null, "01", "02", "03", "04", "05", "06", null, null, null, null];          // the re-ordered deck (9 Nov): Due Diligence on its own, the rest after the axos        // the deck's beats → the layers (2 Nov: due diligence first)
   let arriving = false, pend = 0, self = null;  // entered from the site, its zoom still playing on the map (pend: the beat asked meanwhile)
   let beat = 0, L = null, egOn = false, pin = null, zone = null, nbSel = "homo", built = false, tools = null;
+  // Story 3 (18 Nov, Ritika's review): on with window.ACKO_SP3 (gen_story3.py sets it on index-story3.html only). V3S: on while the
+  // slide is (the plan's host has .sp3), the fold's watcher, zoomed or not, and the Legend button's choice until the next zoom
+  let V3 = false, acPin = null;
+  const V3S = { on: false, mo: null, z: false, man: null };
   const home = () => { const [x, y, w, h] = plan.data.viewBox; return plan.vbFor([x, y, x + w, y + h], box()); };
+  if (plan.warm) plan.warm(() => home());          // 19 Nov: the plan and its picture at this view are made at idle, so opening the slide shows it at once
   const rings = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
   // ---- the panels, filled once from the data ----
   function build(sc) {
     if (built) return; built = true;
+    V3 = !!window.ACKO_SP3; sc.classList.toggle("v3", V3);
     L = plan.layers();
     const P = plan.data, spaces = P.spaces.filter((s) => s.type !== "Not in contract");
     // 01 · the types: the drawing's own typed workstations against the PPT's legend
@@ -485,6 +588,12 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       T3: `<svg class="ty-svg" viewBox="0 0 2434 2300" fill="none" stroke="currentColor" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1216.9 1150.0) rotate(0) translate(-18622.8 -21109.8)"><g transform="matrix(-0.0345 1.3356 1.3356 0.0345 18474.5 21207.2)"><path d="M15.9 164.7L27.6 156.5L42.5 162.0L36.1 167.4L27.6 164.7L15.9 164.7"/><path d="M28.7 96.6L27.6 80.3L49.9 66.7L55.2 69.4L37.2 79.0L46.7 92.6L28.7 96.6"/><path d="M38.2 -181.0L27.6 -174.2L34.0 -170.2L36.1 -171.5L46.7 -171.5L46.7 -166.1L57.3 -167.4L53.1 -174.2L38.2 -181.0"/><path d="M-144.4 -55.8L-141.2 -32.7L-124.2 -23.1L-133.8 -36.8L-144.4 -55.8"/><path d="M-155.0 -55.8L-154.0 -65.3L-160.3 -64.0L-161.4 -54.5L-155.0 -55.8"/><path d="M-82.8 -140.2L-96.6 -142.9L-89.2 -152.5L-77.5 -149.7L-82.8 -140.2"/><path d="M-138.0 -102.1L-142.3 -87.1L-134.9 -76.2L-131.7 -85.8L-134.9 -91.2L-138.0 -102.1"/><path d="M-28.7 -178.3L-37.2 -166.1L-25.5 -166.1L-18.1 -168.8L-28.7 -178.3"/><path d="M-160.3 61.3L-152.9 65.3L-142.3 54.5L-149.7 46.3L-164.6 44.9L-166.7 54.5L-160.3 61.3"/><path d="M-147.6 16.3L-142.3 10.9L-135.9 15.0L-147.6 16.3"/><path d="M-160.3 -4.1L-168.8 0.0L-172.0 -17.7L-168.8 -21.8L-154.0 -21.8L-156.1 -17.7L-164.6 -15.0L-160.3 -4.1"/><path d="M-81.9 153.8L-84.2 145.7L-76.6 145.6L-74.8 151.2L-81.9 153.8"/><path d="M-64.5 150.0L-65.9 154.4L-74.3 161.3L-58.8 165.3L-58.8 151.8L-64.5 150.0"/><path d="M-33.2 156.2L-35.2 144.7L-27.6 144.6L-22.2 155.7L-33.2 156.2"/><path d="M-47.2 146.1L-62.0 129.4L-52.0 124.0L-36.7 129.7L-40.2 137.7L-46.9 136.8L-47.2 146.1"/><path d="M-137.0 29.9L-134.9 44.9L-115.7 58.5L-120.0 49.0L-137.0 29.9"/><path d="M-89.2 40.8L-83.9 55.8L-73.3 50.4L-76.5 40.8L-81.8 44.9L-89.2 40.8"/><path d="M-114.5 135.9L-107.7 124.1L-99.6 126.5L-92.5 137.4L-114.5 135.9"/><path d="M-135.2 100.5L-118.2 100.1L-119.3 108.7L-110.4 111.8L-121.7 121.6L-124.7 111.0L-135.2 100.5"/><path d="M-94.3 118.2L-80.3 120.7L-73.6 135.1L-82.0 134.4L-86.1 126.5L-94.3 118.2"/><path d="M-96.6 102.1L-110.4 88.5L-94.5 91.2L-96.6 102.1"/><path d="M-64.8 96.6L-64.8 89.8L-61.6 92.6L-64.8 96.6"/><path d="M-128.5 77.6L-133.8 73.5L-129.5 72.1L-128.5 77.6"/><path d="M-10.6 65.3L-18.1 57.2L-28.7 64.0L-28.7 69.4L-18.1 65.3L-6.4 72.1L-10.6 65.3"/><path d="M14.9 149.7L3.2 138.8L5.3 128.0L18.1 117.1L28.7 122.5L15.9 129.3L24.4 141.6L14.9 149.7"/><path d="M-15.9 134.8L-22.3 123.9L-10.6 119.8L-5.3 123.9L-15.9 134.8"/><path d="M-31.9 103.5L-39.3 96.6L-36.1 93.9L-28.7 96.6L-31.9 103.5"/><path d="M14.1 191.4L10.6 178.3L18.1 174.2L30.8 177.0L14.1 191.4"/><path d="M-25.5 181.0L-13.8 168.8L-8.5 175.6L0.0 171.5L-1.1 186.5L-10.6 181.0L-25.5 181.0"/><path d="M-49.6 159.1L-41.7 176.7L-30.6 176.2L-33.5 165.6L-39.1 169.6L-41.7 163.2L-39.5 159.5L-49.6 159.1"/><path d="M168.8 -32.7L171.0 -43.6L179.4 -43.6L184.8 -35.4L177.3 -36.8L168.8 -32.7"/><path d="M129.5 -118.4L131.7 -126.6L151.8 -121.2L129.5 -118.4"/><path d="M86.0 -128.0L83.9 -132.0L96.6 -144.3L117.9 -137.5L110.4 -130.7L96.6 -134.8L86.0 -128.0"/><path d="M79.6 -163.4L88.1 -160.6L79.6 -155.2L79.6 -163.4"/><path d="M73.3 -111.6L61.6 -122.5L65.8 -129.3L75.4 -123.9L73.3 -111.6"/><path d="M158.2 -51.7L151.8 -58.5L155.0 -72.1L162.5 -64.0L158.2 -51.7"/><path d="M161.4 -87.1L151.8 -92.6L152.9 -106.2L158.2 -98.0L161.4 -87.1"/><path d="M108.3 152.5L103.0 147.0L98.7 137.5L110.4 144.3L108.3 152.5"/><path d="M125.3 140.2L122.1 134.8L126.4 130.7L137.0 132.0L125.3 140.2"/><path d="M127.4 121.2L122.1 113.0L129.5 107.5L140.2 107.5L129.5 111.6L127.4 121.2"/><path d="M121.0 87.1L123.2 69.4L132.7 68.1L138.0 74.9L121.0 87.1"/><path d="M103.0 87.1L98.7 72.1L105.1 54.5L110.4 64.0L103.0 69.4L103.0 87.1"/><path d="M66.9 49.0L61.6 40.8L69.0 34.0L75.4 36.8L70.1 42.2L66.9 49.0"/><path d="M104.1 -13.6L98.7 -19.1L103.0 -23.1L104.1 -13.6"/><path d="M101.9 21.8L109.4 13.6L110.4 -1.4L121.0 9.5L114.7 29.9L101.9 21.8"/><path d="M69.0 151.1L46.7 149.7L49.9 138.8L64.8 132.0L68.0 140.2L62.6 144.3L69.0 151.1"/><path d="M86.0 148.4L76.5 141.6L81.8 136.1L93.4 140.2L86.0 148.4"/><path d="M58.4 111.6L61.6 93.9L53.1 88.5L64.8 84.4L69.0 99.4L58.4 111.6"/><path d="M89.2 119.8L110.4 125.2L116.8 137.5L113.6 111.6L100.9 110.3L89.2 119.8"/><path d="M83.9 95.3L76.5 117.1L88.1 102.1L83.9 95.3"/><path d="M101.9 107.5L98.7 98.0L124.2 99.4L113.6 108.9L101.9 107.5"/><path d="M76.5 88.5L72.2 79.0L78.6 76.2L83.9 81.7L76.5 88.5"/><path d="M171.0 64.0L174.1 51.7L186.9 40.8L181.6 55.8L171.0 64.0"/><path d="M137.0 53.1L147.6 36.8L140.2 25.9L139.1 36.8L137.0 53.1"/><path d="M165.6 0.0L166.7 -16.3L147.6 -24.5L159.3 -13.6L165.6 0.0"/><path d="M174.1 17.7L180.5 9.5L185.8 13.6L181.6 24.5L174.1 17.7"/><path d="M156.1 19.1L155.0 13.6L146.5 15.0L147.6 23.1L156.1 19.1"/><path d="M163.5 50.4L162.5 39.5L169.9 34.0L174.1 40.8L163.5 50.4"/><path d="M138.0 128.0L137.0 123.9L144.4 118.4L152.9 119.8L138.0 128.0"/><path d="M150.8 83.0L144.4 88.5L143.3 93.9L147.6 98.0L156.1 92.6L150.8 83.0"/><path d="M156.1 65.3L149.7 69.4L143.3 66.7L144.4 61.3L152.9 59.9L156.1 65.3"/><path d="M166.7 84.4L162.5 79.0L168.8 73.5L179.4 80.3L166.7 84.4"/><path d="M49.9 181.0L42.5 177.0L47.8 171.5L53.1 174.2L49.9 181.0"/><path d="M59.5 166.1L61.6 170.2L60.5 181.0L74.3 172.9L64.8 163.4L59.5 166.1"/><path d="M76.5 162.0L94.5 168.8L101.9 160.6L92.4 155.2L91.3 162.0L84.9 159.3L83.9 155.2L76.5 162.0"/><path d="M5.3 2.7L0.0 0.0L3.2 -2.7L7.4 -1.4L5.3 2.7"/><path d="M5.3 58.5L9.6 59.9L12.7 54.5L5.3 51.7L5.3 58.5"/><path d="M1.1 104.8L-8.5 96.6L-3.2 85.8L4.2 95.3L1.1 104.8"/><path d="M-1.1 162.0L-7.4 153.8L-3.2 142.9L1.1 148.4L-1.1 162.0"/><path d="M42.5 123.9L38.2 114.3L41.4 106.2L42.5 114.3L42.5 123.9"/></g><g transform="matrix(-0.342 0.9397 0.9397 0.342 19365.3 21852.3)"><path d="M-287.0 63.0L-279.0 -69.0"/><path d="M163.0 -32.0L144.0 -130.0"/><path d="M-179.0 -167.0L-259.0 -173.0"/><path d="M-279.0 -69.0L-261.0 -172.0"/><path d="M-179.0 -196.0L-181.0 -165.0"/><path d="M144.0 -130.0L62.0 -226.0"/><path d="M142.0 -279.0L218.0 -200.0"/><path d="M-150.0 -262.0L-189.0 -232.0"/><path d="M-171.0 -306.0L-165.0 -284.0"/><path d="M-165.0 -284.0L-145.0 -312.0"/><path d="M-145.0 -312.0L-132.0 -307.0"/><path d="M-132.0 -307.0L-150.0 -262.0"/><path d="M20.0 -283.0L-17.0 -352.0"/><path d="M25.0 -325.0L18.0 -352.0"/><path d="M-146.0 -339.0L-171.0 -306.0"/><path d="M-4.0 -358.0L25.0 -325.0"/><path d="M18.0 -352.0L-10.0 -394.0"/><path d="M-192.0 -196.0L-260.0 -207.0"/><path d="M-258.0 -206.0L-229.0 -266.0"/><path d="M-261.0 -172.0L-258.0 -206.0"/><path d="M-229.0 -266.0L-241.0 -299.0"/><path d="M-189.0 -232.0L-192.0 -196.0"/><path d="M-192.0 -196.0L-179.0 -196.0"/><path d="M-241.0 -299.0L-211.0 -353.0"/><path d="M-211.0 -353.0L-157.0 -354.0"/><path d="M-157.0 -354.0L-146.0 -339.0"/><path d="M-10.0 -394.0L20.0 -400.0"/><path d="M-17.0 -352.0L-4.0 -358.0"/><path d="M62.0 -226.0L73.0 -240.0"/><path d="M78.0 -367.0L106.0 -325.0"/><path d="M106.0 -325.0L113.0 -262.0"/><path d="M113.0 -262.0L142.0 -279.0"/><path d="M73.0 -240.0L20.0 -283.0"/><path d="M20.0 -400.0L78.0 -367.0"/><path d="M-33.0 253.0L-161.0 224.0"/><path d="M-137.0 315.0L-168.0 310.0L-194.0 294.0L-213.0 270.0L-221.0 240.0"/><path d="M249.0 97.0L255.0 214.0"/><path d="M223.0 143.0L107.0 226.0"/><path d="M-160.0 -40.0L-31.0 -67.0"/><path d="M101.0 164.0L54.0 192.0"/><path d="M54.0 192.0L0.0 195.0"/><path d="M0.0 195.0L-47.0 174.0"/><path d="M-77.0 39.0L-43.0 19.0"/><path d="M-43.0 19.0L6.0 10.0"/><path d="M6.0 10.0L47.0 13.0"/><path d="M-84.0 114.0L-75.0 13.0"/><path d="M-75.0 13.0L-17.0 -18.0"/><path d="M-17.0 -18.0L-6.0 -47.0"/><path d="M-6.0 -47.0L6.0 -46.0"/><path d="M6.0 -46.0L18.0 -18.0"/><path d="M18.0 -18.0L83.0 2.0"/><path d="M-47.0 174.0L-84.0 114.0"/><path d="M-161.0 224.0L-263.0 117.0"/><path d="M-263.0 117.0L-287.0 63.0"/><path d="M-221.0 240.0L-225.0 157.0"/><path d="M-158.0 -39.0L-190.0 23.0"/><path d="M116.0 27.0L126.0 86.0"/><path d="M261.0 -118.0L288.0 27.0"/><path d="M163.0 -32.0L153.0 6.0"/><path d="M288.0 27.0L223.0 143.0"/><path d="M89.0 0.0L116.0 27.0"/><path d="M97.0 -60.0L163.0 -32.0"/><path d="M126.0 86.0L101.0 164.0"/><path d="M47.0 13.0L89.0 0.0"/><path d="M-31.0 -67.0L97.0 -60.0"/><path d="M245.0 343.0L234.0 319.0"/><path d="M-189.0 344.0L-198.0 369.0"/><path d="M107.0 226.0L-33.0 253.0"/><path d="M255.0 214.0L250.0 245.0L235.0 271.0L210.0 290.0L180.0 298.0"/><path d="M180.0 298.0L-137.0 315.0"/><path d="M51.0 371.0L48.0 305.0"/><path d="M245.0 343.0L138.0 382.0L26.0 399.0L-87.0 395.0L-198.0 369.0"/><path d="M234.0 319.0L132.0 356.0L25.0 373.0L-83.0 369.0L-189.0 344.0"/><path d="M-2.0 374.0L-5.0 308.0"/><path d="M-181.0 -165.0L-174.0 -164.0"/><path d="M-174.0 -164.0L-160.0 -40.0"/><path d="M218.0 -200.0L261.0 -118.0"/></g><g transform="matrix(0.342 0.9397 -0.9397 0.342 17880.4 21852.3)"><path d="M-287.0 63.0L-279.0 -69.0"/><path d="M163.0 -32.0L144.0 -130.0"/><path d="M-179.0 -167.0L-259.0 -173.0"/><path d="M-279.0 -69.0L-261.0 -172.0"/><path d="M-179.0 -196.0L-181.0 -165.0"/><path d="M144.0 -130.0L62.0 -226.0"/><path d="M142.0 -279.0L218.0 -200.0"/><path d="M-150.0 -262.0L-189.0 -232.0"/><path d="M-171.0 -306.0L-165.0 -284.0"/><path d="M-165.0 -284.0L-145.0 -312.0"/><path d="M-145.0 -312.0L-132.0 -307.0"/><path d="M-132.0 -307.0L-150.0 -262.0"/><path d="M20.0 -283.0L-17.0 -352.0"/><path d="M25.0 -325.0L18.0 -352.0"/><path d="M-146.0 -339.0L-171.0 -306.0"/><path d="M-4.0 -358.0L25.0 -325.0"/><path d="M18.0 -352.0L-10.0 -394.0"/><path d="M-192.0 -196.0L-260.0 -207.0"/><path d="M-258.0 -206.0L-229.0 -266.0"/><path d="M-261.0 -172.0L-258.0 -206.0"/><path d="M-229.0 -266.0L-241.0 -299.0"/><path d="M-189.0 -232.0L-192.0 -196.0"/><path d="M-192.0 -196.0L-179.0 -196.0"/><path d="M-241.0 -299.0L-211.0 -353.0"/><path d="M-211.0 -353.0L-157.0 -354.0"/><path d="M-157.0 -354.0L-146.0 -339.0"/><path d="M-10.0 -394.0L20.0 -400.0"/><path d="M-17.0 -352.0L-4.0 -358.0"/><path d="M62.0 -226.0L73.0 -240.0"/><path d="M78.0 -367.0L106.0 -325.0"/><path d="M106.0 -325.0L113.0 -262.0"/><path d="M113.0 -262.0L142.0 -279.0"/><path d="M73.0 -240.0L20.0 -283.0"/><path d="M20.0 -400.0L78.0 -367.0"/><path d="M-33.0 253.0L-161.0 224.0"/><path d="M-137.0 315.0L-168.0 310.0L-194.0 294.0L-213.0 270.0L-221.0 240.0"/><path d="M249.0 97.0L255.0 214.0"/><path d="M223.0 143.0L107.0 226.0"/><path d="M-160.0 -40.0L-31.0 -67.0"/><path d="M101.0 164.0L54.0 192.0"/><path d="M54.0 192.0L0.0 195.0"/><path d="M0.0 195.0L-47.0 174.0"/><path d="M-77.0 39.0L-43.0 19.0"/><path d="M-43.0 19.0L6.0 10.0"/><path d="M6.0 10.0L47.0 13.0"/><path d="M-84.0 114.0L-75.0 13.0"/><path d="M-75.0 13.0L-17.0 -18.0"/><path d="M-17.0 -18.0L-6.0 -47.0"/><path d="M-6.0 -47.0L6.0 -46.0"/><path d="M6.0 -46.0L18.0 -18.0"/><path d="M18.0 -18.0L83.0 2.0"/><path d="M-47.0 174.0L-84.0 114.0"/><path d="M-161.0 224.0L-263.0 117.0"/><path d="M-263.0 117.0L-287.0 63.0"/><path d="M-221.0 240.0L-225.0 157.0"/><path d="M-158.0 -39.0L-190.0 23.0"/><path d="M116.0 27.0L126.0 86.0"/><path d="M261.0 -118.0L288.0 27.0"/><path d="M163.0 -32.0L153.0 6.0"/><path d="M288.0 27.0L223.0 143.0"/><path d="M89.0 0.0L116.0 27.0"/><path d="M97.0 -60.0L163.0 -32.0"/><path d="M126.0 86.0L101.0 164.0"/><path d="M47.0 13.0L89.0 0.0"/><path d="M-31.0 -67.0L97.0 -60.0"/><path d="M245.0 343.0L234.0 319.0"/><path d="M-189.0 344.0L-198.0 369.0"/><path d="M107.0 226.0L-33.0 253.0"/><path d="M255.0 214.0L250.0 245.0L235.0 271.0L210.0 290.0L180.0 298.0"/><path d="M180.0 298.0L-137.0 315.0"/><path d="M51.0 371.0L48.0 305.0"/><path d="M245.0 343.0L138.0 382.0L26.0 399.0L-87.0 395.0L-198.0 369.0"/><path d="M234.0 319.0L132.0 356.0L25.0 373.0L-83.0 369.0L-189.0 344.0"/><path d="M-2.0 374.0L-5.0 308.0"/><path d="M-181.0 -165.0L-174.0 -164.0"/><path d="M-174.0 -164.0L-160.0 -40.0"/><path d="M218.0 -200.0L261.0 -118.0"/></g><g transform="matrix(-0.342 -0.9397 0.9397 -0.342 19365.3 20367.4)"><path d="M-287.0 63.0L-279.0 -69.0"/><path d="M163.0 -32.0L144.0 -130.0"/><path d="M-179.0 -167.0L-259.0 -173.0"/><path d="M-279.0 -69.0L-261.0 -172.0"/><path d="M-179.0 -196.0L-181.0 -165.0"/><path d="M144.0 -130.0L62.0 -226.0"/><path d="M142.0 -279.0L218.0 -200.0"/><path d="M-150.0 -262.0L-189.0 -232.0"/><path d="M-171.0 -306.0L-165.0 -284.0"/><path d="M-165.0 -284.0L-145.0 -312.0"/><path d="M-145.0 -312.0L-132.0 -307.0"/><path d="M-132.0 -307.0L-150.0 -262.0"/><path d="M20.0 -283.0L-17.0 -352.0"/><path d="M25.0 -325.0L18.0 -352.0"/><path d="M-146.0 -339.0L-171.0 -306.0"/><path d="M-4.0 -358.0L25.0 -325.0"/><path d="M18.0 -352.0L-10.0 -394.0"/><path d="M-192.0 -196.0L-260.0 -207.0"/><path d="M-258.0 -206.0L-229.0 -266.0"/><path d="M-261.0 -172.0L-258.0 -206.0"/><path d="M-229.0 -266.0L-241.0 -299.0"/><path d="M-189.0 -232.0L-192.0 -196.0"/><path d="M-192.0 -196.0L-179.0 -196.0"/><path d="M-241.0 -299.0L-211.0 -353.0"/><path d="M-211.0 -353.0L-157.0 -354.0"/><path d="M-157.0 -354.0L-146.0 -339.0"/><path d="M-10.0 -394.0L20.0 -400.0"/><path d="M-17.0 -352.0L-4.0 -358.0"/><path d="M62.0 -226.0L73.0 -240.0"/><path d="M78.0 -367.0L106.0 -325.0"/><path d="M106.0 -325.0L113.0 -262.0"/><path d="M113.0 -262.0L142.0 -279.0"/><path d="M73.0 -240.0L20.0 -283.0"/><path d="M20.0 -400.0L78.0 -367.0"/><path d="M-33.0 253.0L-161.0 224.0"/><path d="M-137.0 315.0L-168.0 310.0L-194.0 294.0L-213.0 270.0L-221.0 240.0"/><path d="M249.0 97.0L255.0 214.0"/><path d="M223.0 143.0L107.0 226.0"/><path d="M-160.0 -40.0L-31.0 -67.0"/><path d="M101.0 164.0L54.0 192.0"/><path d="M54.0 192.0L0.0 195.0"/><path d="M0.0 195.0L-47.0 174.0"/><path d="M-77.0 39.0L-43.0 19.0"/><path d="M-43.0 19.0L6.0 10.0"/><path d="M6.0 10.0L47.0 13.0"/><path d="M-84.0 114.0L-75.0 13.0"/><path d="M-75.0 13.0L-17.0 -18.0"/><path d="M-17.0 -18.0L-6.0 -47.0"/><path d="M-6.0 -47.0L6.0 -46.0"/><path d="M6.0 -46.0L18.0 -18.0"/><path d="M18.0 -18.0L83.0 2.0"/><path d="M-47.0 174.0L-84.0 114.0"/><path d="M-161.0 224.0L-263.0 117.0"/><path d="M-263.0 117.0L-287.0 63.0"/><path d="M-221.0 240.0L-225.0 157.0"/><path d="M-158.0 -39.0L-190.0 23.0"/><path d="M116.0 27.0L126.0 86.0"/><path d="M261.0 -118.0L288.0 27.0"/><path d="M163.0 -32.0L153.0 6.0"/><path d="M288.0 27.0L223.0 143.0"/><path d="M89.0 0.0L116.0 27.0"/><path d="M97.0 -60.0L163.0 -32.0"/><path d="M126.0 86.0L101.0 164.0"/><path d="M47.0 13.0L89.0 0.0"/><path d="M-31.0 -67.0L97.0 -60.0"/><path d="M245.0 343.0L234.0 319.0"/><path d="M-189.0 344.0L-198.0 369.0"/><path d="M107.0 226.0L-33.0 253.0"/><path d="M255.0 214.0L250.0 245.0L235.0 271.0L210.0 290.0L180.0 298.0"/><path d="M180.0 298.0L-137.0 315.0"/><path d="M51.0 371.0L48.0 305.0"/><path d="M245.0 343.0L138.0 382.0L26.0 399.0L-87.0 395.0L-198.0 369.0"/><path d="M234.0 319.0L132.0 356.0L25.0 373.0L-83.0 369.0L-189.0 344.0"/><path d="M-2.0 374.0L-5.0 308.0"/><path d="M-181.0 -165.0L-174.0 -164.0"/><path d="M-174.0 -164.0L-160.0 -40.0"/><path d="M218.0 -200.0L261.0 -118.0"/></g><g transform="matrix(0.342 -0.9397 -0.9397 -0.342 17880.4 20367.4)"><path d="M-287.0 63.0L-279.0 -69.0"/><path d="M163.0 -32.0L144.0 -130.0"/><path d="M-179.0 -167.0L-259.0 -173.0"/><path d="M-279.0 -69.0L-261.0 -172.0"/><path d="M-179.0 -196.0L-181.0 -165.0"/><path d="M144.0 -130.0L62.0 -226.0"/><path d="M142.0 -279.0L218.0 -200.0"/><path d="M-150.0 -262.0L-189.0 -232.0"/><path d="M-171.0 -306.0L-165.0 -284.0"/><path d="M-165.0 -284.0L-145.0 -312.0"/><path d="M-145.0 -312.0L-132.0 -307.0"/><path d="M-132.0 -307.0L-150.0 -262.0"/><path d="M20.0 -283.0L-17.0 -352.0"/><path d="M25.0 -325.0L18.0 -352.0"/><path d="M-146.0 -339.0L-171.0 -306.0"/><path d="M-4.0 -358.0L25.0 -325.0"/><path d="M18.0 -352.0L-10.0 -394.0"/><path d="M-192.0 -196.0L-260.0 -207.0"/><path d="M-258.0 -206.0L-229.0 -266.0"/><path d="M-261.0 -172.0L-258.0 -206.0"/><path d="M-229.0 -266.0L-241.0 -299.0"/><path d="M-189.0 -232.0L-192.0 -196.0"/><path d="M-192.0 -196.0L-179.0 -196.0"/><path d="M-241.0 -299.0L-211.0 -353.0"/><path d="M-211.0 -353.0L-157.0 -354.0"/><path d="M-157.0 -354.0L-146.0 -339.0"/><path d="M-10.0 -394.0L20.0 -400.0"/><path d="M-17.0 -352.0L-4.0 -358.0"/><path d="M62.0 -226.0L73.0 -240.0"/><path d="M78.0 -367.0L106.0 -325.0"/><path d="M106.0 -325.0L113.0 -262.0"/><path d="M113.0 -262.0L142.0 -279.0"/><path d="M73.0 -240.0L20.0 -283.0"/><path d="M20.0 -400.0L78.0 -367.0"/><path d="M-33.0 253.0L-161.0 224.0"/><path d="M-137.0 315.0L-168.0 310.0L-194.0 294.0L-213.0 270.0L-221.0 240.0"/><path d="M249.0 97.0L255.0 214.0"/><path d="M223.0 143.0L107.0 226.0"/><path d="M-160.0 -40.0L-31.0 -67.0"/><path d="M101.0 164.0L54.0 192.0"/><path d="M54.0 192.0L0.0 195.0"/><path d="M0.0 195.0L-47.0 174.0"/><path d="M-77.0 39.0L-43.0 19.0"/><path d="M-43.0 19.0L6.0 10.0"/><path d="M6.0 10.0L47.0 13.0"/><path d="M-84.0 114.0L-75.0 13.0"/><path d="M-75.0 13.0L-17.0 -18.0"/><path d="M-17.0 -18.0L-6.0 -47.0"/><path d="M-6.0 -47.0L6.0 -46.0"/><path d="M6.0 -46.0L18.0 -18.0"/><path d="M18.0 -18.0L83.0 2.0"/><path d="M-47.0 174.0L-84.0 114.0"/><path d="M-161.0 224.0L-263.0 117.0"/><path d="M-263.0 117.0L-287.0 63.0"/><path d="M-221.0 240.0L-225.0 157.0"/><path d="M-158.0 -39.0L-190.0 23.0"/><path d="M116.0 27.0L126.0 86.0"/><path d="M261.0 -118.0L288.0 27.0"/><path d="M163.0 -32.0L153.0 6.0"/><path d="M288.0 27.0L223.0 143.0"/><path d="M89.0 0.0L116.0 27.0"/><path d="M97.0 -60.0L163.0 -32.0"/><path d="M126.0 86.0L101.0 164.0"/><path d="M47.0 13.0L89.0 0.0"/><path d="M-31.0 -67.0L97.0 -60.0"/><path d="M245.0 343.0L234.0 319.0"/><path d="M-189.0 344.0L-198.0 369.0"/><path d="M107.0 226.0L-33.0 253.0"/><path d="M255.0 214.0L250.0 245.0L235.0 271.0L210.0 290.0L180.0 298.0"/><path d="M180.0 298.0L-137.0 315.0"/><path d="M51.0 371.0L48.0 305.0"/><path d="M245.0 343.0L138.0 382.0L26.0 399.0L-87.0 395.0L-198.0 369.0"/><path d="M234.0 319.0L132.0 356.0L25.0 373.0L-83.0 369.0L-189.0 344.0"/><path d="M-2.0 374.0L-5.0 308.0"/><path d="M-181.0 -165.0L-174.0 -164.0"/><path d="M-174.0 -164.0L-160.0 -40.0"/><path d="M218.0 -200.0L261.0 -118.0"/></g><g transform="matrix(-0.0345 1.3356 1.3356 0.0345 18818.7 20941.1)"><path d="M15.9 164.7L27.6 156.5L42.5 162.0L36.1 167.4L27.6 164.7L15.9 164.7"/><path d="M28.7 96.6L27.6 80.3L49.9 66.7L55.2 69.4L37.2 79.0L46.7 92.6L28.7 96.6"/><path d="M38.2 -181.0L27.6 -174.2L34.0 -170.2L36.1 -171.5L46.7 -171.5L46.7 -166.1L57.3 -167.4L53.1 -174.2L38.2 -181.0"/><path d="M-144.4 -55.8L-141.2 -32.7L-124.2 -23.1L-133.8 -36.8L-144.4 -55.8"/><path d="M-155.0 -55.8L-154.0 -65.3L-160.3 -64.0L-161.4 -54.5L-155.0 -55.8"/><path d="M-82.8 -140.2L-96.6 -142.9L-89.2 -152.5L-77.5 -149.7L-82.8 -140.2"/><path d="M-138.0 -102.1L-142.3 -87.1L-134.9 -76.2L-131.7 -85.8L-134.9 -91.2L-138.0 -102.1"/><path d="M-28.7 -178.3L-37.2 -166.1L-25.5 -166.1L-18.1 -168.8L-28.7 -178.3"/><path d="M-160.3 61.3L-152.9 65.3L-142.3 54.5L-149.7 46.3L-164.6 44.9L-166.7 54.5L-160.3 61.3"/><path d="M-147.6 16.3L-142.3 10.9L-135.9 15.0L-147.6 16.3"/><path d="M-160.3 -4.1L-168.8 0.0L-172.0 -17.7L-168.8 -21.8L-154.0 -21.8L-156.1 -17.7L-164.6 -15.0L-160.3 -4.1"/><path d="M-81.9 153.8L-84.2 145.7L-76.6 145.6L-74.8 151.2L-81.9 153.8"/><path d="M-64.5 150.0L-65.9 154.4L-74.3 161.3L-58.8 165.3L-58.8 151.8L-64.5 150.0"/><path d="M-33.2 156.2L-35.2 144.7L-27.6 144.6L-22.2 155.7L-33.2 156.2"/><path d="M-47.2 146.1L-62.0 129.4L-52.0 124.0L-36.7 129.7L-40.2 137.7L-46.9 136.8L-47.2 146.1"/><path d="M-137.0 29.9L-134.9 44.9L-115.7 58.5L-120.0 49.0L-137.0 29.9"/><path d="M-89.2 40.8L-83.9 55.8L-73.3 50.4L-76.5 40.8L-81.8 44.9L-89.2 40.8"/><path d="M-114.5 135.9L-107.7 124.1L-99.6 126.5L-92.5 137.4L-114.5 135.9"/><path d="M-135.2 100.5L-118.2 100.1L-119.3 108.7L-110.4 111.8L-121.7 121.6L-124.7 111.0L-135.2 100.5"/><path d="M-94.3 118.2L-80.3 120.7L-73.6 135.1L-82.0 134.4L-86.1 126.5L-94.3 118.2"/><path d="M-96.6 102.1L-110.4 88.5L-94.5 91.2L-96.6 102.1"/><path d="M-64.8 96.6L-64.8 89.8L-61.6 92.6L-64.8 96.6"/><path d="M-128.5 77.6L-133.8 73.5L-129.5 72.1L-128.5 77.6"/><path d="M-10.6 65.3L-18.1 57.2L-28.7 64.0L-28.7 69.4L-18.1 65.3L-6.4 72.1L-10.6 65.3"/><path d="M14.9 149.7L3.2 138.8L5.3 128.0L18.1 117.1L28.7 122.5L15.9 129.3L24.4 141.6L14.9 149.7"/><path d="M-15.9 134.8L-22.3 123.9L-10.6 119.8L-5.3 123.9L-15.9 134.8"/><path d="M-31.9 103.5L-39.3 96.6L-36.1 93.9L-28.7 96.6L-31.9 103.5"/><path d="M14.1 191.4L10.6 178.3L18.1 174.2L30.8 177.0L14.1 191.4"/><path d="M-25.5 181.0L-13.8 168.8L-8.5 175.6L0.0 171.5L-1.1 186.5L-10.6 181.0L-25.5 181.0"/><path d="M-49.6 159.1L-41.7 176.7L-30.6 176.2L-33.5 165.6L-39.1 169.6L-41.7 163.2L-39.5 159.5L-49.6 159.1"/><path d="M168.8 -32.7L171.0 -43.6L179.4 -43.6L184.8 -35.4L177.3 -36.8L168.8 -32.7"/><path d="M129.5 -118.4L131.7 -126.6L151.8 -121.2L129.5 -118.4"/><path d="M86.0 -128.0L83.9 -132.0L96.6 -144.3L117.9 -137.5L110.4 -130.7L96.6 -134.8L86.0 -128.0"/><path d="M79.6 -163.4L88.1 -160.6L79.6 -155.2L79.6 -163.4"/><path d="M73.3 -111.6L61.6 -122.5L65.8 -129.3L75.4 -123.9L73.3 -111.6"/><path d="M158.2 -51.7L151.8 -58.5L155.0 -72.1L162.5 -64.0L158.2 -51.7"/><path d="M161.4 -87.1L151.8 -92.6L152.9 -106.2L158.2 -98.0L161.4 -87.1"/><path d="M108.3 152.5L103.0 147.0L98.7 137.5L110.4 144.3L108.3 152.5"/><path d="M125.3 140.2L122.1 134.8L126.4 130.7L137.0 132.0L125.3 140.2"/><path d="M127.4 121.2L122.1 113.0L129.5 107.5L140.2 107.5L129.5 111.6L127.4 121.2"/><path d="M121.0 87.1L123.2 69.4L132.7 68.1L138.0 74.9L121.0 87.1"/><path d="M103.0 87.1L98.7 72.1L105.1 54.5L110.4 64.0L103.0 69.4L103.0 87.1"/><path d="M66.9 49.0L61.6 40.8L69.0 34.0L75.4 36.8L70.1 42.2L66.9 49.0"/><path d="M104.1 -13.6L98.7 -19.1L103.0 -23.1L104.1 -13.6"/><path d="M101.9 21.8L109.4 13.6L110.4 -1.4L121.0 9.5L114.7 29.9L101.9 21.8"/><path d="M69.0 151.1L46.7 149.7L49.9 138.8L64.8 132.0L68.0 140.2L62.6 144.3L69.0 151.1"/><path d="M86.0 148.4L76.5 141.6L81.8 136.1L93.4 140.2L86.0 148.4"/><path d="M58.4 111.6L61.6 93.9L53.1 88.5L64.8 84.4L69.0 99.4L58.4 111.6"/><path d="M89.2 119.8L110.4 125.2L116.8 137.5L113.6 111.6L100.9 110.3L89.2 119.8"/><path d="M83.9 95.3L76.5 117.1L88.1 102.1L83.9 95.3"/><path d="M101.9 107.5L98.7 98.0L124.2 99.4L113.6 108.9L101.9 107.5"/><path d="M76.5 88.5L72.2 79.0L78.6 76.2L83.9 81.7L76.5 88.5"/><path d="M171.0 64.0L174.1 51.7L186.9 40.8L181.6 55.8L171.0 64.0"/><path d="M137.0 53.1L147.6 36.8L140.2 25.9L139.1 36.8L137.0 53.1"/><path d="M165.6 0.0L166.7 -16.3L147.6 -24.5L159.3 -13.6L165.6 0.0"/><path d="M174.1 17.7L180.5 9.5L185.8 13.6L181.6 24.5L174.1 17.7"/><path d="M156.1 19.1L155.0 13.6L146.5 15.0L147.6 23.1L156.1 19.1"/><path d="M163.5 50.4L162.5 39.5L169.9 34.0L174.1 40.8L163.5 50.4"/><path d="M138.0 128.0L137.0 123.9L144.4 118.4L152.9 119.8L138.0 128.0"/><path d="M150.8 83.0L144.4 88.5L143.3 93.9L147.6 98.0L156.1 92.6L150.8 83.0"/><path d="M156.1 65.3L149.7 69.4L143.3 66.7L144.4 61.3L152.9 59.9L156.1 65.3"/><path d="M166.7 84.4L162.5 79.0L168.8 73.5L179.4 80.3L166.7 84.4"/><path d="M49.9 181.0L42.5 177.0L47.8 171.5L53.1 174.2L49.9 181.0"/><path d="M59.5 166.1L61.6 170.2L60.5 181.0L74.3 172.9L64.8 163.4L59.5 166.1"/><path d="M76.5 162.0L94.5 168.8L101.9 160.6L92.4 155.2L91.3 162.0L84.9 159.3L83.9 155.2L76.5 162.0"/><path d="M5.3 2.7L0.0 0.0L3.2 -2.7L7.4 -1.4L5.3 2.7"/><path d="M5.3 58.5L9.6 59.9L12.7 54.5L5.3 51.7L5.3 58.5"/><path d="M1.1 104.8L-8.5 96.6L-3.2 85.8L4.2 95.3L1.1 104.8"/><path d="M-1.1 162.0L-7.4 153.8L-3.2 142.9L1.1 148.4L-1.1 162.0"/><path d="M42.5 123.9L38.2 114.3L41.4 106.2L42.5 114.3L42.5 123.9"/></g><g transform="matrix(1.0 -0.0 -0.0 -1.0 18611.5 21119.1)"><path d="M1061.0 9.0L1056.0 -98.0L1040.0 -202.0L1014.0 -303.0L979.0 -399.0L935.0 -491.0L882.0 -578.0L822.0 -659.0L754.0 -733.0L679.0 -801.0L598.0 -861.0L512.0 -914.0L420.0 -958.0L324.0 -994.0L223.0 -1019.0L119.0 -1035.0L11.0 -1041.0L-96.0 -1035.0L-200.0 -1019.0L-301.0 -994.0L-397.0 -958.0L-489.0 -914.0L-576.0 -861.0L-657.0 -801.0L-731.0 -733.0L-799.0 -659.0L-859.0 -578.0L-912.0 -491.0L-956.0 -399.0L-991.0 -303.0L-1017.0 -202.0L-1033.0 -98.0L-1039.0 9.0L-1033.0 117.0L-1017.0 221.0L-991.0 321.0L-956.0 418.0L-912.0 510.0L-859.0 596.0L-799.0 677.0L-731.0 752.0L-657.0 819.0L-576.0 880.0L-489.0 932.0L-397.0 977.0L-301.0 1012.0L-200.0 1038.0L-96.0 1054.0L11.0 1059.0L119.0 1054.0L223.0 1038.0L324.0 1012.0L420.0 977.0L512.0 932.0L598.0 880.0L679.0 819.0L754.0 752.0L822.0 677.0L882.0 596.0L935.0 510.0L979.0 418.0L1014.0 321.0L1040.0 221.0L1056.0 117.0L1061.0 9.0"/><path d="M-389.0 9.0L-1039.0 9.0"/><path d="M411.0 9.0L1061.0 9.0"/><path d="M11.0 409.0L11.0 1059.0"/><path d="M11.0 -391.0L11.0 -1041.0"/><path d="M411.0 9.0L403.0 -71.0L380.0 -146.0L343.0 -214.0L294.0 -274.0L235.0 -322.0L167.0 -359.0L92.0 -383.0L11.0 -391.0L-69.0 -383.0L-144.0 -359.0L-212.0 -322.0L-272.0 -274.0L-320.0 -214.0L-357.0 -146.0L-381.0 -71.0L-389.0 9.0L-381.0 90.0L-357.0 165.0L-320.0 233.0L-272.0 292.0L-212.0 341.0L-144.0 378.0L-69.0 401.0L11.0 409.0L92.0 401.0L167.0 378.0L235.0 341.0L294.0 292.0L343.0 233.0L380.0 165.0L403.0 90.0L411.0 9.0"/></g></g></svg>`,
       T4: `<svg class="ty-svg" viewBox="0 0 2480 2337" fill="none" stroke="currentColor" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1239.9 1168.5) rotate(0) translate(-43965.7 -16785.4)"><g transform="matrix(-0.2649 0.9643 -0.9643 -0.2649 43992.4 16733.2)"><path d="M-1085.0 34.0L-20.0 36.0L352.0 -562.0L-255.0 -562.0"/><path d="M-416.0 558.0L-275.0 813.0"/><path d="M856.0 -236.0L1052.0 -552.0L542.0 -869.0L-20.0 36.0L314.0 637.0L596.0 182.0"/><path d="M-1085.0 34.0L-20.0 36.0L542.0 -869.0"/><path d="M-19.0 36.0L497.0 968.0"/><path d="M-348.0 501.0L-366.0 439.0"/><path d="M-396.0 452.0L-366.0 442.0"/><path d="M-317.0 489.0L-348.0 501.0"/><path d="M-348.0 501.0L-343.0 512.0"/><path d="M-271.0 810.0L-223.0 703.0"/><path d="M-182.0 844.0L-234.0 913.0"/><path d="M-343.0 512.0L-370.0 523.0"/><path d="M-501.0 691.0L-470.0 711.0"/><path d="M-370.0 523.0L-368.0 528.0"/><path d="M-602.0 770.0L-566.0 715.0"/><path d="M-368.0 523.0L-395.0 454.0"/><path d="M-566.0 715.0L-478.0 682.0"/><path d="M-478.0 682.0L-429.0 719.0"/><path d="M-429.0 719.0L-400.0 717.0"/><path d="M-400.0 717.0L-396.0 727.0"/><path d="M-604.0 524.0L-490.0 478.0"/><path d="M-467.0 592.0L-531.0 589.0"/><path d="M-640.0 565.0L-604.0 524.0"/><path d="M-459.0 880.0L-535.0 890.0"/><path d="M-429.0 785.0L-402.0 815.0"/><path d="M-402.0 815.0L-414.0 849.0"/><path d="M-414.0 849.0L-459.0 880.0"/><path d="M-349.0 798.0L-345.0 865.0"/><path d="M-535.0 890.0L-577.0 862.0"/><path d="M-415.0 748.0L-407.0 804.0"/><path d="M-601.0 817.0L-602.0 770.0"/><path d="M-346.0 993.0L-469.0 985.0"/><path d="M-396.0 727.0L-415.0 748.0"/><path d="M-345.0 865.0L-381.0 871.0"/><path d="M-577.0 862.0L-601.0 817.0"/><path d="M-443.0 749.0L-429.0 785.0"/><path d="M-394.0 687.0L-349.0 798.0"/><path d="M-345.0 865.0L-271.0 810.0"/><path d="M-490.0 478.0L-396.0 452.0"/><path d="M-752.0 887.0L-698.0 858.0"/><path d="M-368.0 528.0L-467.0 589.0"/><path d="M-234.0 913.0L-346.0 993.0"/><path d="M-663.0 812.0L-690.0 694.0"/><path d="M-826.0 720.0L-802.0 717.0"/><path d="M-585.0 919.0L-663.0 812.0"/><path d="M-629.0 1083.0L-613.0 1064.0"/><path d="M-729.0 930.0L-675.0 901.0"/><path d="M-616.0 1009.0L-756.0 749.0"/><path d="M-516.0 1039.0L-530.0 1045.0L-544.0 1048.0L-558.0 1048.0L-572.0 1045.0L-586.0 1040.0L-598.0 1032.0L-608.0 1021.0L-616.0 1009.0"/><path d="M-629.0 1083.0L-704.0 1007.0L-762.0 920.0L-804.0 824.0L-826.0 720.0"/><path d="M-726.0 649.0L-658.0 613.0"/><path d="M-756.0 749.0L-765.0 721.0L-762.0 693.0L-749.0 668.0L-726.0 649.0"/><path d="M-613.0 1064.0L-685.0 992.0L-741.0 909.0L-780.0 816.0L-802.0 717.0"/><path d="M-420.0 988.0L-516.0 1039.0"/><path d="M-469.0 985.0L-585.0 919.0"/><path d="M-690.0 694.0L-640.0 565.0"/><path d="M-134.0 615.0L-110.0 576.0"/><path d="M-304.0 442.0L-281.0 419.0"/><path d="M-223.0 423.0L-202.0 468.0"/><path d="M-93.0 598.0L-98.0 660.0"/><path d="M-148.0 586.0L-137.0 595.0"/><path d="M-366.0 442.0L-304.0 442.0"/><path d="M-281.0 419.0L-223.0 423.0"/><path d="M-232.0 507.0L-276.0 510.0"/><path d="M-210.0 483.0L-248.0 475.0"/><path d="M-202.0 468.0L-210.0 483.0"/><path d="M-248.0 475.0L-264.0 489.0"/><path d="M-232.0 495.0L-232.0 507.0"/><path d="M-264.0 489.0L-232.0 495.0"/><path d="M-146.0 749.0L-182.0 844.0"/><path d="M-223.0 703.0L-207.0 707.0"/><path d="M-276.0 510.0L-317.0 489.0"/><path d="M-98.0 660.0L-122.0 700.0"/><path d="M-172.0 731.0L-146.0 749.0"/><path d="M-122.0 700.0L-172.0 731.0"/><path d="M-137.0 595.0L-154.0 632.0"/><path d="M-207.0 707.0L-191.0 645.0"/><path d="M-191.0 645.0L-148.0 586.0"/><path d="M-154.0 632.0L-134.0 615.0"/><path d="M-110.0 576.0L-93.0 598.0"/><path d="M-470.0 711.0L-443.0 749.0"/><path d="M-467.0 589.0L-394.0 687.0"/><path d="M565.0 62.0L519.0 107.0"/><path d="M545.0 127.0L522.0 106.0"/><path d="M540.0 40.0L565.0 62.0"/><path d="M565.0 62.0L573.0 52.0"/><path d="M800.0 -152.0L684.0 -144.0"/><path d="M789.0 -247.0L874.0 -234.0"/><path d="M573.0 52.0L595.0 71.0"/><path d="M804.0 106.0L808.0 70.0"/><path d="M595.0 71.0L598.0 66.0"/><path d="M922.0 159.0L856.0 153.0"/><path d="M593.0 69.0L545.0 125.0"/><path d="M856.0 153.0L786.0 90.0"/><path d="M786.0 90.0L795.0 30.0"/><path d="M795.0 30.0L780.0 6.0"/><path d="M780.0 6.0L787.0 -3.0"/><path d="M706.0 277.0L611.0 198.0"/><path d="M701.0 123.0L730.0 181.0"/><path d="M760.0 288.0L706.0 277.0"/><path d="M951.0 -20.0L996.0 43.0"/><path d="M853.0 -1.0L867.0 -39.0"/><path d="M867.0 -39.0L902.0 -45.0"/><path d="M902.0 -45.0L951.0 -20.0"/><path d="M827.0 -78.0L884.0 -113.0"/><path d="M996.0 43.0L991.0 93.0"/><path d="M814.0 4.0L860.0 -30.0"/><path d="M963.0 135.0L922.0 159.0"/><path d="M997.0 -173.0L1048.0 -61.0"/><path d="M787.0 -3.0L814.0 4.0"/><path d="M884.0 -113.0L907.0 -84.0"/><path d="M991.0 93.0L963.0 135.0"/><path d="M828.0 28.0L853.0 -1.0"/><path d="M751.0 14.0L827.0 -78.0"/><path d="M884.0 -113.0L800.0 -152.0"/><path d="M611.0 198.0L545.0 127.0"/><path d="M1096.0 235.0L1045.0 201.0"/><path d="M598.0 66.0L699.0 125.0"/><path d="M874.0 -234.0L997.0 -173.0"/><path d="M988.0 192.0L896.0 271.0"/><path d="M984.0 379.0L970.0 359.0"/><path d="M1046.0 72.0L988.0 192.0"/><path d="M1210.0 33.0L1186.0 29.0"/><path d="M1123.0 194.0L1072.0 160.0"/><path d="M1140.0 57.0L977.0 304.0"/><path d="M1119.0 -45.0L1130.0 -36.0L1139.0 -25.0L1146.0 -12.0L1150.0 2.0L1152.0 16.0L1151.0 30.0L1146.0 44.0L1140.0 57.0"/><path d="M1210.0 33.0L1179.0 135.0L1130.0 228.0L1065.0 310.0L984.0 379.0"/><path d="M875.0 325.0L810.0 282.0"/><path d="M977.0 304.0L956.0 324.0L930.0 335.0L902.0 336.0L875.0 325.0"/><path d="M1186.0 29.0L1157.0 126.0L1110.0 215.0L1047.0 293.0L970.0 359.0"/><path d="M1028.0 -105.0L1119.0 -45.0"/><path d="M1048.0 -61.0L1046.0 72.0"/><path d="M896.0 271.0L760.0 288.0"/><path d="M565.0 -181.0L518.0 -183.0"/><path d="M492.0 51.0L461.0 42.0"/><path d="M437.0 -11.0L467.0 -52.0"/><path d="M530.0 -209.0L586.0 -234.0"/><path d="M545.0 -155.0L548.0 -168.0"/><path d="M522.0 106.0L492.0 51.0"/><path d="M461.0 42.0L437.0 -11.0"/><path d="M515.0 -44.0L539.0 -6.0"/><path d="M483.0 -52.0L494.0 -14.0"/><path d="M467.0 -52.0L483.0 -52.0"/><path d="M494.0 -14.0L514.0 -7.0"/><path d="M505.0 -37.0L515.0 -44.0"/><path d="M514.0 -7.0L505.0 -37.0"/><path d="M688.0 -234.0L789.0 -247.0"/><path d="M684.0 -144.0L679.0 -160.0"/><path d="M539.0 -6.0L540.0 40.0"/><path d="M586.0 -234.0L633.0 -231.0"/><path d="M684.0 -202.0L688.0 -234.0"/><path d="M633.0 -231.0L684.0 -202.0"/><path d="M548.0 -168.0L588.0 -172.0"/><path d="M679.0 -160.0L617.0 -144.0"/><path d="M617.0 -144.0L545.0 -155.0"/><path d="M588.0 -172.0L565.0 -181.0"/><path d="M518.0 -183.0L530.0 -209.0"/><path d="M808.0 70.0L828.0 28.0"/><path d="M699.0 125.0L751.0 14.0"/><path d="M-337.0 -474.0L-274.0 -460.0"/><path d="M-271.0 -492.0L-276.0 -461.0"/><path d="M-341.0 -441.0L-337.0 -474.0"/><path d="M-337.0 -474.0L-349.0 -475.0"/><path d="M-645.0 -554.0L-574.0 -460.0"/><path d="M-717.0 -492.0L-753.0 -571.0"/><path d="M-349.0 -475.0L-345.0 -504.0"/><path d="M-430.0 -698.0L-463.0 -682.0"/><path d="M-345.0 -504.0L-351.0 -504.0"/><path d="M-451.0 -826.0L-420.0 -767.0"/><path d="M-347.0 -501.0L-273.0 -492.0"/><path d="M-420.0 -767.0L-434.0 -674.0"/><path d="M-434.0 -674.0L-489.0 -649.0"/><path d="M-489.0 -649.0L-501.0 -623.0"/><path d="M-501.0 -623.0L-512.0 -624.0"/><path d="M-234.0 -709.0L-248.0 -587.0"/><path d="M-360.0 -622.0L-327.0 -677.0"/><path d="M-254.0 -761.0L-234.0 -709.0"/><path d="M-616.0 -753.0L-589.0 -824.0"/><path d="M-547.0 -681.0L-586.0 -671.0"/><path d="M-586.0 -671.0L-610.0 -698.0"/><path d="M-610.0 -698.0L-616.0 -753.0"/><path d="M-597.0 -616.0L-658.0 -645.0"/><path d="M-589.0 -824.0L-544.0 -847.0"/><path d="M-522.0 -651.0L-575.0 -670.0"/><path d="M-493.0 -847.0L-451.0 -826.0"/><path d="M-770.0 -707.0L-704.0 -811.0"/><path d="M-512.0 -624.0L-522.0 -651.0"/><path d="M-658.0 -645.0L-646.0 -680.0"/><path d="M-544.0 -847.0L-493.0 -847.0"/><path d="M-509.0 -675.0L-547.0 -681.0"/><path d="M-479.0 -603.0L-597.0 -616.0"/><path d="M-658.0 -645.0L-645.0 -554.0"/><path d="M-248.0 -587.0L-271.0 -492.0"/><path d="M-482.0 -1013.0L-482.0 -951.0"/><path d="M-351.0 -504.0L-357.0 -620.0"/><path d="M-753.0 -571.0L-770.0 -707.0"/><path d="M-460.0 -899.0L-343.0 -866.0"/><path d="M-300.0 -998.0L-309.0 -976.0"/><path d="M-591.0 -882.0L-460.0 -899.0"/><path d="M-713.0 -998.0L-704.0 -975.0"/><path d="M-531.0 -1014.0L-532.0 -952.0"/><path d="M-655.0 -952.0L-360.0 -951.0"/><path d="M-729.0 -879.0L-728.0 -893.0L-723.0 -907.0L-716.0 -920.0L-707.0 -931.0L-696.0 -940.0L-683.0 -947.0L-669.0 -951.0L-655.0 -952.0"/><path d="M-713.0 -998.0L-611.0 -1028.0L-507.0 -1038.0L-402.0 -1028.0L-300.0 -998.0"/><path d="M-286.0 -877.0L-287.0 -799.0"/><path d="M-360.0 -951.0L-331.0 -945.0L-308.0 -929.0L-292.0 -906.0L-286.0 -877.0"/><path d="M-704.0 -975.0L-607.0 -1004.0L-507.0 -1014.0L-407.0 -1004.0L-309.0 -976.0"/><path d="M-730.0 -770.0L-729.0 -879.0"/><path d="M-704.0 -811.0L-591.0 -882.0"/><path d="M-343.0 -866.0L-254.0 -761.0"/><path d="M-539.0 -341.0L-516.0 -300.0"/><path d="M-306.0 -407.0L-297.0 -375.0"/><path d="M-328.0 -327.0L-378.0 -329.0"/><path d="M-545.0 -296.0L-596.0 -330.0"/><path d="M-507.0 -338.0L-520.0 -333.0"/><path d="M-276.0 -461.0L-306.0 -407.0"/><path d="M-297.0 -375.0L-328.0 -327.0"/><path d="M-398.0 -375.0L-379.0 -415.0"/><path d="M-387.0 -343.0L-362.0 -373.0"/><path d="M-378.0 -329.0L-387.0 -343.0"/><path d="M-362.0 -373.0L-366.0 -394.0"/><path d="M-387.0 -369.0L-398.0 -375.0"/><path d="M-366.0 -394.0L-387.0 -369.0"/><path d="M-652.0 -415.0L-717.0 -492.0"/><path d="M-574.0 -460.0L-585.0 -448.0"/><path d="M-379.0 -415.0L-341.0 -441.0"/><path d="M-596.0 -330.0L-620.0 -371.0"/><path d="M-623.0 -430.0L-652.0 -415.0"/><path d="M-620.0 -371.0L-623.0 -430.0"/><path d="M-520.0 -333.0L-545.0 -366.0"/><path d="M-585.0 -448.0L-538.0 -405.0"/><path d="M-538.0 -405.0L-507.0 -338.0"/><path d="M-545.0 -366.0L-539.0 -341.0"/><path d="M-516.0 -300.0L-545.0 -296.0"/><path d="M-463.0 -682.0L-509.0 -675.0"/><path d="M-357.0 -620.0L-479.0 -603.0"/><path d="M650.0 96.0L803.0 -151.0"/><path d="M-354.0 -562.0L-646.0 -562.0"/><path d="M-749.0 -562.0L-1083.0 -562.0L-1085.0 38.0"/><path d="M-226.0 902.0L-28.0 1259.0L497.0 968.0L-20.0 36.0L-707.0 35.0L-465.0 471.0"/></g></g></svg>` };
     const T = L ? L.types : [];
+    if (V3) {                    // Story 3 (18 Nov, Ritika: "reorder the types… 516, 69, 48, 13", renumbered; "also show the 3D workstation of
+      // the type next to its plan"): the renders from Workstation typologies, the 13-seat type's made from the model (tools/acko/render_ws_type.js)
+      const ORD = ["T4", "T1", "T3", "T2"], R3 = { T1: "ty-type1", T2: "ty-type2", T3: "ty-type3", T4: "ty-type4" };
+      $(".types", sc).innerHTML = ORD.map((k) => T.find((t) => t.t === k)).filter(Boolean).map((t, i) => `<div class="chip" data-t="${t.t}"><div class="ty-vis">${SVG[t.t] || ""}` +
+        `<span class="ty-3w"><img src="${asset("assets/img/" + R3[t.t] + ".webp")}" alt=""></span></div><b>Type ${i + 1}</b><div class="n">${t.seats}<small>seats</small></div></div>`).join("");
+    } else
     $(".types", sc).innerHTML = T.map((t) => `<div class="chip" data-t="${t.t}">${SVG[t.t] || `<img src="${asset("assets/img/" + (ICON[t.t] || "ty-icon1") + ".webp")}" alt="">`}<b>${t.name}</b>` +
       `<div class="n">${t.seats}<small>seats</small></div></div>`).join("");
     const total = P.zones.reduce((a, z) => a + (z.seats || 0), 0);
@@ -516,8 +625,11 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       { c: 4, title: "Carpet + wall panelling on 3 sides + soft panelling / ceiling", who: `Phone booths + podcast studio · <span>${cnt(/Phone booth|Studio/)}</span>`, walls: 3, ceil: true, amp: 0.18, damp: 4.5 },
     ];
     const CC = { 1: "#efe9fd", 2: "#cdb9f5", 3: "#9a79f2", 4: "#5222d0" };
-    $(".acs", sc).innerHTML = ACS.map((a) => `<div class="ac" data-c="${a.c}"><div class="k"><i style="background:${CC[a.c]};${a.c === 1 ? "border:1px solid #d9cff6" : ""}"></i>Category ${a.c}</div>${iso(a, CC)}${wave(a, CC)}<b>${a.title}</b><p>${a.who}</p></div>`).join("");
-    $$(".ac", sc).forEach((el) => { el.onmouseenter = () => L && L.acHi(el.dataset.c); el.onmouseleave = () => L && L.acHi(null); });
+    if (V3) ACS[0].title = "Carpet";                     // Story 3 (18 Nov, Ritika: "remove high-ounce and only call it carpet")
+    $(".acs", sc).innerHTML = ACS.map((a) => `<div class="ac" data-c="${a.c}"><div class="k"><i style="background:${CC[a.c]};${a.c === 1 ? "border:1px solid #d9cff6" : ""}"></i>Category ${a.c}</div>${V3 ? cut(a, CC) : iso(a, CC) + wave(a, CC)}<b>${a.title}</b><p>${a.who}</p></div>`).join("");
+    $$(".ac", sc).forEach((el) => { el.onmouseenter = () => L && L.acHi(el.dataset.c); el.onmouseleave = () => L && L.acHi(acPin);
+      if (V3) el.onclick = () => { acPin = acPin === el.dataset.c ? null : el.dataset.c; $$(".ac", sc).forEach((c) => c.classList.toggle("pin", c.dataset.c === acPin)); if (L) L.acHi(acPin); }; });
+    if (V3) v3Build(sc);
     // 05 · due diligence: each kind, its count and area, in the colour it is outlined in on the plan
     const DD = [["stair", "Fire exit staircases", "#980000", "rgba(152,0,0,.22)"], ["ahu", "AHU rooms", "#1c64b4", "rgba(28,100,180,.2)"],
       ["wash", "Washrooms", "#2f8f9d", "rgba(47,143,157,.2)"], ["slab", "Slab to be strengthened", "#5222d0", "rgba(82,34,208,.16)"], ["lift", "Lift lobbies", "#c98a1a", "rgba(201,138,26,.22)"]];
@@ -588,11 +700,192 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
   }
   function wave(a, CC) { let d = ""; for (let i = 0; i <= 120; i++) { const t = i / 120, y = 12 - Math.sin(t * Math.PI * 14) * 10 * a.amp * Math.exp(-a.damp * t); d += (i ? "L" : "M") + i + " " + y.toFixed(2); }
     return `<svg class="wave" viewBox="0 0 120 24" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="${CC[Math.max(2, a.c)]}" stroke-width="1.4"/></svg>`; }
+  // ---- Story 3 (18 Nov, Ritika's review of the proposed layout; window.ACKO_SP3) ----
+  // a category as a room in section ("give different visual representation for the categories"; she picked the cut-aways): its
+  // treated surfaces in the category's purple (carpet; one wall, the other dashed: "1 or 2 sides"; the soft ceiling; three sides,
+  // the back wall tinted), and a sound inside that dies sooner at each level; the open workhall has no walls and its sound runs on
+  function cut(a, CC) {
+    const c = a.c, T = CC[Math.max(2, c)], G = "#c9c3dc", x0 = 14, x1 = 106, y0 = 8, fl = 52, w = 4;
+    const slats = (x, y, h) => Array.from({ length: 6 }, (_, i) => `<line x1="${x + 0.5}" y1="${y + 2 + i * (h - 4) / 5}" x2="${x + w - 0.5}" y2="${y + 2 + i * (h - 4) / 5}" stroke="#fff" stroke-width=".5"/>`).join("");
+    let s = `<defs><pattern id="sp3-cp${c}" width="3" height="3" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".6" fill="#7d68b8"/></pattern>`;
+    let ix0 = 4, ix1 = 116, iy0 = 0;                     // the room's inside: where its sound can go
+    if (c > 1) { ix0 = x0 + w; ix1 = x1 - w; iy0 = y0 + w; }
+    if (c >= 2) ix1 -= w; if (c >= 4) ix0 += w; if (a.ceil) iy0 += 3;
+    s += `<clipPath id="sp3-ci${c}"><rect x="${ix0}" y="${iy0}" width="${ix1 - ix0}" height="${fl - iy0}"/></clipPath></defs>`;
+    if (c === 1) s += `<path d="M6 ${fl}V22M114 ${fl}V22" stroke="${G}" stroke-width=".8" stroke-dasharray="2 2" fill="none"/>`;
+    else {
+      if (c >= 4) s += `<rect x="${x0 + w}" y="${y0 + w}" width="${x1 - x0 - 2 * w}" height="${fl - y0 - w}" fill="${T}" opacity=".16"/>`;   // the third side, behind
+      s += `<rect x="${x0}" y="${y0}" width="${w}" height="${fl - y0}" fill="#f4f2fa" stroke="${G}" stroke-width=".6"/><rect x="${x1 - w}" y="${y0}" width="${w}" height="${fl - y0}" fill="#f4f2fa" stroke="${G}" stroke-width=".6"/>`;
+      s += `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${w}" fill="#f4f2fa" stroke="${G}" stroke-width=".6"/>`;
+      s += `<rect x="${x1 - 2 * w}" y="${y0 + w}" width="${w}" height="${fl - y0 - w}" fill="${T}"/>` + slats(x1 - 2 * w, y0 + w, fl - y0 - w);      // a panelled wall
+      s += c >= 4 ? `<rect x="${x0 + w}" y="${y0 + w}" width="${w}" height="${fl - y0 - w}" fill="${T}"/>` + slats(x0 + w, y0 + w, fl - y0 - w)
+        : `<rect x="${x0 + w + 0.4}" y="${y0 + w + 0.4}" width="${w - 0.8}" height="${fl - y0 - w - 0.8}" fill="none" stroke="${T}" stroke-width=".8" stroke-dasharray="1.6 1.2"/>`;
+      if (a.ceil) s += `<path d="M${x0 + w} ${y0 + w}H${x1 - w}V${y0 + w + 2}` + Array.from({ length: 12 }, (_, i) => `Q${x1 - w - (i + 0.5) * (x1 - x0 - 2 * w) / 12} ${y0 + w + 4.2} ${x1 - w - (i + 1) * (x1 - x0 - 2 * w) / 12} ${y0 + w + 2}`).join("") + `Z" fill="${T}"/>`;
+    }
+    s += `<rect x="${c === 1 ? 4 : x0}" y="${fl}" width="${c === 1 ? 112 : x1 - x0}" height="4" fill="#ece7f8"/><rect x="${c === 1 ? 4 : x0}" y="${fl}" width="${c === 1 ? 112 : x1 - x0}" height="4" fill="url(#sp3-cp${c})"/>`;
+    s += `<line x1="${c === 1 ? 2 : x0 - 2}" y1="${fl + 4}" x2="${c === 1 ? 118 : x1 + 2}" y2="${fl + 4}" stroke="${G}" stroke-width=".8"/>`;
+    const R = { 1: [[8, .9], [16, .72], [25, .55], [35, .4], [46, .28], [58, .18]], 2: [[8, .85], [15, .55], [23, .28]], 3: [[8, .8], [14, .4], [20, .14]], 4: [[7, .75], [12, .25]] }[c];
+    const cx = 60, cy = 38;
+    s += `<g clip-path="url(#sp3-ci${c})">` + R.map(([r, o]) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#5222d0" stroke-width=".9" opacity="${o}"/>`).join("") + `</g>`;
+    s += `<circle cx="${cx}" cy="${cy}" r="2.1" fill="#5222d0"/>`;
+    return `<svg class="cut" viewBox="0 0 120 60" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${s}</svg>`;
+  }
+  // a fill's colour as a grey of the same lightness, greens kept ("it can be in greys"; "greens can remain in green")
+  function grey(c) {
+    let v = null; const h6 = /^#([0-9a-f]{6})$/i.exec((c || "").trim());
+    if (h6) v = [0, 2, 4].map((i) => parseInt(h6[1].slice(i, i + 2), 16)); else { const m = (c || "").match(/[\d.]+/g); if (m && m.length >= 3) v = m.slice(0, 3).map(Number); }
+    if (!v) return c;
+    const [r, g, b] = v, mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, s = d ? d / (255 - Math.abs(mx + mn - 255)) : 0;
+    let hue = 0; if (d) hue = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hue = (hue * 60 + 360) % 360;
+    if (s > 0.1 && hue >= 70 && hue <= 170) return c;
+    const y = Math.round(0.299 * r + 0.587 * g + 0.114 * b); return `rgb(${y}, ${y}, ${y})`;
+  }
+  // a neighbourhood's outline: its fill's hue, darker (19 Nov, Ritika: "slightly darker colour for neighbourhood boundary, it's not legible
+  // right now": the outlines were the same near-white pastels as the fills). HSL: the hue kept, the lightness down to NBL, the saturation
+  // kept between .3 and .62 so a taupe goes to a dusty rose, not a brick red
+  const NBL = 0.56;
+  function rgbOf(c) { const h6 = /^#([0-9a-f]{6})$/i.exec((c || "").trim()); if (h6) return [0, 2, 4].map((i) => parseInt(h6[1].slice(i, i + 2), 16)); const m = (c || "").match(/[\d.]+/g); return m && m.length >= 3 ? m.slice(0, 3).map(Number) : null; }
+  function deep(c) {
+    const v = rgbOf(c); if (!v) return c;
+    const [r, g, b] = v.map((x) => x / 255), mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, l0 = (mx + mn) / 2;
+    let h = 0; if (d) h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h = (h * 60 + 360) % 360;
+    const s = Math.min(0.62, Math.max(0.3, d ? d / (1 - Math.abs(2 * l0 - 1)) : 0)), l = Math.min(l0, NBL);
+    const a = s * Math.min(l, 1 - l), k = (n) => (n + h / 30) % 12, f = (n) => Math.round((l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)))) * 255);
+    return `rgb(${f(0)}, ${f(8)}, ${f(4)})`;
+  }
+  // the common spaces (19 Nov, Ritika: "also show common spaces in legend"; the café, the two terraces, the two receptions, the visitor hubs,
+  // "only these"): outside every neighbourhood's outline; tinted on the Neighbourhoods click in a soft gold (not grey, not purple, which is the Loop's)
+  const COMMON = /^(Cafeteria|Terrace|Reception|Visitor hub)$/;
+  // the panels' Story 3 parts, once: the neighbourhoods' legend (their colours as the plan fills them), the treatments' strip
+  const TREAT = [["ac-ceiling", "Ceiling treatment", "Absorptive ceiling systems with acoustic tiles or spray treatment; dedicated ceiling treatment in meeting rooms for RT60 control."],
+    ["ac-wall", "Wall treatment", "Absorptive wall panels in meeting spaces enhance speech clarity and reduce echo, with feature walls combining acoustic and aesthetic performance."],
+    ["ac-partition", "Partition design", "Full-height acoustic partitions with appropriate STC ratings ensure privacy based on room function and adjacency."],
+    ["ac-hvac", "HVAC noise control", "Control duct-borne and breakout noise through HVAC design, with terminal devices meeting zone NC targets."],
+    ["ac-masking", "Sound masking", "Background sound masking evens out the floor’s noise, so speech carries less and focus holds."],
+    ["ac-door", "Door &amp; glazing spec", "Acoustic-rated doors and double glazing assemblies complement partition STC performance for meeting spaces."]];   // slides/s-acoustic.html, the PPT's page
+  function v3Build(sc) {
+    const fills = plan.root ? [...plan.root.querySelectorAll("svg.dx-nbfill path")] : [];
+    $(".sp3-nbkey", sc).innerHTML = plan.data.zones.map((z, i) => `<button type="button" data-n="${z.n}" style="--c:${deep((fills[i] && fills[i].style.fill) || "#ccc")}">${/\d/.test(z.name) ? z.name : z.n + " · " + z.name}</button>`).join("") +
+      `<div class="cm"><span class="cm-chip">Common spaces</span><small>café · terraces · receptions · visitor hubs</small></div>`;
+    $$(".sp3-nbkey button", sc).forEach((b) => (b.onclick = (e) => { e.stopPropagation(); b.blur(); if (typeof nbOpen === "function") nbOpen(sc, b.dataset.n); }));   // nbOpen: Story 2's sheets on demand (gen_story.py)
+    $(".sp3-tr", sc).innerHTML = `<small>Treatments<b>NRC 0.70–0.90</b></small>` +
+      TREAT.map(([img, t, p]) => `<div class="t"><i style="background-image:url(${asset("assets/img/" + img + ".webp")})"></i><b>${t}</b><p>${p}</p></div>`).join("");
+    $(".sp3-fold", sc).onclick = (e) => { e.stopPropagation(); e.currentTarget.blur(); V3S.man = !sc.classList.contains("fold"); fold(sc); };
+  }
+  // zoomed in past the beat's view, the panel folds away; back at it (Reset view, a double-click, the next beat) it returns. The
+  // Legend button's choice holds until the zoom crosses that line again
+  function fold(sc) {
+    const v = plan.view, h = home(); if (!v || !h) return;
+    const z = v[2] < h[2] * 0.92;
+    if (z !== V3S.z) { V3S.z = z; V3S.man = null; }
+    const f = V3S.man === null ? z : V3S.man;
+    if (sc.classList.contains("fold") !== f) { sc.classList.toggle("fold", f); $(".sp3-fold", sc).textContent = f ? "▴ Show legend" : "▾ Hide legend"; }
+    else if (!$(".sp3-fold", sc).textContent) $(".sp3-fold", sc).textContent = f ? "▴ Show legend" : "▾ Hide legend";
+  }
+  function v3Enter(sc) {
+    if (!V3 || V3S.on) return;
+    const root = plan.root; if (!root) return;
+    V3S.on = true; root.classList.add("sp3");
+    root.querySelectorAll("svg.dx-fill path").forEach((p) => { const c0 = p.dataset.c0 || p.style.fill; if (!c0) return; p.dataset.c0 = c0; p.style.fill = grey(c0); });
+    const nic = root.querySelector("svg.dx-nic");                 // "put the not in contract boundary in dark grey and have cross hatch"
+    if (nic && !nic.querySelector("#sp3-nic")) nic.insertAdjacentHTML("afterbegin", `<defs><pattern id="sp3-nic" patternUnits="userSpaceOnUse" width="1500" height="1500">` +
+      `<rect width="1500" height="1500" fill="#8a8a8a"/><path d="M0 0L1500 1500M1500 0L0 1500" style="fill:none;stroke:#555;stroke-width:150"/></pattern></defs>`);   // inline: app.css strips .dx-nic paths' strokes; multiplied over the plan (19 Nov)
+    root.querySelectorAll(".dx-nb path").forEach((p) => { const c0 = p.dataset.c0 || p.style.getPropertyValue("--c"); if (!c0) return; p.dataset.c0 = c0; p.style.setProperty("--c", deep(c0)); });   // the outlines, legible
+    const nbf = root.querySelector("svg.dx-nbfill");                // the common spaces, tinted beside the neighbourhoods' own tints (the furniture cuts show through as they do there)
+    if (nbf && !nbf.querySelector(".sp3-common")) nbf.insertAdjacentHTML("beforeend", `<g class="sp3-common">` + plan.data.spaces.filter((s) => COMMON.test(s.type))
+      .map((s) => `<path class="f" d="${s.d}"/><path class="e" d="${outer(s.d)}"/>`).join("") + `</g>`);
+    const mk = root.querySelector("svg.dx-marks"), E = (plan.data.overlays && plan.data.overlays.entry) || [];   // "mark arrival near the arrow"
+    if (mk && !mk.querySelector(".sp3-arr")) mk.insertAdjacentHTML("beforeend", `<g class="sp3-arr">${E.map(() => `<text>Arrival</text>`).join("")}</g>`);
+    arrLay(root, plan.view); V3S.ac = (e) => arrLay(root, e.detail); root.addEventListener("ph:commit", V3S.ac);     // the label keeps its size on screen as the layers redraw
+    V3S.z = false; V3S.man = null; fold(sc);
+    V3S.mo = () => fold(sc); root.addEventListener("ph:view", V3S.mo);     // every zoom step (the plan's own event; the layers redraw only once it rests)
+  }
+  // "Arrival" by each entrance's arrow, 14.5 px on screen at any zoom (plan mm = px × the view's scale), set when the layers are drawn
+  function arrLay(root, v) {
+    const r = root.getBoundingClientRect(); if (!v || !r.width) return;
+    const k = Math.max(v[2] / r.width, v[3] / r.height), E = (plan.data.overlays && plan.data.overlays.entry) || [];
+    root.querySelectorAll(".sp3-arr text").forEach((t, i) => { const e = E[i]; if (!e) return;
+      t.setAttribute("x", (e[0] + 9 * k).toFixed(0)); t.setAttribute("y", (e[1] + 5 * k).toFixed(0));
+      t.style.fontSize = (14.5 * k).toFixed(0) + "px"; t.style.strokeWidth = (2.2 * k).toFixed(0) + "px"; });
+  }
+  function v3Leave(sc) {
+    if (!V3S.on) return; V3S.on = false;
+    const root = plan.root;
+    if (root) { root.classList.remove("sp3"); root.querySelectorAll("svg.dx-fill path[data-c0]").forEach((p) => (p.style.fill = p.dataset.c0));
+      root.querySelectorAll(".dx-nb path[data-c0]").forEach((p) => p.style.setProperty("--c", p.dataset.c0)); }
+    if (V3S.mo && root) root.removeEventListener("ph:view", V3S.mo); V3S.mo = null;
+    if (V3S.ac && root) root.removeEventListener("ph:commit", V3S.ac); V3S.ac = null;
+    if (sc) sc.classList.remove("fold");
+  }
+  // the acoustics' rings, Story 3 ("soundwaves should come from marked rooms… only within the boundary and not spill out"; "all
+  // categories; when selecting a category only for that space"): every marked space (the workhall's stretches of 40 m² and more,
+  // and the treated rooms, plan-layers.js's CAT) sends its rings from a point inside it, each clipped to its own outline; the
+  // open workhall's run long and linger, a treated room's fade before its walls, sooner at each level. A category hovered or
+  // picked (the plan host's pl-ac-N, from L.acHi) shows only its own. Drawn on one canvas through the plan's own view, as the
+  // people were (19 Nov, "there's lag while zooming": as 237 SMIL-animated SVG circles in 114 clip paths they cost every frame)
+  const CAT3 = { "Quick sprint": 2, "Collaboration huddle": 2, "Visitor hub": 2, "Dealer room": 2, "The Hatchery": 2, "Departmental room": 3, "Boardroom": 3, "Phone booth": 4, "Studio": 4 };
+  // per category: a ring's life (s), rings at once, its opacity born, at the knee, the knee (share of its life); then down to 0
+  const LIFE = { 1: [3.6, 3, 0.9, 0.55, 0.55], 2: [2.4, 2, 0.85, 0.3, 0.45], 3: [2.0, 2, 0.85, 0.15, 0.4], 4: [1.6, 2, 0.8, 0, 0.5] };
+  const RC = { 1: "#7a52e8", 2: "#6a45d8", 3: "#4e2bbf", 4: "#3d17a8" }, RW = { 1: 1.9, 2: 1.6, 3: 1.5, 4: 1.3 };   // stroke colour, CSS px
+  const RG = { list: null, raf: 0, last: 0, lv: "" };
+  function ringsBuild() {
+    if (RG.list) return RG.list;
+    const inR = (p, r) => { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
+    RG.list = [];
+    plan.data.spaces.forEach((s) => {
+      const c = s.type === "Workhall" ? (s.m2 >= 40 ? 1 : 0) : CAT3[s.type] || 0; if (!c) return;
+      const o = outer(s.d), R = rings(o)[0]; if (!R || R.length < 3) return;
+      const xs = R.map((q) => q[0]), ys = R.map((q) => q[1]), bx = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+      let p = inR([s.x, s.y], R) ? [s.x, s.y] : null;
+      if (!p) { let bd = Infinity; for (let x = bx[0] + 250; x < bx[2]; x += 500) for (let y = bx[1] + 250; y < bx[3]; y += 500) { const d = Math.hypot(x - s.x, y - s.y); if (d < bd && inR([x, y], R)) { bd = d; p = [x, y]; } } }
+      if (!p) return;
+      const rad = Math.max(...[[bx[0], bx[1]], [bx[2], bx[1]], [bx[0], bx[3]], [bx[2], bx[3]]].map((q) => Math.hypot(q[0] - p[0], q[1] - p[1]))) * (c === 1 ? 1 : 0.9);
+      RG.list.push({ c, x: p[0], y: p[1], rad, b: bx, path: new Path2D(o) });
+    });
+    return RG.list;
+  }
+  function ringsDraw(sc, now) {
+    const cv = $(".sp3-rings", sc), v = plan.view; if (!cv || !v) return;
+    const r = Math.min(2, devicePixelRatio || 1), W = Math.round(cv.clientWidth * r), H = Math.round(cv.clientHeight * r); if (!W || !H) return;
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    const kk = Math.max(v[2] / W, v[3] / H), x0 = v[0] + v[2] / 2 - (W * kk) / 2, y0 = v[1] + v[3] / 2 - (H * kk) / 2, x1 = x0 + W * kk, y1 = y0 + H * kk;   // the plan's own fit
+    const x = cv.getContext("2d"); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, W, H);
+    x.setTransform(1 / kk, 0, 0, 1 / kk, -x0 / kk, -y0 / kk);                 // plan mm from here on
+    const host = plan.root, lit = host ? [1, 2, 3, 4].find((c) => host.classList.contains("pl-ac-" + c)) : 0, t = now / 1000;
+    for (const o of RG.list) {
+      if (lit && o.c !== lit) continue;
+      if (o.b[2] < x0 || o.b[0] > x1 || o.b[3] < y0 || o.b[1] > y1) continue;                  // out of view
+      const [dur, n, a0, a1, kn] = LIFE[o.c];
+      x.save(); x.clip(o.path); x.strokeStyle = RC[o.c]; x.lineWidth = RW[o.c] * r * kk;
+      for (let i = 0; i < n; i++) {
+        const f = reduced ? (i + 1) / (n + 1) : (t / dur + i / n) % 1, op = f < kn ? a0 + (a1 - a0) * (f / kn) : a1 * (1 - (f - kn) / (1 - kn));
+        if (op <= 0.01 || f * o.rad < kk) continue;
+        x.globalAlpha = op; x.beginPath(); x.arc(o.x, o.y, f * o.rad, 0, 6.2832); x.stroke();
+      }
+      x.restore();
+    }
+  }
+  // on while Acoustics is: about 30 frames a second, and every frame while the view moves (so they keep to their rooms in a zoom)
+  function ringsOn(sc, on) {
+    cancelAnimationFrame(RG.raf); RG.raf = 0; sc.classList.toggle("ac-rings", !!on);
+    if (!on) return;
+    ringsBuild(); RG.last = 0; RG.lv = "";
+    const frame = (now) => {
+      if (document.body.dataset.scene !== sc.id || !sc.classList.contains("ac-rings")) return;
+      const v = plan.view, lv = v ? v.join(",") : "";
+      if (lv !== RG.lv || now - RG.last > 32) { RG.lv = lv; RG.last = now; ringsDraw(sc, now); }
+      RG.raf = requestAnimationFrame(frame);
+    };
+    RG.raf = requestAnimationFrame(frame);
+  }
   // ---- a neighbourhood open: the plan zooms into it, the panel shows its key plan and occupancy ----
   // the pills and the bottom band: one height on every beat (2 Nov), the tallest panel's (Acoustics); every panel hangs from its
   // top (--ly-top, % of the page)
   const TOP = 0.70;
-  function band(sc) { $(".page", sc).style.setProperty("--ly-top", TOP * 100 + "%"); bot = Math.round((TOP - 0.08) * 1080); }
+  // Story 3: Acoustics a little higher, for the treatments' strip under its four categories (the plan's home view keeps clear of it)
+  // (19 Nov: the plan's frame stays the same on every click, Acoustics included, so it doesn't move between clicks and shares one prepared picture; the plan
+  // ends well above the raised band)
+  function band(sc) { const t = V3 && beat === 6 ? 0.655 : TOP; $(".page", sc).style.setProperty("--ly-top", t * 100 + "%"); bot = Math.round((TOP - 0.08) * 1080); }
   function openZone(sc, z) {
     if (!z) return;
     zone = z; plan.focusZone(z.id, box());
@@ -744,6 +1037,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     return seated;
   }
   function ppl(sc, on, play) {
+    if (V3) { sc.classList.remove("ppl-on", "ppl-nb"); return; }   // Story 3: no people (18 Nov, Ritika)
     if (!window.ACKO_WOW) return;
     sc.classList.toggle("ppl-on", !!on); sc.classList.toggle("ppl-nb", !!on && !play);   // ppl-nb: Neighbourhoods, the colours without the count
     if (!on) return;
@@ -798,6 +1092,16 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       NBX.mats.forEach((m) => { m.clippingPlanes = null; m.needsUpdate = true; }); NBX.planes = null; NBX.mats = [];
     }
   }
+  // 19 Nov ("as soon as I open the layout slide it has to load clearly and smoothly"; "switching layouts should be seamless"): the first sheet spent
+  // 1.5 s starting the 3D renderer and building the model. Both are done once at idle, a few seconds after the page has loaded, so the click only draws
+  function warm3d() {
+    try {
+      if (NBX.M || !(window.AxoSkp && window.AxoSkp.available() && window.THREE)) return;
+      NBX.M = window.AxoSkp.get(asset); NBX.cam = new window.THREE.OrthographicCamera(-1, 1, 1, -1, 1, 900);
+      const r = window.AxoModel && window.AxoModel.renderer(); if (r && r.compile && NBX.M) r.compile(NBX.M.scene, NBX.cam);
+    } catch (e) {}
+  }
+  setTimeout(() => (window.requestIdleCallback ? requestIdleCallback(warm3d, { timeout: 5000 }) : setTimeout(warm3d, 500)), 6000);
   function nbSet(bx) { const P = NBX.planes; if (!P) return; P[0].constant = -bx[0]; P[1].constant = bx[2]; P[2].constant = -bx[1]; P[3].constant = bx[3]; }
   function nbDraw(sc, st, bx) {
     const r = window.AxoModel.renderer(), host = $(".nb-3d", sc);
@@ -1009,6 +1313,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     step(n, sc) {
       if (arriving) { pend = n; return; }               // the site's zoom still playing: this beat once it has landed
       const k = ORDER[n - 1], was = beat; beat = k; closeZone(sc); occ(sc, false); pin = null; $$(".chip", sc).forEach((c) => c.classList.remove("pin"));
+      if (V3) { v3Enter(sc); acPin = null; $$(".ac", sc).forEach((c) => c.classList.remove("pin")); V3S.man = null; }
       const layer = k === 1 ? "spaces" : k === 2 ? "nb" : k <= 5 ? "bio" : k === 6 ? "ac" : "dd", panel = String(k <= 2 ? k : k <= 5 ? 3 : k);
       plan.planOn(sc, { rooms: true, fill: k <= 2, entry: true, view: home(), ms: was ? 700 : 0 });
       // the egress follows its button alone, off to begin with (30 Oct), on every beat
@@ -1018,6 +1323,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       if (k === 2) nbPick(sc, "homo");                   // nb cards: Homogeneity picked whenever the beat opens
       else { document.body.classList.remove("ly-nbdim", "ly-nb-dis"); if (L) L.mark(null); }
       if (L) { L.set(layer); L.type(null); L.acHi(null); L.ddHi(null); }
+      if (V3) ringsOn(sc, layer === "ac");               // the rings' canvas, on Acoustics only
       $$(".ly-pills [data-go]", sc).forEach((b) => b.classList.toggle("on", b.dataset.go === panel));
       $$(".ly-p", sc).forEach((p) => p.classList.toggle("on", p.dataset.p === panel));
       sc.dataset.bv = "";                                // Biophilia · Views to green, the variations (11 Nov)
@@ -1030,6 +1336,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
         $(".b-np", sc).textContent = st.plants; $(".b-ns", sc).textContent = st.seats;
         $(".b-vw", sc).textContent = st.views + "%";
         $(".b-vwp", sc).innerHTML = `of the seats have a plant in view within 8 m · median <b>${st.median.toFixed(1)} m</b>`;
+        if (V3) { $(".sp3-vw", sc).textContent = st.views + "%"; $(".sp3-vm", sc).textContent = st.median.toFixed(1) + " m"; }
         const BV = window.ACKO_BIO || "a";
         if (b === 3 && BV !== "a") {
           const bvo = $(".bv", sc), pc = Math.round(st.views), m = st.median.toFixed(1);
@@ -1049,6 +1356,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
       if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
+      v3Leave(sc); acPin = null; if (V3 && sc) ringsOn(sc, false);
       sheet(sc, null); plan.planOff(); cancelAnimationFrame(PPL.raf); if (sc) sc.classList.remove("ppl-on");
       if (sc && sc._h3) { sc._h3.remove(); sc._h3 = null; }   // left mid-turn: the model's host goes
     },

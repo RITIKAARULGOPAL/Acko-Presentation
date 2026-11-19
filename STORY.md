@@ -301,3 +301,34 @@ Story 2 stays as the previous version. Eight sections, the last five numbered 01
 - **04 Integrated Performance** (technical performance and added value): ESG strategy (stand-in; PDF to come) · Wayfinding · Engagement points · D & I (stand-in, "Designed for all"; PDF to come)
 - **05 Project Review** (revisiting previous discussions and establishing alignment): Previous meeting recap (placeholder; PDF to come)
 - Out of this page: the Part cards, Why a campus's beats 2–3, The loop on our floor, The opportunity. Appendix: Typologies, the memories, Well-being.
+
+## The proposed layout reworked (18 Nov, Ritika's review; `index-story3.html` only)
+Her review of Layout · Option 02A, the proposed layout (`s-layout-sp`), from screenshots and her answers. Story 2 and the approach page keep the layout as it was ("Story 3 only"): the slide's new parts switch on with `window.ACKO_SP3`, which `gen_story3.py` sets. The due diligence slide is unchanged, except that its pills now land on the right click.
+- **Five clicks:** Spaces · Neighbourhoods · Biophilia, the heat · Biophilia, planting · Acoustics (Views to green is out).
+- **Spaces:**
+  - The floor is in greys, and the greens stay green ("it can be in greys"; "greens can remain in green").
+  - The neighbourhood-coloured people, their walk in and the "640 people" line are out ("remove the neighbourhood people color coding and animation").
+  - Outside the contract is dark grey, cross-hatched ("put the not in contract boundary in dark grey and have cross hatch").
+  - "Arrival" sits by each entrance's arrow ("mark arrival near the arrow").
+  - The four types are in the order 516, 69, 48, 13 seats, renumbered Type 1–4 ("reorder the types").
+  - Each type has its plan and its 3D ("also show the 3D workstation of the type next to its plan"). The renders come from Workstation typologies. The 13-seat type is drawn from the model (`tools/acko/render_ws_type.js` → `assets/img/ty-type2.webp`): two desks back to back as in its plan icon, plainer than the three renders.
+  - Hovering a type lights its desks in purple.
+- **On every click, zooming in folds the panel away** so the plan has the page ("when I zoom the layouts … the legend should be collapsible"). Reset view brings it back, and the Hide / Show legend button works at any time.
+- **Neighbourhoods:** the Homogeneity / Disorientation / Distance text is out. A legend names the six, and a click opens one's sheet ("remove the text and only have legend labelling the neighbourhoods").
+- **Biophilia:**
+  - The heat's paragraph is out.
+  - Views to green is no longer its own click. It is a small drawing in Planting's legend: a seat, its sight line, a plant; 96% of the seats within 8 m, median 3.5 m ("instead give a visual representation for it near legend space").
+- **Acoustics:**
+  - The text is out ("the text marked for acoustics slide can be removed").
+  - "Carpet", not "High-ounce carpet".
+  - Each category is a room in section: its treated surfaces in purple, and a sound inside that dies sooner at each level (she picked the cut-aways).
+  - The rings come from the marked spaces of all four categories, each kept inside its own outline. A category hovered or clicked shows only its own rings ("soundwaves should come from marked rooms … and not spill out"; "all categories; when selecting a category only for that space").
+  - Under the categories, the PPT page's six treatments are a strip of photos, each one's words on hover ("also try include this with acoustic slide").
+- **19 Nov, the next round (Ritika's markup on the live page):**
+  - Outside the contract: the cross-hatch multiplies over the plan, so the base plan reads through it ("not in contract fill should multiply so the base plan is seen").
+  - Biophilia: no Heat / Planting capsule (they are two clicks anyway) and no text under the heading ("instead it can come with beat"; "remove the text under the heading").
+  - Neighbourhoods: the outlines are a deeper tone of each colour (they were the same near-white pastel as the fills: "slightly darker colour for neighbourhood boundary, it's not legible"); the legend's dots match them.
+  - Neighbourhoods: the common spaces, the café, the two terraces, the two receptions and the visitor hubs ("only these"), are tinted a soft gold, not grey, and have their own entry in the legend ("also show common spaces in legend"). Not on the sheets.
+- **Zoom (19 Nov, "there's lag while zooming"):** every click felt it; Acoustics worst, because of the new rings. The rings are now drawn on one canvas. The shared plan scales its layers while you zoom and redraws sharp once it rests (`PlanHover` `fastZoom`; PRESENTATION-PATTERNS 33), which also smooths Story 2 and the live deck. Measured: frame p90 about 100 ms down to 17–33 ms.
+- **Still to look at:** the Appendix's Workstation typologies slide keeps its old numbering (its Type 1 is the layout's Type 2).
+- **Also seen, not mine and not touched:** on a neighbourhood's sheet the "Neighbourhood 03 of 06" bar sits over the tool bar (Story 2 has it too).

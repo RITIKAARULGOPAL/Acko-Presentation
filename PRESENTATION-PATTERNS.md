@@ -721,3 +721,31 @@ amber `#F2A33A`; "A day in ACKO".
 - **Key words underlined in turn** (the pick, `s-heard`): the key word bold purple, `font-size: 1.12em; line-height: 1` so it grows without opening its line; a 2px underline is a background (`linear-gradient` sized `0% 2px` → `100% 2px`, `box-decoration-break: clone` for words that wrap), delayed `--k × 140 ms` after the points are in (`--k` set from each point's order in `enter`).
 - **Gotcha: keyframes, not transitions, for a delayed reveal on load.** A transition starts from the style the browser last drew; on a fresh load the element had no drawn "before" style, so the sweep began already purple and the underline showed as a solid block through its delay. An `animation: … both` holds its own first frame through the delay, and restarts cleanly when its class comes off and on (a replay).
 - **Checking without the pane:** when the Browser pane is hidden its tabs don't paint (screenshots come back blank, transitions don't run); measure with scripts (`getBoundingClientRect`, computed styles, transitions frozen) and take screenshots headless with puppeteer-core, as `tools/walk.js` does.
+
+## 32. One slide, two looks: a page flag (s-layout-sp, Story 3, 18 Nov)
+**What:** Ritika reworked the proposed layout for Story 3 only. The slide is shared with Story 2 and the approach page, so the new parts sit in the same slide file behind a page flag.
+- **The flag:**
+  - `gen_story3.py` adds `window.ACKO_SP3 = true` to the page's `ACKO_SECTIONS` script.
+  - The slide reads it in `build()` and puts `.v3` on its section.
+  - While it is on, it puts `.sp3` on the shared plan's host. `leave()` takes `.sp3` off and restores anything it changed, such as the fills it greyed.
+  - CSS for the new parts is `#s-layout-sp.v3 …` or `#world-plan.sp3 …`. A `:not(.v3)` rule hides them elsewhere.
+- **The generator's patches stay string-asserted,** as `story2()` does, for anything that differs only on the page: the beat count and names, `ORDER`, the pills' maps.
+- **Zoom folds the panel:**
+  - A `MutationObserver` on `.ph-rooms`' `viewBox` compares `plan.view` with the beat's `home()`. Below 0.92× its width, `.fold`.
+  - The Legend button's choice holds until the zoom crosses that line again.
+- **Rings that stay in their room:** one canvas over the plan (`.sp3-rings`, drawn through `plan.view` as the people were). Per space: a `Path2D` of its outer loop (`outer(s.d)`), `ctx.clip()`, then arcs whose radius and opacity run on the clock. The open workhall's rings fade slowly; a treated room's fade sooner. Out-of-view rooms are skipped; about 30 frames a second, and every frame while the view moves. (First built as 237 SMIL-animated SVG circles in 114 `<clipPath>`s: it doubled the style-recalc cost of a zoom, so it went to the canvas.)
+- **Gotcha:** `app.css` sets `.dx-nic path { stroke: none }`, which also hits a `<pattern>`'s path inside that layer. Give the hatch lines an inline style.
+
+## 33. Smooth zoom on the shared plan: scale the drawn layers, redraw sharp once it rests (19 Nov)
+**What:** "there's lag while zooming". Every wheel step rewrote the `viewBox` of about 15 SVG layers (the furniture layer alone is one huge path) and repainted the base canvas: frames of 100 ms and more. `PlanHover.mount(host, { fastZoom: true })` (on for the deck's plan in `app.js` `deckPlan()`; any other mount is as before) stops doing that on every step.
+- **Two views:** `vb` is always the view (`plan.view`, hover, measure, click-to-neighbourhood). `cvb` is the view the layers were last drawn at. Between the two, `.ph-stage` carries a CSS transform (`translate` then `scale`, origin 0 0, `will-change: transform`) that maps one to the other, so a zoom step is a compositor frame.
+- **When it redraws** (`commit()`):
+  - 140 ms after the last change, so it is sharp once it rests;
+  - at once when the preview would blur past 2.2×, or leave more than 4% of the plan undrawn at an edge (zooming out, or a pan with it);
+  - a pan on its own always redraws at once, as before;
+  - on a landing: `fitVb` calls `DP.ph.commit()` when a flight ends or a jump is instant.
+- **No flash:** `commit()` clears the transform and sets every layer's `viewBox`, then fires `ph:commit`. `app.js` answers with `DP.base.draw(view, true)`, a **synchronous** repaint of the base canvas (the `sync` flag in `plan-canvas.js`), so the canvas never shows its old drawing under the new view for even a frame. (A MutationObserver on the `viewBox` did this a frame late.)
+- **Events:** `ph:view` on every step (the slide's legend folds as you zoom), `ph:commit` when the layers are redrawn. Anything sized in plan mm that should keep its size on screen (the Arrival labels, `arrLay`) is set on `ph:commit`; between commits it scales with the zoom like everything else.
+- **Geometry:** `scale()`, `toPlan()`, `toScreen()` and the "above" label measure `el`, the parent of the transformed stage, never the stage. New layers (`addLayer`) are drawn at `cvb`.
+- **Measured (headless, 24 wheel steps):** frame p90 about 100 ms down to 17–33 ms on every click; Acoustics' style recalc 0.36–0.58 s down to 0.11–0.16 s. The preview is exact: a marker's screen position is the same mid-preview and after the redraw to within half a pixel; a hover label sits centred 8 px above its room at 1.7× just as after the redraw.
+- **Gotcha:** a canvas or SVG the slide draws itself (the people, the rings) sits outside the stage and reads `plan.view`, so it is exact on every step. Anything inside a plan layer is the preview until the commit.
