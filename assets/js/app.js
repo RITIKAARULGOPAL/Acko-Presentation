@@ -63,7 +63,7 @@
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const state = { idx: -1, step: 1, t0: null, chapterT0: null, track: "main", mainAt: { idx: 0, step: 1 } };
   // three decks: the ACKO presentation, the Appendix and About SKV (opened from the SKV logo); the arrows stay inside the one on screen
-  const trackOf = (s) => (s.dataset.part === "0" ? "skv" : s.dataset.part === "A" ? "appendix" : "main");
+  const trackOf = (s) => (s.dataset.part === "0" ? "skv" : s.dataset.part === "A" ? "appendix" : s.dataset.part === "R" ? "recap" : "main");
   const trackIdx = (t) => scenes.map((s, i) => (trackOf(s) === t ? i : -1)).filter((i) => i >= 0);
   let timers = [];
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
@@ -145,7 +145,7 @@
   });
   /* the sections list behind the ACKO symbol (top right): hover lists the deck's sections (those with slides) — past ink, now purple,
      next pale — and a click opens one */
-  const TOPICS = { main: SECT.main || [["1", "Design concept"], ["2", "Design strategy"], ["5", "Layout"], ["3", "Visual direction"], ["4", "Value addition"], ["6", "Walkthrough"]], appendix: [["A", "Appendix"]], skv: [["0", "About SKV"]] };
+  const TOPICS = { main: SECT.main || [["1", "Design concept"], ["2", "Design strategy"], ["5", "Layout"], ["3", "Visual direction"], ["4", "Value addition"], ["6", "Walkthrough"]], appendix: [["A", "Appendix"]], recap: [["R", "Recap"]], skv: [["0", "About SKV"]] };
   const firstOf = (p) => scenes.findIndex((s) => s.dataset.part === p);
   function topicMark(track) {
     const tp = (TOPICS[track] || TOPICS.main).filter(([p]) => firstOf(p) >= 0), n = tp.length;   // only sections that have slides
