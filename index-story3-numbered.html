@@ -215,6 +215,11 @@
    the words come in round it */
 #s-pitch .pp-pitches, #s-pitch .pp-len, #s-pitch .pp-lab, #s-pitch .pp-head, #s-pitch .pp-w { transition: opacity .8s var(--ease); }
 #s-pitch .page.pp-arrive :is(.pp-pitches, .pp-len, .pp-lab, .pp-head, .pp-w, [data-only], [data-step]) { opacity: 0 !important; transition: none !important; }
+/* arriving from the site's plate (22 Nov): the floor's outline starts in the map plate's colour and settles into its own */
+#s-pitch .pp-shell .plate { transition: fill 1.4s var(--ease), stroke 1.4s var(--ease); }
+#s-pitch .pp-shell > :not(.plate) { transition: opacity 1.2s var(--ease); }
+#s-pitch .page.pp-site .pp-shell .plate { fill: #9b7ee2 !important; stroke: #5222d0 !important; transition: none !important; }
+#s-pitch .page.pp-site .pp-shell > :not(.plate) { opacity: 0 !important; transition: none !important; }
 </style>
 <style data-slide="s-strategy">
 /* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
@@ -4169,15 +4174,36 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
       if (k < 2) $$(".pp-stats[data-only='1'] [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
     });
   }
+  // from the site (22 Nov, Ritika: "the site boundary should zoom and become the site boundary in the next slide"): the map's plate zooms to where
+  // the Layout's plan sits (the site slide's _into), then the floor's outline takes its place there, in the plate's colour, and glides home
+  function fromSiteGlide(sc, k) {
+    cancelAnimationFrame(raf); draw(sc, k >= 2 ? 1 : 0);
+    const pg = $(".page", sc), sh = $(".pp-shell", sc), M = ACKO_MORPH;
+    pg.classList.add("pp-arrive", "pp-site"); sh.style.opacity = 0;
+    later(() => {
+      if (document.body.dataset.scene && document.body.dataset.scene !== sc.id) return;
+      const from = M.mul(M.inv(M.page($(".pp-svg", sc), pg)), M.rect(M.HOME));
+      sh.style.opacity = ""; plain();
+      M.anim(sh, from, [1, 0, 0, 1, 0, 0], 1500, () => {
+        sh.removeAttribute("transform"); pg.classList.remove("pp-arrive");
+        if (k < 2) $$(".pp-stats[data-only='1'] [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
+      });
+      requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("pp-site")));
+      later(() => document.body.classList.remove("si-into"), 1300);
+    }, 2250);
+  }
   return {
     enter(_, sc) {
       if (window.ACKO_FLOW) ACKO_FLOW.clear(sc);
-      plain();
+      const fromSite = !reduced && !!window.ACKO_MORPH && document.body.classList.contains("si-left");
+      if (!fromSite) plain();
       if (!G) build(sc);
       reveal($(".pp-head", sc), 60);
-      sc._fresh = true; sc._from = !reduced && window.ACKO_MORPH ? ACKO_MORPH.take("s-site-dd") : null;
+      sc._fresh = true; sc._from = !reduced && window.ACKO_MORPH ? ACKO_MORPH.take("s-site-dd") : null; sc._site = fromSite && !sc._from;
+      if (sc._site) { const site = document.getElementById("s-site"); if (site && site._into) site._into(); else sc._site = false; }
     },
     step(k, sc) {
+      if (sc._fresh && sc._site) { sc._fresh = false; sc._site = false; return fromSiteGlide(sc, k); }
       if (sc._fresh && sc._from) { sc._fresh = false; return glide(sc, k); }
       if (sc._fresh) {                                           // entered on a beat: that state at once; the numbers count up
         sc._fresh = false; cancelAnimationFrame(raf); draw(sc, k >= 2 ? 1 : 0);
