@@ -181,7 +181,7 @@
 <style data-slide="s-pitch">
 /* ---------- one floor, two football pitches (01 · Discover the site): the bare floor, to scale, on the pitches' top touchline ---------- */
 #s-pitch .pp-head small { display: block; font-size: calc(var(--pt) * 8.5); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--purple-2); }
-#s-pitch .pp-h { margin: 0; font-size: calc(var(--pt) * 30); line-height: 1.08; font-weight: 400; color: var(--purple); }
+#s-pitch .pp-h { margin: 0; font-size: calc(var(--pt) * 27); line-height: 1.08; font-weight: 400; color: var(--purple); }
 #s-pitch .pp-h b { font-weight: 700; }
 #s-pitch .pp-svg { overflow: visible; }
 #s-pitch .pp-pitch rect, #s-pitch .pp-pitch path, #s-pitch .pp-pitch circle { fill: none; stroke: #7cc58f; stroke-width: .35; }
@@ -205,12 +205,12 @@
 #s-pitch .pp-wp path { stroke: #3c9a5a; stroke-width: .5; }
 #s-pitch .pp-w .pp-ws { font-size: 3px; font-weight: 500; letter-spacing: .3px; }
 #s-pitch .pp-lab { font-size: 3.1px; font-weight: 600; letter-spacing: .5px; fill: #3c9a5a; }
-#s-pitch .pp-stats { display: flex; gap: 6%; }
+#s-pitch .pp-stats { display: flex; gap: 3.5%; }
 #s-pitch .pp-stats > div { flex: 1; border-top: 2px solid var(--purple-2); padding-top: calc(var(--pt) * 4); }
-#s-pitch .pp-stats b { display: block; font-size: calc(var(--pt) * 26); line-height: 1.05; font-weight: 600; color: var(--purple-2); }
+#s-pitch .pp-stats b { display: block; font-size: calc(var(--pt) * 22); line-height: 1.05; font-weight: 600; color: var(--purple-2); }
 #s-pitch .pp-stats b small { font-size: .42em; font-weight: 400; margin-left: .2em; color: #555; }
-#s-pitch .pp-stats > div > span { display: block; font-size: calc(var(--pt) * 8.5); color: #555; }
-#s-pitch .pp-hand { margin: 0; text-align: right; font-size: calc(var(--pt) * 17); color: var(--purple-2); }
+#s-pitch .pp-stats > div > span { display: block; font-size: calc(var(--pt) * 7.4); color: #555; }
+#s-pitch .pp-hand { margin: 0; text-align: right; font-size: calc(var(--pt) * 14); color: var(--purple-2); }
 /* arriving from Layout · Due Diligence (9 Nov): the bare floor starts on the plan's plate and glides to the touchline; the pitches and
    the words come in round it */
 #s-pitch .pp-pitches, #s-pitch .pp-len, #s-pitch .pp-lab, #s-pitch .pp-head, #s-pitch .pp-w { transition: opacity .8s var(--ease); }
@@ -1962,14 +1962,13 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="2" data-mins="0.6" data-beats="Lengthwise,Widthwise"
-  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 651 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
+<section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="1" data-mins="0.6"
+  data-notes="The bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end, and 34 m across, glass to glass: exactly half a pitch wide. About 651 people on one plate, a three-minute walk from one end to the other. A long, thin floor: so how do you make it feel like one team? That shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
   <div class="page">
     <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
       <small style="--i:0">ACKO · Regalium, Koramangala</small>
     </div>
-    <h2 class="pp-h" data-only="1" style="left:3.4%;top:13.5%;width:70%">One floor, longer than <b>two football pitches.</b></h2>
-    <h2 class="pp-h" data-only="2" style="left:3.4%;top:13.5%;width:70%">…and only <b>half a pitch wide.</b></h2>
+    <h2 class="pp-h" style="left:3.4%;top:13.5%;width:84%">One floor, longer than <b>two football pitches</b> and only <b>half a pitch wide.</b></h2>
     <svg class="pp-svg" viewBox="-9 -20 265 102" preserveAspectRatio="xMidYMid meet" aria-hidden="true" style="left:3%;top:31%;width:94%;height:53%">
       <g class="pp-pitches"></g>
       <g class="pp-shell"></g>
@@ -1981,18 +1980,14 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       </g>
       <text class="pp-lab" text-anchor="middle">TWO FOOTBALL PITCHES · 210 m</text>
     </svg>
-    <div class="pp-stats" data-only="1" style="left:3.4%;top:85%;width:50%">
+    <div class="pp-stats" style="left:3.4%;top:85%;width:66%">
       <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
+      <div><b>34<small>m</small></b><span>wide, glass to glass</span></div>
+      <div><b>½</b><span>a pitch’s width</span></div>
       <div><b><span data-count="651">0</span></b><span>people, on one plate</span></div>
       <div><b><span data-count="3">0</span><small>min</small></b><span>to walk end to end</span></div>
     </div>
-    <div class="pp-stats" data-only="2" style="left:3.4%;top:85%;width:50%">
-      <div><b>34<small>m</small></b><span>wide, glass to glass</span></div>
-      <div><b>68<small>m</small></b><span>a football pitch, wide</span></div>
-      <div><b>½</b><span>a pitch's width</span></div>
-    </div>
-    <p class="pp-hand hand" data-only="1" style="left:60%;top:86.5%;width:37%">so how do you make it feel like one team?</p>
-    <p class="pp-hand hand" data-only="2" style="left:60%;top:86.5%;width:37%">a long, thin floor: the shape the plan has to answer</p>
+    <p class="pp-hand hand" style="left:72%;top:85.5%;width:25.5%">a long, thin floor: so how do you make it feel like one team?</p>
   </div>
 </section>
 
@@ -4120,6 +4115,11 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
     const tick = (now) => { const k = dur ? Math.min(1, (now - t0) / dur) : 1; draw(sc, from + (to - from) * k); if (k < 1) raf = requestAnimationFrame(tick); };
     raf = requestAnimationFrame(tick);
   }
+  // one slide, no second beat (22 Nov, Ritika: "merge these 2 slides"): the numbers count up lengthwise, then the view eases to the width by itself
+  function settle(sc) {
+    $$(".pp-stats [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
+    later(() => { if (document.body.dataset.scene === sc.id) go(sc, 1); }, 2000);
+  }
   // from Due Diligence: the floor laid on the plan's plate (its place on the Layout), gliding to its place here; then the rest
   function glide(sc, k) {
     cancelAnimationFrame(raf); draw(sc, k >= 2 ? 1 : 0);
@@ -4128,7 +4128,7 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
     pg.classList.add("pp-arrive");
     M.anim(sh, from, [1, 0, 0, 1, 0, 0], 1500, () => {
       sh.removeAttribute("transform"); pg.classList.remove("pp-arrive");
-      if (k < 2) $$(".pp-stats[data-only='1'] [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
+      if (k < 2) settle(sc);
     });
   }
   // from the site (22 Nov, Ritika: "the site boundary should zoom and become the site boundary in the next slide"): the map's plate zooms to where
@@ -4143,7 +4143,7 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
       sh.style.opacity = ""; plain();
       M.anim(sh, from, [1, 0, 0, 1, 0, 0], 1500, () => {
         sh.removeAttribute("transform"); pg.classList.remove("pp-arrive");
-        if (k < 2) $$(".pp-stats[data-only='1'] [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
+        if (k < 2) settle(sc);
       });
       requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("pp-site")));
       later(() => document.body.classList.remove("si-into"), 1300);
@@ -4164,7 +4164,7 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
       if (sc._fresh && sc._from) { sc._fresh = false; return glide(sc, k); }
       if (sc._fresh) {                                           // entered on a beat: that state at once; the numbers count up
         sc._fresh = false; cancelAnimationFrame(raf); draw(sc, k >= 2 ? 1 : 0);
-        if (k < 2) $$(".pp-stats[data-only='1'] [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
+        if (k < 2) settle(sc);
         return;
       }
       go(sc, k >= 2 ? 1 : 0);
