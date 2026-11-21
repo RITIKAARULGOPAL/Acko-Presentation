@@ -479,3 +479,19 @@ body.wk-idle :is(.topbar, .hint, .lockup, .progress, #shade) { opacity: 0 !impor
 body.wk-idle .walk :is(.wk-kp, .wk-name, .wk-nav, .walk-ctl) { opacity: 0 !important; pointer-events: none; }
 body.wk-idle, body.wk-idle * { cursor: none !important; }
 @media (prefers-reduced-motion: reduce) { .walk .wk-name, .walk .wk-nav, .walk .wk-kp, .walk .walk-ctl { transition: none; } }
+
+/* the walk (22 Nov): the volume slider takes the mouse again (scenes are click-through except buttons) and is easy to hit;
+   the space list keeps one fixed place: a fixed-width label at the baseline, the full list opening upward over it */
+.scene.active .wk-vol input[type="range"] { pointer-events: auto; }
+.wk-vol input[type="range"] { height: calc(var(--pt) * 8); background: transparent; }
+.wk-vol input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: #d6cdf3; }
+.wk-vol input[type="range"]::-webkit-slider-thumb { margin-top: calc(1px - var(--pt) * 2); }
+.wk-vol input[type="range"]::-moz-range-track { height: 2px; background: #d6cdf3; }
+.walk .wk-nav { width: calc(var(--pt) * 58); align-items: stretch; flex-direction: column; justify-content: flex-end; overflow: visible; }
+.walk .wk-nav button { text-align: right; white-space: nowrap; }
+.walk .wk-nav button.on { order: 999; }
+.walk .wk-nav:hover { padding: 0; margin: 0; background: transparent; backdrop-filter: none; box-shadow: none; max-height: none; }
+.walk .wk-nav:hover button:not(.on) { display: block; background: rgba(10,6,30,.62); padding-left: calc(var(--pt) * 3); padding-right: calc(var(--pt) * 3); }
+.walk .wk-nav:hover button.on { background: rgba(10,6,30,.62); padding-left: calc(var(--pt) * 3); padding-right: calc(var(--pt) * 3); margin-top: calc(var(--pt) * 1); }
+.walk .wk-nav:hover button:first-child { border-radius: calc(var(--pt) * 2) calc(var(--pt) * 2) 0 0; padding-top: calc(var(--pt) * 3); }
+.walk .wk-nav:hover { max-height: 46vh; overflow-y: auto; scrollbar-width: thin; }

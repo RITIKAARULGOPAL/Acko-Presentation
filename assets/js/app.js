@@ -693,8 +693,13 @@
         WKUI.forEach((n) => sc.appendChild(n));
         document.body.classList.add("in-walk");
         const deck = scenes.filter((x) => isWalk(x) && trackOf(x) === trackOf(sc)), at = deck.indexOf(sc);
-        $("#wk-nav").innerHTML = deck.length > 1 ? deck.map((x, i) => `<button type="button" data-to="${x.id}"${x === sc ? ' class="on"' : ""}><b>${String(i + 1).padStart(2, "0")}</b>${x.dataset.title}</button>`).join("") : "";
-        $$("#wk-nav button").forEach((b) => (b.onclick = () => go(sceneIx(b.dataset.to), 1)));
+        { const nav = $("#wk-nav"), sig = deck.map((x) => x.id).join(",");     // built once: later slides only move the highlight, so the list stays still
+          if (nav.dataset.sig !== sig) {
+            nav.dataset.sig = sig;
+            nav.innerHTML = deck.length > 1 ? deck.map((x, i) => `<button type="button" data-to="${x.id}"><b>${String(i + 1).padStart(2, "0")}</b>${x.dataset.title}</button>`).join("") : "";
+            $$("#wk-nav button").forEach((b) => (b.onclick = () => go(sceneIx(b.dataset.to), 1)));
+          }
+          $$("#wk-nav button").forEach((b) => b.classList.toggle("on", b.dataset.to === sc.id)); }
         $("#wk-n").innerHTML = `${s.n || sc.dataset.title}<small>${s.sub || ""}</small>`;
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
         $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["OP 01", "OP 02"]).map((t) => `<span>${t}</span>`).join("") : "";
