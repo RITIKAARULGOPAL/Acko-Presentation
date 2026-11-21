@@ -657,7 +657,9 @@
     if (nocam) k = { img: "kp-119", x: 50, y: 50, rot: 0, view: [0, 0, 100, 100] };
     box.style.display = ""; cam.style.display = nocam ? "none" : "";
     // the other views of this space, on the same plan: a second, fainter arrow each, and the card is framed around them all
-    const alts = nocam ? [] : (others || []).map((o) => KPD[o]).filter((o) => o && o.img === k.img);
+    let alts = nocam ? [] : (others || []).map((o) => KPD[o]).filter((o) => o && o.img === k.img);
+    // keep the card zoomed in: only frame the other views too when they sit near this one
+    alts = alts.filter((o) => Math.abs(o.x - k.x) < 14 && Math.abs(o.y - k.y) < 16);
     $$(".wk-cam.alt", inner).forEach((e) => e.remove());
     const view = alts.reduce((v, o) => [Math.min(v[0], o.view[0]), Math.min(v[1], o.view[1]), Math.max(v[2], o.view[2]), Math.max(v[3], o.view[3])], k.view.slice());
     const altEls = alts.map((o) => { const e = cam.cloneNode(true); e.classList.add("alt"); e.style.display = ""; inner.appendChild(e); return [e, o]; });
