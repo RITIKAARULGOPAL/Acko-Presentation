@@ -2521,158 +2521,47 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <style data-slide="s-start-choice">
 #s-start-choice .page { background: #fff; }
-#s-start-choice .sc-v { display: none; position: absolute; inset: 0; }
-#s-start-choice .page[data-choice="a"] .sc-v-a, #s-start-choice .page[data-choice="b"] .sc-v-b, #s-start-choice .page[data-choice="c"] .sc-v-c, #s-start-choice .page[data-choice="d"] .sc-v-d, #s-start-choice .page[data-choice="e"] .sc-v-e { display: block; }
 #s-start-choice button { font-family: var(--body); cursor: pointer; border: 0; background: none; padding: 0; text-align: left; color: inherit; }
 #s-start-choice button:focus { outline: none; }
-#s-start-choice .sc-q { position: absolute; margin: 0; font-weight: 400; color: #111; line-height: 1.1; letter-spacing: -.01em; }
+#s-start-choice .sc-q { position: absolute; left: 8%; top: 9%; width: 84%; margin: 0; font-size: calc(var(--pt) * 28); font-weight: 400; color: #111; line-height: 1.1; letter-spacing: -.01em; }
 #s-start-choice .sc-q b { font-weight: 800; color: var(--purple); }
-#s-start-choice .sc-k { position: absolute; font-size: calc(var(--pt) * 7.5); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); }
+#s-start-choice .sc-k { position: absolute; left: 8%; top: 5%; font-size: calc(var(--pt) * 7.5); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); }
 #s-start-choice .sc-glyph { width: calc(var(--pt) * 22); height: calc(var(--pt) * 22); border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center; }
 #s-start-choice .sc-glyph svg { width: 42%; height: 42%; fill: var(--purple); margin-left: 6%; }
-/* A · two cards */
-#s-start-choice .sc-v-a .sc-q { left: 8%; top: 12%; width: 84%; font-size: calc(var(--pt) * 30); }
-#s-start-choice .sc-v-a .sc-k { left: 8%; top: 7.5%; }
-#s-start-choice .sc-card { position: absolute; top: 32%; width: 40%; height: 52%; border-radius: calc(var(--pt) * 6); overflow: hidden; background-size: cover; background-position: center; box-shadow: 0 10px 30px rgba(40,28,80,.16); transition: transform .4s var(--ease), box-shadow .4s var(--ease); }
-#s-start-choice .sc-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(40,28,80,.26); }
-#s-start-choice .sc-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,6,30,.05) 30%, rgba(10,6,30,.78)); }
-#s-start-choice .sc-card .sc-glyph { position: absolute; left: 6%; top: 8%; }
-#s-start-choice .sc-card .sc-t { position: absolute; left: 6%; bottom: 20%; right: 6%; color: #fff; font-size: calc(var(--pt) * 20); font-weight: 800; line-height: 1.05; }
-#s-start-choice .sc-card .sc-s { position: absolute; left: 6%; bottom: 10%; right: 6%; color: rgba(255,255,255,.88); font-size: calc(var(--pt) * 9); }
-#s-start-choice .sc-card .sc-chip { position: absolute; right: 6%; top: 8%; color: #fff; font-size: calc(var(--pt) * 7); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; border: 1px solid rgba(255,255,255,.7); border-radius: 99px; padding: calc(var(--pt) * 1.6) calc(var(--pt) * 5); }
-/* B · split */
-#s-start-choice .sc-half { position: absolute; top: 0; height: 100%; width: 50%; overflow: hidden; background-size: cover; background-position: center; transition: width .6s var(--ease); }
-#s-start-choice .sc-half.l { left: 0; } #s-start-choice .sc-half.r { right: 0; }
-#s-start-choice .sc-v-b:has(.l:hover) .l, #s-start-choice .sc-v-b:has(.r:hover) .r { width: 58%; }
-#s-start-choice .sc-v-b:has(.l:hover) .r, #s-start-choice .sc-v-b:has(.r:hover) .l { width: 42%; }
-#s-start-choice .sc-half::before { content: ""; position: absolute; inset: 0; background: rgba(10,6,30,.55); transition: background .4s var(--ease); }
-#s-start-choice .sc-half.r::before { background: rgba(255,255,255,.35); }
-#s-start-choice .sc-half:hover::before { background: rgba(10,6,30,.35); }
-#s-start-choice .sc-half.r:hover::before { background: rgba(255,255,255,.15); }
-#s-start-choice .sc-half .sc-t { position: absolute; left: 10%; bottom: 24%; font-size: calc(var(--pt) * 34); font-weight: 800; line-height: 1; color: #fff; }
-#s-start-choice .sc-half.r .sc-t { color: #111; }
-#s-start-choice .sc-half .sc-s { position: absolute; left: 10%; bottom: 17%; font-size: calc(var(--pt) * 10); color: rgba(255,255,255,.9); }
-#s-start-choice .sc-half.r .sc-s { color: #111; }
-#s-start-choice .sc-half .sc-glyph { position: absolute; left: 10%; bottom: 35%; }
-#s-start-choice .sc-v-b .sc-or { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 3; width: calc(var(--pt) * 22); height: calc(var(--pt) * 22); border-radius: 50%; background: #fff; color: var(--purple); display: grid; place-items: center; font-weight: 800; font-size: calc(var(--pt) * 8); letter-spacing: .1em; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
-/* C · question and pills */
-#s-start-choice .sc-v-c .sc-q { left: 8%; top: 30%; width: 84%; font-size: calc(var(--pt) * 36); }
-#s-start-choice .sc-v-c .sc-k { left: 8%; top: 24%; }
-#s-start-choice .sc-pills { position: absolute; left: 8%; top: 56%; display: flex; gap: 4%; }
-#s-start-choice .sc-pill { display: block; font-size: calc(var(--pt) * 12); font-weight: 700; padding: calc(var(--pt) * 5) calc(var(--pt) * 14); border-radius: 99px; border: 2px solid var(--purple); white-space: nowrap; transition: background .3s var(--ease), color .3s var(--ease), transform .3s var(--ease); }
-#s-start-choice .sc-pill:hover { transform: translateY(-3px); }
-#s-start-choice .sc-pill.f { background: var(--purple); color: #fff; }
-#s-start-choice .sc-pill.r { background: #fff; color: var(--purple); }
-#s-start-choice .sc-pill.r:hover { background: #f3effd; }
-#s-start-choice .sc-cap { display: block; margin: calc(var(--pt) * 5) 0 0 calc(var(--pt) * 7); font-size: calc(var(--pt) * 8.5); color: #666; }
-/* D · film tile and strip */
-#s-start-choice .sc-v-d .sc-q { left: 8%; top: 9%; width: 84%; font-size: calc(var(--pt) * 28); }
-#s-start-choice .sc-v-d .sc-k { left: 8%; top: 5%; }
-#s-start-choice .sc-tile { position: absolute; left: 8%; top: 28%; width: 34%; height: 46%; border-radius: calc(var(--pt) * 5); overflow: hidden; background-size: cover; background-position: center; transition: transform .4s var(--ease); }
+/* film tile and a fanned stack of renders, both softly blurred so nothing is shown ahead of the choice (22 Nov, Ritika picked this one) */
+#s-start-choice .sc-tile { position: absolute; left: 8%; top: 28%; width: 30%; height: 46%; border-radius: calc(var(--pt) * 5); overflow: hidden; background-size: cover; background-position: center; transition: transform .4s var(--ease); }
 #s-start-choice .sc-tile:hover { transform: scale(1.02); }
-#s-start-choice .sc-tile::before { content: ""; position: absolute; inset: 0; background: rgba(10,6,30,.35); }
-#s-start-choice .sc-tile .sc-glyph { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: calc(var(--pt) * 28); height: calc(var(--pt) * 28); }
-#s-start-choice .sc-strip { position: absolute; left: 44%; top: 28%; width: 48%; height: 46%; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: calc(var(--pt) * 2.5); }
-#s-start-choice .sc-strip button { border-radius: calc(var(--pt) * 3); background-size: cover; background-position: center; transition: transform .35s var(--ease), filter .35s var(--ease); filter: saturate(.9); }
-#s-start-choice .sc-strip button:hover { transform: scale(1.04); filter: none; }
-#s-start-choice .sc-v-d .sc-b { position: absolute; top: 80%; font-size: calc(var(--pt) * 10.5); font-weight: 700; padding: calc(var(--pt) * 4) calc(var(--pt) * 11); border-radius: 99px; border: 2px solid var(--purple); }
-#s-start-choice .sc-v-d .sc-b.f { left: 8%; background: var(--purple); color: #fff; }
-#s-start-choice .sc-v-d .sc-b.r { left: 26%; color: var(--purple); }
-/* E · order chips */
-#s-start-choice .sc-v-e .sc-q { left: 8%; top: 12%; width: 84%; font-size: calc(var(--pt) * 28); }
-#s-start-choice .sc-v-e .sc-k { left: 8%; top: 7.5%; }
-#s-start-choice .sc-ord { position: absolute; left: 8%; width: 84%; height: 20%; border: 1.5px solid #d9d0f5; border-radius: calc(var(--pt) * 5); display: flex; align-items: center; gap: calc(var(--pt) * 6); padding: 0 calc(var(--pt) * 10); transition: border-color .3s var(--ease), background .3s var(--ease); }
-#s-start-choice .sc-ord:hover { border-color: var(--purple); background: #faf8ff; }
-#s-start-choice .sc-ord .ch { font-size: calc(var(--pt) * 13); font-weight: 800; color: #111; padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #f1edfb; }
-#s-start-choice .sc-ord .ch.p { background: var(--purple); color: #fff; }
-#s-start-choice .sc-ord .ar { color: var(--purple); font-size: calc(var(--pt) * 14); }
-#s-start-choice .sc-ord .why { margin-left: auto; margin-right: calc(var(--pt) * 8); font-size: calc(var(--pt) * 8.5); color: #666; }
-#s-start-choice .sc-ord .go { font-size: calc(var(--pt) * 9.5); font-weight: 700; color: var(--purple); }
-
-/* variations on the film tile + render strip (design D) */
-#s-start-choice .dv-x { display: none; position: absolute; }
-#s-start-choice .sc-v-d .sc-tile, #s-start-choice .sc-v-d .sc-strip, #s-start-choice .sc-v-d .sc-b { transition: left .5s var(--ease), top .5s var(--ease), width .5s var(--ease), height .5s var(--ease); }
-/* V1 big film */
-#s-start-choice .page[data-dv="1"] .sc-tile { left: 8%; top: 26%; width: 54%; height: 52%; }
-#s-start-choice .page[data-dv="1"] .sc-strip { left: 64%; top: 26%; width: 28%; height: 34%; }
-#s-start-choice .page[data-dv="1"] .sc-v-d .sc-b { top: 82%; }
-#s-start-choice .page[data-dv="1"] .sc-v-d .sc-b.r { left: 64%; }
-/* V2 vertical strip */
-#s-start-choice .page[data-dv="2"] .sc-tile { left: 8%; top: 26%; width: 64%; height: 56%; }
-#s-start-choice .page[data-dv="2"] .sc-strip { left: 74%; top: 26%; width: 18%; height: 56%; grid-template-columns: 1fr; grid-template-rows: repeat(6, 1fr); }
-#s-start-choice .page[data-dv="2"] .sc-v-d .sc-b { top: 86%; }
-#s-start-choice .page[data-dv="2"] .sc-v-d .sc-b.r { left: 27%; }
-/* V3 fanned stack */
-#s-start-choice .page[data-dv="3"] .sc-tile { left: 8%; top: 28%; width: 30%; height: 46%; }
-#s-start-choice .page[data-dv="3"] .sc-strip { display: block; left: 42%; top: 24%; width: 50%; height: 56%; }
-#s-start-choice .page[data-dv="3"] .sc-strip button { position: absolute; width: 28%; height: 66%; box-shadow: 0 10px 26px rgba(30,20,70,.3); border: 3px solid #fff; filter: none; }
-#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(1) { left: 0; top: 18%; transform: rotate(-6deg); }
-#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(2) { left: 14%; top: 4%; transform: rotate(3deg); }
-#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(3) { left: 28%; top: 22%; transform: rotate(-3deg); }
-#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(4) { left: 42%; top: 2%; transform: rotate(5deg); }
-#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(5) { left: 56%; top: 20%; transform: rotate(-4deg); }
-#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(6) { left: 71%; top: 6%; transform: rotate(4deg); }
-#s-start-choice .page[data-dv="3"] .sc-strip button:hover { transform: rotate(0) scale(1.1); z-index: 9; }
-/* V4 dark stage */
-#s-start-choice .page[data-dv="4"] { background: radial-gradient(120% 120% at 20% 10%, #3a1a98, #160a46 70%); }
-#s-start-choice .page[data-dv="4"] .sc-v-d .sc-q { color: #fff; }
-#s-start-choice .page[data-dv="4"] .sc-v-d .sc-q b, #s-start-choice .page[data-dv="4"] .sc-v-d .sc-k { color: #cbbdf4; }
-#s-start-choice .page[data-dv="4"] .sc-v-d .sc-b.f { background: #fff; color: var(--purple); border-color: #fff; }
-#s-start-choice .page[data-dv="4"] .sc-v-d .sc-b.r { color: #fff; border-color: #fff; }
-#s-start-choice .page[data-dv="4"] .sc-tile, #s-start-choice .page[data-dv="4"] .sc-strip button { box-shadow: 0 14px 34px rgba(0,0,0,.35); }
-/* V5 labelled halves */
-#s-start-choice .page[data-dv="5"] .sc-tile { left: 8%; top: 31%; width: 38%; height: 44%; }
-#s-start-choice .page[data-dv="5"] .sc-strip { left: 54%; top: 31%; width: 38%; height: 44%; }
-#s-start-choice .page[data-dv="5"] .sc-v-d .sc-b { top: 82%; }
-#s-start-choice .page[data-dv="5"] .sc-v-d .sc-b.r { left: 54%; }
-#s-start-choice .page[data-dv="5"] .dv-cap { display: block; top: 25%; font-size: calc(var(--pt) * 8.5); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); }
-#s-start-choice .page[data-dv="5"] .dv-cap.l { left: 8%; }
-#s-start-choice .page[data-dv="5"] .dv-cap.r { left: 54%; }
-#s-start-choice .page[data-dv="5"] .dv-div { display: block; left: 50%; top: 25%; width: 2px; height: 58%; background: #e3dcf7; }
-/* V6 hover-led */
-#s-start-choice .page[data-dv="6"] .sc-v-d .sc-q { font-size: calc(var(--pt) * 22); }
-#s-start-choice .page[data-dv="6"] .sc-tile { left: 8%; top: 24%; width: 38%; height: 58%; }
-#s-start-choice .page[data-dv="6"] .sc-strip { left: 48%; top: 24%; width: 44%; height: 58%; }
-#s-start-choice .page[data-dv="6"] .sc-v-d .sc-b { display: none; }
-#s-start-choice .page[data-dv="6"] .sc-tile::after, #s-start-choice .page[data-dv="6"] .sc-strip::after { position: absolute; z-index: 3; left: calc(var(--pt) * 6); bottom: calc(var(--pt) * 6); padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #fff; color: var(--purple); font-size: calc(var(--pt) * 9); font-weight: 700; opacity: .0; transform: translateY(6px); transition: opacity .3s var(--ease), transform .3s var(--ease); pointer-events: none; }
-#s-start-choice .page[data-dv="6"] .sc-tile::after { content: "Start with the film"; }
-#s-start-choice .page[data-dv="6"] .sc-strip::after { content: "Start with the renders"; }
-#s-start-choice .page[data-dv="6"] .sc-tile:hover::after, #s-start-choice .page[data-dv="6"] .sc-strip:hover::after { opacity: 1; transform: none; }
+#s-start-choice .sc-tile::before, #s-start-choice .sc-strip button::before { content: ""; position: absolute; inset: -12px; background: inherit; filter: blur(11px) saturate(1.05); transition: filter .4s var(--ease); }
+#s-start-choice .sc-tile::after { content: ""; position: absolute; inset: 0; background: rgba(10,6,30,.28); }
+#s-start-choice .sc-tile .sc-glyph { position: absolute; z-index: 2; left: 50%; top: 50%; transform: translate(-50%, -50%); width: calc(var(--pt) * 28); height: calc(var(--pt) * 28); }
+#s-start-choice .sc-strip { position: absolute; left: 42%; top: 24%; width: 50%; height: 56%; }
+#s-start-choice .sc-strip button { position: absolute; width: 28%; height: 66%; overflow: hidden; border-radius: calc(var(--pt) * 3); background-size: cover; background-position: center; box-shadow: 0 10px 26px rgba(30,20,70,.3); border: 3px solid #fff; transition: transform .35s var(--ease); }
+#s-start-choice .sc-strip button:nth-child(1) { left: 0; top: 18%; transform: rotate(-6deg); }
+#s-start-choice .sc-strip button:nth-child(2) { left: 14%; top: 4%; transform: rotate(3deg); }
+#s-start-choice .sc-strip button:nth-child(3) { left: 28%; top: 22%; transform: rotate(-3deg); }
+#s-start-choice .sc-strip button:nth-child(4) { left: 42%; top: 2%; transform: rotate(5deg); }
+#s-start-choice .sc-strip button:nth-child(5) { left: 56%; top: 20%; transform: rotate(-4deg); }
+#s-start-choice .sc-strip button:nth-child(6) { left: 71%; top: 6%; transform: rotate(4deg); }
+#s-start-choice .sc-strip button:hover { transform: rotate(0) scale(1.1); z-index: 9; }
+#s-start-choice .sc-strip button:hover::before { filter: blur(4px) saturate(1.05); }
+#s-start-choice .sc-tile:hover::before { filter: blur(5px) saturate(1.05); }
+/* the two capsules share one line; each starts at its picture's left edge */
+#s-start-choice .sc-b { position: absolute; top: 83%; display: flex; align-items: center; justify-content: center; height: calc(var(--pt) * 21); box-sizing: border-box; padding: 0 calc(var(--pt) * 12); font-size: calc(var(--pt) * 10.5); font-weight: 700; line-height: 1; white-space: nowrap; border-radius: 99px; border: 2px solid var(--purple); transition: transform .3s var(--ease), background .3s var(--ease); }
+#s-start-choice .sc-b:hover { transform: translateY(-2px); }
+#s-start-choice .sc-b.f { left: 8%; background: var(--purple); color: #fff; }
+#s-start-choice .sc-b.r { left: 42%; background: #fff; color: var(--purple); }
+#s-start-choice .sc-b.r:hover { background: #f3effd; }
+@media (prefers-reduced-motion: reduce) { #s-start-choice * { transition: none !important; } }
 </style>
 <section class="scene" id="s-start-choice" data-part="p6" data-title="Walkthrough or renders?" data-steps="1" data-mins="0.3"
   data-notes="Shall we start with the walkthrough film, or with the renders? Either way we see both: the film is the whole campus in motion, the renders are every space, one by one. → Bridge: Your call.">
-  <div class="page rv" data-choice="a">
-    <div class="sc-v sc-v-a">
-      <span class="sc-k">Visual direction</span>
-      <h2 class="sc-q">Where shall we <b>start?</b></h2>
-      <button type="button" class="sc-card" data-pick="film" style="left:8%;background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span><span class="sc-chip">Film</span><span class="sc-t">The walkthrough</span><span class="sc-s">A walk through the Loop, arrival to the last room.</span></button>
-      <button type="button" class="sc-card" data-pick="renders" style="left:52%;background-image:url(assets/img/r3-reception-op1.webp)"><span class="sc-chip">17 spaces</span><span class="sc-t">The renders</span><span class="sc-s">Every space, one by one, with its light and its mood.</span></button>
-    </div>
-    <div class="sc-v sc-v-b">
-      <button type="button" class="sc-half l" data-pick="film" style="background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span><span class="sc-t">Walk<br>through it</span><span class="sc-s">The campus in motion</span></button>
-      <button type="button" class="sc-half r" data-pick="renders" style="background-image:url(assets/img/r3-reception-op1.webp)"><span class="sc-t">See it<br>still</span><span class="sc-s">Every space, one by one</span></button>
-      <span class="sc-or">OR</span>
-    </div>
-    <div class="sc-v sc-v-c">
-      <span class="sc-k">Visual direction</span>
-      <h2 class="sc-q">Walk through it, <b>or look at it first?</b></h2>
-      <div class="sc-pills"><div class="sc-pc"><button type="button" class="sc-pill f" data-pick="film">Start with the walkthrough</button><span class="sc-cap">The campus in motion</span></div><div class="sc-pc"><button type="button" class="sc-pill r" data-pick="renders">Start with the renders</button><span class="sc-cap">Every space, one by one</span></div></div>
-    </div>
-    <div class="sc-v sc-v-d">
-      <span class="sc-k">Visual direction</span>
-      <h2 class="sc-q">Film first, or <b>space by space?</b></h2>
-      <button type="button" class="sc-tile" data-pick="film" style="background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span></button>
-      <div class="sc-strip"><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-reception-op1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-cafe1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-deck.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-garden.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-collab.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-zen.webp)"></button></div>
-      <span class="dv-x dv-cap l">The film</span><span class="dv-x dv-cap r">The spaces</span><i class="dv-x dv-div"></i>
-      <button type="button" class="sc-b f" data-pick="film">Start with the film</button>
-      <button type="button" class="sc-b r" data-pick="renders">Start with the renders</button>
-    </div>
-    <div class="sc-v sc-v-e">
-      <span class="sc-k">Visual direction</span>
-      <h2 class="sc-q">Which order <b>suits the room?</b></h2>
-      <button type="button" class="sc-ord" data-pick="film" style="top:34%"><span class="ch p">Walkthrough</span><span class="ar">→</span><span class="ch">Renders</span><span class="why">Set the scene in motion, then look closely</span><span class="go">Choose this</span></button>
-      <button type="button" class="sc-ord" data-pick="renders" style="top:60%"><span class="ch p">Renders</span><span class="ar">→</span><span class="ch">Walkthrough</span><span class="why">Look closely first, then walk it all</span><span class="go">Choose this</span></button>
-    </div>
+  <div class="page rv">
+    <span class="sc-k">Visual direction</span>
+    <h2 class="sc-q">Film first, or <b>space by space?</b></h2>
+    <button type="button" class="sc-tile" data-pick="film" style="background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span></button>
+    <div class="sc-strip"><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-reception-op1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-cafe1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-deck.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-garden.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-collab.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-zen.webp)"></button></div>
+    <button type="button" class="sc-b f" data-pick="film">Start with the film</button>
+    <button type="button" class="sc-b r" data-pick="renders">Start with the renders</button>
   </div>
 </section>
 
@@ -8311,9 +8200,7 @@ ACKO.slide("s-start-choice", ({ $, $$, plain, reveal, go, sceneIx }) => {
   return {
     enter(_, sc) {
       window.__wtOrder = "";
-      const pg = $(".page", sc), q = new URLSearchParams(location.search); let c = q.get("choice") || "";
-      try { if (q.get("choice")) sessionStorage.setItem("wtChoice", c); else c = sessionStorage.getItem("wtChoice") || ""; } catch (e) {}
-      pg.setAttribute("data-choice", /^[a-e]$/.test(c) ? c : "a"); { let d = q.get("dv") || ""; try { if (q.get("dv")) sessionStorage.setItem("wtDv", d); else d = sessionStorage.getItem("wtDv") || ""; } catch (e) {} if (/^[1-6]$/.test(d)) pg.setAttribute("data-dv", d); else pg.removeAttribute("data-dv"); }
+      const pg = $(".page", sc);
       plain(); reveal(pg, 60);
       if (!sc.dataset.on) { sc.dataset.on = 1; sc.addEventListener("click", (e) => { const b = e.target.closest("[data-pick]"); if (!b) return; e.stopPropagation(); e.preventDefault(); b.blur(); pick(b.dataset.pick); }); ["mousedown", "pointerdown", "dblclick"].forEach((t) => sc.addEventListener(t, (e) => { if (e.target.closest("[data-pick]")) e.stopPropagation(); })); }
     },
