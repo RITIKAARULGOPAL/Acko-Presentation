@@ -2638,6 +2638,29 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 #s-start-choice .page[data-dv="6"] .sc-tile::after { content: "Start with the film"; }
 #s-start-choice .page[data-dv="6"] .sc-strip::after { content: "Start with the renders"; }
 #s-start-choice .page[data-dv="6"] .sc-tile:hover::after, #s-start-choice .page[data-dv="6"] .sc-strip:hover::after { opacity: 1; transform: none; }
+
+/* capsules centred under their own picture, one shared line; the pictures only lightly blurred */
+#s-start-choice .sc-v-d .sc-b { display: flex; align-items: center; justify-content: center; height: calc(var(--pt) * 21); box-sizing: border-box; padding: 0 calc(var(--pt) * 12); white-space: nowrap; line-height: 1; transform: translateX(-50%); transition: left .5s var(--ease), top .5s var(--ease), transform .3s var(--ease), background .3s var(--ease); }
+#s-start-choice .sc-v-d .sc-b:hover { transform: translate(-50%, -2px); }
+#s-start-choice .sc-tile::before { backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); transition: backdrop-filter .4s var(--ease); }
+#s-start-choice .sc-tile:hover::before { backdrop-filter: blur(.5px); -webkit-backdrop-filter: blur(.5px); }
+#s-start-choice .sc-strip button { position: relative; }
+#s-start-choice .page[data-dv="3"] .sc-strip button { position: absolute; }
+#s-start-choice .sc-strip button::before { content: ""; position: absolute; inset: 0; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); transition: backdrop-filter .35s var(--ease); pointer-events: none; }
+#s-start-choice .sc-strip button:hover::before { backdrop-filter: blur(.5px); -webkit-backdrop-filter: blur(.5px); }
+#s-start-choice .sc-v-d .sc-b.f { left: 25%; top: 80%; }
+#s-start-choice .sc-v-d .sc-b.r { left: 68%; top: 80%; }
+#s-start-choice .page[data-dv="1"] .sc-v-d .sc-b.f { left: 35%; top: 82%; }
+#s-start-choice .page[data-dv="1"] .sc-v-d .sc-b.r { left: 78%; top: 82%; }
+#s-start-choice .page[data-dv="2"] .sc-v-d .sc-b.f { left: 40%; top: 86%; }
+#s-start-choice .page[data-dv="2"] .sc-v-d .sc-b.r { left: 83%; top: 86%; }
+#s-start-choice .page[data-dv="3"] .sc-v-d .sc-b.f { left: 23%; top: 80%; }
+#s-start-choice .page[data-dv="3"] .sc-v-d .sc-b.r { left: 67%; top: 80%; }
+#s-start-choice .page[data-dv="4"] .sc-v-d .sc-b.f { left: 25%; top: 80%; }
+#s-start-choice .page[data-dv="4"] .sc-v-d .sc-b.r { left: 68%; top: 80%; }
+#s-start-choice .page[data-dv="5"] .sc-v-d .sc-b.f { left: 27%; top: 82%; }
+#s-start-choice .page[data-dv="5"] .sc-v-d .sc-b.r { left: 73%; top: 82%; }
+@media (prefers-reduced-motion: reduce) { #s-start-choice .sc-v-d .sc-b, #s-start-choice .sc-tile::before, #s-start-choice .sc-strip button::before { transition: none !important; } }
 </style>
 <section class="scene" id="s-start-choice" data-part="p6" data-title="Walkthrough or renders?" data-steps="1" data-mins="0.3"
   data-notes="Shall we start with the walkthrough film, or with the renders? Either way we see both: the film is the whole campus in motion, the renders are every space, one by one. → Bridge: Your call.">
