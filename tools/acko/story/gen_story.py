@@ -318,10 +318,11 @@ AC_MORE = ('<ul class="ac-more"><li><b>NRC 0.70–0.90</b> across the floor</li>
            '<p class="ac-note">An acoustic consultant can refine the specification.</p>')
 SP2_CSS = ('<style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }'
            '#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }'
-           '#s-layout-sp .sp2-nav { display: none; left: 34%; top: 3.4%; z-index: 7; align-items: center; gap: calc(var(--pt) * 8); }'
+           '#s-layout-sp .sp2-nav { display: none; left: 50%; transform: translateX(-50%); top: 3.6%; z-index: 7; align-items: center; gap: calc(var(--pt) * 6); }'
            '#s-layout-sp.nb-open .sp2-nav { display: flex; }'
-           '#s-layout-sp .sp2-nav button { border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 9); font: 600 calc(var(--pt) * 8) var(--body); cursor: pointer; }'
-           '#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 8.5); color: #333; }</style>\n')
+           '#s-layout-sp.nb-open .ly-tools button:not([data-t="occ"]) { display: none; }'      # 22 Nov: the neighbourhood sheet's own nav takes the top: the tools would sit under its buttons
+           '#s-layout-sp .sp2-nav button { border: 1px solid #e6e1f4; background: transparent; color: #6a5fa0; border-radius: 999px; padding: calc(var(--pt) * 1.4) calc(var(--pt) * 5.4); font: 500 calc(var(--pt) * 5.6) var(--body); cursor: pointer; }'      # 22 Nov, Ritika: the nav buttons less prominent
+           '#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 6.4); font-weight: 600; color: #6b6680; }</style>\n')
 SP2_JS = '''
   // the sheets on demand (12 Nov): a click opens a neighbourhood's sheet; → / Next goes on to the next; Back / Esc returns to the layout
   let SH = null; const NBS = ["01", "02", "03", "04", "05", "06"];
@@ -589,7 +590,6 @@ def story2(h):
 # the lockup; and no neighbourhood block in a purple ("Loop = the only strong purple line"): 02 Life (lilac) and 03 Health (violet
 # blue) take a soft mint and a soft peach, on this page only (Ritika: "Story 2 only"); the plan and the axo both read AXO_LAYERS
 TAG = {  # (22 Nov, Ritika: the Concept capsules are gone)
-       "s-loop-floor": "Plan", "s-strategy": "Plan", "s-layout-dd": "Plan", "s-layout-sp": "Plan",
        "s-memories": "Reference", "s-site": "Reference"}
 TAG_CSS = ('<style>.scene .page > .dg-tag { right: 12.6%; top: 95.1%; margin: 0; padding: .25em .9em; border: 1px solid currentColor; '
            'border-radius: 99px; font-size: calc(var(--pt) * 5); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; '

@@ -137,11 +137,18 @@
 #s-why-campus .wc-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
 #s-why-campus .wc-a { color: #17857e; }
 #s-why-campus .wc-b { color: #a3967a; }
-#s-why-campus .wc-f { color: var(--ink); }
 #s-why-campus .page.b2 .wc-a.shown, #s-why-campus .page.b2 .wc-b.shown { opacity: 0; transition-delay: 0s; }
 #s-why-campus .wc-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
-#s-why-campus .wc-f[data-step], #s-why-campus .wc-cap[data-step="2"] { transition-delay: 2.2s; }
 #s-why-campus .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+/* the caption travels: "we came from two..." slides under the one drop as the drops merge and becomes "...we arrive on one floor..." */
+#s-why-campus .wc-cap { position: absolute; transition: opacity .7s var(--ease), left .5s var(--ease), top .5s var(--ease), width .5s var(--ease); }
+#s-why-campus .wc-cap .c1 { display: block; transition: opacity .4s var(--ease); }
+#s-why-campus .wc-cap .c2 { display: block; position: absolute; left: 0; right: 0; top: 0; opacity: 0; transition: opacity .3s var(--ease); }
+#s-why-campus .page.b2 .wc-cap { left: 36.9% !important; top: 78.9% !important; width: 26.2% !important; transition: opacity .7s var(--ease), left 1.6s var(--ease) .4s, top 1.6s var(--ease) .4s, width 1.6s var(--ease) .4s; }
+#s-why-campus .page.b2 .wc-cap .c1 { opacity: 0; transition: opacity .6s var(--ease) .4s; }
+#s-why-campus .page.b2 .wc-cap .c2 { opacity: 1; transition: opacity .8s var(--ease) 1.5s; }
+#s-why-campus .still .wc-cap, #s-why-campus .still .wc-cap span { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { #s-why-campus .wc-cap, #s-why-campus .wc-cap span { transition: none !important; } }
 </style>
 <style data-slide="s-campus-loop">
 /* ---------- How it ties together · one ribbon ---------- */
@@ -186,14 +193,20 @@
 #s-campus-loop .cpl-dots > g { transform-box: view-box; transform-origin: 0 0; }
 #s-campus-loop .pa { fill: #1e9e95; color: #1e9e95; }
 #s-campus-loop .pb { fill: #bcae92; color: #bcae92; }
-/* the Replay button: shown once the run has ended */
-#s-campus-loop .cpl-replay { right: 4.8%; top: 88.2%; font: 600 calc(var(--pt) * 6.4) var(--body); letter-spacing: .06em; color: var(--accent); background: #fff; border: 1px solid #cfc3f3; border-radius: 99px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 8); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
-#s-campus-loop .page.end .cpl-replay { opacity: 1; pointer-events: auto; }
-#s-campus-loop .cpl-replay:hover { background: #f3effd; }
 /* + and = */
 #s-campus-loop .cpl-op { top: 49%; width: 6%; text-align: center; font-size: calc(var(--pt) * 22); font-weight: 300; line-height: 1; color: var(--accent); }
 /* the words under each figure, once the ribbon has made it */
 #s-campus-loop .cpl-w { top: 67.4%; text-align: center; }
+/* the + and = arrive one after the other, the same way (22 Nov, Ritika: "+ and = sequential") */
+#s-campus-loop .cpl-op { transition: opacity .6s var(--ease) .15s; }
+/* sentences break on their punctuation, never leave a lone word (22 Nov) */
+#s-campus-loop .cpl-w p { text-wrap: balance; }
+#s-campus-loop .cpl-w p .ln { display: block; }
+/* the Möbius promise: bold purple, and a line that sweeps under each line, again and again (22 Nov, Ritika picked B) */
+#s-campus-loop .cpl-w.w2 p { display: inline-block; padding: .2em .1em; color: var(--accent); font-weight: 700; font-size: 1.1em; line-height: 1.35; }
+#s-campus-loop .cpl-w.w2 .ln { background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 2px; padding-bottom: .12em; }
+@media not (prefers-reduced-motion: reduce) { #s-campus-loop .cpl-w.w2.shown .ln { animation: cpl-sweep 2.6s ease-in-out infinite; } }
+@keyframes cpl-sweep { 0% { background-size: 0 2px; background-position: 0 100%; } 55% { background-size: 100% 2px; background-position: 0 100%; } 100% { background-size: 0 2px; background-position: 100% 100%; } }
 #s-campus-loop .cpl-w h3 { margin: 0; font-size: calc(var(--pt) * 13); font-weight: 700; line-height: 1.1; letter-spacing: -.01em; color: var(--ink); }
 #s-campus-loop .cpl-w.w3 h3 { color: var(--accent); }
 #s-campus-loop .cpl-w em { display: block; margin-top: calc(var(--pt) * 3); font-style: normal; font-size: calc(var(--pt) * 5.4); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
@@ -281,7 +294,7 @@
 .vm-hosur { fill: none; stroke: #cfc6e6; stroke-width: 9; stroke-linecap: round; }
 .vm-bld path { fill: #dcd8e3; stroke: #cdc8d6; stroke-width: .4; }
 .vm-foot { fill: #c9b3f3; stroke: #5222d0; stroke-width: 1.4; }
-.vm-plate { fill: #5222d0; opacity: .55; }
+.vm-plate { fill: #5222d0; fill-opacity: .55; stroke: #5222d0; stroke-width: 1.4; }   /* 19 Nov: the plate alone (no footprint block behind it) */
 /* beat 2, into the floor (3 Nov): the neighbourhood and the copy fade, the plate alone stays, lighter, where the plan will be */
 #vmap .vm-fade { transition: opacity .5s var(--ease); }
 body.si-into #vmap .vm-fade { opacity: 0; }
@@ -579,6 +592,9 @@ body[data-scene="s-layout-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-strategy .st-anim { left: 7.62%; top: 9.07%; width: 78.04%; height: 78.04%; background: url(assets/img/strategy-anim.webp) center / 100% 100% no-repeat; }
 #s-strategy:not(.st-fallback) .st-anim { display: none; }
 #s-strategy.st-fallback .st-3d, #s-strategy.st-fallback .st-ov, #s-strategy.st-fallback .st-tools, #s-strategy.st-fallback .st-cap, #s-strategy.st-fallback .st-veil { display: none; }
+#s-strategy.st-rise :is(.st-t, .st-tools, .st-cap, .st-ov) { opacity: 0 !important; transition: none !important; }   /* arriving from the site plan: the words wait until the axo has landed */
+#s-strategy.st-land :is(.st-t, .st-tools) { animation: st-landin .9s var(--ease) both; }
+@keyframes st-landin { from { opacity: 0; } to { opacity: 1; } }
 #s-strategy .st-3d { left: 0; top: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 #s-strategy .st-3d.drag { cursor: grabbing; }
 #s-strategy .st-3d canvas { display: block; width: 100%; height: 100%; }
@@ -593,6 +609,14 @@ body[data-scene="s-layout-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.4;   /* 29 Oct: "the line spacing is off" */ font-style: italic; font-weight: 300; color: #666; }
 #s-strategy .st-t p b { font-weight: 500; }
 #s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); justify-content: flex-start; }   /* rows from the top: placed under the name (placeLine) */   /* 29 Oct: "use 1.2 spacing" */
+/* Story 3 (data-merge): the beat's caption and its line sit top left where the main idea was; the heading and the Inspired line take the caption's old place */
+#s-strategy .st-t .st-insp { display: none; }
+#s-strategy[data-merge] .st-t p:not(.st-hand):not(.st-insp) { display: none; }
+#s-strategy[data-merge] .st-t h3 { left: 46.62%; top: 76%; }
+#s-strategy[data-merge] .st-t .st-insp { display: flex; left: 46.62%; top: 82.5%; width: 42.47%; height: auto; font-size: calc(var(--pt) * 9); line-height: 1.4; font-style: italic; font-weight: 300; color: #666; justify-content: flex-start; }
+#s-strategy[data-merge] .st-tools { display: none; }   /* no Reset view in Story 3 */
+#s-strategy[data-merge] .st-cap { left: 2.82%; top: 19.1%; }
+#s-strategy[data-merge] .st-t .st-hand { left: 1.82%; width: 44%; }
 /* the beat's name, bottom right of the floor, as the deck's animation writes it */
 #s-strategy .st-cap { left: 47.62%; top: 68.32%;   /* on the handwritten line's left edge; the same place on every beat, where The Client's journey had it (29 Oct: "keep this position as constant") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
   opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
@@ -656,9 +680,19 @@ body[data-scene="s-layout-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 /* arriving from the site's plate (3 Nov): the worlds cross slowly, the page's furniture waits for the plan, then fades in */
 body.ly-arrive .w-layer, body.ly-arrive .w-layer.on { transition-duration: 1.6s, 1.1s, 1.6s, 0s !important; transition-timing-function: ease-in-out !important; }
 #s-layout-sp .hdr, #s-layout-sp .ly-tools, #s-layout-sp .ly-bot { transition: opacity .7s var(--ease), top .45s var(--ease); }
+/* the fire egress legend: only while Fire egress is on, beside the pills, on every beat */
+#s-layout-sp .ly-eg-leg { position: absolute; right: 7%; top: calc(var(--ly-top, 70%) - 5.6%); display: none; align-items: center; gap: calc(var(--pt) * 6); padding: calc(var(--pt) * 2.4) calc(var(--pt) * 7); border: 1px solid #e3def2; border-radius: 999px; background: #fff; font-size: calc(var(--pt) * 5.4); color: var(--soft); white-space: nowrap; transition: opacity .7s var(--ease) .15s, top .45s var(--ease); }
+#s-layout-sp.eg-on .ly-eg-leg { display: flex; }
+#s-layout-sp .ly-eg-leg b { color: var(--ink); font-weight: 600; }
+#s-layout-sp .ly-eg-leg span { display: inline-flex; align-items: center; gap: calc(var(--pt) * 2.4); }
+#s-layout-sp .ly-eg-leg i { display: inline-block; width: calc(var(--pt) * 12); height: 0; border-top: 2.6px solid #1c64b4; }
+#s-layout-sp .ly-eg-leg i.eg-d { border-top-style: dashed; }
+#s-layout-sp.ly-arrive .ly-eg-leg, #s-layout-sp.nb-sheet .ly-eg-leg, #s-layout-sp.nb-open .ly-eg-leg { opacity: 0; visibility: hidden; transition: none; }
+#s-layout-sp.v3.fold:not(.nb-sheet) .ly-eg-leg { top: 89.6%; }
 #s-layout-sp .ly-pills, #s-layout-sp .ly-north { transition: opacity .7s var(--ease) .15s, top .45s var(--ease); }
 #s-layout-sp .ly-top { transition: opacity .7s var(--ease); }
-#s-layout-sp.ly-arrive :is(.hdr, .ly-tools, .ly-pills, .ly-top, .ly-bot, .ly-north, .ly-p.on) { opacity: 0; transition: none; }   /* the white bands too, over the map */
+#s-layout-sp.ly-arrive :is(.hdr, .ly-tools, .ly-pills, .ly-top, .ly-bot, .ly-north, .ly-p.on) { opacity: 0; transition: none; }
+body.ly-arrive #world-plan .dx-lab { opacity: 0 !important; transition: none !important; }   /* the plan's room marks wait: the boundary stands alone, then the spaces come */   /* the white bands too, over the map */
 #s-layout-sp .lt-read { right: 5%; top: calc(var(--ly-top, 70%) - 5.5%); transition: top .45s var(--ease); }
 #s-layout-sp .ly-north circle { fill: none; stroke: #9a9a9a; stroke-width: 1.2; }
 #s-layout-sp .ly-north line { stroke: #333; stroke-width: 2.6; stroke-linecap: round; }
@@ -705,6 +739,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .three .pre { font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
 #s-layout-sp .zone { display: none; grid-template-columns: 30% 1fr; gap: calc(var(--pt) * 8); align-items: start; }
 #s-layout-sp .ly-p.zoned .three { display: none; } #s-layout-sp .ly-p.zoned .zone { display: grid; }
+#s-layout-sp.v3 .zone { grid-template-columns: 40% 1fr; }      /* 22 Nov: a wider key plan (cropped to the floor), so its numbers read */
 #s-layout-sp .kp b { display: block; font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
 #s-layout-sp .kp-in svg { width: 100%; height: auto; }
 #s-layout-sp .occ { columns: 2; column-gap: calc(var(--pt) * 10); font-size: calc(var(--pt) * 5.6); }
@@ -860,6 +895,9 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .nbe-cnt b { display: block; font-family: var(--num); font-weight: 600; font-size: calc(var(--pt) * 24); line-height: 1.05; color: var(--ink); }
 #s-layout-sp .nbe-cnt small { display: flex; align-items: center; gap: calc(var(--pt) * 2.5); font-size: calc(var(--pt) * 5.4); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
 #s-layout-sp .nbe-cnt small::before { content: ""; width: calc(var(--pt) * 4.5); height: calc(var(--pt) * 4.5); border-radius: 50%; background: var(--k); }
+/* 22 Nov, Ritika: template E is the one; no pinpoints on the plan or the axonometric (nor their hint), and one way back only: the nav's, not "All neighbourhoods" besides */
+#s-layout-sp.nb-sheet[data-nbv="e"] :is(.nbe-pm, .nbe-ap, .nbe-hint) { display: none !important; }
+#s-layout-sp.nb-sheet .ly-back { display: none !important; }
 #s-layout-sp .nbe-hint { margin: auto 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); }
 #s-layout-sp :is(.nbe-pm, .nbe-ap) i { display: block; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); border-radius: 50%; background: var(--k); font-style: normal;
   box-shadow: 0 0 0 calc(var(--pt) * 1.4) #fff, 0 1px 4px rgba(0, 0, 0, .25); pointer-events: auto; cursor: default; position: relative; transition: transform .15s; }
@@ -921,8 +959,12 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 /* Spaces: no people ("remove the neighbourhood people colour coding and animation", the count with them); the floor in greys,
    the greens kept (JS); outside the contract dark grey, cross-hatched; Arrival by each entrance's arrow */
 #s-layout-sp.v3 :is(.ly-ppl, .ly-ppl-n) { display: none !important; }
-#world-plan.sp3 .dx-nic path { fill: url(#sp3-nic); fill-opacity: 1; }
-#world-plan.sp3 svg.dx-nic { mix-blend-mode: multiply; }      /* 19 Nov, Ritika: "not in contract fill should multiply so the base plan is seen" */
+/* 22 Nov, Ritika: outside the contract a plain lighter grey, no cross-hatch, covering the drawing under it (its boundary masked); hovered, it multiplies
+   so the layout under it is seen */
+#world-plan.sp3 .dx-nic path { fill: #e3e3e3; fill-opacity: 1; stroke: none; pointer-events: fill; transition: fill .25s; }   /* the contract boundary shows through as the drawing's own lines: the grey is masked back from its edge (JS v3Enter) */
+#world-plan.sp3.no-hover .dx-nic path { pointer-events: none; }      /* Names on hover off: the grey is not hovered either */
+#world-plan.sp3 .dx-nic path:hover { fill: #d2d2d2; mix-blend-mode: multiply; }
+#world-plan .sp3-arr { display: none; }      /* 22 Nov, Ritika: no "Arrival" word next to the entrance arrows */
 #world-plan .sp3-arr text { fill: #c40000; font-family: var(--body, sans-serif); font-weight: 600; paint-order: stroke; stroke: #fff; stroke-linejoin: round; opacity: 0; transition: opacity .6s; }   /* size and halo: JS arrLay, a constant 14.5 px on screen */
 #world-plan.sp3.show-entry .sp3-arr text { opacity: 1; }
 /* the types: in order 516, 69, 48, 13, renumbered 1–4 (JS); each its plan beside its 3D; hovered or pinned, purple */
@@ -1022,13 +1064,21 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-sec-4 .st-line b { font-weight: 700; color: var(--purple); }
 #s-sec-4 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
 </style>
-<style data-slide="s-material">#s-material .mat-sep { border-left: 1px dashed #c9c9c9; }</style>
+<style data-slide="s-palette2">
+#s-palette2 .page { background: #fff; }
+</style>
+<style data-slide="s-material">
+#s-material .page { background: #fff; }
+</style>
 <style data-slide="s-wf-a6">
 #s-wf-a6 .wf-chips { display: flex; gap: calc(var(--pt) * 3); }
 #s-wf-a6 .wf-chips button { display: inline-flex; align-items: center; gap: calc(var(--pt) * 2.5); border: 1px solid #ddd6f2; background: #fff; color: var(--ink); border-radius: 999px;
   padding: calc(var(--pt) * 1.8) calc(var(--pt) * 4.5); font: 600 calc(var(--pt) * 6) / 1.1 var(--num, inherit); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
 #s-wf-a6 .wf-chips button::before { content: ""; width: calc(var(--pt) * 5); height: calc(var(--pt) * 5); border-radius: 50%; background: var(--c); }
 #s-wf-a6 .wf-chips button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+#s-wf-a6 .wf-look { display: inline-flex; border: 1px solid #ddd6f2; border-radius: 999px; overflow: hidden; background: #fff; }
+#s-wf-a6 .wf-look button { border: 0; background: none; color: var(--ink); padding: calc(var(--pt) * 1.8) calc(var(--pt) * 4.5); font: 600 calc(var(--pt) * 5.4) / 1.1 var(--num, inherit); cursor: pointer; transition: background .2s, color .2s; }
+#s-wf-a6 .wf-look button.on { background: var(--ink); color: #fff; }
 #s-wf-a6 .wf-note { font-size: calc(var(--pt) * 5.2); color: var(--mute); font-style: italic; }
 #s-wf-a6 .wf-k { display: block; font-size: calc(var(--pt) * 5.4); letter-spacing: .16em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
 
@@ -1048,18 +1098,20 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-wf-a6 .film { fill: var(--privacy); } #s-wf-a6 .filmdot { fill: var(--paint); opacity: .35; }
 #s-wf-a6 .sign { fill: #fff; stroke: #2b2440; stroke-width: 2.5; } #s-wf-a6 .signt { font: 600 20px var(--body, sans-serif); fill: #2b2440; }
 #s-wf-a6 .braille circle { fill: #2b2440; }
-#s-wf-a6 .coffee { fill: var(--coffee); } #s-wf-a6 .coffee-top { fill: #2b2440; } #s-wf-a6 .cup { fill: #fff; stroke: #2b2440; stroke-width: 2; }
+#s-wf-a6 .chair { fill: #efeaf6; } #s-wf-a6 .wsdesk { fill: #e7dfd0; } #s-wf-a6 .wsmon { fill: #2b2440; } #s-wf-a6 .wsscreen { fill: var(--ws); } #s-wf-a6 .modesty { fill: #bdbac1; }
+#s-wf-a6 .m-modesty { mix-blend-mode: multiply; opacity: .5; }
+#s-wf-a6 .collab { fill: var(--collab); stroke: #2b2440; stroke-width: 3.2; } #s-wf-a6 .ctable { fill: #2b2440; stroke: #2b2440; stroke-width: 3; } #s-wf-a6 .cup { fill: #fff; stroke: #2b2440; stroke-width: 2; }
 #s-wf-a6 .ln { fill: #fff; stroke: #2b2440; stroke-width: 2.5; }
-#s-wf-a6 .carpet { fill: var(--carpet); } #s-wf-a6 .floor { stroke: #2b2440; stroke-width: 2; }
+#s-wf-a6 .carpet { fill: #8d8b90; } #s-wf-a6 .grunge { fill: var(--carpet); opacity: .85; } #s-wf-a6 .floor { stroke: #2b2440; stroke-width: 2; }
 #s-wf-a6 .lead path { stroke: #8a83a3; stroke-width: 1.4; stroke-dasharray: 3 4; fill: none; }
 #s-wf-a6 .lab text { font: 600 21px var(--body, sans-serif); fill: #2b2440; } #s-wf-a6 .lab text.gen { fill: #8a83a3; }
 #s-wf-a6 .wf-bar { display: flex; align-items: center; gap: calc(var(--pt) * 6); }
 #s-wf-a6 .wf-bar .wf-k { margin: 0; }
 #s-wf-a6 .wf-name { font-size: calc(var(--pt) * 7); color: var(--ink); }
 
-#s-wf-a6 :is(.paint, .carpet, .coffee, .art, .acoustic) { filter: url(#wfa6-wash); opacity: .88; }
+#s-wf-a6 :is(.paint, .carpet, .collab, .wsscreen, .art, .acoustic) { filter: url(#wfa6-wash); opacity: .88; }
 #s-wf-a6 .wall { fill: #fbf8f1; } #s-wf-a6 .room { fill: #fdfbf6; }
-#s-wf-a6 .frame, #s-wf-a6 .floor, #s-wf-a6 .glass, #s-wf-a6 .sign, #s-wf-a6 .ln, #s-wf-a6 .cup, #s-wf-a6 .coffee-top { stroke: #2b2440; stroke-width: 3.2; }
+#s-wf-a6 .frame, #s-wf-a6 .floor, #s-wf-a6 .glass, #s-wf-a6 .sign, #s-wf-a6 .ln, #s-wf-a6 :is(.cup, .chair, .wsdesk, .wsmon, .wsscreen, .modesty) { stroke: #2b2440; stroke-width: 3.2; }
 #s-wf-a6 .hatch { stroke: rgba(43, 36, 64, .28); stroke-width: 1.4; }
 #s-wf-a6 .lab text { font: 400 34px var(--hand, cursive); fill: #2b2440; } #s-wf-a6 .lab text.gen { fill: #6f6a85; }
 #s-wf-a6 .lead path { stroke: #2b2440; stroke-dasharray: none; stroke-width: 1.2; }
@@ -1088,7 +1140,9 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-wf-a6 .face { transition: transform .35s; } #s-wf-a6 .left .face { transform: scaleX(-1); }
 #s-wf-a6 .headg { transition: transform .5s; } #s-wf-a6 .wonder .headg { transform: translate(0, -196px) rotate(-9deg) translate(0, 196px); }
 #s-wf-a6 .reach .a1 { transform: rotate(-100deg); } #s-wf-a6 .hold .a1 { transform: rotate(-78deg); }
-#s-wf-a6 .mycup { opacity: 0; transition: opacity .3s; } #s-wf-a6 .hold .mycup { opacity: 1; transition-delay: .35s; }
+#s-wf-a6 .sitlegs { display: none; } #s-wf-a6 .sit .sitlegs { display: block; } #s-wf-a6 .sit :is(.l1, .l2) { display: none; }
+#s-wf-a6 .bob { transition: transform .4s; } #s-wf-a6 .sit .bob { transform: translateY(43px); } #s-wf-a6 .sit .a1 { transform: rotate(-55deg); } #s-wf-a6 .sit .a2 { transform: rotate(-45deg); }
+#s-wf-a6 .mycup { opacity: 0; transition: opacity .3s; } #s-wf-a6 .hold .mycup { opacity: 0; }
 #s-wf-a6 .mycup rect { fill: #fff; stroke-width: 3; } #s-wf-a6 .steam { stroke-width: 2.4; opacity: .55; animation: wf6-steam 1.6s ease-in-out infinite; }
 @keyframes wf6-steam { 0% { transform: translateY(4px); opacity: 0; } 50% { opacity: .6; } 100% { transform: translateY(-8px); opacity: 0; } }
 #s-wf-a6 .bub { opacity: 0; transition: opacity .35s; } #s-wf-a6 .bub.on { opacity: 1; }
@@ -1100,6 +1154,22 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-wf-a6 .wf-close.on { opacity: 1; transform: none; }
 #s-wf-a6 .wf-again { opacity: .55; border: 1px solid #ddd6f2; background: #fff; color: var(--ink); border-radius: 999px; padding: calc(var(--pt) * 1.8) calc(var(--pt) * 5);
   font: 600 calc(var(--pt) * 5.6) / 1.1 inherit; cursor: pointer; }
+/* the Material look: the same drawing, its surfaces in real finishes (textures cropped from the project's own material and render images) */
+#s-wf-a6 .mat { opacity: 0; pointer-events: none; transition: opacity .7s; }
+#s-wf-a6 .wf-el[data-look="mat"] .mat { opacity: 1; }
+#s-wf-a6 .wf-el[data-look="mat"] :is(.paint, .carpet, .collab, .wsscreen, .art, .acoustic) { filter: none; opacity: 1; }
+#s-wf-a6 .wf-el[data-look="mat"] .ink0 { filter: none; }
+#s-wf-a6 .wf-el[data-look="mat"] .hat { opacity: 0; }
+#s-wf-a6 .hat { transition: opacity .7s; }
+#s-wf-a6 .mat :is(.m-slats rect, .m-collab rect, .m-wsg rect, .m-ctable) { mix-blend-mode: multiply; }
+#s-wf-a6 .m-collab rect, #s-wf-a6 .m-wsg rect { fill: url(#wfa6-t-fabric); opacity: .7; } #s-wf-a6 .m-ctable { stroke: #2b2440; stroke-width: 3; }
+#s-wf-a6 .m-slats rect { fill: url(#wfa6-t-slats); opacity: .8; }
+#s-wf-a6 .m-img { filter: grayscale(1) brightness(1.12) contrast(1.05); }
+#s-wf-a6 .m-tint { fill: var(--t2, #888); opacity: .92; mix-blend-mode: color; transition: fill .7s; }
+#s-wf-a6 .m-film { fill: rgba(255, 255, 255, .5); stroke: none; }
+#s-wf-a6 .m-sign { fill: url(#wfa6-brass); stroke: #2b2440; stroke-width: 2.5; }
+#s-wf-a6 .m-carpet { mix-blend-mode: multiply; opacity: .75; }
+#s-wf-a6 .wf-el[data-look="mat"] .grunge { opacity: 1; }
 #s-wf-a6 .wf-again:hover { border-color: var(--purple); color: var(--purple); }
 </style>
 <style data-slide="s-wayday">
@@ -1139,6 +1209,25 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-wayday .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
 #s-wayday.wd-fallback .wd-nogl { display: block; }
 #s-wayday.wd-fallback .wd-gl, #s-wayday.wd-fallback .lt-tools { display: none; }
+/* one focus: a lilac ground, the title small, the subtitle and header gone, and the quote, the stop's line, the clock and the stop's name stacked
+   in one block top left; the time ticks on between stops with a fill along the day (Ritika, 20 Nov: "go with D") */
+#s-wayday .page { background: #e3ddf3; }
+#s-wayday .wd-veil { background: linear-gradient(90deg, rgba(227,221,243,.9) 0, rgba(227,221,243,.6) 22%, rgba(227,221,243,0) 38%), linear-gradient(0deg, rgba(227,221,243,.92) 0, rgba(227,221,243,.7) 15%, rgba(227,221,243,0) 24%), linear-gradient(180deg, rgba(227,221,243,.8) 0, rgba(227,221,243,0) 10%); }
+#s-wayday .wd-title p, #s-wayday .hdr { display: none; }
+#s-wayday .wd-title { top: 6%; }
+#s-wayday .wd-title h1 { font-size: calc(var(--pt) * 8); font-style: normal; color: var(--mute); }
+#s-wayday .lt-tools { opacity: .25; transition: opacity .3s; } #s-wayday .lt-tools:hover { opacity: 1; }
+#s-wayday .wd-now { left: 1.8%; top: 11%; width: 29%; display: flex; flex-direction: column; }
+#s-wayday .wd-now q { order: 1; font-size: calc(var(--pt) * 13); line-height: 1.15; text-wrap: balance; color: var(--purple-2); margin: 0; }
+#s-wayday .wd-now span { order: 2; font-size: calc(var(--pt) * 7.2); color: var(--soft); margin: calc(var(--pt) * 2) 0 0; }
+#s-wayday .wd-now .t { order: 3; font-size: calc(var(--pt) * 15); font-variant-numeric: tabular-nums; margin-top: calc(var(--pt) * 5); }
+#s-wayday .wd-now b { order: 4; font-size: calc(var(--pt) * 8.5); margin-top: calc(var(--pt) * 1); }
+#s-wayday .wd-now q:not(:empty)::before { content: "\201C"; } #s-wayday .wd-now q:not(:empty)::after { content: "\201D"; }
+#s-wayday .wd-now.wd-sw span, #s-wayday .wd-now.wd-sw q { animation: wd-swap .7s ease both; }
+@keyframes wd-swap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+#s-wayday .wd-day button { border-top-color: rgba(82,34,208,.18); }
+#s-wayday .wd-day button.on, #s-wayday .wd-day button.done { border-top-color: transparent; }
+#s-wayday .wd-ph { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--purple); pointer-events: none; }
 </style>
 <style data-slide="s-engage">
 /* ---------- Acker's engagement points (deck 46): the PPT collage as a lens, one group lit per beat, then all ---------- */
@@ -1278,6 +1367,12 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-memories .mem-wi.on2 .mw-q .w { opacity: 1; filter: none; transform: none; transition-delay: calc(.4s + var(--w) * 90ms); }
 /* stepping back: what goes, goes at once */
 #s-memories .mem-wi:not(.on) :is(p, .w), #s-memories .mem-wi:not(.on2) :is(.mw-q .w, .mw-l4) { transition-delay: 0s !important; }
+</style>
+<style data-slide="s-di">
+#s-di .page { background: #fff; }
+</style>
+<style data-slide="s-esg">
+#s-esg .page { background: #fff; }
 </style>
 <style data-slide="s-skv">
 /* the deck's own copyright line (the chrome) is already on every page: SKV's footer would sit on top of it */
@@ -1498,14 +1593,14 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
   <div class="page rv">
     <div class="cv-small at" style="left:1.6%;top:7.8%;--i:0">Studiokon Ventures</div>
     <div class="cv-small at" style="left:79.8%;top:7.8%;--i:0">RFP-ACKO-DB-001 · Technical bid</div>
-    <div class="cv-small at" style="left:1.7%;top:19.7%;--i:1">Technical bid submission · August 2026</div>
+    <div class="cv-small at" style="left:1.7%;top:19.7%;--i:1">Technical bid submission · November 2026</div>
     <img class="cv-logo at" src="assets/img/acko-white.webp" alt="ACKO" style="left:1.8%;top:24.6%;--i:2">
     <div class="cv-title at" style="left:1.3%;top:35.4%;--i:3">HEAD OFFICE DESIGN &amp; BUILD</div>
     <div class="cv-facts at" style="left:1.6%;top:47.6%;width:92%;--i:4">
       <div><span>Site</span><b>Regalium Building, Koramangala Industrial Layout, Bengaluru</b></div>
       <div><span>Floor plate</span><b>91,000 sqft, single floor</b></div>
       <div><span>Submitted to</span><b>Anarock PMES, for ACKO</b></div>
-      <div><span>Due</span><b>23rd November 2026</b></div>
+      <div><span>Due</span><b>31st October 2026</b></div>
     </div>
   </div>
 </section>
@@ -1571,7 +1666,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
       <li style="--i:3"><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
       <li style="--i:4"><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
       <li style="--i:5"><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
-      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of plumbing provisions.</p></li>
       <li style="--i:7"><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
       <li style="--i:8"><p><b>Crash/nap room</b>: mandatory</p></li>
       <li style="--i:9"><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
@@ -1581,7 +1676,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
   </div>
 </section>
 <section class="scene" id="s-sec-1" data-part="s1" data-title="Part 01 · Belonging" data-steps="1" data-mins="0.3"
-  data-notes="Part 01 of six: Belonging, why a campus. About 640 Ackers, from two offices, onto one floor. So we began with them. → Bridge: Moving offices is easy. Moving people isn&#x27;t.">
+  data-notes="Part 01 of six: Belonging, why a campus. About 651 Ackers, from two offices, onto one floor. So we began with them. → Bridge: Moving offices is easy. Moving people isn&#x27;t.">
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Part 01 · Belonging</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
@@ -1591,17 +1686,16 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
       <li style="--i:6"><i></i><b>04</b><span class="hand">The Feel</span></li>
       <li style="--i:7"><i></i><b>05</b><span class="hand">The Day</span></li>
           </ol>
-    <div class="st-line" style="left:8%;top:62%;width:84%"><p>About <b>640 Ackers</b>, from two offices, onto one floor.</p><span class="hand">So we began with them.</span></div>
+    <div class="st-line" style="left:8%;top:62%;width:84%"><p>About <b>651 Ackers</b>, from two offices, onto one floor.</p><span class="hand">So we began with them.</span></div>
   </div>
 </section>
 <section class="scene" id="s-why-campus" data-part="s1" data-title="Why a campus" data-steps="2" data-mins="0.6" data-beats="Two offices,One floor"
-  data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 640 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: So how does a floor this long hold together? With something ACKO already stands for.">
+  data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 651 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: So how does a floor this long hold together? With something ACKO already stands for.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="hdr"><b>Why a campus</b><span>01 · Belonging</span></div>
     <p class="wc-hand hand wc-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
     <h2 class="wc-h wc-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
-    <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+    <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 651 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
 
     <!-- the drops, in a 1920 × 1080 frame over the page: Leela at 700, HSR at 1220, the one drop at 960, all at y 590 -->
     <svg class="wc-dia" viewBox="0 0 1920 1080" aria-hidden="true">
@@ -1624,9 +1718,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 
     <span class="wc-lb wc-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Leela</span>
     <span class="wc-lb wc-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">HSR</span>
-    <span class="wc-lb wc-f" data-step="2" style="left:36.9%;top:75.8%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
-    <p class="wc-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
-    <p class="wc-cap hand" data-step="2" style="left:36.9%;top:78.9%;width:26.2%">…we arrive on one floor…</p>
+    <p class="wc-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%"><span class="c1">we came from two…</span><span class="c2">…we arrive on one floor…</span></p>
 
   </div>
 </section>
@@ -1653,7 +1745,6 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
   data-beats="Campus,+ Möbius,= Our floor,Neighbourhoods,Shared spaces,The ACKO Loop"
   data-notes="The one floor becomes a ribbon. Campus first: it splits into six neighbourhoods, put together as one campus; belonging is the idea. Möbius second: the same ribbon runs round ACKO's Möbius, its promise of continuity, no inside and no outside; the inspiration for why the connector is a loop and not a corridor. The result is the ACKO Loop, sketched on our own floor: one smooth, continuous route, the neighbourhoods along both sides, the shared spaces inside it, both arrivals on it. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life. → Bridge: Here it is on our floor.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="hdr"><b>How it ties together</b><span>01 · Belonging</span></div>
     <p class="cpl-hand hand">a campus to belong to, a promise to hold it together</p>
     <h2 class="cpl-h"><span data-step="1">Campus</span> <span data-step="2">+ Möbius</span> <span data-step="3">=</span> <span data-step="6"><b>The ACKO Loop.</b></span></h2>
@@ -1689,15 +1780,14 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
       <g class="cpl-dots"></g>
     </svg>
     <canvas class="cpl-strip"></canvas>
-    <button type="button" class="cpl-replay" tabindex="-1">↻ Replay</button>
     <svg class="cpl-dia" viewBox="0 0 1920 1080" aria-hidden="true"><g class="cpl-zones cpl-zt"></g></svg>
 
     <div class="cpl-op" data-step="2" style="left:22.9%">+</div>
     <div class="cpl-op" data-step="3" style="left:49.1%">=</div>
 
-    <div class="cpl-w w1" data-step="1" style="left:4.8%;width:20.4%"><h3>Campus</h3><em>Belonging · the idea</em><p>Many neighbourhoods, one shared identity.</p></div>
-    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p>It’s never us versus you; it’s always us with you.</p></div>
-    <div class="cpl-w w3" data-step="6" style="left:54%;width:41.2%"><h3>The ACKO Loop</h3><em>Connection · the plan</em><p>One continuous route that links every neighbourhood, both arrivals and every shared space.</p></div>
+    <div class="cpl-w w1" data-step="1" style="left:4.8%;width:20.4%"><h3>Campus</h3><em>Belonging · the idea</em><p><span class="ln">Many neighbourhoods,</span><span class="ln">one shared identity.</span></p></div>
+    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p><span class="ln">It’s never us versus you;</span><span class="ln">it’s always us with you.</span></p></div>
+    <div class="cpl-w w3" data-step="6" style="left:54%;width:41.2%"><h3>The ACKO Loop</h3><em>Connection · the plan</em><p><span class="ln">One continuous route that links every neighbourhood,</span><span class="ln">both arrivals and every shared space.</span></p></div>
 
   </div>
 </section>
@@ -1709,7 +1799,6 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 <section class="scene" id="s-loop-floor" data-part="s1" data-title="The loop on our floor" data-steps="3" data-mins="1" data-beats="The floor,The loop,No dead ends"
   data-notes="One floor, 245 m long, and one loop holds it together. 1 · The real Layout 02A plan: six neighbourhoods, each a home in its own colour. 2 · The loop: the middle of the floor is too narrow for two lanes, so it runs as a main street that both lift lobbies open onto, then rings the meeting island at each end and comes back. The café, the Acker Garden, the state room, the meeting rooms and wellness all sit on it. The dashed stretch is honest: 02A doesn't have that lane round the west island yet, so planning must open it; the east island already has one. 3 · Six neighbourhoods, one continuous loop, two arrivals, and every desk a short walk from a meeting room. This turns a metaphor into a plan. → Bridge: Here&#x27;s the floor itself, as we found it. Part 2.">
   <div class="page">
-    <p class="dg-tag">Plan</p>
     <div class="hdr"><b>The loop on our floor</b><span>01 · Belonging</span></div>
     <h2 class="lf-h">One floor, 245 m long.<br><strong>One loop holds it together.</strong></h2>
     <ul class="lf-key">
@@ -1746,7 +1835,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
   </div>
 </section>
 <section class="scene" id="s-site" data-part="s3" data-title="The site" data-steps="1" data-mins="0.4"
-  data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up, 56,650 sq ft carpet, for about 640 people. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans. → Bridge: Here is the floor itself, as we found it.">
+  data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up, 56,650 sq ft carpet, for about 651 people. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans. → Bridge: Here is the floor itself, as we found it.">
   <div class="page">
     <p class="dg-tag">Reference</p>
     <div class="hdr"><b>The Site</b><span>02 · The Site</span></div>
@@ -1757,7 +1846,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
         <div><dt>Floor</dt><dd>3rd floor · one plate</dd></div>
         <div><dt>Super built-up</dt><dd><span data-count="91000">91,000</span> sq ft</dd></div>
         <div><dt>Carpet</dt><dd><span data-count="56650">56,650</span> sq ft</dd></div>
-        <div><dt>People</dt><dd>about <span data-count="640">640</span></dd></div>
+        <div><dt>People</dt><dd>about <span data-count="651">651</span></dd></div>
       </dl>
       <ul class="si-walk" style="--i:3"></ul>
     </div>
@@ -1766,7 +1855,6 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 <section class="scene" id="s-layout-dd" data-part="s3" data-title="Layout · Option 02A" data-steps="2" data-mins="0.6" data-beats="Due diligence,Sun path"
   data-notes="2 · Sun path: the site sun study on the plan, every half hour from 7 am to 6:30 pm (20 Mar / 23 Sep; 21 Jun and 21 Dec on the chips): the sun's way round the building, its light across the floor and the sunlit patches. The layout in five layers, each a click (the pills under the plan jump to any of them); the plan's tools and the occupancy chart (the brief against Option 2A) in one button group, top right: Measure and Area (M, A; Esc clears), zoom, Reset, Hover, Egress. 1 · Due diligence: what the building brings, that the layout works around: the fire exit staircases, the AHU rooms, the washrooms, the slab to be strengthened and the lift lobbies. 2 · Spaces: every space in its colour; hover a workstation type to see where it sits. 3 · Neighbourhoods: six, each named after an ACKO product, outlined; click one to zoom in and open its occupancy chart. Vastness, dealt with: homogeneity (six places, each its own identity), disorientation (two arrival zones at the lift lobbies, amenities in every neighbourhood), distance (every desk close to a meeting room and a phone booth). 4 · Biophilia, the heat: where people gather, CO₂ gathers, service rooms counted too. 5 · Planting: the plants placed where people gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); planting beside the exit routes. 6 · Views to green: planting in the line of sight from the desks. 7 · Acoustics: four levels of treatment, from a high-ounce carpet in the workhall to panelling on three sides and a soft ceiling in the phone booths and the podcast studio. → Bridge: To feel how big this floor is…">
   <div class="page">
-    <p class="dg-tag">Plan</p>
     <svg class="dd-sun" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"><g class="dd-sun-g">
       <path class="arc"/><g class="ticks"></g>
       <g class="lit" transform="matrix(50 0 0 50 8842 12775)"><g class="a"></g><g class="b"></g></g>
@@ -1906,9 +1994,8 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
   </div>
 </section>
 <section class="scene" id="s-pitch" data-part="s3" data-title="One floor, two football pitches" data-steps="2" data-mins="0.6" data-beats="Lengthwise,Widthwise"
-  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 640 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: That length could divide people, or hold a whole campus.">
+  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 651 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: That length could divide people, or hold a whole campus.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
       <small style="--i:0">ACKO · Regalium, Koramangala</small>
     </div>
@@ -1927,7 +2014,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
     </svg>
     <div class="pp-stats" data-only="1" style="left:3.4%;top:85%;width:50%">
       <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
-      <div><b><span data-count="640">0</span></b><span>people, on one plate</span></div>
+      <div><b><span data-count="651">0</span></b><span>people, on one plate</span></div>
       <div><b><span data-count="3">0</span><small>min</small></b><span>to walk end to end</span></div>
     </div>
     <div class="pp-stats" data-only="2" style="left:3.4%;top:85%;width:50%">
@@ -1942,7 +2029,6 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 <section class="scene" id="s-challenges" data-part="s3" data-title="The opportunity" data-steps="4" data-mins="1.3" data-beats="Identity,Closeness,Clarity,A campus that connects"
   data-notes="One long floor, room for a whole campus. The drawing shows the floor as any plan would fill it; each beat names what our plan turns around. 1 · Identity: instead of one uniform sea of desks, neighbourhoods with a character of their own. 2 · Closeness: from a desk at the far end the café is a long walk today; we bring it, the green and the meeting rooms within easy reach. 3 · Clarity: instead of dead ends and guesswork, one clear path that always tells you where you are. 4 · A campus that connects, not just accommodates. → Bridge: A campus that connects, not just accommodates. So here&#x27;s how we plan it: the Loop, laid on the floor.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="hdr"><b>The Opportunity</b><span>02 · The Site</span></div>
     <svg class="cl-morph" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"><g></g></svg>
     <div class="cl-axo" style="left:0;top:1%;width:89.8%;height:98.4%"></div>
@@ -2001,7 +2087,6 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
   data-beats="The Shell,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together,The Client’s journey,The Employees Journey"
   data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And from above, here&#x27;s the plan that makes it work.">
   <div class="page">
-    <p class="dg-tag">Plan</p>
     <div class="st-anim"></div>
     <div class="st-3d ui"></div>
     <div class="st-from"></div>
@@ -2011,6 +2096,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
       <h3 style="--i:0">Understanding the Campus Strategy</h3>
       <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
+      <p class="st-insp" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
     <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
@@ -2019,9 +2105,8 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 <section class="scene" id="s-layout-sp" data-part="s4" data-title="Layout · Option 02A" data-steps="6" data-mins="2.4" data-beats="Spaces,Neighbourhoods,Biophilia · the heat,Biophilia · planting,Biophilia · views to green,Acoustics"
   data-notes="Neighbourhoods one by one (beats 3–8: neighbourhoods 01 to 06): each its plan with its rooms, beside its model turning slowly, cut to it; its workstations, meeting rooms, phone booths and wellness rooms counted; hover a dot to name a room. The layout in five layers, each a click (the pills under the plan jump to any of them); the plan's tools and the occupancy chart (the brief against Option 2A) in one button group, top right: Measure and Area (M, A; Esc clears), zoom, Reset, Hover, Egress. 1 · Due diligence: what the building brings, that the layout works around: the fire exit staircases, the AHU rooms, the washrooms, the slab to be strengthened and the lift lobbies. 2 · Spaces: every space in its colour; hover a workstation type to see where it sits. 3 · Neighbourhoods: six, each named after an ACKO product, outlined; click one to zoom in and open its occupancy chart. Vastness, dealt with: homogeneity (six places, each its own identity), disorientation (two arrival zones at the lift lobbies, amenities in every neighbourhood), distance (every desk close to a meeting room and a phone booth). 4 · Biophilia, the heat: where people gather, CO₂ gathers, service rooms counted too. 5 · Planting: the plants placed where people gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); planting beside the exit routes. 6 · Views to green: planting in the line of sight from the desks. 7 · Acoustics: four levels of treatment, from a high-ounce carpet in the workhall to panelling on three sides and a soft ceiling in the phone booths and the podcast studio. → Bridge: A plan is a promise on paper. Part 4: what makes it feel like home.">
   <div class="page">
-    <p class="dg-tag">Plan</p>
     <div class="sp2-nav ui"><button type="button" class="sp2-back">← Back to layout</button><b></b><button type="button" class="sp2-next">Next neighbourhood →</button></div>
-    <!-- the people (9 Nov, the re-ordered deck): 640 come in at the two entrances and walk the Loop to their desks -->
+    <!-- the people (9 Nov, the re-ordered deck): 651 come in at the two entrances and walk the Loop to their desks -->
     <canvas class="ly-ppl" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></canvas>
     <div class="ly-ppl-n" style="left:3%;top:18.6%;width:50%"><b>0</b><span>people, one floor: each to their own desk</span></div>
     <!-- Story 3 (18–19 Nov): the acoustics' sound rings, each inside its own space, drawn through the plan's view -->
@@ -2053,6 +2138,8 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
       <button type="button" data-go="3"><small>04</small>Biophilia</button>
       <button type="button" data-go="6"><small>05</small>Acoustics</button>
     </nav>
+    <!-- 22 Nov, Ritika: with Fire egress on, its paths' legend, on every beat -->
+    <div class="ly-eg-leg ui"><b>Egress paths</b><span><i class="eg-s"></i>under 50 m</span><span><i class="eg-d"></i>50–60 m</span></div>
     <!-- the plan's tools, one button group top right beside the ACKO symbol -->
     <div class="ly-tools ui">
       <button type="button" data-t="dist" title="Measure a distance (M)"><svg viewBox="0 0 16 16"><path d="M2 12L12 2M2 12l2 2M5 9l1.5 1.5M8 6l1.5 1.5M11 3l2 2"/></svg>Measure</button>
@@ -2167,17 +2254,17 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
           <tr class="z3"><td>Focus room - 2 pax</td><td>20</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Visitor Hub</td><td>5</td><td data-count="5">5</td></tr>
           <tr class="z3"><td>Dealer Room - 4 pax</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="2">2</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 4 pax</td><td>25</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 6 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 8 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
-          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="13">13</td></tr>
+          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="14">14</td></tr>
           <tr class="z3"><td>Departmental Room - 18–20 pax</td><td>8</td><td class="short" data-count="6">6</td></tr>
           <tr class="z3"><td>Hatchery - 08 pax</td><td>1</td><td class="up">1 <small>(12 pax)</small></td></tr>
           <tr class="z3"><td>Studio</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z3"><td>Phone booth</td><td>44</td><td class="short" data-count="42">42</td></tr>
+          <tr class="z3"><td>Phone booth</td><td>44</td><td class="short" data-count="41">41</td></tr>
           <tr class="z4"><td>Training room</td><td>Training Room - 40 pax</td><td>1</td><td>1 <small>(40 pax)</small></td></tr>
-          <tr class="z5"><td rowspan="6">Recreational area / wellness</td><td>Cafeteria</td><td>1 <small>(150 pax)</small></td><td class="up">1 <small>(178 pax)</small></td></tr>
+          <tr class="z5"><td rowspan="6">Recreational area / wellness</td><td>Cafeteria</td><td>1 <small>(150 pax)</small></td><td class="up">1 <small>(166 pax)</small></td></tr>
           <tr class="z5"><td>Mother's Room</td><td>1</td><td data-count="1">1</td></tr>
           <tr class="z5"><td>Zen Room</td><td>5</td><td data-count="5">5</td></tr>
           <tr class="z5"><td>Nap Room</td><td>1</td><td class="up" data-count="2">2</td></tr>
@@ -2213,130 +2300,151 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>What you <b>touch</b>, hear and find your way by.</p><span class="hand"></span></div>
   </div>
 </section>
-<section class="scene palette" id="s-palette2" data-part="s5" data-title="The campus palette" data-steps="1" data-mins="0.3"
-  data-beats="Palette"
+<section class="scene vpage" id="s-palette2" data-part="s5" data-title="The campus palette" data-steps="1" data-mins="0.3"
   data-notes="A place that already feels like home. The campus palette: textured, contrast, warmth, refined, layered. A sophisticated blend of light wood, accent stone, soft neutrals and lush greenery for a grounded and contemporary workplace. Timeless, serene, soothing, organic, sleek, expressive, tactile, understated, artisanal, accent. → Bridge: And how each surface earns its place…">
-  <div class="page">
+  <div class="page rv">
     <p class="lens-cb">A place that already feels like home.</p>
-    <div class="hdr"><b>The Campus Palette</b><span>04 · The Feel</span></div>
-    <div class="pl-board rv" style="left:0;top:0;width:100%;height:100%">
-      <i class="dk" style="--i:0;left:43.2%;top:21.6%;width:9.4%;height:47.2%;background-size:100% 100%;background-image:url(assets/img/pal3-01.webp)"></i>
-      <i class="dk" style="--i:1;left:43.2%;top:27.7%;width:9.4%;height:41.1%;background-size:100% 100%;background-image:url(assets/img/pal3-02.webp)"></i>
-      <i class="dk" style="--i:2;left:1.8%;top:21.6%;width:19.9%;height:47.2%;background-size:100% 100%;background-image:url(assets/img/pal3-03.webp)"></i>
-      <i class="dk" style="--i:3;left:22.0%;top:21.7%;width:13.2%;height:24.2%;background-size:100% 100%;background-image:url(assets/img/pal3-04.webp)"></i>
-      <i class="dk" style="--i:4;left:22.0%;top:46.4%;width:13.2%;height:22.4%;background-size:100% 100%;background-image:url(assets/img/pal3-05.webp)"></i>
-      <i class="dk" style="--i:5;left:35.6%;top:21.6%;width:7.2%;height:47.2%;background-size:100% 100%;background-image:url(assets/img/pal3-06.webp)"></i>
-      <i class="dk" style="--i:6;left:52.9%;top:21.6%;width:14.9%;height:19.9%;background-size:100% 100%;background-image:url(assets/img/pal3-07.webp)"></i>
-      <i class="dk" style="--i:7;left:52.9%;top:42.0%;width:14.9%;height:26.6%;background-size:100% 100%;background-image:url(assets/img/pal3-08.webp)"></i>
-      <i class="dk" style="--i:8;left:68.2%;top:21.3%;width:12.6%;height:5.6%;background-size:100% 100%;background-image:url(assets/img/pal3-09.webp)"></i>
-      <i class="dk" style="--i:9;left:68.2%;top:27.7%;width:12.4%;height:6.5%;background-size:100% 100%;background-image:url(assets/img/pal3-10.webp)"></i>
-      <i class="dk" style="--i:10;left:68.2%;top:34.9%;width:12.6%;height:6.5%;background-size:100% 100%;background-image:url(assets/img/pal3-11.webp)"></i>
-      <i class="dk" style="--i:11;left:68.2%;top:51.2%;width:12.6%;height:17.4%;background-size:100% 100%;background-image:url(assets/img/pal3-12.webp)"></i>
-      <i class="dk" style="--i:12;left:68.2%;top:42.0%;width:12.6%;height:8.1%;background-size:100% 100%;background-image:url(assets/img/pal3-13.webp)"></i>
-      <i class="dk" style="--i:13;left:81.1%;top:21.7%;width:13.6%;height:28.4%;background-size:100% 100%;background-image:url(assets/img/pal3-14.webp)"></i>
-      <i class="dk" style="--i:14;left:87.3%;top:32.0%;width:11.0%;height:18.0%;background-size:100% 100%;background-image:url(assets/img/pal3-15.webp)"></i>
-      <i class="dk" style="--i:15;left:81.1%;top:51.2%;width:13.6%;height:17.4%;background-size:100% 100%;background-image:url(assets/img/pal3-16.webp)"></i>
-      <span class="pl-lab" style="left:22.4%;top:41.9%;color:#111;text-shadow:none">Timeless</span>
-      <span class="pl-lab" style="left:22.4%;top:65.1%">Serene</span>
-      <span class="pl-lab" style="left:36.0%;top:65.1%;color:#111;text-shadow:none">Soothing</span>
-      <span class="pl-lab" style="left:43.5%;top:21.5%">Organic</span>
-      <span class="pl-lab" style="left:53.3%;top:22.3%;color:#111;text-shadow:none">Sleek</span>
-      <span class="pl-lab" style="left:53.3%;top:65.1%">Expressive</span>
-      <span class="pl-lab" style="left:68.6%;top:51.1%">Tactile</span>
-      <span class="pl-lab" style="left:68.6%;top:21.7%;color:#111;text-shadow:none">Understated</span>
-      <span class="pl-lab" style="left:81.5%;top:46.4%">Artisanal</span>
-      <span class="pl-lab" style="left:81.7%;top:65.0%">Accent</span>
-    </div>
-    <div class="pl-words" style="left:2.7%;top:16%">TEXTURED · CONTRAST · WARMTH · REFINED · LAYERED</div>
-    <div class="pl-title hand" style="left:2.3%;top:68.6%">The Campus Palette</div>
-    <p class="pl-p" style="left:31.1%;top:71.6%;width:50%">A sophisticated blend of <b>light wood, Accent stone,</b> soft neutrals and lush greenery for a <b>grounded and contemporary workplace.</b></p>
+      <i class="dk" style="--i:0;left:1.74%;top:21.54%;width:19.97%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-01.webp)"></i>
+      <i class="dk" style="--i:2;left:22.01%;top:21.67%;width:13.26%;height:24.2%;background-size:100% 100%;background-image:url(assets/img/pal4-02.webp)"></i>
+      <i class="dk" style="--i:2;left:22.01%;top:46.36%;width:13.26%;height:22.47%;background-size:100% 100%;background-image:url(assets/img/pal4-03.webp)"></i>
+      <i class="dk" style="--i:3;left:35.59%;top:21.54%;width:7.22%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-04.webp)"></i>
+      <i class="dk" style="--i:3;left:43.16%;top:21.54%;width:9.41%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-05.webp)"></i>
+      <i class="dk" style="--i:4;left:52.88%;top:21.54%;width:14.97%;height:20%;background-size:100% 100%;background-image:url(assets/img/pal4-06.webp)"></i>
+      <i class="dk" style="--i:4;left:52.88%;top:41.98%;width:14.97%;height:26.73%;background-size:100% 100%;background-image:url(assets/img/pal4-07.webp)"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:21.3%;width:12.64%;height:5.62%;background:#f8f5ee"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:27.65%;width:12.47%;height:6.54%;background:#dedacf"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:34.88%;width:12.64%;height:6.6%;background:#262626"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:41.98%;width:12.64%;height:8.15%;background-size:100% 100%;background-image:url(assets/img/pal4-11.webp)"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:51.17%;width:12.64%;height:17.47%;background-size:100% 100%;background-image:url(assets/img/pal4-12.webp)"></i>
+      <i class="dk" style="--i:7;left:81.11%;top:21.67%;width:16.7%;height:28.46%;background-size:100% 100%;background-image:url(assets/img/pal4-13.webp)"></i>
+      <i class="dk" style="--i:7;left:81.11%;top:51.17%;width:13.61%;height:17.47%;background-size:100% 100%;background-image:url(assets/img/pal4-14.webp)"></i>
+    <div class="vt" style="--i:2;left:23.24%;top:42.86%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Timeless</div>
+    <div class="vt" style="--i:3;left:31.07%;top:72.62%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap;font-style:italic">A sophisticated blend of <span style="font-weight:700">light wood, Accent stone,</span> soft neutrals and lush greenery</div>
+    <div class="vt" style="--i:3;left:31.07%;top:75.69%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap;font-style:italic"><span style="font-weight:400">for a</span> grounded and contemporary workplace.</div>
+    <div class="vt" style="--i:3;left:36.56%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Soothing</div>
+    <div class="vt" style="--i:5;left:53.84%;top:23.21%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Sleek</div>
+    <div class="vt" style="--i:6;left:69.13%;top:22.62%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Understated</div>
+    <div class="vt" style="--i:2;left:22.98%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Serene</div>
+    <div class="vt" style="--i:4;left:44.1%;top:22.41%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Organic</div>
+    <div class="vt" style="--i:5;left:53.84%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Expressive</div>
+    <div class="vt" style="--i:6;left:69.13%;top:52%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Tactile</div>
+    <div class="vt" style="--i:7;left:82.08%;top:47.38%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Artisanal</div>
+    <div class="vt" style="--i:7;left:82.24%;top:65.94%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Accent</div>
+    <div class="vt" style="--i:1;left:2.7%;top:16.9%;font-family:var(--label);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#999999;font-weight:700;white-space:nowrap">TEXTURED · CONTRAST · WARMTH · REFINED · LAYERED</div>
+    <div class="vt" style="--i:1;left:2.3%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">The</div>
+    <div class="vt" style="--i:1;left:7.53%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">Campus</div>
+    <div class="vt" style="--i:2;left:18.97%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">Palette</div>
   </div>
 </section>
 <section class="scene vpage" id="s-material" data-part="s5" data-title="Material strategy" data-steps="1" data-mins="0.4"
   data-notes="A place that already feels like home. The kit of parts, by surface. Flooring: tiles, wooden LVT, carpet. Ceiling: stretch fabric, spray-applied treatment, gypsum ceiling with track lights, acoustic baffles. Furnishing: rugs, fabrics, blinds. Wall finishes: wallpaper, acoustic panel, wooden panel. Material intelligence matters. → Bridge: And on a floor this long, finding your way should be effortless.">
   <div class="page rv">
     <p class="lens-cb">A place that already feels like home.</p>
-    <div class="hdr"><b>Material Strategy</b><span>04 · The Feel</span></div>
-      <i class="dk" style="--i:0;left:52.9%;top:31.5%;width:9.2%;height:16.5%;background-size:100% 100%;background-image:url(assets/img/mat3-01.webp)"></i>
-      <i class="dk" style="--i:1;left:62.8%;top:31.4%;width:10.9%;height:34.2%;background-size:100% 100%;background-image:url(assets/img/mat3-02.webp)"></i>
-      <i class="dk" style="--i:2;left:88.7%;top:31.4%;width:9.8%;height:34.2%;background-size:100% 100%;background-image:url(assets/img/mat3-03.webp)"></i>
-      <i class="dk" style="--i:3;left:37.2%;top:49.1%;width:10.2%;height:16.4%;background-size:100% 100%;background-image:url(assets/img/mat3-04.webp)"></i>
-      <i class="dk" style="--i:4;left:27.1%;top:31.4%;width:9.1%;height:16.2%;background-size:100% 100%;background-image:url(assets/img/mat3-05.webp)"></i>
-      <i class="dk" style="--i:5;left:27.1%;top:49.1%;width:9.2%;height:16.4%;background-size:100% 100%;background-image:url(assets/img/mat3-06.webp)"></i>
-      <i class="dk" style="--i:6;left:78.7%;top:31.4%;width:9.1%;height:16.4%;background-size:100% 100%;background-image:url(assets/img/mat3-07.webp)"></i>
-      <i class="dk" style="--i:7;left:78.7%;top:49.1%;width:9.2%;height:16.5%;background-size:100% 100%;background-image:url(assets/img/mat3-08.webp)"></i>
-      <i class="dk" style="--i:8;left:52.9%;top:49.1%;width:9.2%;height:16.5%;background-size:100% 100%;background-image:url(assets/img/mat3-09.webp)"></i>
-      <i class="dk" style="--i:9;left:11.7%;top:31.3%;width:10.1%;height:34.2%;background-size:100% 100%;background-image:url(assets/img/mat3-10.webp)"></i>
-      <i class="dk" style="--i:10;left:1.9%;top:31.3%;width:9.1%;height:16.4%;background-size:100% 100%;background-image:url(assets/img/mat3-11.webp)"></i>
-      <i class="dk" style="--i:11;left:1.8%;top:49.0%;width:9.1%;height:16.5%;background-size:100% 100%;background-image:url(assets/img/mat3-12.webp)"></i>
-      <i class="dk" style="--i:12;left:37.2%;top:31.4%;width:10.0%;height:16.2%;background-size:100% 100%;background-image:url(assets/img/mat3-13.webp)"></i>
-    <i class="mat-sep" style="left:24.5%;top:33.4%;height:32.1%"></i>
-    <i class="mat-sep" style="left:50.4%;top:33.4%;height:32.1%"></i>
-    <i class="mat-sep" style="left:76.1%;top:33.4%;height:32.1%"></i>
-    <div class="vt col-h" style="--i:9;left:28.1%;top:26.1%;width:20%;">Ceiling.</div>
-    <div class="vt col-h" style="--i:10;left:79.3%;top:26.1%;width:20%;">Wall Finishes.</div>
-    <div class="vt col-h" style="--i:11;left:53.5%;top:26.1%;width:20%;">Furnishing.</div>
-    <div class="vt col-h" style="--i:12;left:1.9%;top:26.1%;width:20%;">Flooring.</div>
-    <div class="vt tile-lab" style="--i:13;left:2.2%;top:31.5%;width:9.5%;">Tiles</div>
-    <div class="vt tile-lab" style="--i:14;left:2.2%;top:62.5%;width:9.5%;">Wooden LVT</div>
-    <div class="vt tile-lab" style="--i:15;left:12.0%;top:62.4%;width:9.5%;">Carpet</div>
-    <div class="vt tile-lab dark" style="--i:16;left:27.5%;top:31.5%;width:9.5%;">Stretch Fabric</div>
-    <div class="vt tile-lab" style="--i:17;left:27.5%;top:60.6%;width:9.5%;">Gypsum ceiling with track lights</div>
-    <div class="vt tile-lab dark" style="--i:18;left:37.5%;top:31.4%;width:9.5%;">Spray-applied treatment</div>
-    <div class="vt tile-lab" style="--i:19;left:37.5%;top:60.6%;width:9.5%;">Acoustic baffles</div>
-    <div class="vt tile-lab" style="--i:20;left:53.2%;top:62.5%;width:9.5%;">Fabrics</div>
-    <div class="vt tile-lab" style="--i:21;left:53.3%;top:31.5%;width:9.5%;">Rugs</div>
-    <div class="vt tile-lab" style="--i:22;left:63.1%;top:62.6%;width:9.5%;">Blinds</div>
-    <div class="vt tile-lab" style="--i:23;left:79.0%;top:31.5%;width:9.5%;">Wallpaper</div>
-    <div class="vt tile-lab" style="--i:24;left:79.0%;top:62.5%;width:9.5%;">Wooden Panel</div>
-    <div class="vt tile-lab" style="--i:25;left:89.0%;top:31.5%;width:9.5%;">Acoustic Panel</div>
-    <div class="vt hand h-hand" style="--i:30;left:53.9%;top:67.8%;width:45%;">Material Intelligence matters…</div>
-    
+      <i class="dk" style="--i:0;left:1.84%;top:31.3%;width:9.1%;height:16.48%;background-size:100% 100%;background-image:url(assets/img/mat4-01.webp)"></i>
+      <i class="dk" style="--i:0;left:1.81%;top:49.01%;width:9.13%;height:16.54%;background-size:100% 100%;background-image:url(assets/img/mat4-02.webp)"></i>
+      <i class="dk" style="--i:1;left:11.7%;top:31.3%;width:10.14%;height:34.26%;background-size:100% 100%;background-image:url(assets/img/mat4-03.webp)"></i>
+      <i class="dk" style="--i:2;left:27.12%;top:31.36%;width:9.17%;height:16.23%;background-size:100% 100%;background-image:url(assets/img/mat4-04.webp)"></i>
+      <i class="dk" style="--i:2;left:27.08%;top:49.07%;width:9.24%;height:16.48%;background-size:100% 100%;background-image:url(assets/img/mat4-05.webp)"></i>
+      <i class="dk" style="--i:3;left:37.15%;top:31.36%;width:10.1%;height:16.23%;background-size:100% 100%;background-image:url(assets/img/mat4-06.webp)"></i>
+      <i class="dk" style="--i:3;left:37.19%;top:49.07%;width:10.24%;height:16.48%;background-size:100% 100%;background-image:url(assets/img/mat4-07.webp)"></i>
+      <i class="dk" style="--i:4;left:52.92%;top:31.42%;width:9.24%;height:16.54%;background-size:100% 100%;background-image:url(assets/img/mat4-08.webp)"></i>
+      <i class="dk" style="--i:4;left:52.88%;top:49.07%;width:9.2%;height:16.54%;background-size:100% 100%;background-image:url(assets/img/mat4-09.webp)"></i>
+      <i class="dk" style="--i:5;left:62.74%;top:31.36%;width:10.94%;height:34.2%;background-size:100% 100%;background-image:url(assets/img/mat4-10.webp)"></i>
+      <i class="dk" style="--i:6;left:78.72%;top:31.36%;width:9.17%;height:16.42%;background-size:100% 100%;background-image:url(assets/img/mat4-11.webp)"></i>
+      <i class="dk" style="--i:6;left:78.68%;top:49.01%;width:9.2%;height:16.54%;background-size:100% 100%;background-image:url(assets/img/mat4-12.webp)"></i>
+      <i class="dk" style="--i:7;left:88.65%;top:31.36%;width:9.83%;height:34.26%;background-size:100% 100%;background-image:url(assets/img/mat4-13.webp)"></i>
+    <div class="vt" style="--i:3;left:27.88%;top:32.33%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Stretch Fabric</div>
+    <div class="vt" style="--i:4;left:37.93%;top:32.24%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#000000;font-weight:500;white-space:nowrap">spray-applied<br>treatment</div>
+    <div class="vt" style="--i:1;left:2.61%;top:32.27%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Tiles</div>
+    <div class="vt" style="--i:1;left:2.57%;top:63.34%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Wooden Lvt</div>
+    <div class="vt" style="--i:1;left:12.41%;top:63.21%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Carpet</div>
+    <div class="vt" style="--i:3;left:27.88%;top:61.37%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Gypsum ceiling with<br>track lights</div>
+    <div class="vt" style="--i:4;left:37.95%;top:61.37%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Acoustic<br>baffles</div>
+    <div class="vt" style="--i:5;left:53.65%;top:63.25%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Fabrics</div>
+    <div class="vt" style="--i:5;left:53.69%;top:32.24%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Rugs</div>
+    <div class="vt" style="--i:6;left:63.49%;top:63.38%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Blinds</div>
+    <div class="vt" style="--i:7;left:79.46%;top:32.24%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Wallpaper</div>
+    <div class="vt" style="--i:7;left:79.42%;top:63.31%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Wooden Panel</div>
+    <div class="vt" style="--i:8;left:89.4%;top:32.24%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Acoustic Panel</div>
+    <div class="vt" style="--i:1;left:2.25%;top:6.9%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#6b7080;font-weight:400;white-space:nowrap">Kit of parts | Material Strategy</div>
+    <div class="vt" style="--i:1;left:2.07%;top:26.93%;font-family:var(--body);font-size:calc(var(--pt) * 11.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Flooring.</div>
+    <div class="vt" style="--i:3;left:28.21%;top:26.93%;font-family:var(--body);font-size:calc(var(--pt) * 11.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Ceiling.</div>
+    <div class="vt" style="--i:5;left:53.64%;top:26.93%;font-family:var(--body);font-size:calc(var(--pt) * 11.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Furnishing.</div>
+    <div class="vt" style="--i:7;left:79.46%;top:26.93%;font-family:var(--body);font-size:calc(var(--pt) * 11.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Wall Finishes.</div>
+    <div class="vt" style="--i:1;left:1.88%;top:2.79%;font-family:var(--body);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Value Addition</div>
+    <div class="vt" style="--i:5;left:53.93%;top:69.72%;font-family:var(--hand);font-size:calc(var(--pt) * 18.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Material Intelligence matter…</div>
   </div>
 </section>
-<section class="scene" id="s-wf-a6" data-part="s5" data-title="Wayfinding" data-steps="4" data-mins="1" data-beats="My team,Still us,My 3 pm,Coffee"
-  data-notes="Wayfinding, walked: someone new to the floor, looking for their team, one stop per click. 1 · Where's my team? The wall answers: its colour and its number. 2 · Still us? The artwork and the carpet underfoot carry the same accent. 3 · Which room is my 3 pm? Nalanda, the same signage family everywhere, with braille at reach. 4 · Coffee? Their own point, in its own tone. Known before a sign is read. → Bridge: And here&#x27;s the floor in use, through one day.">
+<section class="scene" id="s-wf-a6" data-part="s5" data-title="Wayfinding" data-steps="5" data-mins="1.2" data-beats="My team,Still us,My 3 pm,My desk,Collab"
+  data-notes="Wayfinding, walked: someone new to the floor, looking for their team, one stop per click. 1 · Where's my team? The wall answers: its colour and its number. 2 · Still us? The artwork and the carpet underfoot carry the same accent. 3 · Which room is my 3 pm? Nalanda, the same signage family everywhere, with braille at reach. 4 · And my desk? Privacy panels in its own tone, acoustic screens, a place to focus. 5 · Where can we huddle? The collab area, in its own tone. Known before a sign is read. → Bridge: And here&#x27;s the floor in use, through one day.">
   <div class="page">
     <div class="hdr"><b>Wayfinding</b><span>04 · The Feel</span></div>
     <div class="wf-stage" style="left:1.8%;top:14%;width:96.4%;height:68%"><svg class="wf-el" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <defs><filter id="wfa6-pen" x="-30%" y="-10%" width="160%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter><filter id="wfa6-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><filter id="wfa6-wash" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><pattern id="wfa6-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" class="hatch"/></pattern>
+        <defs><filter id="wfa6-pen" x="-30%" y="-10%" width="160%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter><filter id="wfa6-ink" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter><filter id="wfa6-wash" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><filter id="wfa6-plaster" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".55" numOctaves="4" seed="3"/><feColorMatrix type="matrix" values="0 0 0 0 .25  0 0 0 0 .22  0 0 0 0 .2  0 0 0 .7 -.3"/></filter>
+          <pattern id="wfa6-t-carpet" width="130" height="110" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/carpet.webp" width="130" height="110" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-t-slats" width="190" height="165" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/slats.webp" width="190" height="165" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-t-wood" width="450" height="228" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/wood.webp" width="450" height="228" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-t-stone" width="368" height="220" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/stone.webp" width="368" height="220" preserveAspectRatio="none"/></pattern>
+          <linearGradient id="wfa6-brass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ede4"/><stop offset=".5" stop-color="#d9d3c4"/><stop offset="1" stop-color="#ece7da"/></linearGradient>
+          <linearGradient id="wfa6-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dfe8ee" stop-opacity=".5"/><stop offset=".45" stop-color="#ffffff" stop-opacity=".12"/><stop offset="1" stop-color="#c9d6df" stop-opacity=".4"/></linearGradient>
+          <clipPath id="wfa6-c-art"><rect x="470" y="160" width="170" height="150"/></clipPath>
+          <filter id="wfa6-grunge" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".011 .12" numOctaves="3" seed="6" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 7 -3.8" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+          <pattern id="wfa6-t-fabric" width="130" height="90" patternUnits="userSpaceOnUse"><image href="assets/img/s-wf-a6/fabric.webp" width="130" height="90" preserveAspectRatio="none"/></pattern>
+          <pattern id="wfa6-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" class="hatch"/></pattern>
           <linearGradient id="wfa6-art" x1="0" x2="1"><stop offset="0" class="s1"/><stop offset="1" class="s2"/></linearGradient>
           <pattern id="wfa6-film" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" class="film"/><ellipse cx="13" cy="13" rx="9" ry="4.5" class="filmdot"/></pattern>
         </defs>
-        <g filter="url(#wfa6-ink)"><rect class="wall" x="40" y="80" width="1520" height="390"/>
-        <rect class="paint" x="40" y="80" width="460" height="390"/>
-        <text class="graphic" x="270" y="380" text-anchor="middle">03</text>
-        <path class="graphic-l" d="M80 410H460M80 425H360"/>
-        <rect class="art" x="560" y="150" width="210" height="170" fill="url(#wfa6-art)"/><rect class="frame" x="560" y="150" width="210" height="170"/>
-        <rect class="room" x="840" y="80" width="330" height="390"/>
-        <g class="acoustic"><rect x="870" y="110" width="44" height="150"/><rect x="922" y="110" width="44" height="150"/><rect x="974" y="110" width="44" height="150"/><rect x="1026" y="110" width="44" height="150"/><rect x="1078" y="110" width="44" height="150"/></g>
-        <rect class="table" x="905" y="330" width="200" height="16"/>
-        <rect class="glass" x="840" y="80" width="330" height="390"/>
-        <rect x="840" y="250" width="330" height="80" fill="url(#wfa6-film)" class="filmband"/>
-        <rect class="sign" x="1192" y="210" width="110" height="74" rx="6"/><text class="signt" x="1247" y="244" text-anchor="middle">Nalanda</text>
-        <g class="braille"><circle cx="1222" cy="266" r="3.4"/><circle cx="1232" cy="266" r="3.4"/><circle cx="1222" cy="274" r="3.4"/><circle cx="1246" cy="266" r="3.4"/><circle cx="1256" cy="274" r="3.4"/><circle cx="1270" cy="266" r="3.4"/><circle cx="1270" cy="274" r="3.4"/></g>
-        <rect class="coffee" x="1340" y="330" width="210" height="140"/><rect class="coffee-top" x="1330" y="318" width="230" height="14"/>
-        <path class="ln" d="M1445 80V180M1420 180H1470L1460 205H1430Z"/><rect class="cup" x="1370" y="296" width="16" height="22" rx="3"/><rect class="cup" x="1394" y="300" width="14" height="18" rx="3"/>
-        <rect class="carpet" x="40" y="470" width="1520" height="46"/>
+        <g class="ink0" filter="url(#wfa6-ink)"><rect class="wall" x="40" y="80" width="1520" height="390"/>
+        <rect class="paint" x="40" y="80" width="390" height="390"/>
+        <text class="graphic" x="235" y="380" text-anchor="middle">03</text>
+        <path class="graphic-l" d="M70 410H400M70 425H320"/>
+        <rect class="art" x="470" y="160" width="170" height="150" fill="url(#wfa6-art)"/><rect class="frame" x="470" y="160" width="170" height="150"/>
+        <rect class="room" x="700" y="80" width="240" height="390"/>
+        <g class="acoustic"><rect x="722" y="110" width="40" height="150"/><rect x="774" y="110" width="40" height="150"/><rect x="826" y="110" width="40" height="150"/><rect x="878" y="110" width="40" height="150"/></g>
+        <rect class="table" x="735" y="330" width="170" height="16"/>
+        <rect class="glass" x="700" y="80" width="240" height="390"/>
+        <rect x="700" y="250" width="240" height="80" fill="url(#wfa6-film)" class="filmband"/>
+        <rect class="sign" x="952" y="210" width="90" height="74" rx="6"/><text class="signt" x="997" y="244" text-anchor="middle">Nalanda</text>
+        <g class="braille"><circle cx="982" cy="266" r="3.4"/><circle cx="992" cy="266" r="3.4"/><circle cx="982" cy="274" r="3.4"/><circle cx="1006" cy="266" r="3.4"/><circle cx="1016" cy="274" r="3.4"/><circle cx="1030" cy="266" r="3.4"/><circle cx="1030" cy="274" r="3.4"/></g>
+        <g class="ws-g"><rect class="chair" x="1120" y="352" width="9" height="72" rx="3"/><rect class="chair" x="1122" y="413" width="58" height="10" rx="4"/><path class="ln" d="M1150 423V470"/>
+          <rect class="wsdesk" x="1226" y="380" width="100" height="10" rx="3"/><path class="ln" d="M1234 390V470M1318 390V470"/>
+          <rect class="wsmon" x="1252" y="326" width="52" height="38" rx="3"/><path class="ln" d="M1278 364V380"/>
+          <rect class="modesty" x="1226" y="392" width="100" height="56" rx="5"/><rect class="wsscreen" x="1322" y="318" width="12" height="62" rx="3"/></g>
+        <g class="collab-g"><rect class="collab" x="1454" y="352" width="106" height="62" rx="14"/><rect class="collab" x="1440" y="400" width="120" height="70" rx="12"/><rect class="collab" x="1440" y="372" width="26" height="98" rx="13"/><rect class="collab" x="1534" y="372" width="26" height="98" rx="13"/></g>
+        <path class="ln" d="M1412 410V470"/><rect class="ctable" x="1392" y="403" width="42" height="9" rx="4"/>
+        <path class="ln" d="M1500 80V180M1475 180H1525L1515 205H1485Z"/><rect class="cup" x="1396" y="388" width="28" height="15" rx="2"/>
+        <rect class="carpet" x="40" y="470" width="1520" height="46"/><rect class="grunge" x="40" y="470" width="1520" height="46" filter="url(#wfa6-grunge)"/>
         <line class="floor" x1="40" y1="516" x2="1560" y2="516"/>
-        </g><rect x="40" y="470" width="1520" height="46" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><rect x="1340" y="330" width="210" height="140" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><g class="lead">
-          <path d="M270 80V36"/><path d="M330 432V560"/><path d="M665 150V36"/><path d="M720 320V560"/><path d="M1005 110V36"/><path d="M890 290V560"/>
-          <path d="M1247 210V36"/><path d="M1290 284V560"/><path d="M1445 318V560"/><path d="M110 516V560"/>
+        </g><g class="mat">
+          <rect x="40" y="80" width="390" height="390" filter="url(#wfa6-plaster)"/>
+          <rect class="m-carpet" x="40" y="470" width="1520" height="46" fill="url(#wfa6-t-carpet)"/>
+          <g class="m-art"><image class="m-img" href="assets/img/s-wf-a6/art-3.webp" x="470" y="160" width="170" height="150" preserveAspectRatio="xMidYMid slice" clip-path="url(#wfa6-c-art)"/><rect class="m-tint" x="470" y="160" width="170" height="150"/><rect class="frame" x="470" y="160" width="170" height="150" fill="none"/></g>
+          <g class="m-slats"><rect x="722" y="110" width="40" height="150"/><rect x="774" y="110" width="40" height="150"/><rect x="826" y="110" width="40" height="150"/><rect x="878" y="110" width="40" height="150"/></g>
+          <rect x="700" y="80" width="240" height="390" fill="url(#wfa6-glass)"/>
+          <rect class="m-film" x="700" y="250" width="240" height="80"/>
+          <rect class="m-sign" x="952" y="210" width="90" height="74" rx="6"/><text class="signt" x="997" y="244" text-anchor="middle">Nalanda</text>
+          <g class="braille"><circle cx="982" cy="266" r="3.4"/><circle cx="992" cy="266" r="3.4"/><circle cx="982" cy="274" r="3.4"/><circle cx="1006" cy="266" r="3.4"/><circle cx="1016" cy="274" r="3.4"/><circle cx="1030" cy="266" r="3.4"/><circle cx="1030" cy="274" r="3.4"/></g>
+          <g class="m-wsg"><rect x="1322" y="318" width="12" height="62" rx="3"/></g><rect class="m-modesty" x="1226" y="392" width="100" height="56" rx="5" fill="url(#wfa6-t-fabric)"/>
+          <rect class="m-ctable" x="1226" y="380" width="100" height="10" rx="3" fill="url(#wfa6-t-wood)"/>
+          <g class="m-collab"><rect x="1454" y="352" width="106" height="62" rx="14"/><rect x="1440" y="400" width="120" height="70" rx="12"/><rect x="1440" y="372" width="26" height="98" rx="13"/><rect x="1534" y="372" width="26" height="98" rx="13"/></g>
+          <rect class="m-ctable" x="1392" y="403" width="42" height="9" rx="4" fill="url(#wfa6-t-wood)"/>
+        </g><rect class="hat" x="40" y="470" width="1520" height="46" fill="url(#wfa6-hatch)" filter="url(#wfa6-ink)"/><g class="lead">
+          <path d="M235 80V36"/><path d="M200 432V560"/><path d="M555 160V36"/><path d="M555 310V560"/><path d="M794 110V36"/>
+          <path d="M1010 210V36"/><path d="M1006 282V560"/><path d="M1500 352V560"/><path d="M110 516V560"/><path d="M1328 318V36"/>
         </g>
         <g class="lab">
-          <text x="270" y="28" text-anchor="middle">Paint accent</text><text x="330" y="582" text-anchor="middle">Wall graphic</text>
-          <text x="665" y="28" text-anchor="middle">Artwork</text><text x="720" y="582" text-anchor="middle">Artwork tonality</text>
-          <text x="1005" y="28" text-anchor="middle">Meeting-room acoustics</text><text x="890" y="582" text-anchor="middle">Privacy panel</text>
-          <text class="gen" x="1247" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1290" y="582" text-anchor="middle">Inclusive · braille</text>
-          <text x="1445" y="582" text-anchor="middle">Coffee point</text><text x="60" y="582" text-anchor="start">Carpet</text>
-        </g>
-      <g class="ring" data-s="0" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M152.3 196.5L176.7 186.0L203.3 177.8L231.7 172.2L261.3 169.4L291.3 169.3L321.1 172.2L350.0 177.9L377.4 186.3L402.6 197.3L424.9 210.6L443.9 225.9L459.2 242.9L470.2 261.2L476.8 280.3L478.8 299.9L476.2 319.4L469.1 338.3L457.6 356.4L442.0 373.0L422.8 387.9L400.4 400.7L375.4 411.2L348.4 419.1L320.1 424.4L291.0 426.8L261.9 426.5L233.4 423.4L206.1 417.8L180.6 409.6L157.5 399.3L137.0 387.1L119.8 373.1L105.9 357.9L95.7 341.6L89.3 324.7L86.8 307.5L88.1 290.3L93.1 273.6L101.8 257.5L113.9 242.4L129.1 228.7L147.2 216.4L167.7 206.0L190.3 197.5L214.5 191.1L240.0 186.9L266.1 185.1L292.4 185.7"/><path pathLength="1" d="M152.3 196.5L176.7 186.0L203.3 177.8L231.7 172.2L261.3 169.4L291.3 169.3L321.1 172.2L350.0 177.9L377.4 186.3L402.6 197.3L424.9 210.6L443.9 225.9L459.2 242.9L470.2 261.2L476.8 280.3L478.8 299.9L476.2 319.4L469.1 338.3L457.6 356.4L442.0 373.0L422.8 387.9L400.4 400.7L375.4 411.2L348.4 419.1L320.1 424.4L291.0 426.8L261.9 426.5L233.4 423.4L206.1 417.8L180.6 409.6L157.5 399.3L137.0 387.1L119.8 373.1L105.9 357.9L95.7 341.6L89.3 324.7L86.8 307.5L88.1 290.3L93.1 273.6L101.8 257.5L113.9 242.4L129.1 228.7L147.2 216.4L167.7 206.0L190.3 197.5L214.5 191.1L240.0 186.9L266.1 185.1L292.4 185.7"/></g><g class="ring" data-s="1" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M576.7 142.2L595.0 132.7L615.0 125.3L636.3 120.2L658.4 117.6L681.0 117.6L703.3 120.2L725.0 125.3L745.5 132.9L764.4 142.9L781.2 155.0L795.5 168.8L806.9 184.3L815.2 200.8L820.1 218.2L821.6 235.9L819.7 253.6L814.3 270.7L805.7 287.1L794.0 302.2L779.6 315.7L762.8 327.3L744.1 336.8L723.8 344.0L702.6 348.7L680.8 350.9L658.9 350.6L637.5 347.9L617.1 342.7L598.0 335.4L580.6 326.0L565.3 314.9L552.3 302.3L541.9 288.4L534.3 273.7L529.5 258.4L527.6 242.8L528.5 227.2L532.3 212.0L538.8 197.5L547.9 183.8L559.3 171.3L572.9 160.3L588.3 150.8L605.2 143.1L623.4 137.3L642.5 133.5L662.1 131.9L681.8 132.4"/><path pathLength="1" d="M576.7 142.2L595.0 132.7L615.0 125.3L636.3 120.2L658.4 117.6L681.0 117.6L703.3 120.2L725.0 125.3L745.5 132.9L764.4 142.9L781.2 155.0L795.5 168.8L806.9 184.3L815.2 200.8L820.1 218.2L821.6 235.9L819.7 253.6L814.3 270.7L805.7 287.1L794.0 302.2L779.6 315.7L762.8 327.3L744.1 336.8L723.8 344.0L702.6 348.7L680.8 350.9L658.9 350.6L637.5 347.9L617.1 342.7L598.0 335.4L580.6 326.0L565.3 314.9L552.3 302.3L541.9 288.4L534.3 273.7L529.5 258.4L527.6 242.8L528.5 227.2L532.3 212.0L538.8 197.5L547.9 183.8L559.3 171.3L572.9 160.3L588.3 150.8L605.2 143.1L623.4 137.3L642.5 133.5L662.1 131.9L681.8 132.4"/></g><g class="ring" data-s="2" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M1209.6 203.1L1218.4 198.3L1228.0 194.6L1238.2 192.1L1248.9 190.8L1259.7 190.8L1270.4 192.1L1280.8 194.7L1290.7 198.5L1299.7 203.4L1307.8 209.5L1314.6 216.4L1320.1 224.1L1324.1 232.4L1326.5 241.1L1327.2 249.9L1326.2 258.8L1323.7 267.4L1319.5 275.5L1313.9 283.1L1307.0 289.8L1299.0 295.6L1290.0 300.4L1280.2 304.0L1270.0 306.4L1259.6 307.5L1249.1 307.3L1238.8 305.9L1229.0 303.4L1219.8 299.7L1211.5 295.0L1204.1 289.4L1197.9 283.1L1192.9 276.2L1189.3 268.8L1186.9 261.2L1186.0 253.4L1186.5 245.6L1188.3 238.0L1191.4 230.7L1195.8 223.9L1201.3 217.7L1207.8 212.1L1215.2 207.4L1223.3 203.5L1232.0 200.6L1241.2 198.8L1250.6 197.9L1260.1 198.2"/><path pathLength="1" d="M1209.6 203.1L1218.4 198.3L1228.0 194.6L1238.2 192.1L1248.9 190.8L1259.7 190.8L1270.4 192.1L1280.8 194.7L1290.7 198.5L1299.7 203.4L1307.8 209.5L1314.6 216.4L1320.1 224.1L1324.1 232.4L1326.5 241.1L1327.2 249.9L1326.2 258.8L1323.7 267.4L1319.5 275.5L1313.9 283.1L1307.0 289.8L1299.0 295.6L1290.0 300.4L1280.2 304.0L1270.0 306.4L1259.6 307.5L1249.1 307.3L1238.8 305.9L1229.0 303.4L1219.8 299.7L1211.5 295.0L1204.1 289.4L1197.9 283.1L1192.9 276.2L1189.3 268.8L1186.9 261.2L1186.0 253.4L1186.5 245.6L1188.3 238.0L1191.4 230.7L1195.8 223.9L1201.3 217.7L1207.8 212.1L1215.2 207.4L1223.3 203.5L1232.0 200.6L1241.2 198.8L1250.6 197.9L1260.1 198.2"/></g><g class="ring" data-s="3" filter="url(#wfa6-ink)"><path class="halo" pathLength="1" d="M1379.4 314.2L1394.0 305.9L1410.0 299.5L1427.0 295.2L1444.8 292.9L1462.8 292.9L1480.7 295.1L1498.0 299.6L1514.4 306.2L1529.5 314.7L1543.0 325.1L1554.4 337.1L1563.5 350.4L1570.1 364.7L1574.1 379.6L1575.3 394.9L1573.7 410.1L1569.4 425.0L1562.5 439.0L1553.2 452.0L1541.7 463.7L1528.3 473.7L1513.3 481.9L1497.1 488.1L1480.0 492.2L1462.6 494.1L1445.1 493.8L1428.0 491.4L1411.7 487.0L1396.4 480.7L1382.5 472.6L1370.2 463.0L1359.9 452.1L1351.5 440.2L1345.4 427.5L1341.6 414.3L1340.1 400.8L1340.8 387.4L1343.9 374.3L1349.1 361.8L1356.3 350.0L1365.5 339.3L1376.3 329.7L1388.6 321.5L1402.2 314.9L1416.7 309.9L1432.0 306.7L1447.6 305.2L1463.4 305.7"/><path pathLength="1" d="M1379.4 314.2L1394.0 305.9L1410.0 299.5L1427.0 295.2L1444.8 292.9L1462.8 292.9L1480.7 295.1L1498.0 299.6L1514.4 306.2L1529.5 314.7L1543.0 325.1L1554.4 337.1L1563.5 350.4L1570.1 364.7L1574.1 379.6L1575.3 394.9L1573.7 410.1L1569.4 425.0L1562.5 439.0L1553.2 452.0L1541.7 463.7L1528.3 473.7L1513.3 481.9L1497.1 488.1L1480.0 492.2L1462.6 494.1L1445.1 493.8L1428.0 491.4L1411.7 487.0L1396.4 480.7L1382.5 472.6L1370.2 463.0L1359.9 452.1L1351.5 440.2L1345.4 427.5L1341.6 414.3L1340.1 400.8L1340.8 387.4L1343.9 374.3L1349.1 361.8L1356.3 350.0L1365.5 339.3L1376.3 329.7L1388.6 321.5L1402.2 314.9L1416.7 309.9L1432.0 306.7L1447.6 305.2L1463.4 305.7"/></g><g class="who"><g transform="scale(1.18)"><g class="face"><g class="bob" filter="url(#wfa6-pen)"><g transform="translate(0 -98)"><g class="limb l2"><path d="M0 0L-1 94L13 97"/></g></g><g transform="translate(0 -166)"><g class="limb a2"><path d="M0 0L1 68"/></g></g><path class="torso" d="M-15 -171C-6 -177 6 -177 15 -171L14 -97C5 -93 -5 -93 -14 -97Z"/><path class="strap" d="M-11 -170L12 -116"/><rect class="bag" x="4" y="-120" width="22" height="18" rx="3"/><g transform="translate(0 -98)"><g class="limb l1"><path d="M0 0L1 94L15 97"/></g></g><g class="headg"><circle class="head" cx="0" cy="-196" r="19"/><path class="hair" d="M-19 -197C-17 -216 8 -221 19 -203"/><path class="nose" d="M18 -197l7 5l-6 2"/></g><g transform="translate(0 -166)"><g class="limb a1"><path d="M0 0L-1 68"/><circle class="hand" cx="-1" cy="72" r="4.5"/></g></g><g class="mycup"><rect x="63" y="-171" width="15" height="19" rx="3"/><path class="steam" d="M67 -178c-6 -10 6 -14 0 -24M75 -178c-6 -10 6 -14 0 -24"/></g></g></g></g></g><g class="bub"><g class="tail"><circle r="7"/><circle r="10"/><circle r="13"/></g><rect class="bb" height="124" rx="46" filter="url(#wfa6-pen)"/><text class="q" x="34" y="54"></text><text class="ans" x="34" y="100"></text></g></svg></div>
-    <div class="wf-bar" style="left:1.8%;top:85%;width:96.4%"><span class="wf-k">Pick a neighbourhood</span><div class="wf-chips"></div><b class="wf-name"></b><span class="wf-close">Known before a sign is read.</span><button type="button" class="wf-again" title="Play this stop again">&#8635;</button></div>
+          <text x="235" y="28" text-anchor="middle">Paint accent</text><text x="200" y="582" text-anchor="middle">Wall graphic</text>
+          <text x="555" y="28" text-anchor="middle">Artwork</text><text x="555" y="582" text-anchor="middle">Artwork tonality</text>
+          <text x="794" y="28" text-anchor="middle">Meeting-room acoustics</text>          <text class="gen" x="1010" y="28" text-anchor="middle">Signage · general</text><text class="gen" x="1006" y="582" text-anchor="middle">Inclusive · braille</text>
+          <text x="1500" y="582" text-anchor="middle">Collab area</text><text x="60" y="582" text-anchor="start">Carpet</text>
+          <text x="1328" y="28" text-anchor="middle">Privacy panel</text>        </g>
+      <g class="ring" data-s="0" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="1" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="2" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="3" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="ring" data-s="4" filter="url(#wfa6-ink)"><path class="halo" pathLength="1"/><path pathLength="1"/></g><g class="who"><g transform="scale(1.18)"><g class="face"><g class="bob" filter="url(#wfa6-pen)"><g transform="translate(0 -98)"><g class="limb l2"><path d="M0 0L-1 94L13 97"/></g></g><g transform="translate(0 -166)"><g class="limb a2"><path d="M0 0L1 68"/></g></g><path class="torso" d="M-15 -171C-6 -177 6 -177 15 -171L14 -97C5 -93 -5 -93 -14 -97Z"/><path class="strap" d="M-11 -170L12 -116"/><rect class="bag" x="4" y="-120" width="22" height="18" rx="3"/><g transform="translate(0 -98)"><g class="limb l1"><path d="M0 0L1 94L15 97"/></g></g><g class="sitlegs"><path d="M0 -98L52 -98L54 -45L68 -42"/><path d="M-4 -98L46 -98L48 -45L62 -42"/></g><g class="headg"><circle class="head" cx="0" cy="-196" r="19"/><path class="hair" d="M-19 -197C-17 -216 8 -221 19 -203"/><path class="nose" d="M18 -197l7 5l-6 2"/></g><g transform="translate(0 -166)"><g class="limb a1"><path d="M0 0L-1 68"/><circle class="hand" cx="-1" cy="72" r="4.5"/></g></g><g class="mycup"><rect x="63" y="-171" width="15" height="19" rx="3"/><path class="steam" d="M67 -178c-6 -10 6 -14 0 -24M75 -178c-6 -10 6 -14 0 -24"/></g></g></g></g></g><g class="bub"><g class="tail"><circle r="7"/><circle r="10"/><circle r="13"/></g><rect class="bb" height="124" rx="46" filter="url(#wfa6-pen)"/><text class="q" x="34" y="54"></text><text class="ans" x="34" y="100"></text></g></svg></div>
+    <div class="wf-bar" style="left:1.8%;top:85%;width:96.4%"><span class="wf-k">Pick a neighbourhood</span><div class="wf-chips"></div><span class="wf-look" title="How the walls are drawn"><button type="button" data-look="sk" class="on">Sketch</button><button type="button" data-look="mat">Material</button></span><b class="wf-name"></b><span class="wf-close">Known before a sign is read.</span><button type="button" class="wf-again" title="Play this stop again">&#8635;</button></div>
   </div>
 </section>
 <section class="scene" id="s-wayday" data-part="s5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
-  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Board Room,Wellness"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: And at every stop, something for the Acker: their engagement points.">
+  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Wellness,Board Room"
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Wellness: a pause on the terrace garden, they thought of me too. 17:00 Board Room: the review, my big moment. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: And at every stop, something for the Acker: their engagement points.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
@@ -2549,16 +2657,82 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
     <div class="deckpage" data-only="1" style="background-image:url(assets/deck/s49.webp)"></div>
   </div>
 </section>
-<section class="scene deck" id="s-di" data-part="A" data-title="Designed for all" data-steps="1" data-mins="0.5"
-  data-notes="Universally accessible design: braille signage, quiet room, mother's room, gender-inclusive toilets, visual and audible fire alarms, zen room.">
-  <div class="page">
-    <div class="deckpage" data-only="1" style="background-image:url(assets/deck/s50.webp)"></div>
+<section class="scene vpage" id="s-di" data-part="A" data-title="Designed for all" data-steps="1" data-mins="0.5"
+  data-notes="Universally accessible design: braille signage, quiet room, mother&#x27;s room, gender-inclusive toilets, visual and audible fire alarms, zen room.">
+  <div class="page rv">
+      <i class="dk" style="--i:0;left:1.81%;top:21.85%;width:12.92%;height:4.94%;background:#d9d9d9"></i>
+      <i class="dk" style="--i:0;left:1.77%;top:44.2%;width:12.95%;height:14.81%;background-size:100% 100%;background-image:url(assets/img/di4-03.webp)"></i>
+      <i class="dk" style="--i:0;left:1.77%;top:59.69%;width:12.95%;height:13.77%;background-size:100% 100%;background-image:url(assets/img/di4-04.webp)"></i>
+      <i class="dk" style="--i:1;left:15.8%;top:21.85%;width:12.92%;height:4.94%;background:#d9d9d9"></i>
+      <i class="dk" style="--i:1;left:15.73%;top:44.2%;width:12.95%;height:14.81%;background-size:100% 100%;background-image:url(assets/img/di4-07.webp)"></i>
+      <i class="dk" style="--i:1;left:15.73%;top:59.69%;width:12.95%;height:13.77%;background-size:100% 100%;background-image:url(assets/img/di4-08.webp)"></i>
+      <i class="dk" style="--i:2;left:29.65%;top:21.85%;width:12.92%;height:4.94%;background:#d9d9d9"></i>
+      <i class="dk" style="--i:2;left:29.62%;top:44.2%;width:12.95%;height:14.81%;background-size:100% 100%;background-image:url(assets/img/di4-11.webp)"></i>
+      <i class="dk" style="--i:2;left:29.62%;top:59.69%;width:12.95%;height:13.77%;background-size:100% 100%;background-image:url(assets/img/di4-12.webp)"></i>
+      <i class="dk" style="--i:4;left:43.89%;top:21.85%;width:12.85%;height:4.94%;background:#d9d9d9"></i>
+      <i class="dk" style="--i:4;left:43.85%;top:44.32%;width:12.85%;height:14.81%;background-size:100% 100%;background-image:url(assets/img/di4-15.webp)"></i>
+      <i class="dk" style="--i:4;left:43.82%;top:59.57%;width:12.95%;height:13.89%;background-size:100% 100%;background-image:url(assets/img/di4-16.webp)"></i>
+      <i class="dk" style="--i:5;left:58.02%;top:21.85%;width:12.67%;height:4.94%;background:#d9d9d9"></i>
+      <i class="dk" style="--i:5;left:57.88%;top:44.26%;width:12.92%;height:29.07%;background-size:100% 100%;background-image:url(assets/img/di4-19.webp)"></i>
+      <i class="dk" style="--i:6;left:71.88%;top:21.85%;width:12.85%;height:4.94%;background:#d9d9d9"></i>
+      <i class="dk" style="--i:6;left:71.84%;top:44.26%;width:12.88%;height:29.07%;background-size:100% 100%;background-image:url(assets/img/di4-22.webp)"></i>
+      <i class="dk" style="--i:7;left:85.62%;top:21.85%;width:12.85%;height:4.94%;background:#d9d9d9"></i>
+      <i class="dk" style="--i:7;left:85.66%;top:44.26%;width:12.88%;height:29.07%;background-size:100% 100%;background-image:url(assets/img/di4-25.webp)"></i>
+    <div class="vt" style="--i:7;left:86.36%;top:28.65%;font-family:var(--body);font-size:calc(var(--pt) * 6.10);line-height:1.194;color:#000000;font-weight:300;white-space:nowrap">Offers a tranquil space for<br>employees to relax, meditate,<br>or recharge. Designed with<br>calming materials, soft<br>lighting, and acoustic<br>comfort to promote<br>mindfulness, well-being, and<br>renewed focus.</div>
+    <div class="vt" style="--i:1;left:2.68%;top:28.65%;font-family:var(--body);font-size:calc(var(--pt) * 6.10);line-height:1.194;color:#6b7080;font-weight:300;white-space:nowrap">Seamlessly integrated ramps<br>and handrails, along with<br>handicapped toilets, to<br>maximize facility accessibility<br>for people of all ages, sizes,<br>and abilities</div>
+    <div class="vt" style="--i:2;left:16.58%;top:28.65%;font-family:var(--body);font-size:calc(var(--pt) * 6.10);line-height:1.194;color:#6b7080;font-weight:300;white-space:nowrap">A high-standard<br>implementation of tactile<br>flooring and signage with<br>equivalent braille to support<br>the navigation of visually<br>impaired employees and<br>guests.</div>
+    <div class="vt" style="--i:3;left:30.48%;top:28.65%;font-family:var(--body);font-size:calc(var(--pt) * 6.10);line-height:1.194;color:#6b7080;font-weight:300;white-space:nowrap">Offers employees a<br>Multi-Faith serene place for<br>meditation and reflection,<br>respecting diverse cultural<br>and spiritual practices</div>
+    <div class="vt" style="--i:4;left:44.66%;top:28.65%;font-family:var(--body);font-size:calc(var(--pt) * 6.10);line-height:1.194;color:#6b7080;font-weight:300;white-space:nowrap">An empathetic space offering<br>privacy, comfort, and<br>functional amenities like<br>storage, a sink, and a<br>refrigerator to support<br>working mothers transitioning<br>back to the office.</div>
+    <div class="vt" style="--i:5;left:58.96%;top:28.68%;font-family:var(--body);font-size:calc(var(--pt) * 6.10);line-height:1.194;color:#6b7080;font-weight:300;white-space:nowrap">Provide a positive and<br>welcoming environment for<br>everyone, particularly trans<br>and non-binary individuals.<br>This promotes an equitable<br>workplace that attracts and<br>retains diverse talent</div>
+    <div class="vt" style="--i:6;left:72.67%;top:28.71%;font-family:var(--body);font-size:calc(var(--pt) * 6.10);line-height:1.194;color:#6b7080;font-weight:300;white-space:nowrap">Comprehensive safety<br>protocols that include strobe<br>lights to ensure critical<br>emergency information is<br>received by individuals with<br>hearing or visual impairments</div>
+    <div class="vt" style="--i:1;left:2.59%;top:22.39%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Universally Accessible</div>
+    <div class="vt" style="--i:1;left:6.53%;top:24.76%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Design</div>
+    <div class="vt" style="--i:2;left:18.48%;top:22.85%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Braille Signage</div>
+    <div class="vt" style="--i:3;left:33.08%;top:22.85%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Quiet Room</div>
+    <div class="vt" style="--i:4;left:46.5%;top:22.85%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Mother’s Room</div>
+    <div class="vt" style="--i:5;left:60.1%;top:22.39%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Gender Inclusive</div>
+    <div class="vt" style="--i:6;left:62.67%;top:24.76%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Toilets</div>
+    <div class="vt" style="--i:6;left:73.07%;top:22.39%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Visual &amp; Audible Fire</div>
+    <div class="vt" style="--i:7;left:76.53%;top:24.76%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Alarms</div>
+    <div class="vt" style="--i:8;left:89.47%;top:22.85%;font-family:var(--body);font-size:calc(var(--pt) * 8.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Zen Room</div>
+    <div class="vt" style="--i:1;left:2.24%;top:6.9%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#6b7080;font-weight:400;white-space:nowrap">Value Addition | Kit of parts</div>
+    <div class="vt" style="--i:1;left:2.24%;top:3.31%;font-family:var(--body);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">D&amp;I Strategy</div>
+    <div class="vt" style="--i:7;left:82.59%;top:76.21%;font-family:var(--hand);font-size:calc(var(--pt) * 18.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Designed for all .</div>
   </div>
 </section>
-<section class="scene deck" id="s-esg" data-part="A" data-title="ESG strategy" data-steps="1" data-mins="0.5"
+<section class="scene vpage" id="s-esg" data-part="A" data-title="ESG strategy" data-steps="1" data-mins="0.5"
   data-notes="Graphics, people and wellbeing, human scale: privacy films, business narratives, urban imprint, biophilia, ergonomics, inclusive design, community and wellness.">
-  <div class="page">
-    <div class="deckpage" data-only="1" style="background-image:url(assets/deck/s51.webp)"></div>
+  <div class="page rv">
+      <i class="dk" style="--i:0;left:1.74%;top:30.37%;width:12.05%;height:22.78%;background-size:100% 100%;background-image:url(assets/img/esg4-01.webp)"></i>
+      <i class="dk" style="--i:0;left:1.74%;top:53.83%;width:12.05%;height:20.62%;background-size:100% 100%;background-image:url(assets/img/esg4-02.webp)"></i>
+      <i class="dk" style="--i:1;left:14.41%;top:30.19%;width:14.62%;height:17.59%;background-size:100% 100%;background-image:url(assets/img/esg4-03.webp)"></i>
+      <i class="dk" style="--i:1;left:14.41%;top:49.01%;width:6.01%;height:25.49%;background-size:100% 100%;background-image:url(assets/img/esg4-04.webp)"></i>
+      <i class="dk" style="--i:3;left:33.75%;top:32.53%;width:12.43%;height:18.52%;background-size:100% 100%;background-image:url(assets/img/esg4-05.webp)"></i>
+      <i class="dk" style="--i:4;left:46.63%;top:32.47%;width:8.54%;height:18.52%;background-size:100% 100%;background-image:url(assets/img/esg4-06.webp)"></i>
+      <i class="dk" style="--i:4;left:49.13%;top:51.54%;width:7.88%;height:18.52%;background-size:100% 100%;background-image:url(assets/img/esg4-07.webp)"></i>
+      <i class="dk" style="--i:4;left:55.66%;top:30.12%;width:10.24%;height:20.62%;background-size:100% 100%;background-image:url(assets/img/esg4-08.webp)"></i>
+      <i class="dk" style="--i:4;left:57.4%;top:51.54%;width:8.3%;height:22.16%;background-size:100% 100%;background-image:url(assets/img/esg4-09.webp)"></i>
+      <i class="dk" style="--i:6;left:70.1%;top:31.05%;width:27.05%;height:32.78%;background-size:100% 100%;background-image:url(assets/img/esg4-10.webp)"></i>
+    <div class="vt" style="--i:2;left:21.99%;top:55.72%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#595959;font-weight:300;white-space:nowrap">Subtle<br>interpretation<br>of brand<br>through colours</div>
+    <div class="vt" style="--i:2;left:21.99%;top:62.83%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#595959;font-weight:500;white-space:nowrap"><span style="font-weight:300">in</span> local context</div>
+    <div class="vt" style="--i:2;left:21.99%;top:64.61%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#595959;font-weight:300;white-space:nowrap">Over all- Precise<br>&amp; Calm</div>
+    <div class="vt" style="--i:3;left:27.69%;top:62.83%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#595959;font-weight:300;white-space:nowrap">.</div>
+    <div class="vt" style="--i:3;left:33.66%;top:52.92%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#595959;font-weight:300;white-space:nowrap">Here , we ought to focus on how to<br>make it better for people, by <span style="font-weight:500">giving</span><br><span style="font-weight:500">opportunities</span> that let them be, and we<br>ensure that the design speaks the<br>same.</div>
+    <div class="vt" style="--i:6;left:70.49%;top:64.19%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#595959;font-weight:500;white-space:nowrap"><span style="font-weight:300">We explore</span> how accessible are the neighbourhood at a very human<br>scale, for such a large floor plate.</div>
+    <div class="vt" style="--i:1;left:2.46%;top:54.7%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#eeeeee;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Urban Imprint</div>
+    <div class="vt" style="--i:2;left:22.89%;top:31.27%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#eeeeee;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Privacy Films</div>
+    <div class="vt" style="--i:4;left:46.83%;top:34.02%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#eeeeee;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Employee Wellness</div>
+    <div class="vt" style="--i:4;left:49.33%;top:52.54%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#eeeeee;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Biophilia</div>
+    <div class="vt" style="--i:5;left:56.5%;top:31.27%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#eeeeee;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Ergonomics</div>
+    <div class="vt" style="--i:1;left:2.09%;top:31.53%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Business<br>Narratives</div>
+    <div class="vt" style="--i:3;left:34.14%;top:46.42%;font-family:var(--body);font-size:calc(var(--pt) * 6.00);line-height:1.200;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Community - socializing<br>opportunity</div>
+    <div class="vt" style="--i:1;left:2.24%;top:6.9%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#6b7080;font-weight:400;white-space:nowrap">Value Addition | Kit of parts</div>
+    <div class="vt" style="--i:1;left:2.55%;top:26.63%;font-family:var(--body);font-size:calc(var(--pt) * 10.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">01 Graphics</div>
+    <div class="vt" style="--i:3;left:34.51%;top:26.63%;font-family:var(--body);font-size:calc(var(--pt) * 10.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">02 People &amp; Wellbeing</div>
+    <div class="vt" style="--i:6;left:69.92%;top:26.63%;font-family:var(--body);font-size:calc(var(--pt) * 10.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">03 Human Scale</div>
+    <div class="vt" style="--i:1;left:2.24%;top:3.31%;font-family:var(--body);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">ESG Strategy</div>
+    <div class="vt" style="--i:5;left:61.82%;top:72.35%;font-family:var(--label);font-size:calc(var(--pt) * 6.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Inclusive</div>
+    <div class="vt" style="--i:7;left:85.95%;top:75.86%;font-family:var(--hand);font-size:calc(var(--pt) * 18.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">A step ahead…</div>
   </div>
 </section>
 <section class="scene skv" id="s-skv" data-part="0" data-title="About SKV" data-lens="story" data-steps="11" data-mins="3" data-crumb="About SKV"
@@ -2802,7 +2976,7 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 <style>#s-strategy .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }</style>
 <style>#s-strategy .st-s.cl b { color: #1a2cf0; }</style>
 <style>#s-strategy .st-from { left: 0; top: 1%; width: 89.8%; height: 98.4%; pointer-events: none; opacity: 0; background: url(assets/img/challenge-axo.webp) 100% 0 / 111.4% 100% no-repeat; transform-origin: 93.15% 0; transform: scale(.95); }#s-layout-sp .ly-p[data-p="1"] p:not(.hand), #s-layout-sp .nb-p { display: none; }</style>
-<style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }#s-layout-sp .sp2-nav { display: none; left: 34%; top: 3.4%; z-index: 7; align-items: center; gap: calc(var(--pt) * 8); }#s-layout-sp.nb-open .sp2-nav { display: flex; }#s-layout-sp .sp2-nav button { border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 9); font: 600 calc(var(--pt) * 8) var(--body); cursor: pointer; }#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 8.5); color: #333; }</style>
+<style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }#s-layout-sp .sp2-nav { display: none; left: 50%; transform: translateX(-50%); top: 3.6%; z-index: 7; align-items: center; gap: calc(var(--pt) * 6); }#s-layout-sp.nb-open .sp2-nav { display: flex; }#s-layout-sp.nb-open .ly-tools button:not([data-t="occ"]) { display: none; }#s-layout-sp .sp2-nav button { border: 1px solid #e6e1f4; background: transparent; color: #6a5fa0; border-radius: 999px; padding: calc(var(--pt) * 1.4) calc(var(--pt) * 5.4); font: 500 calc(var(--pt) * 5.6) var(--body); cursor: pointer; }#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 6.4); font-weight: 600; color: #6b6680; }</style>
 <style>.scene .page > .dg-tag { right: 12.6%; top: 95.1%; margin: 0; padding: .25em .9em; border: 1px solid currentColor; border-radius: 99px; font-size: calc(var(--pt) * 5); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; line-height: 1.3; opacity: .5; pointer-events: none; }</style>
 <script>window.ACKO_WOW = true;   /* the big moments (9 Nov): this page only */</script>
 <script>window.ACKO_SECTIONS = {"names": {"s1": "01 · Belonging", "s3": "02 · The Site", "s4": "03 · The Plan", "s5": "04 · The Feel", "s6": "05 · The Day", "A": "Appendix · Kit of parts", "close": "Thank you"}, "main": [["s1", "Belonging", "01"], ["s3", "The Site", "02"], ["s4", "The Plan", "03"], ["s5", "The Feel", "04"], ["s6", "The Day", "05"], ["close", "Thank you", ""]]};</script>
@@ -3246,7 +3420,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
         i = j + 1;
       }
       x.setLineDash([]);
-      R.arrS.forEach((i) => { if (R.ss[i] <= st.loop) { x.beginPath(); x.arc(R.pts[i][0] * k, R.pts[i][1] * k, (LAY.line ? 4.6 : 6.5) * k, 0, 2 * Math.PI); x.fillStyle = "#fff"; x.fill(); x.lineWidth = (LAY.line ? 1.5 : 2.2) * k; x.strokeStyle = LAY.line ? LN.col : "#1d1d1d"; x.stroke(); } });
       if (LAY.line && LAY.line.arrow && st.loop >= R.end) {                      // an arrowhead where it ends, pointing on toward the start
         const e = R.pts.length - 1, [px, py] = R.pts[e], [qx, qy] = R.pts[Math.max(0, e - 8)], a = Math.atan2(py - qy, px - qx), L = 11 * k, hw = 5 * k;
         x.beginPath(); x.moveTo(px * k + Math.cos(a) * L * .4, py * k + Math.sin(a) * L * .4);
@@ -3300,7 +3473,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     const pg = $(".page", sc);
     if (jump) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
     const R = S.R;
-    pg.classList.toggle("end", k >= 6);                                    // the Replay button, once the loop is drawn
     glide(sc, k ? 1 : 0, false);
     $(".cpl-drop", sc).style.opacity = k ? 0 : 1; $(".cpl-one", sc).style.opacity = k ? 0 : 1; $(".cpl-cond", sc).style.opacity = 0;
     $$(".cpl-seg", sc).forEach((e) => { e.classList.toggle("on", k >= 1); e.classList.toggle("ghost", k >= 4); }); $(".cpl-out", sc).classList.toggle("on", k >= 1);
@@ -3323,16 +3495,29 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       c.style.transform = `translate(${x}px,${y}px) scale(${on ? 4.6 : 7})`;
     });
   }
-  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; }
+  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; S.cyc = false; }
+  // after the first round the purple band keeps circling the loop (Ritika, 22 Nov: "the purple band should be in loop"):
+  // the loop line stays drawn, the band runs round it, lap after lap; nothing else moves
+  function cycle(sc) {
+    stop(); S.cyc = true;
+    const R = S.R, LAP = 7000, GAP = 500, TAIL = 280, SPAN = R.end - R.loop0;
+    const t0 = performance.now();
+    const frame = (now) => {
+      if ((document.body.dataset.scene && document.body.dataset.scene !== sc.id) || !S.cyc) { S.raf = 0; S.cyc = false; return; }
+      const t = (now - t0) % (LAP + GAP), u = clamp(t / LAP, 0, 1);
+      if (t >= LAP) draw({ wins: [], reveal: Infinity, loop: R.end });
+      else {
+        const head = R.loop0 + SPAN * u, tail = Math.max(R.loop0, head - TAIL), g = clamp((head - R.loop0) / 90, 0, 1);
+        draw({ wins: wins(tail, head, 130 * g, 22 * g), reveal: Infinity, loop: R.end });
+      }
+      S.raf = requestAnimationFrame(frame);
+    };
+    S.raf = requestAnimationFrame(frame);
+  }
+  function loopOn(sc, k) { if (k >= 6 && !reduced) later(() => { if (S.last >= 6 && !S.run && !S.raf && document.body.dataset.scene === sc.id) cycle(sc); }, 2600); }
   // after stage k, the next one by itself, unless a click got there first or the slide was left (?noauto switches it off, for the walk test)
   const AUTO = !/[?&]noauto/.test(location.search), PAUSE = { 1: 650, 2: 650, 3: 700, 4: 500, 5: 1000 };
   function auto(sc, k) { if (AUTO && PAUSE[k]) later(() => { if (S.last === k && document.body.dataset.scene === sc.id) next(); }, PAUSE[k]); }
-  // Replay (Ritika, 18 Nov: "we can have a replay button"): back to the opening frame, then the run from the top
-  function replay(sc) {
-    stop(); S.fresh = true; S.last = 0; pose(sc, 0);
-    const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");
-    raf2(() => pg.classList.add("drawn")); setStep(1);
-  }
   // click 4: each campus neighbourhood lifts off its ring, flies to its place on the floor and becomes that neighbourhood (Ritika, 18
   // Nov: "that neighbourhood in campus can move to ACKO campus neighbourhoods"); the ring keeps a ghost of it. A flyer is a copy of the
   // segment, moved and stretched (translate, scale) from its own box to the floor shape's box, fading out as the shape fades in
@@ -3359,7 +3544,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     const L = R.end - LA, DUR = clamp(L / .95, 9000, 15000), A = .1, B = .12, V = 1 / (1 - A / 2 - B / 2);
     const pos = (u) => (u < A ? (V * u * u) / (2 * A) : u < 1 - B ? V * (A / 2 + u - A) : 1 - (V * (1 - u) * (1 - u)) / (2 * B));
     const to = (n) => { if (state.step < n) setStep(n); };
-    let split = false, FL = null, tF = 0, plate = false, shared = false;
+    let split = false, FL = null, tF = 0, plate = false, shared = false, t2 = 0;
     const frame = (now) => {
       if (document.body.dataset.scene && document.body.dataset.scene !== sc.id) { S.raf = 0; S.run = false; return; }
       const t = now - t0;
@@ -3378,14 +3563,14 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
         if (!plate) { $(".cpl-drop", sc).style.opacity = 0; $(".cpl-one", sc).style.opacity = 0; $(".cpl-cond", sc).style.opacity = 0; $$(".cpl-seg", sc).forEach((g) => g.classList.add("on")); }
         const u = clamp((t - TR) / DUR, 0, 1), head = LA + L * pos(u), g = clamp((head - LA) / 220, 0, 1);
         const len = Math.min(head - LA, LREST + 40) * (1 - clamp((u - .88) / .12, 0, 1));    // a soft tail, which catches the head at the end
-        if (head > R.rest1 - 150) to(2);
-        if (head > R.mob1 - 200) { to(3); if (!plate) { plate = true; $(".cpl-plate", sc).classList.add("on"); } }
+        if (head > Math.max(R.mob0, R.rest1)) { if (!t2) t2 = t; to(2); }
+        if (t2 && t - t2 > 450 && head > R.mob1) { to(3); if (!plate) { plate = true; $(".cpl-plate", sc).classList.add("on"); } }
         if (head > R.mob1 && !FL) { FL = flyers(sc); tF = t; $$(".cpl-seg", sc).forEach((g2) => g2.classList.add("ghost")); to(4); }
         if (FL) { fly(FL, t - tF); if (t - tF > 500) $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-n")); }
         if (!shared && head > R.loop0 - 120) { shared = true; $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-s")); to(5); }
         if (head > R.loop0 + (R.end - R.loop0) * .12) to(6);
         draw({ wins: wins(Math.max(LA, head - len), head, 130 * g, 22 * g), reveal: head, loop: head });
-        if (u >= 1) { S.raf = 0; S.run = false; pose(sc, 6); to(6); return; }
+        if (u >= 1) { S.raf = 0; S.run = false; pose(sc, 6); to(6); loopOn(sc, 6); return; }
       }
       S.raf = requestAnimationFrame(frame);
     };
@@ -3442,6 +3627,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       } else done = true;
       if (done) {
         S.raf = 0; pose(sc, k);
+        loopOn(sc, k);
         // the ribbon runs without clicks (Ritika, 18 Nov: "the ribbon flows without beat"): every stage hands on to the next after a short pause
         auto(sc, k);
         return;
@@ -3453,7 +3639,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
   return {
     enter(_, sc) {
       plain(); build(sc); stop(); S.fresh = true; S.last = 0;
-      const rb = $(".cpl-replay", sc); if (!rb.dataset.on) { rb.dataset.on = 1; ["click", "mousedown", "pointerdown", "dblclick"].forEach((t) => rb.addEventListener(t, (e) => { e.stopPropagation(); if (t === "click") { e.preventDefault(); replay(sc); rb.blur(); } })); }
       pose(sc, 0);
       const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");   // reset at once, but let the words keep their delays
       raf2(() => pg.classList.add("drawn"));                                   // the header and hand line, once Why a campus's words have gone
@@ -3462,7 +3647,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       if (S.run) { S.last = k; return; }                                        // the run is moving the steps itself
       const still = reduced || (S.fresh ? k !== 1 : k !== S.last + 1);
       S.fresh = false; S.last = k;
-      if (still) { stop(); pose(sc, k); }
+      if (still) { stop(); pose(sc, k); loopOn(sc, k); }
       else if (k === 1 && AUTO) run(sc);
       else if (k === 1 || k === 2 || k === 3 || k === 4 || k === 6) play(sc, k);
       else { stop(); pose(sc, k, false); auto(sc, k); }                         // 5: the shared spaces come in on their own, then the loop
@@ -3562,6 +3747,9 @@ ACKO.slide("s-sec-2", ({ $, plain, reveal, later, reduced }) => ({
    building lines up with the plans. Drawn in the world's map layer (#vmap) */
 ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) => {
   const SV = { built: false, vb: [-760, -590, 1520, 1180], rot: 0, raf: 0 };
+  // 19 Nov (Ritika: the site boundary is the plot she outlined, south of where the building was drawn): the building, its plate and its
+  // label moved together into it, in the map's own (turned) frame; the shape and the turn are unchanged
+  const BX = -6, BY = 68, BS = 1.2;   // BS: the plate a little bigger (19 Nov), grown from its bottom edge
   function siteMap() {
     if (SV.built || !window.ACKO_SITE) return;
     const S = window.ACKO_SITE, svg = $("#vmap");
@@ -3577,10 +3765,9 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
       roads.map((r) => `<path class="vm-road c" d="${r.d}" style="stroke-width:${r.w + 2.4}"/>`).join("") +
       roads.map((r) => `<path class="vm-road" d="${r.d}" style="stroke-width:${r.w}"/>`).join("") + rail + hosur +
       `<g class="vm-bld">${S.buildings.map((d) => `<path d="${d}"/>`).join("")}</g>` +
-      `<path class="vm-foot" d="${S.footprint.d}"/>` +
       `${labels}${marks}` +
-      `<g class="vm-pin" data-t="translate(0 10)" transform="translate(0 10)"><text y="-62" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
-      `<path class="vm-plate" d="${S.onSite.plate}"/></g>`;
+      `<g class="vm-pin" data-t="translate(${BX} ${10 + BY})" transform="translate(${BX} ${10 + BY})"><text y="-50" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
+      `<path class="vm-plate" transform="translate(${BX} ${BY}) translate(-4.6 50) scale(${BS}) translate(4.6 -50)" d="${S.onSite.plate}"/></g>`;
     $("#map-credit").textContent = S.attribution || "© OpenStreetMap contributors, Overture Maps";
     $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"} walk</span></li>`).join("");
     SV.built = true;
@@ -4266,7 +4453,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // 5 and 6); the name stays put, and the line's first row lands GAP pt under it, however many rows it runs to (placeLine)
   const GAP = 12;
   const HAND = ["", "One long floor and two entrances: the ground the Loop is laid on.",
-    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.",
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "The neighbourhoods can be configured based on the occupancy of each and the proximity between neighbourhoods that you require.", "Every neighbourhood sits on the Loop, so the whole campus reads as one place to belong, not a collection of separate spaces.",
     "The client journey is envisioned as a seamless transition through ACKO’s neighbourhood, where each touchpoint unfolds a distinct experience while maintaining a continuous sense of connection, discovery, and belonging.",
     "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
   const NAMES = ["", "The Shell", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
@@ -4327,7 +4514,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     // away as the colour comes
     M.zones.forEach((v, i) => {
       let y = 0, f = 0;
-      if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
+      const ZN = { HOME: 0, DRIVE: 1, TRAVEL: 2, HEALTH: 3, LIFE: 4, AUTO: 5 }, zk = v.userData.zone && v.userData.zone.key, j = zk in ZN ? ZN[zk] : i;   // 01 to 06 as the numbers read on the floor (axo-layers.js NUM)
+      if (k === 2) { const e = win(t, 0.15 + 0.32 * j, 0.95 + 0.32 * j); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
       if (k === 4) f = 1 - 0.7 * win(t, 0, 1.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
       v.position.y = y; M.fade(v, f); if (v.userData.num) v.userData.num.visible = k !== 4;
@@ -4395,6 +4583,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     for (const z of S.zl) if (z.dept) z.d.classList.toggle("picked", z.dept === d);
   }
   function caption(txt) {
+    if (sc.dataset.merge && txt === NAMES[1]) return;   // Story 3: no caption for the shell beat
     const cap = $(".st-cap", sc), hand = $(".st-hand", sc), line = HAND[NAMES.indexOf(txt)] || hand.textContent;
     if (cap.dataset.t === txt) return;
     cap.classList.remove("on"); cap.dataset.t = txt;
@@ -4417,6 +4606,15 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     if (WAVE && k === 1 && !reduced) cue("swell");
     S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
     pose(k, reduced ? DUR[k] : 0); need();
+  }
+  // Story 3 (data-merge): beat 1 is the shell standing and then, straight on, the neighbourhoods (beat 2); the shell's own words are dropped
+  function mergeIn() {
+    S.noCap1 = true;
+    if (reduced) { S.k = 2; S.playing = false; pose(2, DUR[2]); need(); return; }
+    let wait;
+    if (S.tween) { S.k = 1; S.playing = false; pose(1, DUR[1]); need(); wait = S.tween.ms - (performance.now() - S.tween.t0) + 300; }   // rising from the site plan: the shell is already there
+    else { play(1); wait = DUR[1] * 1000 + 150; }
+    S.mt = setTimeout(() => { if (document.body.dataset.scene === "s-strategy" && S.k === 1) play(2); }, Math.max(0, wait));
   }
   function resample(P, n) {
     const ss = [0]; for (let i = 1; i < P.length; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
@@ -4711,7 +4909,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
     // the page's right edge hangs to the left
-    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-t .st-insp, .st-cap, .st-tools", sc).map((e) => {
       const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
       return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
     }).filter((b) => b[2] > b[0]);
@@ -4754,6 +4952,23 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   }
 
   // ---------- drawing on demand ----------
+  // the arrival from the site plan: the layout's boundary alone (a blue ribbon on the plate's edge, over a white veil), then it tilts and
+  // grows while the veil lifts and the axo fills in, the ribbon going last; the page's words wait until it lands
+  const ramp = (a, b, x) => Math.min(1, Math.max(0, (x - a) / (b - a)));
+  function ribbonBuild() {
+    if (S.ribbon || !window.ACKO_FLOOR || !window.ACKO_FLOOR.plate) return;
+    const P = window.ACKO_FLOOR.plate.map((q) => [((q[0] * 50 + 8842) - 185842 - M.CX) / 1000, ((q[1] * 50 + 12775) + 182802 - M.CY) / 1000]), W = 0.4, pos = [];
+    for (let i = 0; i < P.length; i++) {
+      const a = P[i], b = P[(i + 1) % P.length], dx = b[0] - a[0], dz = b[1] - a[1], L = Math.hypot(dx, dz) || 1, nx = -dz / L * W / 2, nz = dx / L * W / 2;
+      pos.push(a[0] + nx, 0.05, a[1] + nz, b[0] + nx, 0.05, b[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] + nx, 0.05, a[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] - nx, 0.05, a[1] - nz);
+    }
+    const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+    S.ribbon = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0x3fc1ea, transparent: true, depthTest: false, depthWrite: false, side: T.DoubleSide }));
+    S.ribbon.renderOrder = 10; S.ribbon.frustumCulled = false; S.ribbon.visible = false; M.scene.add(S.ribbon);
+  }
+  function riseStart() { ribbonBuild(); S.rise = true; S.dim = 1; if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = 1; } sc.classList.remove("st-land"); sc.classList.add("st-rise"); }
+  function riseStep(k) { S.dim = 1 - ramp(0.3, 0.85, k); if (S.ribbon) S.ribbon.material.opacity = 1 - ramp(0.6, 0.95, k); if (k >= 1) riseEnd(true); }
+  function riseEnd(landed) { S.rise = false; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; sc.classList.remove("st-rise"); if (landed) sc.classList.add("st-land"); }
   function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
   function draw(now) {
     S.raf = 0;
@@ -4772,6 +4987,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     if (S.tween) {
       const tw = S.tween, k = Math.min(1, (now - tw.t0) / tw.ms), e = ease(k), L = (a, b) => a + (b - a) * e;
       S.state = { theta: L(tw.from.theta, tw.to.theta), phi: L(tw.from.phi, tw.to.phi), half: L(tw.from.half, tw.to.half), t: tw.from.t.map((x, i) => L(x, tw.to.t[i])) };
+      if (S.rise) riseStep(k);
       if (k >= 1) S.tween = null;
     }
     window.AxoModel.apply(cam, S.state, asp);
@@ -4873,7 +5089,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const c = document.createElement("canvas"); c.width = r.domElement.width; c.height = r.domElement.height; c.getContext("2d").drawImage(r.domElement, 0, 0);
     return c;
   }
-  function flatten(vb, ms, done) {
+  function flatten(vb, ms, done, opts) {
     if (!M || !r || !cam) return false;
     const stage = document.getElementById("stage"); if (!stage) return false;
     const h = document.createElement("div"); h.className = "st-flat-host";
@@ -4882,19 +5098,25 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const cv = r.domElement; h.appendChild(cv); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block";
     sc.classList.add("st-flat");
     cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; S.tween = null;
+    S.flatOn = true; clearTimeout(S.skOff);              // the hand-drawn neighbourhoods stay on the axo until it has washed out to the boundary
     const from = { theta: S.state.theta, phi: S.state.phi, half: S.state.half, t: S.state.t.slice() }, d0 = S.dim || 0;
     const to = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
     const paint = (e) => {
       const L = (a, b) => a + (b - a) * e;
       S.state = { theta: L(from.theta, to.theta), phi: L(from.phi, to.phi), half: L(from.half, to.half), t: from.t.map((x, i) => L(x, to.t[i])) };
-      S.dim = d0 * (1 - e);                            // the veil lifts: the furniture at full strength, as the plan's
+      if (opts && opts.boundary) {                     // Story 3: the axo washes out to white, leaving the layout's boundary alone as it lies flat
+        S.dim = ramp(0.3, 0.75, e); ribbonBuild();
+        S.veil.renderOrder = 11; if (S.ribbon) S.ribbon.renderOrder = 13;   // the boundary stands alone above the wash
+        [S.base.zones, S.base.sketch && S.base.sketch.zones].forEach((zs) => (zs || []).forEach((v) => { if (v.userData.num) v.userData.num.visible = e < 0.3; }));   // the neighbourhood numbers go as the wash begins
+        if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = ramp(0.15, 0.5, e); }
+      } else S.dim = d0 * (1 - e);                     // the veil lifts: the furniture at full strength, as the plan's
       window.AxoModel.apply(cam, S.state, asp);
       S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
       if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
       r.render(M.scene, cam);
     };
     let t0 = 0, end = false;
-    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); if (done) done(h); };
+    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); S.flatOn = false; if (S.base) S.base.useSketch(false); if (done) done(h); };   // the swap to the exact zones is unseen: the axo is washed out
     const tick = (now) => { if (end) return; if (!t0) t0 = now; const k = Math.min(1, (now - t0) / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
     paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 500);
     return true;
@@ -4904,28 +5126,35 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     enter(_, s) {
       sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
       S.fresh = true; S.k = 0;
+      window.ACKO_STRAT_ON = 1; S.dim = 0; if (S.base && S.base.zones) S.base.zones.forEach((v) => { if (v.userData.num) v.userData.num.visible = true; }); if (S.veil) S.veil.renderOrder = 8; if (S.ribbon) { S.ribbon.visible = false; S.ribbon.renderOrder = 10; }   // the Spaces slide may take the axo from here; a flattened veil and ribbon start clean
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
-      S.base.useSketch(true);
+      clearTimeout(S.skOff); S.flatOn = false; S.base.useSketch(true);
       // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
+      const site = !reduced && !!window.ACKO_SITE_AXO; window.ACKO_SITE_AXO = 0;   // from the site plan: the same rise
       const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-challenges", 2500) : null;
       const im = $(".st-from", sc); im.style.transition = "none"; im.style.opacity = fc ? 1 : 0; S.fromCh = !!fc;
       if (fc) later(() => { im.style.transition = "opacity 1.3s var(--ease)"; im.style.opacity = 0; }, 500);
       const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;
-      if (fl && plan && plan.data) {
+      if ((fl || site) && plan && plan.data) {
         const [x, y, w, h] = plan.data.viewBox, vb = plan.vbFor([x, y, x + w, y + h], [35, 157, 1885, 670]);
         const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
-        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
+        const ms = site ? (window.ACKO_RISE_MS || 2600) : 2400;
+        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms }; need();
+        if (site) { riseStart(); }
       }
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
-      S.fresh = false;
+      S.fresh = false; clearTimeout(S.mt);
+      if (sc.dataset.merge) { if (k === 1) mergeIn(); else play(k + 1); return; }   // Story 3: the Shell and the neighbourhoods are one beat
       play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.rb) S.rb.show(false); S.skOff = setTimeout(() => { if (S.base && !S.flatOn) S.base.useSketch(false); }, 300);   // Layout · Spaces flattens the floor from here (9 Nov)
+      clearTimeout(S.mt); setTimeout(() => { window.ACKO_STRAT_ON = 0; }, 1800);
+      if (S.rise) riseEnd(false);
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },
@@ -4950,6 +5179,11 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
   const V3S = { on: false, mo: null, z: false, man: null };
   const home = () => { const [x, y, w, h] = plan.data.viewBox; return plan.vbFor([x, y, x + w, y + h], box()); };
   if (plan.warm) plan.warm(() => home());          // 19 Nov: the plan and its picture at this view are made at idle, so opening the slide shows it at once
+  // 22 Nov: after every landing the pictures of the next zoom-in and zoom-out views are made at idle (on the CPU, in the worker: no frame is held),
+  // so the next step lands on a picture that is already sharp instead of a scaled-up one for the ~1 s it takes to make
+  { let wz = 0; const wp0 = document.getElementById("world-plan");
+    const warmZoom = () => { if (!plan.warm || document.body.dataset.scene !== "s-layout-sp") return; [0.7, 1 / 0.7].forEach((f) => plan.warm(() => { const v = plan.view; return v && zoomTarget(f, v); })); };
+    if (wp0) wp0.addEventListener("ph:commit", () => { clearTimeout(wz); wz = setTimeout(warmZoom, 300); }); }
   const rings = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
   // ---- the panels, filled once from the data ----
   function build(sc) {
@@ -4971,7 +5205,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       // the type next to its plan"): the renders from Workstation typologies, the 13-seat type's made from the model (tools/acko/render_ws_type.js)
       const ORD = ["T4", "T1", "T3", "T2"], R3 = { T1: "ty-type1", T2: "ty-type2", T3: "ty-type3", T4: "ty-type4" };
       $(".types", sc).innerHTML = ORD.map((k) => T.find((t) => t.t === k)).filter(Boolean).map((t, i) => `<div class="chip" data-t="${t.t}"><div class="ty-vis">${SVG[t.t] || ""}` +
-        `<span class="ty-3w"><img src="${asset("assets/img/" + R3[t.t] + ".webp")}" alt=""></span></div><b>Type ${i + 1}</b><div class="n">${t.seats}<small>seats</small></div></div>`).join("");
+        `<span class="ty-3w"><img src="${asset("assets/img/" + R3[t.t] + ".webp")}" alt=""></span></div><b>Type ${i + 1}</b><div class="n">${[516, 74, 48, 13][i] || t.seats}<small>seats</small></div></div>`).join("");   // 22 Nov, Ritika: Type 2 is 74 (516 + 74 + 48 + 13 = 651)
     } else
     $(".types", sc).innerHTML = T.map((t) => `<div class="chip" data-t="${t.t}">${SVG[t.t] || `<img src="${asset("assets/img/" + (ICON[t.t] || "ty-icon1") + ".webp")}" alt="">`}<b>${t.name}</b>` +
       `<div class="n">${t.seats}<small>seats</small></div></div>`).join("");
@@ -5166,15 +5400,19 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const root = plan.root; if (!root) return;
     V3S.on = true; root.classList.add("sp3");
     root.querySelectorAll("svg.dx-fill path").forEach((p) => { const c0 = p.dataset.c0 || p.style.fill; if (!c0) return; p.dataset.c0 = c0; p.style.fill = grey(c0); });
-    const nic = root.querySelector("svg.dx-nic");                 // "put the not in contract boundary in dark grey and have cross hatch"
-    if (nic && !nic.querySelector("#sp3-nic")) nic.insertAdjacentHTML("afterbegin", `<defs><pattern id="sp3-nic" patternUnits="userSpaceOnUse" width="1500" height="1500">` +
-      `<rect width="1500" height="1500" fill="#8a8a8a"/><path d="M0 0L1500 1500M1500 0L0 1500" style="fill:none;stroke:#555;stroke-width:150"/></pattern></defs>`);   // inline: app.css strips .dx-nic paths' strokes; multiplied over the plan (19 Nov)
+    // 22 Nov, Ritika: "match the layout walls": the grey is held back a few px from its edge (a mask: the shape in white, its outline in black), so
+    // the drawing's own lines along the contract boundary show as they are drawn, instead of an outline of ours
+    const nic = root.querySelector("svg.dx-nic");
+    if (nic && !nic.querySelector("#sp3-nicm")) { const ps = [...nic.querySelectorAll("path")], ds = ps.map((p) => p.getAttribute("d"));
+      const bb = nic.getBBox(), pad = 3000;      // a mask the size of the shapes (a huge one is rendered coarsely)
+      nic.insertAdjacentHTML("afterbegin", `<defs><mask id="sp3-nicm" maskUnits="userSpaceOnUse" x="${bb.x - pad}" y="${bb.y - pad}" width="${bb.width + 2 * pad}" height="${bb.height + 2 * pad}">` +
+        ds.map((d) => `<path d="${d}" fill="#fff" stroke="none"/>`).join("") + ds.map((d) => `<path d="${d}" fill="none" stroke="#000" stroke-width="7" style="vector-effect:non-scaling-stroke"/>`).join("") + `</mask></defs>`);
+      ps.forEach((p) => p.setAttribute("mask", "url(#sp3-nicm)")); }
     root.querySelectorAll(".dx-nb path").forEach((p) => { const c0 = p.dataset.c0 || p.style.getPropertyValue("--c"); if (!c0) return; p.dataset.c0 = c0; p.style.setProperty("--c", deep(c0)); });   // the outlines, legible
     const nbf = root.querySelector("svg.dx-nbfill");                // the common spaces, tinted beside the neighbourhoods' own tints (the furniture cuts show through as they do there)
     if (nbf && !nbf.querySelector(".sp3-common")) nbf.insertAdjacentHTML("beforeend", `<g class="sp3-common">` + plan.data.spaces.filter((s) => COMMON.test(s.type))
       .map((s) => `<path class="f" d="${s.d}"/><path class="e" d="${outer(s.d)}"/>`).join("") + `</g>`);
     const mk = root.querySelector("svg.dx-marks"), E = (plan.data.overlays && plan.data.overlays.entry) || [];   // "mark arrival near the arrow"
-    if (mk && !mk.querySelector(".sp3-arr")) mk.insertAdjacentHTML("beforeend", `<g class="sp3-arr">${E.map(() => `<text>Arrival</text>`).join("")}</g>`);
     arrLay(root, plan.view); V3S.ac = (e) => arrLay(root, e.detail); root.addEventListener("ph:commit", V3S.ac);     // the label keeps its size on screen as the layers redraw
     V3S.z = false; V3S.man = null; fold(sc);
     V3S.mo = () => fold(sc); root.addEventListener("ph:view", V3S.mo);     // every zoom step (the plan's own event; the layers redraw only once it rests)
@@ -5361,7 +5599,13 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const mode = L.measure.set(m, (t) => { $(".lt-read", sc).textContent = t; });
     $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.toggle("on", b.dataset.t === mode));
   }
-  function zoomBy(f) { const v = plan.view; if (!v) return; f = Math.min(f, home()[2] / v[2]); if (Math.abs(f - 1) < 1e-3) return; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; plan.fitVb([cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f], 300); }
+  // the view a zoom step of f leads to from v (null at the limit); the zoom buttons fly there on the base picture (450 ms), and the next steps'
+  // pictures are made ahead at idle (plan.warm), so a step lands without a stall
+  const zoomTarget = (f, v) => { const hm = home(); if (f * v[2] >= hm[2] - 1e-3) return Math.abs(v[2] - hm[2]) < 1e-3 && Math.abs(v[0] - hm[0]) < 1 ? null : hm.slice(); f = Math.min(f, hm[2] / v[2]); if (Math.abs(f - 1) < 1e-3) return null; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; return [cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f]; };
+  function zoomBy(f) {
+    const v = plan.view; if (!v) return; const nv = zoomTarget(f, v); if (!nv) return;
+    plan.fitVb(nv, 450, { settle: 150 });      // the sharp picture is made on the CPU in ~150 ms now, so it can follow the landing closely (was 1500 ms: the plan stayed blurry that long)
+  }
   // ---- the people (9 Nov, the re-ordered deck only: window.ACKO_WOW): 640 of the plan's 646 desks (L.seats, the chairs in the drawing)
   // filled by people who come in at the two entrances (PLAN_DXF.overlays.entry) and walk the employees' route (ACKO_LOOP's graph: the
   // shortest way from the nearer entrance to the route point nearest their desk), then step to it; each in their neighbourhood's
@@ -5384,7 +5628,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const E = (D.overlays && D.overlays.entry) || LP.entries, EN = E.map((e) => near(e)), T = EN.map(dij);
     const zones = D.zones.map((z) => ({ n: z.n, R: rings(z.zone) }));
     const inP = (q, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > q[1]) !== (yj > q[1]) && q[0] < ((xj - xi) * (q[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
-    const seats = L.seats.filter((_, i) => i % 108 !== 107).slice(0, 640);          // 640 people, 646 desks: 6 left free
+    const seats = L.seats.filter((_, i) => i % 108 !== 107).slice(0, 640);          // 640 of the 646 desks drawn (the animation, not the count): 6 left free
     const P = seats.map((q, i) => {
       const z = zones.find((z) => z.R.some((r) => inP(q, r))), sn = near(q);
       const e = T[0].dist[sn] <= T[1].dist[sn] ? 0 : 1, way = []; for (let u = sn; u >= 0; u = T[e].prev[u]) way.push(N[u]);
@@ -5647,19 +5891,27 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       // still: done at once, they froze the zoom's start (3 Nov: "not smooth")
       arriving = document.body.classList.contains("si-left"); pend = 0; PPL.on = false; sc.classList.remove("ppl-on");
       const ax = !arriving && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? (ACKO_MORPH.take("s-strategy") || ACKO_MORPH.take("s-walk")) : null;
-      const st = ax && document.getElementById(ax.id);          // the strategy's axo, or the walk's view from above
+      const fromStrat = !ax && !arriving && window.ACKO_STRAT_ON && !matchMedia("(prefers-reduced-motion: reduce)").matches; window.ACKO_STRAT_ON = 0;   // Story 3: no ACKO_MORPH, the axo leaves as its boundary
+      const st = ax ? document.getElementById(ax.id) : fromStrat ? document.getElementById("s-strategy") : null;          // the strategy's axo, or the walk's view from above
       if (st && st._flatten) {                          // from the Employees Journey: the model turns down onto the plan, then the plan
         arriving = true; document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
-        const ok = st._flatten(home(), 1700, (h) => {
+        const flatMs = fromStrat ? (window.ACKO_FLAT_MS || 2200) : 1700, wp = document.getElementById("world-plan");
+        let built = false;                                                   // Story 3: the plan is built in the background while the boundary travels, then fades in whole
+        if (fromStrat && wp) { wp.style.transition = "none"; wp.style.opacity = "0"; later(() => { const warm = () => { if (!built && document.body.dataset.scene === sc.id) { built = true; build(sc); } }; if (window.requestIdleCallback) requestIdleCallback(warm, { timeout: 500 }); else warm(); }, flatMs * 0.45); }
+        const ok = st._flatten(home(), flatMs, (h) => {
           if (document.body.dataset.scene !== sc.id) { h.remove(); return; }
-          arriving = false; build(sc); self.step(pend || 1, sc);          // planOn: the 2D plan fades in under the model
+          arriving = false; if (!built) { built = true; build(sc); } self.step(pend || 1, sc);          // planOn: the 2D plan fades in under the model
+          if (fromStrat && wp) {
+            requestAnimationFrame(() => requestAnimationFrame(() => { wp.style.transition = "opacity 1.2s ease"; wp.style.opacity = "1"; }));
+            later(() => { wp.style.transition = ""; wp.style.opacity = ""; try { plan.planReset(); } catch (e) { /* the plan keeps its view */ } }, 1500);
+          }
           sc._h3 = h; h.style.transition = "opacity 1.1s ease-in-out";
           later(() => { h.style.opacity = "0"; }, 300);                   // the model fades off the plan it now lies on
           later(() => { h.remove(); sc._h3 = null; }, 1600);
           later(() => sc.classList.remove("ly-arrive"), 1100);
           later(() => document.body.classList.remove("ly-arrive"), 1800);
-        });
-        if (!ok) { arriving = false; document.body.classList.remove("ly-arrive"); sc.classList.remove("ly-arrive"); build(sc); }
+        }, fromStrat ? { boundary: true } : undefined);
+        if (!ok) { arriving = false; document.body.classList.remove("ly-arrive"); sc.classList.remove("ly-arrive"); if (wp) { wp.style.transition = ""; wp.style.opacity = ""; } if (!built) build(sc); }
       } else if (arriving) {
         document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
         const site = document.getElementById("s-site"); if (site && site._into) site._into();
@@ -5670,13 +5922,22 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       } else build(sc);
       $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 3, 4, 5, 6].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
+      // 22 Nov, Ritika: the laser cursor by default over the layout (the canvas between the header band and the foot band, not over the tools, pills, panels
+      // or north point); L still toggles it by hand. As on the due-diligence slide.
+      if (!sc._laser) { const cur = document.getElementById("cur"); let auto = false;
+        sc._laser = (e) => { const top = sc.querySelector(".ly-top").getBoundingClientRect().bottom, bot = sc.querySelector(".ly-bot").getBoundingClientRect().top;
+          const inBox = (q) => { const r = sc.querySelector(q); if (!r) return false; const b = r.getBoundingClientRect(); return e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom; };
+          const on = !!(e.target.closest && !e.target.closest(".ui, .ly-tools, .ly-pills, .ly-north, .sp3-fold, .ly-fo, button") && !inBox(".ly-tools") && !inBox(".ly-north") && e.clientY > top && e.clientY < bot);
+          if (on && !cur.classList.contains("laser")) { cur.classList.add("laser"); auto = true; } else if (!on && auto) { cur.classList.remove("laser"); auto = false; } };
+        sc._laserOff = () => { if (auto) cur.classList.remove("laser"); auto = false; }; }
+      document.removeEventListener("mousemove", sc._laser, true); document.addEventListener("mousemove", sc._laser, true);
       $$("button", tools).forEach((b) => (b.onclick = () => {
         const t = b.dataset.t; b.blur();
         if (t === "dist" || t === "area") measure(sc, t);
         else if (t === "in") zoomBy(0.7); else if (t === "out") zoomBy(1 / 0.7);
         else if (t === "reset") plan.planReset();
         else if (t === "hover") b.classList.toggle("on", plan.planHover());
-        else if (t === "eg") { egOn = !egOn; b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
+        else if (t === "eg") { egOn = !egOn; sc.classList.toggle("eg-on", egOn); b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
         else if (t === "occ") occ(sc, !$(".ly-fo", sc).classList.contains("on"));
       }));
       $('[data-t="hover"]', tools).classList.toggle("on", plan.hoverOn);
@@ -5707,7 +5968,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       const layer = k === 1 ? "spaces" : k === 2 ? "nb" : k <= 5 ? "bio" : k === 6 ? "ac" : "dd", panel = String(k <= 2 ? k : k <= 5 ? 3 : k);
       plan.planOn(sc, { rooms: true, fill: k <= 2, entry: true, view: home(), ms: was ? 700 : 0 });
       // the egress follows its button alone, off to begin with (30 Oct), on every beat
-      if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
+      sc.classList.toggle("eg-on", egOn); if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
       $(".bio-p", sc).classList.toggle("eg", egOn);
       plan.planNb(k === 2); plan.planEgress(egOn);
       if (k === 2) nbPick(sc, "homo");                   // nb cards: Homogeneity picked whenever the beat opens
@@ -5744,6 +6005,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     leave(_, sc) {
       SH = null; if (sc) sc.classList.remove("nb-open");
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
+      if (sc && sc._laser) { document.removeEventListener("mousemove", sc._laser, true); sc._laserOff(); }
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
       if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
@@ -5775,20 +6037,24 @@ ACKO.slide("s-sec-4", ({ $, plain, reveal, later, reduced }) => ({
 <script data-slide="s-wf-a6">
 ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   // the six accents (ACKO's logo colours: violet, green, yellow; deep and light), one per neighbourhood; indicative
+  // the ACKO logo's colours, deep and light (violet, green, yellow): the six read apart at a glance; the wall paint is eased toward the paper below
   const NB = [["01", "#5222d0", "Violet"], ["02", "#a98bf2", "Violet, light"], ["03", "#0fa458", "Green"], ["04", "#8fd8ae", "Green, light"],
     ["05", "#f2ae00", "Yellow"], ["06", "#ffd866", "Yellow, light"]];
   const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)), toh = (c) => "#" + c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
   const mix = (a, b, t) => toh(hx(a).map((v, i) => v + (hx(b)[i] - v) * t));
+  // 19 Nov (Ritika: "two tones lighter"): the surfaces use the accent lifted toward white; the chips keep the logo colours
+  const lift = (c) => mix(c, "#ffffff", 0.32);
   // each layer's tone from the accent
   const LAYERS = [
-    ["paint", "Paint accent", "the neighbourhood's own wall", (c) => c],
+    ["paint", "Paint accent", "the neighbourhood's own wall", (c) => mix(c, "#fbf8f1", 0.06)],
     ["graphic", "Wall graphics", "its number, large, at the way in", (c) => c],
-    ["carpet", "Carpet", "underfoot, a deeper, quieter tone", (c) => mix(c, "#4a4652", 0.55)],
+    ["carpet", "Carpet", "grey underfoot, the accent worked into it", (c) => c],
     ["privacy", "Privacy panels", "the film on the glass, a light tint", (c) => mix(c, "#ffffff", 0.68)],
     ["art", "Artwork", "a piece chosen for the neighbourhood", (c) => mix(c, "#ffffff", 0.2)],
     ["tone", "Artwork tonality", "light to deep, in its colour", (c) => `linear-gradient(90deg, ${mix(c, "#ffffff", 0.55)}, ${mix(c, "#1d1733", 0.35)})`],
     ["acoustic", "Meeting-room acoustics", "the panels inside its rooms", (c) => mix(c, "#ffffff", 0.35)],
-    ["coffee", "Collab / coffee point", "the counter, a warmer tone", (c) => mix(c, "#c8a27a", 0.45)]];
+    ["collab", "Collab area", "the soft seating, in its own tone", (c) => mix(c, "#ffffff", 0.18)],
+    ["ws", "Privacy panel", "the desk screens, in its own tone", (c) => mix(c, "#ffffff", 0.12)]];
   const GENERAL = [["Signage", "one family across the floor: rooms named for a Modern Indian Institution (Nalanda, Sabha, Takshashila)"],
     ["Inclusivity", "braille and tactile signs, high contrast, at reach height"]];
   const tones = (c) => Object.fromEntries(LAYERS.map(([k, , , f]) => [k, f(c)]));
@@ -5806,10 +6072,25 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   const WORD = ["Violet", "Light violet", "Green", "Light green", "Yellow", "Light yellow"];
   // the stops: where he stands (x on the carpet), which way he faces, his pose, the question, the answer, which labels ink in
   const STOPS = [
-    { x: 530, face: -1, side: 1, q: "Where's my team?", a: (w, n) => `${w}, ${n}. That's us!`, labs: [0, 1], lit: ["paint"] },
-    { x: 805, face: -1, side: 1, q: "Still us?", a: (w) => `Our art, our ${w.toLowerCase()} floor.`, labs: [2, 3, 9], lit: ["t1", "t2", "carpet"] },
-    { x: 1150, face: 1, side: 1, pose: "reach", q: "Which room is my 3 pm?", a: () => "Nalanda. Found it by touch.", labs: [4, 5, 6, 7], lit: ["privacy", "dot", "acoustic"] },
-    { x: 1325, face: 1, side: 1, pose: "hold", q: "Coffee?", a: () => "Ours, right here.", labs: [8], lit: ["coffee"] }];
+    { x: 450, face: -1, side: 1, q: "Where's my team?", a: (w, n) => `${w}, ${n}. That's us!`, labs: [0, 1], lit: ["paint"] },
+    { x: 675, face: -1, side: 1, q: "Still us?", a: (w) => `Our art, our ${w.toLowerCase()} floor.`, labs: [2, 3, 8], lit: ["t1", "t2", "carpet"] },
+    { x: 1062, face: -1, side: 1, pose: "reach", q: "Which room is my 3 pm?", a: () => "Nalanda. Found it by touch.", labs: [4, 5, 6], lit: ["privacy", "dot", "acoustic"] },
+    { x: 1160, face: 1, side: 1, pose: "sit", q: "And my desk?", a: () => "Our desk, our privacy panel.", labs: [9], lit: ["ws"] },
+    { x: 1366, face: 1, side: 1, pose: "hold", q: "Where can we huddle?", a: () => "Collab area, right here.", labs: [7], lit: ["collab"] }];
+  // the rings, drawn here: centre and radii of what each stop circles, a hand-drawn loop that overshoots its start
+  const RINGS = [[235, 305, 172, 126], [555, 235, 128, 104], [997, 247, 78, 60], [1280, 395, 96, 92], [1500, 420, 90, 90]];
+  const ringD = (cx, cy, rx, ry, k) => {
+    const pts = [], n = 60, a0 = -2.3 + k * 0.9, sweep = Math.PI * 2.1;
+    for (let i = 0; i <= n; i++) {
+      const a = a0 + (sweep * i) / n, f = 1 + 0.028 * Math.sin(3 * a + k) + 0.02 * Math.sin(5 * a + 2 * k) + 0.03 * (i / n);
+      pts.push((i ? "L" : "M") + (cx + rx * f * Math.cos(a)).toFixed(1) + " " + (cy + ry * f * Math.sin(a)).toFixed(1));
+    }
+    return pts.join("");
+  };
+  document.querySelectorAll("#s-wf-a6 .ring").forEach((g, k) => g.querySelectorAll("path").forEach((pa) => pa.setAttribute("d", ringD(RINGS[k][0], RINGS[k][1], RINGS[k][2], RINGS[k][3], k))));
+  // the framed artwork per neighbourhood: pieces that hang in the project's own renders (tapestry, carved panel, painting, living wall, rug, planting); paths written out so the single file embeds them
+  const ART = ["assets/img/s-wf-a6/art-1.webp", "assets/img/s-wf-a6/art-2.webp", "assets/img/s-wf-a6/art-3.webp", "assets/img/s-wf-a6/art-4.webp", "assets/img/s-wf-a6/art-5.webp", "assets/img/s-wf-a6/art-6.webp"]
+    .map((p) => (window.ASSET_URLS && window.ASSET_URLS[p]) || p);
   const SPEED = 230, START = -70;
   let T = [], cur = -1, nb = 2, X = START;
   const at = (fn, ms) => T.push(setTimeout(fn, ms)), stop = () => { T.forEach(clearTimeout); T = []; };
@@ -5819,14 +6100,15 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
     if (keys) lit = keys;
     const el = $(".wf-el", sc);
     Object.entries(TONE).forEach(([k, c]) => el.style.setProperty("--" + k, lit === "all" || lit.includes(k) ? c : grey(c)));
+    el.style.setProperty("--artg", lit === "all" || lit.includes("t1") ? 0 : 1);
   }
   function paint(sc, i) {
     nb = i;
-    const [n, c, name] = NB[i], t = tones(c), el = $(".wf-el", sc);
-    TONE = { paint: t.paint, carpet: t.carpet, privacy: t.privacy, acoustic: t.acoustic, coffee: t.coffee, dot: t.paint,
+    const [n, c0, name] = NB[i], c = lift(c0), t = tones(c), el = $(".wf-el", sc);
+    TONE = { paint: t.paint, carpet: t.carpet, privacy: t.privacy, acoustic: t.acoustic, collab: t.collab, ws: t.ws, dot: t.paint,
       t1: mix(c, "#ffffff", 0.55), t2: mix(c, "#1d1733", 0.35) };
-    light(sc);
-    el.style.setProperty("--mark", mix(c, "#1d1733", [1, 3, 5].includes(i) ? 0.5 : 0.12));
+    light(sc); $(".m-img", sc).setAttribute("href", ART[i]);
+    el.style.setProperty("--mark", mix(c0, "#1d1733", [1, 3, 5].includes(i) ? 0.5 : 0.12));
     $$(".graphic", sc).forEach((g) => (g.textContent = n)); $(".wf-name", sc).textContent = `Neighbourhood ${n} · ${name}`;
     if (cur >= 0) bubble(sc, cur, $(".bub", sc).classList.contains("ok"));
   }
@@ -5838,7 +6120,7 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
     const h = 124, top = 58, left = Math.max(16, Math.min(1584 - w, s.side > 0 ? s.x + 18 : s.x - 18 - w));
     $(".bb", b).setAttribute("width", w); $(".bb", b).setAttribute("x", 0); b.setAttribute("transform", `translate(${left} ${top})`);
     // three little circles rising from his head to the bubble
-    const hx = s.x + s.side * 14 - left, hy = 212 - top, ex = Math.max(40, Math.min(w - 40, s.x + s.side * 40 - left)), ey = h + 6;
+    const hx = s.x + s.side * 14 - left, hy = 212 - top + (s.pose === "sit" ? 50 : 0), ex = Math.max(40, Math.min(w - 40, s.x + s.side * 40 - left)), ey = h + 6;
     $$(".tail circle", b).forEach((c, j) => { const f = (j + 1) / 3.4; c.setAttribute("cx", hx + (ex - hx) * f); c.setAttribute("cy", hy + (ey - hy) * f); });
     b.classList.toggle("ok", !!ok);
   }
@@ -5852,7 +6134,7 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
     const el = $(".wf-el", sc), who = $(".who", sc);
     el.classList.add("walk"); $$(".seen", el).forEach((e) => e.classList.remove("seen")); $$(".ring", el).forEach((r) => r.classList.remove("on", "done"));
     $(".bub", sc).classList.remove("on", "ok"); $(".wf-close", sc).classList.remove("on");
-    who.classList.remove("walking", "left", "reach", "hold", "wonder"); who.style.opacity = 1; place(sc, START, 0);
+    who.classList.remove("walking", "left", "reach", "hold", "sit", "wonder"); who.style.opacity = 1; place(sc, START, 0);
   }
   function found(sc, k, settled) {
     const labs = $$(".lab text", sc), leads = $$(".lead path", sc), r = $(`.ring[data-s="${k}"]`, sc);
@@ -5889,6 +6171,8 @@ ACKO.slide("s-wf-a6", ({ $, $$, plain, reveal, later, reduced }) => {
   return {
     enter(_, sc) {
       plain(); chips(sc, paint); pick(sc, 2, paint); reset(sc);
+      // Sketch | Material: how the walls are drawn
+      $$(".wf-look button", sc).forEach((b) => (b.onclick = (e) => { e.stopPropagation(); b.blur(); $$(".wf-look button", sc).forEach((o) => o.classList.toggle("on", o === b)); $(".wf-el", sc).dataset.look = b.dataset.look; }));
       // the small replay plays the stop on screen again, from the one before
       const again = $(".wf-again", sc);
       again.onclick = (e) => { e.stopPropagation(); again.blur(); if (reduced || !shown) return; const k = shown; if (k > 1) jump(sc, k - 1); else reset(sc); walkTo(sc, k); };
@@ -5928,8 +6212,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     { t: "11:00", n: "Meeting Rooms", s: "A team review in the departmental room", q: "My impact", at: [36745, 24148], half: 11, sp: "Departmental room", spot: 2 },
     { t: "12:00", n: "Collab", s: "In the Acker Garden: the swing, a punch bag and foosball", q: "Wow, worth the commute", at: [18279, 18618], half: 6.5, theta: 1.68, sp: "Collab", spot: 4 },
     { t: "13:00", n: "Café", s: "Lunch together in the café", q: "Hey, we finally meet!", at: [67562, 40539], half: 15, sp: "Cafeteria", spot: 5 },
-    { t: "15:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
-    { t: "17:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: 6 },
+    { t: "15:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: 6 },
+    { t: "17:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
   ];
   // the Acker Garden's foosball (a prop, not a person): plan mm, angle in centiradians, the deck's height in mm
   const FOOSBALL = [19539, 17138, -157, 130];
@@ -5981,7 +6265,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     };
     const chaikin = (Q, it) => { for (let k = 0; k < it; k++) { const O = [Q[0]]; for (let i = 0; i + 1 < Q.length; i++) { const a = Q[i], b = Q[i + 1]; O.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } O.push(Q[Q.length - 1]); Q = O; } return Q; };
     const dense = (Q) => { const o = [Q[0]]; for (let i = 1; i < Q.length; i++) { const a = Q[i - 1], b = Q[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.25)); for (let k = 1; k <= n; k++) o.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); } return o; };
-    const VIA = { 5: [[84216, 43565], [85500, 31500]], 6: [[85500, 31500]] };          // by the beat he is walking to: the terrace and Reception (plan mm)
+    const VIA = { 6: [[85500, 31500]] };                                                  // by the beat he is walking to: Reception, on the way from the terrace to the Board Room (plan mm)
     const clear = (A, B) => { const n = Math.max(2, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1000)); for (let k = 0; k <= n; k++) if (!inRing([A[0] + (B[0] - A[0]) * k / n, A[1] + (B[1] - A[1]) * k / n], M.slab)) return false; return true; };
     const seg = (A, B) => {                                                              // points (m) from plan spot A to plan spot B, both ends included
       const prev = [M.X(A[0]), M.Z(A[1])], here = [M.X(B[0]), M.Z(B[1])];
@@ -5995,8 +6279,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     P = []; legEnd = [0];
     BEATS.forEach((b, i) => {
       const here = [b.p.x, b.p.z]; if (i === 0) { P.push(here); return; }
-      // via points (Ritika, 19 Nov): from the Café to the Board Room he goes out by the terrace and in through Reception, and from the Board Room
-      // to the terrace back through Reception; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
+      // via points (Ritika, 19 Nov): from the Café he goes out to the terrace (Wellness), and from there in through Reception to the Board Room; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
       const stops = [BEATS[i - 1].at].concat(VIA[i] || [], [b.at]);
       let pts = [[M.X(stops[0][0]), M.Z(stops[0][1])]];
       for (let k = 1; k < stops.length; k++) pts.push(...seg(stops[k - 1], stops[k]).slice(1));
@@ -6080,9 +6363,25 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     requestAnimationFrame(() => requestAnimationFrame(() => { c.style.opacity = 0; }));
     setTimeout(() => { if (c.parentNode) c.parentNode.removeChild(c); }, 2000);
   }
+  // the clock: the time counts on from the last stop to this one (a minute at a time, easing out) and a fill runs along the day's line with it
+  const mins = (t) => +t.slice(0, 2) * 60 + +t.slice(3);
+  const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(Math.round(m % 60)).padStart(2, "0");
+  let clk = 0;
+  function clockTo(el, t, i) {
+    cancelAnimationFrame(clk);
+    const day = $(".wd-day", sc); let ph = $(".wd-ph", day); if (!ph) { ph = document.createElement("i"); ph.className = "wd-ph"; day.appendChild(ph); }
+    const pct = (i / BEATS.length) * 100;
+    if (reduced || S.clockT === undefined) { el.textContent = t; ph.style.transition = "none"; ph.style.width = pct + "%"; S.clockT = mins(t); return; }
+    const from = S.clockT, to = mins(t), t0 = performance.now(), dur = 1300;
+    ph.style.transition = "width " + dur + "ms cubic-bezier(.2,.7,.2,1)"; ph.style.width = pct + "%";
+    const step = (now) => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = hhmm(from + (to - from) * e); if (k < 1) clk = requestAnimationFrame(step); else S.clockT = to; };
+    clk = requestAnimationFrame(step);
+  }
   function setNow(i) {
     const b = BEATS[i], now = $(".wd-now", sc);
-    $(".t", now).textContent = b.t; $("b", now).textContent = b.n; $("span", now).textContent = b.s; $("q", now).textContent = b.q;
+    $("b", now).textContent = b.n; $("span", now).textContent = b.s; $("q", now).textContent = b.q;
+    clockTo($(".t", now), b.t, i);
+    now.classList.remove("wd-sw"); void now.offsetWidth; now.classList.add("wd-sw");
     $$(".wd-day button", sc).forEach((el, k) => { el.classList.toggle("on", k === i); el.classList.toggle("done", k < i); });
     if (MODEL.focus) { if (b.ring === undefined) b.ring = spaceOf(b); MODEL.focus(b.ring); }
   }

@@ -188,7 +188,11 @@ for sid in ORDER:
 SEC2 = dict(zip(ORDER, out))
 
 # site due diligence (18 Nov, Ritika: one view, the sun path with it): its header names its section
+def acfirst(s):                              # the pills: 04 Acoustics, then 05 Biophilia (22 Nov, Ritika)
+    pb = re.compile(r'(<button type="button" data-go="3"><small>)04(</small>Biophilia</button>)(\s*)(<button type="button" data-go="6"><small>)05(</small>Acoustics</button>)')
+    s2, n = pb.subn(lambda m: m.group(4) + "04" + m.group(5) + m.group(3) + m.group(1) + "05" + m.group(2), s); assert n == 1, "pills"; return s2
 s = SEC2["s-site-dd"]
+s = acfirst(s)
 s = re.sub(r'(<div class="hdr"><b>Site due diligence</b><span>)[^<]*(</span>)', lambda m: m.group(1) + LABEL[PART["s-site-dd"]] + m.group(2), s, count=1)
 SEC2["s-site-dd"] = s
 
@@ -201,8 +205,9 @@ s = SEC2["s-campus-loop"]                   # The ACKO Campus: Campus + Möbius 
 SEC2["s-campus-loop"] = attr(s, "data-title", "The ACKO Campus").replace('<div class="hdr"><b>How it ties together</b>', '<div class="hdr"><b>The ACKO Campus</b>', 1)
 s = SEC2["s-strategy"]                      # the conceptual axonometries: the first four beats
 beats = re.search(r'data-beats="([^"]*)"', s[:s.index(">")])
-s = attr(s, "data-steps", "4")
-if beats: s = attr(s, "data-beats", ",".join(beats.group(1).split(",")[:4]))
+s = attr(s, "data-steps", "3")                # the Shell and Planning Acko's Neighbourhood are one beat here (data-merge)
+s = attr(s, "data-merge", "1")
+if beats: s = attr(s, "data-beats", ",".join(beats.group(1).split(",")[1:4]))
 SEC2["s-strategy"] = bridge(notes_cut(s, "5 ·"), BRIDGE["s-strategy"])
 # the proposed layout, reworked (18 Nov, Ritika's review; Story 3 only, "story 3 only"): five clicks, Views to green out (its
 # numbers now a small visual in Planting's legend); the slide's own V3 code (window.ACKO_SP3, set below) does the rest
@@ -210,16 +215,20 @@ LAYOUT_NOTES = ("The proposed layout in five clicks; the pills under the plan ju
     "The tools, top right: Measure and Area (M, A; Esc clears), zoom, Reset view, Names on hover, Fire egress, Occupancy chart (the brief "
     "against Option 2A). Zoom in and the panel folds away to give the plan the page; Reset view or the Legend button brings it back. "
     "1 · Spaces: the floor in greys, the greens kept; the area outside our contract hatched in dark grey; Arrival at both lift lobbies. "
-    "Four workstation types, each its plan and its 3D: Type 1, 516 seats; Type 2, 69; Type 3, 48; Type 4, 13. Hover one: its desks light up "
+    "Four workstation types, each its plan and its 3D: Type 1, 516 seats; Type 2, 74; Type 3, 48; Type 4, 13. Hover one: its desks light up "
     "in purple. 2 · Neighbourhoods: six, outlined in a deeper tone of their colour and named in the legend, and the common spaces (the café, the two terraces, the two receptions, the visitor hubs) tinted gold, also in the legend; click a neighbourhood, on the plan or in the legend, to open its sheet. "
-    "3 · Biophilia, the heat: where people gather, CO₂ gathers; service rooms counted too. 4 · Planting: the plants placed where people "
-    "gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); views to green, beside the legend: "
-    "nearly every seat has a plant in view within 8 m. 5 · Acoustics: four categories of treatment, from carpet in the workhall to three "
+    "3 · Acoustics: four categories of treatment, from carpet in the workhall to three "
     "panelled walls and a soft ceiling in the phone booths and the podcast studio; the rings show each space's sound, kept inside it; "
     "hover a category to see only its spaces. Beneath, the treatments: ceiling, walls, partitions, HVAC noise, sound masking, doors and "
-    "glazing (NRC 0.70–0.90 across the floor; an acoustic consultant can refine the specification).")
+    "glazing (NRC 0.70–0.90 across the floor; an acoustic consultant can refine the specification). "
+    "4 · Biophilia, the heat: where people gather, CO₂ gathers; service rooms counted too. 5 · Planting: the plants placed where people "
+    "gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); views to green, beside the legend: "
+    "nearly every seat has a plant in view within 8 m.")   # 22 Nov, Ritika: Acoustics before Biophilia
 s = SEC2["s-layout-sp"]
-s = attr(attr(s, "data-steps", "5"), "data-beats", "Spaces,Neighbourhoods,Biophilia · the heat,Biophilia · planting,Acoustics")
+s = attr(attr(s, "data-steps", "5"), "data-beats", "Spaces,Neighbourhoods,Acoustics,Biophilia · the heat,Biophilia · planting")   # 22 Nov, Ritika: Acoustics before Biophilia
+s = acfirst(s)
+for a, b in (('<small>04</small><h2>Biophilia</h2>', '<small>05</small><h2>Biophilia</h2>'), ('<small>05</small><h2>Acoustics</h2>', '<small>04</small><h2>Acoustics</h2>')):
+    assert s.count(a) == 1, a; s = s.replace(a, b)
 s = attr(s, "data-notes", _h.escape(LAYOUT_NOTES, quote=True))
 x = '<button type="button" data-go="5"><small>3</small>Views to green</button>'
 assert s.count(x) == 1, "views to green tab"; s = s.replace(x, "")
@@ -244,9 +253,13 @@ assert n == 1, "sections"
 def in_js(h, sid, x, y):
     a = h.index('ACKO.slide("%s"' % sid); b = h.index("</script>", a); js = h[a:b]
     assert js.count(x) == 1, (sid, x[:60], js.count(x)); return h[:a] + js.replace(x, y) + h[b:]
-h = in_js(h, "s-layout-sp", "const ORDER = [1, 2, 3, 4, 5, 6], SHEET = [null, null, null, null, null, null];", "const ORDER = [1, 2, 3, 4, 6], SHEET = [null, null, null, null, null];")
-h = in_js(h, "s-layout-sp", "[1, 2, 3, 4, 5, 6].indexOf(g) + 1", "[1, 2, 3, 4, 6].indexOf(g) + 1")
+h = in_js(h, "s-layout-sp", "const ORDER = [1, 2, 3, 4, 5, 6], SHEET = [null, null, null, null, null, null];", "const ORDER = [1, 2, 6, 3, 4], SHEET = [null, null, null, null, null];")      # Acoustics third, then Biophilia's heat and planting (22 Nov, Ritika)
+h = in_js(h, "s-layout-sp", 'const V = window.ACKO_NB || "a";', 'const V = window.ACKO_NB || "e";')      # 22 Nov, Ritika: the neighbourhood sheet is template E
+h = in_js(h, "s-layout-sp", "[1, 2, 3, 4, 5, 6].indexOf(g) + 1", "[1, 2, 6, 3, 4].indexOf(g) + 1")
+h = in_js(h, "s-site-dd", "[1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6].indexOf(g) + 1", "[1, 2, 6, 3, 4].indexOf(g) + 1")   # its pills jump into the layout's five clicks
 # (s-layout-dd, the older due diligence, is out of this deck: s-site-dd replaced it, so its pills need no patch)
+# the plan engine's files change often: a new query string so a browser never keeps an old copy (the zoom fixes need all four)
+h = re.sub(r"(assets/(?:js/(?:app|plan-hover|plan-canvas|plan-layers)\.js|css/app\.css))\?v=\d+", lambda m: m.group(1) + "?v=62", h)
 open(OUT, "w", encoding="utf-8").write(h)
 steps = [int((re.search(r'data-steps="(\d+)"', a) or [0, 1])[1]) for a in re.findall(r'<section class="scene[^"]*" id="[^"]+"([^>]*)>', h)]
 print("ok", OUT, len(ORDER), "slides,", sum(steps), "beats; dropped:", " ".join(dropped))

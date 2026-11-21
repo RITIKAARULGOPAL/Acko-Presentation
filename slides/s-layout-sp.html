@@ -46,6 +46,8 @@
       <button type="button" data-go="3"><small>04</small>Biophilia</button>
       <button type="button" data-go="6"><small>05</small>Acoustics</button>
     </nav>
+    <!-- 22 Nov, Ritika: with Fire egress on, its paths' legend, on every beat -->
+    <div class="ly-eg-leg ui"><b>Egress paths</b><span><i class="eg-s"></i>under 50 m</span><span><i class="eg-d"></i>50–60 m</span></div>
     <!-- the plan's tools, one button group top right beside the ACKO symbol -->
     <div class="ly-tools ui">
       <button type="button" data-t="dist" title="Measure a distance (M)"><svg viewBox="0 0 16 16"><path d="M2 12L12 2M2 12l2 2M5 9l1.5 1.5M8 6l1.5 1.5M11 3l2 2"/></svg>Measure</button>
@@ -160,17 +162,17 @@
           <tr class="z3"><td>Focus room - 2 pax</td><td>20</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Visitor Hub</td><td>5</td><td data-count="5">5</td></tr>
           <tr class="z3"><td>Dealer Room - 4 pax</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="2">2</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 4 pax</td><td>25</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 6 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 8 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
-          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="13">13</td></tr>
+          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="14">14</td></tr>
           <tr class="z3"><td>Departmental Room - 18–20 pax</td><td>8</td><td class="short" data-count="6">6</td></tr>
           <tr class="z3"><td>Hatchery - 08 pax</td><td>1</td><td class="up">1 <small>(12 pax)</small></td></tr>
           <tr class="z3"><td>Studio</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z3"><td>Phone booth</td><td>44</td><td class="short" data-count="42">42</td></tr>
+          <tr class="z3"><td>Phone booth</td><td>44</td><td class="short" data-count="41">41</td></tr>
           <tr class="z4"><td>Training room</td><td>Training Room - 40 pax</td><td>1</td><td>1 <small>(40 pax)</small></td></tr>
-          <tr class="z5"><td rowspan="6">Recreational area / wellness</td><td>Cafeteria</td><td>1 <small>(150 pax)</small></td><td class="up">1 <small>(178 pax)</small></td></tr>
+          <tr class="z5"><td rowspan="6">Recreational area / wellness</td><td>Cafeteria</td><td>1 <small>(150 pax)</small></td><td class="up">1 <small>(166 pax)</small></td></tr>
           <tr class="z5"><td>Mother's Room</td><td>1</td><td data-count="1">1</td></tr>
           <tr class="z5"><td>Zen Room</td><td>5</td><td data-count="5">5</td></tr>
           <tr class="z5"><td>Nap Room</td><td>1</td><td class="up" data-count="2">2</td></tr>
@@ -211,9 +213,19 @@
 /* arriving from the site's plate (3 Nov): the worlds cross slowly, the page's furniture waits for the plan, then fades in */
 body.ly-arrive .w-layer, body.ly-arrive .w-layer.on { transition-duration: 1.6s, 1.1s, 1.6s, 0s !important; transition-timing-function: ease-in-out !important; }
 #s-layout-sp .hdr, #s-layout-sp .ly-tools, #s-layout-sp .ly-bot { transition: opacity .7s var(--ease), top .45s var(--ease); }
+/* the fire egress legend: only while Fire egress is on, beside the pills, on every beat */
+#s-layout-sp .ly-eg-leg { position: absolute; right: 7%; top: calc(var(--ly-top, 70%) - 5.6%); display: none; align-items: center; gap: calc(var(--pt) * 6); padding: calc(var(--pt) * 2.4) calc(var(--pt) * 7); border: 1px solid #e3def2; border-radius: 999px; background: #fff; font-size: calc(var(--pt) * 5.4); color: var(--soft); white-space: nowrap; transition: opacity .7s var(--ease) .15s, top .45s var(--ease); }
+#s-layout-sp.eg-on .ly-eg-leg { display: flex; }
+#s-layout-sp .ly-eg-leg b { color: var(--ink); font-weight: 600; }
+#s-layout-sp .ly-eg-leg span { display: inline-flex; align-items: center; gap: calc(var(--pt) * 2.4); }
+#s-layout-sp .ly-eg-leg i { display: inline-block; width: calc(var(--pt) * 12); height: 0; border-top: 2.6px solid #1c64b4; }
+#s-layout-sp .ly-eg-leg i.eg-d { border-top-style: dashed; }
+#s-layout-sp.ly-arrive .ly-eg-leg, #s-layout-sp.nb-sheet .ly-eg-leg, #s-layout-sp.nb-open .ly-eg-leg { opacity: 0; visibility: hidden; transition: none; }
+#s-layout-sp.v3.fold:not(.nb-sheet) .ly-eg-leg { top: 89.6%; }
 #s-layout-sp .ly-pills, #s-layout-sp .ly-north { transition: opacity .7s var(--ease) .15s, top .45s var(--ease); }
 #s-layout-sp .ly-top { transition: opacity .7s var(--ease); }
-#s-layout-sp.ly-arrive :is(.hdr, .ly-tools, .ly-pills, .ly-top, .ly-bot, .ly-north, .ly-p.on) { opacity: 0; transition: none; }   /* the white bands too, over the map */
+#s-layout-sp.ly-arrive :is(.hdr, .ly-tools, .ly-pills, .ly-top, .ly-bot, .ly-north, .ly-p.on) { opacity: 0; transition: none; }
+body.ly-arrive #world-plan .dx-lab { opacity: 0 !important; transition: none !important; }   /* the plan's room marks wait: the boundary stands alone, then the spaces come */   /* the white bands too, over the map */
 #s-layout-sp .lt-read { right: 5%; top: calc(var(--ly-top, 70%) - 5.5%); transition: top .45s var(--ease); }
 #s-layout-sp .ly-north circle { fill: none; stroke: #9a9a9a; stroke-width: 1.2; }
 #s-layout-sp .ly-north line { stroke: #333; stroke-width: 2.6; stroke-linecap: round; }
@@ -260,6 +272,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .three .pre { font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
 #s-layout-sp .zone { display: none; grid-template-columns: 30% 1fr; gap: calc(var(--pt) * 8); align-items: start; }
 #s-layout-sp .ly-p.zoned .three { display: none; } #s-layout-sp .ly-p.zoned .zone { display: grid; }
+#s-layout-sp.v3 .zone { grid-template-columns: 40% 1fr; }      /* 22 Nov: a wider key plan (cropped to the floor), so its numbers read */
 #s-layout-sp .kp b { display: block; font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
 #s-layout-sp .kp-in svg { width: 100%; height: auto; }
 #s-layout-sp .occ { columns: 2; column-gap: calc(var(--pt) * 10); font-size: calc(var(--pt) * 5.6); }
@@ -415,6 +428,9 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .nbe-cnt b { display: block; font-family: var(--num); font-weight: 600; font-size: calc(var(--pt) * 24); line-height: 1.05; color: var(--ink); }
 #s-layout-sp .nbe-cnt small { display: flex; align-items: center; gap: calc(var(--pt) * 2.5); font-size: calc(var(--pt) * 5.4); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
 #s-layout-sp .nbe-cnt small::before { content: ""; width: calc(var(--pt) * 4.5); height: calc(var(--pt) * 4.5); border-radius: 50%; background: var(--k); }
+/* 22 Nov, Ritika: template E is the one; no pinpoints on the plan or the axonometric (nor their hint), and one way back only: the nav's, not "All neighbourhoods" besides */
+#s-layout-sp.nb-sheet[data-nbv="e"] :is(.nbe-pm, .nbe-ap, .nbe-hint) { display: none !important; }
+#s-layout-sp.nb-sheet .ly-back { display: none !important; }
 #s-layout-sp .nbe-hint { margin: auto 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); }
 #s-layout-sp :is(.nbe-pm, .nbe-ap) i { display: block; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); border-radius: 50%; background: var(--k); font-style: normal;
   box-shadow: 0 0 0 calc(var(--pt) * 1.4) #fff, 0 1px 4px rgba(0, 0, 0, .25); pointer-events: auto; cursor: default; position: relative; transition: transform .15s; }
@@ -476,8 +492,12 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 /* Spaces: no people ("remove the neighbourhood people colour coding and animation", the count with them); the floor in greys,
    the greens kept (JS); outside the contract dark grey, cross-hatched; Arrival by each entrance's arrow */
 #s-layout-sp.v3 :is(.ly-ppl, .ly-ppl-n) { display: none !important; }
-#world-plan.sp3 .dx-nic path { fill: url(#sp3-nic); fill-opacity: 1; }
-#world-plan.sp3 svg.dx-nic { mix-blend-mode: multiply; }      /* 19 Nov, Ritika: "not in contract fill should multiply so the base plan is seen" */
+/* 22 Nov, Ritika: outside the contract a plain lighter grey, no cross-hatch, covering the drawing under it (its boundary masked); hovered, it multiplies
+   so the layout under it is seen */
+#world-plan.sp3 .dx-nic path { fill: #e3e3e3; fill-opacity: 1; stroke: none; pointer-events: fill; transition: fill .25s; }   /* the contract boundary shows through as the drawing's own lines: the grey is masked back from its edge (JS v3Enter) */
+#world-plan.sp3.no-hover .dx-nic path { pointer-events: none; }      /* Names on hover off: the grey is not hovered either */
+#world-plan.sp3 .dx-nic path:hover { fill: #d2d2d2; mix-blend-mode: multiply; }
+#world-plan .sp3-arr { display: none; }      /* 22 Nov, Ritika: no "Arrival" word next to the entrance arrows */
 #world-plan .sp3-arr text { fill: #c40000; font-family: var(--body, sans-serif); font-weight: 600; paint-order: stroke; stroke: #fff; stroke-linejoin: round; opacity: 0; transition: opacity .6s; }   /* size and halo: JS arrLay, a constant 14.5 px on screen */
 #world-plan.sp3.show-entry .sp3-arr text { opacity: 1; }
 /* the types: in order 516, 69, 48, 13, renumbered 1–4 (JS); each its plan beside its 3D; hovered or pinned, purple */
@@ -571,6 +591,11 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
   const V3S = { on: false, mo: null, z: false, man: null };
   const home = () => { const [x, y, w, h] = plan.data.viewBox; return plan.vbFor([x, y, x + w, y + h], box()); };
   if (plan.warm) plan.warm(() => home());          // 19 Nov: the plan and its picture at this view are made at idle, so opening the slide shows it at once
+  // 22 Nov: after every landing the pictures of the next zoom-in and zoom-out views are made at idle (on the CPU, in the worker: no frame is held),
+  // so the next step lands on a picture that is already sharp instead of a scaled-up one for the ~1 s it takes to make
+  { let wz = 0; const wp0 = document.getElementById("world-plan");
+    const warmZoom = () => { if (!plan.warm || document.body.dataset.scene !== "s-layout-sp") return; [0.7, 1 / 0.7].forEach((f) => plan.warm(() => { const v = plan.view; return v && zoomTarget(f, v); })); };
+    if (wp0) wp0.addEventListener("ph:commit", () => { clearTimeout(wz); wz = setTimeout(warmZoom, 300); }); }
   const rings = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
   // ---- the panels, filled once from the data ----
   function build(sc) {
@@ -592,7 +617,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       // the type next to its plan"): the renders from Workstation typologies, the 13-seat type's made from the model (tools/acko/render_ws_type.js)
       const ORD = ["T4", "T1", "T3", "T2"], R3 = { T1: "ty-type1", T2: "ty-type2", T3: "ty-type3", T4: "ty-type4" };
       $(".types", sc).innerHTML = ORD.map((k) => T.find((t) => t.t === k)).filter(Boolean).map((t, i) => `<div class="chip" data-t="${t.t}"><div class="ty-vis">${SVG[t.t] || ""}` +
-        `<span class="ty-3w"><img src="${asset("assets/img/" + R3[t.t] + ".webp")}" alt=""></span></div><b>Type ${i + 1}</b><div class="n">${t.seats}<small>seats</small></div></div>`).join("");
+        `<span class="ty-3w"><img src="${asset("assets/img/" + R3[t.t] + ".webp")}" alt=""></span></div><b>Type ${i + 1}</b><div class="n">${[516, 74, 48, 13][i] || t.seats}<small>seats</small></div></div>`).join("");   // 22 Nov, Ritika: Type 2 is 74 (516 + 74 + 48 + 13 = 651)
     } else
     $(".types", sc).innerHTML = T.map((t) => `<div class="chip" data-t="${t.t}">${SVG[t.t] || `<img src="${asset("assets/img/" + (ICON[t.t] || "ty-icon1") + ".webp")}" alt="">`}<b>${t.name}</b>` +
       `<div class="n">${t.seats}<small>seats</small></div></div>`).join("");
@@ -787,15 +812,19 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const root = plan.root; if (!root) return;
     V3S.on = true; root.classList.add("sp3");
     root.querySelectorAll("svg.dx-fill path").forEach((p) => { const c0 = p.dataset.c0 || p.style.fill; if (!c0) return; p.dataset.c0 = c0; p.style.fill = grey(c0); });
-    const nic = root.querySelector("svg.dx-nic");                 // "put the not in contract boundary in dark grey and have cross hatch"
-    if (nic && !nic.querySelector("#sp3-nic")) nic.insertAdjacentHTML("afterbegin", `<defs><pattern id="sp3-nic" patternUnits="userSpaceOnUse" width="1500" height="1500">` +
-      `<rect width="1500" height="1500" fill="#8a8a8a"/><path d="M0 0L1500 1500M1500 0L0 1500" style="fill:none;stroke:#555;stroke-width:150"/></pattern></defs>`);   // inline: app.css strips .dx-nic paths' strokes; multiplied over the plan (19 Nov)
+    // 22 Nov, Ritika: "match the layout walls": the grey is held back a few px from its edge (a mask: the shape in white, its outline in black), so
+    // the drawing's own lines along the contract boundary show as they are drawn, instead of an outline of ours
+    const nic = root.querySelector("svg.dx-nic");
+    if (nic && !nic.querySelector("#sp3-nicm")) { const ps = [...nic.querySelectorAll("path")], ds = ps.map((p) => p.getAttribute("d"));
+      const bb = nic.getBBox(), pad = 3000;      // a mask the size of the shapes (a huge one is rendered coarsely)
+      nic.insertAdjacentHTML("afterbegin", `<defs><mask id="sp3-nicm" maskUnits="userSpaceOnUse" x="${bb.x - pad}" y="${bb.y - pad}" width="${bb.width + 2 * pad}" height="${bb.height + 2 * pad}">` +
+        ds.map((d) => `<path d="${d}" fill="#fff" stroke="none"/>`).join("") + ds.map((d) => `<path d="${d}" fill="none" stroke="#000" stroke-width="7" style="vector-effect:non-scaling-stroke"/>`).join("") + `</mask></defs>`);
+      ps.forEach((p) => p.setAttribute("mask", "url(#sp3-nicm)")); }
     root.querySelectorAll(".dx-nb path").forEach((p) => { const c0 = p.dataset.c0 || p.style.getPropertyValue("--c"); if (!c0) return; p.dataset.c0 = c0; p.style.setProperty("--c", deep(c0)); });   // the outlines, legible
     const nbf = root.querySelector("svg.dx-nbfill");                // the common spaces, tinted beside the neighbourhoods' own tints (the furniture cuts show through as they do there)
     if (nbf && !nbf.querySelector(".sp3-common")) nbf.insertAdjacentHTML("beforeend", `<g class="sp3-common">` + plan.data.spaces.filter((s) => COMMON.test(s.type))
       .map((s) => `<path class="f" d="${s.d}"/><path class="e" d="${outer(s.d)}"/>`).join("") + `</g>`);
     const mk = root.querySelector("svg.dx-marks"), E = (plan.data.overlays && plan.data.overlays.entry) || [];   // "mark arrival near the arrow"
-    if (mk && !mk.querySelector(".sp3-arr")) mk.insertAdjacentHTML("beforeend", `<g class="sp3-arr">${E.map(() => `<text>Arrival</text>`).join("")}</g>`);
     arrLay(root, plan.view); V3S.ac = (e) => arrLay(root, e.detail); root.addEventListener("ph:commit", V3S.ac);     // the label keeps its size on screen as the layers redraw
     V3S.z = false; V3S.man = null; fold(sc);
     V3S.mo = () => fold(sc); root.addEventListener("ph:view", V3S.mo);     // every zoom step (the plan's own event; the layers redraw only once it rests)
@@ -982,7 +1011,13 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const mode = L.measure.set(m, (t) => { $(".lt-read", sc).textContent = t; });
     $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.toggle("on", b.dataset.t === mode));
   }
-  function zoomBy(f) { const v = plan.view; if (!v) return; f = Math.min(f, home()[2] / v[2]); if (Math.abs(f - 1) < 1e-3) return; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; plan.fitVb([cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f], 300); }
+  // the view a zoom step of f leads to from v (null at the limit); the zoom buttons fly there on the base picture (450 ms), and the next steps'
+  // pictures are made ahead at idle (plan.warm), so a step lands without a stall
+  const zoomTarget = (f, v) => { const hm = home(); if (f * v[2] >= hm[2] - 1e-3) return Math.abs(v[2] - hm[2]) < 1e-3 && Math.abs(v[0] - hm[0]) < 1 ? null : hm.slice(); f = Math.min(f, hm[2] / v[2]); if (Math.abs(f - 1) < 1e-3) return null; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; return [cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f]; };
+  function zoomBy(f) {
+    const v = plan.view; if (!v) return; const nv = zoomTarget(f, v); if (!nv) return;
+    plan.fitVb(nv, 450, { settle: 150 });      // the sharp picture is made on the CPU in ~150 ms now, so it can follow the landing closely (was 1500 ms: the plan stayed blurry that long)
+  }
   // ---- the people (9 Nov, the re-ordered deck only: window.ACKO_WOW): 640 of the plan's 646 desks (L.seats, the chairs in the drawing)
   // filled by people who come in at the two entrances (PLAN_DXF.overlays.entry) and walk the employees' route (ACKO_LOOP's graph: the
   // shortest way from the nearer entrance to the route point nearest their desk), then step to it; each in their neighbourhood's
@@ -1262,19 +1297,27 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       // still: done at once, they froze the zoom's start (3 Nov: "not smooth")
       arriving = document.body.classList.contains("si-left"); pend = 0; PPL.on = false; sc.classList.remove("ppl-on");
       const ax = !arriving && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? (ACKO_MORPH.take("s-strategy") || ACKO_MORPH.take("s-walk")) : null;
-      const st = ax && document.getElementById(ax.id);          // the strategy's axo, or the walk's view from above
+      const fromStrat = !ax && !arriving && window.ACKO_STRAT_ON && !matchMedia("(prefers-reduced-motion: reduce)").matches; window.ACKO_STRAT_ON = 0;   // Story 3: no ACKO_MORPH, the axo leaves as its boundary
+      const st = ax ? document.getElementById(ax.id) : fromStrat ? document.getElementById("s-strategy") : null;          // the strategy's axo, or the walk's view from above
       if (st && st._flatten) {                          // from the Employees Journey: the model turns down onto the plan, then the plan
         arriving = true; document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
-        const ok = st._flatten(home(), 1700, (h) => {
+        const flatMs = fromStrat ? (window.ACKO_FLAT_MS || 2200) : 1700, wp = document.getElementById("world-plan");
+        let built = false;                                                   // Story 3: the plan is built in the background while the boundary travels, then fades in whole
+        if (fromStrat && wp) { wp.style.transition = "none"; wp.style.opacity = "0"; later(() => { const warm = () => { if (!built && document.body.dataset.scene === sc.id) { built = true; build(sc); } }; if (window.requestIdleCallback) requestIdleCallback(warm, { timeout: 500 }); else warm(); }, flatMs * 0.45); }
+        const ok = st._flatten(home(), flatMs, (h) => {
           if (document.body.dataset.scene !== sc.id) { h.remove(); return; }
-          arriving = false; build(sc); self.step(pend || 1, sc);          // planOn: the 2D plan fades in under the model
+          arriving = false; if (!built) { built = true; build(sc); } self.step(pend || 1, sc);          // planOn: the 2D plan fades in under the model
+          if (fromStrat && wp) {
+            requestAnimationFrame(() => requestAnimationFrame(() => { wp.style.transition = "opacity 1.2s ease"; wp.style.opacity = "1"; }));
+            later(() => { wp.style.transition = ""; wp.style.opacity = ""; try { plan.planReset(); } catch (e) { /* the plan keeps its view */ } }, 1500);
+          }
           sc._h3 = h; h.style.transition = "opacity 1.1s ease-in-out";
           later(() => { h.style.opacity = "0"; }, 300);                   // the model fades off the plan it now lies on
           later(() => { h.remove(); sc._h3 = null; }, 1600);
           later(() => sc.classList.remove("ly-arrive"), 1100);
           later(() => document.body.classList.remove("ly-arrive"), 1800);
-        });
-        if (!ok) { arriving = false; document.body.classList.remove("ly-arrive"); sc.classList.remove("ly-arrive"); build(sc); }
+        }, fromStrat ? { boundary: true } : undefined);
+        if (!ok) { arriving = false; document.body.classList.remove("ly-arrive"); sc.classList.remove("ly-arrive"); if (wp) { wp.style.transition = ""; wp.style.opacity = ""; } if (!built) build(sc); }
       } else if (arriving) {
         document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
         const site = document.getElementById("s-site"); if (site && site._into) site._into();
@@ -1285,13 +1328,22 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       } else build(sc);
       $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
+      // 22 Nov, Ritika: the laser cursor by default over the layout (the canvas between the header band and the foot band, not over the tools, pills, panels
+      // or north point); L still toggles it by hand. As on the due-diligence slide.
+      if (!sc._laser) { const cur = document.getElementById("cur"); let auto = false;
+        sc._laser = (e) => { const top = sc.querySelector(".ly-top").getBoundingClientRect().bottom, bot = sc.querySelector(".ly-bot").getBoundingClientRect().top;
+          const inBox = (q) => { const r = sc.querySelector(q); if (!r) return false; const b = r.getBoundingClientRect(); return e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom; };
+          const on = !!(e.target.closest && !e.target.closest(".ui, .ly-tools, .ly-pills, .ly-north, .sp3-fold, .ly-fo, button") && !inBox(".ly-tools") && !inBox(".ly-north") && e.clientY > top && e.clientY < bot);
+          if (on && !cur.classList.contains("laser")) { cur.classList.add("laser"); auto = true; } else if (!on && auto) { cur.classList.remove("laser"); auto = false; } };
+        sc._laserOff = () => { if (auto) cur.classList.remove("laser"); auto = false; }; }
+      document.removeEventListener("mousemove", sc._laser, true); document.addEventListener("mousemove", sc._laser, true);
       $$("button", tools).forEach((b) => (b.onclick = () => {
         const t = b.dataset.t; b.blur();
         if (t === "dist" || t === "area") measure(sc, t);
         else if (t === "in") zoomBy(0.7); else if (t === "out") zoomBy(1 / 0.7);
         else if (t === "reset") plan.planReset();
         else if (t === "hover") b.classList.toggle("on", plan.planHover());
-        else if (t === "eg") { egOn = !egOn; b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
+        else if (t === "eg") { egOn = !egOn; sc.classList.toggle("eg-on", egOn); b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
         else if (t === "occ") occ(sc, !$(".ly-fo", sc).classList.contains("on"));
       }));
       $('[data-t="hover"]', tools).classList.toggle("on", plan.hoverOn);
@@ -1317,7 +1369,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       const layer = k === 1 ? "spaces" : k === 2 ? "nb" : k <= 5 ? "bio" : k === 6 ? "ac" : "dd", panel = String(k <= 2 ? k : k <= 5 ? 3 : k);
       plan.planOn(sc, { rooms: true, fill: k <= 2, entry: true, view: home(), ms: was ? 700 : 0 });
       // the egress follows its button alone, off to begin with (30 Oct), on every beat
-      if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
+      sc.classList.toggle("eg-on", egOn); if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
       $(".bio-p", sc).classList.toggle("eg", egOn);
       plan.planNb(k === 2); plan.planEgress(egOn);
       if (k === 2) nbPick(sc, "homo");                   // nb cards: Homogeneity picked whenever the beat opens
@@ -1353,6 +1405,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     },
     leave(_, sc) {
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
+      if (sc && sc._laser) { document.removeEventListener("mousemove", sc._laser, true); sc._laserOff(); }
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
       if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
