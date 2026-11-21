@@ -70,6 +70,34 @@ class NoCache(SimpleHTTPRequestHandler):
             i = html.rfind("</body>")
             html = html[:i] + RELOAD % s0 + html[i:] if i >= 0 else html + RELOAD % s0
             return self.send_text(html.encode("utf-8"), code)
+        rng = self.headers.get("Range", "")
+        fp = self.translate_path(self.path)
+        if rng.startswith("bytes=") and os.path.isfile(fp):      # video seeking needs HTTP Range
+            size = os.path.getsize(fp)
+            a, _, b = rng[6:].split(",")[0].partition("-")
+            try:
+                start = int(a) if a else max(0, size - int(b))
+                end = min(int(b), size - 1) if (a and b) else size - 1
+            except ValueError:
+                start, end = 0, size - 1
+            if start > end or start >= size:
+                self.send_response(416); self.send_header("Content-Range", f"bytes */{size}"); self.end_headers(); return
+            self.send_response(206)
+            self.send_header("Content-Type", self.guess_type(fp))
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+            self.send_header("Content-Length", str(end - start + 1))
+            self.end_headers()
+            try:
+                with open(fp, "rb") as f:
+                    f.seek(start); left = end - start + 1
+                    while left > 0:
+                        chunk = f.read(min(1 << 16, left))
+                        if not chunk: break
+                        self.wfile.write(chunk); left -= len(chunk)
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+            return
         super().do_GET()
 
 

@@ -803,6 +803,15 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 .wt-vl::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
 .wt-vl::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 0; }
 .wt-vl:focus { outline: none; }
+
+/* the deck makes everything inside a scene click-through except buttons: switch the seek strip and the volume slider back on */
+#s-walkthrough-film:not(.idle) :is(.wt-prog, .wt-vl) { pointer-events: auto; }
+.wt-prog::before { top: -12px; bottom: -12px; }
+.wt-vl { height: 16px; background: transparent; }
+.wt-vl::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(to right, #fff var(--p, 100%), rgba(255,255,255,.3) var(--p, 100%)); }
+.wt-vl::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255,255,255,.3); }
+.wt-vl::-moz-range-progress { height: 4px; border-radius: 2px; background: #fff; }
+.wt-vl::-webkit-slider-thumb { margin-top: -4px; }
 </style>
 <style data-slide="s-thanks-w">
 /* ---------- thank you ---------- */
