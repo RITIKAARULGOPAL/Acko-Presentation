@@ -236,6 +236,14 @@
 #s-pitch .pp-hand { font-size: calc(var(--pt) * 15); color: var(--purple-2); }
 /* the floor outline alone: no cores, stairs, lifts or columns inside the boundary (22 Nov, Ritika: "the core inside boundary seems wrong") */
 #s-pitch .pp-shell :is(.core, .stair, .stair-h, .lift, .lift-x, .col, .cut) { display: none; }
+/* facts: one colour, smaller, even (22 Nov, Ritika: "a little smaller and in the same colour"); the hand line more prominent */
+#s-pitch .pp-stats > div { border-top: 2px solid #d9d0f5 !important; }
+#s-pitch .pp-stats > div:nth-child(4) { border-top: 3px solid var(--purple) !important; }
+#s-pitch .pp-stats b { height: calc(var(--pt) * 28) !important; font-weight: 700 !important; color: var(--purple) !important; font-size: calc(var(--pt) * 22) !important; }
+#s-pitch .pp-stats > div:nth-child(4) b { font-size: calc(var(--pt) * 24) !important; }
+#s-pitch .pp-stats b small { font-size: .42em !important; color: #777 !important; }
+#s-pitch .pp-stats > div > span { font-size: calc(var(--pt) * 7) !important; color: #555 !important; }
+#s-pitch .pp-hand { font-size: calc(var(--pt) * 26) !important; line-height: 1.12; color: var(--purple) !important; }
 </style>
 <style data-slide="s-strategy">
 /* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
@@ -1996,14 +2004,14 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       </g>
       <text class="pp-lab" text-anchor="middle">TWO FOOTBALL PITCHES · 210 m</text>
     </svg>
-    <div class="pp-stats" style="left:3.4%;top:82.6%;width:66%">
+    <div class="pp-stats" style="left:3.4%;top:84%;width:60%">
       <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
       <div><b>34<small>m</small></b><span>wide, glass to glass</span></div>
       <div><b>½</b><span>a pitch’s width</span></div>
       <div><b><span data-count="651">0</span></b><span>people, on one plate</span></div>
       <div><b><span data-count="5">0</span><span>+</span><small>min</small></b><span>to walk end to end</span></div>
     </div>
-    <p class="pp-hand hand" style="left:72%;top:85.5%;width:25.5%">a long, thin floor: so how do you make it feel like one team?</p>
+    <p class="pp-hand hand" style="left:64%;top:82.5%;width:33%">a long, thin floor: so how do you make it feel like one team?</p>
   </div>
 </section>
 
