@@ -13,7 +13,7 @@ OPTS = [
      "Why people come in, the answer in ACKO’s own promise, and how it becomes one floor and one day.",
      ["why people come in", "where it must happen", "how it becomes a campus", "what it feels like", "can we live it?"]),
     ("2 · From belonging to campus", "Today", "From belonging", "to a campus.",
-     "How 640 Ackers, two offices and one long floor become one place.",
+     "How 651 Ackers, two offices and one long floor become one place.",
      ["why we come in", "one floor, 245 m long", "one loop, six neighbourhoods", "warm, quiet, easy to find", "arrival to evening"]),
     ("3 · Five questions", "Five questions", "Five questions,", "one answer.",
      "Each part asks one thing. The answer is always the Loop.",

@@ -97,11 +97,18 @@
 #s-why-campus .wc-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
 #s-why-campus .wc-a { color: #17857e; }
 #s-why-campus .wc-b { color: #a3967a; }
-#s-why-campus .wc-f { color: var(--ink); }
 #s-why-campus .page.b2 .wc-a.shown, #s-why-campus .page.b2 .wc-b.shown { opacity: 0; transition-delay: 0s; }
 #s-why-campus .wc-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
-#s-why-campus .wc-f[data-step], #s-why-campus .wc-cap[data-step="2"] { transition-delay: 2.2s; }
 #s-why-campus .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+/* the caption travels: "we came from two..." slides under the one drop as the drops merge and becomes "...we arrive on one floor..." */
+#s-why-campus .wc-cap { position: absolute; transition: opacity .7s var(--ease), left .5s var(--ease), top .5s var(--ease), width .5s var(--ease); }
+#s-why-campus .wc-cap .c1 { display: block; transition: opacity .4s var(--ease); }
+#s-why-campus .wc-cap .c2 { display: block; position: absolute; left: 0; right: 0; top: 0; opacity: 0; transition: opacity .3s var(--ease); }
+#s-why-campus .page.b2 .wc-cap { left: 36.9% !important; top: 78.9% !important; width: 26.2% !important; transition: opacity .7s var(--ease), left 1.6s var(--ease) .4s, top 1.6s var(--ease) .4s, width 1.6s var(--ease) .4s; }
+#s-why-campus .page.b2 .wc-cap .c1 { opacity: 0; transition: opacity .6s var(--ease) .4s; }
+#s-why-campus .page.b2 .wc-cap .c2 { opacity: 1; transition: opacity .8s var(--ease) 1.5s; }
+#s-why-campus .still .wc-cap, #s-why-campus .still .wc-cap span { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { #s-why-campus .wc-cap, #s-why-campus .wc-cap span { transition: none !important; } }
 </style>
 <style data-slide="s-campus-loop">
 /* ---------- How it ties together · one ribbon ---------- */
@@ -1722,7 +1729,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page rv">
     <div class="cv-small at" style="left:1.6%;top:7.8%;--i:0">Studiokon Ventures</div>
     <div class="cv-small at" style="left:79.8%;top:7.8%;--i:0">RFP-ACKO-DB-001 · Technical bid</div>
-    <div class="cv-small at" style="left:1.7%;top:19.7%;--i:1">Technical bid submission · August 2026</div>
+    <div class="cv-small at" style="left:1.7%;top:19.7%;--i:1">Technical bid submission · November 2026</div>
     <img class="cv-logo at" src="assets/img/acko-white.webp" alt="ACKO" style="left:1.8%;top:24.6%;--i:2">
     <div class="cv-title at" style="left:1.3%;top:35.4%;--i:3">HEAD OFFICE DESIGN &amp; BUILD</div>
     <div class="cv-facts at" style="left:1.6%;top:47.6%;width:92%;--i:4">
@@ -1809,13 +1816,13 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-why-campus" data-part="p4" data-title="Two Offices" data-steps="2" data-mins="0.6" data-beats="Two offices,One floor"
-  data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 640 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: Two offices, one floor: so we made it one campus.">
+  data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 651 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: Two offices, one floor: so we made it one campus.">
   <div class="page">
     <p class="dg-tag">Concept</p>
     <div class="hdr"><b>Two Offices</b><span>01 · Concept Framework</span></div>
     <p class="wc-hand hand wc-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
     <h2 class="wc-h wc-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
-    <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+    <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 651 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
 
     <!-- the drops, in a 1920 × 1080 frame over the page: Leela at 700, HSR at 1220, the one drop at 960, all at y 590 -->
     <svg class="wc-dia" viewBox="0 0 1920 1080" aria-hidden="true">
@@ -1838,9 +1845,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
     <span class="wc-lb wc-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Leela</span>
     <span class="wc-lb wc-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">HSR</span>
-    <span class="wc-lb wc-f" data-step="2" style="left:36.9%;top:75.8%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
-    <p class="wc-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
-    <p class="wc-cap hand" data-step="2" style="left:36.9%;top:78.9%;width:26.2%">…we arrive on one floor…</p>
+    <p class="wc-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%"><span class="c1">we came from two…</span><span class="c2">…we arrive on one floor…</span></p>
 
   </div>
 </section>
@@ -1934,7 +1939,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-site" data-part="p5" data-title="The site" data-steps="1" data-mins="0.4"
-  data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up, 56,650 sq ft carpet, for about 640 people. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans. → Bridge: How big is this floor? Two football pitches.">
+  data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up, 56,650 sq ft carpet, for about 651 people. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans. → Bridge: How big is this floor? Two football pitches.">
   <div class="page">
     <div class="hdr"><b>The Site</b><span>Layout</span></div>
     <div class="si-copy rv" style="left:1.8%;top:22%;width:30%">
@@ -1944,7 +1949,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
         <div><dt>Floor</dt><dd>3rd floor · one plate</dd></div>
         <div><dt>Super built-up</dt><dd><span data-count="91000">91,000</span> sq ft</dd></div>
         <div><dt>Carpet</dt><dd><span data-count="56650">56,650</span> sq ft</dd></div>
-        <div><dt>People</dt><dd>about <span data-count="640">640</span></dd></div>
+        <div><dt>People</dt><dd>about <span data-count="651">651</span></dd></div>
       </dl>
       <ul class="si-walk" style="--i:3"></ul>
     </div>
@@ -1952,7 +1957,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="2" data-mins="0.6" data-beats="Lengthwise,Widthwise"
-  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 640 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
+  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 651 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
   <div class="page">
     <p class="dg-tag">Concept</p>
     <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
@@ -1973,7 +1978,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     </svg>
     <div class="pp-stats" data-only="1" style="left:3.4%;top:85%;width:50%">
       <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
-      <div><b><span data-count="640">0</span></b><span>people, on one plate</span></div>
+      <div><b><span data-count="651">0</span></b><span>people, on one plate</span></div>
       <div><b><span data-count="3">0</span><small>min</small></b><span>to walk end to end</span></div>
     </div>
     <div class="pp-stats" data-only="2" style="left:3.4%;top:85%;width:50%">
@@ -2156,7 +2161,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <p class="dg-tag">Plan</p>
     <div class="sp2-nav ui"><button type="button" class="sp2-back">← Back to layout</button><b></b><button type="button" class="sp2-next">Next neighbourhood →</button></div>
-    <!-- the people (9 Nov, the re-ordered deck): 640 come in at the two entrances and walk the Loop to their desks -->
+    <!-- the people (9 Nov, the re-ordered deck): 651 come in at the two entrances and walk the Loop to their desks -->
     <canvas class="ly-ppl" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></canvas>
     <div class="ly-ppl-n" style="left:3%;top:18.6%;width:50%"><b>0</b><span>people, one floor: each to their own desk</span></div>
     <!-- Story 3 (18–19 Nov): the acoustics' sound rings, each inside its own space, drawn through the plan's view -->
@@ -5334,7 +5339,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const E = (D.overlays && D.overlays.entry) || LP.entries, EN = E.map((e) => near(e)), T = EN.map(dij);
     const zones = D.zones.map((z) => ({ n: z.n, R: rings(z.zone) }));
     const inP = (q, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > q[1]) !== (yj > q[1]) && q[0] < ((xj - xi) * (q[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
-    const seats = L.seats.filter((_, i) => i % 108 !== 107).slice(0, 640);          // 640 people, 646 desks: 6 left free
+    const seats = L.seats.filter((_, i) => i % 108 !== 107).slice(0, 640);          // 640 of the 646 desks drawn (the animation, not the count): 6 left free
     const P = seats.map((q, i) => {
       const z = zones.find((z) => z.R.some((r) => inP(q, r))), sn = near(q);
       const e = T[0].dist[sn] <= T[1].dist[sn] ? 0 : 1, way = []; for (let u = sn; u >= 0; u = T[e].prev[u]) way.push(N[u]);

@@ -48,7 +48,7 @@ AGENDA_Q = ["why people come in", "where it must happen", "how the floor becomes
 # the agenda called back at the start of every section (Ritika, 11 Nov: "call back this with every section start"): s-sec-1..6, made
 # from s-start (Where it starts): the six parts, the others step back and this one stays lit, then its line
 SECTIONS = [
-    ("About <b>640 Ackers</b>, from two offices, onto one floor.", "So we began with them."),
+    ("About <b>651 Ackers</b>, from two offices, onto one floor.", "So we began with them."),
     ("<b>One floor</b> in Koramangala: where it has to happen.", ""),
     ("<b>One loop</b>, seven stops, six neighbourhoods.", ""),
     ("What you <b>touch</b>, hear and find your way by.", ""),
