@@ -172,33 +172,11 @@
 #s-campus-loop .still .cpl-w.shown, #s-campus-loop .still .cpl-h .shown, #s-campus-loop .still .cpl-seg, #s-campus-loop .still .cpl-out, #s-campus-loop .still .cpl-plate { transition: none !important; }
 /* the line under a hairline */
 @media (prefers-reduced-motion: reduce) { #s-campus-loop * { transition-duration: 0s !important; transition-delay: 0s !important; } }
-/* the Möbius promise, set apart: a lilac band that breathes, a ring that ripples out of it, the words in bold purple (22 Nov, Ritika: "it still doesn't feel highlighted") */
-#s-campus-loop .cpl-w.w2 p { display: inline-block; padding: .5em .95em; border-radius: .55em; background: rgba(190, 164, 245, .30); color: var(--accent); font-weight: 700; font-size: 1.1em; line-height: 1.35; }
-#s-campus-loop .cpl-w.w2.shown p { animation: cpl-band 2.4s ease-in-out infinite; }
-@keyframes cpl-band { 0%, 100% { background-color: rgba(190, 164, 245, .18); box-shadow: 0 0 0 0 rgba(82, 34, 208, .30); } 50% { background-color: rgba(190, 164, 245, .45); box-shadow: 0 0 0 .8em rgba(82, 34, 208, 0); } }
-@media (prefers-reduced-motion: reduce) { #s-campus-loop .cpl-w.w2.shown p { animation: none; } }
-/* the Möbius promise: six ways to set it apart and make it pulse (?pulse=a..f). A is the band above */
-@media not (prefers-reduced-motion: reduce) {
-#s-campus-loop .cpl-w.w2[data-pulse="b"].shown .ln { animation: cpl-sweep 2.6s ease-in-out infinite; }
-#s-campus-loop .cpl-w.w2[data-pulse="c"].shown p { animation: cpl-glow 2.4s ease-in-out infinite; }
-#s-campus-loop .cpl-w.w2[data-pulse="d"].shown .ln { animation: cpl-wipe 3.4s ease-in-out infinite; }
-#s-campus-loop .cpl-w.w2[data-pulse="e"].shown p { animation: cpl-shim 2.8s linear infinite; }
-#s-campus-loop .cpl-w.w2[data-pulse="f"].shown p { animation: cpl-frame 2.4s ease-in-out infinite; }
-}
-#s-campus-loop .cpl-w.w2[data-pulse="b"] p, #s-campus-loop .cpl-w.w2[data-pulse="c"] p, #s-campus-loop .cpl-w.w2[data-pulse="d"] p, #s-campus-loop .cpl-w.w2[data-pulse="e"] p, #s-campus-loop .cpl-w.w2[data-pulse="f"] p { animation: none; background: none; box-shadow: none; }
-#s-campus-loop .cpl-w.w2[data-pulse="b"] p { padding: .2em .1em; }
-#s-campus-loop .cpl-w.w2[data-pulse="b"] .ln { background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 2px; padding-bottom: .12em; }
+/* the Möbius promise: bold purple, and a line that sweeps under each line, again and again (22 Nov, Ritika picked B) */
+#s-campus-loop .cpl-w.w2 p { display: inline-block; padding: .2em .1em; color: var(--accent); font-weight: 700; font-size: 1.1em; line-height: 1.35; }
+#s-campus-loop .cpl-w.w2 .ln { background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 2px; padding-bottom: .12em; }
+@media not (prefers-reduced-motion: reduce) { #s-campus-loop .cpl-w.w2.shown .ln { animation: cpl-sweep 2.6s ease-in-out infinite; } }
 @keyframes cpl-sweep { 0% { background-size: 0 2px; background-position: 0 100%; } 55% { background-size: 100% 2px; background-position: 0 100%; } 100% { background-size: 0 2px; background-position: 100% 100%; } }
-#s-campus-loop .cpl-w.w2[data-pulse="c"] p { padding: .3em .5em; text-shadow: 0 0 .2em rgba(82, 34, 208, .18); }
-@keyframes cpl-glow { 0%, 100% { text-shadow: 0 0 .15em rgba(82, 34, 208, .15); } 50% { text-shadow: 0 0 .35em rgba(82, 34, 208, .75), 0 0 1.1em rgba(124, 82, 245, .55); } }
-#s-campus-loop .cpl-w.w2[data-pulse="d"] p { padding: .3em .3em; }
-#s-campus-loop .cpl-w.w2[data-pulse="d"] .ln { background: linear-gradient(rgba(190, 164, 245, .6), rgba(190, 164, 245, .6)) no-repeat 0 62% / 100% 58%; }
-@keyframes cpl-wipe { 0% { background-size: 0 58%; opacity: 1; } 35%, 78% { background-size: 100% 58%; opacity: 1; } 100% { background-size: 100% 58%; opacity: 0; } }
-#s-campus-loop .cpl-w.w2[data-pulse="e"] p { padding: .3em .6em; background: linear-gradient(100deg, var(--accent) 38%, #a98bff 50%, var(--accent) 62%) 100% 0 / 260% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
-@keyframes cpl-shim { to { background-position: -60% 0; } }
-#s-campus-loop .cpl-w.w2[data-pulse="f"] p { position: relative; margin-top: 1.35em; padding: .5em .95em; border: 1.5px solid rgba(82, 34, 208, .5); border-radius: .55em; background: rgba(190, 164, 245, .12); }
-#s-campus-loop .cpl-w.w2[data-pulse="f"] p::before { content: "THE PROMISE"; position: absolute; left: .9em; top: -.78em; padding: 0 .45em; background: #fff; font-size: .55em; font-weight: 700; letter-spacing: .2em; color: var(--accent); }
-@keyframes cpl-frame { 0%, 100% { border-color: rgba(82, 34, 208, .3); box-shadow: 0 0 0 0 rgba(82, 34, 208, .0); } 50% { border-color: rgba(82, 34, 208, .95); box-shadow: 0 0 .9em .1em rgba(124, 82, 245, .35); } }
 </style>
 <style data-slide="s-pitch">
 /* ---------- one floor, two football pitches (01 · Discover the site): the bare floor, to scale, on the pitches' top touchline ---------- */
@@ -8134,15 +8112,5 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li:last-child { flex: 0 0 auto; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li > span { white-space: nowrap !important; }
 </style>
-<script>
-/* ?pulse=a..f picks how the Möbius promise is set apart (kept for the session) */
-(function () {
-  var q = new URLSearchParams(location.search), t = "";
-  try { t = q.get("pulse") || sessionStorage.getItem("cplPulse") || ""; if (q.get("pulse")) sessionStorage.setItem("cplPulse", t); } catch (e) {}
-  function apply() { var w = document.querySelector("#s-campus-loop .cpl-w.w2"); if (!w) return; if (/^[b-f]$/.test(t)) w.setAttribute("data-pulse", t); else w.removeAttribute("data-pulse"); }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply); else apply();
-  window.addEventListener("load", apply);
-})();
-</script>
 </body>
 </html>
