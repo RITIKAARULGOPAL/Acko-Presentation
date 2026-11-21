@@ -659,19 +659,20 @@
     // the other views of this space, on the same plan: a second, fainter arrow each, and the card is framed around them all
     let alts = nocam ? [] : (others || []).map((o) => KPD[o]).filter((o) => o && o.img === k.img);
     // keep the card zoomed in: only frame the other views too when they sit near this one
-    alts = alts.filter((o) => Math.abs(o.x - k.x) < 14 && Math.abs(o.y - k.y) < 16);
+    alts = alts.filter((o) => o.x >= k.view[0] && o.x <= k.view[2] && o.y >= k.view[1] && o.y <= k.view[3]);
     $$(".wk-cam.alt", inner).forEach((e) => e.remove());
     const view = alts.reduce((v, o) => [Math.min(v[0], o.view[0]), Math.min(v[1], o.view[1]), Math.max(v[2], o.view[2]), Math.max(v[3], o.view[3])], k.view.slice());
     const altEls = alts.map((o) => { const e = cam.cloneNode(true); e.classList.add("alt"); e.style.display = ""; inner.appendChild(e); return [e, o]; });
+    view[0] = Math.min(view[0], k.x - 1.5); view[1] = Math.min(view[1], k.y - 1.5); view[2] = Math.max(view[2], k.x + 1.5); view[3] = Math.max(view[3], k.y + 1.5);
     inner._k = k;
     const place = () => {
       const W = box.clientWidth, Hh = box.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
       if (!W || !iw) return;
       const vw = ((view[2] - view[0]) / 100) * iw, vh = ((view[3] - view[1]) / 100) * ih;
-      const f = nocam ? 1 : 0.75, s = Math.min(W / (vw * f), Hh / (vh * f)), w = iw * s, h = ih * s;
+      const f = 1, s = Math.min(W / (vw * f), Hh / (vh * f)), w = iw * s, h = ih * s;
       const cx = (k.x / 100) * w, cy = (k.y / 100) * h;
       const mx = ((view[0] + view[2]) / 200) * w, my = ((view[1] + view[3]) / 200) * h;      // centre of the framed area
-      const tx = clamp(W / 2 - (alts.length ? mx : cx), W - w, 0), ty = clamp(Hh / 2 - (alts.length ? my : cy), Hh - h, 0);
+      const tx = clamp(W / 2 - (nocam ? cx : mx), W - w, 0), ty = clamp(Hh / 2 - (nocam ? cy : my), Hh - h, 0);
       inner.style.width = w + "px"; inner.style.transform = `translate(${tx}px, ${ty}px)`;
       cam.style.left = cx + "px"; cam.style.top = cy + "px"; cam.style.setProperty("--rot", k.rot + "deg");
       altEls.forEach(([e, o]) => { e.style.left = (o.x / 100) * w + "px"; e.style.top = (o.y / 100) * h + "px"; e.style.setProperty("--rot", o.rot + "deg"); });
