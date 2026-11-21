@@ -529,23 +529,20 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     });
   }
   function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; S.cyc = false; }
-  // after the first round only the loop repeats (Ritika, 22 Nov: "no neighbourhood animation in the loop; the ribbon only in the loop"):
-  // the neighbourhoods and shared spaces stay as they are; the ribbon runs along the loop alone, drawing it, a hold, and again
+  // after the first round the purple band keeps circling the loop (Ritika, 22 Nov: "the purple band should be in loop"):
+  // the loop line stays drawn, the band runs round it, lap after lap; nothing else moves
   function cycle(sc) {
     stop(); S.cyc = true;
-    const R = S.R, TDRAW = clamp((R.end - R.loop0) / .5, 4500, 7000), THOLD = 3200, TGAP = 700;
+    const R = S.R, LAP = 7000, GAP = 500, TAIL = 280, SPAN = R.end - R.loop0;
     const t0 = performance.now();
     const frame = (now) => {
       if ((document.body.dataset.scene && document.body.dataset.scene !== sc.id) || !S.cyc) { S.raf = 0; S.cyc = false; return; }
-      const t = now - t0;
-      if (t < TGAP) {
-        draw({ wins: [], reveal: Infinity, loop: 0 });
-      } else if (t < TGAP + TDRAW) {
-        const u = clamp((t - TGAP) / TDRAW, 0, 1), e = ease(u), head = R.loop0 + (R.end - R.loop0) * e, len = 220 * Math.sin(Math.PI * u) * (1 - u * .3);
-        draw({ wins: wins(Math.max(R.loop0, head - len), head, 130, 22), reveal: Infinity, loop: head });
-      } else if (t < TGAP + TDRAW + THOLD) {
-        draw({ wins: [], reveal: Infinity, loop: R.end });
-      } else { S.raf = 0; S.cyc = false; cycle(sc); return; }
+      const t = (now - t0) % (LAP + GAP), u = clamp(t / LAP, 0, 1);
+      if (t >= LAP) draw({ wins: [], reveal: Infinity, loop: R.end });
+      else {
+        const head = R.loop0 + SPAN * u, tail = Math.max(R.loop0, head - TAIL), g = clamp((head - R.loop0) / 90, 0, 1);
+        draw({ wins: wins(tail, head, 130 * g, 22 * g), reveal: Infinity, loop: R.end });
+      }
       S.raf = requestAnimationFrame(frame);
     };
     S.raf = requestAnimationFrame(frame);
