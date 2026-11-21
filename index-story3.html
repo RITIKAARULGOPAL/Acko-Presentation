@@ -6026,7 +6026,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
   const RW = 1.2, RY = 0.07;                                        // the path's width (m) and height
   const S = { built: false, beat: 0, view: null, follow: true, raf: 0, fresh: true, jump: false, asp: 1, home: null, user: false, wired: false, open: -1 };
-  let T, M, R, cam, host, sc, group, W, man, trail, P = [], legEnd = [], DU = [];
+  let T, M, R, cam, host, sc, group, W, man, trail, P = [], legEnd = [], DU = [], KEEP = -1;
   const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
   const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
   // the neighbourhood of the day's desks, by the drawing's own name ("06 · Home")
@@ -6083,7 +6083,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     gx.fillStyle = "#000"; gx.fillRect(0, 0, GW, GH);
     if (ring) { gx.strokeStyle = "#fff"; gx.lineWidth = 14; gx.lineJoin = gx.lineCap = "round"; gx.beginPath(); ring.forEach((q, i) => gx[i ? "lineTo" : "moveTo"](cxp(q[0]), cyp(q[1]))); gx.stroke(); }
     gx.fillStyle = "#fff";                                                  // the Café and the terrace: all their floor, less what stands on it
-    for (const nm of ["Cafeteria", "Terrace"]) for (const r of (plan.data.spaces || []).filter((q) => q.type === nm && q.d)) { trace(ringsOf(r.d)); gx.fill("evenodd"); }
+    for (const nm of ["Cafeteria", "Terrace", "Coffee corner", "Reception"]) for (const r of (plan.data.spaces || []).filter((q) => q.type === nm && q.d)) { trace(ringsOf(r.d)); gx.fill("evenodd"); }
     gx.fillStyle = gx.strokeStyle = "#000"; gx.lineWidth = 2; gx.lineJoin = "round";
     for (const it of PCS) { if (it[0] === "door") continue; trace(it[2]); gx.fill("evenodd"); gx.stroke(); }
     gx.fillStyle = "#fff"; for (const it of PCS) if (it[0] === "door") { trace(it[2]); gx.fill("evenodd"); }       // every door is a gap in the walls
@@ -6126,6 +6126,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const hold = (rs, p) => rs.filter((r) => inRing(p, r)).length % 2 === 1;
     const edgeD = (rs, p) => { let d = 1e18; for (const r of rs) for (let i = 0; i < r.length; i++) { const a = r[i], b = r[(i + 1) % r.length], ux = b[0] - a[0], uy = b[1] - a[1], t = Math.max(0, Math.min(1, ((p[0] - a[0]) * ux + (p[1] - a[1]) * uy) / (ux * ux + uy * uy || 1))); d = Math.min(d, Math.hypot(p[0] - a[0] - t * ux, p[1] - a[1] - t * uy)); } return d; };
     // the model's doors (the ones it can swing), as plan mm: centre, along, across, width
+    const GATES = [[87800, 36600, 40600, 900]];                              // [x, from y, to y, half width] (plan mm)
     const DR = [];
     if (M.doors) for (const it of PCS) {
       if (it[0] !== "door") continue;
@@ -6156,6 +6157,11 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
         const x = d.c[0] + ni[0] * t + d.u[0] * s, y = d.c[1] + ni[1] * t + d.u[1] * s, [i, j] = cellOf([x, y]);
         if (i >= 0 && j >= 0 && i < GW && j < GH && (Math.abs(t) < 300 || !furn || !furn[j * GW + i])) { walk[j * GW + i] = 1; free[j * GW + i] = 1; }
       }
+    }
+    // the way from the terrace lawn up past the coffee bar to Reception, as Ritika marked it (22 Nov): an opening in the terrace's north edge, cut through the glass (not the walls)
+    for (const [ox, y0, y1, hw] of GATES) for (let y = y0; y <= y1; y += 100) for (let x = ox - hw; x <= ox + hw; x += 100) {
+      const [i, j] = cellOf([x, y]); if (i < 0 || j < 0 || i >= GW || j >= GH) continue; const m = j * GW + i;
+      if (!furn || !furn[m]) { walk[m] = 1; free[m] = 1; }
     }
     const picks = BEATS.map((b, k) => pickDoor(b, k));
     const STD = BEATS.map((b, k) => {
@@ -6226,6 +6232,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       const i0 = ics[0], q0 = P[Math.max(0, i0 - 3)], q1 = P[Math.min(P.length - 1, i0 + 3)], dir = (q1[0] - q0[0]) * d.n[0] + (q1[1] - q0[1]) * d.n[1] >= 0 ? 1 : -1;   // the leaf swings the way he first goes through
       DU.push({ mi: d.mi, n: [d.n[0] * dir, d.n[1] * dir], ics, a: 0 });
     }
+    KEEP = STD[BEATS.length - 1].door ? STD[BEATS.length - 1].door.d.mi : -1;
     BEATS.forEach((b) => { const sx = M.X(b.st[0]), sz = M.Z(b.st[1]); b.corr = [b.p.x - sx, b.p.z - sz]; });
     // the ribbon: the Loop's lilac stroke on a paler, wider edge, drawn as far as he has walked
     const strip = (wid, col, op, ro, off) => {
@@ -6243,7 +6250,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     if (!M || !M.doorOpen) return;
     for (const d of DU) {
       let m = 1e9; for (const ic of d.ics) m = Math.min(m, Math.abs(S.p - ic));
-      const e = (m * 0.25 - 1.4) / 2.2, a = e <= 0 ? 1 : e >= 1 ? 0 : 1 - e * e * (3 - 2 * e);
+      const e = (m * 0.25 - 1.4) / 2.2, a = d.mi === KEEP ? 1 : e <= 0 ? 1 : e >= 1 ? 0 : 1 - e * e * (3 - 2 * e);      // (the Board Room door stays open, Ritika 22 Nov)
       if (Math.abs(a - d.a) > 0.004) { d.a = a; M.doorOpen(d.mi, a, d.n[0], d.n[1]); }
     }
   }
