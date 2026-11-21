@@ -863,14 +863,14 @@
       if (shadowDue) { r.shadowMap.needsUpdate = true; shadowDue = false; }
     };
     M = { scene, groups: G, X, Z, CX, CY, slab: A.slab, source: D.source, areas: areasP };   // (areas: where the furniture is the plan's)
-    // the doors: M.doors (world metres, the leaf's length) and M.doorOpen(i, a, nx, nz): door i open a (0 shut to 1 wide open), its leaf turned about a jamb
+    // the doors: M.doors (world metres, the leaf's length) and M.doorOpen(i, a, nx, nz): door i open a (0 shut to 1 folded back against the wall, 170 degrees), its leaf turned about a jamb
     // to swing toward (nx, nz) (the room side); the leaf and its pulls are rewritten in their buffers, a = 0 puts them back as built (22 Nov, Ritika: "the door can open and he can enter")
     if (FT && DGEO && DGEO.glass && DGEO.mullion) {
       M.doors = FT.doors.map((d) => ({ x: d.x, z: d.z, ang: d.ang, L: d.L, h: d.h }));
       M.doorOpen = (i, a, nx, nz) => {
         const d = FT.doors[i]; if (!d) return;
         const al = [Math.cos(d.ang), -Math.sin(d.ang)], Hx = d.x + al[0] * d.L / 2, Hz = d.z + al[1] * d.L / 2, ex = -al[0] * d.L, ez = -al[1] * d.L;
-        const sg = (ez * nx - ex * nz) > 0 ? 1 : -1, ph = sg * a * Math.PI / 2, c = Math.cos(ph), s = Math.sin(ph);
+        const sg = (ez * nx - ex * nz) > 0 ? 1 : -1, ph = sg * a * 2.97, c = Math.cos(ph), s = Math.sin(ph);
         const turn = (G2, range) => { const P = G2.g.getAttribute("position").array, O = G2.o;
           for (let j = range[0]; j < range[1]; j += 3) { const rx = O[j] - Hx, rz = O[j + 2] - Hz; P[j] = Hx + rx * c + rz * s; P[j + 1] = O[j + 1]; P[j + 2] = Hz - rx * s + rz * c; }
           G2.g.getAttribute("position").needsUpdate = true; };
