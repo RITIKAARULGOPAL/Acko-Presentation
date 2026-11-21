@@ -3509,7 +3509,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <script src="data/loop-path.js?v=1"></script>
 <script src="assets/js/axo-layers.js?v=1"></script>
 <script src="data/axo-skp.js?v=1"></script>
-<script src="assets/js/axo-skp.js?v=2"></script>
+<script src="assets/js/axo-skp.js?v=3"></script>
 <script src="assets/js/plan-hover.js?v=62"></script>
 <script src="assets/js/plan-layers.js?v=62"></script>
 <script src="data/site-floor.js?v=1"></script>
@@ -6125,6 +6125,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const trace = (rs) => { gx.beginPath(); for (const r of rs) { r.forEach((q, i) => gx[i ? "lineTo" : "moveTo"](cxp(q[0]), cyp(q[1]))); gx.closePath(); } };
     gx.fillStyle = "#000"; gx.fillRect(0, 0, GW, GH);
     if (ring) { gx.strokeStyle = "#fff"; gx.lineWidth = 14; gx.lineJoin = gx.lineCap = "round"; gx.beginPath(); ring.forEach((q, i) => gx[i ? "lineTo" : "moveTo"](cxp(q[0]), cyp(q[1]))); gx.stroke(); }
+    gx.fillStyle = "#fff";                                                  // the Café and the terrace: all their floor, less what stands on it
+    for (const nm of ["Cafeteria", "Terrace"]) for (const r of (plan.data.spaces || []).filter((q) => q.type === nm && q.d)) { trace(ringsOf(r.d)); gx.fill("evenodd"); }
     gx.fillStyle = gx.strokeStyle = "#000"; gx.lineWidth = 2; gx.lineJoin = "round";
     for (const it of PCS) { if (it[0] === "door") continue; trace(it[2]); gx.fill("evenodd"); gx.stroke(); }
     gx.fillStyle = "#fff"; for (const it of PCS) if (it[0] === "door") { trace(it[2]); gx.fill("evenodd"); }       // every door is a gap in the walls
@@ -6202,7 +6204,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const STD = BEATS.map((b, k) => {
       const pk = picks[k];
       if (pk) {                                                             // as far in as the way is clear of furniture, up to 1.4 m (a crowded doorway: he stands in it)
-        let t = 0; while (t < 1400) { const [i, j] = cellOf([pk.d.c[0] + pk.ni[0] * (t + 100), pk.d.c[1] + pk.ni[1] * (t + 100)]); if (furn && furn[j * GW + i]) break; t += 100; }
+        let t = 0; const maxT = b.n === "Café" ? 2600 : 1400; while (t < maxT) { const [i, j] = cellOf([pk.d.c[0] + pk.ni[0] * (t + 100), pk.d.c[1] + pk.ni[1] * (t + 100)]); if (furn && furn[j * GW + i]) break; t += 100; }
         lane(pk.d, pk.ni, -1200, t + 200);
         return { p: [pk.d.c[0] + pk.ni[0] * t, pk.d.c[1] + pk.ni[1] * t], door: pk }; }
       return { p: nearestWalk(anchor(k), walk) || nearestWalk(b.at, free) || b.at, door: null };
@@ -6261,7 +6263,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     DU = [];
     for (const d of DR) {
       const wx = M.X(d.c[0]), wz = M.Z(d.c[1]), ics = []; let last = -99;
-      P.forEach((q, i) => { if (Math.hypot(q[0] - wx, q[1] - wz) < 0.45) { if (i - last > 8) ics.push(i); last = i; } });
+      const ax = d.u[0], az = d.u[1], hl = d.L / 2000;                         // the doorway's own line (its centre ± half its width), not just its middle
+      P.forEach((q, i) => { const t = Math.max(-hl, Math.min(hl, (q[0] - wx) * ax + (q[1] - wz) * az)); if (Math.hypot(q[0] - wx - ax * t, q[1] - wz - az * t) < 0.45) { if (i - last > 8) ics.push(i); last = i; } });
       if (!ics.length) continue;
       const i0 = ics[0], q0 = P[Math.max(0, i0 - 3)], q1 = P[Math.min(P.length - 1, i0 + 3)], dir = (q1[0] - q0[0]) * d.n[0] + (q1[1] - q0[1]) * d.n[1] >= 0 ? 1 : -1;   // the leaf swings the way he first goes through
       DU.push({ mi: d.mi, n: [d.n[0] * dir, d.n[1] * dir], ics, a: 0 });

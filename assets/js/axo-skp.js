@@ -709,11 +709,27 @@
       const keep = []; for (let t = 0; t < n; t++) if (!drop[t]) keep.push(ix[3 * t], ix[3 * t + 1], ix[3 * t + 2]);
       if (keep.length < ix.length) g.setIndex(new T.BufferAttribute(new ix.constructor(keep), 1));
     };
+    // the café's counter, moved away from the door (22 Nov, Ritika: "move the counter away from the door", so he can walk in): the vertices of the low pieces (under 1.2 m)
+    // whose middle lies in a move's plan box shift by its offset (plan mm); the counter is one piece, 5.6 m long, 0.6 m deep, along the café's north wall
+    const MOVES = [{ box: [62500, 32100, 68400, 32800], by: [2500, 0] }];
+    const move = (g) => {
+      const pa = g.getAttribute("position"), pos = pa.array, ix = g.getIndex() ? g.getIndex().array : null; if (!ix) return;
+      const seen = new Set();
+      for (const mv of MOVES) {
+        const x0 = X(mv.box[0]), z0 = Z(mv.box[1]), x1 = X(mv.box[2]), z1 = Z(mv.box[3]), dx = mv.by[0] / 1000, dz = mv.by[1] / 1000;
+        for (let t = 0; t < ix.length / 3; t++) {
+          const a = ix[3 * t] * 3, b = ix[3 * t + 1] * 3, c = ix[3 * t + 2] * 3, cx = (pos[a] + pos[b] + pos[c]) / 3, cz = (pos[a + 2] + pos[b + 2] + pos[c + 2]) / 3;
+          if (cx < x0 || cx > x1 || cz < z0 || cz > z1 || Math.max(pos[a + 1], pos[b + 1], pos[c + 1]) >= 1.2) continue;
+          for (const v of [a, b, c]) if (!seen.has(v)) { seen.add(v); pos[v] += dx; pos[v + 2] += dz; }
+        }
+      }
+      if (seen.size) { pa.needsUpdate = true; g.computeBoundingBox(); g.computeBoundingSphere(); }
+    };
     const fine = [], coarse = [], lo = new T.Vector3(1e9, 1e9, 1e9), hi = new T.Vector3(-1e9, -1e9, -1e9), ink = [], boothMesh = new Set();
     for (const [pi, p] of D.parts.entries()) {
       if (FIT && ARCH.includes(p.k) && !booths.has(p.u)) continue;          // (the plan's walls, glass and façade instead)
       const g = geometry(p), mat = matOf(p.k);
-      if (CHG && p.u < 0 && FURN.includes(p.k)) cut(g);
+      if (CHG && p.u < 0 && FURN.includes(p.k)) { cut(g); move(g); }
       if (CHG && p.u < 0 && CHG.drop && CHG.drop[pi]) {                        // walls 28.10 doesn't have
         const ix = g.getIndex().array, out = new Uint8Array(ix.length / 3); for (const [t0, t1] of CHG.drop[pi]) out.fill(1, t0, t1);
         const keep = []; for (let t = 0; t < out.length; t++) if (!out[t]) keep.push(ix[3 * t], ix[3 * t + 1], ix[3 * t + 2]);
