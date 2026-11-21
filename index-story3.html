@@ -4358,7 +4358,7 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
     leave(_, sc) {
       cancelAnimationFrame(raf);
       if (sc && window.ACKO_MORPH) { const pg = $(".page", sc), sh = $(".pp-shell", sc); pg.classList.remove("pp-arrive"); sh.removeAttribute("transform"); const pl = $(".plate", sh), bb = pl ? pl.getBBox() : null, st = ["fill", "stroke", "stroke-width", "stroke-dasharray", "stroke-linejoin"];
-        const html = [...sh.children].map((e) => { const c = e.cloneNode(true), cs = getComputedStyle(e); c.removeAttribute("class"); st.forEach((p) => c.style.setProperty(p, cs.getPropertyValue(p))); return c.outerHTML; }).join("");
+        const html = [...sh.children].filter((e) => !/^(core|stair|stair-h|lift|lift-x|col)$/.test(e.getAttribute("class") || "")).map((e) => { const c = e.cloneNode(true), cs = getComputedStyle(e); c.removeAttribute("class"); st.forEach((p) => c.style.setProperty(p, cs.getPropertyValue(p))); return c.outerHTML; }).join("");
         ACKO_MORPH.mark("s-pitch", { m: ACKO_MORPH.page(sh, pg), bb: bb ? [bb.x, bb.y, bb.width, bb.height] : null, html }); }
       if (sc && window.ACKO_FLOW) ACKO_FLOW.out(sc);
     },
@@ -4928,9 +4928,9 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     S.ribbon = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0x14102a, transparent: true, depthTest: false, depthWrite: false, side: T.DoubleSide }));
     S.ribbon.renderOrder = 10; S.ribbon.frustumCulled = false; S.ribbon.visible = false; M.scene.add(S.ribbon);
   }
-  function riseStart() { ribbonBuild(); S.rise = true; S.post = 0; S.dim = 1; if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = 1; } sc.classList.remove("st-land"); sc.classList.add("st-rise"); }
+  function riseStart() { ribbonBuild(); S.rise = true; S.post = 0; S.dim = 0; if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = 0; } sc.classList.remove("st-land"); sc.classList.add("st-rise"); }
   // the white veil and the black boundary stay whole while the plan tilts to the axo's angle; only when it has landed the axo comes up (22 Nov, Ritika)
-  function riseStep(k) { S.dim = 1; if (S.ribbon) S.ribbon.material.opacity = 1; if (k >= 1 && !S.post) S.post = performance.now(); }
+  function riseStep(k) { const a = ramp(0, 0.1, k); S.dim = a; if (S.ribbon) S.ribbon.material.opacity = a; if (k >= 1 && !S.post) S.post = performance.now(); }      // the white and the black boundary fade in on the very footprint of the plan, then it tilts
   function risePost(now) { const u = Math.min(1, (now - S.post) / 1500); S.dim = 1 - ramp(0, 0.9, u); if (S.ribbon) S.ribbon.material.opacity = 1 - ramp(0.55, 1, u); if (u >= 1) { S.post = 0; riseEnd(true); } }
   function riseEnd(landed) { S.rise = false; S.post = 0; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; sc.classList.remove("st-rise"); if (landed) sc.classList.add("st-land"); }
   function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
@@ -5103,8 +5103,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       if (fc) later(() => { im.style.transition = "opacity 1.3s var(--ease)"; im.style.opacity = 0; }, 500);
       const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;
       if ((fl || site) && plan && plan.data) {
-        const [x, y, w, h] = plan.data.viewBox, vb = plan.vbFor([x, y, x + w, y + h], [35, 157, 1885, 670]);
-        const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+        const [x, y, w, h] = plan.data.viewBox, vb = site && window.ACKO_SITE_VB ? window.ACKO_SITE_VB : plan.vbFor([x, y, x + w, y + h], [35, 157, 1885, 670]); window.ACKO_SITE_VB = null;
+        const top = { theta: 0, phi: 1e-4, half: (Math.max(vb[2] / 1920, vb[3] / 1080) * 1080) / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
         const ms = site ? (window.ACKO_RISE_MS || 2600) : 2400;
         S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms }; need();
         if (site) { riseStart(); }
@@ -7296,6 +7296,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     },
     leave(_, sc) {
       const mvb = home(), mbox = ddBox(mvb);
+      window.ACKO_SITE_VB = (plan.view && plan.view.slice ? plan.view.slice() : mvb.slice());      // the view the plan is shown in: the axo tilts up from exactly there
       { const wpl = document.getElementById("w-plan"); if (wpl) { wpl.style.transition = ""; wpl.style.opacity = ""; } }
       if (window.ACKO_FLOW) ACKO_FLOW.out(sc);
       document.body.dataset.tpl = "";
