@@ -244,6 +244,13 @@
 #s-pitch .pp-stats b small { font-size: .42em !important; color: #777 !important; }
 #s-pitch .pp-stats > div > span { font-size: calc(var(--pt) * 7) !important; color: #555 !important; }
 #s-pitch .pp-hand { font-size: calc(var(--pt) * 26) !important; line-height: 1.12; color: var(--purple) !important; }
+/* balance (22 Nov, Ritika): the drawing leads, the words support; one left edge and one right edge */
+#s-pitch .pp-h { font-size: calc(var(--pt) * 21) !important; line-height: 1.15; }
+#s-pitch .pp-h b { font-size: 1.18em !important; white-space: nowrap; }
+#s-pitch .pp-stats b { height: calc(var(--pt) * 24) !important; font-size: calc(var(--pt) * 19) !important; }
+#s-pitch .pp-stats > div:nth-child(4) b { font-size: calc(var(--pt) * 21) !important; }
+#s-pitch .pp-stats > div > span { font-size: calc(var(--pt) * 6.6) !important; }
+#s-pitch .pp-hand { font-size: calc(var(--pt) * 17) !important; line-height: 1.15; }
 </style>
 <style data-slide="s-strategy">
 /* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
@@ -1989,11 +1996,8 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="1" data-mins="0.6"
   data-notes="The bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end, and 34 m across, glass to glass: exactly half a pitch wide. About 651 people on one plate, a walk of five minutes or more from one end to the other. A long, thin floor: so how do you make it feel like one team? That shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
   <div class="page">
-    <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
-      <small style="--i:0">ACKO · Regalium, Koramangala</small>
-    </div>
-    <h2 class="pp-h" style="left:3.4%;top:13.5%;width:84%">One floor, longer than <b>two football pitches</b> and only <b>half a pitch wide.</b></h2>
-    <svg class="pp-svg" viewBox="-9 -20 265 102" preserveAspectRatio="xMidYMid meet" aria-hidden="true" style="left:3%;top:31%;width:94%;height:53%">
+    <h2 class="pp-h" style="left:6.8%;top:8.5%;width:87.3%">One floor, longer than <b>two football pitches</b> and only <b>half a pitch wide.</b></h2>
+    <svg class="pp-svg" viewBox="-9 -20 265 102" preserveAspectRatio="xMidYMid meet" aria-hidden="true" style="left:4%;top:22%;width:92%;height:62%">
       <g class="pp-pitches"></g>
       <g class="pp-shell"></g>
       <g class="pp-len"><path/><text text-anchor="middle">245 m</text></g>
@@ -2004,14 +2008,14 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       </g>
       <text class="pp-lab" text-anchor="middle">TWO FOOTBALL PITCHES · 210 m</text>
     </svg>
-    <div class="pp-stats" style="left:3.4%;top:84%;width:60%">
+    <div class="pp-stats" style="left:6.8%;top:85%;width:58%">
       <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
       <div><b>34<small>m</small></b><span>wide, glass to glass</span></div>
       <div><b>½</b><span>a pitch’s width</span></div>
       <div><b><span data-count="651">0</span></b><span>people, on one plate</span></div>
       <div><b><span data-count="5">0</span><span>+</span><small>min</small></b><span>to walk end to end</span></div>
     </div>
-    <p class="pp-hand hand" style="left:64%;top:82.5%;width:33%">a long, thin floor: so how do you make it feel like one team?</p>
+    <p class="pp-hand hand" style="left:66.6%;top:85%;width:27.5%">a long, thin floor: so how do you make it feel like one team?</p>
   </div>
 </section>
 
@@ -4179,7 +4183,6 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
       const fromSite = !reduced && !!window.ACKO_MORPH && document.body.classList.contains("si-left");
       if (!fromSite) plain();
       if (!G) build(sc);
-      reveal($(".pp-head", sc), 60);
       sc._fresh = true; sc._from = !reduced && window.ACKO_MORPH ? ACKO_MORPH.take("s-site-dd") : null; sc._site = fromSite && !sc._from;
       if (sc._site) { const site = document.getElementById("s-site"); if (site && site._into) site._into(); else sc._site = false; }
     },
