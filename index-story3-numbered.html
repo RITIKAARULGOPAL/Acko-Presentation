@@ -786,6 +786,23 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 .wt-prog { flex: 1; height: calc(var(--pt) * 1.8); background: rgba(255,255,255,.28); cursor: pointer; position: relative; }
 .wt-prog i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--lilac); }
 .wt-t { min-width: calc(var(--pt) * 24); text-align: right; opacity: .85; font-variant-numeric: tabular-nums; }
+
+/* film: whole frame always visible; seek bar with a hover preview; volume slider */
+#s-walkthrough-film video { object-fit: contain; }
+.wt-prog { height: calc(var(--pt) * 1.8); overflow: visible; touch-action: none; }
+.wt-prog::before { content: ""; position: absolute; left: 0; right: 0; top: -9px; bottom: -9px; }
+.wt-prog u { position: absolute; inset: 0 auto 0 0; width: 0; background: rgba(255,255,255,.28); text-decoration: none; }
+.wt-prog i { z-index: 1; }
+.wt-prog i::after { content: ""; position: absolute; right: -6px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); transform: scale(0); transition: transform .15s; }
+.wt-prog:hover i::after, .wt-prog.drag i::after { transform: scale(1); }
+.wt-tip { position: absolute; bottom: 14px; left: 0; transform: translateX(-50%); display: none; flex-direction: column; align-items: center; gap: 4px; pointer-events: none; z-index: 3; }
+.wt-tip.on { display: flex; }
+.wt-tip canvas { width: 160px; height: 90px; border-radius: 4px; border: 2px solid #fff; background: #000; box-shadow: 0 4px 14px rgba(0,0,0,.5); }
+.wt-tip span { font-size: 12px; font-weight: 600; background: rgba(0,0,0,.75); padding: 1px 6px; border-radius: 4px; font-variant-numeric: tabular-nums; }
+.wt-vl { -webkit-appearance: none; appearance: none; width: calc(var(--pt) * 30); height: 4px; border-radius: 2px; background: linear-gradient(to right, #fff var(--p, 100%), rgba(255,255,255,.3) var(--p, 100%)); cursor: pointer; margin: 0 calc(var(--pt) * 1.5) 0 calc(var(--pt) * 1); }
+.wt-vl::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.wt-vl::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 0; }
+.wt-vl:focus { outline: none; }
 </style>
 <style data-slide="s-thanks-w">
 /* ---------- thank you ---------- */
@@ -2577,9 +2594,10 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="wt-bar">
     <button type="button" class="wt-b" id="wt-play" title="Play / pause" aria-label="Play / pause"><svg viewBox="0 0 24 24"><path class="pl" d="M7 4l13 8-13 8z"/><path class="pa" d="M8 5v14M16 5v14" style="display:none"/></svg><span>Play</span></button>
     <button type="button" class="wt-b" id="wt-replay" title="Replay from the start" aria-label="Replay"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Replay</span></button>
-    <div class="wt-prog" id="wt-prog"><i></i></div>
+    <div class="wt-prog" id="wt-prog"><u></u><i></i><div class="wt-tip" id="wt-tip"><canvas width="320" height="180"></canvas><span>0:00</span></div></div>
     <span class="wt-t" id="wt-t">0:00 / 0:00</span>
     <button type="button" class="wt-b on" id="wt-mute" title="Music on / off" aria-label="Music on / off"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path class="wv" d="M16 8a5 5 0 0 1 0 8"/><path class="wx" d="M17 9l5 6M22 9l-5 6" style="display:none"/></svg><span>Music</span></button>
+    <input type="range" class="wt-vl" id="wt-vl" min="0" max="100" value="100" aria-label="Volume">
     <div class="wt-sp" id="wt-sp"><button type="button" class="wt-b" data-r="0.5">0.5x</button><button type="button" class="wt-b on" data-r="1">1x</button><button type="button" class="wt-b" data-r="1.5">1.5x</button><button type="button" class="wt-b" data-r="2">2x</button></div>
   </div>
 </section>
@@ -6251,28 +6269,53 @@ ACKO.slide("s-walkthrough-film", ({ $, plain }) => {
     $("#wt-play .pl", document).style.display = v.paused ? "" : "none"; $("#wt-play .pa", document).style.display = v.paused ? "none" : "";
     $("#wt-play span", document).textContent = v.paused ? "Play" : "Pause";
     $("#wt-prog i", document).style.width = (v.duration ? (v.currentTime / v.duration) * 100 : 0) + "%";
-    $("#wt-t", document).textContent = T(v.currentTime) + " / " + T(v.duration || 0);
+    $("#wt-t", document).textContent = T(v.currentTime) + " / " + T(v.duration || 0); try { const bf = v.buffered; $("#wt-prog u", document).style.width = (v.duration && bf.length ? (bf.end(bf.length - 1) / v.duration) * 100 : 0) + "%"; } catch (e) {} const vl = $("#wt-vl", document); const lv = v.muted ? 0 : Math.round(v.volume * 100); vl.value = lv; vl.style.setProperty("--p", lv + "%");
     $("#wt-mute", document).classList.toggle("on", !v.muted); $("#wt-mute .wx", document).style.display = v.muted ? "" : "none"; $("#wt-mute .wv", document).style.display = v.muted ? "none" : "";
     if (v.paused) { clearTimeout(idle); if (SC) SC.classList.remove("idle"); }
   }
+  // Space plays / pauses the film (and never moves the deck); Shift + arrows jump 5 s
+  const KD = (e) => {
+    const t = e.target, tag = t && t.tagName;
+    if ((e.code === "Space" || e.key === " ") && !(tag === "TEXTAREA" || (tag === "INPUT" && t.type !== "range"))) { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); const v = V(); if (v) (v.paused ? v.play() : v.pause()); wake(); }
+    else if (e.shiftKey && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); const v = V(); if (v && v.duration) v.currentTime = Math.min(v.duration, Math.max(0, v.currentTime + (e.key === "ArrowRight" ? 5 : -5))); wake(); }
+  };
   function wire(sc) {
     if (wired) return; wired = true; const v = V();
     const toggle = () => (v.paused ? v.play() : v.pause());
-    ["play", "pause", "timeupdate", "loadedmetadata", "ended", "volumechange"].forEach((e) => v.addEventListener(e, sync));
+    ["play", "pause", "timeupdate", "loadedmetadata", "ended", "volumechange", "progress"].forEach((e) => v.addEventListener(e, sync));
     v.addEventListener("play", wake);
     v.addEventListener("click", toggle);
         $("#wt-play", document).addEventListener("click", toggle);
     $("#wt-replay", document).addEventListener("click", () => { v.currentTime = 0; v.play(); });
-    $("#wt-mute", document).addEventListener("click", () => { v.muted = !v.muted; });
-    $("#wt-prog", document).addEventListener("click", (e) => { const r = e.currentTarget.getBoundingClientRect(); if (v.duration) v.currentTime = ((e.clientX - r.left) / r.width) * v.duration; });
+    $("#wt-mute", document).addEventListener("click", () => { v.muted = !v.muted; if (!v.muted && v.volume === 0) v.volume = .5; });
+    { const vl = $("#wt-vl", document);
+      try { const sv = sessionStorage.getItem("wtVol"); if (sv !== null) v.volume = Math.min(1, Math.max(0, +sv / 100)); } catch (e) {}
+      vl.addEventListener("input", () => { const x = +vl.value / 100; v.volume = x; v.muted = x === 0; try { sessionStorage.setItem("wtVol", vl.value); } catch (e) {} });
+      ["pointerup", "change"].forEach((t) => vl.addEventListener(t, () => vl.blur())); }
+    { const prog = $("#wt-prog", document), tip = $("#wt-tip", document), cv = tip.querySelector("canvas"), cx = cv.getContext("2d"), tl = tip.querySelector("span");
+      let pv = null, busy = false, want = null, drag = false;
+      const frac = (e) => { const r = prog.getBoundingClientRect(); return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); };
+      const seek = (f) => { if (v.duration) v.currentTime = f * v.duration; };
+      const show = (f) => {
+        const r = prog.getBoundingClientRect(), t = f * (v.duration || 0), w = tip.offsetWidth || 164;
+        tip.style.left = Math.min(r.width - w / 2, Math.max(w / 2, f * r.width)) + "px"; tl.textContent = T(t); tip.classList.add("on");
+        if (!pv) { pv = document.createElement("video"); pv.muted = true; pv.preload = "auto"; pv.playsInline = true; pv.src = v.currentSrc || v.src;
+          pv.addEventListener("seeked", () => { try { cx.drawImage(pv, 0, 0, cv.width, cv.height); } catch (e) {} busy = false; if (want !== null) { const q = want; want = null; busy = true; pv.currentTime = q; } }); }
+        if (busy) want = t; else { busy = true; pv.currentTime = t; }
+      };
+      prog.addEventListener("pointermove", (e) => { show(frac(e)); if (drag) seek(frac(e)); });
+      prog.addEventListener("pointerleave", () => { if (!drag) tip.classList.remove("on"); });
+      prog.addEventListener("pointerdown", (e) => { drag = true; prog.classList.add("drag"); try { prog.setPointerCapture(e.pointerId); } catch (x) {} seek(frac(e)); show(frac(e)); });
+      const end = () => { if (!drag) return; drag = false; prog.classList.remove("drag"); tip.classList.remove("on"); };
+      prog.addEventListener("pointerup", end); prog.addEventListener("pointercancel", end); }
     $("#wt-sp", document).addEventListener("click", (e) => {
       const b = e.target.closest("[data-r]"); if (!b) return; v.playbackRate = +b.dataset.r;
       $("#wt-sp", document).querySelectorAll(".wt-b").forEach((x) => x.classList.toggle("on", x === b));
     });
   }
   return {
-    enter(_, sc) { plain(); SC = sc; wire(sc); document.body.classList.add("wt-film"); EV.forEach((e) => document.addEventListener(e, wake, true)); const v = V(); v.currentTime = 0; sync(); const p = v.play(); if (p && p.catch) p.catch(() => {}); wake(); },
-    leave() { const v = V(); if (v) v.pause(); clearTimeout(idle); document.body.classList.remove("wt-film"); EV.forEach((e) => document.removeEventListener(e, wake, true)); if (SC) SC.classList.remove("idle"); },
+    enter(_, sc) { plain(); SC = sc; wire(sc); window.addEventListener("keydown", KD, true); document.body.classList.add("wt-film"); EV.forEach((e) => document.addEventListener(e, wake, true)); const v = V(); v.currentTime = 0; sync(); const p = v.play(); if (p && p.catch) p.catch(() => {}); wake(); },
+    leave() { window.removeEventListener("keydown", KD, true); const v = V(); if (v) v.pause(); clearTimeout(idle); document.body.classList.remove("wt-film"); EV.forEach((e) => document.removeEventListener(e, wake, true)); if (SC) SC.classList.remove("idle"); },
   };
 });
 </script>
