@@ -188,11 +188,11 @@
         jobs.sort((a, b) => b.prio - a.prio);
         const j = jobs[0];
         if (dead.has(j.id)) { jobs.shift(); dead.delete(j.id); continue; }
-        if (!j.oc) { j.oc = new OffscreenCanvas(j.g.W, j.g.H); j.c = j.oc.getContext("2d"); j.i = 0; j.re = j.bare ? new RegExp(j.bare[0], j.bare[1]) : null; }
+        if (!j.oc) { j.oc = new OffscreenCanvas(j.g.W, j.g.H); j.c = j.oc.getContext("2d", { willReadFrequently: true }); j.t0 = performance.now(); j.i = 0; j.re = j.bare ? new RegExp(j.bare[0], j.bare[1]) : null; }
         const k = j.order[j.i++];
         try { render(j.c, j.g, k * j.w, Math.min(j.g.W, (k + 1) * j.w), j.theme, j.re); } catch (err) { jobs.shift(); postMessage({ t: "fail", id: j.id }); continue; }
         if (j.i >= j.order.length) { jobs.shift(); j.c.getImageData(0, 0, 1, 1); const bm = j.oc.transferToImageBitmap();      // the readback makes the GPU finish here, in the worker, not when the page first uses the bitmap
-          postMessage({ t: "done", id: j.id, bitmap: bm }, [bm]); }
+          postMessage({ t: "done", id: j.id, bitmap: bm, ms: Math.round(performance.now() - j.t0) }, [bm]); }
         await new Promise((r) => setTimeout(r, 0));
       }
       busy = false;
@@ -220,11 +220,13 @@
     };
     // ---- one picture of a view: the canvas' size, the scale, where the plan falls; key names the picture (size, view, mode, colours) ----
     const geom = (view, bb) => {
-      const r = host.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+      // picture density capped (default 1.5): a 2x display would make every picture 4.9 MP (about 20 MB to make, copy and keep), and the copy is what
+      // holds the page at each zoom landing; the canvas is CSS-sized to the stage, so it just scales up. ?dpr=2 (or window.ACKO_PLAN_DPR) lifts the cap.
+      const r = host.getBoundingClientRect(), cap = Number(window.ACKO_PLAN_DPR || new URLSearchParams(location.search).get("dpr")) || 1.5, dpr = Math.min(window.devicePixelRatio || 1, cap);
       if (!r.width || !r.height) return null;
       const kk = Math.max(view[2] / r.width, view[3] / r.height), x0 = view[0] + view[2] / 2 - (r.width * kk) / 2, y0 = view[1] + view[3] / 2 - (r.height * kk) / 2, s = dpr / kk;
       const W = Math.round(r.width * dpr), H = Math.round(r.height * dpr);
-      return { dpr, W, H, x0, y0, s, hair: 1 / s, vy1: y0 + r.height * kk, key: W + "x" + H + "|" + view.join(",") + "|" + String(bb === undefined ? bare : bb) + "|" + themeV };
+      return { dpr, W, H, x0, y0, s, hair: 1 / s, vy1: y0 + r.height * kk, key: W + "x" + H + "|" + view.map((n) => Math.round(n * 100) / 100).join(",") + "|" + String(bb === undefined ? bare : bb) + "|" + themeV };
     };
     // ---- pictures: a view's drawing made ahead (a bitmap from the worker, or an offscreen canvas painted in slices when there is no worker); showing
     // one is a copy. Pinned pictures (the overview, warmed at idle) are kept for views that come back (Reset view, the next click); the newest other
@@ -236,7 +238,7 @@
     const pinned = new Map(); let lastDone = null;
     const ready = (key) => pinned.get(key) || (lastDone && lastDone.key === key ? lastDone : null);
     const keep = (rec, pin) => {
-      if (pin) { pinned.set(rec.key, rec); while (pinned.size > 2) { const k0 = pinned.keys().next().value; drop(pinned.get(k0)); pinned.delete(k0); } }
+      if (pin) { pinned.set(rec.key, rec); while (pinned.size > 6) { const k0 = pinned.keys().next().value; drop(pinned.get(k0)); pinned.delete(k0); } }
       else { drop(lastDone); lastDone = rec; }
     };
     // the worker: made at the first need; null where workers or offscreen canvases aren't (or it failed): then the page paints
@@ -249,7 +251,7 @@
         wk = new Worker(URL.createObjectURL(new Blob([src], { type: "text/javascript" })));
         // any failure turns the worker off for good: what was waiting is told, and the page paints from then on
         const fail = () => { wkFail = true; const w = wk, fs = [...pend.values()]; wk = null; pend.clear(); try { w && w.terminate(); } catch (e) {} fs.forEach((f) => f(null)); };
-        wk.onmessage = (e) => { const m = e.data; if (m.t === "fail") return fail(); const f = pend.get(m.id); if (f) { pend.delete(m.id); f(m.t === "done" ? m.bitmap : null); } };
+        wk.onmessage = (e) => { const m = e.data; if (m.t === "fail") return fail(); const f = pend.get(m.id); if (f) { pend.delete(m.id); if (m.t === "done") window.__picMs = m.ms; f(m.t === "done" ? m.bitmap : null); } };
         wk.onerror = fail;
         wk.postMessage({ t: "init", data });                      // the data is copied once (about 120 ms)
       } catch (e) { wkFail = true; wk = null; }
@@ -319,7 +321,9 @@
       if (!vb) return; if (on) draw(vb); else later = setTimeout(() => draw(vb), 900); };
     // prepare(view, done) -> cancel: a picture of `view` made without stalling; done() when it can be shown (at once if it already can: draw(view, true) then copies it)
     // warm(view, done): the same, at idle, kept for when the view comes back
-    return { el: cv, draw, get model() { local(); return M; }, bare: setBare, prepare: (view, done) => job(view, false, done), warm: (view, done) => job(view, true, done || (() => {})) };
+    // has(view): the picture of view is already made (a flight can swap to it half-way, so the second half is sharp, not a scaled-up old picture)
+    const has = (view) => { const g = geom(view, bare); return !!(g && ready(g.key)); };
+    return { el: cv, draw, has, get model() { local(); return M; }, bare: setBare, prepare: (view, done) => job(view, false, done), warm: (view, done) => job(view, true, done || (() => {})) };
   }
 
   window.PlanCanvas = { mount, build: CORE.build };

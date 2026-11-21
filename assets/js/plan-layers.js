@@ -199,7 +199,7 @@
     const snap = (p, k) => { let best = null, bd = 12 * k; for (const q of VERTS) { const d = Math.hypot(q[0] - p[0], q[1] - p[1]); if (d < bd) { bd = d; best = q; } } return best ? [best[0], best[1], 1] : [p[0], p[1], 0]; };
     const len = (p) => p.slice(1).reduce((a, q, i) => a + Math.hypot(q[0] - p[i][0], q[1] - p[i][1]), 0);
     const area = (p) => Math.abs(p.reduce((a, q, i) => { const r = p[(i + 1) % p.length]; return a + q[0] * r[1] - r[0] * q[1]; }, 0)) / 2;
-    const fm = (mm) => (mm / 1000).toFixed(2) + " m", fa = (mm2) => (mm2 / 1e6).toFixed(1) + " m²";
+    const fm = (mm) => (mm / 1000).toFixed(2) + " m", fa = (mm2) => Math.round((mm2 / 1e6) * 10.7639).toLocaleString("en-IN") + " sq ft";   // 22 Nov, Ritika: the measured area in square feet
     function drawMeasure() {
       if (!MS.mode) { measureSvg.innerHTML = ""; MS.read && MS.read(""); return; }
       const k = kOf(), lab = (p, t) => `<text class="pl-m-lab" x="${p[0]}" y="${p[1]}" font-size="${11.5 * k}" stroke-width="${3.2 * k}">${t}</text>`;

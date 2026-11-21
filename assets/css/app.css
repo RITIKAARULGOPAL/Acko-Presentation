@@ -295,6 +295,11 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .dxplan .dx-vec { --ph-paper: #fff; }
 .dxplan:not(.vec-on) .dx-vec, .dxplan.vec-fly .dx-vec, .dxplan.vec-heavy.ph-dragging .dx-vec, .dxplan.vec-heavy.vec-wheel .dx-vec { display: none; }
 .dxplan.vec-on:not(.vec-fly):not(.vec-heavy.ph-dragging):not(.vec-heavy.vec-wheel) .lv { visibility: hidden !important; }
+/* a flight (zoom buttons, Reset view) is carried by the base picture alone: the ~16 SVG layers (about 1800 elements, non-scaling strokes)
+   would be re-rasterised on every frame of a scale change (frames of 0.5 to 1 s); they come back after landing, lazily, with a short fade */
+/* 22 Nov: no longer hidden (the picture is made on the CPU now, so the layers are not what stalled): hiding them made the plan lose its colours and
+   marks during every zoom and look washed out / blurry */
+/* no fade on the way back: 16 simultaneous opacity animations made each layer its own composited surface (frames of 0.3 to 0.5 s) */
 /* beneath: the spaces in the legend's colours; hovers live per beat */
 .dxplan .dx-fill path { stroke: none; }
 .dxplan .dx-fill { transition: opacity .6s; }
@@ -410,9 +415,12 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .lt-read { right: 4.9%; top: 13.4%; font: 400 calc(var(--pt) * 5.4) var(--num); color: var(--purple); }
 /* the key plan beside it (keyplan()) */
 .dx-key { display: block; width: 100%; height: auto; }
-.dx-key path { fill: none; stroke: var(--c); stroke-width: 1.2; vector-effect: non-scaling-stroke; opacity: .7; }
-.dx-key path.sel { fill: var(--c); fill-opacity: .35; stroke-width: 2.2; opacity: 1; }
-.dx-key text { font-family: var(--body); font-weight: 700; font-size: 6000px; text-anchor: middle; dominant-baseline: middle; paint-order: stroke; stroke: #fff; stroke-width: 500px; }
+.dx-key image { filter: grayscale(1); }                                                      /* the floor's drawing only a faint ground; the neighbourhoods are the key */
+.dx-key path { fill: var(--c); fill-opacity: .34; stroke: var(--c); stroke-width: 1.6; vector-effect: non-scaling-stroke; opacity: 1; }
+.dx-key path.sel { fill-opacity: .92; stroke-width: 2.6; }
+.dx-key text { font-family: var(--body); font-weight: 800; text-anchor: middle; dominant-baseline: middle; paint-order: stroke; pointer-events: none; stroke-linejoin: round; }
+.dx-key text.n { fill: #fff; stroke: var(--c); font-size: 11000px; stroke-width: 2600px; }
+.dx-key text.sel { fill: #fff; stroke: var(--c); font-size: 17000px; stroke-width: 3600px; }
 .north { position: absolute; height: auto; opacity: .7; }
 /* ---------- value addition and typologies (deck 15, 46-48, 52) ---------- */
 .vt { position: absolute; }

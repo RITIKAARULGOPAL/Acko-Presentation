@@ -477,15 +477,47 @@
     }
     if (X.pending.length) requestAnimationFrame(vecBuild); else { X.busy = false; DP.level(); }
   }
+  // ?perf=1: logs every frame over 80 ms to the console with the plan events just before it, and the display's density, so a hitch can be read
+  if (/[?&]perf=1/.test(location.search)) {
+    const ev = []; const note = (n) => { ev.push(n + "@" + Math.round(performance.now())); if (ev.length > 8) ev.shift(); };
+    document.addEventListener("ph:view", () => note("view"), true); document.addEventListener("ph:commit", () => note("COMMIT"), true);
+    const wpEl = () => document.getElementById("world-plan");
+    new MutationObserver((ms) => { if (ms.some((m) => m.target === wpEl())) note("plan-class:" + (wpEl().className.match(/vec-\w+/g) || []).join("+")); }).observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ["class"] });
+    // an on-screen panel (bottom left) so it can be screenshotted: fps over the last 2 s, the slow frames with what preceded them, and the graphics
+    // the browser is using (a software renderer such as SwiftShader or "Basic Render" would explain everything by itself)
+    let gpu = "?"; try { const g = document.createElement("canvas").getContext("webgl"), x = g && g.getExtension("WEBGL_debug_renderer_info"); gpu = x ? g.getParameter(x.UNMASKED_RENDERER_WEBGL) : g ? "webgl (renderer hidden)" : "no webgl"; } catch (e) { gpu = "error"; }
+    const box = document.createElement("pre"); box.style.cssText = "position:fixed;left:6px;bottom:6px;z-index:99999;margin:0;padding:6px 8px;max-width:46vw;background:rgba(0,0,0,.78);color:#9f9;font:11px/1.35 monospace;white-space:pre-wrap;pointer-events:none"; document.body.appendChild(box);
+    const slow = [], ts = []; let last = performance.now();
+    const loop = (t) => { const dt = t - last; last = t; ts.push(t); while (ts.length && t - ts[0] > 2000) ts.shift();
+      if (dt > 80 && dt < 3000) { slow.push(Math.round(dt) + " ms <- " + (ev.slice(-3).join(" ") || "-")); if (slow.length > 6) slow.shift(); console.log("[perf] frame " + Math.round(dt) + " ms; events: " + ev.join(" ")); }
+      box.textContent = "perf  fps " + Math.round(ts.length / 2) + "  dpr " + devicePixelRatio + "  cores " + navigator.hardwareConcurrency + "\ngpu " + gpu + "\nslow frames (>80 ms):\n" + (slow.join("\n") || "none yet");
+      requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+    setTimeout(() => { const w = document.getElementById("world-plan"); const r = w && w.getBoundingClientRect(); console.log("[perf] devicePixelRatio " + devicePixelRatio + ", plan stage " + (r ? Math.round(r.width) + "x" + Math.round(r.height) : "?") + " css px, picture density cap " + (window.ACKO_PLAN_DPR || new URLSearchParams(location.search).get("dpr") || 1.5)); }, 3000);
+  }
   // a flight: the picture carries the move (vec-fly), the vector comes back as it lands
-  function fitVb(v, ms) {
-    cancelAnimationFrame(DP.raf);
+  function fitVb(v, ms, o) {
+    cancelAnimationFrame(DP.raf); clearTimeout(DP.landF); clearTimeout(DP.landT); clearTimeout(DP.settleT); DP.root.classList.remove("vec-land");
+    const tok = (DP.tok = (DP.tok || 0) + 1);            // a newer flight overrides a landing still waiting to show the layers
+    if (DP.ph.cancelPrepare) DP.ph.cancelPrepare();      // a sharp picture still being made for the old view would compete with this flight for the CPU
     const from = DP.ph.view, t0 = performance.now();
     if (!ms || reduced) { DP.ph.flying = false; DP.root.classList.remove("vec-fly"); DP.ph.zoomTo(...v); DP.ph.commit(); return DP.level(); }
     DP.root.classList.add("vec-fly"); DP.ph.flying = true;
+    let swapped = false;
     const run = (now) => { const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+      // half-way, if the picture of the target view is ready (made ahead at idle), the layers are redrawn on it: the second half of the flight
+      // is sharp instead of a scaled-up picture of the old view. All in this one frame (view to target, commit, view back), so nothing shows between.
+      if (!swapped && k >= 0.45 && DP.base && DP.base.has && DP.base.has(v)) { swapped = true; const cur = DP.ph.view; DP.ph.zoomTo(...v); DP.ph.commit(); DP.ph.zoomTo(...cur); }
       DP.ph.zoomTo(...from.map((a, i) => a + (v[i] - a) * e));
-      if (k < 1) DP.raf = requestAnimationFrame(run); else { DP.ph.flying = false; DP.ph.commit(); DP.root.classList.remove("vec-fly"); DP.level(); } };
+      if (k < 1) DP.raf = requestAnimationFrame(run); else {
+        DP.ph.flying = false;
+        // landed: the layers come back at once, still scaled with the picture. The sharp redraw (the worker makes a new picture, about 1 to 3 s
+        // of CPU) waits for o.settle ms without another zoom: back-to-back zoom clicks ran at 60 fps with 6 s between them and at 1 to 3 fps
+        // without, because that picture was being made during the next flight. Flights that a slide starts (no o.settle) redraw at once.
+        const root = DP.root, sharp = () => { if (tok !== DP.tok) return; DP.ph.commit(); };
+        requestAnimationFrame(() => { if (tok !== DP.tok) return; root.classList.remove("vec-fly"); DP.level(); });
+        if (o && o.settle) DP.settleT = setTimeout(sharp, o.settle); else sharp();
+      } };
     DP.raf = requestAnimationFrame(run);
   }
   // the viewBox (plan mm) that shows box [x0, y0, x1, y1] (plan mm) inside the display rect disp (frame px of the 1920 × 1080 page)
@@ -550,10 +582,16 @@
   function zoneKey(id) {
     const P = window.PLAN_DXF, [x, y, w, h] = P.viewBox, l = P.levels[0];
     const sel = P.zones.find((q) => q.id === id);
-    return `<svg class="dx-key" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet">` +
-      `<image href="${asset(l.src)}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" opacity=".5"/>` +
+    // cropped to the floor itself (the zones and the area outside the contract), not the page-shaped frame with its empty bands: the floor fills the thumbnail
+    if (!zoneKey.box) { let x0 = 1e12, y0 = 1e12, x1 = -1e12, y1 = -1e12;
+      [...P.zones.map((z) => z.zone), ...((P.overlays && P.overlays.nic) || [])].forEach((d) => { const n = d.match(/-?\d+(?:\.\d+)?/g) || []; for (let i = 0; i + 1 < n.length; i += 2) { const px = +n[i], py = +n[i + 1]; if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py; } });
+      const pad = (x1 - x0) * 0.02; zoneKey.box = x1 > x0 ? [x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad] : [x, y, w, h]; }
+    const [kx, ky, kw, kh] = zoneKey.box;
+    return `<svg class="dx-key" viewBox="${kx} ${ky} ${kw} ${kh}" preserveAspectRatio="xMidYMid meet">` +
+      `<image href="${asset(l.src)}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" opacity=".35"/>` +
       P.zones.map((z) => `<path class="${z.id === id ? "sel" : ""}" d="${z.zone}" style="--c:${nbLine(z)}"/>`).join("") +
-      (sel ? `<text x="${sel.x}" y="${sel.y}" style="fill:${nbLine(sel)}">${sel.n}</text>` : "") + `</svg>`;
+      // 22 Nov, Ritika: "make the key plan more legible": every neighbourhood numbered (the picked one larger), not the picked one alone
+      P.zones.map((z) => `<text class="${z.id === id ? "sel" : "n"}" x="${z.x}" y="${z.y}" style="--c:${nbLine(z)}">${z.n}</text>`).join("") + `</svg>`;
   }
   // the fire egress layer, switched by a button on the slide (on top of whatever the beat shows)
   function planEgress(on) { deckPlan(); return DP.root.classList.toggle("show-egress", on); }

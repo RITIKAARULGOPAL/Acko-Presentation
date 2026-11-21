@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ACKO · The Loop</title>
 <meta name="description" content="SKV × ACKO — the Loop: an interactive design presentation for ACKO's head office at Regalium, Koramangala, Bengaluru.">
-<link rel="stylesheet" href="assets/css/app.css?v=1">
+<link rel="stylesheet" href="assets/css/app.css?v=62">
 <link rel="stylesheet" href="assets/css/plan-hover.css?v=1">
 <style data-slide="s-cover">
 /* ---------- cover (slide 1) ---------- */
@@ -239,6 +239,14 @@
 #s-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.4;   /* 29 Oct: "the line spacing is off" */ font-style: italic; font-weight: 300; color: #666; }
 #s-strategy .st-t p b { font-weight: 500; }
 #s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); justify-content: flex-start; }   /* rows from the top: placed under the name (placeLine) */   /* 29 Oct: "use 1.2 spacing" */
+/* Story 3 (data-merge): the beat's caption and its line sit top left where the main idea was; the heading and the Inspired line take the caption's old place */
+#s-strategy .st-t .st-insp { display: none; }
+#s-strategy[data-merge] .st-t p:not(.st-hand):not(.st-insp) { display: none; }
+#s-strategy[data-merge] .st-t h3 { left: 46.62%; top: 76%; }
+#s-strategy[data-merge] .st-t .st-insp { display: flex; left: 46.62%; top: 82.5%; width: 42.47%; height: auto; font-size: calc(var(--pt) * 9); line-height: 1.4; font-style: italic; font-weight: 300; color: #666; justify-content: flex-start; }
+#s-strategy[data-merge] .st-tools { display: none; }   /* no Reset view in Story 3 */
+#s-strategy[data-merge] .st-cap { left: 2.82%; top: 19.1%; }
+#s-strategy[data-merge] .st-t .st-hand { left: 1.82%; width: 44%; }
 /* the beat's name, bottom right of the floor, as the deck's animation writes it */
 #s-strategy .st-cap { left: 47.62%; top: 68.32%;   /* on the handwritten line's left edge; the same place on every beat, where The Client's journey had it (29 Oct: "keep this position as constant") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
   opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
@@ -302,9 +310,19 @@
 /* arriving from the site's plate (3 Nov): the worlds cross slowly, the page's furniture waits for the plan, then fades in */
 body.ly-arrive .w-layer, body.ly-arrive .w-layer.on { transition-duration: 1.6s, 1.1s, 1.6s, 0s !important; transition-timing-function: ease-in-out !important; }
 #s-layout-sp .hdr, #s-layout-sp .ly-tools, #s-layout-sp .ly-bot { transition: opacity .7s var(--ease), top .45s var(--ease); }
+/* the fire egress legend: only while Fire egress is on, beside the pills, on every beat */
+#s-layout-sp .ly-eg-leg { position: absolute; right: 7%; top: calc(var(--ly-top, 70%) - 5.6%); display: none; align-items: center; gap: calc(var(--pt) * 6); padding: calc(var(--pt) * 2.4) calc(var(--pt) * 7); border: 1px solid #e3def2; border-radius: 999px; background: #fff; font-size: calc(var(--pt) * 5.4); color: var(--soft); white-space: nowrap; transition: opacity .7s var(--ease) .15s, top .45s var(--ease); }
+#s-layout-sp.eg-on .ly-eg-leg { display: flex; }
+#s-layout-sp .ly-eg-leg b { color: var(--ink); font-weight: 600; }
+#s-layout-sp .ly-eg-leg span { display: inline-flex; align-items: center; gap: calc(var(--pt) * 2.4); }
+#s-layout-sp .ly-eg-leg i { display: inline-block; width: calc(var(--pt) * 12); height: 0; border-top: 2.6px solid #1c64b4; }
+#s-layout-sp .ly-eg-leg i.eg-d { border-top-style: dashed; }
+#s-layout-sp.ly-arrive .ly-eg-leg, #s-layout-sp.nb-sheet .ly-eg-leg, #s-layout-sp.nb-open .ly-eg-leg { opacity: 0; visibility: hidden; transition: none; }
+#s-layout-sp.v3.fold:not(.nb-sheet) .ly-eg-leg { top: 89.6%; }
 #s-layout-sp .ly-pills, #s-layout-sp .ly-north { transition: opacity .7s var(--ease) .15s, top .45s var(--ease); }
 #s-layout-sp .ly-top { transition: opacity .7s var(--ease); }
-#s-layout-sp.ly-arrive :is(.hdr, .ly-tools, .ly-pills, .ly-top, .ly-bot, .ly-north, .ly-p.on) { opacity: 0; transition: none; }   /* the white bands too, over the map */
+#s-layout-sp.ly-arrive :is(.hdr, .ly-tools, .ly-pills, .ly-top, .ly-bot, .ly-north, .ly-p.on) { opacity: 0; transition: none; }
+body.ly-arrive #world-plan .dx-lab { opacity: 0 !important; transition: none !important; }   /* the plan's room marks wait: the boundary stands alone, then the spaces come */   /* the white bands too, over the map */
 #s-layout-sp .lt-read { right: 5%; top: calc(var(--ly-top, 70%) - 5.5%); transition: top .45s var(--ease); }
 #s-layout-sp .ly-north circle { fill: none; stroke: #9a9a9a; stroke-width: 1.2; }
 #s-layout-sp .ly-north line { stroke: #333; stroke-width: 2.6; stroke-linecap: round; }
@@ -351,6 +369,7 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .three .pre { font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
 #s-layout-sp .zone { display: none; grid-template-columns: 30% 1fr; gap: calc(var(--pt) * 8); align-items: start; }
 #s-layout-sp .ly-p.zoned .three { display: none; } #s-layout-sp .ly-p.zoned .zone { display: grid; }
+#s-layout-sp.v3 .zone { grid-template-columns: 40% 1fr; }      /* 22 Nov: a wider key plan (cropped to the floor), so its numbers read */
 #s-layout-sp .kp b { display: block; font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-bottom: calc(var(--pt) * 2); }
 #s-layout-sp .kp-in svg { width: 100%; height: auto; }
 #s-layout-sp .occ { columns: 2; column-gap: calc(var(--pt) * 10); font-size: calc(var(--pt) * 5.6); }
@@ -506,6 +525,9 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .nbe-cnt b { display: block; font-family: var(--num); font-weight: 600; font-size: calc(var(--pt) * 24); line-height: 1.05; color: var(--ink); }
 #s-layout-sp .nbe-cnt small { display: flex; align-items: center; gap: calc(var(--pt) * 2.5); font-size: calc(var(--pt) * 5.4); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
 #s-layout-sp .nbe-cnt small::before { content: ""; width: calc(var(--pt) * 4.5); height: calc(var(--pt) * 4.5); border-radius: 50%; background: var(--k); }
+/* 22 Nov, Ritika: template E is the one; no pinpoints on the plan or the axonometric (nor their hint), and one way back only: the nav's, not "All neighbourhoods" besides */
+#s-layout-sp.nb-sheet[data-nbv="e"] :is(.nbe-pm, .nbe-ap, .nbe-hint) { display: none !important; }
+#s-layout-sp.nb-sheet .ly-back { display: none !important; }
 #s-layout-sp .nbe-hint { margin: auto 0 0; font-size: calc(var(--pt) * 5.4); color: var(--mute); }
 #s-layout-sp :is(.nbe-pm, .nbe-ap) i { display: block; width: calc(var(--pt) * 7); height: calc(var(--pt) * 7); border-radius: 50%; background: var(--k); font-style: normal;
   box-shadow: 0 0 0 calc(var(--pt) * 1.4) #fff, 0 1px 4px rgba(0, 0, 0, .25); pointer-events: auto; cursor: default; position: relative; transition: transform .15s; }
@@ -567,8 +589,12 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 /* Spaces: no people ("remove the neighbourhood people colour coding and animation", the count with them); the floor in greys,
    the greens kept (JS); outside the contract dark grey, cross-hatched; Arrival by each entrance's arrow */
 #s-layout-sp.v3 :is(.ly-ppl, .ly-ppl-n) { display: none !important; }
-#world-plan.sp3 .dx-nic path { fill: url(#sp3-nic); fill-opacity: 1; }
-#world-plan.sp3 svg.dx-nic { mix-blend-mode: multiply; }      /* 19 Nov, Ritika: "not in contract fill should multiply so the base plan is seen" */
+/* 22 Nov, Ritika: outside the contract a plain lighter grey, no cross-hatch, covering the drawing under it (its boundary masked); hovered, it multiplies
+   so the layout under it is seen */
+#world-plan.sp3 .dx-nic path { fill: #e3e3e3; fill-opacity: 1; stroke: none; pointer-events: fill; transition: fill .25s; }   /* the contract boundary shows through as the drawing's own lines: the grey is masked back from its edge (JS v3Enter) */
+#world-plan.sp3.no-hover .dx-nic path { pointer-events: none; }      /* Names on hover off: the grey is not hovered either */
+#world-plan.sp3 .dx-nic path:hover { fill: #d2d2d2; mix-blend-mode: multiply; }
+#world-plan .sp3-arr { display: none; }      /* 22 Nov, Ritika: no "Arrival" word next to the entrance arrows */
 #world-plan .sp3-arr text { fill: #c40000; font-family: var(--body, sans-serif); font-weight: 600; paint-order: stroke; stroke: #fff; stroke-linejoin: round; opacity: 0; transition: opacity .6s; }   /* size and halo: JS arrLay, a constant 14.5 px on screen */
 #world-plan.sp3.show-entry .sp3-arr text { opacity: 1; }
 /* the types: in order 516, 69, 48, 13, renumbered 1–4 (JS); each its plan beside its 3D; hovered or pinned, purple */
@@ -1992,8 +2018,8 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <button type="button" data-go="7"><small>01</small>Due Diligence</button>
       <button type="button" data-go="1"><small>02</small>Spaces</button>
       <button type="button" data-go="2"><small>03</small>Neighbourhoods</button>
-      <button type="button" data-go="3"><small>04</small>Biophilia</button>
-      <button type="button" data-go="6"><small>05</small>Acoustics</button>
+      <button type="button" data-go="6"><small>04</small>Acoustics</button>
+      <button type="button" data-go="3"><small>05</small>Biophilia</button>
     </nav>
     <!-- the plan's tools, one button group top right beside the ACKO symbol -->
     <div class="ly-tools ui">
@@ -2114,11 +2140,10 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-strategy" data-part="p5" data-title="Campus strategy" data-steps="4" data-mins="1.9"
-  data-beats="The Shell,Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together"
-  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work.">
+<section class="scene" id="s-strategy" data-part="p5" data-title="Campus strategy" data-steps="3" data-mins="1.9"
+  data-beats="Planning Acko’s Neighbourhood,Configuring the Neighbourhoods,Looping it all Together"
+  data-notes="Understanding the campus strategy: the concept has to carry the space planning and the visual direction, and work in a day in the life of an Acker, an employee or a client walking in. Six beats, an evolution of planning and massing: from the bare shell to the furnished floor. 1 The shell: the bare floor we were given, the core, the façade, the two entrances. 2 Planning Acko's neighbourhoods, hand-drawn, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, the café, the two atriums and terraces. 3 Configuring the neighbourhoods (say it: any neighbourhood can take any department, by its occupancy and the proximity it needs to the others; the slide has no text for it). Every department, name and colour, steps one zone along the floor, twice, then steps back home; then a click on two names swaps them live. 4 Looping it all together: conceptual massing, the neighbourhoods as hand-drawn masses, no walls, then the Loop lies down as a loose hand-drawn stroke, one closed ring, the same loop as on our floor: the main street both arrivals open onto, out and back, round the meeting island at each end, no dead ends; its seven stops called out with their words as it reaches each. The faint stretch is the lane 02A has yet to open. 5 The client's journey: the client's route from the entrances, its touchpoints called out: Reception, the Visitor Hub and Board Room, the east Reception, Collab. 6 The employee's journey: the furniture comes in, the rooms', the café, the terraces, the workstations, the plants; the employee's route from the entrances through the Loop's seven stops, Arrival, Café, Board Room, Meeting Rooms, Collab, Work, Wellness. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. → Bridge: And here&#x27;s the plan that makes it work." data-merge="1">
   <div class="page">
-    <p class="dg-tag">Plan</p>
     <div class="st-anim"></div>
     <div class="st-3d ui"></div>
     <div class="st-from"></div>
@@ -2128,16 +2153,16 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <h3 style="--i:0">Understanding the Campus Strategy</h3>
       <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
+      <p class="st-insp" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
     <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
   </div>
 </section>
 
-<section class="scene" id="s-layout-sp" data-part="p5" data-title="Layout · Option 02A" data-steps="5" data-mins="2.4" data-beats="Spaces,Neighbourhoods,Biophilia · the heat,Biophilia · planting,Acoustics"
-  data-notes="The proposed layout in five clicks; the pills under the plan jump to any of them (the first back to the due diligence). The tools, top right: Measure and Area (M, A; Esc clears), zoom, Reset view, Names on hover, Fire egress, Occupancy chart (the brief against Option 2A). Zoom in and the panel folds away to give the plan the page; Reset view or the Legend button brings it back. 1 · Spaces: the floor in greys, the greens kept; the area outside our contract hatched in dark grey; Arrival at both lift lobbies. Four workstation types, each its plan and its 3D: Type 1, 516 seats; Type 2, 69; Type 3, 48; Type 4, 13. Hover one: its desks light up in purple. 2 · Neighbourhoods: six, outlined in a deeper tone of their colour and named in the legend, and the common spaces (the café, the two terraces, the two receptions, the visitor hubs) tinted gold, also in the legend; click a neighbourhood, on the plan or in the legend, to open its sheet. 3 · Biophilia, the heat: where people gather, CO₂ gathers; service rooms counted too. 4 · Planting: the plants placed where people gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); views to green, beside the legend: nearly every seat has a plant in view within 8 m. 5 · Acoustics: four categories of treatment, from carpet in the workhall to three panelled walls and a soft ceiling in the phone booths and the podcast studio; the rings show each space&#x27;s sound, kept inside it; hover a category to see only its spaces. Beneath, the treatments: ceiling, walls, partitions, HVAC noise, sound masking, doors and glazing (NRC 0.70–0.90 across the floor; an acoustic consultant can refine the specification). → Bridge: Now the plan rises into the axonometric.">
+<section class="scene" id="s-layout-sp" data-part="p5" data-title="Layout · Option 02A" data-steps="5" data-mins="2.4" data-beats="Spaces,Neighbourhoods,Acoustics,Biophilia · the heat,Biophilia · planting"
+  data-notes="The proposed layout in five clicks; the pills under the plan jump to any of them (the first back to the due diligence). The tools, top right: Measure and Area (M, A; Esc clears), zoom, Reset view, Names on hover, Fire egress, Occupancy chart (the brief against Option 2A). Zoom in and the panel folds away to give the plan the page; Reset view or the Legend button brings it back. 1 · Spaces: the floor in greys, the greens kept; the area outside our contract hatched in dark grey; Arrival at both lift lobbies. Four workstation types, each its plan and its 3D: Type 1, 516 seats; Type 2, 74; Type 3, 48; Type 4, 13. Hover one: its desks light up in purple. 2 · Neighbourhoods: six, outlined in a deeper tone of their colour and named in the legend, and the common spaces (the café, the two terraces, the two receptions, the visitor hubs) tinted gold, also in the legend; click a neighbourhood, on the plan or in the legend, to open its sheet. 3 · Acoustics: four categories of treatment, from carpet in the workhall to three panelled walls and a soft ceiling in the phone booths and the podcast studio; the rings show each space&#x27;s sound, kept inside it; hover a category to see only its spaces. Beneath, the treatments: ceiling, walls, partitions, HVAC noise, sound masking, doors and glazing (NRC 0.70–0.90 across the floor; an acoustic consultant can refine the specification). 4 · Biophilia, the heat: where people gather, CO₂ gathers; service rooms counted too. 5 · Planting: the plants placed where people gather soften the busiest spots (conceptual; fresh air with CO₂ sensing carries the load); views to green, beside the legend: nearly every seat has a plant in view within 8 m. → Bridge: Now the plan rises into the axonometric.">
   <div class="page">
-    <p class="dg-tag">Plan</p>
     <div class="sp2-nav ui"><button type="button" class="sp2-back">← Back to layout</button><b></b><button type="button" class="sp2-next">Next neighbourhood →</button></div>
     <!-- the people (9 Nov, the re-ordered deck): 651 come in at the two entrances and walk the Loop to their desks -->
     <canvas class="ly-ppl" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></canvas>
@@ -2168,9 +2193,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <button type="button" data-go="7"><small>01</small>Due Diligence</button>
       <button type="button" data-go="1"><small>02</small>Spaces</button>
       <button type="button" data-go="2"><small>03</small>Neighbourhoods</button>
-      <button type="button" data-go="3"><small>04</small>Biophilia</button>
-      <button type="button" data-go="6"><small>05</small>Acoustics</button>
+      <button type="button" data-go="6"><small>04</small>Acoustics</button>
+      <button type="button" data-go="3"><small>05</small>Biophilia</button>
     </nav>
+    <!-- 22 Nov, Ritika: with Fire egress on, its paths' legend, on every beat -->
+    <div class="ly-eg-leg ui"><b>Egress paths</b><span><i class="eg-s"></i>under 50 m</span><span><i class="eg-d"></i>50–60 m</span></div>
     <!-- the plan's tools, one button group top right beside the ACKO symbol -->
     <div class="ly-tools ui">
       <button type="button" data-t="dist" title="Measure a distance (M)"><svg viewBox="0 0 16 16"><path d="M2 12L12 2M2 12l2 2M5 9l1.5 1.5M8 6l1.5 1.5M11 3l2 2"/></svg>Measure</button>
@@ -2230,7 +2257,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     </div>
     <!-- 03 · biophilia: 1 the heat, 2 the planting (conceptual), 3 views to green (beats 3, 4, 5) -->
     <div class="ly-p bio-p" data-p="3">
-      <div class="lead"><small>04</small><h2>Biophilia</h2>
+      <div class="lead"><small>05</small><h2>Biophilia</h2>
         <div class="bsteps ui"><button type="button" data-go="3"><small>1</small>Heat</button><button type="button" data-go="4"><small>2</small>Planting</button></div>
         <p data-b="1"><b>Where people gather, CO₂ gathers.</b> The heat shows where breathing out concentrates: the desks, the café, reception, the lift lobbies and the meeting rooms. <b>Service rooms</b> (server, UPS, battery) are counted as sources too.</p>
         <p data-b="2"><b>Planting where it's needed.</b> The plants are placed where people gather, and the busiest spots soften around them.</p>
@@ -2256,7 +2283,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     </div>
     <!-- 04 · acoustics -->
     <div class="ly-p" data-p="6">
-      <div class="lead"><small>05</small><h2>Acoustics</h2>
+      <div class="lead"><small>04</small><h2>Acoustics</h2>
         <p>Four levels of treatment, matched to how loud and how private each space is. <b>Hover a level</b> to find its rooms.</p>
         <p>The rings show sound: wide and lingering in the open workhall, cut short in the treated rooms.</p><ul class="ac-more"><li><b>NRC 0.70–0.90</b> across the floor</li><li>Ceiling treatment in meeting rooms for <b>RT60</b></li><li>Absorptive wall panels for speech clarity</li><li>Full-height partitions to the right <b>STC</b></li><li>HVAC noise held to zone <b>NC</b> targets</li><li>Sound masking, so focus holds</li><li>Acoustic doors and double glazing</li></ul><p class="ac-note">An acoustic consultant can refine the specification.</p></div>
       <div class="acs"></div>
@@ -2285,17 +2312,17 @@ body.si-into #vmap .vm-plate { opacity: .22; }
           <tr class="z3"><td>Focus room - 2 pax</td><td>20</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Visitor Hub</td><td>5</td><td data-count="5">5</td></tr>
           <tr class="z3"><td>Dealer Room - 4 pax</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="2">2</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 4 pax</td><td>25</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 6 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 8 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
-          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="13">13</td></tr>
+          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="14">14</td></tr>
           <tr class="z3"><td>Departmental Room - 18–20 pax</td><td>8</td><td class="short" data-count="6">6</td></tr>
           <tr class="z3"><td>Hatchery - 08 pax</td><td>1</td><td class="up">1 <small>(12 pax)</small></td></tr>
           <tr class="z3"><td>Studio</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z3"><td>Phone booth</td><td>44</td><td class="short" data-count="42">42</td></tr>
+          <tr class="z3"><td>Phone booth</td><td>44</td><td class="short" data-count="41">41</td></tr>
           <tr class="z4"><td>Training room</td><td>Training Room - 40 pax</td><td>1</td><td>1 <small>(40 pax)</small></td></tr>
-          <tr class="z5"><td rowspan="6">Recreational area / wellness</td><td>Cafeteria</td><td>1 <small>(150 pax)</small></td><td class="up">1 <small>(178 pax)</small></td></tr>
+          <tr class="z5"><td rowspan="6">Recreational area / wellness</td><td>Cafeteria</td><td>1 <small>(150 pax)</small></td><td class="up">1 <small>(166 pax)</small></td></tr>
           <tr class="z5"><td>Mother's Room</td><td>1</td><td data-count="1">1</td></tr>
           <tr class="z5"><td>Zen Room</td><td>5</td><td data-count="5">5</td></tr>
           <tr class="z5"><td>Nap Room</td><td>1</td><td class="up" data-count="2">2</td></tr>
@@ -2323,7 +2350,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 A day in ACKO: the camera glides in, the Loop and the words fade away, and A day in ACKO takes over on the same frame. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it. → Bridge: And over one day in ACKO…">
   <div class="page">
     <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>
-    <p class="dg-tag">Plan</p>
     <div class="st-anim"></div>
     <div class="st-3d ui"></div>
     <div class="st-from"></div>
@@ -3280,7 +3306,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <script src="data/keyplans.js?v=1"></script>
 <script src="data/plan-dxf.js?v=1"></script>
 <script src="data/plan-base.js?v=1"></script>
-<script src="assets/js/plan-canvas.js?v=1"></script>
+<script src="assets/js/plan-canvas.js?v=62"></script>
 <script src="data/axo-dxf.js?v=1"></script>
 <script src="assets/js/axo-model.js?v=1"></script>
 <script src="data/axo-layers.js?v=1"></script>
@@ -3289,18 +3315,18 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <script src="assets/js/axo-layers.js?v=1"></script>
 <script src="data/axo-skp.js?v=1"></script>
 <script src="assets/js/axo-skp.js?v=1"></script>
-<script src="assets/js/plan-hover.js?v=1"></script>
-<script src="assets/js/plan-layers.js?v=1"></script>
+<script src="assets/js/plan-hover.js?v=62"></script>
+<script src="assets/js/plan-layers.js?v=62"></script>
 <script src="data/site-floor.js?v=1"></script>
 <style>.scene .page > .lens-cb { left: 1.8%; top: 10%; margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 13); line-height: 1; color: var(--purple); white-space: nowrap; }</style>
 <style>#s-strategy .st-legs g.arr circle { fill: #fff; stroke: #1a1a2e; stroke-width: 2.4; }</style>
 <style>#s-strategy .st-s.cl b { color: #1a2cf0; }</style>
 <style>#s-strategy .st-from { left: 0; top: 1%; width: 89.8%; height: 98.4%; pointer-events: none; opacity: 0; background: url(assets/img/challenge-axo.webp) 100% 0 / 111.4% 100% no-repeat; transform-origin: 93.15% 0; transform: scale(.95); }#s-layout-sp .ly-p[data-p="1"] p:not(.hand), #s-layout-sp .nb-p { display: none; }</style>
-<style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }#s-layout-sp .sp2-nav { display: none; left: 34%; top: 3.4%; z-index: 7; align-items: center; gap: calc(var(--pt) * 8); }#s-layout-sp.nb-open .sp2-nav { display: flex; }#s-layout-sp .sp2-nav button { border: 1px solid #d6cdf3; background: #fff; color: var(--purple); border-radius: 999px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 9); font: 600 calc(var(--pt) * 8) var(--body); cursor: pointer; }#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 8.5); color: #333; }</style>
+<style>#s-layout-sp .ac-more { margin: calc(var(--pt) * 4) 0 0; padding-left: 1.1em; columns: 2; column-gap: 1.4em; font-size: calc(var(--pt) * 7.6); line-height: 1.4; color: #444; }#s-layout-sp .ac-more b { color: var(--purple); } #s-layout-sp .ac-note { font-size: calc(var(--pt) * 7); color: #888; font-style: italic; margin-top: calc(var(--pt) * 2) !important; }#s-layout-sp .sp2-nav { display: none; left: 50%; transform: translateX(-50%); top: 3.6%; z-index: 7; align-items: center; gap: calc(var(--pt) * 6); }#s-layout-sp.nb-open .sp2-nav { display: flex; }#s-layout-sp.nb-open .ly-tools button:not([data-t="occ"]) { display: none; }#s-layout-sp .sp2-nav button { border: 1px solid #e6e1f4; background: transparent; color: #6a5fa0; border-radius: 999px; padding: calc(var(--pt) * 1.4) calc(var(--pt) * 5.4); font: 500 calc(var(--pt) * 5.6) var(--body); cursor: pointer; }#s-layout-sp .sp2-nav button:hover { background: #f3effd; } #s-layout-sp .sp2-nav b { font-size: calc(var(--pt) * 6.4); font-weight: 600; color: #6b6680; }</style>
 <style>.scene .page > .dg-tag { right: 12.6%; top: 95.1%; margin: 0; padding: .25em .9em; border: 1px solid currentColor; border-radius: 99px; font-size: calc(var(--pt) * 5); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; line-height: 1.3; opacity: .5; pointer-events: none; }</style>
 <script>window.ACKO_WOW = true;   /* the big moments (9 Nov): this page only */</script>
 <script>window.ACKO_SECTIONS = {"names": {"cover": "Project Vision", "p2": "Design Drivers", "p3": "Overview", "p4": "01 · Concept Framework", "p5": "02 · Design Development", "p6": "03 · Design Expression", "p7": "04 · Integrated Performance", "p8": "05 · Project Review", "close": "Thank you", "A": "Appendix · Kit of parts"}, "main": [["cover", "Project Vision", ""], ["p2", "Design Drivers", ""], ["p3", "Overview", ""], ["p4", "Concept Framework", ""], ["p5", "Design Development", ""], ["p6", "Design Expression", ""], ["p7", "Integrated Performance", ""], ["p8", "Project Review", ""], ["close", "Thank you", ""]]}; window.ACKO_SP3 = true;</script>
-<script src="assets/js/app.js?v=1"></script>
+<script src="assets/js/app.js?v=62"></script>
 <script data-slide="s-cover">
 /* the cover (deck slide 1): the facts come up over the stairs */
 ACKO.slide("s-cover", ({ $, plain, reveal }) => ({
@@ -4095,7 +4121,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // 5 and 6); the name stays put, and the line's first row lands GAP pt under it, however many rows it runs to (placeLine)
   const GAP = 12;
   const HAND = ["", "One long floor and two entrances: the ground the Loop is laid on.",
-    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.",
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "The neighbourhoods can be configured based on the occupancy of each and the proximity between neighbourhoods that you require.", "Every neighbourhood sits on the Loop, so the whole campus reads as one place to belong, not a collection of separate spaces.",
     "The client journey is envisioned as a seamless transition through ACKO’s neighbourhood, where each touchpoint unfolds a distinct experience while maintaining a continuous sense of connection, discovery, and belonging.",
     "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
   const NAMES = ["", "The Shell", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
@@ -4156,7 +4182,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     // away as the colour comes
     M.zones.forEach((v, i) => {
       let y = 0, f = 0;
-      if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
+      const ZN = { HOME: 0, DRIVE: 1, TRAVEL: 2, HEALTH: 3, LIFE: 4, AUTO: 5 }, zk = v.userData.zone && v.userData.zone.key, j = zk in ZN ? ZN[zk] : i;   // 01 to 06 as the numbers read on the floor (axo-layers.js NUM)
+      if (k === 2) { const e = win(t, 0.15 + 0.32 * j, 0.95 + 0.32 * j); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
       if (k === 4) f = 1 - 0.7 * win(t, 0, 1.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
       v.position.y = y; M.fade(v, f); if (v.userData.num) v.userData.num.visible = k !== 4;
@@ -4224,6 +4251,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     for (const z of S.zl) if (z.dept) z.d.classList.toggle("picked", z.dept === d);
   }
   function caption(txt) {
+    if (sc.dataset.merge && txt === NAMES[1]) return;   // Story 3: no caption for the shell beat
     const cap = $(".st-cap", sc), hand = $(".st-hand", sc), line = HAND[NAMES.indexOf(txt)] || hand.textContent;
     if (cap.dataset.t === txt) return;
     cap.classList.remove("on"); cap.dataset.t = txt;
@@ -4246,6 +4274,15 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     if (WAVE && k === 1 && !reduced) cue("swell");
     S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
     pose(k, reduced ? DUR[k] : 0); need();
+  }
+  // Story 3 (data-merge): beat 1 is the shell standing and then, straight on, the neighbourhoods (beat 2); the shell's own words are dropped
+  function mergeIn() {
+    S.noCap1 = true;
+    if (reduced) { S.k = 2; S.playing = false; pose(2, DUR[2]); need(); return; }
+    let wait;
+    if (S.tween) { S.k = 1; S.playing = false; pose(1, DUR[1]); need(); wait = S.tween.ms - (performance.now() - S.tween.t0) + 300; }   // rising from the site plan: the shell is already there
+    else { play(1); wait = DUR[1] * 1000 + 150; }
+    S.mt = setTimeout(() => { if (document.body.dataset.scene === "s-strategy" && S.k === 1) play(2); }, Math.max(0, wait));
   }
   function resample(P, n) {
     const ss = [0]; for (let i = 1; i < P.length; i++) ss.push(ss[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
@@ -4540,7 +4577,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
     // the page's right edge hangs to the left
-    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-t .st-insp, .st-cap, .st-tools", sc).map((e) => {
       const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
       return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
     }).filter((b) => b[2] > b[0]);
@@ -4720,7 +4757,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const c = document.createElement("canvas"); c.width = r.domElement.width; c.height = r.domElement.height; c.getContext("2d").drawImage(r.domElement, 0, 0);
     return c;
   }
-  function flatten(vb, ms, done) {
+  function flatten(vb, ms, done, opts) {
     if (!M || !r || !cam) return false;
     const stage = document.getElementById("stage"); if (!stage) return false;
     const h = document.createElement("div"); h.className = "st-flat-host";
@@ -4729,19 +4766,25 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     const cv = r.domElement; h.appendChild(cv); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block";
     sc.classList.add("st-flat");
     cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; S.tween = null;
+    S.flatOn = true; clearTimeout(S.skOff);              // the hand-drawn neighbourhoods stay on the axo until it has washed out to the boundary
     const from = { theta: S.state.theta, phi: S.state.phi, half: S.state.half, t: S.state.t.slice() }, d0 = S.dim || 0;
     const to = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
     const paint = (e) => {
       const L = (a, b) => a + (b - a) * e;
       S.state = { theta: L(from.theta, to.theta), phi: L(from.phi, to.phi), half: L(from.half, to.half), t: from.t.map((x, i) => L(x, to.t[i])) };
-      S.dim = d0 * (1 - e);                            // the veil lifts: the furniture at full strength, as the plan's
+      if (opts && opts.boundary) {                     // Story 3: the axo washes out to white, leaving the layout's boundary alone as it lies flat
+        S.dim = ramp(0.3, 0.75, e); ribbonBuild();
+        S.veil.renderOrder = 11; if (S.ribbon) S.ribbon.renderOrder = 13;   // the boundary stands alone above the wash
+        [S.base.zones, S.base.sketch && S.base.sketch.zones].forEach((zs) => (zs || []).forEach((v) => { if (v.userData.num) v.userData.num.visible = e < 0.3; }));   // the neighbourhood numbers go as the wash begins
+        if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = ramp(0.15, 0.5, e); }
+      } else S.dim = d0 * (1 - e);                     // the veil lifts: the furniture at full strength, as the plan's
       window.AxoModel.apply(cam, S.state, asp);
       S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
       if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
       r.render(M.scene, cam);
     };
     let t0 = 0, end = false;
-    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); if (done) done(h); };
+    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); S.flatOn = false; if (S.base) S.base.useSketch(false); if (done) done(h); };   // the swap to the exact zones is unseen: the axo is washed out
     const tick = (now) => { if (end) return; if (!t0) t0 = now; const k = Math.min(1, (now - t0) / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
     paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 500);
     return true;
@@ -4751,10 +4794,11 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     enter(_, s) {
       sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
       S.fresh = true; S.k = 0;
+      window.ACKO_STRAT_ON = 1; S.dim = 0; if (S.base && S.base.zones) S.base.zones.forEach((v) => { if (v.userData.num) v.userData.num.visible = true; }); if (S.veil) S.veil.renderOrder = 8; if (S.ribbon) { S.ribbon.visible = false; S.ribbon.renderOrder = 10; }   // the Spaces slide may take the axo from here; a flattened veil and ribbon start clean
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
-      S.base.useSketch(true);
+      clearTimeout(S.skOff); S.flatOn = false; S.base.useSketch(true);
       // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
       const site = !reduced && !!window.ACKO_SITE_AXO; window.ACKO_SITE_AXO = 0;   // from the site plan: the same rise
       const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-challenges", 2500) : null;
@@ -4772,10 +4816,12 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
-      S.fresh = false;
+      S.fresh = false; clearTimeout(S.mt);
+      if (sc.dataset.merge) { if (k === 1) mergeIn(); else play(k + 1); return; }   // Story 3: the Shell and the neighbourhoods are one beat
       play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.rb) S.rb.show(false); S.skOff = setTimeout(() => { if (S.base && !S.flatOn) S.base.useSketch(false); }, 300);   // Layout · Spaces flattens the floor from here (9 Nov)
+      clearTimeout(S.mt); setTimeout(() => { window.ACKO_STRAT_ON = 0; }, 1800);
       if (S.rise) riseEnd(false);
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
@@ -4792,7 +4838,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
 ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue, reduced }) => {
   let bot = 670;                              // the bottom band's top on this beat (frame px; band() sets it)
   const box = () => [35, 157, 1885, bot];     // where the plan sits on the page (frame px): centred between the header's band and the bottom band
-  const ORDER = [1, 2, 3, 4, 6], SHEET = [null, null, null, null, null];          // the re-ordered deck (9 Nov): Due Diligence on its own, the rest after the axos        // the deck's beats → the layers (2 Nov: due diligence first)
+  const ORDER = [1, 2, 6, 3, 4], SHEET = [null, null, null, null, null];          // the re-ordered deck (9 Nov): Due Diligence on its own, the rest after the axos        // the deck's beats → the layers (2 Nov: due diligence first)
   let arriving = false, pend = 0, self = null;  // entered from the site, its zoom still playing on the map (pend: the beat asked meanwhile)
   let beat = 0, L = null, egOn = false, pin = null, zone = null, nbSel = "homo", built = false, tools = null;
   // Story 3 (18 Nov, Ritika's review): on with window.ACKO_SP3 (gen_story3.py sets it on index-story3.html only). V3S: on while the
@@ -4801,6 +4847,11 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
   const V3S = { on: false, mo: null, z: false, man: null };
   const home = () => { const [x, y, w, h] = plan.data.viewBox; return plan.vbFor([x, y, x + w, y + h], box()); };
   if (plan.warm) plan.warm(() => home());          // 19 Nov: the plan and its picture at this view are made at idle, so opening the slide shows it at once
+  // 22 Nov: after every landing the pictures of the next zoom-in and zoom-out views are made at idle (on the CPU, in the worker: no frame is held),
+  // so the next step lands on a picture that is already sharp instead of a scaled-up one for the ~1 s it takes to make
+  { let wz = 0; const wp0 = document.getElementById("world-plan");
+    const warmZoom = () => { if (!plan.warm || document.body.dataset.scene !== "s-layout-sp") return; [0.7, 1 / 0.7].forEach((f) => plan.warm(() => { const v = plan.view; return v && zoomTarget(f, v); })); };
+    if (wp0) wp0.addEventListener("ph:commit", () => { clearTimeout(wz); wz = setTimeout(warmZoom, 300); }); }
   const rings = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
   // ---- the panels, filled once from the data ----
   function build(sc) {
@@ -4822,7 +4873,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       // the type next to its plan"): the renders from Workstation typologies, the 13-seat type's made from the model (tools/acko/render_ws_type.js)
       const ORD = ["T4", "T1", "T3", "T2"], R3 = { T1: "ty-type1", T2: "ty-type2", T3: "ty-type3", T4: "ty-type4" };
       $(".types", sc).innerHTML = ORD.map((k) => T.find((t) => t.t === k)).filter(Boolean).map((t, i) => `<div class="chip" data-t="${t.t}"><div class="ty-vis">${SVG[t.t] || ""}` +
-        `<span class="ty-3w"><img src="${asset("assets/img/" + R3[t.t] + ".webp")}" alt=""></span></div><b>Type ${i + 1}</b><div class="n">${t.seats}<small>seats</small></div></div>`).join("");
+        `<span class="ty-3w"><img src="${asset("assets/img/" + R3[t.t] + ".webp")}" alt=""></span></div><b>Type ${i + 1}</b><div class="n">${[516, 74, 48, 13][i] || t.seats}<small>seats</small></div></div>`).join("");   // 22 Nov, Ritika: Type 2 is 74 (516 + 74 + 48 + 13 = 651)
     } else
     $(".types", sc).innerHTML = T.map((t) => `<div class="chip" data-t="${t.t}">${SVG[t.t] || `<img src="${asset("assets/img/" + (ICON[t.t] || "ty-icon1") + ".webp")}" alt="">`}<b>${t.name}</b>` +
       `<div class="n">${t.seats}<small>seats</small></div></div>`).join("");
@@ -5017,15 +5068,19 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const root = plan.root; if (!root) return;
     V3S.on = true; root.classList.add("sp3");
     root.querySelectorAll("svg.dx-fill path").forEach((p) => { const c0 = p.dataset.c0 || p.style.fill; if (!c0) return; p.dataset.c0 = c0; p.style.fill = grey(c0); });
-    const nic = root.querySelector("svg.dx-nic");                 // "put the not in contract boundary in dark grey and have cross hatch"
-    if (nic && !nic.querySelector("#sp3-nic")) nic.insertAdjacentHTML("afterbegin", `<defs><pattern id="sp3-nic" patternUnits="userSpaceOnUse" width="1500" height="1500">` +
-      `<rect width="1500" height="1500" fill="#8a8a8a"/><path d="M0 0L1500 1500M1500 0L0 1500" style="fill:none;stroke:#555;stroke-width:150"/></pattern></defs>`);   // inline: app.css strips .dx-nic paths' strokes; multiplied over the plan (19 Nov)
+    // 22 Nov, Ritika: "match the layout walls": the grey is held back a few px from its edge (a mask: the shape in white, its outline in black), so
+    // the drawing's own lines along the contract boundary show as they are drawn, instead of an outline of ours
+    const nic = root.querySelector("svg.dx-nic");
+    if (nic && !nic.querySelector("#sp3-nicm")) { const ps = [...nic.querySelectorAll("path")], ds = ps.map((p) => p.getAttribute("d"));
+      const bb = nic.getBBox(), pad = 3000;      // a mask the size of the shapes (a huge one is rendered coarsely)
+      nic.insertAdjacentHTML("afterbegin", `<defs><mask id="sp3-nicm" maskUnits="userSpaceOnUse" x="${bb.x - pad}" y="${bb.y - pad}" width="${bb.width + 2 * pad}" height="${bb.height + 2 * pad}">` +
+        ds.map((d) => `<path d="${d}" fill="#fff" stroke="none"/>`).join("") + ds.map((d) => `<path d="${d}" fill="none" stroke="#000" stroke-width="7" style="vector-effect:non-scaling-stroke"/>`).join("") + `</mask></defs>`);
+      ps.forEach((p) => p.setAttribute("mask", "url(#sp3-nicm)")); }
     root.querySelectorAll(".dx-nb path").forEach((p) => { const c0 = p.dataset.c0 || p.style.getPropertyValue("--c"); if (!c0) return; p.dataset.c0 = c0; p.style.setProperty("--c", deep(c0)); });   // the outlines, legible
     const nbf = root.querySelector("svg.dx-nbfill");                // the common spaces, tinted beside the neighbourhoods' own tints (the furniture cuts show through as they do there)
     if (nbf && !nbf.querySelector(".sp3-common")) nbf.insertAdjacentHTML("beforeend", `<g class="sp3-common">` + plan.data.spaces.filter((s) => COMMON.test(s.type))
       .map((s) => `<path class="f" d="${s.d}"/><path class="e" d="${outer(s.d)}"/>`).join("") + `</g>`);
     const mk = root.querySelector("svg.dx-marks"), E = (plan.data.overlays && plan.data.overlays.entry) || [];   // "mark arrival near the arrow"
-    if (mk && !mk.querySelector(".sp3-arr")) mk.insertAdjacentHTML("beforeend", `<g class="sp3-arr">${E.map(() => `<text>Arrival</text>`).join("")}</g>`);
     arrLay(root, plan.view); V3S.ac = (e) => arrLay(root, e.detail); root.addEventListener("ph:commit", V3S.ac);     // the label keeps its size on screen as the layers redraw
     V3S.z = false; V3S.man = null; fold(sc);
     V3S.mo = () => fold(sc); root.addEventListener("ph:view", V3S.mo);     // every zoom step (the plan's own event; the layers redraw only once it rests)
@@ -5212,7 +5267,13 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const mode = L.measure.set(m, (t) => { $(".lt-read", sc).textContent = t; });
     $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.toggle("on", b.dataset.t === mode));
   }
-  function zoomBy(f) { const v = plan.view; if (!v) return; f = Math.min(f, home()[2] / v[2]); if (Math.abs(f - 1) < 1e-3) return; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; plan.fitVb([cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f], 300); }
+  // the view a zoom step of f leads to from v (null at the limit); the zoom buttons fly there on the base picture (450 ms), and the next steps'
+  // pictures are made ahead at idle (plan.warm), so a step lands without a stall
+  const zoomTarget = (f, v) => { const hm = home(); if (f * v[2] >= hm[2] - 1e-3) return Math.abs(v[2] - hm[2]) < 1e-3 && Math.abs(v[0] - hm[0]) < 1 ? null : hm.slice(); f = Math.min(f, hm[2] / v[2]); if (Math.abs(f - 1) < 1e-3) return null; const cx = v[0] + v[2] / 2, cy = v[1] + v[3] / 2; return [cx - (v[2] * f) / 2, cy - (v[3] * f) / 2, v[2] * f, v[3] * f]; };
+  function zoomBy(f) {
+    const v = plan.view; if (!v) return; const nv = zoomTarget(f, v); if (!nv) return;
+    plan.fitVb(nv, 450, { settle: 150 });      // the sharp picture is made on the CPU in ~150 ms now, so it can follow the landing closely (was 1500 ms: the plan stayed blurry that long)
+  }
   // ---- the people (9 Nov, the re-ordered deck only: window.ACKO_WOW): 640 of the plan's 646 desks (L.seats, the chairs in the drawing)
   // filled by people who come in at the two entrances (PLAN_DXF.overlays.entry) and walk the employees' route (ACKO_LOOP's graph: the
   // shortest way from the nearer entrance to the route point nearest their desk), then step to it; each in their neighbourhood's
@@ -5460,7 +5521,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       $(".ly-p[data-p=\"2\"] .lead small", sc).textContent = "03"; $('.ly-p[data-p="2"]', sc).classList.remove("zoned");
       plan.focusZone(null); return;
     }
-    const V = window.ACKO_NB || "a"; sc.dataset.nbv = V;                     // the template (option pages set it)
+    const V = window.ACKO_NB || "e"; sc.dataset.nbv = V;                     // the template (option pages set it)
     plan.focusZone(z.id, V === "d" ? [35, 157, 640, 455] : V === "e" ? [531, 185, 1171, 936] : LEFT); nbPanel(sc, z, +n);
     if (V === "e") { NBX.zf = 1; NBX.pan = [0, 0]; nbE(sc, z, +n); }
     sc.classList.add("nb-sheet");
@@ -5498,19 +5559,27 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       // still: done at once, they froze the zoom's start (3 Nov: "not smooth")
       arriving = document.body.classList.contains("si-left"); pend = 0; PPL.on = false; sc.classList.remove("ppl-on");
       const ax = !arriving && window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? (ACKO_MORPH.take("s-strategy") || ACKO_MORPH.take("s-walk")) : null;
-      const st = ax && document.getElementById(ax.id);          // the strategy's axo, or the walk's view from above
+      const fromStrat = !ax && !arriving && window.ACKO_STRAT_ON && !matchMedia("(prefers-reduced-motion: reduce)").matches; window.ACKO_STRAT_ON = 0;   // Story 3: no ACKO_MORPH, the axo leaves as its boundary
+      const st = ax ? document.getElementById(ax.id) : fromStrat ? document.getElementById("s-strategy") : null;          // the strategy's axo, or the walk's view from above
       if (st && st._flatten) {                          // from the Employees Journey: the model turns down onto the plan, then the plan
         arriving = true; document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
-        const ok = st._flatten(home(), 1700, (h) => {
+        const flatMs = fromStrat ? (window.ACKO_FLAT_MS || 2200) : 1700, wp = document.getElementById("world-plan");
+        let built = false;                                                   // Story 3: the plan is built in the background while the boundary travels, then fades in whole
+        if (fromStrat && wp) { wp.style.transition = "none"; wp.style.opacity = "0"; later(() => { const warm = () => { if (!built && document.body.dataset.scene === sc.id) { built = true; build(sc); } }; if (window.requestIdleCallback) requestIdleCallback(warm, { timeout: 500 }); else warm(); }, flatMs * 0.45); }
+        const ok = st._flatten(home(), flatMs, (h) => {
           if (document.body.dataset.scene !== sc.id) { h.remove(); return; }
-          arriving = false; build(sc); self.step(pend || 1, sc);          // planOn: the 2D plan fades in under the model
+          arriving = false; if (!built) { built = true; build(sc); } self.step(pend || 1, sc);          // planOn: the 2D plan fades in under the model
+          if (fromStrat && wp) {
+            requestAnimationFrame(() => requestAnimationFrame(() => { wp.style.transition = "opacity 1.2s ease"; wp.style.opacity = "1"; }));
+            later(() => { wp.style.transition = ""; wp.style.opacity = ""; try { plan.planReset(); } catch (e) { /* the plan keeps its view */ } }, 1500);
+          }
           sc._h3 = h; h.style.transition = "opacity 1.1s ease-in-out";
           later(() => { h.style.opacity = "0"; }, 300);                   // the model fades off the plan it now lies on
           later(() => { h.remove(); sc._h3 = null; }, 1600);
           later(() => sc.classList.remove("ly-arrive"), 1100);
           later(() => document.body.classList.remove("ly-arrive"), 1800);
-        });
-        if (!ok) { arriving = false; document.body.classList.remove("ly-arrive"); sc.classList.remove("ly-arrive"); build(sc); }
+        }, fromStrat ? { boundary: true } : undefined);
+        if (!ok) { arriving = false; document.body.classList.remove("ly-arrive"); sc.classList.remove("ly-arrive"); if (wp) { wp.style.transition = ""; wp.style.opacity = ""; } if (!built) build(sc); }
       } else if (arriving) {
         document.body.classList.add("ly-arrive"); sc.classList.add("ly-arrive");
         const site = document.getElementById("s-site"); if (site && site._into) site._into();
@@ -5519,15 +5588,24 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
         later(() => sc.classList.remove("ly-arrive"), 3700);
         later(() => document.body.classList.remove("ly-arrive", "si-into"), 4400);
       } else build(sc);
-      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 3, 4, 6].indexOf(g) + 1); } }));
+      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 6, 3, 4].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
+      // 22 Nov, Ritika: the laser cursor by default over the layout (the canvas between the header band and the foot band, not over the tools, pills, panels
+      // or north point); L still toggles it by hand. As on the due-diligence slide.
+      if (!sc._laser) { const cur = document.getElementById("cur"); let auto = false;
+        sc._laser = (e) => { const top = sc.querySelector(".ly-top").getBoundingClientRect().bottom, bot = sc.querySelector(".ly-bot").getBoundingClientRect().top;
+          const inBox = (q) => { const r = sc.querySelector(q); if (!r) return false; const b = r.getBoundingClientRect(); return e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom; };
+          const on = !!(e.target.closest && !e.target.closest(".ui, .ly-tools, .ly-pills, .ly-north, .sp3-fold, .ly-fo, button") && !inBox(".ly-tools") && !inBox(".ly-north") && e.clientY > top && e.clientY < bot);
+          if (on && !cur.classList.contains("laser")) { cur.classList.add("laser"); auto = true; } else if (!on && auto) { cur.classList.remove("laser"); auto = false; } };
+        sc._laserOff = () => { if (auto) cur.classList.remove("laser"); auto = false; }; }
+      document.removeEventListener("mousemove", sc._laser, true); document.addEventListener("mousemove", sc._laser, true);
       $$("button", tools).forEach((b) => (b.onclick = () => {
         const t = b.dataset.t; b.blur();
         if (t === "dist" || t === "area") measure(sc, t);
         else if (t === "in") zoomBy(0.7); else if (t === "out") zoomBy(1 / 0.7);
         else if (t === "reset") plan.planReset();
         else if (t === "hover") b.classList.toggle("on", plan.planHover());
-        else if (t === "eg") { egOn = !egOn; b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
+        else if (t === "eg") { egOn = !egOn; sc.classList.toggle("eg-on", egOn); b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
         else if (t === "occ") occ(sc, !$(".ly-fo", sc).classList.contains("on"));
       }));
       $('[data-t="hover"]', tools).classList.toggle("on", plan.hoverOn);
@@ -5558,7 +5636,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       const layer = k === 1 ? "spaces" : k === 2 ? "nb" : k <= 5 ? "bio" : k === 6 ? "ac" : "dd", panel = String(k <= 2 ? k : k <= 5 ? 3 : k);
       plan.planOn(sc, { rooms: true, fill: k <= 2, entry: true, view: home(), ms: was ? 700 : 0 });
       // the egress follows its button alone, off to begin with (30 Oct), on every beat
-      if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
+      sc.classList.toggle("eg-on", egOn); if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
       $(".bio-p", sc).classList.toggle("eg", egOn);
       plan.planNb(k === 2); plan.planEgress(egOn);
       if (k === 2) nbPick(sc, "homo");                   // nb cards: Homogeneity picked whenever the beat opens
@@ -5595,6 +5673,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     leave(_, sc) {
       SH = null; if (sc) sc.classList.remove("nb-open");
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
+      if (sc && sc._laser) { document.removeEventListener("mousemove", sc._laser, true); sc._laserOff(); }
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
       if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
@@ -6870,7 +6949,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
         later(() => sc.classList.remove("ly-arrive"), 3700);
         later(() => document.body.classList.remove("ly-arrive", "si-into"), 4400);
       } else { build(sc); ddShell(true); }   // the bare shell (10 Nov)
-      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-site-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6].indexOf(g) + 1); } }));
+      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-site-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 6, 3, 4].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
       if (!sc._laser) { const cur = document.getElementById("cur"); let auto = false;   // the laser only over the canvas, between the header band and the foot band (L still works by hand)
         sc._laser = (e) => { const top = sc.querySelector(".ly-top").getBoundingClientRect().bottom, bot = sc.querySelector(".ly-bot").getBoundingClientRect().top;

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neighbourhood sheet · five templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --ink: #16131f; --mute: #5b5570; --line: #e3def2; --purple: #5222d0; --bg: #faf9fd; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: Figtree, system-ui, sans-serif; }
+header { padding: 14px 20px 10px; border-bottom: 1px solid var(--line); background: #fff; }
+h1 { margin: 0 0 4px; font-size: 20px; }
+p { margin: 0 0 10px; color: var(--mute); font-size: 13px; max-width: 900px; line-height: 1.45; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px; }
+.row b { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--purple); margin-right: 4px; }
+button { font: 600 13px Figtree, system-ui, sans-serif; border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+button:hover { border-color: var(--purple); }
+button.on { background: var(--purple); border-color: var(--purple); color: #fff; }
+.note { margin-left: 8px; font-size: 12px; color: var(--mute); }
+#wrap { position: relative; overflow: hidden; background: #000; }
+#fr { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; border: 0; transform-origin: 0 0; background: #fff; }
+#msg { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 14px; pointer-events: none; }
+</style></head><body>
+<header>
+  <h1>Neighbourhood sheet · five templates</h1>
+  <p>The real Layout slide, live. Pick a template and a neighbourhood: the sheet reopens in it. Use “Next neighbourhood” inside the slide to step through. Tell me the letter you like (or what to take from which) and I will make it the default.</p>
+  <div class="row"><b>Template</b><span id="tp"></span><span class="note" id="tn"></span></div>
+  <div class="row"><b>Neighbourhood</b><span id="nb"></span></div>
+</header>
+<div id="wrap"><iframe id="fr" src="index-story3.html?x=nbo#s-layout-sp/2"></iframe><div id="msg">Loading the slide…</div></div>
+<script>
+const T = { a: ["A · now", "plan + axo, key plan, the full list of rooms"],
+  b: ["B", "the axonometric alone, four figures, key plan"],
+  c: ["C", "plan + axo, four figures; no list, no key plan"],
+  d: ["D", "small plan, big axonometric, figures under the title"],
+  e: ["E", "title and figures in a side panel; big plan, axo beside it"] };
+let cur = "a", n = "03", ready = false;
+const fr = document.getElementById("fr"), wrap = document.getElementById("wrap");
+const mk = (host, items, cb, get) => { host.innerHTML = ""; items.forEach(([k, label]) => { const b = document.createElement("button"); b.textContent = label; b.dataset.k = k; b.onclick = () => cb(k); host.appendChild(b); }); };
+const mark = () => { document.querySelectorAll("#tp button").forEach((b) => b.classList.toggle("on", b.dataset.k === cur)); document.querySelectorAll("#nb button").forEach((b) => b.classList.toggle("on", b.dataset.k === n)); document.getElementById("tn").textContent = T[cur][1]; };
+function fit() { const h = innerHeight - wrap.getBoundingClientRect().top, s = Math.min(innerWidth / 1920, h / 1080); fr.style.transform = `scale(${s})`; wrap.style.height = h + "px"; wrap.style.width = innerWidth + "px"; }
+function apply() {
+  if (!ready) return;
+  const w = fr.contentWindow, d = fr.contentDocument, sc = d.getElementById("s-layout-sp"); w.ACKO_NB = cur;
+  const open = () => { const b = sc.querySelector(`.ly-p[data-p="2"] button[data-n="${n}"]`); if (b) b.click(); };
+  if (sc.classList.contains("nb-open")) { const back = sc.querySelector(".sp2-back"); if (back) back.click(); setTimeout(open, 1800); } else open();
+  mark();
+}
+mk(document.getElementById("tp"), Object.entries(T).map(([k, v]) => [k, v[0]]), (k) => { cur = k; apply(); });
+mk(document.getElementById("nb"), ["01", "02", "03", "04", "05", "06"].map((k) => [k, k]), (k) => { n = k; apply(); });
+mark(); fit(); addEventListener("resize", fit);
+fr.addEventListener("load", () => { setTimeout(() => { ready = true; document.getElementById("msg").remove(); apply(); }, 13000); });
+</script></body></html>

@@ -23,6 +23,7 @@
       <h3 style="--i:0">Understanding the Campus Strategy</h3>
       <p style="--i:1"><span>The main idea was to make sure, the whole concept embraces our space planning as well as the Visual direction. More over how efficiently these could be translated in <b>a day in life of an acker. </b>Be it in case of an employee or a client that walks in. How well we cater to people.</span></p>
       <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
+      <p class="st-insp" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
     </div>
     <p class="st-cap"></p>
     <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
@@ -51,6 +52,14 @@
 #s-strategy .st-t p { left: 1.82%; top: 26.22%; width: 42.47%; height: 11.53%; font-size: calc(var(--pt) * 9); line-height: 1.4;   /* 29 Oct: "the line spacing is off" */ font-style: italic; font-weight: 300; color: #666; }
 #s-strategy .st-t p b { font-weight: 500; }
 #s-strategy .st-t .st-hand { left: 46.62%; top: 78.59%; width: 51.85%; height: 11.53%; font-size: calc(var(--pt) * 18); line-height: 1.2; font-style: normal; color: var(--hand-ink); justify-content: flex-start; }   /* rows from the top: placed under the name (placeLine) */   /* 29 Oct: "use 1.2 spacing" */
+/* Story 3 (data-merge): the beat's caption and its line sit top left where the main idea was; the heading and the Inspired line take the caption's old place */
+#s-strategy .st-t .st-insp { display: none; }
+#s-strategy[data-merge] .st-t p:not(.st-hand):not(.st-insp) { display: none; }
+#s-strategy[data-merge] .st-t h3 { left: 46.62%; top: 76%; }
+#s-strategy[data-merge] .st-t .st-insp { display: flex; left: 46.62%; top: 82.5%; width: 42.47%; height: auto; font-size: calc(var(--pt) * 9); line-height: 1.4; font-style: italic; font-weight: 300; color: #666; justify-content: flex-start; }
+#s-strategy[data-merge] .st-tools { display: none; }   /* no Reset view in Story 3 */
+#s-strategy[data-merge] .st-cap { left: 2.82%; top: 19.1%; }
+#s-strategy[data-merge] .st-t .st-hand { left: 1.82%; width: 44%; }
 /* the beat's name, bottom right of the floor, as the deck's animation writes it */
 #s-strategy .st-cap { left: 47.62%; top: 68.32%;   /* on the handwritten line's left edge; the same place on every beat, where The Client's journey had it (29 Oct: "keep this position as constant") */ font-size: calc(var(--pt) * 16); font-style: italic; font-weight: 700; color: var(--purple); white-space: nowrap; text-align: left; pointer-events: none;
   opacity: 0; transform: translateY(calc(var(--pt) * 4)); transition: opacity .5s var(--ease), transform .5s var(--ease); }
@@ -141,7 +150,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
   // 5 and 6); the name stays put, and the line's first row lands GAP pt under it, however many rows it runs to (placeLine)
   const GAP = 12;
   const HAND = ["", "Every journey begins with a thought. Ours began with reimagining what a workplace could feel like.",
-    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.", "Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.",
+    "Reimagining ACKO as a neighbourhood of connected spaces, shared experiences, and belonging.", "The neighbourhoods can be configured based on the occupancy of each and the proximity between neighbourhoods that you require.", "Every neighbourhood sits on the Loop, so the whole campus reads as one place to belong, not a collection of separate spaces.",
     "The client journey is envisioned as a seamless transition through ACKO’s neighbourhood, where each touchpoint unfolds a distinct experience while maintaining a continuous sense of connection, discovery, and belonging.",
     "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
   const NAMES = ["", "How it started", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
@@ -202,7 +211,8 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     // away as the colour comes
     M.zones.forEach((v, i) => {
       let y = 0, f = 0;
-      if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
+      const ZN = { HOME: 0, DRIVE: 1, TRAVEL: 2, HEALTH: 3, LIFE: 4, AUTO: 5 }, zk = v.userData.zone && v.userData.zone.key, j = zk in ZN ? ZN[zk] : i;   // 01 to 06 as the numbers read on the floor (axo-layers.js NUM)
+      if (k === 2) { const e = win(t, 0.15 + 0.32 * j, 0.95 + 0.32 * j); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
       if (k === 4) f = 1 - 0.7 * win(t, 0, 1.0);   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
       v.position.y = y; M.fade(v, f); if (v.userData.num) v.userData.num.visible = k !== 4;
@@ -267,6 +277,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     for (const z of S.zl) if (z.dept) z.d.classList.toggle("picked", z.dept === d);
   }
   function caption(txt) {
+    if (sc.dataset.merge && txt === NAMES[1]) return;   // Story 3: no caption for the shell beat
     const cap = $(".st-cap", sc), hand = $(".st-hand", sc), line = HAND[NAMES.indexOf(txt)] || hand.textContent;
     if (cap.dataset.t === txt) return;
     cap.classList.remove("on"); cap.dataset.t = txt;
@@ -288,6 +299,15 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     if (WAVE && k === 1 && !reduced) cue("swell");
     S.k = k; S.t0 = performance.now(); S.playing = !reduced; S.cur = PLAN; S.swap = null; pick(null);
     pose(k, reduced ? DUR[k] : 0); need();
+  }
+  // Story 3 (data-merge): beat 1 is the shell standing and then, straight on, the neighbourhoods (beat 2); the shell's own words are dropped
+  function mergeIn() {
+    S.noCap1 = true;
+    if (reduced) { S.k = 2; S.playing = false; pose(2, DUR[2]); need(); return; }
+    let wait;
+    if (S.tween) { S.k = 1; S.playing = false; pose(1, DUR[1]); need(); wait = S.tween.ms - (performance.now() - S.tween.t0) + 300; }   // rising from the site plan: the shell is already there
+    else { play(1); wait = DUR[1] * 1000 + 150; }
+    S.mt = setTimeout(() => { if (document.body.dataset.scene === "s-strategy" && S.k === 1) play(2); }, Math.max(0, wait));
   }
   function show(k) { S.k = k; S.playing = false; S.cur = PLAN; S.swap = null; pick(null); pose(k, DUR[k]); need(); }
 
@@ -402,7 +422,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     }
     // stops: each name above its dot, stepping up past names already placed; below it where the copy is in the way; one near
     // the page's right edge hangs to the left
-    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-tools", sc).map((e) => {
+    if (!S.obs) S.obs = $$(".st-t h3, .st-t p > span, .st-t .st-hand, .st-t .st-insp, .st-cap, .st-tools", sc).map((e) => {
       const rg = document.createRange(); rg.selectNodeContents(e); const b = rg.getBoundingClientRect(), h = host.getBoundingClientRect();
       return [(b.left - h.left) * k - 12, (b.top - h.top) * k - 8, (b.right - h.left) * k + 12, (b.bottom - h.top) * k + 8];
     }).filter((b) => b[2] > b[0]);
@@ -582,7 +602,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     const c = document.createElement("canvas"); c.width = r.domElement.width; c.height = r.domElement.height; c.getContext("2d").drawImage(r.domElement, 0, 0);
     return c;
   }
-  function flatten(vb, ms, done) {
+  function flatten(vb, ms, done, opts) {
     if (!M || !r || !cam) return false;
     const stage = document.getElementById("stage"); if (!stage) return false;
     const h = document.createElement("div"); h.className = "st-flat-host";
@@ -591,19 +611,25 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     const cv = r.domElement; h.appendChild(cv); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block";
     sc.classList.add("st-flat");
     cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; S.tween = null;
+    S.flatOn = true; clearTimeout(S.skOff);              // the hand-drawn neighbourhoods stay on the axo until it has washed out to the boundary
     const from = { theta: S.state.theta, phi: S.state.phi, half: S.state.half, t: S.state.t.slice() }, d0 = S.dim || 0;
     const to = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
     const paint = (e) => {
       const L = (a, b) => a + (b - a) * e;
       S.state = { theta: L(from.theta, to.theta), phi: L(from.phi, to.phi), half: L(from.half, to.half), t: from.t.map((x, i) => L(x, to.t[i])) };
-      S.dim = d0 * (1 - e);                            // the veil lifts: the furniture at full strength, as the plan's
+      if (opts && opts.boundary) {                     // Story 3: the axo washes out to white, leaving the layout's boundary alone as it lies flat
+        S.dim = ramp(0.3, 0.75, e); ribbonBuild();
+        S.veil.renderOrder = 11; if (S.ribbon) S.ribbon.renderOrder = 13;   // the boundary stands alone above the wash
+        [S.base.zones, S.base.sketch && S.base.sketch.zones].forEach((zs) => (zs || []).forEach((v) => { if (v.userData.num) v.userData.num.visible = e < 0.3; }));   // the neighbourhood numbers go as the wash begins
+        if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = ramp(0.15, 0.5, e); }
+      } else S.dim = d0 * (1 - e);                     // the veil lifts: the furniture at full strength, as the plan's
       window.AxoModel.apply(cam, S.state, asp);
       S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
       if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
       r.render(M.scene, cam);
     };
     let t0 = 0, end = false;
-    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); if (done) done(h); };
+    const fin = () => { if (end) return; end = true; paint(1); sc.classList.remove("st-flat"); S.flatOn = false; if (S.base) S.base.useSketch(false); if (done) done(h); };   // the swap to the exact zones is unseen: the axo is washed out
     const tick = (now) => { if (end) return; if (!t0) t0 = now; const k = Math.min(1, (now - t0) / ms); paint(ease(k)); if (k < 1) requestAnimationFrame(tick); else fin(); };
     paint(0); requestAnimationFrame(tick); setTimeout(fin, ms + 500);
     return true;
@@ -613,10 +639,11 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     enter(_, s) {
       sc = s; sc._flatten = flatten; sc._snap = snap; plain(); reveal($(".page", sc), 100);
       S.fresh = true; S.k = 0;
+      window.ACKO_STRAT_ON = 1; S.dim = 0; if (S.base && S.base.zones) S.base.zones.forEach((v) => { if (v.userData.num) v.userData.num.visible = true; }); if (S.veil) S.veil.renderOrder = 8; if (S.ribbon) { S.ribbon.visible = false; S.ribbon.renderOrder = 10; }   // the Spaces slide may take the axo from here; a flattened veil and ribbon start clean
       const ok = start();
       sc.classList.toggle("st-fallback", !ok);
       if (!ok) return;
-      S.base.useSketch(true);
+      clearTimeout(S.skOff); S.flatOn = false; S.base.useSketch(true);
       // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
       const site = !reduced && !!window.ACKO_SITE_AXO; window.ACKO_SITE_AXO = 0;   // from the site plan: the same rise
       const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;
@@ -631,10 +658,12 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan }) => {
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
-      S.fresh = false;
+      S.fresh = false; clearTimeout(S.mt);
+      if (sc.dataset.merge) { if (k === 1) mergeIn(); else play(k + 1); return; }   // Story 3: the Shell and the neighbourhoods are one beat
       play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+    leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); S.skOff = setTimeout(() => { if (S.base && !S.flatOn) S.base.useSketch(false); }, 300);   // Layout · Spaces flattens the floor from here (9 Nov)
+      clearTimeout(S.mt); setTimeout(() => { window.ACKO_STRAT_ON = 0; }, 1800);
       if (S.rise) riseEnd(false);
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours

@@ -127,8 +127,15 @@
         stage.style.transformOrigin = "0 0"; stage.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
         placeLabel();
         const unc = Math.max(0, tx / r.width, ty / r.height, (r.width - tx - s * r.width) / r.width, (r.height - ty - s * r.height) / r.height);   // the share of the view the drawing no longer covers
-        if (!want && (unc > 0.3 || s > 8 || (!flying && (unc > 0.04 || s > 3.5)))) request();
-        else { clearTimeout(ctimer); if (!flying) ctimer = setTimeout(request, 140); }
+        // a gesture (wheel, drag, pinch) redraws once it rests (600 ms), not every ~340 ms; the preview may blur to 6x or leave 12% of the view
+        // undrawn before an earlier redraw is forced. A redraw being made for a view the gesture has left is stopped, so it never competes with it.
+        // 22 Nov: the picture is made on the CPU in a worker now, so a gesture can keep it fresh: a redraw starts as soon as the preview would blur past
+        // 1.6x (or shrink under 0.6x, or leave 8% of the view undrawn) and is let to land even if the view has moved on a little (the commit
+        // re-aims the preview); it is only dropped when the view has gone far from what it was made for
+        const far = want && (Math.abs(Math.log(want[2] / vb[2])) > 0.7 || Math.abs(want[0] + want[2] / 2 - vb[0] - vb[2] / 2) > 0.6 * vb[2] || Math.abs(want[1] + want[3] / 2 - vb[1] - vb[3] / 2) > 0.6 * vb[3]);
+        if (far) cancelPrepare();
+        if (!want && (flying ? (unc > 0.3 || s > 8) : (unc > 0.08 || s > 1.6 || s < 0.6))) request();
+        else { clearTimeout(ctimer); if (!flying) ctimer = setTimeout(request, 250); }   // 22 Nov: was 1200 ms (the plan stayed a scaled-up picture that long after a wheel / drag zoom); the picture is made on the CPU in ~150 ms now, and a job is cancelled the moment the view moves again
       }
       el.dispatchEvent(new CustomEvent("ph:view", { detail: vb }));
     }
@@ -267,7 +274,8 @@
       get option() { return current; },
       setOption: key => load(key),
       fit,
-      commit: request,                          // fastZoom: have the layers redrawn sharp at the view (a flight that has landed): at once if it is ready, else as soon as it is
+      cancelPrepare,                            // a new flight has started: the sharp picture being made for the old view is of no use, stop making it
+      commit: request,                        // fastZoom: have the layers redrawn sharp at the view (a flight that has landed): at once if it is ready, else as soon as it is
       set flying(f) { flying = !!f; },          // fastZoom: a flight is under way: only a preview that can't stand is redrawn mid-way
       zoomTo,                                   // plan units are mm in the SVG frame
       get view() { return vb.slice(); },        // the current viewBox [x, y, w, h]
