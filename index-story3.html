@@ -97,11 +97,18 @@
 #s-why-campus .wc-lb { font-family: var(--label); font-weight: 600; font-size: calc(var(--pt) * 5.8); letter-spacing: .2em; text-transform: uppercase; text-align: center; white-space: nowrap; }
 #s-why-campus .wc-a { color: #17857e; }
 #s-why-campus .wc-b { color: #a3967a; }
-#s-why-campus .wc-f { color: var(--ink); }
 #s-why-campus .page.b2 .wc-a.shown, #s-why-campus .page.b2 .wc-b.shown { opacity: 0; transition-delay: 0s; }
 #s-why-campus .wc-cap { margin: 0; font-size: calc(var(--pt) * 15.5); text-align: center; white-space: nowrap; color: var(--ink); }
-#s-why-campus .wc-f[data-step], #s-why-campus .wc-cap[data-step="2"] { transition-delay: 2.2s; }
 #s-why-campus .page:not(.b2) [data-step="2"] { transition-delay: 0s !important; }
+/* the caption travels: "we came from two..." slides under the one drop as the drops merge and becomes "...we arrive on one floor..." */
+#s-why-campus .wc-cap { position: absolute; transition: opacity .7s var(--ease), left .5s var(--ease), top .5s var(--ease), width .5s var(--ease); }
+#s-why-campus .wc-cap .c1 { display: block; transition: opacity .4s var(--ease); }
+#s-why-campus .wc-cap .c2 { display: block; position: absolute; left: 0; right: 0; top: 0; opacity: 0; transition: opacity .3s var(--ease); }
+#s-why-campus .page.b2 .wc-cap { left: 36.9% !important; top: 78.9% !important; width: 26.2% !important; transition: opacity .7s var(--ease), left 1.6s var(--ease) .4s, top 1.6s var(--ease) .4s, width 1.6s var(--ease) .4s; }
+#s-why-campus .page.b2 .wc-cap .c1 { opacity: 0; transition: opacity .6s var(--ease) .4s; }
+#s-why-campus .page.b2 .wc-cap .c2 { opacity: 1; transition: opacity .8s var(--ease) 1.5s; }
+#s-why-campus .still .wc-cap, #s-why-campus .still .wc-cap span { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { #s-why-campus .wc-cap, #s-why-campus .wc-cap span { transition: none !important; } }
 </style>
 <style data-slide="s-campus-loop">
 /* ---------- How it ties together · one ribbon ---------- */
@@ -146,14 +153,20 @@
 #s-campus-loop .cpl-dots > g { transform-box: view-box; transform-origin: 0 0; }
 #s-campus-loop .pa { fill: #1e9e95; color: #1e9e95; }
 #s-campus-loop .pb { fill: #bcae92; color: #bcae92; }
-/* the Replay button: shown once the run has ended */
-#s-campus-loop .cpl-replay { right: 4.8%; top: 88.2%; font: 600 calc(var(--pt) * 6.4) var(--body); letter-spacing: .06em; color: var(--accent); background: #fff; border: 1px solid #cfc3f3; border-radius: 99px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 8); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
-#s-campus-loop .page.end .cpl-replay { opacity: 1; pointer-events: auto; }
-#s-campus-loop .cpl-replay:hover { background: #f3effd; }
 /* + and = */
 #s-campus-loop .cpl-op { top: 49%; width: 6%; text-align: center; font-size: calc(var(--pt) * 22); font-weight: 300; line-height: 1; color: var(--accent); }
 /* the words under each figure, once the ribbon has made it */
 #s-campus-loop .cpl-w { top: 67.4%; text-align: center; }
+/* the + and = arrive one after the other, the same way (22 Nov, Ritika: "+ and = sequential") */
+#s-campus-loop .cpl-op { transition: opacity .6s var(--ease) .15s; }
+/* sentences break on their punctuation, never leave a lone word (22 Nov) */
+#s-campus-loop .cpl-w p { text-wrap: balance; }
+#s-campus-loop .cpl-w p .ln { display: block; }
+/* the Möbius promise: bold purple, and a line that sweeps under each line, again and again (22 Nov, Ritika picked B) */
+#s-campus-loop .cpl-w.w2 p { display: inline-block; padding: .2em .1em; color: var(--accent); font-weight: 700; font-size: 1.1em; line-height: 1.35; }
+#s-campus-loop .cpl-w.w2 .ln { background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 2px; padding-bottom: .12em; }
+@media not (prefers-reduced-motion: reduce) { #s-campus-loop .cpl-w.w2.shown .ln { animation: cpl-sweep 2.6s ease-in-out infinite; } }
+@keyframes cpl-sweep { 0% { background-size: 0 2px; background-position: 0 100%; } 55% { background-size: 100% 2px; background-position: 0 100%; } 100% { background-size: 0 2px; background-position: 100% 100%; } }
 #s-campus-loop .cpl-w h3 { margin: 0; font-size: calc(var(--pt) * 13); font-weight: 700; line-height: 1.1; letter-spacing: -.01em; color: var(--ink); }
 #s-campus-loop .cpl-w.w3 h3 { color: var(--accent); }
 #s-campus-loop .cpl-w em { display: block; margin-top: calc(var(--pt) * 3); font-style: normal; font-size: calc(var(--pt) * 5.4); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
@@ -209,6 +222,9 @@
 #s-strategy .st-anim { left: 7.62%; top: 9.07%; width: 78.04%; height: 78.04%; background: url(assets/img/strategy-anim.webp) center / 100% 100% no-repeat; }
 #s-strategy:not(.st-fallback) .st-anim { display: none; }
 #s-strategy.st-fallback .st-3d, #s-strategy.st-fallback .st-ov, #s-strategy.st-fallback .st-tools, #s-strategy.st-fallback .st-cap, #s-strategy.st-fallback .st-veil { display: none; }
+#s-strategy.st-rise :is(.st-t, .st-tools, .st-cap, .st-ov) { opacity: 0 !important; transition: none !important; }   /* arriving from the site plan: the words wait until the axo has landed */
+#s-strategy.st-land :is(.st-t, .st-tools) { animation: st-landin .9s var(--ease) both; }
+@keyframes st-landin { from { opacity: 0; } to { opacity: 1; } }
 #s-strategy .st-3d { left: 0; top: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 #s-strategy .st-3d.drag { cursor: grabbing; }
 #s-strategy .st-3d canvas { display: block; width: 100%; height: 100%; }
@@ -665,6 +681,25 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-wayday .wd-nogl { left: 30%; top: 45%; width: 40%; text-align: center; color: var(--mute); display: none; }
 #s-wayday.wd-fallback .wd-nogl { display: block; }
 #s-wayday.wd-fallback .wd-gl, #s-wayday.wd-fallback .lt-tools { display: none; }
+/* one focus: a lilac ground, the title small, the subtitle and header gone, and the quote, the stop's line, the clock and the stop's name stacked
+   in one block top left; the time ticks on between stops with a fill along the day (Ritika, 20 Nov: "go with D") */
+#s-wayday .page { background: #e3ddf3; }
+#s-wayday .wd-veil { background: linear-gradient(90deg, rgba(227,221,243,.9) 0, rgba(227,221,243,.6) 22%, rgba(227,221,243,0) 38%), linear-gradient(0deg, rgba(227,221,243,.92) 0, rgba(227,221,243,.7) 15%, rgba(227,221,243,0) 24%), linear-gradient(180deg, rgba(227,221,243,.8) 0, rgba(227,221,243,0) 10%); }
+#s-wayday .wd-title p, #s-wayday .hdr { display: none; }
+#s-wayday .wd-title { top: 6%; }
+#s-wayday .wd-title h1 { font-size: calc(var(--pt) * 8); font-style: normal; color: var(--mute); }
+#s-wayday .lt-tools { opacity: .25; transition: opacity .3s; } #s-wayday .lt-tools:hover { opacity: 1; }
+#s-wayday .wd-now { left: 1.8%; top: 11%; width: 29%; display: flex; flex-direction: column; }
+#s-wayday .wd-now q { order: 1; font-size: calc(var(--pt) * 13); line-height: 1.15; text-wrap: balance; color: var(--purple-2); margin: 0; }
+#s-wayday .wd-now span { order: 2; font-size: calc(var(--pt) * 7.2); color: var(--soft); margin: calc(var(--pt) * 2) 0 0; }
+#s-wayday .wd-now .t { order: 3; font-size: calc(var(--pt) * 15); font-variant-numeric: tabular-nums; margin-top: calc(var(--pt) * 5); }
+#s-wayday .wd-now b { order: 4; font-size: calc(var(--pt) * 8.5); margin-top: calc(var(--pt) * 1); }
+#s-wayday .wd-now q:not(:empty)::before { content: "\201C"; } #s-wayday .wd-now q:not(:empty)::after { content: "\201D"; }
+#s-wayday .wd-now.wd-sw span, #s-wayday .wd-now.wd-sw q { animation: wd-swap .7s ease both; }
+@keyframes wd-swap { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+#s-wayday .wd-day button { border-top-color: rgba(82,34,208,.18); }
+#s-wayday .wd-day button.on, #s-wayday .wd-day button.done { border-top-color: transparent; }
+#s-wayday .wd-ph { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--purple); pointer-events: none; }
 </style>
 <style data-slide="s-engage">
 /* ---------- Acker's engagement points (deck 46): the PPT collage as a lens, one group lit per beat, then all ---------- */
@@ -1668,14 +1703,14 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page rv">
     <div class="cv-small at" style="left:1.6%;top:7.8%;--i:0">Studiokon Ventures</div>
     <div class="cv-small at" style="left:79.8%;top:7.8%;--i:0">RFP-ACKO-DB-001 · Technical bid</div>
-    <div class="cv-small at" style="left:1.7%;top:19.7%;--i:1">Technical bid submission · August 2026</div>
+    <div class="cv-small at" style="left:1.7%;top:19.7%;--i:1">Technical bid submission · November 2026</div>
     <img class="cv-logo at" src="assets/img/acko-white.webp" alt="ACKO" style="left:1.8%;top:24.6%;--i:2">
     <div class="cv-title at" style="left:1.3%;top:35.4%;--i:3">HEAD OFFICE DESIGN &amp; BUILD</div>
     <div class="cv-facts at" style="left:1.6%;top:47.6%;width:92%;--i:4">
       <div><span>Site</span><b>Regalium Building, Koramangala Industrial Layout, Bengaluru</b></div>
       <div><span>Floor plate</span><b>91,000 sqft, single floor</b></div>
       <div><span>Submitted to</span><b>Anarock PMES, for ACKO</b></div>
-      <div><span>Due</span><b>23rd November 2026</b></div>
+      <div><span>Due</span><b>31st October 2026</b></div>
     </div>
   </div>
 </section>
@@ -1728,7 +1763,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <li style="--i:3"><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
       <li style="--i:4"><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
       <li style="--i:5"><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
-      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of plumbing provisions.</p></li>
       <li style="--i:7"><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
       <li style="--i:8"><p><b>Crash/nap room</b>: mandatory</p></li>
       <li style="--i:9"><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
@@ -1768,13 +1803,12 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-why-campus" data-part="p4" data-title="Two Offices" data-steps="2" data-mins="0.6" data-beats="Two offices,One floor"
-  data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 640 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: Two offices, one floor: so we made it one campus.">
+  data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 651 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: Two offices, one floor: so we made it one campus.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="hdr"><b>Two Offices</b><span>01 · Concept Framework</span></div>
     <p class="wc-hand hand wc-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
     <h2 class="wc-h wc-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
-    <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 640 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
+    <p class="wc-sub wc-in" style="--i:2;left:4.8%;top:27%;width:57%">About 651 Ackers, from two workplaces, onto one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place.</p>
 
     <!-- the drops, in a 1920 × 1080 frame over the page: Leela at 700, HSR at 1220, the one drop at 960, all at y 590 -->
     <svg class="wc-dia" viewBox="0 0 1920 1080" aria-hidden="true">
@@ -1797,9 +1831,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
     <span class="wc-lb wc-a" data-step="1" style="left:30.6%;top:73.4%;width:11.8%">Leela</span>
     <span class="wc-lb wc-b" data-step="1" style="left:57.7%;top:73.4%;width:11.8%">HSR</span>
-    <span class="wc-lb wc-f" data-step="2" style="left:36.9%;top:75.8%;width:26.2%">One floor · 245 m · 91,000 sq ft</span>
-    <p class="wc-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%">we came from two…</p>
-    <p class="wc-cap hand" data-step="2" style="left:36.9%;top:78.9%;width:26.2%">…we arrive on one floor…</p>
+    <p class="wc-cap hand" data-step="1" style="left:6.25%;top:78.4%;width:25.3%"><span class="c1">we came from two…</span><span class="c2">…we arrive on one floor…</span></p>
 
   </div>
 </section>
@@ -1827,7 +1859,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   data-beats="Campus,+ Möbius,= Our floor,Neighbourhoods,Shared spaces,The ACKO Loop"
   data-notes="The one floor becomes a ribbon. Campus first: it splits into six neighbourhoods, put together as one campus; belonging is the idea. Möbius second: the same ribbon runs round ACKO's Möbius, its promise of continuity, no inside and no outside; the inspiration for why the connector is a loop and not a corridor. The result is the ACKO Loop, sketched on our own floor: one smooth, continuous route, the neighbourhoods along both sides, the shared spaces inside it, both arrivals on it. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life. → Bridge: Now the floor itself. 02 · Design Development.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="hdr"><b>The ACKO Campus</b><span>01 · Concept Framework</span></div>
     <p class="cpl-hand hand">a campus to belong to, a promise to hold it together</p>
     <h2 class="cpl-h"><span data-step="1">Campus</span> <span data-step="2">+ Möbius</span> <span data-step="3">=</span> <span data-step="6"><b>The ACKO Loop.</b></span></h2>
@@ -1863,15 +1894,14 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <g class="cpl-dots"></g>
     </svg>
     <canvas class="cpl-strip"></canvas>
-    <button type="button" class="cpl-replay" tabindex="-1">↻ Replay</button>
     <svg class="cpl-dia" viewBox="0 0 1920 1080" aria-hidden="true"><g class="cpl-zones cpl-zt"></g></svg>
 
     <div class="cpl-op" data-step="2" style="left:22.9%">+</div>
     <div class="cpl-op" data-step="3" style="left:49.1%">=</div>
 
-    <div class="cpl-w w1" data-step="1" style="left:4.8%;width:20.4%"><h3>Campus</h3><em>Belonging · the idea</em><p>Many neighbourhoods, one shared identity.</p></div>
-    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p>It’s never us versus you; it’s always us with you.</p></div>
-    <div class="cpl-w w3" data-step="6" style="left:54%;width:41.2%"><h3>The ACKO Loop</h3><em>Connection · the plan</em><p>One continuous route that links every neighbourhood, both arrivals and every shared space.</p></div>
+    <div class="cpl-w w1" data-step="1" style="left:4.8%;width:20.4%"><h3>Campus</h3><em>Belonging · the idea</em><p><span class="ln">Many neighbourhoods,</span><span class="ln">one shared identity.</span></p></div>
+    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p><span class="ln">It’s never us versus you;</span><span class="ln">it’s always us with you.</span></p></div>
+    <div class="cpl-w w3" data-step="6" style="left:54%;width:41.2%"><h3>The ACKO Loop</h3><em>Connection · the plan</em><p><span class="ln">One continuous route that links every neighbourhood,</span><span class="ln">both arrivals and every shared space.</span></p></div>
 
   </div>
 </section>
@@ -1910,9 +1940,8 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="2" data-mins="0.6" data-beats="Lengthwise,Widthwise"
-  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 640 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
+  data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 651 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
       <small style="--i:0">ACKO · Regalium, Koramangala</small>
     </div>
@@ -1931,7 +1960,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     </svg>
     <div class="pp-stats" data-only="1" style="left:3.4%;top:85%;width:50%">
       <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
-      <div><b><span data-count="640">0</span></b><span>people, on one plate</span></div>
+      <div><b><span data-count="651">0</span></b><span>people, on one plate</span></div>
       <div><b><span data-count="3">0</span><small>min</small></b><span>to walk end to end</span></div>
     </div>
     <div class="pp-stats" data-only="2" style="left:3.4%;top:85%;width:50%">
@@ -2110,7 +2139,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   <div class="page">
     <p class="dg-tag">Plan</p>
     <div class="sp2-nav ui"><button type="button" class="sp2-back">← Back to layout</button><b></b><button type="button" class="sp2-next">Next neighbourhood →</button></div>
-    <!-- the people (9 Nov, the re-ordered deck): 640 come in at the two entrances and walk the Loop to their desks -->
+    <!-- the people (9 Nov, the re-ordered deck): 651 come in at the two entrances and walk the Loop to their desks -->
     <canvas class="ly-ppl" aria-hidden="true" style="left:0;top:0;width:100%;height:100%"></canvas>
     <div class="ly-ppl-n" style="left:3%;top:18.6%;width:50%"><b>0</b><span>people, one floor: each to their own desk</span></div>
     <!-- Story 3 (18–19 Nov): the acoustics' sound rings, each inside its own space, drawn through the plan's view -->
@@ -2311,8 +2340,8 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-wayday" data-part="p5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
-  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Board Room,Wellness"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Board Room: the review, my big moment. 17:00 Wellness: a pause on the terrace garden, they thought of me too. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: What it&#x27;s made of. 03 · Design Expression.">
+  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Wellness,Board Room"
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Wellness: a pause on the terrace garden, they thought of me too. 17:00 Board Room: the review, my big moment. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. → Bridge: What it&#x27;s made of. 03 · Design Expression.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
@@ -3687,7 +3716,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
         i = j + 1;
       }
       x.setLineDash([]);
-      R.arrS.forEach((i) => { if (R.ss[i] <= st.loop) { x.beginPath(); x.arc(R.pts[i][0] * k, R.pts[i][1] * k, (LAY.line ? 4.6 : 6.5) * k, 0, 2 * Math.PI); x.fillStyle = "#fff"; x.fill(); x.lineWidth = (LAY.line ? 1.5 : 2.2) * k; x.strokeStyle = LAY.line ? LN.col : "#1d1d1d"; x.stroke(); } });
       if (LAY.line && LAY.line.arrow && st.loop >= R.end) {                      // an arrowhead where it ends, pointing on toward the start
         const e = R.pts.length - 1, [px, py] = R.pts[e], [qx, qy] = R.pts[Math.max(0, e - 8)], a = Math.atan2(py - qy, px - qx), L = 11 * k, hw = 5 * k;
         x.beginPath(); x.moveTo(px * k + Math.cos(a) * L * .4, py * k + Math.sin(a) * L * .4);
@@ -3741,7 +3769,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     const pg = $(".page", sc);
     if (jump) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
     const R = S.R;
-    pg.classList.toggle("end", k >= 6);                                    // the Replay button, once the loop is drawn
     glide(sc, k ? 1 : 0, false);
     $(".cpl-drop", sc).style.opacity = k ? 0 : 1; $(".cpl-one", sc).style.opacity = k ? 0 : 1; $(".cpl-cond", sc).style.opacity = 0;
     $$(".cpl-seg", sc).forEach((e) => { e.classList.toggle("on", k >= 1); e.classList.toggle("ghost", k >= 4); }); $(".cpl-out", sc).classList.toggle("on", k >= 1);
@@ -3764,16 +3791,29 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       c.style.transform = `translate(${x}px,${y}px) scale(${on ? 4.6 : 7})`;
     });
   }
-  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; }
+  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; S.cyc = false; }
+  // after the first round the purple band keeps circling the loop (Ritika, 22 Nov: "the purple band should be in loop"):
+  // the loop line stays drawn, the band runs round it, lap after lap; nothing else moves
+  function cycle(sc) {
+    stop(); S.cyc = true;
+    const R = S.R, LAP = 7000, GAP = 500, TAIL = 280, SPAN = R.end - R.loop0;
+    const t0 = performance.now();
+    const frame = (now) => {
+      if ((document.body.dataset.scene && document.body.dataset.scene !== sc.id) || !S.cyc) { S.raf = 0; S.cyc = false; return; }
+      const t = (now - t0) % (LAP + GAP), u = clamp(t / LAP, 0, 1);
+      if (t >= LAP) draw({ wins: [], reveal: Infinity, loop: R.end });
+      else {
+        const head = R.loop0 + SPAN * u, tail = Math.max(R.loop0, head - TAIL), g = clamp((head - R.loop0) / 90, 0, 1);
+        draw({ wins: wins(tail, head, 130 * g, 22 * g), reveal: Infinity, loop: R.end });
+      }
+      S.raf = requestAnimationFrame(frame);
+    };
+    S.raf = requestAnimationFrame(frame);
+  }
+  function loopOn(sc, k) { if (k >= 6 && !reduced) later(() => { if (S.last >= 6 && !S.run && !S.raf && document.body.dataset.scene === sc.id) cycle(sc); }, 2600); }
   // after stage k, the next one by itself, unless a click got there first or the slide was left (?noauto switches it off, for the walk test)
   const AUTO = !/[?&]noauto/.test(location.search), PAUSE = { 1: 650, 2: 650, 3: 700, 4: 500, 5: 1000 };
   function auto(sc, k) { if (AUTO && PAUSE[k]) later(() => { if (S.last === k && document.body.dataset.scene === sc.id) next(); }, PAUSE[k]); }
-  // Replay (Ritika, 18 Nov: "we can have a replay button"): back to the opening frame, then the run from the top
-  function replay(sc) {
-    stop(); S.fresh = true; S.last = 0; pose(sc, 0);
-    const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");
-    raf2(() => pg.classList.add("drawn")); setStep(1);
-  }
   // click 4: each campus neighbourhood lifts off its ring, flies to its place on the floor and becomes that neighbourhood (Ritika, 18
   // Nov: "that neighbourhood in campus can move to ACKO campus neighbourhoods"); the ring keeps a ghost of it. A flyer is a copy of the
   // segment, moved and stretched (translate, scale) from its own box to the floor shape's box, fading out as the shape fades in
@@ -3800,7 +3840,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     const L = R.end - LA, DUR = clamp(L / .95, 9000, 15000), A = .1, B = .12, V = 1 / (1 - A / 2 - B / 2);
     const pos = (u) => (u < A ? (V * u * u) / (2 * A) : u < 1 - B ? V * (A / 2 + u - A) : 1 - (V * (1 - u) * (1 - u)) / (2 * B));
     const to = (n) => { if (state.step < n) setStep(n); };
-    let split = false, FL = null, tF = 0, plate = false, shared = false;
+    let split = false, FL = null, tF = 0, plate = false, shared = false, t2 = 0;
     const frame = (now) => {
       if (document.body.dataset.scene && document.body.dataset.scene !== sc.id) { S.raf = 0; S.run = false; return; }
       const t = now - t0;
@@ -3819,14 +3859,14 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
         if (!plate) { $(".cpl-drop", sc).style.opacity = 0; $(".cpl-one", sc).style.opacity = 0; $(".cpl-cond", sc).style.opacity = 0; $$(".cpl-seg", sc).forEach((g) => g.classList.add("on")); }
         const u = clamp((t - TR) / DUR, 0, 1), head = LA + L * pos(u), g = clamp((head - LA) / 220, 0, 1);
         const len = Math.min(head - LA, LREST + 40) * (1 - clamp((u - .88) / .12, 0, 1));    // a soft tail, which catches the head at the end
-        if (head > R.rest1 - 150) to(2);
-        if (head > R.mob1 - 200) { to(3); if (!plate) { plate = true; $(".cpl-plate", sc).classList.add("on"); } }
+        if (head > Math.max(R.mob0, R.rest1)) { if (!t2) t2 = t; to(2); }
+        if (t2 && t - t2 > 450 && head > R.mob1) { to(3); if (!plate) { plate = true; $(".cpl-plate", sc).classList.add("on"); } }
         if (head > R.mob1 && !FL) { FL = flyers(sc); tF = t; $$(".cpl-seg", sc).forEach((g2) => g2.classList.add("ghost")); to(4); }
         if (FL) { fly(FL, t - tF); if (t - tF > 500) $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-n")); }
         if (!shared && head > R.loop0 - 120) { shared = true; $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-s")); to(5); }
         if (head > R.loop0 + (R.end - R.loop0) * .12) to(6);
         draw({ wins: wins(Math.max(LA, head - len), head, 130 * g, 22 * g), reveal: head, loop: head });
-        if (u >= 1) { S.raf = 0; S.run = false; pose(sc, 6); to(6); return; }
+        if (u >= 1) { S.raf = 0; S.run = false; pose(sc, 6); to(6); loopOn(sc, 6); return; }
       }
       S.raf = requestAnimationFrame(frame);
     };
@@ -3883,6 +3923,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       } else done = true;
       if (done) {
         S.raf = 0; pose(sc, k);
+        loopOn(sc, k);
         // the ribbon runs without clicks (Ritika, 18 Nov: "the ribbon flows without beat"): every stage hands on to the next after a short pause
         auto(sc, k);
         return;
@@ -3894,7 +3935,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
   return {
     enter(_, sc) {
       plain(); build(sc); stop(); S.fresh = true; S.last = 0;
-      const rb = $(".cpl-replay", sc); if (!rb.dataset.on) { rb.dataset.on = 1; ["click", "mousedown", "pointerdown", "dblclick"].forEach((t) => rb.addEventListener(t, (e) => { e.stopPropagation(); if (t === "click") { e.preventDefault(); replay(sc); rb.blur(); } })); }
       pose(sc, 0);
       const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");   // reset at once, but let the words keep their delays
       raf2(() => pg.classList.add("drawn"));                                   // the header and hand line, once Why a campus's words have gone
@@ -3903,7 +3943,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       if (S.run) { S.last = k; return; }                                        // the run is moving the steps itself
       const still = reduced || (S.fresh ? k !== 1 : k !== S.last + 1);
       S.fresh = false; S.last = k;
-      if (still) { stop(); pose(sc, k); }
+      if (still) { stop(); pose(sc, k); loopOn(sc, k); }
       else if (k === 1 && AUTO) run(sc);
       else if (k === 1 || k === 2 || k === 3 || k === 4 || k === 6) play(sc, k);
       else { stop(); pose(sc, k, false); auto(sc, k); }                         // 5: the shared spaces come in on their own, then the loop
@@ -4543,6 +4583,23 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   }
 
   // ---------- drawing on demand ----------
+  // the arrival from the site plan: the layout's boundary alone (a blue ribbon on the plate's edge, over a white veil), then it tilts and
+  // grows while the veil lifts and the axo fills in, the ribbon going last; the page's words wait until it lands
+  const ramp = (a, b, x) => Math.min(1, Math.max(0, (x - a) / (b - a)));
+  function ribbonBuild() {
+    if (S.ribbon || !window.ACKO_FLOOR || !window.ACKO_FLOOR.plate) return;
+    const P = window.ACKO_FLOOR.plate.map((q) => [((q[0] * 50 + 8842) - 185842 - M.CX) / 1000, ((q[1] * 50 + 12775) + 182802 - M.CY) / 1000]), W = 0.4, pos = [];
+    for (let i = 0; i < P.length; i++) {
+      const a = P[i], b = P[(i + 1) % P.length], dx = b[0] - a[0], dz = b[1] - a[1], L = Math.hypot(dx, dz) || 1, nx = -dz / L * W / 2, nz = dx / L * W / 2;
+      pos.push(a[0] + nx, 0.05, a[1] + nz, b[0] + nx, 0.05, b[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] + nx, 0.05, a[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] - nx, 0.05, a[1] - nz);
+    }
+    const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+    S.ribbon = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0x3fc1ea, transparent: true, depthTest: false, depthWrite: false, side: T.DoubleSide }));
+    S.ribbon.renderOrder = 10; S.ribbon.frustumCulled = false; S.ribbon.visible = false; M.scene.add(S.ribbon);
+  }
+  function riseStart() { ribbonBuild(); S.rise = true; S.dim = 1; if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = 1; } sc.classList.remove("st-land"); sc.classList.add("st-rise"); }
+  function riseStep(k) { S.dim = 1 - ramp(0.3, 0.85, k); if (S.ribbon) S.ribbon.material.opacity = 1 - ramp(0.6, 0.95, k); if (k >= 1) riseEnd(true); }
+  function riseEnd(landed) { S.rise = false; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; sc.classList.remove("st-rise"); if (landed) sc.classList.add("st-land"); }
   function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
   function draw(now) {
     S.raf = 0;
@@ -4561,6 +4618,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
     if (S.tween) {
       const tw = S.tween, k = Math.min(1, (now - tw.t0) / tw.ms), e = ease(k), L = (a, b) => a + (b - a) * e;
       S.state = { theta: L(tw.from.theta, tw.to.theta), phi: L(tw.from.phi, tw.to.phi), half: L(tw.from.half, tw.to.half), t: tw.from.t.map((x, i) => L(x, tw.to.t[i])) };
+      if (S.rise) riseStep(k);
       if (k >= 1) S.tween = null;
     }
     window.AxoModel.apply(cam, S.state, asp);
@@ -4698,14 +4756,17 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       if (!ok) return;
       S.base.useSketch(true);
       // from the Loop lying on the floor (10 Nov, problem first): straight down on the plan's footprint, rising into the axo
+      const site = !reduced && !!window.ACKO_SITE_AXO; window.ACKO_SITE_AXO = 0;   // from the site plan: the same rise
       const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-challenges", 2500) : null;
       const im = $(".st-from", sc); im.style.transition = "none"; im.style.opacity = fc ? 1 : 0; S.fromCh = !!fc;
       if (fc) later(() => { im.style.transition = "opacity 1.3s var(--ease)"; im.style.opacity = 0; }, 500);
       const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? window.ACKO_MORPH.take("s-loop-w") : null;
-      if (fl && plan && plan.data) {
+      if ((fl || site) && plan && plan.data) {
         const [x, y, w, h] = plan.data.viewBox, vb = plan.vbFor([x, y, x + w, y + h], [35, 157, 1885, 670]);
         const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
-        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
+        const ms = site ? (window.ACKO_RISE_MS || 2600) : 2400;
+        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms }; need();
+        if (site) { riseStart(); }
       }
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
     },
@@ -4715,6 +4776,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       play(k);                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
     leave() { if (window.ACKO_MORPH) ACKO_MORPH.mark("s-strategy"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+      if (S.rise) riseEnd(false);
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },
@@ -5173,7 +5235,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const E = (D.overlays && D.overlays.entry) || LP.entries, EN = E.map((e) => near(e)), T = EN.map(dij);
     const zones = D.zones.map((z) => ({ n: z.n, R: rings(z.zone) }));
     const inP = (q, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > q[1]) !== (yj > q[1]) && q[0] < ((xj - xi) * (q[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
-    const seats = L.seats.filter((_, i) => i % 108 !== 107).slice(0, 640);          // 640 people, 646 desks: 6 left free
+    const seats = L.seats.filter((_, i) => i % 108 !== 107).slice(0, 640);          // 640 of the 646 desks drawn (the animation, not the count): 6 left free
     const P = seats.map((q, i) => {
       const z = zones.find((z) => z.R.some((r) => inP(q, r))), sn = near(q);
       const e = T[0].dist[sn] <= T[1].dist[sn] ? 0 : 1, way = []; for (let u = sn; u >= 0; u = T[e].prev[u]) way.push(N[u]);
@@ -5572,8 +5634,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     { t: "11:00", n: "Meeting Rooms", s: "A team review in the departmental room", q: "My impact", at: [36745, 24148], half: 11, sp: "Departmental room", spot: 2 },
     { t: "12:00", n: "Collab", s: "In the Acker Garden: the swing, a punch bag and foosball", q: "Wow, worth the commute", at: [18279, 18618], half: 6.5, theta: 1.68, sp: "Collab", spot: 4 },
     { t: "13:00", n: "Café", s: "Lunch together in the café", q: "Hey, we finally meet!", at: [67562, 40539], half: 15, sp: "Cafeteria", spot: 5 },
-    { t: "15:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
-    { t: "17:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: 6 },
+    { t: "15:00", n: "Wellness", s: "A pause on the terrace garden", q: "They thought of me too!", at: [84216, 43565], half: 12, sp: "Terrace", spot: 6 },
+    { t: "17:00", n: "Board Room", s: "The quarterly review in the boardroom", q: "This is my big moment", at: [106776, 42102], half: 11, sp: "Boardroom", spot: -1 },
   ];
   // the Acker Garden's foosball (a prop, not a person): plan mm, angle in centiradians, the deck's height in mm
   const FOOSBALL = [19539, 17138, -157, 130];
@@ -5625,7 +5687,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     };
     const chaikin = (Q, it) => { for (let k = 0; k < it; k++) { const O = [Q[0]]; for (let i = 0; i + 1 < Q.length; i++) { const a = Q[i], b = Q[i + 1]; O.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } O.push(Q[Q.length - 1]); Q = O; } return Q; };
     const dense = (Q) => { const o = [Q[0]]; for (let i = 1; i < Q.length; i++) { const a = Q[i - 1], b = Q[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.25)); for (let k = 1; k <= n; k++) o.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); } return o; };
-    const VIA = { 5: [[84216, 43565], [85500, 31500]], 6: [[85500, 31500]] };          // by the beat he is walking to: the terrace and Reception (plan mm)
+    const VIA = { 6: [[85500, 31500]] };                                                  // by the beat he is walking to: Reception, on the way from the terrace to the Board Room (plan mm)
     const clear = (A, B) => { const n = Math.max(2, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1000)); for (let k = 0; k <= n; k++) if (!inRing([A[0] + (B[0] - A[0]) * k / n, A[1] + (B[1] - A[1]) * k / n], M.slab)) return false; return true; };
     const seg = (A, B) => {                                                              // points (m) from plan spot A to plan spot B, both ends included
       const prev = [M.X(A[0]), M.Z(A[1])], here = [M.X(B[0]), M.Z(B[1])];
@@ -5639,8 +5701,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     P = []; legEnd = [0];
     BEATS.forEach((b, i) => {
       const here = [b.p.x, b.p.z]; if (i === 0) { P.push(here); return; }
-      // via points (Ritika, 19 Nov): from the Café to the Board Room he goes out by the terrace and in through Reception, and from the Board Room
-      // to the terrace back through Reception; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
+      // via points (Ritika, 19 Nov): from the Café he goes out to the terrace (Wellness), and from there in through Reception to the Board Room; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
       const stops = [BEATS[i - 1].at].concat(VIA[i] || [], [b.at]);
       let pts = [[M.X(stops[0][0]), M.Z(stops[0][1])]];
       for (let k = 1; k < stops.length; k++) pts.push(...seg(stops[k - 1], stops[k]).slice(1));
@@ -5724,9 +5785,25 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     requestAnimationFrame(() => requestAnimationFrame(() => { c.style.opacity = 0; }));
     setTimeout(() => { if (c.parentNode) c.parentNode.removeChild(c); }, 2000);
   }
+  // the clock: the time counts on from the last stop to this one (a minute at a time, easing out) and a fill runs along the day's line with it
+  const mins = (t) => +t.slice(0, 2) * 60 + +t.slice(3);
+  const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(Math.round(m % 60)).padStart(2, "0");
+  let clk = 0;
+  function clockTo(el, t, i) {
+    cancelAnimationFrame(clk);
+    const day = $(".wd-day", sc); let ph = $(".wd-ph", day); if (!ph) { ph = document.createElement("i"); ph.className = "wd-ph"; day.appendChild(ph); }
+    const pct = (i / BEATS.length) * 100;
+    if (reduced || S.clockT === undefined) { el.textContent = t; ph.style.transition = "none"; ph.style.width = pct + "%"; S.clockT = mins(t); return; }
+    const from = S.clockT, to = mins(t), t0 = performance.now(), dur = 1300;
+    ph.style.transition = "width " + dur + "ms cubic-bezier(.2,.7,.2,1)"; ph.style.width = pct + "%";
+    const step = (now) => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = hhmm(from + (to - from) * e); if (k < 1) clk = requestAnimationFrame(step); else S.clockT = to; };
+    clk = requestAnimationFrame(step);
+  }
   function setNow(i) {
     const b = BEATS[i], now = $(".wd-now", sc);
-    $(".t", now).textContent = b.t; $("b", now).textContent = b.n; $("span", now).textContent = b.s; $("q", now).textContent = b.q;
+    $("b", now).textContent = b.n; $("span", now).textContent = b.s; $("q", now).textContent = b.q;
+    clockTo($(".t", now), b.t, i);
+    now.classList.remove("wd-sw"); void now.offsetWidth; now.classList.add("wd-sw");
     $$(".wd-day button", sc).forEach((el, k) => { el.classList.toggle("on", k === i); el.classList.toggle("done", k < i); });
     if (MODEL.focus) { if (b.ring === undefined) b.ring = spaceOf(b); MODEL.focus(b.ring); }
   }
@@ -6778,6 +6855,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   }
   return self = {
     enter(_, sc) {
+      window.ACKO_SITE_AXO = 1;
       document.body.dataset.tpl = new URLSearchParams(location.search).get("tpl") || "";
       // straight from the site (3 Nov): its map closes in on Regalium's plate till it lies where the plan does, the plan takes
       // the plate's place slowly, then the page's header, tools, pills and panel come in round it
@@ -6860,6 +6938,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
       plan.planOff(); if (sc) { sunDD(sc, false); coHide(sc); }
       ddShell(false);                                   // the fit-out back for the slides after
+      setTimeout(() => { window.ACKO_SITE_AXO = 0; }, 1800);   // the strategy axo rises from this plan (tilts and grows) if it enters within this
       if (window.ACKO_MORPH) ACKO_MORPH.mark("s-layout-dd");   // the pitches pick the floor up from here
     },
   };

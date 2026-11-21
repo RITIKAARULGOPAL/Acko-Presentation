@@ -779,6 +779,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   }
   return self = {
     enter(_, sc) {
+      window.ACKO_SITE_AXO = 1;
       document.body.dataset.tpl = new URLSearchParams(location.search).get("tpl") || "";
       // straight from the site (3 Nov): its map closes in on Regalium's plate till it lies where the plan does, the plan takes
       // the plate's place slowly, then the page's header, tools, pills and panel come in round it
@@ -861,6 +862,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
       plan.planOff(); if (sc) { sunDD(sc, false); coHide(sc); }
       ddShell(false);                                   // the fit-out back for the slides after
+      setTimeout(() => { window.ACKO_SITE_AXO = 0; }, 1800);   // the strategy axo rises from this plan (tilts and grows) if it enters within this
       if (window.ACKO_MORPH) ACKO_MORPH.mark("s-layout-dd");   // the pitches pick the floor up from here
     },
   };
