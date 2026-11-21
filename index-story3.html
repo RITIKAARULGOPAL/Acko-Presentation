@@ -260,6 +260,7 @@
 #s-pitch .pp-hand { transition-delay: .7s; }
 #s-pitch .page.pp-wait-p :is(.pp-pitches, .pp-len, .pp-lab) { opacity: 0; }
 #s-pitch .page.pp-wait-t :is(.pp-h, .pp-hand, .pp-stats > div) { opacity: 0; transform: translateY(8px); }
+#s-pitch .pp-title { position: absolute; left: 2.24%; top: 3.31%; font-family: var(--body); font-size: calc(var(--pt) * 12); line-height: 1; font-weight: 700; color: #5222d0; white-space: nowrap; }
 </style>
 <style data-slide="s-strategy">
 /* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
@@ -2018,6 +2019,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="1" data-mins="0.6"
   data-notes="The bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end, and 34 m across, glass to glass: exactly half a pitch wide. About 651 people on one plate, a walk of five minutes or more from one end to the other. A long, thin floor: so how do you make it feel like one team? That shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
   <div class="page">
+    <div class="pp-title">Challenges of vastness</div>
     <h2 class="pp-h" style="left:6.8%;top:8.5%;width:87.3%">One floor, longer than <b>two football pitches</b> and only <b>half a pitch wide.</b></h2>
     <svg class="pp-svg" viewBox="-9 -20 265 102" preserveAspectRatio="xMidYMid meet" aria-hidden="true" style="left:4%;top:22%;width:92%;height:62%">
       <g class="pp-pitches"></g>
@@ -7186,8 +7188,32 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     $$(".dd-days button", sc).forEach((b) => (b.onclick = () => { b.blur(); SUN.day = +b.dataset.d; sunPlay(sc, 0); }));
     cancelAnimationFrame(SUN.raf); sunFollow(sc); sunPlay(sc, 700);
   }
+  // from the football pitches (Ritika, 19 Nov): the floor's drawing from the pitches slide, at its place there, glides onto the plan's
+  // outline, then gives way to the plan under it
+  function ddBox(vb) {                                  // the plan's outline (the glazing) in page px, for the plan's view vb
+    const b = bboxOf(DD_GLAZE), kk = Math.max(vb[2] / 1920, vb[3] / 1080), x0 = vb[0] + vb[2] / 2 - 960 * kk, y0 = vb[1] + vb[3] / 2 - 540 * kk;
+    return [(b[0] - x0) / kk, (b[1] - y0) / kk, (b[2] - x0) / kk, (b[3] - y0) / kk];
+  }
+  function ghostIn(sc, mk) {
+    const stage = document.getElementById("stage"), M = window.ACKO_MORPH; if (!stage || !M || !mk || !mk.m || !mk.bb || !mk.html) return false;
+    const tb = ddBox(home()), b = mk.bb, s = (tb[2] - tb[0]) / b[2], cx = (tb[0] + tb[2]) / 2, cy = (tb[1] + tb[3]) / 2;
+    const Q = [s, 0, 0, s, cx - s * (b[0] + b[2] / 2), cy - s * (b[1] + b[3] / 2)];
+    const host = document.createElement("div"); host.className = "pd-ghost";
+    host.style.cssText = "position:fixed;left:var(--pl);top:var(--ptop);width:var(--pw);height:var(--ph);pointer-events:none;z-index:0;transition:opacity .7s ease";
+    host.innerHTML = '<svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><g>' + mk.html + "</g></svg>";
+    stage.insertBefore(host, stage.firstChild);
+    const wp = document.getElementById("w-plan"); wp.style.transition = "none"; wp.style.opacity = "0";      // the plan waits: only the plate is on the page while it glides
+    M.anim(host.querySelector("svg > g"), mk.m, Q, 1500, () => {
+      wp.style.transition = "opacity .9s ease"; wp.style.opacity = ""; host.style.opacity = "0";
+      setTimeout(() => { host.remove(); wp.style.transition = ""; }, 1100);
+      if (window.ACKO_FLOW) ACKO_FLOW.reveal(sc, 700);
+    }, 350);
+    return true;
+  }
   return self = {
     enter(_, sc) {
+      sc._pitch = window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? ACKO_MORPH.take("s-pitch", 2500) : null;
+      if (window.ACKO_FLOW) { ACKO_FLOW.clear(sc); if (sc._pitch) ACKO_FLOW.hold(sc); }
       window.ACKO_SITE_AXO = 1;
       document.body.dataset.tpl = new URLSearchParams(location.search).get("tpl") || "";
       // straight from the site (3 Nov): its map closes in on Regalium's plate till it lies where the plan does, the plan takes
@@ -7259,10 +7285,14 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
         $(".b-vwp", sc).innerHTML = `of the seats have a plant in view within 8 m · median <b>${st.median.toFixed(1)} m</b>`;
       }
       band(sc); plan.planHome(home(), was ? 700 : 0);        // the plan centred in what this beat's panel leaves it
+      if (sc._pitch && !was) { const mk = sc._pitch; sc._pitch = null; if (!ghostIn(sc, mk) && window.ACKO_FLOW) ACKO_FLOW.reveal(sc, 0); }        // the plan centred in what this beat's panel leaves it
       sunDD(sc, sunOn);                                  // the sun path, with the due diligence (the button turns it off)
       if (tools) $('[data-t="sun"]', tools).classList.toggle("on", sunOn);
     },
     leave(_, sc) {
+      const mvb = home(), mbox = ddBox(mvb);
+      { const wpl = document.getElementById("w-plan"); if (wpl) { wpl.style.transition = ""; wpl.style.opacity = ""; } }
+      if (window.ACKO_FLOW) ACKO_FLOW.out(sc);
       document.body.dataset.tpl = "";
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
       if (sc && sc._laser) { document.removeEventListener("mousemove", sc._laser, true); sc._laserOff(); }
@@ -7272,6 +7302,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
       plan.planOff(); if (sc) { sunDD(sc, false); coHide(sc); }
       ddShell(false);                                   // the fit-out back for the slides after
       setTimeout(() => { window.ACKO_SITE_AXO = 0; }, 1800);   // the strategy axo rises from this plan (tilts and grows) if it enters within this
+      if (window.ACKO_MORPH) ACKO_MORPH.mark("s-site-dd", { vb: mvb, box: mbox });   // the pitches pick the floor up from here
       if (window.ACKO_MORPH) ACKO_MORPH.mark("s-layout-dd");   // the pitches pick the floor up from here
     },
   };
