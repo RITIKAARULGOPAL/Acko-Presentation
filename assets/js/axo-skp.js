@@ -135,7 +135,9 @@
     // door a glass door, full height (a jamb each side, rails, a leaf, a pull on each face by its free edge)
     const WALL_RGB = [232, 230, 226], PANE_RGB = [95, 78, 107], FPANE_RGB = [223, 233, 239], FRAME_RGB = [74, 77, 82], PULL_RGB = [201, 201, 201];
     const GLZ = { PANE: 0.012, RAIL: 0.05, POST: 0.05 }, PANEL = { glass: 1.2, rail: 1.2, facade: 1.5 }, JAMB = 0.05, PULL = 0.6;
+    const DOORS = [];       // each door: its place and the ranges of its leaf (in the merged glass buffer) and its two pulls (in the frame buffer), so a slide can swing it (M.doorOpen)
     function pieces(list) {
+      DOORS.length = 0;
       const B = { wall: bucket(), pane: bucket(), fpane: bucket(), frame: bucket() };
       for (const [ty, h, rings] of list) {
         if (ty === "booth") continue;
@@ -149,8 +151,10 @@
         if (ty === "door") {
           const leafL = Math.max(0.1, L - 2 * JAMB);
           for (const s of [-L / 2 + JAMB / 2, L / 2 - JAMB / 2]) { const [px, pz] = at(s); boxAt(B.frame, FRAME_RGB, JAMB, h, d, px, h / 2, pz, ang); }
-          boxAt(B.pane, PANE_RGB, leafL, h - 2 * R, GLZ.PANE, x, h / 2, z, ang);
-          for (const side of [-1, 1]) { const [px, pz] = at(leafL / 2 - 0.1, side * (GLZ.PANE / 2 + 0.03)); boxAt(B.frame, PULL_RGB, 0.025, PULL, 0.025, px, 1.05, pz, ang); }
+          const rec = { x, z, ang, L: leafL, h, pane: [B.pane.pos.length], pulls: [] };
+          boxAt(B.pane, PANE_RGB, leafL, h - 2 * R, GLZ.PANE, x, h / 2, z, ang); rec.pane.push(B.pane.pos.length);
+          for (const side of [-1, 1]) { const [px, pz] = at(leafL / 2 - 0.1, side * (GLZ.PANE / 2 + 0.03)); const f0 = B.frame.pos.length; boxAt(B.frame, PULL_RGB, 0.025, PULL, 0.025, px, 1.05, pz, ang); rec.pulls.push([f0, B.frame.pos.length]); }
+          DOORS.push(rec);
           continue;
         }
         boxAt(pb, prgb, L, h - 2 * R, GLZ.PANE, x, h / 2, z, ang);
@@ -512,7 +516,7 @@
     const nookInk = (meshes) => { const arr = []; for (const [g, k] of meshes) if (k === "hard" || k === "soft") arr.push(...new T.EdgesGeometry(g, 30).getAttribute("position").array);
       const lg = new T.BufferGeometry(); lg.setAttribute("position", new T.Float32BufferAttribute(arr, 3)); return lg; };
 
-    return { pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, planTables, coffeeNook, raise, nookMeshes, nookInk, ink: NOOK.INK, trim };
+    return { doors: DOORS, pieces, solid, loungeGroups, fixPlace, loungeSeats, terraceFurniture, terraceMeshes, planTables, coffeeNook, raise, nookMeshes, nookInk, ink: NOOK.INK, trim };
   }
 
   AS.get = function (asset) {
@@ -789,8 +793,9 @@
     // doors as its glass doors (jambs, rails, a leaf, pulls); the panes in the model's glass, the frames in its metal; the
     // external glazing toned down (Ritika: "tone down the external glazing glass"): the pale pane glass of the deck's own axo
     // (AxoModel's façade: #dfe9ef at 16%)
+    let DGEO = null;
     if (FIT) {
-      const B = FT.pieces(FIT.pieces), SEE_K = { glass: 0.35, pane: 0.16 };
+      const B = FT.pieces(FIT.pieces), SEE_K = { glass: 0.35, pane: 0.16 }; DGEO = {};
       const own = (kind) => mats[kind + "28"] || (mats[kind + "28"] = reg(focusable(new T.MeshLambertMaterial(SEE_K[kind]
         ? { color: 0xffffff, vertexColors: true, flatShading: true, transparent: true, opacity: SEE_K[kind], depthWrite: false, side: T.DoubleSide, shadowSide: T.BackSide }
         : { color: 0xffffff, vertexColors: true, flatShading: true, side: T.DoubleSide, shadowSide: T.BackSide }), kind), kind, true));
@@ -799,6 +804,7 @@
         const g = FT.solid(b.pos, b.col), mesh = new T.Mesh(g, own(kind));
         if (SEE_K[kind]) mesh.renderOrder = 2;
         grp.add(mesh); REG.meshes.push([mesh, kind]); if (edged) ink.push(new T.EdgesGeometry(g, 30));
+        if (kind === "glass" || kind === "mullion") DGEO[kind] = { g, o: Float32Array.from(g.getAttribute("position").array) };
       }
     }
     // the architecture's edges, thin, in the looks' ink
@@ -841,6 +847,21 @@
       if (shadowDue) { r.shadowMap.needsUpdate = true; shadowDue = false; }
     };
     M = { scene, groups: G, X, Z, CX, CY, slab: A.slab, source: D.source, areas: areasP };   // (areas: where the furniture is the plan's)
+    // the doors: M.doors (world metres, the leaf's length) and M.doorOpen(i, a, nx, nz): door i open a (0 shut to 1 wide open), its leaf turned about a jamb
+    // to swing toward (nx, nz) (the room side); the leaf and its pulls are rewritten in their buffers, a = 0 puts them back as built (22 Nov, Ritika: "the door can open and he can enter")
+    if (FT && DGEO && DGEO.glass && DGEO.mullion) {
+      M.doors = FT.doors.map((d) => ({ x: d.x, z: d.z, ang: d.ang, L: d.L, h: d.h }));
+      M.doorOpen = (i, a, nx, nz) => {
+        const d = FT.doors[i]; if (!d) return;
+        const al = [Math.cos(d.ang), -Math.sin(d.ang)], Hx = d.x + al[0] * d.L / 2, Hz = d.z + al[1] * d.L / 2, ex = -al[0] * d.L, ez = -al[1] * d.L;
+        const sg = (ez * nx - ex * nz) > 0 ? 1 : -1, ph = sg * a * Math.PI / 2, c = Math.cos(ph), s = Math.sin(ph);
+        const turn = (G2, range) => { const P = G2.g.getAttribute("position").array, O = G2.o;
+          for (let j = range[0]; j < range[1]; j += 3) { const rx = O[j] - Hx, rz = O[j + 2] - Hz; P[j] = Hx + rx * c + rz * s; P[j + 1] = O[j + 1]; P[j + 2] = Hz - rx * s + rz * c; }
+          G2.g.getAttribute("position").needsUpdate = true; };
+        turn(DGEO.glass, d.pane); for (const r of d.pulls) turn(DGEO.mullion, r);
+        shadowDue = true;
+      };
+    }
     M.reset = () => { for (const k in G) { G[k].visible = true; G[k].scale.set(1, 1, 1); } shadowDue = true; };
     window.AxoModel.looks.apply(REG, LOOK);
     return M;

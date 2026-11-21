@@ -2414,7 +2414,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-wayday" data-part="p5" data-title="A day in ACKO" data-steps="8" data-mins="1.7"
+<section class="scene" id="s-wayday" data-part="p5" data-title="A day in the life of an Acker" data-steps="8" data-mins="1.7"
   data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Wellness,Board Room,The whole floor"
   data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Wellness: a pause on the terrace garden, they thought of me too. 17:00 Board Room: the review, my big moment. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. 8 After the day: the whole floor again, his whole path on it: all the neighbourhoods are self-sustaining.">
   <div class="page">
@@ -2422,7 +2422,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     <div class="wd-veil"></div>
     <div class="hdr"><b>Schematic Axonometric</b><span>Space Planning &nbsp;| Wayfinding</span></div>
     <div class="lt-tools ui"><button type="button" class="wd-rs" title="Back to the day's view"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button><button type="button" class="wd-play on">The day</button><button type="button" class="wd-all">Whole floor</button></div>
-    <div class="wd-title"><h1>A day in ACKO</h1><p>From arrival to the evening: one Acker’s day, walked along the Loop.</p></div>
+    <div class="wd-title"><h1>A day in the life of an Acker</h1><p>From arrival to the evening: one Acker’s day, walked along the Loop.</p></div>
     <div class="wd-now"><div class="t"></div><b></b><span></span><q></q></div>
     <div class="wd-day ui"></div>
     <p class="wd-nogl">The live model needs WebGL on this machine.</p>
@@ -3509,7 +3509,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <script src="data/loop-path.js?v=1"></script>
 <script src="assets/js/axo-layers.js?v=1"></script>
 <script src="data/axo-skp.js?v=1"></script>
-<script src="assets/js/axo-skp.js?v=1"></script>
+<script src="assets/js/axo-skp.js?v=2"></script>
 <script src="assets/js/plan-hover.js?v=62"></script>
 <script src="assets/js/plan-layers.js?v=62"></script>
 <script src="data/site-floor.js?v=1"></script>
@@ -6069,7 +6069,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   const VIEW = { theta: -0.62, phi: 0.92 }, FIT = [0.30, 0.16, 0.99, 0.82];
   const RW = 1.2, RY = 0.07;                                        // the path's width (m) and height
   const S = { built: false, beat: 0, view: null, follow: true, raf: 0, fresh: true, jump: false, asp: 1, home: null, user: false, wired: false, open: -1 };
-  let T, M, R, cam, host, sc, group, W, man, trail, P = [], legEnd = [];
+  let T, M, R, cam, host, sc, group, W, man, trail, P = [], legEnd = [], DU = [];
   const ringsOf = (d) => (d.match(/M[^Z]+/g) || []).map((r) => r.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number)));
   const inRing = (p, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c; } return c; };
   // the neighbourhood of the day's desks, by the drawing's own name ("06 · Home")
@@ -6113,25 +6113,160 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const chaikin = (Q, it) => { for (let k = 0; k < it; k++) { const O = [Q[0]]; for (let i = 0; i + 1 < Q.length; i++) { const a = Q[i], b = Q[i + 1]; O.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]); } O.push(Q[Q.length - 1]); Q = O; } return Q; };
     const dense = (Q) => { const o = [Q[0]]; for (let i = 1; i < Q.length; i++) { const a = Q[i - 1], b = Q[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.25)); for (let k = 1; k <= n; k++) o.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); } return o; };
     const VIA = { 6: [[85500, 31500]] };                                                  // by the beat he is walking to: Reception, on the way from the terrace to the Board Room (plan mm)
-    const clear = (A, B) => { const n = Math.max(2, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1000)); for (let k = 0; k <= n; k++) if (!inRing([A[0] + (B[0] - A[0]) * k / n, A[1] + (B[1] - A[1]) * k / n], M.slab)) return false; return true; };
-    const seg = (A, B) => {                                                              // points (m) from plan spot A to plan spot B, both ends included
-      const prev = [M.X(A[0]), M.Z(A[1])], here = [M.X(B[0]), M.Z(B[1])];
-      if (!ring) return [prev, here];
-      const ia = near(A), ib = near(B), ca = Math.hypot(ring[ia][0] - A[0], ring[ia][1] - A[1]), cb = Math.hypot(ring[ib][0] - B[0], ring[ib][1] - B[1]), r = dij(ia, ib);
-      const straight = Math.hypot(B[0] - A[0], B[1] - A[1]), ok = ca < 12000 && cb < 12000, free = clear(A, B);
-      const viaRing = [prev].concat(r.path.map((q) => [M.X(ring[q][0]), M.Z(ring[q][1])]), [here]);
-      if (ok && (r.len + ca + cb <= 1.4 * straight + 8000 || !free)) return viaRing;
-      return free || !ok ? [prev, here] : viaRing;
-    };
+    // ---- his walk (22 Nov, Ritika: "the path should not clash any walls, partitions or furniture, only come on the corridor; to enter a space the door can open and
+    // he can enter"). A walkable mask over the floor (plan mm, 200 mm cells): the Loop's corridor (a band 2.8 m wide round ACKO_LOOP.ring), less the plan's walls,
+    // partitions, glass, columns and booths (AXO_SKP's fit pieces, kept 0.3 m clear) and less the furniture (the model seen from above, between 0.2 and 1.8 m). A stop
+    // whose room has a door on its edge reaches it by that door (the doorway is cut through the mask, he ends a step inside); any other stops at the corridor point
+    // nearest the Loop's own stop. The way between stops is the shortest walk on the mask, its corners rounded
+    const GX = 8000, GY = 12000, CELL = 200, GW = 1240, GH = 195, cxp = (x) => (x - GX) / CELL, cyp = (y) => (y - GY) / CELL;
+    const PCS = (window.AXO_SKP && window.AXO_SKP.changes && window.AXO_SKP.changes.fit && window.AXO_SKP.changes.fit.pieces) || [];
+    const cvm = document.createElement("canvas"); cvm.width = GW; cvm.height = GH;
+    const gx = cvm.getContext("2d", { willReadFrequently: true });
+    const trace = (rs) => { gx.beginPath(); for (const r of rs) { r.forEach((q, i) => gx[i ? "lineTo" : "moveTo"](cxp(q[0]), cyp(q[1]))); gx.closePath(); } };
+    gx.fillStyle = "#000"; gx.fillRect(0, 0, GW, GH);
+    if (ring) { gx.strokeStyle = "#fff"; gx.lineWidth = 14; gx.lineJoin = gx.lineCap = "round"; gx.beginPath(); ring.forEach((q, i) => gx[i ? "lineTo" : "moveTo"](cxp(q[0]), cyp(q[1]))); gx.stroke(); }
+    gx.fillStyle = gx.strokeStyle = "#000"; gx.lineWidth = 2; gx.lineJoin = "round";
+    for (const it of PCS) { if (it[0] === "door") continue; trace(it[2]); gx.fill("evenodd"); gx.stroke(); }
+    gx.fillStyle = "#fff"; for (const it of PCS) if (it[0] === "door") { trace(it[2]); gx.fill("evenodd"); }       // every door is a gap in the walls
+    const walk = new Uint8Array(GW * GH), px0 = gx.getImageData(0, 0, GW, GH).data;
+    for (let i = 0; i < GW * GH; i++) walk[i] = px0[i * 4] > 128 ? 1 : 0;
+    // the furniture, seen from straight above: everything between 0.2 and 1.8 m (the model's furniture and plants), a render of 100 mm pixels, a cell blocked (and its
+    // neighbours) where any pixel is lit
+    const furn = (() => {
+      try {
+        const sc3 = M.scene, Gs = M.groups, keep = { furniture: 1, plants: 1 }, saved = {};
+        for (const k in Gs) { saved[k] = Gs[k].visible; Gs[k].visible = !!keep[k]; }
+        const FRX = 2, RW_ = GW * FRX, RH_ = GH * FRX, w = (GW * CELL) / 1000, h = (GH * CELL) / 1000;
+        const mx = (M.X(GX) + M.X(GX + GW * CELL)) / 2, mz = (M.Z(GY) + M.Z(GY + GH * CELL)) / 2;
+        const cam2 = new T.OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0.1, 60); cam2.position.set(mx, 30, mz); cam2.up.set(0, 0, -1); cam2.lookAt(mx, 0, mz); cam2.updateMatrixWorld();
+        const rt = new T.WebGLRenderTarget(RW_, RH_), buf = new Uint8Array(RW_ * RH_ * 4);
+        const prev = { rt: R.getRenderTarget(), col: R.getClearColor(new T.Color()), al: R.getClearAlpha(), clip: R.clippingPlanes, ov: sc3.overrideMaterial, auto: R.autoClear };
+        R.setRenderTarget(rt); R.setClearColor(0x000000, 1); R.autoClear = true;
+        R.clippingPlanes = [new T.Plane(new T.Vector3(0, -1, 0), 1.8), new T.Plane(new T.Vector3(0, 1, 0), -0.2)];
+        sc3.overrideMaterial = new T.MeshBasicMaterial({ color: 0xffffff, side: T.DoubleSide });
+        R.render(sc3, cam2); R.readRenderTargetPixels(rt, 0, 0, RW_, RH_, buf);
+        sc3.overrideMaterial = prev.ov; R.clippingPlanes = prev.clip; R.setRenderTarget(prev.rt); R.setClearColor(prev.col, prev.al); R.autoClear = prev.auto;
+        for (const k in Gs) Gs[k].visible = saved[k];
+        rt.dispose();
+        const raw = new Uint8Array(GW * GH);
+        for (let j = 0; j < GH; j++) for (let i = 0; i < GW; i++) {
+          let on = 0; for (let b = 0; b < FRX && !on; b++) for (let a = 0; a < FRX; a++) { const row = RH_ - 1 - (j * FRX + b), col = i * FRX + a; if (buf[(row * RW_ + col) * 4] > 128) { on = 1; break; } }
+          raw[j * GW + i] = on;
+        }
+        const out = new Uint8Array(GW * GH);
+        for (let j = 1; j < GH - 1; j++) for (let i = 1; i < GW - 1; i++) if (raw[j * GW + i]) for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) out[(j + dj) * GW + i + di] = 1;
+        return out;
+      } catch (e) { return null; }
+    })();
+    const free = new Uint8Array(walk);                          // the corridor, walls kept clear (no furniture): the fallback
+    if (furn) for (let i = 0; i < GW * GH; i++) if (furn[i]) walk[i] = 0;
+    const cellOf = (p) => [Math.round(cxp(p[0])), Math.round(cyp(p[1]))], okc = (i, j, A) => i >= 0 && j >= 0 && i < GW && j < GH && A[j * GW + i] === 1;
+    const nearestWalk = (p, A) => { const [i0, j0] = cellOf(p); let best = null, bd = 1e18;
+      for (let j = j0 - 80; j <= j0 + 80; j++) for (let i = i0 - 80; i <= i0 + 80; i++) if (okc(i, j, A)) { const d = (i - i0) ** 2 + (j - j0) ** 2; if (d < bd) { bd = d; best = [i, j]; } }
+      return best ? [GX + best[0] * CELL, GY + best[1] * CELL] : null; };
+    const hold = (rs, p) => rs.filter((r) => inRing(p, r)).length % 2 === 1;
+    const edgeD = (rs, p) => { let d = 1e18; for (const r of rs) for (let i = 0; i < r.length; i++) { const a = r[i], b = r[(i + 1) % r.length], ux = b[0] - a[0], uy = b[1] - a[1], t = Math.max(0, Math.min(1, ((p[0] - a[0]) * ux + (p[1] - a[1]) * uy) / (ux * ux + uy * uy || 1))); d = Math.min(d, Math.hypot(p[0] - a[0] - t * ux, p[1] - a[1] - t * uy)); } return d; };
+    // the model's doors (the ones it can swing), as plan mm: centre, along, across, width
+    const DR = [];
+    if (M.doors) for (const it of PCS) {
+      if (it[0] !== "door") continue;
+      const r = it[2][0]; if (!r || r.length < 4) continue;
+      const e1 = [r[1][0] - r[0][0], r[1][1] - r[0][1]], e2 = [r[2][0] - r[1][0], r[2][1] - r[1][1]], l1 = Math.hypot(e1[0], e1[1]), l2 = Math.hypot(e2[0], e2[1]), L = Math.max(l1, l2), u = l1 >= l2 ? e1 : e2;
+      const c = [(r[0][0] + r[2][0]) / 2, (r[0][1] + r[2][1]) / 2], wx = M.X(c[0]), wz = M.Z(c[1]);
+      let mi = -1, bd = 0.35; M.doors.forEach((q, i) => { const d = Math.hypot(q.x - wx, q.z - wz); if (d < bd) { bd = d; mi = i; } });
+      if (mi >= 0 && L > 500) DR.push({ c, u: [u[0] / L, u[1] / L], n: [-u[1] / L, u[0] / L], L, mi });
+    }
+    const RS = {}; ((LP && LP.ringStops) || []).forEach((s) => { if (s.kind === "stop") RS[s.name] = s.i; });
+    const anchor = (k) => BEATS[k].at;                                       // (the Loop's own stop points are elsewhere on the floor)
+    function pickDoor(b, k) {
+      const rs = b.sp === "@NB" ? null : spaceOf(b); if (!rs) return null;
+      const A = anchor(k); let best = null;
+      for (const d of DR) {
+        if (edgeD(rs, d.c) > 1300) continue;
+        const p1 = [d.c[0] + d.n[0] * 1100, d.c[1] + d.n[1] * 1100], p0 = [d.c[0] - d.n[0] * 1100, d.c[1] - d.n[1] * 1100], i1 = hold(rs, p1), i0 = hold(rs, p0);
+        if (i1 === i0) continue;                                              // one side in the room, the other out
+        const ni = i1 ? d.n : [-d.n[0], -d.n[1]], O = [d.c[0] - ni[0] * 1100, d.c[1] - ni[1] * 1100], [oi, oj] = cellOf(O);
+        if (!okc(oi, oj, walk)) continue;                                     // the outside of the door is the corridor
+        const sc2 = Math.hypot(O[0] - A[0], O[1] - A[1]);
+        if (!best || sc2 < best.sc) best = { d, ni, sc: sc2 };
+      }
+      return best;
+    }
+    function lane(d, ni, t0, t1) {                                          // the doorway: a lane through the door, wall to the room, free of furniture inside
+      for (let t = t0; t <= t1; t += 100) for (let s = -d.L / 2; s <= d.L / 2; s += 100) {
+        const x = d.c[0] + ni[0] * t + d.u[0] * s, y = d.c[1] + ni[1] * t + d.u[1] * s, [i, j] = cellOf([x, y]);
+        if (i >= 0 && j >= 0 && i < GW && j < GH && (Math.abs(t) < 300 || !furn || !furn[j * GW + i])) { walk[j * GW + i] = 1; free[j * GW + i] = 1; }
+      }
+    }
+    const picks = BEATS.map((b, k) => pickDoor(b, k));
+    const STD = BEATS.map((b, k) => {
+      const pk = picks[k];
+      if (pk) {                                                             // as far in as the way is clear of furniture, up to 1.4 m (a crowded doorway: he stands in it)
+        let t = 0; while (t < 1400) { const [i, j] = cellOf([pk.d.c[0] + pk.ni[0] * (t + 100), pk.d.c[1] + pk.ni[1] * (t + 100)]); if (furn && furn[j * GW + i]) break; t += 100; }
+        lane(pk.d, pk.ni, -1200, t + 200);
+        return { p: [pk.d.c[0] + pk.ni[0] * t, pk.d.c[1] + pk.ni[1] * t], door: pk }; }
+      return { p: nearestWalk(anchor(k), walk) || nearestWalk(b.at, free) || b.at, door: null };
+    });
+    function astar(a, b, A, loose) {
+      const [ai, aj] = cellOf(a), [bi, bj] = cellOf(b); if (!okc(ai, aj, A) || !okc(bi, bj, A)) return null;
+      const N = GW * GH, g = new Float32Array(N).fill(1e9), from = new Int32Array(N).fill(-1), closed = new Uint8Array(N), heap = [], s0 = aj * GW + ai, goal = bj * GW + bi;
+      const hs = (i, j) => { const dx = Math.abs(i - bi), dy = Math.abs(j - bj); return Math.max(dx, dy) + 0.414 * Math.min(dx, dy); };
+      const push = (n, f) => { heap.push([f, n]); let c = heap.length - 1; while (c > 0) { const p = (c - 1) >> 1; if (heap[p][0] <= heap[c][0]) break; [heap[p], heap[c]] = [heap[c], heap[p]]; c = p; } };
+      const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let c = 0; for (;;) { let l = 2 * c + 1, r = l + 1, m = c; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === c) break; [heap[m], heap[c]] = [heap[c], heap[m]]; c = m; } } return top; };
+      g[s0] = 0; push(s0, hs(ai, aj));
+      while (heap.length) {
+        const [, n] = pop(); if (closed[n]) continue; closed[n] = 1; if (n === goal) break;
+        const ci = n % GW, cj = (n / GW) | 0;
+        for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
+          if (!di && !dj) continue; const ni = ci + di, nj = cj + dj; if (!okc(ni, nj, A)) continue;
+          if (di && dj && (loose ? (!okc(ci + di, cj, A) && !okc(ci, cj + dj, A)) : (!okc(ci + di, cj, A) || !okc(ci, cj + dj, A)))) continue;           // no cutting a corner
+          const m = nj * GW + ni, edge = (okc(ni + 1, nj, A) && okc(ni - 1, nj, A) && okc(ni, nj + 1, A) && okc(ni, nj - 1, A)) ? 0 : 0.5, w = g[n] + (di && dj ? 1.414 : 1) + edge;
+          if (w < g[m]) { g[m] = w; from[m] = n; push(m, w + hs(ni, nj)); }
+        }
+      }
+      if (from[goal] < 0 && goal !== s0) return null;
+      const cells = []; for (let n = goal; n !== -1; n = from[n]) cells.push([n % GW, (n / GW) | 0]); cells.reverse(); return cells;
+    }
+    const los = (a, b, A) => { const n = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])) * 2 || 1; for (let k = 0; k <= n; k++) { const i = Math.round(a[0] + (b[0] - a[0]) * k / n), j = Math.round(a[1] + (b[1] - a[1]) * k / n); if (!okc(i, j, A)) return false; } return true; };
+    const pull = (cells, A) => { const o = [cells[0]]; let i = 0; while (i < cells.length - 1) { let j = cells.length - 1; while (j > i + 1 && !los(cells[i], cells[j], A)) j--; o.push(cells[j]); i = j; } return o; };
+    const hyp = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+    const rounded = (Q, r) => { if (Q.length < 3) return Q; const out = [Q[0]];
+      for (let i = 1; i < Q.length - 1; i++) { const a = Q[i - 1], b = Q[i], c = Q[i + 1], l1 = hyp(a, b), l2 = hyp(b, c), rr = Math.min(r, l1 / 2, l2 / 2);
+        const p = [b[0] + (a[0] - b[0]) * rr / l1, b[1] + (a[1] - b[1]) * rr / l1], q = [b[0] + (c[0] - b[0]) * rr / l2, b[1] + (c[1] - b[1]) * rr / l2]; out.push(p);
+        for (let k = 1; k < 8; k++) { const t = k / 8, u = 1 - t; out.push([u * u * p[0] + 2 * u * t * b[0] + t * t * q[0], u * u * p[1] + 2 * u * t * b[1] + t * t * q[1]]); } out.push(q); }
+      out.push(Q[Q.length - 1]); return out; };
+    const clearPath = (Q, A) => { for (let i = 1; i < Q.length; i++) { const n = Math.max(1, Math.ceil(hyp(Q[i - 1], Q[i]) / 100)); for (let k = 0; k <= n; k++) { const x = Q[i - 1][0] + (Q[i][0] - Q[i - 1][0]) * k / n, y = Q[i - 1][1] + (Q[i][1] - Q[i - 1][1]) * k / n, [ci, cj] = cellOf([x, y]); if (!okc(ci, cj, A)) return false; } } return true; };
+    // a walk from plan mm point a to b (through via points): a list of plan mm points, never off the mask
+    function walkPath(a, b, via) {
+      const stops = [a].concat(via || [], [b]), Q = [a];
+      for (let s = 1; s < stops.length; s++) {
+        const goal = s === stops.length - 1 ? stops[s] : (nearestWalk(stops[s], walk) || stops[s]);
+        let A = walk, cells = astar(Q[Q.length - 1], goal, A);
+        if (!cells) { A = free; cells = astar(Q[Q.length - 1], goal, A); }           // furniture in the way of every walk: the corridor alone
+        if (!cells) cells = astar(Q[Q.length - 1], goal, A, true);
+        if (!cells) { Q.push(goal); window.ACKO_WALK_WARN = (window.ACKO_WALK_WARN || 0) + 1; continue; }
+        const pts = pull(cells, A).map(([i, j]) => [GX + i * CELL, GY + j * CELL]);
+        const sm = rounded(pts, 700); Q.push(...(clearPath(sm, A) ? sm : pts).slice(1));
+      }
+      return Q;
+    }
     P = []; legEnd = [0];
     BEATS.forEach((b, i) => {
-      const here = [b.p.x, b.p.z]; if (i === 0) { P.push(here); return; }
-      // via points (Ritika, 19 Nov): from the Café he goes out to the terrace (Wellness), and from there in through Reception to the Board Room; never over the edge of the site (a straight stretch is used only if all of it is on the slab)
-      const stops = [BEATS[i - 1].at].concat(VIA[i] || [], [b.at]);
-      let pts = [[M.X(stops[0][0]), M.Z(stops[0][1])]];
-      for (let k = 1; k < stops.length; k++) pts.push(...seg(stops[k - 1], stops[k]).slice(1));
-      const leg = dense(chaikin(pts, 2)); P.push(...leg.slice(1)); legEnd.push(P.length - 1);
+      b.st = STD[i].p;
+      if (i === 0) { P.push([M.X(b.st[0]), M.Z(b.st[1])]); return; }
+      const Q = walkPath(STD[i - 1].p, STD[i].p, (VIA[i] || []).map((v) => nearestWalk(v, walk) || v));
+      const leg = dense(Q.map((q) => [M.X(q[0]), M.Z(q[1])])); P.push(...leg.slice(1)); legEnd.push(P.length - 1);
     });
+    // the doors he uses: where along his walk he goes through each (the leaf is open within 1.4 m of it, shutting over the next 2.2 m)
+    DU = [];
+    for (const d of DR) {
+      const wx = M.X(d.c[0]), wz = M.Z(d.c[1]), ics = []; let last = -99;
+      P.forEach((q, i) => { if (Math.hypot(q[0] - wx, q[1] - wz) < 0.45) { if (i - last > 8) ics.push(i); last = i; } });
+      if (!ics.length) continue;
+      const i0 = ics[0], q0 = P[Math.max(0, i0 - 3)], q1 = P[Math.min(P.length - 1, i0 + 3)], dir = (q1[0] - q0[0]) * d.n[0] + (q1[1] - q0[1]) * d.n[1] >= 0 ? 1 : -1;   // the leaf swings the way he first goes through
+      DU.push({ mi: d.mi, n: [d.n[0] * dir, d.n[1] * dir], ics, a: 0 });
+    }
+    BEATS.forEach((b) => { const sx = M.X(b.st[0]), sz = M.Z(b.st[1]); b.corr = [b.p.x - sx, b.p.z - sz]; });
     // the ribbon: the Loop's lilac stroke on a paler, wider edge, drawn as far as he has walked
     const strip = (wid, col, op, ro, off) => {
       const n = P.length, E = P.map((q, i) => { const a = P[Math.max(0, i - 2)], c = P[Math.min(n - 1, i + 2)], dx = c[0] - a[0], dz = c[1] - a[1], l = Math.hypot(dx, dz) || 1; return [[q[0] - dz / l * wid / 2, q[1] + dx / l * wid / 2], [q[0] + dz / l * wid / 2, q[1] - dx / l * wid / 2]]; });
@@ -6143,11 +6278,21 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     trail = new T.Group(); trail.add(strip(RW + 0.35, 0xd9cbfa, 0.9, 8, -0.01), strip(RW, 0x8f6cf0, 0.9, 9, 0)); group.add(trail);
     S.p = 0; S.pt = 0; S.last = 0; place();
   }
+  // the doors he goes through swing open as he comes to them, stay open while he is in the doorway or just inside, and shut behind him (a function of where he is on his walk)
+  function doors() {
+    if (!M || !M.doorOpen) return;
+    for (const d of DU) {
+      let m = 1e9; for (const ic of d.ics) m = Math.min(m, Math.abs(S.p - ic));
+      const e = (m * 0.25 - 1.4) / 2.2, a = e <= 0 ? 1 : e >= 1 ? 0 : 1 - e * e * (3 - 2 * e);
+      if (Math.abs(a - d.a) > 0.004) { d.a = a; M.doorOpen(d.mi, a, d.n[0], d.n[1]); }
+    }
+  }
   // where he stands and how much of the path shows
   function place() {
     const k = Math.max(0, Math.min(P.length - 1, S.p)), i = Math.floor(k), f = k - i, a = P[i], b = P[Math.min(P.length - 1, i + 1)];
     man.position.set(a[0] + (b[0] - a[0]) * f, 0, a[1] + (b[1] - a[1]) * f);
     trail.children.forEach((m) => m.geometry.setDrawRange(0, 6 * Math.max(0, Math.min(P.length - 1, Math.floor(k)))));
+    doors();
   }
   // the next beat: he walks the path to its spot (a stretch takes its length at 5 m/s, between 1.8 and 4 s); on arriving at a beat from outside, or
   // with reduced motion, he is simply there
@@ -6265,7 +6410,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     const a = legEnd[k - 1], b = legEnd[k], f = b > a ? Math.max(0, Math.min(1, (q - a) / (b - a))) : 1, e = f * f * (3 - 2 * f);
     const v = mix(beatView(k - 1), beatView(k), e), { right, up } = window.AxoModel.basis(v), h = v.half;
     const off = right.clone().multiplyScalar(-h * S.asp * 0.18).add(up.clone().multiplyScalar(h * 0.05));
-    return { theta: v.theta, phi: v.phi, half: h, t: [man.position.x + off.x, 0.8 + off.y, man.position.z + off.z] };
+    const c0 = BEATS[k - 1].corr || [0, 0], c1 = BEATS[k].corr || [0, 0], cx = c0[0] + (c1[0] - c0[0]) * e, cz = c0[1] + (c1[1] - c0[1]) * e;   // he stops at a door or the corridor: the camera still settles on the beat's space
+    return { theta: v.theta, phi: v.phi, half: h, t: [man.position.x + cx + off.x, 0.8 + off.y, man.position.z + cz + off.z] };
   }
   function frame(now) {
     S.raf = 0;
@@ -6316,7 +6462,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   // after the day (22 Nov, Ritika): the whole floor, the whole path, and what it adds up to
   function finale() {
     S.beat = BEATS.length - 1; walkTo(S.beat);
-    const now = $(".wd-now", sc), day = $(".wd-day", sc), ph = $(".wd-ph", day);
+    const now = $(".wd-now", sc), day = $(".wd-day", sc); let ph = $(".wd-ph", day); if (!ph) { ph = document.createElement("i"); ph.className = "wd-ph"; day.appendChild(ph); }
     $("q", now).textContent = "All the neighbourhoods are self-sustaining."; $("span", now).textContent = "The whole floor, one Loop.";
     now.classList.add("wd-end"); now.classList.remove("wd-sw"); void now.offsetWidth; now.classList.add("wd-sw");
     $$("button", day).forEach((el) => { el.classList.remove("on"); el.classList.add("done"); });
@@ -6336,6 +6482,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       sc.classList.toggle("wd-fallback", !ok);
       if (!ok) return;
       if (!S.built) build();
+      sc._wd = () => ({ P, legEnd, DU, st: BEATS.map((b) => b.st), warn: window.ACKO_WALK_WARN || 0, p: S.p, inv: (q) => [q[0] * 1000 + M.CX, q[1] * 1000 + M.CY] });
       if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
       M.reset(); M.scene.add(group);
       if (SKP) window.AxoSkp.look("sketchup");
@@ -6359,6 +6506,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     },
     leave() {
       cancelAnimationFrame(S.raf); S.raf = 0;
+      if (M && M.doorOpen) for (const d of DU) { d.a = 0; M.doorOpen(d.mi, 0, d.n[0], d.n[1]); }
       if (M && group) { M.scene.remove(group); M.reset(); }
       if (MODEL.focus) MODEL.focus(null);
     },
