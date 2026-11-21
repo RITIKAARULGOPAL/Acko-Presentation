@@ -529,29 +529,21 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     });
   }
   function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; S.cyc = false; }
-  // after the first round only the floor repeats (Ritika, 22 Nov: "the animation of loop and neighbourhoods alone in a loop, the rest static"):
-  // the neighbourhoods fly on from the campus ring, the shared spaces come up, the loop is drawn round them, a hold, and again
+  // after the first round only the loop repeats (Ritika, 22 Nov: "no neighbourhood animation in the loop; the ribbon only in the loop"):
+  // the neighbourhoods and shared spaces stay as they are; the ribbon runs along the loop alone, drawing it, a hold, and again
   function cycle(sc) {
     stop(); S.cyc = true;
-    const R = S.R, TFLY = 1900, TSH = 900, TDRAW = clamp((R.end - R.loop0) / .5, 4500, 7000), THOLD = 3200;
-    const zones = () => $$(".cpl-zones", sc);
-    zones().forEach((z) => z.classList.remove("on-n", "on-s"));
-    const FL = flyers(sc); fly(FL, 0);
+    const R = S.R, TDRAW = clamp((R.end - R.loop0) / .5, 4500, 7000), THOLD = 3200, TGAP = 700;
     const t0 = performance.now();
-    let shown = false, shared = false;
     const frame = (now) => {
       if ((document.body.dataset.scene && document.body.dataset.scene !== sc.id) || !S.cyc) { S.raf = 0; S.cyc = false; return; }
       const t = now - t0;
-      if (t < TFLY) {
-        fly(FL, t); if (!shown && t > 500) { shown = true; zones().forEach((z) => z.classList.add("on-n")); }
+      if (t < TGAP) {
         draw({ wins: [], reveal: Infinity, loop: 0 });
-      } else if (t < TFLY + TSH) {
-        if (!shared) { shared = true; zones().forEach((z) => z.classList.add("on-s")); }
-        draw({ wins: [], reveal: Infinity, loop: 0 });
-      } else if (t < TFLY + TSH + TDRAW) {
-        const u = clamp((t - TFLY - TSH) / TDRAW, 0, 1), e = ease(u), head = R.loop0 + (R.end - R.loop0) * e, len = LREST * (1 - u) + 160 * Math.sin(Math.PI * u);
-        draw({ wins: wins(Math.max(R.loop0 - LREST, head - len), head, 130, 22), reveal: Infinity, loop: head });
-      } else if (t < TFLY + TSH + TDRAW + THOLD) {
+      } else if (t < TGAP + TDRAW) {
+        const u = clamp((t - TGAP) / TDRAW, 0, 1), e = ease(u), head = R.loop0 + (R.end - R.loop0) * e, len = 220 * Math.sin(Math.PI * u) * (1 - u * .3);
+        draw({ wins: wins(Math.max(R.loop0, head - len), head, 130, 22), reveal: Infinity, loop: head });
+      } else if (t < TGAP + TDRAW + THOLD) {
         draw({ wins: [], reveal: Infinity, loop: R.end });
       } else { S.raf = 0; S.cyc = false; cycle(sc); return; }
       S.raf = requestAnimationFrame(frame);
