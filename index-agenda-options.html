@@ -29,6 +29,7 @@
 </header>
 <div class="row"><b>Look</b><span id="looks"></span></div>
 <div class="row"><b>Slide</b><span id="slides"></span></div>
+<div class="row" id="connrow"><b>Line</b><span id="conns"></span></div>
 <div class="desc" id="desc"></div>
 <div class="frame"><iframe id="f" title="slide"></iframe><span class="note" id="note"></span></div>
 <script>
@@ -45,8 +46,15 @@ const SLIDES = {
   s3: ["Section 03", "s-div-3/1"],
   s4: ["Section 04", "s-div-4/1"]
 };
+const CONNS = {
+  1: "1 · Chevron on the line",
+  2: "2 · Dotted + arrowhead",
+  3: "3 · Progress line",
+  4: "4 · Segments only",
+  5: "5 · One long arrow"
+};
 const q = new URLSearchParams(location.search);
-let look = LOOKS[q.get("look")] ? q.get("look") : "a", slide = SLIDES[q.get("slide")] ? q.get("slide") : "s1";
+let look = LOOKS[q.get("look")] ? q.get("look") : "a", slide = SLIDES[q.get("slide")] ? q.get("slide") : "s1", conn = CONNS[q.get("conn")] ? q.get("conn") : "1";
 function mk(host, obj, cur, set, label) {
   host.innerHTML = "";
   for (const k in obj) { const b = document.createElement("button"); b.textContent = label(k); b.setAttribute("aria-pressed", k === cur); b.onclick = () => set(k); host.appendChild(b); }
@@ -54,11 +62,13 @@ function mk(host, obj, cur, set, label) {
 function render() {
   mk(document.getElementById("looks"), LOOKS, look, (k) => { look = k; render(); }, (k) => LOOKS[k][0]);
   mk(document.getElementById("slides"), SLIDES, slide, (k) => { slide = k; render(); }, (k) => SLIDES[k][0]);
+  mk(document.getElementById("conns"), CONNS, conn, (k) => { conn = k; render(); }, (k) => CONNS[k]);
+  document.getElementById("connrow").style.display = (look === "a" || look === "e") ? "" : "none";
   document.getElementById("desc").textContent = LOOKS[look][1];
-  const url = "index-story3.html?look=" + look + "&v=" + Date.now() + "#" + SLIDES[slide][1];
+  const url = "index-story3.html?look=" + look + "&conn=" + conn + "&v=" + Date.now() + "#" + SLIDES[slide][1];
   const f = document.getElementById("f"); f.src = url;
   document.getElementById("note").innerHTML = '<a href="' + url + '" target="_blank">open full size</a>';
-  history.replaceState(null, "", "?look=" + look + "&slide=" + slide);
+  history.replaceState(null, "", "?look=" + look + "&slide=" + slide + "&conn=" + conn);
 }
 render();
 </script>

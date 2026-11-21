@@ -8155,13 +8155,47 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"].lit .ap-steps li.cur > span { font-weight: 800 !important; color: #111 !important; }
 
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .hero, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"] .hero, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page:not([data-look]) .hero { display: none !important; }
+
+/* connectors between the stage dots (22 Nov, Ritika: "the arrow and line seems a bit off"): ?conn=1..5, centred on the dots */
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li { z-index: 1; }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li::after { content: none !important; display: none !important; }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps::after { content: none; }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="1"] .ap-steps li:not(:last-child)::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="2"] .ap-steps li:not(:last-child)::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="4"] .ap-steps li:not(:last-child)::before {
+  content: "" !important; display: block !important; position: absolute; border: 0 !important; opacity: 1 !important;
+  top: calc(var(--pt) * 6.5 - .75px); left: calc(var(--pt) * 13 + var(--pt) * 9); right: calc(var(--pt) * 9); height: 1.5px; background: rgba(82, 34, 208, .3);
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="1"] .ap-steps li:not(:last-child)::after {
+  content: "" !important; display: block !important; position: absolute; left: calc(50% + var(--pt) * 6.5); top: calc(var(--pt) * 6.5); width: calc(var(--pt) * 4.2); height: calc(var(--pt) * 4.2);
+  border-top: 1.6px solid var(--purple); border-right: 1.6px solid var(--purple); transform: translate(-65%, -50%) rotate(45deg); background: none;
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="2"] .ap-steps li:not(:last-child)::before { height: 0; background: none; border-top: 2px dotted rgba(82, 34, 208, .55) !important; top: calc(var(--pt) * 6.5 - 1px); right: calc(var(--pt) * 9 + var(--pt) * 6); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="2"] .ap-steps li:not(:last-child)::after {
+  content: "" !important; display: block !important; position: absolute; top: calc(var(--pt) * 6.5); left: calc(100% - var(--pt) * 9 - var(--pt) * 5.5); width: 0; height: 0; transform: translateY(-50%);
+  border-left: calc(var(--pt) * 5.5) solid var(--purple); border-top: calc(var(--pt) * 3.4) solid transparent; border-bottom: calc(var(--pt) * 3.4) solid transparent;
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"] .ap-steps::after, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="5"] .ap-steps::after { content: ""; position: absolute; z-index: 0; left: calc(var(--pt) * 6.5); top: calc(var(--pt) * 6.5 - .75px); height: 1.5px; background: rgba(82, 34, 208, .22); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"] .ap-steps::after { width: 80%; }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"] .ap-steps::before { content: ""; position: absolute; z-index: 0; left: calc(var(--pt) * 6.5); top: calc(var(--pt) * 6.5 - 1px); height: 2px; background: var(--purple); width: 0; transition: width .9s var(--ease); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"].lit .ap-steps::before { width: calc((var(--cur, 1) - 1) * 20%); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="4"] .ap-steps li:not(:last-child)::before { height: 1px; top: calc(var(--pt) * 6.5 - .5px); background: rgba(82, 34, 208, .5); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="5"] .ap-steps::after { width: calc(94% - var(--pt) * 6.5); background: rgba(82, 34, 208, .35); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="5"] .ap-steps::before { content: ""; position: absolute; z-index: 0; left: calc(94% - var(--pt) * 1); top: calc(var(--pt) * 6.5); width: 0; height: 0; transform: translateY(-50%);
+  border-left: calc(var(--pt) * 6) solid var(--purple); border-top: calc(var(--pt) * 3.6) solid transparent; border-bottom: calc(var(--pt) * 3.6) solid transparent; }
+
+#s-overview .page { --cur: 1; }
+#s-div-2 .page { --cur: 2; }
+#s-div-3 .page { --cur: 3; }
+#s-div-4 .page { --cur: 4; }
+#s-div-5 .page { --cur: 5; }
 </style>
 <script>
-/* ?look=a..e picks the agenda / section-starter look (kept for the session so the dividers follow) */
+/* ?look=a..e and ?conn=1..5 pick the agenda / section-starter look and its connectors (kept for the session so the dividers follow) */
 (function () {
-  var l = ""; try { l = new URLSearchParams(location.search).get("look") || sessionStorage.getItem("agendaLook") || ""; if (l) sessionStorage.setItem("agendaLook", l); } catch (e) {}
-  if (!/^[a-e]$/.test(l)) return;
-  function apply() { document.querySelectorAll("#s-overview .page, #s-div-2 .page, #s-div-3 .page, #s-div-4 .page, #s-div-5 .page").forEach(function (p) { p.setAttribute("data-look", l); }); }
+  var q = new URLSearchParams(location.search), l = "", c = "";
+  try { l = q.get("look") || sessionStorage.getItem("agendaLook") || ""; if (q.get("look")) sessionStorage.setItem("agendaLook", l); } catch (e) {}
+  try { c = q.get("conn") || sessionStorage.getItem("agendaConn") || ""; if (q.get("conn")) sessionStorage.setItem("agendaConn", c); } catch (e) {}
+  if (!/^[1-5]$/.test(c)) c = "1";
+  function apply() { document.querySelectorAll("#s-overview .page, #s-div-2 .page, #s-div-3 .page, #s-div-4 .page, #s-div-5 .page").forEach(function (p) { if (/^[a-e]$/.test(l)) p.setAttribute("data-look", l); p.setAttribute("data-conn", c); }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply); else apply();
   window.addEventListener("load", apply);
 })();
