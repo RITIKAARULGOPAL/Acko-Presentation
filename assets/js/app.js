@@ -650,14 +650,15 @@
   $("#wk-kp").onclick = () => { kpOn = !kpOn; $("#wk-kp").classList.toggle("on", kpOn); document.body.classList.toggle("kp-off", !kpOn); };
   // the keyplan: the deck's keyplan image, framed around its camera mark (a little wider than the deck's crop)
   function keyplan(slideNo) {
-    const k = (window.ACKO_KP || {})[slideNo], box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner), cam = $(".wk-cam", inner);
-    if (!k) { box.style.display = "none"; return; }
-    box.style.display = "";
+    let k = (window.ACKO_KP || {})[slideNo]; const box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner), cam = $(".wk-cam", inner);
+    const nocam = !k;       // no camera position in the deck for this render: the whole floor plan, no arrow, until one is added to data/keyplans.js
+    if (nocam) k = { img: "kp-119", x: 50, y: 50, rot: 0, view: [0, 0, 100, 100] };
+    box.style.display = ""; cam.style.display = nocam ? "none" : "";
     const place = () => {
       const W = box.clientWidth, Hh = box.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
       if (!W || !iw) return;
       const vw = ((k.view[2] - k.view[0]) / 100) * iw, vh = ((k.view[3] - k.view[1]) / 100) * ih;
-      const s = Math.min(W / (vw * 1.5), Hh / (vh * 1.5)), w = iw * s, h = ih * s;
+      const f = nocam ? 1 : 1.5, s = Math.min(W / (vw * f), Hh / (vh * f)), w = iw * s, h = ih * s;
       const cx = (k.x / 100) * w, cy = (k.y / 100) * h;
       const tx = clamp(W / 2 - cx, W - w, 0), ty = clamp(Hh / 2 - cy, Hh - h, 0);
       inner.style.width = w + "px"; inner.style.transform = `translate(${tx}px, ${ty}px)`;
