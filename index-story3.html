@@ -1150,41 +1150,6 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 #s-div-4 .page.lit .ap-steps li:nth-child(4) b { font-size: calc(var(--pt) * 30); }
 #s-div-4 .page.lit .ap-steps li:nth-child(4) > span { font-size: calc(var(--pt) * 11.5); font-weight: 800; color: var(--purple); }
 </style>
-<style data-slide="s-div-5">
-/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-5 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
-#s-div-5 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
-#s-div-5 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
-#s-div-5 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
-#s-div-5 .ap-steps li:last-child::before { right: 70%; }
-#s-div-5 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
-#s-div-5 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
-#s-div-5 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-5 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
-#s-div-5 .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
-#s-div-5 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
-#s-div-5 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
-#s-div-5 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
-#s-div-5 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-5 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
-#s-div-5 .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
-#s-div-5 .page.lit .ap-steps li:not(:nth-child(5)) { opacity: .26 !important; }
-#s-div-5 .page.lit .ap-steps li:nth-child(5) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
-#s-div-5 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-#s-div-5 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-5 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
-#s-div-5 .st-line b { font-weight: 700; color: var(--purple); }
-#s-div-5 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
-
-/* type hierarchy (21 Nov, Ritika: "variation in font height, thickness and colour"): label > number > name; the lit stage steps forward */
-#s-div-5 .st-k small { font-size: calc(var(--pt) * 13); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }
-#s-div-5 .ap-steps b { font-size: calc(var(--pt) * 24); font-weight: 800; line-height: 1; color: var(--purple); font-variant-numeric: tabular-nums; }
-#s-div-5 .ap-steps li > span { font-size: calc(var(--pt) * 10); font-weight: 500; color: #1d1640; }
-#s-div-5 .ap-steps li { transition: opacity .7s var(--ease); }
-#s-div-5 .st-line p { font-size: calc(var(--pt) * 30); color: var(--purple-2); }
-#s-div-5 .page.lit .ap-steps li:nth-child(5) b { font-size: calc(var(--pt) * 30); }
-#s-div-5 .page.lit .ap-steps li:nth-child(5) > span { font-size: calc(var(--pt) * 11.5); font-weight: 800; color: var(--purple); }
-</style>
 <style data-slide="s-overview">
 .ap-still, .ap-still > * { transition: none !important; opacity: 1 !important; transform: none !important; }
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
@@ -1561,6 +1526,20 @@ body.ax-hand .scene { transition: none !important; }
 </style>
 <style data-slide="s-di">
 #s-di .page { background: #fff; }
+/* D&I builds left to right: header bar, heading, words, then its two pictures; "Designed for all ." is written last */
+@keyframes di-bar { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes di-tile { from { opacity: 0; transform: translateY(12px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes di-text { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes di-head { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+@keyframes di-write { from { opacity: 1; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@media not (prefers-reduced-motion: reduce) {
+#s-di .page.go > i.dk, #s-di .page.go > .vt { transition: none !important; }
+#s-di .page.go > i.dk { animation: di-tile .85s var(--ease) var(--d, 0ms) both; }
+#s-di .page.go > i.dk.di-bar { animation-name: di-bar; }
+#s-di .page.go > .vt { animation: di-text .8s var(--ease) var(--d, 0ms) both; }
+#s-di .page.go > .vt.di-h { animation-name: di-head; }
+#s-di .page.go > .vt.di-w { animation: di-write 1.4s cubic-bezier(.5, 0, .2, 1) var(--d, 0ms) both; }
+}
 </style>
 <style data-slide="s-wf-a6">
 #s-wf-a6 .wf-chips { display: flex; gap: calc(var(--pt) * 3); }
@@ -1693,86 +1672,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 .si-walk b { font-weight: 500; }
 .si-walk span { color: var(--purple); font-family: var(--num); white-space: nowrap; }
 </style>
-<style data-slide="s-recap">
-#s-recap .page { background: #fff; }
-</style>
-<style data-slide="s-recap-reception-option-a">
-#s-recap-reception-option-a .page { background: #fff; }
-</style>
-<style data-slide="s-recap-reception-option-b">
-#s-recap-reception-option-b .page { background: #fff; }
-</style>
-<style data-slide="s-recap-arrival-coffee-shop-option-a">
-#s-recap-arrival-coffee-shop-option-a .page { background: #fff; }
-</style>
-<style data-slide="s-recap-arrival-coffee-shop-option-b">
-#s-recap-arrival-coffee-shop-option-b .page { background: #fff; }
-</style>
-<style data-slide="s-recap-secondary-arrival-reception">
-#s-recap-secondary-arrival-reception .page { background: #fff; }
-</style>
-<style data-slide="s-recap-state-room-boardroom-32pax-option-01">
-#s-recap-state-room-boardroom-32pax-option-01 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-state-room-boardroom-32pax-option-02">
-#s-recap-state-room-boardroom-32pax-option-02 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-departmental-room-meeting-room-20pax">
-#s-recap-departmental-room-meeting-room-20pax .page { background: #fff; }
-</style>
-<style data-slide="s-recap-departmental-room-meeting-room-20pax-2">
-#s-recap-departmental-room-meeting-room-20pax-2 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-quick-sprint-room-04-pax-meeting-room-option-01">
-#s-recap-quick-sprint-room-04-pax-meeting-room-option-01 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-quick-sprint-room-04-pax-meeting-room-option-01-2">
-#s-recap-quick-sprint-room-04-pax-meeting-room-option-01-2 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-work-arena-the-neighbourhood-option-01">
-#s-recap-work-arena-the-neighbourhood-option-01 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-work-arena-the-neighbourhood-option-02">
-#s-recap-work-arena-the-neighbourhood-option-02 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-work-arena-library">
-#s-recap-work-arena-library .page { background: #fff; }
-</style>
-<style data-slide="s-recap-work-arena-the-acker-garden">
-#s-recap-work-arena-the-acker-garden .page { background: #fff; }
-</style>
-<style data-slide="s-recap-cafe-option-01">
-#s-recap-cafe-option-01 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-cafe-option-01-2">
-#s-recap-cafe-option-01-2 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-cafe-option-02">
-#s-recap-cafe-option-02 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-cafe-option-02-2">
-#s-recap-cafe-option-02-2 .page { background: #fff; }
-</style>
-<style data-slide="s-recap-coffee-point">
-#s-recap-coffee-point .page { background: #fff; }
-</style>
-<style data-slide="s-recap-mother-s-room">
-#s-recap-mother-s-room .page { background: #fff; }
-</style>
-<style data-slide="s-recap-executive-room">
-#s-recap-executive-room .page { background: #fff; }
-</style>
-<style data-slide="s-recap-zen-room">
-#s-recap-zen-room .page { background: #fff; }
-</style>
-<style data-slide="s-recap-studio-room">
-#s-recap-studio-room .page { background: #fff; }
-</style>
 </head>
 <body>
 
 <header class="topbar">
-  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's five sections, a click opens one -->
+  <!-- the ACKO symbol (purple; white on dark pages and over photos); hover lists the deck's four sections, a click opens one -->
   <div class="topic-mark" id="topic-mark"><button type="button" class="tm-btn" aria-label="ACKO · sections"><img class="logo-ink" src="assets/img/acko-mark.webp" alt="ACKO"><img class="logo-light" src="assets/img/acko-mark-white.webp" alt=""></button><div class="tm-list" id="tm-list"></div></div>
 </header>
 
@@ -1904,7 +1808,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-overview" data-part="p3" data-title="Agenda" data-steps="2" data-mins="0.3"
-  data-notes="The agenda: five sections ahead. 01 Concept Framework: establishing the overarching design vision. 02 Design Development: translating the concept into a spatial solution. 03 Design Expression: materiality, visualisation and spatial experience. 04 Integrated Performance: technical performance and added value. 05 Project Review: revisiting previous discussions and establishing alignment. Beat 2: 01 Concept Framework lit, establishing the overarching design vision. → Bridge: The concept first. 01 · Concept Framework.">
+  data-notes="The agenda: four sections ahead. 01 Concept Framework: establishing the overarching design vision. 02 Design Development: translating the concept into a spatial solution. 03 Design Expression: materiality, visualisation and spatial experience. 04 Integrated Performance: technical performance and added value. Beat 2: 01 Concept Framework lit, establishing the overarching design vision. → Bridge: The concept first. 01 · Concept Framework.">
   <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
@@ -1912,7 +1816,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span><small class="ds">Translating the concept into a spatial solution</small></li>
       <li style="--i:5"><i></i><b>03</b><span>Design Expression</span><small class="ds">Materiality, visualisation and spatial experience</small></li>
       <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span><small class="ds">Technical performance and added value</small></li>
-      <li style="--i:7"><i></i><b>05</b><span>Project Review</span><small class="ds">Revisiting previous discussions and establishing alignment</small></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Establishing the overarching design vision.</p></div>
     <div class="hero"><b>01</b><h3>Concept Framework</h3><p>Establishing the overarching design vision.</p></div>
@@ -2024,7 +1927,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-div-2" data-part="p5" data-title="02 · Design Development" data-steps="1" data-mins="0.3"
-  data-notes="Section 02 of 05: Design Development, translating the concept into a spatial solution.">
+  data-notes="Section 02 of 04: Design Development, translating the concept into a spatial solution.">
   <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
@@ -2032,7 +1935,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <li class="cur" style="--i:4"><i></i><b>02</b><span>Design Development</span><small class="ds">Translating the concept into a spatial solution</small></li>
       <li style="--i:5"><i></i><b>03</b><span>Design Expression</span><small class="ds">Materiality, visualisation and spatial experience</small></li>
       <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span><small class="ds">Technical performance and added value</small></li>
-      <li style="--i:7"><i></i><b>05</b><span>Project Review</span><small class="ds">Revisiting previous discussions and establishing alignment</small></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Translating the concept into a spatial solution.</p></div>
     <div class="hero"><b>02</b><h3>Design Development</h3><p>Translating the concept into a spatial solution.</p></div>
@@ -2467,7 +2369,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-div-3" data-part="p6" data-title="03 · Design Expression" data-steps="1" data-mins="0.3"
-  data-notes="Section 03 of 05: Design Expression, materiality, visualisation and spatial experience.">
+  data-notes="Section 03 of 04: Design Expression, materiality, visualisation and spatial experience.">
   <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
@@ -2475,7 +2377,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span><small class="ds">Translating the concept into a spatial solution</small></li>
       <li class="cur" style="--i:5"><i></i><b>03</b><span>Design Expression</span><small class="ds">Materiality, visualisation and spatial experience</small></li>
       <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span><small class="ds">Technical performance and added value</small></li>
-      <li style="--i:7"><i></i><b>05</b><span>Project Review</span><small class="ds">Revisiting previous discussions and establishing alignment</small></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Materiality, visualisation and spatial experience.</p></div>
     <div class="hero"><b>03</b><h3>Design Expression</h3><p>Materiality, visualisation and spatial experience.</p></div>
@@ -2721,7 +2622,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-div-4" data-part="p7" data-title="04 · Integrated Performance" data-steps="1" data-mins="0.3"
-  data-notes="Section 04 of 05: Integrated Performance, technical performance and added value.">
+  data-notes="Section 04 of 04: Integrated Performance, technical performance and added value.">
   <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
@@ -2729,7 +2630,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span><small class="ds">Translating the concept into a spatial solution</small></li>
       <li style="--i:5"><i></i><b>03</b><span>Design Expression</span><small class="ds">Materiality, visualisation and spatial experience</small></li>
       <li class="cur" style="--i:6"><i></i><b>04</b><span>Integrated Performance</span><small class="ds">Technical performance and added value</small></li>
-      <li style="--i:7"><i></i><b>05</b><span>Project Review</span><small class="ds">Revisiting previous discussions and establishing alignment</small></li>
           </ol>
     <div class="st-line" style="left:8%;top:62%;width:84%"><p>Technical performance and added value.</p></div>
     <div class="hero"><b>04</b><h3>Integrated Performance</h3><p>Technical performance and added value.</p></div>
@@ -2841,12 +2741,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene vpage" id="s-engage" data-part="p7" data-title="Acker's engagement points" data-steps="4" data-mins="0.75" data-beats="Feel it,Play it,Share it,All together"
-  data-notes="Room to explore. Acker's engagement points: the workplace beyond function — moments of interaction, play and emotional engagement. 1 · Feel it, check in and let it out: the mood check-in mirror, a wall to express how you feel, a punch bag to let it out and feel energised. 2 · Play it, pause and nerd out: interactive gaming, a scrabble wall to nerd out on, a word search to pause and play. 3 · Share it, talk and laugh: happy conversations. 4 · All of them together, through the Loop. → Bridge: And designed for everyone.">
+  data-notes="Acker's engagement points: the workplace beyond function — moments of interaction, play and emotional engagement. 1 · Feel it, check in and let it out: the mood check-in mirror, a wall to express how you feel, a punch bag to let it out and feel energised. 2 · Play it, pause and nerd out: interactive gaming, a scrabble wall to nerd out on, a word search to pause and play. 3 · Share it, talk and laugh: happy conversations. 4 · All of them together, through the Loop. → Bridge: And designed for everyone.">
   <!-- Ritika's PPT collage, kept whole (the deck page's crops); each beat lights one group and dims the rest: Feel it, Play it,
        Share it, then all of them. Every tile, label and arrow carries data-k, its point: a gaming wall, b scrabble wall,
        c punch bag, d word search, e feelings shelves, f speech bubbles, g "you look good" mirror. -->
   <div class="page">
-    <p class="lens-cb">Room to explore.</p>
     <div class="hdr"><b>Acker’s engagement points</b><span>04 · Integrated Performance</span></div>
     <div class="eg-in rv" style="left:0;top:0;width:100%;height:100%">
       <i class="dk click" data-k="a" style="--i:0;left:34.2%;top:51.6%;width:13.2%;height:20.5%;background-size:106.6% 183.5%;background-position:100.0% 53.2%;background-image:url(assets/img/eng-a.webp)"></i>
@@ -2895,7 +2794,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene vpage" id="s-di" data-part="p7" data-title="Designed for all" data-steps="1" data-mins="0.5"
-  data-notes="Universally accessible design: braille signage, quiet room, mother&#x27;s room, gender-inclusive toilets, visual and audible fire alarms, zen room. → Bridge: Last, back to where we started. 05 · Project Review.">
+  data-notes="Universally accessible design: braille signage, quiet room, mother&#x27;s room, gender-inclusive toilets, visual and audible fire alarms, zen room. → Bridge: Thank you.">
   <div class="page rv">
       <i class="dk" style="--i:0;left:1.81%;top:21.85%;width:12.92%;height:4.94%;background:#d9d9d9"></i>
       <i class="dk" style="--i:0;left:1.77%;top:44.2%;width:12.95%;height:14.81%;background-size:100% 100%;background-image:url(assets/img/di4-03.webp)"></i>
@@ -2935,246 +2834,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     <div class="vt" style="--i:1;left:2.24%;top:6.9%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#6b7080;font-weight:400;white-space:nowrap">Value Addition | Kit of parts</div>
     <div class="vt" style="--i:1;left:2.24%;top:3.31%;font-family:var(--body);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">D&amp;I Strategy</div>
     <div class="vt" style="--i:7;left:82.59%;top:76.21%;font-family:var(--hand);font-size:calc(var(--pt) * 18.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Designed for all .</div>
-  </div>
-</section>
-
-<section class="scene" id="s-div-5" data-part="p8" data-title="05 · Project Review" data-steps="1" data-mins="0.3"
-  data-notes="Section 05 of 05: Project Review, revisiting previous discussions and establishing alignment.">
-  <div class="page" data-look="a" data-conn="1">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
-    <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span><small class="ds">Establishing the overarching design vision</small></li>
-      <li style="--i:4"><i></i><b>02</b><span>Design Development</span><small class="ds">Translating the concept into a spatial solution</small></li>
-      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span><small class="ds">Materiality, visualisation and spatial experience</small></li>
-      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span><small class="ds">Technical performance and added value</small></li>
-      <li class="cur" style="--i:7"><i></i><b>05</b><span>Project Review</span><small class="ds">Revisiting previous discussions and establishing alignment</small></li>
-          </ol>
-    <div class="st-line" style="left:8%;top:62%;width:84%"><p>Revisiting previous discussions and establishing alignment.</p></div>
-    <div class="hero"><b>05</b><h3>Project Review</h3><p>Revisiting previous discussions and establishing alignment.</p></div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap" data-part="p8" data-title="A quick recap" data-steps="1" data-mins="0.1"
-  data-notes="A quick recap: the spaces we have already seen, one render each. → Bridge: A quick recap of what we have already seen.">
-  <div class="page rv">
-
-    <div class="vt" style="--i:1;left:2.24%;top:46.53%;font-family:var(--body);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">A quick Recap ..</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-reception-option-a" data-part="p8" data-title="A quick recap · Reception | Option A" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Reception | Option A. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-reception-option-a-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Reception | Option A</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-reception-option-b" data-part="p8" data-title="A quick recap · Reception | Option B" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Reception | Option B. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-reception-option-b-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Reception | Option B</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-arrival-coffee-shop-option-a" data-part="p8" data-title="A quick recap · Arrival coffee shop | Option A" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Arrival coffee shop | Option A. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-arrival-coffee-shop-option-a-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Arrival coffee shop | Option A</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-arrival-coffee-shop-option-b" data-part="p8" data-title="A quick recap · Arrival coffee shop | Option B" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Arrival coffee shop | Option B. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-arrival-coffee-shop-option-b-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Arrival coffee shop | Option B</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-secondary-arrival-reception" data-part="p8" data-title="A quick recap · Secondary arrival reception" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Secondary arrival reception. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-secondary-arrival-reception-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Secondary arrival reception</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-state-room-boardroom-32pax-option-01" data-part="p8" data-title="A quick recap · State room | Boardroom 32pax | Option 01" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: State room | Boardroom 32pax | Option 01. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-state-room-boardroom-32pax-option-01-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">State room | Boardroom 32pax | Option 01</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-state-room-boardroom-32pax-option-02" data-part="p8" data-title="A quick recap · State room | Boardroom 32pax | Option 02" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: State room | Boardroom 32pax | Option 02. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-state-room-boardroom-32pax-option-02-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">State room | Boardroom 32pax | Option 02</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-departmental-room-meeting-room-20pax" data-part="p8" data-title="A quick recap · Departmental Room | Meeting room 20pax" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Departmental Room | Meeting room 20pax. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-departmental-room-meeting-room-20pax-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Departmental Room | Meeting room 20pax</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-departmental-room-meeting-room-20pax-2" data-part="p8" data-title="A quick recap · Departmental Room | Meeting room 20pax" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Departmental Room | Meeting room 20pax. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-departmental-room-meeting-room-20pax-2-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Departmental Room | Meeting room 20pax</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-quick-sprint-room-04-pax-meeting-room-option-01" data-part="p8" data-title="A quick recap · Quick sprint room | 04 pax meeting room | Option 01" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Quick sprint room | 04 pax meeting room | Option 01. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:12.87%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-quick-sprint-room-04-pax-meeting-room-option-01-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Quick sprint room | 04 pax meeting room | Option 01</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-quick-sprint-room-04-pax-meeting-room-option-01-2" data-part="p8" data-title="A quick recap · Quick sprint room | 04 pax meeting room | Option 01" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Quick sprint room | 04 pax meeting room | Option 01. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:78.79%;background-size:100% 100%;background-image:url(assets/recap/s-recap-quick-sprint-room-04-pax-meeting-room-option-01-2-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Quick sprint room | 04 pax meeting room | Option 01</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-work-arena-the-neighbourhood-option-01" data-part="p8" data-title="A quick recap · Work arena | The neighbourhood | Option 01" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Work arena | The neighbourhood | Option 01. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-work-arena-the-neighbourhood-option-01-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Work arena | The neighbourhood | Option 01</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-work-arena-the-neighbourhood-option-02" data-part="p8" data-title="A quick recap · Work arena | The neighbourhood | Option 02" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Work arena | The neighbourhood | Option 02. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:74.34%;background-size:100% 100%;background-image:url(assets/recap/s-recap-work-arena-the-neighbourhood-option-02-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Work arena | The neighbourhood | Option 02</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-work-arena-library" data-part="p8" data-title="A quick recap · Work arena | Library" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Work arena | Library. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:73.97%;background-size:100% 100%;background-image:url(assets/recap/s-recap-work-arena-library-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Work arena | Library</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-work-arena-the-acker-garden" data-part="p8" data-title="A quick recap · Work arena | The acker garden" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Work arena | The acker garden. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:78.79%;background-size:100% 100%;background-image:url(assets/recap/s-recap-work-arena-the-acker-garden-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Work arena | The acker garden</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-cafe-option-01" data-part="p8" data-title="A quick recap · Cafe | Option 01" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Cafe | Option 01. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:78.79%;background-size:100% 100%;background-image:url(assets/recap/s-recap-cafe-option-01-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Cafe | Option 01</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-cafe-option-01-2" data-part="p8" data-title="A quick recap · Cafe | Option 01" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Cafe | Option 01. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:78.79%;background-size:100% 100%;background-image:url(assets/recap/s-recap-cafe-option-01-2-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Cafe | Option 01</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-cafe-option-02" data-part="p8" data-title="A quick recap · Cafe | Option 02" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Cafe | Option 02. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:78.79%;background-size:100% 100%;background-image:url(assets/recap/s-recap-cafe-option-02-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Cafe | Option 02</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-cafe-option-02-2" data-part="p8" data-title="A quick recap · Cafe | Option 02" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Cafe | Option 02. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:78.79%;background-size:100% 100%;background-image:url(assets/recap/s-recap-cafe-option-02-2-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Cafe | Option 02</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-coffee-point" data-part="p8" data-title="A quick recap · Coffee point" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Coffee point. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:2;left:0.05%;top:0.09%;width:64.89%;height:91.75%;background-size:100% 100%;background-image:url(assets/recap/s-recap-coffee-point-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Coffee point</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:700;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-mother-s-room" data-part="p8" data-title="A quick recap · Mother’s room" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Mother’s room. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:3;left:0.05%;top:0.09%;width:85.15%;height:91.75%;background-size:100% 100%;background-image:url(assets/recap/s-recap-mother-s-room-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Mother’s room</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:700;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-executive-room" data-part="p8" data-title="A quick recap · Executive room" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Executive room. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:4;left:0.05%;top:13.05%;width:99.94%;height:73.79%;background-size:100% 100%;background-image:url(assets/recap/s-recap-executive-room-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Executive room</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-zen-room" data-part="p8" data-title="A quick recap · Zen room" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Zen room. The render as shown at the last meeting.">
-  <div class="page rv">
-      <i class="dk" style="--i:2;left:0.05%;top:0.09%;width:64.89%;height:91.75%;background-size:100% 100%;background-image:url(assets/recap/s-recap-zen-room-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#ffffff;font-weight:400;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Zen room</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:700;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">A quick recap</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-recap-studio-room" data-part="p8" data-title="A quick recap · Studio room" data-steps="1" data-mins="0.2"
-  data-notes="A quick recap: Studio room. The render as shown at the last meeting. → Bridge: Thank you.">
-  <div class="page rv">
-      <i class="dk" style="--i:3;left:0.05%;top:11.85%;width:99.57%;height:75.18%;background-size:100% 100%;background-image:url(assets/recap/s-recap-studio-room-01.webp)"></i>
-    <div class="vt" style="--i:1;left:2.24%;top:6.99%;font-family:var(--body);font-size:calc(var(--pt) * 8.10);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Studio room</div>
-    <div class="vt" style="--i:1;left:2.24%;top:3.6%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap">A quick recap</div>
   </div>
 </section>
 
@@ -3571,7 +3230,7 @@ window.ACKO_FLOW = window.ACKO_FLOW || {
 .scene.fl-fade .page > * { transition: opacity .9s ease calc(var(--i, 0) * 90ms) !important; }
 .scene.fl-in .page > .st-3d, .scene.fl-out .page > .st-3d, .scene.fl-fade .page > .st-3d { opacity: 1 !important; transition: none !important; }
 </style>
-<script>window.ACKO_SECTIONS = {"names": {"cover": "Project Vision", "p2": "Design Drivers", "p3": "Overview", "p4": "01 · Concept Framework", "p5": "02 · Design Development", "p6": "03 · Design Expression", "p7": "04 · Integrated Performance", "p8": "05 · Project Review", "close": "Thank you", "A": "Appendix · Kit of parts"}, "main": [["cover", "Project Vision", ""], ["p2", "Design Drivers", ""], ["p3", "Overview", ""], ["p4", "Concept Framework", ""], ["p5", "Design Development", ""], ["p6", "Design Expression", ""], ["p7", "Integrated Performance", ""], ["p8", "Project Review", ""], ["close", "Thank you", ""]]}; window.ACKO_SP3 = true;</script>
+<script>window.ACKO_SECTIONS = {"names": {"cover": "Project Vision", "p2": "Design Drivers", "p3": "Overview", "p4": "01 · Concept Framework", "p5": "02 · Design Development", "p6": "03 · Design Expression", "p7": "04 · Integrated Performance", "close": "Thank you", "A": "Appendix · Kit of parts"}, "main": [["cover", "Project Vision", ""], ["p2", "Design Drivers", ""], ["p3", "Overview", ""], ["p4", "Concept Framework", ""], ["p5", "Design Development", ""], ["p6", "Design Expression", ""], ["p7", "Integrated Performance", ""], ["close", "Thank you", ""]]}; window.ACKO_SP3 = true;</script>
 <script src="assets/js/app.js?v=1"></script>
 <script data-slide="s-cover">
 /* the cover (deck slide 1): the facts come up over the stairs */
@@ -6721,24 +6380,6 @@ ACKO.slide("s-div-4", ({ $, plain, reveal, later, reduced }) => ({
   },
 }));
 </script>
-<script data-slide="s-div-5">
-/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
-   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
-ACKO.slide("s-div-5", ({ $, plain, reveal, later, reduced }) => ({
-  enter(_, sc) {
-    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
-    reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
-    if (reduced) { pg.classList.add("lit", "said"); return; }
-    later(() => pg.classList.add("lit"), 1300);
-    later(() => pg.classList.add("said"), 2000);
-  },
-  leave(_, sc) {
-    if (!sc || !window.ACKO_MORPH) return;
-    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(5) i", sc).getBoundingClientRect();
-    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
-  },
-}));
-</script>
 <script data-slide="s-overview">
 /* the agenda and the first section's opener in one slide (21 Nov, Ritika): beat 1 the five sections, beat 2 the first lit with its line.
    Leaving, it hands the first dot's place to the people's challenge, whose lavender grows out of it */
@@ -8206,6 +7847,31 @@ ACKO.slide("s-esg", ({ $, $$, plain, reveal, reduced }) => ({
       else if (sz >= 10) { e.classList.add("esg-h"); e.style.setProperty("--d", BASE(c) - 250 + "ms"); }
       else if (/#(eeeeee|ffffff)/i.test(e.style.color) || e.style.color.replace(/\s/g, "") === "rgb(255,255,255)" || e.style.color.replace(/\s/g, "") === "rgb(238,238,238)") e.style.setProperty("--d", BASE(c) + 600 + lab[c]++ * 120 + "ms");
       else e.style.setProperty("--d", BASE(c) + 1100 + "ms");
+    });
+    plain(); reveal(pg, 60);
+  },
+}));
+</script>
+<script data-slide="s-di">
+/* D&I strategy: builds column by column, left to right; "Designed for all ." is written on last */
+ACKO.slide("s-di", ({ $, $$, plain, reveal }) => ({
+  enter(_, sc) {
+    const pg = $(".page", sc), EDGE = [15, 29, 43.5, 57.5, 71.5, 85];
+    const col = (e) => EDGE.filter((x) => parseFloat(e.style.left) >= x).length;
+    const size = (e) => { const m = /\* ([0-9.]+)\)/.exec(e.style.fontSize || ""); return m ? +m[1] : 0; };
+    const B = (c) => 900 + c * 480, pic = Array(7).fill(0);
+    $$(":scope > i.dk", pg).forEach((e) => {
+      const c = col(e), bar = e.style.background === "rgb(217, 217, 217)" || /#d9d9d9/i.test(e.getAttribute("style") || "");
+      e.classList.toggle("di-bar", bar);
+      e.style.setProperty("--d", bar ? B(c) + "ms" : B(c) + 750 + pic[c]++ * 200 + "ms");
+    });
+    $$(":scope > .vt", pg).forEach((e) => {
+      e.classList.remove("di-h", "di-w");
+      const c = col(e), sz = size(e), hand = /hand/.test(e.style.fontFamily || ""), top = parseFloat(e.style.top);
+      if (hand) { e.classList.add("di-w"); e.style.setProperty("--d", B(6) + 1500 + "ms"); }
+      else if (top < 8) e.style.setProperty("--d", (sz >= 12 ? 100 : 350) + "ms"), e.classList.add("di-h");
+      else if (sz >= 8) { e.classList.add("di-h"); e.style.setProperty("--d", B(c) + 180 + "ms"); }
+      else e.style.setProperty("--d", B(c) + 420 + "ms");
     });
     plain(); reveal(pg, 60);
   },
