@@ -970,32 +970,6 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
   .skv-row { flex-wrap: wrap; }
 }
 </style>
-<style data-slide="s-div-1">
-/* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
-#s-div-1 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
-#s-div-1 .ap-steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
-#s-div-1 .ap-steps li { position: relative; display: flex; flex-direction: column; padding-top: calc(var(--pt) * 22); }
-#s-div-1 .ap-steps li::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--pt) * 5); border-top: 1px solid #cfc6ea; }
-#s-div-1 .ap-steps li:last-child::before { right: 70%; }
-#s-div-1 .ap-steps li:not(:last-child)::after { content: "→"; position: absolute; left: 52%; top: calc(var(--pt) * -2); font-size: calc(var(--pt) * 9); color: var(--purple-2); }
-#s-div-1 .ap-steps i { position: absolute; left: 0; top: 0; width: calc(var(--pt) * 10); height: calc(var(--pt) * 10); border-radius: 50%; background: var(--purple); }
-#s-div-1 .ap-steps b { font-size: calc(var(--pt) * 13); font-weight: 700; color: var(--purple-2); }
-#s-div-1 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
-#s-div-1 .ap-steps li > span { margin-top: calc(var(--pt) * 2); white-space: nowrap; font-size: calc(var(--pt) * 17); line-height: 1; color: var(--hand-ink); }
-#s-div-1 .ap-steps li { padding-top: calc(var(--pt) * 28); transition: opacity .7s var(--ease); }
-#s-div-1 .ap-steps i { width: calc(var(--pt) * 13); height: calc(var(--pt) * 13); transition: transform .7s var(--ease), box-shadow .7s var(--ease); }
-#s-div-1 .ap-steps li::before { top: calc(var(--pt) * 6.5); }
-#s-div-1 .ap-steps b { font-size: calc(var(--pt) * 15); }
-#s-div-1 .ap-steps li > span { font-family: var(--body); font-weight: 700; color: var(--purple-2); }
-#s-div-1 .ap-steps li > span { font-size: calc(var(--pt) * 10.5); }   /* the longer names */
-#s-div-1 .page.lit .ap-steps li:not(:nth-child(1)) { opacity: .26 !important; }
-#s-div-1 .page.lit .ap-steps li:nth-child(1) i { transform: scale(1.45); box-shadow: 0 0 0 calc(var(--pt) * 5) rgba(82, 34, 208, .14); }
-#s-div-1 .st-line { opacity: 0; transform: translateY(calc(var(--pt) * 5)); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-#s-div-1 .page.said .st-line { opacity: 1; transform: none; }
-#s-div-1 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
-#s-div-1 .st-line b { font-weight: 700; color: var(--purple); }
-#s-div-1 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
-</style>
 <style data-slide="s-div-2">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
 #s-div-2 .st-k small { display: block; font-size: calc(var(--pt) * 12); font-style: normal; font-weight: 700; color: var(--purple-2); }
@@ -1021,6 +995,15 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 #s-div-2 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-2 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-2 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+
+/* type hierarchy (21 Nov, Ritika: "variation in font height, thickness and colour"): label > number > name; the lit stage steps forward */
+#s-div-2 .st-k small { font-size: calc(var(--pt) * 13); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }
+#s-div-2 .ap-steps b { font-size: calc(var(--pt) * 24); font-weight: 800; line-height: 1; color: var(--purple); font-variant-numeric: tabular-nums; }
+#s-div-2 .ap-steps li > span { font-size: calc(var(--pt) * 10); font-weight: 500; color: #1d1640; }
+#s-div-2 .ap-steps li { transition: opacity .7s var(--ease); }
+#s-div-2 .st-line p { font-size: calc(var(--pt) * 30); color: var(--purple-2); }
+#s-div-2 .page.lit .ap-steps li:nth-child(2) b { font-size: calc(var(--pt) * 30); }
+#s-div-2 .page.lit .ap-steps li:nth-child(2) > span { font-size: calc(var(--pt) * 11.5); font-weight: 800; color: var(--purple); }
 </style>
 <style data-slide="s-div-3">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
@@ -1047,6 +1030,15 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 #s-div-3 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-3 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-3 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+
+/* type hierarchy (21 Nov, Ritika: "variation in font height, thickness and colour"): label > number > name; the lit stage steps forward */
+#s-div-3 .st-k small { font-size: calc(var(--pt) * 13); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }
+#s-div-3 .ap-steps b { font-size: calc(var(--pt) * 24); font-weight: 800; line-height: 1; color: var(--purple); font-variant-numeric: tabular-nums; }
+#s-div-3 .ap-steps li > span { font-size: calc(var(--pt) * 10); font-weight: 500; color: #1d1640; }
+#s-div-3 .ap-steps li { transition: opacity .7s var(--ease); }
+#s-div-3 .st-line p { font-size: calc(var(--pt) * 30); color: var(--purple-2); }
+#s-div-3 .page.lit .ap-steps li:nth-child(3) b { font-size: calc(var(--pt) * 30); }
+#s-div-3 .page.lit .ap-steps li:nth-child(3) > span { font-size: calc(var(--pt) * 11.5); font-weight: 800; color: var(--purple); }
 </style>
 <style data-slide="s-div-4">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
@@ -1073,6 +1065,15 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 #s-div-4 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-4 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-4 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+
+/* type hierarchy (21 Nov, Ritika: "variation in font height, thickness and colour"): label > number > name; the lit stage steps forward */
+#s-div-4 .st-k small { font-size: calc(var(--pt) * 13); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }
+#s-div-4 .ap-steps b { font-size: calc(var(--pt) * 24); font-weight: 800; line-height: 1; color: var(--purple); font-variant-numeric: tabular-nums; }
+#s-div-4 .ap-steps li > span { font-size: calc(var(--pt) * 10); font-weight: 500; color: #1d1640; }
+#s-div-4 .ap-steps li { transition: opacity .7s var(--ease); }
+#s-div-4 .st-line p { font-size: calc(var(--pt) * 30); color: var(--purple-2); }
+#s-div-4 .page.lit .ap-steps li:nth-child(4) b { font-size: calc(var(--pt) * 30); }
+#s-div-4 .page.lit .ap-steps li:nth-child(4) > span { font-size: calc(var(--pt) * 11.5); font-weight: 800; color: var(--purple); }
 </style>
 <style data-slide="s-div-5">
 /* where it starts (10 Nov): the six stages, larger; the rest step back and Understand · the people stays; then the move, said */
@@ -1099,6 +1100,15 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 #s-div-5 .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-div-5 .st-line b { font-weight: 700; color: var(--purple); }
 #s-div-5 .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+
+/* type hierarchy (21 Nov, Ritika: "variation in font height, thickness and colour"): label > number > name; the lit stage steps forward */
+#s-div-5 .st-k small { font-size: calc(var(--pt) * 13); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }
+#s-div-5 .ap-steps b { font-size: calc(var(--pt) * 24); font-weight: 800; line-height: 1; color: var(--purple); font-variant-numeric: tabular-nums; }
+#s-div-5 .ap-steps li > span { font-size: calc(var(--pt) * 10); font-weight: 500; color: #1d1640; }
+#s-div-5 .ap-steps li { transition: opacity .7s var(--ease); }
+#s-div-5 .st-line p { font-size: calc(var(--pt) * 30); color: var(--purple-2); }
+#s-div-5 .page.lit .ap-steps li:nth-child(5) b { font-size: calc(var(--pt) * 30); }
+#s-div-5 .page.lit .ap-steps li:nth-child(5) > span { font-size: calc(var(--pt) * 11.5); font-weight: 800; color: var(--purple); }
 </style>
 <style data-slide="s-overview">
 .ap-still, .ap-still > * { transition: none !important; opacity: 1 !important; transform: none !important; }
@@ -1126,6 +1136,15 @@ body.wt-film :is(.hint, .lockup) { opacity: 0 !important; visibility: hidden; po
 #s-overview .st-line p { margin: 0; font-family: var(--hand); font-size: calc(var(--pt) * 26); line-height: 1.1; color: var(--hand-ink); }
 #s-overview .st-line b { font-weight: 700; color: var(--purple); }
 #s-overview .st-line .hand { display: block; margin-top: calc(var(--pt) * 8); font-size: calc(var(--pt) * 20); color: var(--hand-ink); }
+
+/* type hierarchy (21 Nov, Ritika: "variation in font height, thickness and colour"): label > number > name; the lit stage steps forward */
+#s-overview .st-k small { font-size: calc(var(--pt) * 13); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--purple); }
+#s-overview .ap-steps b { font-size: calc(var(--pt) * 24); font-weight: 800; line-height: 1; color: var(--purple); font-variant-numeric: tabular-nums; }
+#s-overview .ap-steps li > span { font-size: calc(var(--pt) * 10); font-weight: 500; color: #1d1640; }
+#s-overview .ap-steps li { transition: opacity .7s var(--ease); }
+#s-overview .st-line p { font-size: calc(var(--pt) * 30); color: var(--purple-2); }
+#s-overview .page.lit .ap-steps li:nth-child(1) b { font-size: calc(var(--pt) * 30); }
+#s-overview .page.lit .ap-steps li:nth-child(1) > span { font-size: calc(var(--pt) * 11.5); font-weight: 800; color: var(--purple); }
 </style>
 <style data-slide="s-site-dd">
 /* the layers' pills, centred under the plan (app.css .lt-pills: their look); the band beneath, white from just above them to
@@ -1763,7 +1782,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <li style="--i:3"><p>Increase the size of the <b>podcast room &amp; Green room</b></p></li>
       <li style="--i:4"><p>Revise the <b>Boardroom</b> to meet the required capacity. Location to be relooked.</p></li>
       <li style="--i:5"><p>Move <b>meeting rooms</b> toward the center of the floor plate rather than along the façade.</p></li>
-      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of vertical pumping provisions.</p></li>
+      <li style="--i:6"><p>Rework the <b>cafeteria</b> location, considering the unavailability of plumbing provisions.</p></li>
       <li style="--i:7"><p>Explore the <b>landscape deck</b> as an additional functional and breakout space.</p></li>
       <li style="--i:8"><p><b>Crash/nap room</b>: mandatory</p></li>
       <li style="--i:9"><p><b>Sick room</b> with a bed, privacy and first aid: mandatory</p></li>
@@ -1773,24 +1792,10 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-overview" data-part="p3" data-title="Agenda" data-steps="1" data-mins="0.3"
-  data-notes="The agenda: five sections ahead. 01 Concept Framework: establishing the overarching design vision. 02 Design Development: translating the concept into a spatial solution. 03 Design Expression: materiality, visualisation and spatial experience. 04 Integrated Performance: technical performance and added value. 05 Project Review: revisiting previous discussions and establishing alignment. → Bridge: The concept first. 01 · Concept Framework.">
+<section class="scene" id="s-overview" data-part="p3" data-title="Agenda" data-steps="2" data-mins="0.3"
+  data-notes="The agenda: five sections ahead. 01 Concept Framework: establishing the overarching design vision. 02 Design Development: translating the concept into a spatial solution. 03 Design Expression: materiality, visualisation and spatial experience. 04 Integrated Performance: technical performance and added value. 05 Project Review: revisiting previous discussions and establishing alignment. Beat 2: 01 Concept Framework lit, establishing the overarching design vision. → Bridge: The concept first. 01 · Concept Framework.">
   <div class="page">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
-    <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
-      <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
-      <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
-      <li style="--i:5"><i></i><b>03</b><span>Design Expression</span></li>
-      <li style="--i:6"><i></i><b>04</b><span>Integrated Performance</span></li>
-      <li style="--i:7"><i></i><b>05</b><span>Project Review</span></li>
-          </ol>
-      </div>
-</section>
-
-<section class="scene" id="s-div-1" data-part="p4" data-title="01 · Concept Framework" data-steps="1" data-mins="0.3"
-  data-notes="Section 01 of 05: Concept Framework, establishing the overarching design vision.">
-  <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">01 · Concept Framework</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
@@ -1914,7 +1919,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-div-2" data-part="p5" data-title="02 · Design Development" data-steps="1" data-mins="0.3"
   data-notes="Section 02 of 05: Design Development, translating the concept into a spatial solution.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">02 · Design Development</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
@@ -2367,7 +2372,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-div-3" data-part="p6" data-title="03 · Design Expression" data-steps="1" data-mins="0.3"
   data-notes="Section 03 of 05: Design Expression, materiality, visualisation and spatial experience.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">03 · Design Expression</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
@@ -2542,7 +2547,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-div-4" data-part="p7" data-title="04 · Integrated Performance" data-steps="1" data-mins="0.3"
   data-notes="Section 04 of 05: Integrated Performance, technical performance and added value.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">04 · Integrated Performance</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
@@ -2759,7 +2764,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-div-5" data-part="p8" data-title="05 · Project Review" data-steps="1" data-mins="0.3"
   data-notes="Section 05 of 05: Project Review, revisiting previous discussions and establishing alignment.">
   <div class="page">
-    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">05 · Project Review</small></div>
+    <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span></li>
       <li style="--i:4"><i></i><b>02</b><span>Design Development</span></li>
@@ -6417,26 +6422,6 @@ ACKO.slide("s-skv", ({ $, $$, later, plain, countUp, asset }) => {
   };
 });
 </script>
-<script data-slide="s-div-1">
-/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
-   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
-ACKO.slide("s-div-1", ({ $, plain, reveal, later, reduced }) => ({
-  enter(_, sc) {
-    plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
-    if (window.__apHold && Date.now() - window.__apHold < 1500) { window.__apHold = 0; [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => { e.classList.add("ap-still", "go"); later(() => e.classList.remove("ap-still"), 150); }); }
-    else { [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => e.classList.remove("ap-still")); reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90); }
-    if (reduced) { pg.classList.add("lit", "said"); return; }
-    later(() => pg.classList.add("lit"), 1300);
-    later(() => pg.classList.add("said"), 2000);
-  },
-  leave(_, sc) {
-    window.__apHold = Date.now();
-    if (!sc || !window.ACKO_MORPH) return;
-    const pg = $(".page", sc).getBoundingClientRect(), d = $(".ap-steps li:nth-child(1) i", sc).getBoundingClientRect();
-    window.ACKO_MORPH.mark("s-approach", { x: (d.left + d.width / 2 - pg.left) / pg.width, y: (d.top + d.height / 2 - pg.top) / pg.height });
-  },
-}));
-</script>
 <script data-slide="s-div-2">
 /* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
    Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
@@ -6510,14 +6495,19 @@ ACKO.slide("s-div-5", ({ $, plain, reveal, later, reduced }) => ({
 }));
 </script>
 <script data-slide="s-overview">
-/* where it starts: the six stages as How we worked left them, then the rest step back and the first stays; then the move, said.
-   Leaving, it hands the Understand dot's place to the people's challenge, whose lavender grows out of it */
+/* the agenda and the first section's opener in one slide (21 Nov, Ritika): beat 1 the five sections, beat 2 the first lit with its line.
+   Leaving, it hands the first dot's place to the people's challenge, whose lavender grows out of it */
 ACKO.slide("s-overview", ({ $, plain, reveal, later, reduced }) => ({
   enter(_, sc) {
     plain(); const pg = $(".page", sc); pg.classList.remove("lit", "said"); void pg.offsetWidth;
     if (window.__apHold && Date.now() - window.__apHold < 1500) { window.__apHold = 0; [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => { e.classList.add("ap-still", "go"); later(() => e.classList.remove("ap-still"), 150); }); return; }
     [$(".st-k", sc), $(".ap-steps", sc)].forEach((e) => e.classList.remove("ap-still"));
     reveal($(".st-k", sc), 80); reveal($(".ap-steps", sc), 90);
+  },
+  step(k, sc) {
+    const pg = $(".page", sc);
+    if (k >= 2) { pg.classList.add("lit"); later(() => pg.classList.add("said"), reduced ? 0 : 700); }
+    else pg.classList.remove("lit", "said");
   },
   leave(_, sc) {
     window.__apHold = Date.now();
