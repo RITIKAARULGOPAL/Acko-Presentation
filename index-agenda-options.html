@@ -51,7 +51,12 @@ const CONNS = {
   2: "2 · Dotted + arrowhead",
   3: "3 · Progress line",
   4: "4 · Segments only",
-  5: "5 · One long arrow"
+  5: "5 · One long arrow",
+  6: "6 · Bold rounded bar",
+  7: "7 · Flowing dashes",
+  8: "8 · Arcs",
+  9: "9 · Typographic arrows",
+  10: "10 · Track bar"
 };
 const q = new URLSearchParams(location.search);
 let look = LOOKS[q.get("look")] ? q.get("look") : "a", slide = SLIDES[q.get("slide")] ? q.get("slide") : "s1", conn = CONNS[q.get("conn")] ? q.get("conn") : "1";

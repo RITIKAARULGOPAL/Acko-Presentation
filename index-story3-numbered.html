@@ -8187,6 +8187,39 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 #s-div-3 .page { --cur: 3; }
 #s-div-4 .page { --cur: 4; }
 #s-div-5 .page { --cur: 5; }
+
+/* connectors, set 2 (?conn=6..10) */
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="6"] .ap-steps li:not(:last-child)::before {
+  content: "" !important; display: block !important; position: absolute; border: 0 !important; opacity: 1 !important;
+  top: calc(var(--pt) * 6.5 - var(--pt) * 1.6); left: calc(var(--pt) * 13 + var(--pt) * 9); right: calc(var(--pt) * 9); height: calc(var(--pt) * 3.2); border-radius: 99px; background: rgba(82, 34, 208, .32);
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="7"] .ap-steps li:not(:last-child)::before {
+  content: "" !important; display: block !important; position: absolute; border: 0 !important; opacity: 1 !important;
+  top: calc(var(--pt) * 6.5 - 1px); left: calc(var(--pt) * 13 + var(--pt) * 9); right: calc(var(--pt) * 9 + var(--pt) * 6); height: 2px;
+  background: repeating-linear-gradient(90deg, var(--purple) 0 6px, transparent 6px 11px); background-size: 11px 2px; animation: conn-march 1.1s linear infinite;
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="7"] .ap-steps li:not(:last-child)::after {
+  content: "" !important; display: block !important; position: absolute; top: calc(var(--pt) * 6.5); left: calc(100% - var(--pt) * 9 - var(--pt) * 5.5); width: 0; height: 0; transform: translateY(-50%);
+  border-left: calc(var(--pt) * 5.5) solid var(--purple); border-top: calc(var(--pt) * 3.4) solid transparent; border-bottom: calc(var(--pt) * 3.4) solid transparent;
+}
+@keyframes conn-march { to { background-position: 11px 0; } }
+@media (prefers-reduced-motion: reduce) { :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="7"] .ap-steps li::before { animation: none !important; } }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="8"] .ap-steps li:not(:last-child)::before {
+  content: "" !important; display: block !important; position: absolute; opacity: 1 !important; box-sizing: border-box;
+  top: calc(0px - var(--pt) * 14); left: calc(var(--pt) * 13 / 2); right: calc(0px - var(--pt) * 13 / 2 + var(--pt) * 0); height: calc(var(--pt) * 14); border: 2px solid var(--purple) !important; border-bottom: 0 !important;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: none;
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="8"] .ap-steps li:not(:last-child)::after {
+  content: "" !important; display: block !important; position: absolute; top: calc(0px - var(--pt) * 4.5); left: calc(100% + var(--pt) * 13 / 2 - var(--pt) * 3.2); width: 0; height: 0;
+  border-top: calc(var(--pt) * 4.5) solid var(--purple); border-left: calc(var(--pt) * 3.2) solid transparent; border-right: calc(var(--pt) * 3.2) solid transparent;
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="9"] .ap-steps li:not(:last-child)::after {
+  content: "\2192" !important; display: block !important; position: absolute; left: calc(50% + var(--pt) * 6.5); top: calc(var(--pt) * 6.5); transform: translate(-50%, -54%);
+  font-family: var(--body); font-size: calc(var(--pt) * 11); font-weight: 200; line-height: 1; color: #111; width: auto; height: auto; border: 0;
+}
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="10"] .ap-steps::after { content: ""; position: absolute; z-index: 0; left: 0; top: calc(var(--pt) * 6.5 - var(--pt) * 2.5); height: calc(var(--pt) * 5); width: calc(80% + var(--pt) * 13); border-radius: 99px; background: rgba(82, 34, 208, .14); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="10"] .ap-steps::before { content: ""; position: absolute; z-index: 0; left: 0; top: calc(var(--pt) * 6.5 - var(--pt) * 2.5); height: calc(var(--pt) * 5); border-radius: 99px; background: var(--purple); width: calc(var(--pt) * 13); transition: width .9s var(--ease); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="10"].lit .ap-steps::before { width: calc(var(--pt) * 13 + (var(--cur, 1) - 1) * 20%); }
 </style>
 <script>
 /* ?look=a..e and ?conn=1..5 pick the agenda / section-starter look and its connectors (kept for the session so the dividers follow) */
@@ -8194,7 +8227,7 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
   var q = new URLSearchParams(location.search), l = "", c = "";
   try { l = q.get("look") || sessionStorage.getItem("agendaLook") || ""; if (q.get("look")) sessionStorage.setItem("agendaLook", l); } catch (e) {}
   try { c = q.get("conn") || sessionStorage.getItem("agendaConn") || ""; if (q.get("conn")) sessionStorage.setItem("agendaConn", c); } catch (e) {}
-  if (!/^[1-5]$/.test(c)) c = "1";
+  if (!/^([1-9]|10)$/.test(c)) c = "1";
   function apply() { document.querySelectorAll("#s-overview .page, #s-div-2 .page, #s-div-3 .page, #s-div-4 .page, #s-div-5 .page").forEach(function (p) { if (/^[a-e]$/.test(l)) p.setAttribute("data-look", l); p.setAttribute("data-conn", c); }); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply); else apply();
   window.addEventListener("load", apply);
