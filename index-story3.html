@@ -172,9 +172,10 @@
 #s-campus-loop .still .cpl-w.shown, #s-campus-loop .still .cpl-h .shown, #s-campus-loop .still .cpl-seg, #s-campus-loop .still .cpl-out, #s-campus-loop .still .cpl-plate { transition: none !important; }
 /* the line under a hairline */
 @media (prefers-reduced-motion: reduce) { #s-campus-loop * { transition-duration: 0s !important; transition-delay: 0s !important; } }
-/* the Möbius promise pulses, gently and for good (22 Nov, Ritika: "keep the '...us versus...' text as pulsing") */
-#s-campus-loop .cpl-w.w2.shown p { animation: cpl-pulse 2.8s ease-in-out infinite; }
-@keyframes cpl-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 .6em rgba(82, 34, 208, .22); } 50% { opacity: .55; text-shadow: none; } }
+/* the Möbius promise, set apart: a lilac band that breathes, a ring that ripples out of it, the words in bold purple (22 Nov, Ritika: "it still doesn't feel highlighted") */
+#s-campus-loop .cpl-w.w2 p { display: inline-block; padding: .5em .95em; border-radius: .55em; background: rgba(190, 164, 245, .30); color: var(--accent); font-weight: 700; font-size: 1.1em; line-height: 1.35; }
+#s-campus-loop .cpl-w.w2.shown p { animation: cpl-band 2.4s ease-in-out infinite; }
+@keyframes cpl-band { 0%, 100% { background-color: rgba(190, 164, 245, .18); box-shadow: 0 0 0 0 rgba(82, 34, 208, .30); } 50% { background-color: rgba(190, 164, 245, .45); box-shadow: 0 0 0 .8em rgba(82, 34, 208, 0); } }
 @media (prefers-reduced-motion: reduce) { #s-campus-loop .cpl-w.w2.shown p { animation: none; } }
 </style>
 <style data-slide="s-pitch">

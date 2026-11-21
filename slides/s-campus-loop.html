@@ -130,9 +130,10 @@
 /* sentences break on their punctuation, never leave a lone word (22 Nov) */
 #s-campus-loop .cpl-w p { text-wrap: balance; }
 #s-campus-loop .cpl-w p .ln { display: block; }
-/* the Möbius promise pulses, gently and for good (22 Nov, Ritika: "keep the '...us versus...' text as pulsing") */
-#s-campus-loop .cpl-w.w2.shown p { animation: cpl-pulse 2.8s ease-in-out infinite; }
-@keyframes cpl-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 .6em rgba(82, 34, 208, .22); } 50% { opacity: .55; text-shadow: none; } }
+/* the Möbius promise, set apart: a lilac band that breathes, a ring that ripples out of it, the words in bold purple (22 Nov, Ritika: "it still doesn't feel highlighted") */
+#s-campus-loop .cpl-w.w2 p { display: inline-block; padding: .5em .95em; border-radius: .55em; background: rgba(190, 164, 245, .30); color: var(--accent); font-weight: 700; font-size: 1.1em; line-height: 1.35; }
+#s-campus-loop .cpl-w.w2.shown p { animation: cpl-band 2.4s ease-in-out infinite; }
+@keyframes cpl-band { 0%, 100% { background-color: rgba(190, 164, 245, .18); box-shadow: 0 0 0 0 rgba(82, 34, 208, .30); } 50% { background-color: rgba(190, 164, 245, .45); box-shadow: 0 0 0 .8em rgba(82, 34, 208, 0); } }
 @media (prefers-reduced-motion: reduce) { #s-campus-loop .cpl-w.w2.shown p { animation: none; } }
 #s-campus-loop .cpl-w h3 { margin: 0; font-size: calc(var(--pt) * 13); font-weight: 700; line-height: 1.1; letter-spacing: -.01em; color: var(--ink); }
 #s-campus-loop .cpl-w.w3 h3 { color: var(--accent); }
