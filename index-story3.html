@@ -153,14 +153,15 @@
 #s-campus-loop .cpl-dots > g { transform-box: view-box; transform-origin: 0 0; }
 #s-campus-loop .pa { fill: #1e9e95; color: #1e9e95; }
 #s-campus-loop .pb { fill: #bcae92; color: #bcae92; }
-/* the Replay button: shown once the run has ended */
-#s-campus-loop .cpl-replay { right: 4.8%; top: 88.2%; font: 600 calc(var(--pt) * 6.4) var(--body); letter-spacing: .06em; color: var(--accent); background: #fff; border: 1px solid #cfc3f3; border-radius: 99px; padding: calc(var(--pt) * 2.4) calc(var(--pt) * 8); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
-#s-campus-loop .page.end .cpl-replay { opacity: 1; pointer-events: auto; }
-#s-campus-loop .cpl-replay:hover { background: #f3effd; }
 /* + and = */
 #s-campus-loop .cpl-op { top: 49%; width: 6%; text-align: center; font-size: calc(var(--pt) * 22); font-weight: 300; line-height: 1; color: var(--accent); }
 /* the words under each figure, once the ribbon has made it */
 #s-campus-loop .cpl-w { top: 67.4%; text-align: center; }
+/* the + and = arrive one after the other, the same way (22 Nov, Ritika: "+ and = sequential") */
+#s-campus-loop .cpl-op { transition: opacity .6s var(--ease) .15s; }
+/* sentences break on their punctuation, never leave a lone word (22 Nov) */
+#s-campus-loop .cpl-w p { text-wrap: balance; }
+#s-campus-loop .cpl-w p .ln { display: block; }
 #s-campus-loop .cpl-w h3 { margin: 0; font-size: calc(var(--pt) * 13); font-weight: 700; line-height: 1.1; letter-spacing: -.01em; color: var(--ink); }
 #s-campus-loop .cpl-w.w3 h3 { color: var(--accent); }
 #s-campus-loop .cpl-w em { display: block; margin-top: calc(var(--pt) * 3); font-style: normal; font-size: calc(var(--pt) * 5.4); font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
@@ -171,6 +172,16 @@
 #s-campus-loop .still .cpl-w.shown, #s-campus-loop .still .cpl-h .shown, #s-campus-loop .still .cpl-seg, #s-campus-loop .still .cpl-out, #s-campus-loop .still .cpl-plate { transition: none !important; }
 /* the line under a hairline */
 @media (prefers-reduced-motion: reduce) { #s-campus-loop * { transition-duration: 0s !important; transition-delay: 0s !important; } }
+/* the Möbius promise, highlighted: ?tag=a..e (22 Nov, Ritika: "its tagline, subtly highlighted, give me variations") */
+#s-campus-loop .cpl-w.w2[data-tag="a"] p { font-style: italic; font-weight: 500; color: var(--accent); }
+#s-campus-loop .cpl-w.w2[data-tag="b"] .t2 { background: linear-gradient(transparent 58%, rgba(190, 164, 245, .55) 58% 92%, transparent 92%); padding: 0 .14em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+#s-campus-loop .cpl-w.w2[data-tag="c"] p { font-family: var(--hand); font-size: calc(var(--pt) * 12.5); line-height: 1.02; color: var(--ink); }
+#s-campus-loop .cpl-w.w2[data-tag="c"] p::before { content: "\201C"; }
+#s-campus-loop .cpl-w.w2[data-tag="c"] p::after { content: "\201D"; }
+#s-campus-loop .cpl-w.w2[data-tag="d"] .t1 { color: #8d869e; }
+#s-campus-loop .cpl-w.w2[data-tag="d"] .t2 { color: var(--accent); font-weight: 700; }
+#s-campus-loop .cpl-w.w2[data-tag="e"] p { text-align: left; border-left: 2px solid #cbbdf4; padding-left: .9em; margin-top: calc(var(--pt) * 6); }
+#s-campus-loop .cpl-w.w2[data-tag="e"] p::before { content: "THE PROMISE"; display: block; margin-bottom: .35em; font-size: .62em; font-weight: 600; letter-spacing: .2em; color: var(--accent); }
 </style>
 <style data-slide="s-pitch">
 /* ---------- one floor, two football pitches (01 · Discover the site): the bare floor, to scale, on the pitches' top touchline ---------- */
@@ -1818,7 +1829,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-why-campus" data-part="p4" data-title="Two Offices" data-steps="2" data-mins="0.6" data-beats="Two offices,One floor"
   data-notes="Two offices, Leela and HSR, flow together onto one 245 m floor, about 651 Ackers on one floor. A campus lets every team keep a home of its own, while everyone belongs to the same place; next, the one floor becomes the ribbon that ties it together. → Bridge: Two offices, one floor: so we made it one campus.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="hdr"><b>Two Offices</b><span>01 · Concept Framework</span></div>
     <p class="wc-hand hand wc-in" style="--i:0;left:4.8%;top:10.6%">Moving offices is easy. Moving people isn’t.</p>
     <h2 class="wc-h wc-in" style="--i:1;left:4.8%;top:15.6%">Two offices. <b>One campus.</b></h2>
@@ -1873,7 +1883,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   data-beats="Campus,+ Möbius,= Our floor,Neighbourhoods,Shared spaces,The ACKO Loop"
   data-notes="The one floor becomes a ribbon. Campus first: it splits into six neighbourhoods, put together as one campus; belonging is the idea. Möbius second: the same ribbon runs round ACKO's Möbius, its promise of continuity, no inside and no outside; the inspiration for why the connector is a loop and not a corridor. The result is the ACKO Loop, sketched on our own floor: one smooth, continuous route, the neighbourhoods along both sides, the shared spaces inside it, both arrivals on it. Neighbourhood gives you an address; the loop connects you to everyone; the commons make it daily life. → Bridge: Now the floor itself. 02 · Design Development.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="hdr"><b>The ACKO Campus</b><span>01 · Concept Framework</span></div>
     <p class="cpl-hand hand">a campus to belong to, a promise to hold it together</p>
     <h2 class="cpl-h"><span data-step="1">Campus</span> <span data-step="2">+ Möbius</span> <span data-step="3">=</span> <span data-step="6"><b>The ACKO Loop.</b></span></h2>
@@ -1909,15 +1918,14 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <g class="cpl-dots"></g>
     </svg>
     <canvas class="cpl-strip"></canvas>
-    <button type="button" class="cpl-replay" tabindex="-1">↻ Replay</button>
     <svg class="cpl-dia" viewBox="0 0 1920 1080" aria-hidden="true"><g class="cpl-zones cpl-zt"></g></svg>
 
     <div class="cpl-op" data-step="2" style="left:22.9%">+</div>
     <div class="cpl-op" data-step="3" style="left:49.1%">=</div>
 
-    <div class="cpl-w w1" data-step="1" style="left:4.8%;width:20.4%"><h3>Campus</h3><em>Belonging · the idea</em><p>Many neighbourhoods, one shared identity.</p></div>
-    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p>It’s never us versus you; it’s always us with you.</p></div>
-    <div class="cpl-w w3" data-step="6" style="left:54%;width:41.2%"><h3>The ACKO Loop</h3><em>Connection · the plan</em><p>One continuous route that links every neighbourhood, both arrivals and every shared space.</p></div>
+    <div class="cpl-w w1" data-step="1" style="left:4.8%;width:20.4%"><h3>Campus</h3><em>Belonging · the idea</em><p><span class="ln">Many neighbourhoods,</span><span class="ln">one shared identity.</span></p></div>
+    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p><span class="ln t1">It’s never us versus you;</span><span class="ln t2">it’s always us with you.</span></p></div>
+    <div class="cpl-w w3" data-step="6" style="left:54%;width:41.2%"><h3>The ACKO Loop</h3><em>Connection · the plan</em><p><span class="ln">One continuous route that links every neighbourhood,</span><span class="ln">both arrivals and every shared space.</span></p></div>
 
   </div>
 </section>
@@ -1959,7 +1967,6 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="2" data-mins="0.6" data-beats="Lengthwise,Widthwise"
   data-notes="1 · Lengthwise: the bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end; about 651 people on one plate, a three-minute walk from one end to the other. So how do you make it feel like one team? 2 · Widthwise: set its width against a pitch's. The floor is 34 m across, glass to glass; a pitch is 68 m. Exactly half a pitch wide. A long, thin floor: that shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
   <div class="page">
-    <p class="dg-tag">Concept</p>
     <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
       <small style="--i:0">ACKO · Regalium, Koramangala</small>
     </div>
@@ -3820,7 +3827,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
         i = j + 1;
       }
       x.setLineDash([]);
-      R.arrS.forEach((i) => { if (R.ss[i] <= st.loop) { x.beginPath(); x.arc(R.pts[i][0] * k, R.pts[i][1] * k, (LAY.line ? 4.6 : 6.5) * k, 0, 2 * Math.PI); x.fillStyle = "#fff"; x.fill(); x.lineWidth = (LAY.line ? 1.5 : 2.2) * k; x.strokeStyle = LAY.line ? LN.col : "#1d1d1d"; x.stroke(); } });
       if (LAY.line && LAY.line.arrow && st.loop >= R.end) {                      // an arrowhead where it ends, pointing on toward the start
         const e = R.pts.length - 1, [px, py] = R.pts[e], [qx, qy] = R.pts[Math.max(0, e - 8)], a = Math.atan2(py - qy, px - qx), L = 11 * k, hw = 5 * k;
         x.beginPath(); x.moveTo(px * k + Math.cos(a) * L * .4, py * k + Math.sin(a) * L * .4);
@@ -3874,7 +3880,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     const pg = $(".page", sc);
     if (jump) { pg.classList.add("still"); requestAnimationFrame(() => requestAnimationFrame(() => pg.classList.remove("still"))); }
     const R = S.R;
-    pg.classList.toggle("end", k >= 6);                                    // the Replay button, once the loop is drawn
     glide(sc, k ? 1 : 0, false);
     $(".cpl-drop", sc).style.opacity = k ? 0 : 1; $(".cpl-one", sc).style.opacity = k ? 0 : 1; $(".cpl-cond", sc).style.opacity = 0;
     $$(".cpl-seg", sc).forEach((e) => { e.classList.toggle("on", k >= 1); e.classList.toggle("ghost", k >= 4); }); $(".cpl-out", sc).classList.toggle("on", k >= 1);
@@ -3897,16 +3902,40 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       c.style.transform = `translate(${x}px,${y}px) scale(${on ? 4.6 : 7})`;
     });
   }
-  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; }
+  function stop() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = 0; S.run = false; S.cyc = false; }
+  // after the first round only the floor repeats (Ritika, 22 Nov: "the animation of loop and neighbourhoods alone in a loop, the rest static"):
+  // the neighbourhoods fly on from the campus ring, the shared spaces come up, the loop is drawn round them, a hold, and again
+  function cycle(sc) {
+    stop(); S.cyc = true;
+    const R = S.R, TFLY = 1900, TSH = 900, TDRAW = clamp((R.end - R.loop0) / .5, 4500, 7000), THOLD = 3200;
+    const zones = () => $$(".cpl-zones", sc);
+    zones().forEach((z) => z.classList.remove("on-n", "on-s"));
+    const FL = flyers(sc); fly(FL, 0);
+    const t0 = performance.now();
+    let shown = false, shared = false;
+    const frame = (now) => {
+      if ((document.body.dataset.scene && document.body.dataset.scene !== sc.id) || !S.cyc) { S.raf = 0; S.cyc = false; return; }
+      const t = now - t0;
+      if (t < TFLY) {
+        fly(FL, t); if (!shown && t > 500) { shown = true; zones().forEach((z) => z.classList.add("on-n")); }
+        draw({ wins: [], reveal: Infinity, loop: 0 });
+      } else if (t < TFLY + TSH) {
+        if (!shared) { shared = true; zones().forEach((z) => z.classList.add("on-s")); }
+        draw({ wins: [], reveal: Infinity, loop: 0 });
+      } else if (t < TFLY + TSH + TDRAW) {
+        const u = clamp((t - TFLY - TSH) / TDRAW, 0, 1), e = ease(u), head = R.loop0 + (R.end - R.loop0) * e, len = LREST * (1 - u) + 160 * Math.sin(Math.PI * u);
+        draw({ wins: wins(Math.max(R.loop0 - LREST, head - len), head, 130, 22), reveal: Infinity, loop: head });
+      } else if (t < TFLY + TSH + TDRAW + THOLD) {
+        draw({ wins: [], reveal: Infinity, loop: R.end });
+      } else { S.raf = 0; S.cyc = false; cycle(sc); return; }
+      S.raf = requestAnimationFrame(frame);
+    };
+    S.raf = requestAnimationFrame(frame);
+  }
+  function loopOn(sc, k) { if (k >= 6 && !reduced) later(() => { if (S.last >= 6 && !S.run && !S.raf && document.body.dataset.scene === sc.id) cycle(sc); }, 2600); }
   // after stage k, the next one by itself, unless a click got there first or the slide was left (?noauto switches it off, for the walk test)
   const AUTO = !/[?&]noauto/.test(location.search), PAUSE = { 1: 650, 2: 650, 3: 700, 4: 500, 5: 1000 };
   function auto(sc, k) { if (AUTO && PAUSE[k]) later(() => { if (S.last === k && document.body.dataset.scene === sc.id) next(); }, PAUSE[k]); }
-  // Replay (Ritika, 18 Nov: "we can have a replay button"): back to the opening frame, then the run from the top
-  function replay(sc) {
-    stop(); S.fresh = true; S.last = 0; pose(sc, 0);
-    const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");
-    raf2(() => pg.classList.add("drawn")); setStep(1);
-  }
   // click 4: each campus neighbourhood lifts off its ring, flies to its place on the floor and becomes that neighbourhood (Ritika, 18
   // Nov: "that neighbourhood in campus can move to ACKO campus neighbourhoods"); the ring keeps a ghost of it. A flyer is a copy of the
   // segment, moved and stretched (translate, scale) from its own box to the floor shape's box, fading out as the shape fades in
@@ -3933,7 +3962,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
     const L = R.end - LA, DUR = clamp(L / .95, 9000, 15000), A = .1, B = .12, V = 1 / (1 - A / 2 - B / 2);
     const pos = (u) => (u < A ? (V * u * u) / (2 * A) : u < 1 - B ? V * (A / 2 + u - A) : 1 - (V * (1 - u) * (1 - u)) / (2 * B));
     const to = (n) => { if (state.step < n) setStep(n); };
-    let split = false, FL = null, tF = 0, plate = false, shared = false;
+    let split = false, FL = null, tF = 0, plate = false, shared = false, t2 = 0;
     const frame = (now) => {
       if (document.body.dataset.scene && document.body.dataset.scene !== sc.id) { S.raf = 0; S.run = false; return; }
       const t = now - t0;
@@ -3952,14 +3981,14 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
         if (!plate) { $(".cpl-drop", sc).style.opacity = 0; $(".cpl-one", sc).style.opacity = 0; $(".cpl-cond", sc).style.opacity = 0; $$(".cpl-seg", sc).forEach((g) => g.classList.add("on")); }
         const u = clamp((t - TR) / DUR, 0, 1), head = LA + L * pos(u), g = clamp((head - LA) / 220, 0, 1);
         const len = Math.min(head - LA, LREST + 40) * (1 - clamp((u - .88) / .12, 0, 1));    // a soft tail, which catches the head at the end
-        if (head > R.rest1 - 150) to(2);
-        if (head > R.mob1 - 200) { to(3); if (!plate) { plate = true; $(".cpl-plate", sc).classList.add("on"); } }
+        if (head > Math.max(R.mob0, R.rest1)) { if (!t2) t2 = t; to(2); }
+        if (t2 && t - t2 > 450 && head > R.mob1) { to(3); if (!plate) { plate = true; $(".cpl-plate", sc).classList.add("on"); } }
         if (head > R.mob1 && !FL) { FL = flyers(sc); tF = t; $$(".cpl-seg", sc).forEach((g2) => g2.classList.add("ghost")); to(4); }
         if (FL) { fly(FL, t - tF); if (t - tF > 500) $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-n")); }
         if (!shared && head > R.loop0 - 120) { shared = true; $$(".cpl-zones", sc).forEach((z) => z.classList.add("on-s")); to(5); }
         if (head > R.loop0 + (R.end - R.loop0) * .12) to(6);
         draw({ wins: wins(Math.max(LA, head - len), head, 130 * g, 22 * g), reveal: head, loop: head });
-        if (u >= 1) { S.raf = 0; S.run = false; pose(sc, 6); to(6); return; }
+        if (u >= 1) { S.raf = 0; S.run = false; pose(sc, 6); to(6); loopOn(sc, 6); return; }
       }
       S.raf = requestAnimationFrame(frame);
     };
@@ -4016,6 +4045,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       } else done = true;
       if (done) {
         S.raf = 0; pose(sc, k);
+        loopOn(sc, k);
         // the ribbon runs without clicks (Ritika, 18 Nov: "the ribbon flows without beat"): every stage hands on to the next after a short pause
         auto(sc, k);
         return;
@@ -4027,7 +4057,6 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
   return {
     enter(_, sc) {
       plain(); build(sc); stop(); S.fresh = true; S.last = 0;
-      const rb = $(".cpl-replay", sc); if (!rb.dataset.on) { rb.dataset.on = 1; ["click", "mousedown", "pointerdown", "dblclick"].forEach((t) => rb.addEventListener(t, (e) => { e.stopPropagation(); if (t === "click") { e.preventDefault(); replay(sc); rb.blur(); } })); }
       pose(sc, 0);
       const pg = $(".page", sc); pg.classList.remove("drawn"); void pg.offsetWidth; pg.classList.remove("still");   // reset at once, but let the words keep their delays
       raf2(() => pg.classList.add("drawn"));                                   // the header and hand line, once Why a campus's words have gone
@@ -4036,7 +4065,7 @@ ACKO.slide("s-campus-loop", ({ $, $$, plain, raf2, reduced, later, next, setStep
       if (S.run) { S.last = k; return; }                                        // the run is moving the steps itself
       const still = reduced || (S.fresh ? k !== 1 : k !== S.last + 1);
       S.fresh = false; S.last = k;
-      if (still) { stop(); pose(sc, k); }
+      if (still) { stop(); pose(sc, k); loopOn(sc, k); }
       else if (k === 1 && AUTO) run(sc);
       else if (k === 1 || k === 2 || k === 3 || k === 4 || k === 6) play(sc, k);
       else { stop(); pose(sc, k, false); auto(sc, k); }                         // 5: the shared spaces come in on their own, then the loop
@@ -8088,5 +8117,15 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li:last-child { flex: 0 0 auto; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li > span { white-space: nowrap !important; }
 </style>
+<script>
+/* ?tag=a..e picks how the Möbius promise is highlighted (kept for the session) */
+(function () {
+  var q = new URLSearchParams(location.search), t = "";
+  try { t = q.get("tag") || sessionStorage.getItem("cplTag") || ""; if (q.get("tag")) sessionStorage.setItem("cplTag", t); } catch (e) {}
+  function apply() { var w = document.querySelector("#s-campus-loop .cpl-w.w2"); if (!w) return; if (/^[a-e]$/.test(t)) w.setAttribute("data-tag", t); else w.removeAttribute("data-tag"); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply); else apply();
+  window.addEventListener("load", apply);
+})();
+</script>
 </body>
 </html>

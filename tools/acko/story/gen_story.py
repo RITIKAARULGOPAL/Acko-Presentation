@@ -588,7 +588,7 @@ def story2(h):
 # every diagram labelled as concept, plan or reference ("so the client never mistakes a reference image for the project"), small, by
 # the lockup; and no neighbourhood block in a purple ("Loop = the only strong purple line"): 02 Life (lilac) and 03 Health (violet
 # blue) take a soft mint and a soft peach, on this page only (Ritika: "Story 2 only"); the plan and the axo both read AXO_LAYERS
-TAG = {"s-why-campus": "Concept", "s-campus-loop": "Concept", "s-challenges": "Concept", "s-pitch": "Concept",
+TAG = {  # (22 Nov, Ritika: the Concept capsules are gone)
        "s-loop-floor": "Plan", "s-strategy": "Plan", "s-layout-dd": "Plan", "s-layout-sp": "Plan",
        "s-memories": "Reference", "s-site": "Reference"}
 TAG_CSS = ('<style>.scene .page > .dg-tag { right: 12.6%; top: 95.1%; margin: 0; padding: .25em .9em; border: 1px solid currentColor; '
