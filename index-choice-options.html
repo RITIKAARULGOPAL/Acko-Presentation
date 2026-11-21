@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Walkthrough or renders · five designs</title>
+<title>Which way in? · eight designs</title>
 <style>
   :root { --purple: #5222d0; --ink: #111; }
   * { box-sizing: border-box; }
@@ -15,7 +15,7 @@
   button { font: inherit; padding: 8px 14px; border: 1px solid #cfc6ea; border-radius: 8px; background: #fff; cursor: pointer; }
   button[aria-pressed="true"] { background: var(--purple); color: #fff; border-color: var(--purple); }
   .desc { padding: 4px 20px 10px; min-height: 28px; }
-  .frame { position: relative; margin: 0 20px 20px; aspect-ratio: 16 / 9; max-height: calc(100vh - 210px); background: #fff; border: 1px solid #cfc6ea; border-radius: 10px; overflow: hidden; }
+  .frame { position: relative; margin: 0 20px 20px; aspect-ratio: 16 / 9; max-height: calc(100vh - 230px); background: #fff; border: 1px solid #cfc6ea; border-radius: 10px; overflow: hidden; }
   iframe { width: 100%; height: 100%; border: 0; }
   .note { position: absolute; right: 12px; top: 10px; font-size: 12px; background: #fffc; padding: 2px 8px; border-radius: 6px; }
   a { color: var(--purple); }
@@ -23,19 +23,22 @@
 </head>
 <body>
 <header>
-  <h1>Walkthrough or renders: five designs for the question slide</h1>
-  <p>Each one is the real slide and works: pick a side and the deck goes there. The deck takes about 40 s to start here.</p>
+  <h1>Which way in? Eight blind-choice designs for the question slide</h1>
+  <p>The slide never says what the two choices are. The first / left / top choice goes one way, the second / right / bottom the other (only your speaker notes say which). Each design works; the deck takes about 40 s to start here.</p>
 </header>
 <div class="row" id="opts"></div>
 <div class="desc" id="desc"></div>
 <div class="frame"><iframe id="f" title="slide"></iframe><span class="note" id="note"></span></div>
 <script>
 const OPTS = {
-  a: ["A · Two cards", "Two large cards side by side: the film (poster, play) and the renders (a render), each with a line and a tag."],
-  b: ["B · Split screen", "The slide split in two: dark film half and light render half; the hovered half widens."],
-  c: ["C · One question, two pills", "A big black question with a purple pill and an outlined pill; no imagery."],
-  d: ["D · Film tile + render strip", "A play tile on the left, six render thumbnails on the right, two buttons below."],
-  e: ["E · Order chips", "The two possible orders drawn as chip sequences, each with a Choose button."]
+  a: ["A · Two doors", "Two tall door-shaped panels, each a frosted, purple-tinted glimpse of a space, numbered 1 and 2."],
+  b: ["B · Left or right", "Split screen of two colour fields with big arrows; the hovered side widens."],
+  c: ["C · Pick a number", "Two large circles, 1 and 2, on white."],
+  d: ["D · Face-down cards", "Two purple cards with a question mark; the chosen one flips before the deck moves on."],
+  e: ["E · A fork in the path", "A line that splits in two; each path end lights up on hover."],
+  f: ["F · A | B switch", "A big two-state switch; the knob slides to the side you pick."],
+  g: ["G · This way / that way", "Huge black words with a purple underline sweeping in on hover; no imagery."],
+  h: ["H · Frosted frames", "Two frosted-glass frames marked “Tap to open”; the chosen one clears and zooms."]
 };
 const q = new URLSearchParams(location.search);
 let o = OPTS[q.get("choice")] ? q.get("choice") : "a";
