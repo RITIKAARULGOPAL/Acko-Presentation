@@ -4919,18 +4919,20 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   const ramp = (a, b, x) => Math.min(1, Math.max(0, (x - a) / (b - a)));
   function ribbonBuild() {
     if (S.ribbon || !window.ACKO_FLOOR || !window.ACKO_FLOOR.plate) return;
-    const P = window.ACKO_FLOOR.plate.map((q) => [((q[0] * 50 + 8842) - 185842 - M.CX) / 1000, ((q[1] * 50 + 12775) + 182802 - M.CY) / 1000]), W = 0.4, pos = [];
+    const P = window.ACKO_FLOOR.plate.map((q) => [((q[0] * 50 + 8842) - 185842 - M.CX) / 1000, ((q[1] * 50 + 12775) + 182802 - M.CY) / 1000]), W = 0.6, pos = [];
     for (let i = 0; i < P.length; i++) {
       const a = P[i], b = P[(i + 1) % P.length], dx = b[0] - a[0], dz = b[1] - a[1], L = Math.hypot(dx, dz) || 1, nx = -dz / L * W / 2, nz = dx / L * W / 2;
       pos.push(a[0] + nx, 0.05, a[1] + nz, b[0] + nx, 0.05, b[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] + nx, 0.05, a[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] - nx, 0.05, a[1] - nz);
     }
     const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
-    S.ribbon = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0x3fc1ea, transparent: true, depthTest: false, depthWrite: false, side: T.DoubleSide }));
+    S.ribbon = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0x14102a, transparent: true, depthTest: false, depthWrite: false, side: T.DoubleSide }));
     S.ribbon.renderOrder = 10; S.ribbon.frustumCulled = false; S.ribbon.visible = false; M.scene.add(S.ribbon);
   }
-  function riseStart() { ribbonBuild(); S.rise = true; S.dim = 1; if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = 1; } sc.classList.remove("st-land"); sc.classList.add("st-rise"); }
-  function riseStep(k) { S.dim = 1 - ramp(0.3, 0.85, k); if (S.ribbon) S.ribbon.material.opacity = 1 - ramp(0.6, 0.95, k); if (k >= 1) riseEnd(true); }
-  function riseEnd(landed) { S.rise = false; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; sc.classList.remove("st-rise"); if (landed) sc.classList.add("st-land"); }
+  function riseStart() { ribbonBuild(); S.rise = true; S.post = 0; S.dim = 1; if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = 1; } sc.classList.remove("st-land"); sc.classList.add("st-rise"); }
+  // the white veil and the black boundary stay whole while the plan tilts to the axo's angle; only when it has landed the axo comes up (22 Nov, Ritika)
+  function riseStep(k) { S.dim = 1; if (S.ribbon) S.ribbon.material.opacity = 1; if (k >= 1 && !S.post) S.post = performance.now(); }
+  function risePost(now) { const u = Math.min(1, (now - S.post) / 1500); S.dim = 1 - ramp(0, 0.9, u); if (S.ribbon) S.ribbon.material.opacity = 1 - ramp(0.55, 1, u); if (u >= 1) { S.post = 0; riseEnd(true); } }
+  function riseEnd(landed) { S.rise = false; S.post = 0; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; sc.classList.remove("st-rise"); if (landed) sc.classList.add("st-land"); }
   function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
   function draw(now) {
     S.raf = 0;
@@ -4952,13 +4954,14 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
       if (S.rise) riseStep(k);
       if (k >= 1) S.tween = null;
     }
+    if (S.rise && S.post && !S.tween) risePost(now);
     window.AxoModel.apply(cam, S.state, asp);
     // the dimming: a white veil just in front of the camera, over all it has drawn, under the routes (renderOrder 9)
     S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
     if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
     r.render(M.scene, cam);
     overlay();
-    if (S.playing || S.tween || S.swap) need();
+    if (S.playing || S.tween || S.swap || (S.rise && S.post)) need();
   }
 
   // ---------- panning, turning, zooming ----------
@@ -7182,8 +7185,9 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     if (sc.classList.contains("dd-on") && document.body.dataset.scene === sc.id) SUN.raf = requestAnimationFrame(() => sunFollow(sc));
   }
   function sunDD(sc, on) {
-    if (!on || !sunGeo()) { if (sc.classList.contains("dd-on")) { sc.classList.remove("dd-on"); sunStop(); cancelAnimationFrame(SUN.raf); $$(".dd-sun .lit g", sc).forEach((g) => { g.classList.remove("on"); g.innerHTML = ""; }); } return; }
+    if (!on || !sunGeo()) { clearTimeout(SUN.hold); if (sc.classList.contains("dd-on")) { sc.classList.remove("dd-on"); sunStop(); cancelAnimationFrame(SUN.raf); $$(".dd-sun .lit g", sc).forEach((g) => { g.classList.remove("on"); g.innerHTML = ""; }); } return; }
     if (sc.classList.contains("dd-on")) return;
+    if (sc._ddHold) { sc._ddHold = false; clearTimeout(SUN.hold); SUN.hold = setTimeout(() => { if (document.body.dataset.scene === sc.id) sunDD(sc, true); }, 3300); return; }   // after the layout has glided in
     sc.classList.add("dd-on");
     $$(".dd-days button", sc).forEach((b) => (b.onclick = () => { b.blur(); SUN.day = +b.dataset.d; sunPlay(sc, 0); }));
     cancelAnimationFrame(SUN.raf); sunFollow(sc); sunPlay(sc, 700);
@@ -7214,6 +7218,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     enter(_, sc) {
       sc._pitch = window.ACKO_MORPH && !matchMedia("(prefers-reduced-motion: reduce)").matches ? ACKO_MORPH.take("s-pitch", 2500) : null;
       if (window.ACKO_FLOW) { ACKO_FLOW.clear(sc); if (sc._pitch) ACKO_FLOW.hold(sc); }
+      sc._ddHold = !!sc._pitch;
       window.ACKO_SITE_AXO = 1;
       document.body.dataset.tpl = new URLSearchParams(location.search).get("tpl") || "";
       // straight from the site (3 Nov): its map closes in on Regalium's plate till it lies where the plan does, the plan takes
