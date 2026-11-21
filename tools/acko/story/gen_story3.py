@@ -50,7 +50,7 @@ SECTIONS = [
     ("p4", "01", "Concept Framework", "Establishing the overarching design vision", ["s-div-1", "s-why-campus", "s-campus-loop"]),
     ("p5", "02", "Design Development", "Translating the concept into a spatial solution",
      ["s-div-2", "s-site", "s-pitch", "s-site-dd", "s-strategy", "s-layout-sp", "s-axo-detail", "s-wayday"]),
-    ("p6", "03", "Design Expression", "Materiality, visualisation and spatial experience", ["s-div-3", "s-material", "s-palette2", "s-walkthrough"] + RENDERS),
+    ("p6", "03", "Design Expression", "Materiality, visualisation and spatial experience", ["s-div-3", "s-palette2", "s-walkthrough"] + RENDERS),
     ("p7", "04", "Integrated Performance", "Technical performance and added value", ["s-div-4", "s-esg", "s-wf-a6", "s-engage", "s-di"]),
     ("p8", "05", "Project Review", "Revisiting previous discussions and establishing alignment", ["s-div-5", "s-recap"] + RECAP),
     ("close", "", "Thank you", "", ["s-thanks-w"]),
@@ -88,7 +88,7 @@ BRIDGE = {
 }
 BRIDGE[RECAP[-1]] = "Thank you."
 # the four value slides are rebuilt from the same PDF (pages 1-4), (and s-wf-a6, muted and with its Material look, 19 Nov) so they come in fresh too
-NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-site-dd", "s-axo-detail", "s-material", "s-palette2", "s-esg", "s-di", "s-wf-a6", "s-site", "s-recap"] + RECAP
+NEW = ["s-div-%d" % int(s[1]) for s in AHEAD] + ["s-overview", "s-site-dd", "s-axo-detail", "s-palette2", "s-esg", "s-di", "s-wf-a6", "s-site", "s-recap"] + RECAP
 
 # ---- the dividers: s-start's design (as gen_story.py makes the Part cards), the five sections ahead, this one lit, her line said
 st = open("slides/s-start.html", encoding="utf-8").read()

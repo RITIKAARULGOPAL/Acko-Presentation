@@ -1485,11 +1485,16 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #s-axo-detail.ax-day .st-t, #s-axo-detail.ax-day .st-cap, #s-axo-detail.ax-day .st-ov, #s-axo-detail.ax-day .st-tools, #s-axo-detail.ax-day .hdr { opacity: 0 !important; transition: opacity 1.2s ease !important; }
 body.ax-hand .scene { transition: none !important; }
 </style>
-<style data-slide="s-material">
-#s-material .page { background: #fff; }
-</style>
 <style data-slide="s-palette2">
 #s-palette2 .page { background: #fff; }
+/* the material strategy, as a layer inside the palette slide (22 Nov, Ritika: "add the material strategy as a button within the campus palette slide") */
+#s-palette2 .mat-btn { position: absolute; right: 4%; top: 74%; z-index: 6; cursor: pointer; font: 600 calc(var(--pt) * 7.4) var(--body); letter-spacing: .03em; color: var(--purple); background: #fff; border: 1px solid #cfc3f3; border-radius: 99px; padding: calc(var(--pt) * 3.2) calc(var(--pt) * 8); transition: background .25s var(--ease), border-color .25s var(--ease), opacity .7s var(--ease) !important; }
+#s-palette2 .mat-btn:hover { background: #f3effd; border-color: var(--purple); }
+#s-palette2 .mat-btn:focus { outline: none; }
+#s-palette2 .mat-pop { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 5; background: #fff; opacity: 0 !important; visibility: hidden; transform: none !important; transition: opacity .5s var(--ease), visibility 0s linear .5s; }
+#s-palette2 .mat-pop.open { opacity: 1 !important; visibility: visible; transition: opacity .5s var(--ease), visibility 0s; }
+@keyframes mp-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media not (prefers-reduced-motion: reduce) { #s-palette2 .mat-pop.open > * { animation: mp-in .6s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms); } }
 </style>
 <style data-slide="s-esg">
 #s-esg .page { background: #fff; }
@@ -2420,9 +2425,40 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene vpage" id="s-material" data-part="p6" data-title="Material strategy" data-steps="1" data-mins="0.4"
-  data-notes="The kit of parts, by surface. Flooring: tiles, wooden LVT, carpet. Ceiling: stretch fabric, spray-applied treatment, gypsum ceiling with track lights, acoustic baffles. Furnishing: rugs, fabrics, blinds. Wall finishes: wallpaper, acoustic panel, wooden panel. Material intelligence matters. → Bridge: And the palette it comes together in.">
+<section class="scene vpage" id="s-palette2" data-part="p6" data-title="The campus palette" data-steps="1" data-mins="0.3"
+  data-notes="The campus palette: textured, contrast, warmth, refined, layered. A sophisticated blend of light wood, accent stone, soft neutrals and lush greenery for a grounded and contemporary workplace. Timeless, serene, soothing, organic, sleek, expressive, tactile, understated, artisanal, accent. Material strategy (the button): the kit of parts, by surface. Flooring: tiles, wooden LVT, carpet. Ceiling: stretch fabric, spray-applied treatment, gypsum ceiling with track lights, acoustic baffles. Furnishing: rugs, fabrics, blinds. Wall finishes: wallpaper, acoustic panel, wooden panel. Material intelligence matters. → Bridge: Now walk through it.">
   <div class="page rv">
+      <i class="dk" style="--i:0;left:1.74%;top:21.54%;width:19.97%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-01.webp)"></i>
+      <i class="dk" style="--i:2;left:22.01%;top:21.67%;width:13.26%;height:24.2%;background-size:100% 100%;background-image:url(assets/img/pal4-02.webp)"></i>
+      <i class="dk" style="--i:2;left:22.01%;top:46.36%;width:13.26%;height:22.47%;background-size:100% 100%;background-image:url(assets/img/pal4-03.webp)"></i>
+      <i class="dk" style="--i:3;left:35.59%;top:21.54%;width:7.22%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-04.webp)"></i>
+      <i class="dk" style="--i:3;left:43.16%;top:21.54%;width:9.41%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-05.webp)"></i>
+      <i class="dk" style="--i:4;left:52.88%;top:21.54%;width:14.97%;height:20%;background-size:100% 100%;background-image:url(assets/img/pal4-06.webp)"></i>
+      <i class="dk" style="--i:4;left:52.88%;top:41.98%;width:14.97%;height:26.73%;background-size:100% 100%;background-image:url(assets/img/pal4-07.webp)"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:21.3%;width:12.64%;height:5.62%;background:#f8f5ee"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:27.65%;width:12.47%;height:6.54%;background:#dedacf"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:34.88%;width:12.64%;height:6.6%;background:#262626"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:41.98%;width:12.64%;height:8.15%;background-size:100% 100%;background-image:url(assets/img/pal4-11.webp)"></i>
+      <i class="dk" style="--i:5;left:68.16%;top:51.17%;width:12.64%;height:17.47%;background-size:100% 100%;background-image:url(assets/img/pal4-12.webp)"></i>
+      <i class="dk" style="--i:7;left:81.11%;top:21.67%;width:16.7%;height:28.46%;background-size:100% 100%;background-image:url(assets/img/pal4-13.webp)"></i>
+      <i class="dk" style="--i:7;left:81.11%;top:51.17%;width:13.61%;height:17.47%;background-size:100% 100%;background-image:url(assets/img/pal4-14.webp)"></i>
+    <div class="vt" style="--i:2;left:23.24%;top:42.86%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Timeless</div>
+    <div class="vt" style="--i:3;left:31.07%;top:72.62%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap;font-style:italic">A sophisticated blend of <span style="font-weight:700">light wood, Accent stone,</span> soft neutrals and lush greenery</div>
+    <div class="vt" style="--i:3;left:31.07%;top:75.69%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap;font-style:italic"><span style="font-weight:400">for a</span> grounded and contemporary workplace.</div>
+    <div class="vt" style="--i:3;left:36.56%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Soothing</div>
+    <div class="vt" style="--i:5;left:53.84%;top:23.21%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Sleek</div>
+    <div class="vt" style="--i:6;left:69.13%;top:22.62%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Understated</div>
+    <div class="vt" style="--i:2;left:22.98%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Serene</div>
+    <div class="vt" style="--i:4;left:44.1%;top:22.41%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Organic</div>
+    <div class="vt" style="--i:5;left:53.84%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Expressive</div>
+    <div class="vt" style="--i:6;left:69.13%;top:52%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Tactile</div>
+    <div class="vt" style="--i:7;left:82.08%;top:47.38%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Artisanal</div>
+    <div class="vt" style="--i:7;left:82.24%;top:65.94%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Accent</div>
+    <div class="vt" style="--i:1;left:2.7%;top:16.9%;font-family:var(--label);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#999999;font-weight:700;white-space:nowrap">TEXTURED · CONTRAST · WARMTH · REFINED · LAYERED</div>
+    <div class="vt" style="--i:1;left:2.3%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">The</div>
+    <div class="vt" style="--i:1;left:7.53%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">Campus</div>
+    <div class="vt" style="--i:2;left:18.97%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">Palette</div>
+    <div class="mat-pop">
       <i class="dk" style="--i:0;left:1.84%;top:31.3%;width:9.1%;height:16.48%;background-size:100% 100%;background-image:url(assets/img/mat4-01.webp)"></i>
       <i class="dk" style="--i:0;left:1.81%;top:49.01%;width:9.13%;height:16.54%;background-size:100% 100%;background-image:url(assets/img/mat4-02.webp)"></i>
       <i class="dk" style="--i:1;left:11.7%;top:31.3%;width:10.14%;height:34.26%;background-size:100% 100%;background-image:url(assets/img/mat4-03.webp)"></i>
@@ -2456,42 +2492,8 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     <div class="vt" style="--i:7;left:79.46%;top:26.93%;font-family:var(--body);font-size:calc(var(--pt) * 11.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Wall Finishes.</div>
     <div class="vt" style="--i:1;left:1.88%;top:2.79%;font-family:var(--body);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Value Addition</div>
     <div class="vt" style="--i:5;left:53.93%;top:69.72%;font-family:var(--hand);font-size:calc(var(--pt) * 18.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Material Intelligence matter…</div>
-  </div>
-</section>
-
-<section class="scene vpage" id="s-palette2" data-part="p6" data-title="The campus palette" data-steps="1" data-mins="0.3"
-  data-notes="The campus palette: textured, contrast, warmth, refined, layered. A sophisticated blend of light wood, accent stone, soft neutrals and lush greenery for a grounded and contemporary workplace. Timeless, serene, soothing, organic, sleek, expressive, tactile, understated, artisanal, accent. → Bridge: Now walk through it.">
-  <div class="page rv">
-      <i class="dk" style="--i:0;left:1.74%;top:21.54%;width:19.97%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-01.webp)"></i>
-      <i class="dk" style="--i:2;left:22.01%;top:21.67%;width:13.26%;height:24.2%;background-size:100% 100%;background-image:url(assets/img/pal4-02.webp)"></i>
-      <i class="dk" style="--i:2;left:22.01%;top:46.36%;width:13.26%;height:22.47%;background-size:100% 100%;background-image:url(assets/img/pal4-03.webp)"></i>
-      <i class="dk" style="--i:3;left:35.59%;top:21.54%;width:7.22%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-04.webp)"></i>
-      <i class="dk" style="--i:3;left:43.16%;top:21.54%;width:9.41%;height:47.28%;background-size:100% 100%;background-image:url(assets/img/pal4-05.webp)"></i>
-      <i class="dk" style="--i:4;left:52.88%;top:21.54%;width:14.97%;height:20%;background-size:100% 100%;background-image:url(assets/img/pal4-06.webp)"></i>
-      <i class="dk" style="--i:4;left:52.88%;top:41.98%;width:14.97%;height:26.73%;background-size:100% 100%;background-image:url(assets/img/pal4-07.webp)"></i>
-      <i class="dk" style="--i:5;left:68.16%;top:21.3%;width:12.64%;height:5.62%;background:#f8f5ee"></i>
-      <i class="dk" style="--i:5;left:68.16%;top:27.65%;width:12.47%;height:6.54%;background:#dedacf"></i>
-      <i class="dk" style="--i:5;left:68.16%;top:34.88%;width:12.64%;height:6.6%;background:#262626"></i>
-      <i class="dk" style="--i:5;left:68.16%;top:41.98%;width:12.64%;height:8.15%;background-size:100% 100%;background-image:url(assets/img/pal4-11.webp)"></i>
-      <i class="dk" style="--i:5;left:68.16%;top:51.17%;width:12.64%;height:17.47%;background-size:100% 100%;background-image:url(assets/img/pal4-12.webp)"></i>
-      <i class="dk" style="--i:7;left:81.11%;top:21.67%;width:16.7%;height:28.46%;background-size:100% 100%;background-image:url(assets/img/pal4-13.webp)"></i>
-      <i class="dk" style="--i:7;left:81.11%;top:51.17%;width:13.61%;height:17.47%;background-size:100% 100%;background-image:url(assets/img/pal4-14.webp)"></i>
-    <div class="vt" style="--i:2;left:23.24%;top:42.86%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Timeless</div>
-    <div class="vt" style="--i:3;left:31.07%;top:72.62%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap;font-style:italic">A sophisticated blend of <span style="font-weight:700">light wood, Accent stone,</span> soft neutrals and lush greenery</div>
-    <div class="vt" style="--i:3;left:31.07%;top:75.69%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:700;white-space:nowrap;font-style:italic"><span style="font-weight:400">for a</span> grounded and contemporary workplace.</div>
-    <div class="vt" style="--i:3;left:36.56%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Soothing</div>
-    <div class="vt" style="--i:5;left:53.84%;top:23.21%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Sleek</div>
-    <div class="vt" style="--i:6;left:69.13%;top:22.62%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#000000;font-weight:500;white-space:nowrap">Understated</div>
-    <div class="vt" style="--i:2;left:22.98%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Serene</div>
-    <div class="vt" style="--i:4;left:44.1%;top:22.41%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Organic</div>
-    <div class="vt" style="--i:5;left:53.84%;top:66.09%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Expressive</div>
-    <div class="vt" style="--i:6;left:69.13%;top:52%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Tactile</div>
-    <div class="vt" style="--i:7;left:82.08%;top:47.38%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Artisanal</div>
-    <div class="vt" style="--i:7;left:82.24%;top:65.94%;font-family:var(--body);font-size:calc(var(--pt) * 9.00);line-height:1.000;color:#ffffff;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.4)">Accent</div>
-    <div class="vt" style="--i:1;left:2.7%;top:16.9%;font-family:var(--label);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#999999;font-weight:700;white-space:nowrap">TEXTURED · CONTRAST · WARMTH · REFINED · LAYERED</div>
-    <div class="vt" style="--i:1;left:2.3%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">The</div>
-    <div class="vt" style="--i:1;left:7.53%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">Campus</div>
-    <div class="vt" style="--i:2;left:18.97%;top:71.89%;font-family:var(--hand);font-size:calc(var(--pt) * 36.00);line-height:1.000;color:#6f2f9f;font-weight:400;white-space:nowrap">Palette</div>
+    </div>
+    <button type="button" class="mat-btn" tabindex="-1" aria-pressed="false">Material strategy →</button>
   </div>
 </section>
 
@@ -8101,6 +8103,23 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
       cancelAnimationFrame(SV.raf); SV.into = true;      // the intro's last turn won't come after this
       document.body.classList.add("si-left"); setTimeout(() => document.body.classList.remove("si-left"), 60);   // for the Layout
     },
+  };
+});
+</script>
+<script data-slide="s-palette2">
+/* the Material strategy button: the kit of parts lays over the palette; click again, Esc, or leaving closes it */
+ACKO.slide("s-palette2", ({ $, plain, reveal }) => {
+  const set = (sc, on) => { const p = $(".mat-pop", sc), b = $(".mat-btn", sc); if (!p || !b) return; p.classList.toggle("open", on); b.textContent = on ? "\u2190 The campus palette" : "Material strategy \u2192"; b.setAttribute("aria-pressed", on ? "true" : "false"); };
+  const onKey = (e) => { if (e.key === "Escape") { const sc = document.getElementById("s-palette2"); if (sc && $(".mat-pop.open", sc)) { e.stopPropagation(); set(sc, false); } } };
+  return {
+    enter(_, sc) {
+      plain(); reveal($(".page", sc), 60);
+      set(sc, false);
+      const b = $(".mat-btn", sc);
+      if (!b.dataset.on) { b.dataset.on = 1; ["mousedown", "pointerdown", "dblclick"].forEach((t) => b.addEventListener(t, (e) => e.stopPropagation())); b.addEventListener("click", (e) => { e.stopPropagation(); e.preventDefault(); set(sc, !$(".mat-pop", sc).classList.contains("open")); b.blur(); }); }
+      document.addEventListener("keydown", onKey, true);
+    },
+    leave(_, sc) { document.removeEventListener("keydown", onKey, true); if (sc) set(sc, false); },
   };
 });
 </script>
