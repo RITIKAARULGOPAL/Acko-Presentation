@@ -1550,15 +1550,12 @@ body.ax-hand .scene { transition: none !important; }
 @keyframes esg-tile { from { opacity: 0; transform: translateY(12px) scale(.94); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: none; clip-path: inset(0 0 0 0); } }
 @keyframes esg-text { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes esg-head { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
-@keyframes esg-rule { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes esg-write { from { opacity: 1; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
-#s-esg .vt.esg-h::after { content: ""; display: block; height: 2px; margin-top: .35em; background: #5222d0; transform-origin: left; }
 @media not (prefers-reduced-motion: reduce) {
 #s-esg .page.go > i.dk, #s-esg .page.go > .vt { transition: none !important; }
 #s-esg .page.go > i.dk { animation: esg-tile .9s var(--ease) var(--d, 0ms) both; }
 #s-esg .page.go > .vt { animation: esg-text .8s var(--ease) var(--d, 0ms) both; }
 #s-esg .page.go > .vt.esg-t, #s-esg .page.go > .vt.esg-h { animation-name: esg-head; }
-#s-esg .page.go > .vt.esg-h::after { animation: esg-rule .9s var(--ease) calc(var(--d, 0ms) + 350ms) both; }
 #s-esg .page.go > .vt.esg-w { animation: esg-write 1.4s cubic-bezier(.5, 0, .2, 1) var(--d, 0ms) both; }
 }
 </style>
