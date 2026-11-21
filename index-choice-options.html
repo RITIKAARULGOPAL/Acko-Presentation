@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Walkthrough or renders · five designs</title>
+<style>
+  :root { --purple: #5222d0; --ink: #111; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, "Segoe UI", sans-serif; color: var(--ink); background: #f3f0fb; }
+  header { padding: 14px 20px 10px; }
+  h1 { margin: 0 0 4px; font-size: 18px; }
+  p { margin: 0; color: #555; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 20px; align-items: center; }
+  button { font: inherit; padding: 8px 14px; border: 1px solid #cfc6ea; border-radius: 8px; background: #fff; cursor: pointer; }
+  button[aria-pressed="true"] { background: var(--purple); color: #fff; border-color: var(--purple); }
+  .desc { padding: 4px 20px 10px; min-height: 28px; }
+  .frame { position: relative; margin: 0 20px 20px; aspect-ratio: 16 / 9; max-height: calc(100vh - 210px); background: #fff; border: 1px solid #cfc6ea; border-radius: 10px; overflow: hidden; }
+  iframe { width: 100%; height: 100%; border: 0; }
+  .note { position: absolute; right: 12px; top: 10px; font-size: 12px; background: #fffc; padding: 2px 8px; border-radius: 6px; }
+  a { color: var(--purple); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Walkthrough or renders: five designs for the question slide</h1>
+  <p>Each one is the real slide and works: pick a side and the deck goes there. The deck takes about 40 s to start here.</p>
+</header>
+<div class="row" id="opts"></div>
+<div class="desc" id="desc"></div>
+<div class="frame"><iframe id="f" title="slide"></iframe><span class="note" id="note"></span></div>
+<script>
+const OPTS = {
+  a: ["A · Two cards", "Two large cards side by side: the film (poster, play) and the renders (a render), each with a line and a tag."],
+  b: ["B · Split screen", "The slide split in two: dark film half and light render half; the hovered half widens."],
+  c: ["C · One question, two pills", "A big black question with a purple pill and an outlined pill; no imagery."],
+  d: ["D · Film tile + render strip", "A play tile on the left, six render thumbnails on the right, two buttons below."],
+  e: ["E · Order chips", "The two possible orders drawn as chip sequences, each with a Choose button."]
+};
+const q = new URLSearchParams(location.search);
+let o = OPTS[q.get("choice")] ? q.get("choice") : "a";
+function render() {
+  const host = document.getElementById("opts"); host.innerHTML = "";
+  for (const k in OPTS) { const b = document.createElement("button"); b.textContent = OPTS[k][0]; b.setAttribute("aria-pressed", k === o); b.onclick = () => { o = k; render(); }; host.appendChild(b); }
+  document.getElementById("desc").textContent = OPTS[o][1];
+  const url = "index-story3.html?choice=" + o + "&v=" + Date.now() + "#s-start-choice/1";
+  document.getElementById("f").src = url;
+  document.getElementById("note").innerHTML = '<a href="' + url + '" target="_blank">open full size</a>';
+  history.replaceState(null, "", "?choice=" + o);
+}
+render();
+</script>
+</body>
+</html>
