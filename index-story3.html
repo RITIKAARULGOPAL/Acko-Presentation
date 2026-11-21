@@ -1534,6 +1534,9 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 /* the third beat: the words and the ring fade as the camera glides in; then A day in ACKO takes over with no slide fade */
 #s-axo-detail.ax-day .st-t, #s-axo-detail.ax-day .st-cap, #s-axo-detail.ax-day .st-ov, #s-axo-detail.ax-day .st-tools, #s-axo-detail.ax-day .hdr { opacity: 0 !important; transition: opacity 1.2s ease !important; }
 body.ax-hand .scene { transition: none !important; }
+#s-axo-detail.st-rise :is(.st-t, .st-tools, .st-cap, .st-ov) { opacity: 0 !important; transition: none !important; }   /* arriving from the layout: the words wait until the axo has landed */
+#s-axo-detail.st-land :is(.st-t, .st-tools) { animation: ad-landin .9s var(--ease) both; }
+@keyframes ad-landin { from { opacity: 0; } to { opacity: 1; } }
 </style>
 <style data-slide="s-palette2">
 #s-palette2 .page { background: #fff; }
@@ -2389,9 +2392,9 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-axo-detail" data-part="p5" data-title="Detailed axonometric" data-steps="3" data-mins="2"
-  data-beats="The Neighbourhoods,The Loop,A day in ACKO"
-  data-notes="Detailed axonometric, with defined boundaries: the proposed layout transforms into an axonometry where the neighbourhoods and the Loop are defined. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café. 2 The Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. 3 A day in ACKO: the camera glides in, the Loop and the words fade away, and A day in ACKO takes over on the same frame. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it. → Bridge: And over one day in ACKO…">
+<section class="scene" id="s-axo-detail" data-part="p5" data-title="Detailed axonometric" data-steps="2" data-mins="2"
+  data-beats="Neighbourhoods and the Loop,A day in ACKO"
+  data-notes="Detailed axonometric: the proposed layout and the concept drawn as one plan. The Layout goes, its boundary stands alone, tilts to the axo's angle, and the axo builds. 1 The neighbourhoods, numbered west to east: 01 ACKO Home, 02 ACKO Drive, 03 ACKO Travel, 04 ACKO Health, 05 ACKO Life, 06 ACKO Auto, with the atriums, terraces and café, and, straight on, the Loop: the floor in colour and the partitions rise, the two arrows land, and the Loop grows out of them through its seven stops. They were planned together: each neighbourhood sits where the Loop passes it, so the way people move is the way the floor is organised. 2 A day in ACKO: the camera glides in, the Loop and the words fade away, and A day in ACKO takes over on the same frame. A click on the floor plays the beat again; drag turns it, scroll zooms, Reset view goes back. It is drawn on the furnished model of A day in ACKO and then glides into it. → Bridge: And over one day in ACKO…">
   <div class="page">
     <div class="hdr"><b>Detailed axonometric</b><span>02 · Design Development</span></div>
     <div class="st-anim"></div>
@@ -2400,9 +2403,9 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     <div class="st-ov"><svg viewBox="0 0 1920 1080" preserveAspectRatio="none"><g class="st-ent"></g><g class="st-legs"></g></svg></div>
     <div class="st-veil"></div>
     <div class="st-t rv">
-      <h3 style="--i:0">Detailed Axonometric</h3>
-      <p style="--i:1"><span>With defined boundaries: the proposed layout becomes an axonometry where the neighbourhoods and the Loop are both defined.</span></p>
-      <p class="st-hand hand" style="--i:3">Inspired by institutional pathways that bring spaces to life, the ACKO Loop connects people and spaces, fostering belonging and continuity.</p>
+      <h3 style="--i:0">The plan, drawn as one idea</h3>
+      <p style="--i:1"><span>The neighbourhoods and the Loop were planned together: each neighbourhood sits where the Loop passes it, so the way people move is the way the floor is organised.</span></p>
+      <p class="st-hand hand" style="--i:3">Six neighbourhoods, one continuous Loop: the floor and the idea are the same drawing.</p>
     </div>
     <p class="st-cap"></p>
     <div class="st-tools ui" style="right:4.7%;top:3.3%"><button type="button" class="st-tool st-rs"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>Reset view</button></div>
@@ -4932,7 +4935,7 @@ ACKO.slide("s-strategy", ({ $, $$, reduced, plain, reveal, cue, plan, later }) =
   // the white veil and the black boundary stay whole while the plan tilts to the axo's angle; only when it has landed the axo comes up (22 Nov, Ritika)
   function riseStep(k) { const a = ramp(0, 0.1, k); S.dim = a; if (S.ribbon) S.ribbon.material.opacity = a; if (k >= 1 && !S.post) S.post = performance.now(); }      // the white and the black boundary fade in on the very footprint of the plan, then it tilts
   function risePost(now) { const u = Math.min(1, (now - S.post) / 1500); S.dim = 1 - ramp(0, 0.9, u); if (S.ribbon) S.ribbon.material.opacity = 1 - ramp(0.55, 1, u); if (u >= 1) { S.post = 0; riseEnd(true); } }
-  function riseEnd(landed) { S.rise = false; S.post = 0; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; sc.classList.remove("st-rise"); if (landed) sc.classList.add("st-land"); }
+  function riseEnd(landed) { S.rise = false; S.post = 0; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; if (S.veil) S.veil.visible = false; sc.classList.remove("st-rise"); if (landed) sc.classList.add("st-land"); }
   function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
   function draw(now) {
     S.raf = 0;
@@ -5968,6 +5971,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       ppl(sc, k === 1 || k === 2, k === 1);              // Spaces: the people come in; Neighbourhoods: they stay, in their colours (10 Nov)
     },
     leave(_, sc) {
+      try { if (plan.view && plan.view.slice) { window.ACKO_LAYOUT_VB = plan.view.slice(); setTimeout(() => { window.ACKO_LAYOUT_VB = null; }, 1800); } } catch (e) { /* no view: the axo opens as it is */ }   // the detailed axo tilts up from exactly the view the layout is shown in
       SH = null; if (sc) sc.classList.remove("nb-open");
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
       if (sc && sc._laser) { document.removeEventListener("mousemove", sc._laser, true); sc._laserOff(); }
@@ -7338,7 +7342,7 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
   // tips on slide 14's picture's (29.5, 1037) and (1606, 137) page px (FIT14); both then at 95% about page (1606, 10.8), so the
   // copyright line clears them ("back on both, axos made smaller"). The entrances below were measured on the PPT's GIF, at FIT_MARKS
   const FIT14 = [0.0134, 0.0028, 0.8385, 0.9852], SHRINK = 0.95, AT = [1606 / 1920, 10.8 / 1080];
-  const FIT = [0.15, 0.22, 0.86, 0.74], FIT_MARKS = [0.161, 0.09, 0.811, 0.864];
+  const FIT = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2])), FIT_MARKS = [0.161, 0.09, 0.811, 0.864];   // 22 Nov: as large as the concept axo
   const STOPS = { "Arrival": "I feel welcomed", "Café": "Hey, we finally meet!", "Board Room": "This is my big moment", "Meeting Rooms": "My impact",
     "Collab": "Wow, worth the commute", "Work": "These are my folks!", "Wellness": "They thought of me too!" };
   // beat 2's entrances where the deck's animation has them (page px at 1920 × 1080, at the home view), each pinned to the model
@@ -7369,7 +7373,8 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     "The client journey is envisioned as a seamless transition through ACKO’s neighbourhood, where each touchpoint unfolds a distinct experience while maintaining a continuous sense of connection, discovery, and belonging.",
     "A seamless journey through work, collaboration, and moments of pause, fostering connection and belonging across ACKO’s neighbourhood."];
   const NAMES = ["", "The Shell", "Planning Acko’s Neighbourhood", "Configuring the Neighbourhoods", "Looping it all Together", "The Client’s journey", "The Employees Journey"];
-  NAMES[2] = "The Neighbourhoods"; NAMES[4] = "The Loop"; NAMES[6] = "The Employees’ journey";
+  NAMES[2] = NAMES[4] = "Neighbourhoods and the Loop"; NAMES[6] = "The Employees’ journey";
+  HAND[2] = HAND[4] = "Six neighbourhoods, one continuous Loop: the floor and the idea are the same drawing.";   // 22 Nov: the concept and the layout, one drawing
   const DUR = [0, 2.4, 4.4, 6.4, 7.5, 4.2, 7.0];   // beat 4 longer: the Loop's ribbon draws on after the partitions (12 Nov)
   // the building assembles (9 Nov, the re-ordered deck only, window.ACKO_WOW): on beat 1 the core and columns come up in a wave from
   // the west end to the east, the façade following them, then the entrances drop in: a clipping plane on each group's materials
@@ -7854,6 +7859,39 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
   }
 
   // ---------- drawing on demand ----------
+  // the arrival from the Layout (22 Nov, Ritika: "the same method" as the Due Diligence to the concept axo): the layout's content has gone, its boundary
+  // stands alone (black, on a white veil) on the very footprint of the plan, tilts to this axo's angle, and only then does the axo come up
+  const ramp = (a, b, x) => Math.min(1, Math.max(0, (x - a) / (b - a)));
+  function ribbonBuild() {
+    if (S.ribbon || !window.ACKO_FLOOR || !window.ACKO_FLOOR.plate) return;
+    const P = window.ACKO_FLOOR.plate.map((q) => [((q[0] * 50 + 8842) - 185842 - M.CX) / 1000, ((q[1] * 50 + 12775) + 182802 - M.CY) / 1000]), W = 0.6, pos = [];
+    for (let i = 0; i < P.length; i++) {
+      const a = P[i], b = P[(i + 1) % P.length], dx = b[0] - a[0], dz = b[1] - a[1], L = Math.hypot(dx, dz) || 1, nx = -dz / L * W / 2, nz = dx / L * W / 2;
+      pos.push(a[0] + nx, 0.05, a[1] + nz, b[0] + nx, 0.05, b[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] + nx, 0.05, a[1] + nz, b[0] - nx, 0.05, b[1] - nz, a[0] - nx, 0.05, a[1] - nz);
+    }
+    const g = new T.BufferGeometry(); g.setAttribute("position", new T.Float32BufferAttribute(pos, 3));
+    S.ribbon = new T.Mesh(g, new T.MeshBasicMaterial({ color: 0x14102a, transparent: true, depthTest: false, depthWrite: false, side: T.DoubleSide }));
+    S.ribbon.renderOrder = 10; S.ribbon.frustumCulled = false; S.ribbon.visible = false; M.scene.add(S.ribbon);
+  }
+  function riseStart() { ribbonBuild(); S.rise = true; S.post = 0; S.dim = 0; if (S.ribbon) { S.ribbon.visible = true; S.ribbon.material.opacity = 0; } sc.classList.remove("st-land"); sc.classList.add("st-rise"); }
+  function riseStep(k) { const a = ramp(0, 0.1, k); S.dim = a; if (S.ribbon) S.ribbon.material.opacity = a; if (k >= 1 && !S.post) S.post = performance.now(); }      // the white and the black boundary fade in on the footprint, then it tilts
+  function risePost(now) { const u = Math.min(1, (now - S.post) / 1500); S.dim = 1 - ramp(0, 0.9, u); if (S.ribbon) S.ribbon.material.opacity = 1 - ramp(0.55, 1, u); if (u >= 1) { S.post = 0; riseEnd(true); } }
+  function riseEnd(landed) {
+    S.rise = false; S.post = 0; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; if (S.veil) S.veil.visible = false; sc.classList.remove("st-rise");
+    if (landed) sc.classList.add("st-land");
+    if (landed && S.pend) { S.pend = false; run(); } else S.pend = false;
+  }
+  // the neighbourhoods and the Loop are one beat (22 Nov, Ritika): the neighbourhoods drop in and, straight on, the Loop is drawn over them
+  function run() {
+    play(2);
+    S.mt = setTimeout(() => { if (document.body.dataset.scene === "s-axo-detail" && S.k === 2) play(4); }, DUR[2] * 1000 + 500);
+  }
+  function mergeIn() {
+    clearTimeout(S.mt); S.pend = false;
+    if (reduced) { S.k = 4; S.playing = false; pose(4, DUR[4]); need(); return; }
+    if (S.rise) { S.k = 2; S.playing = false; pose(2, 0); need(); S.pend = true; return; }     // rising from the layout: the shell stands, the neighbourhoods follow once it has landed
+    run();
+  }
   function need() { if (!S.raf) S.raf = requestAnimationFrame(draw); }
   // two passes: the furnished model (its own frame: the plan, the Layers floor is the plan + (185842, -182802) mm), then the Layers scene over
   // it with the depth cleared, so the neighbourhoods, the Loop and the journeys always show on the furniture. The Layers floor itself is hidden
@@ -7883,15 +7921,17 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     if (S.tween) {
       const tw = S.tween, k = Math.min(1, (now - tw.t0) / tw.ms), e = ease(k), L = (a, b) => a + (b - a) * e;
       S.state = { theta: L(tw.from.theta, tw.to.theta), phi: L(tw.from.phi, tw.to.phi), half: L(tw.from.half, tw.to.half), t: tw.from.t.map((x, i) => L(x, tw.to.t[i])) };
+      if (S.rise) riseStep(k);
       if (k >= 1) S.tween = null;
     }
+    if (S.rise && S.post && !S.tween) risePost(now);
     window.AxoModel.apply(cam, S.state, asp);
     // the dimming: a white veil just in front of the camera, over all it has drawn, under the routes (renderOrder 9)
     S.veil.visible = S.dim > 0.001; S.veil.material.opacity = S.dim;
     if (S.veil.visible) { cam.updateMatrixWorld(); S.veil.quaternion.copy(cam.quaternion); S.veil.position.copy(cam.position).add(cam.getWorldDirection(v3()).multiplyScalar(5)); S.veil.scale.set(4 * S.state.half * asp, 4 * S.state.half, 1); }
     paint();
     overlay();
-    if (S.playing || S.tween || S.swap) need();
+    if (S.playing || S.tween || S.swap || (S.rise && S.post)) need();
   }
 
   // ---------- panning, turning, zooming ----------
@@ -8048,20 +8088,21 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
       const fc = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? null : null;
       const im = $(".st-from", sc); im.style.transition = "none"; im.style.opacity = fc ? 1 : 0; S.fromCh = !!fc;
       if (fc) later(() => { im.style.transition = "opacity 1.3s var(--ease)"; im.style.opacity = 0; }, 500);
-      const fl = window.ACKO_WOW && window.ACKO_MORPH && !reduced ? null : null;
-      if (fl && plan && plan.data) {
-        const [x, y, w, h] = plan.data.viewBox, vb = plan.vbFor([x, y, x + w, y + h], [35, 157, 1885, 670]);
-        const top = { theta: 0, phi: 1e-4, half: vb[3] / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
-        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: 2400 }; need();
+      clearTimeout(S.mt); S.pend = false; S.rise = false; S.post = 0; S.dim = 0; if (S.ribbon) S.ribbon.visible = false; S.veil.visible = false; sc.classList.remove("st-rise", "st-land");
+      const lvb = window.ACKO_LAYOUT_VB; window.ACKO_LAYOUT_VB = null;
+      if (!reduced && lvb && plan && plan.data) {                       // from the Layout: its boundary, tilted up from exactly where the plan stood
+        const vb = lvb;
+        const top = { theta: 0, phi: 1e-4, half: (Math.max(vb[2] / 1920, vb[3] / 1080) * 1080) / 2000, t: [(vb[0] + vb[2] / 2 - 185842 - M.CX) / 1000, 0, (vb[1] + vb[3] / 2 + 182802 - M.CY) / 1000] };
+        S.state = top; S.tween = { from: top, to: S.home, t0: performance.now(), ms: window.ACKO_RISE_MS || 2600 }; riseStart(); need();
       }
       $(".st-rs", sc).onclick = (e) => { e.currentTarget.blur(); home(); };
     },
     step(k) {
       if (!M || sc.classList.contains("st-fallback")) return;
-      S.fresh = false;
-      if (k === 3) toDay(); else { clearDay(); play(MAP[k]); }                                         // every beat plays, forward or back (28 Oct: back played nothing)
+      S.fresh = false; clearTimeout(S.mt);
+      if (k === 2) toDay(); else { clearDay(); mergeIn(); }                                         // every beat plays, forward or back (28 Oct: back played nothing)
     },
-    leave() { handoff(); S.day = false; if (window.ACKO_MORPH) ACKO_MORPH.mark("s-axo-detail"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
+    leave() { clearTimeout(S.mt); if (S.rise) riseEnd(false); S.pend = false; handoff(); S.day = false; if (window.ACKO_MORPH) ACKO_MORPH.mark("s-axo-detail"); if (S.rb) S.rb.show(false); if (S.base) S.base.useSketch(false);   // Layout · Spaces flattens the floor from here (9 Nov)
       cancelAnimationFrame(S.raf); S.raf = 0; S.playing = false; if (CLIP) clip(1e6, 1e6);
       if (M && S.anchor) { S.cur = PLAN; S.swap = null; arrange(liveAt(0)); }      // the shared model leaves in the plan's colours
     },
