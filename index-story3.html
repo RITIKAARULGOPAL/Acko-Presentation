@@ -172,16 +172,10 @@
 #s-campus-loop .still .cpl-w.shown, #s-campus-loop .still .cpl-h .shown, #s-campus-loop .still .cpl-seg, #s-campus-loop .still .cpl-out, #s-campus-loop .still .cpl-plate { transition: none !important; }
 /* the line under a hairline */
 @media (prefers-reduced-motion: reduce) { #s-campus-loop * { transition-duration: 0s !important; transition-delay: 0s !important; } }
-/* the Möbius promise, highlighted: ?tag=a..e (22 Nov, Ritika: "its tagline, subtly highlighted, give me variations") */
-#s-campus-loop .cpl-w.w2[data-tag="a"] p { font-style: italic; font-weight: 500; color: var(--accent); }
-#s-campus-loop .cpl-w.w2[data-tag="b"] .t2 { background: linear-gradient(transparent 58%, rgba(190, 164, 245, .55) 58% 92%, transparent 92%); padding: 0 .14em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-#s-campus-loop .cpl-w.w2[data-tag="c"] p { font-family: var(--hand); font-size: calc(var(--pt) * 12.5); line-height: 1.02; color: var(--ink); }
-#s-campus-loop .cpl-w.w2[data-tag="c"] p::before { content: "\201C"; }
-#s-campus-loop .cpl-w.w2[data-tag="c"] p::after { content: "\201D"; }
-#s-campus-loop .cpl-w.w2[data-tag="d"] .t1 { color: #8d869e; }
-#s-campus-loop .cpl-w.w2[data-tag="d"] .t2 { color: var(--accent); font-weight: 700; }
-#s-campus-loop .cpl-w.w2[data-tag="e"] p { text-align: left; border-left: 2px solid #cbbdf4; padding-left: .9em; margin-top: calc(var(--pt) * 6); }
-#s-campus-loop .cpl-w.w2[data-tag="e"] p::before { content: "THE PROMISE"; display: block; margin-bottom: .35em; font-size: .62em; font-weight: 600; letter-spacing: .2em; color: var(--accent); }
+/* the Möbius promise pulses, gently and for good (22 Nov, Ritika: "keep the '...us versus...' text as pulsing") */
+#s-campus-loop .cpl-w.w2.shown p { animation: cpl-pulse 2.8s ease-in-out infinite; }
+@keyframes cpl-pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 .6em rgba(82, 34, 208, .22); } 50% { opacity: .55; text-shadow: none; } }
+@media (prefers-reduced-motion: reduce) { #s-campus-loop .cpl-w.w2.shown p { animation: none; } }
 </style>
 <style data-slide="s-pitch">
 /* ---------- one floor, two football pitches (01 · Discover the site): the bare floor, to scale, on the pitches' top touchline ---------- */
@@ -1924,7 +1918,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     <div class="cpl-op" data-step="3" style="left:49.1%">=</div>
 
     <div class="cpl-w w1" data-step="1" style="left:4.8%;width:20.4%"><h3>Campus</h3><em>Belonging · the idea</em><p><span class="ln">Many neighbourhoods,</span><span class="ln">one shared identity.</span></p></div>
-    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p><span class="ln t1">It’s never us versus you;</span><span class="ln t2">it’s always us with you.</span></p></div>
+    <div class="cpl-w w2" data-step="2" style="left:28.4%;width:22.4%"><h3>Möbius</h3><em>ACKO’s promise · continuity</em><p><span class="ln">It’s never us versus you;</span><span class="ln">it’s always us with you.</span></p></div>
     <div class="cpl-w w3" data-step="6" style="left:54%;width:41.2%"><h3>The ACKO Loop</h3><em>Connection · the plan</em><p><span class="ln">One continuous route that links every neighbourhood,</span><span class="ln">both arrivals and every shared space.</span></p></div>
 
   </div>
@@ -8117,15 +8111,5 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li:last-child { flex: 0 0 auto; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li > span { white-space: nowrap !important; }
 </style>
-<script>
-/* ?tag=a..e picks how the Möbius promise is highlighted (kept for the session) */
-(function () {
-  var q = new URLSearchParams(location.search), t = "";
-  try { t = q.get("tag") || sessionStorage.getItem("cplTag") || ""; if (q.get("tag")) sessionStorage.setItem("cplTag", t); } catch (e) {}
-  function apply() { var w = document.querySelector("#s-campus-loop .cpl-w.w2"); if (!w) return; if (/^[a-e]$/.test(t)) w.setAttribute("data-tag", t); else w.removeAttribute("data-tag"); }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply); else apply();
-  window.addEventListener("load", apply);
-})();
-</script>
 </body>
 </html>
