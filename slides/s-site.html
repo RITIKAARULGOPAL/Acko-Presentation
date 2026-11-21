@@ -12,7 +12,7 @@
 <body>
 <!-- slide:start -->
 <section class="scene" id="s-site" data-part="2" data-title="The site" data-steps="1" data-mins="0.4"
-  data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up, 56,650 sq ft carpet, for about 651 people. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans.">
+  data-notes="The site: Regalium, on Hosur Road in Koramangala, 3rd floor. 91,000 sq ft super built-up. Nexus Mall and St John's are a few minutes' walk; the Silk Board metro is about two kilometres. The map turns 11.5° so the building lines up with our plans.">
   <div class="page">
     <div class="hdr"><b>The Site</b><span>Layout</span></div>
     <div class="si-copy rv" style="left:1.8%;top:22%;width:30%">
@@ -21,8 +21,6 @@
       <dl class="si-facts" style="--i:2">
         <div><dt>Floor</dt><dd>3rd floor · one plate</dd></div>
         <div><dt>Super built-up</dt><dd><span data-count="91000">91,000</span> sq ft</dd></div>
-        <div><dt>Carpet</dt><dd><span data-count="56650">56,650</span> sq ft</dd></div>
-        <div><dt>People</dt><dd>about <span data-count="651">651</span></dd></div>
       </dl>
       <ul class="si-walk" style="--i:3"></ul>
     </div>
@@ -87,7 +85,7 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
       `<g class="vm-pin" data-t="translate(${BX} ${10 + BY})" transform="translate(${BX} ${10 + BY})"><text y="-50" text-anchor="middle">Regalium · 3rd floor</text></g></g>` +
       `<path class="vm-plate" transform="translate(${BX} ${BY}) translate(-4.6 50) scale(${BS}) translate(4.6 -50)" d="${S.onSite.plate}"/></g>`;
     $("#map-credit").textContent = S.attribution || "© OpenStreetMap contributors, Overture Maps";
-    $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"} walk</span></li>`).join("");
+    $("#s-site .si-walk").innerHTML = S.marks.slice(0, 5).map((m) => `<li><b>${m.n}</b><span>${m.walk >= 1000 ? (m.walk / 1000).toFixed(1) + " km" : Math.round(m.walk) + " m"}</span></li>`).join("");
     SV.built = true;
   }
   function view(vb, rot, ms) {
