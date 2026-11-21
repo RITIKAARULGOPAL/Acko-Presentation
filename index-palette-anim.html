@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus palette · six animations</title>
+<style>
+  :root { --purple: #5222d0; --ink: #111; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, "Segoe UI", sans-serif; color: var(--ink); background: #f3f0fb; }
+  header { padding: 14px 20px 10px; }
+  h1 { margin: 0 0 4px; font-size: 18px; }
+  p { margin: 0; color: #555; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 20px; align-items: center; }
+  button { font: inherit; padding: 8px 14px; border: 1px solid #cfc6ea; border-radius: 8px; background: #fff; cursor: pointer; }
+  button[aria-pressed="true"] { background: var(--purple); color: #fff; border-color: var(--purple); }
+  .desc { padding: 4px 20px 10px; min-height: 28px; }
+  .frame { position: relative; margin: 0 20px 20px; aspect-ratio: 16 / 9; max-height: calc(100vh - 210px); background: #fff; border: 1px solid #cfc6ea; border-radius: 10px; overflow: hidden; }
+  iframe { width: 100%; height: 100%; border: 0; }
+  .note { position: absolute; right: 12px; top: 10px; font-size: 12px; background: #fffc; padding: 2px 8px; border-radius: 6px; }
+  a { color: var(--purple); }
+</style>
+</head>
+<body>
+<header>
+  <h1>The campus palette: six ways it could animate</h1>
+  <p>Each is the real slide. The deck takes a while to start here (about 40 s); then the board animates. Replay runs it again.</p>
+</header>
+<div class="row"><span id="opts"></span><button id="replay">↻ Replay</button></div>
+<div class="desc" id="desc"></div>
+<div class="frame"><iframe id="f" title="slide"></iframe><span class="note" id="note"></span></div>
+<script>
+const OPTS = {
+  p: ["Plain (today)", "The generic fade-up, as it is now."],
+  a: ["A · Mosaic build", "Tiles scale up and fade in column by column, left to right; labels follow a beat later."],
+  b: ["B · Curtain wipe", "Each tile is uncovered by a wipe, alternating sideways and upwards; labels rise in after."],
+  c: ["C · Drift", "Tiles fade in, then the photographs keep drifting slowly (a gentle zoom and pan), so the board feels alive."],
+  d: ["D · Spotlight cycle", "After the build, the tiles take turns: the active one lifts with a soft shadow while the others dim slightly."],
+  e: ["E · Swatch drop", "Tiles drop in from above with a soft spring, in a shuffled order; the colour swatches land last."],
+  f: ["F · Sheen sweep", "Tiles fade in, then a diagonal sheen of light passes across the whole board every few seconds."]
+};
+const q = new URLSearchParams(location.search);
+let o = OPTS[q.get("anim")] ? q.get("anim") : "a";
+function render() {
+  const host = document.getElementById("opts"); host.innerHTML = "";
+  for (const k in OPTS) { const b = document.createElement("button"); b.textContent = OPTS[k][0]; b.setAttribute("aria-pressed", k === o); b.onclick = () => { o = k; render(); }; host.appendChild(b); host.appendChild(document.createTextNode(" ")); }
+  document.getElementById("desc").textContent = OPTS[o][1];
+  const url = "index-story3.html?anim=" + (o === "p" ? "x" : o) + "&v=" + Date.now() + "#s-palette2/1";
+  document.getElementById("f").src = url;
+  document.getElementById("note").innerHTML = '<a href="' + url + '" target="_blank">open full size</a>';
+  history.replaceState(null, "", "?anim=" + o);
+}
+document.getElementById("replay").onclick = render;
+render();
+</script>
+</body>
+</html>
