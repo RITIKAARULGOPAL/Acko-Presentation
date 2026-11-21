@@ -1495,63 +1495,27 @@ body.ax-hand .scene { transition: none !important; }
 #s-palette2 .mat-pop.open { opacity: 1 !important; visibility: visible; transition: opacity .5s var(--ease), visibility 0s; }
 @keyframes mp-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @media not (prefers-reduced-motion: reduce) { #s-palette2 .mat-pop.open > * { animation: mp-in .6s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms); } }
-/* six ways the palette board could come alive (22 Nov, Ritika: "some animation, multiple variations"): ?anim=a..f, no param = the plain fade */
+/* the campus palette: the board builds, then the tiles take turns in the spotlight (22 Nov, Ritika picked D) */
 @keyframes pa-in { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
 @keyframes pa-label { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-@keyframes pb-wipe { from { opacity: 1; clip-path: inset(0 100% 0 0); transform: none; } to { opacity: 1; clip-path: inset(0 0 0 0); transform: none; } }
-@keyframes pb-wipe-up { from { opacity: 1; clip-path: inset(100% 0 0 0); transform: none; } to { opacity: 1; clip-path: inset(0 0 0 0); transform: none; } }
-@keyframes pc-drift { from { background-size: 100% 100%; background-position: 0 0; } to { background-size: 112% 112%; background-position: 100% 100%; } }
 @keyframes pd-spot { 0%, 100% { filter: brightness(.93) saturate(.92); transform: none; } 3%, 7% { filter: none; transform: scale(1.035); box-shadow: 0 10px 28px rgba(40, 28, 80, .3); } 10% { filter: brightness(.93) saturate(.92); transform: none; box-shadow: none; } }
-@keyframes pe-drop { 0% { opacity: 0; transform: translateY(-70px) rotate(-2deg); } 55% { opacity: 1; transform: translateY(8px) rotate(.4deg); } 78% { transform: translateY(-4px); } 100% { opacity: 1; transform: none; } }
-@keyframes pf-sweep { 0% { transform: translateX(-130%); } 45%, 100% { transform: translateX(130%); } }
 @media not (prefers-reduced-motion: reduce) {
-#s-palette2 .page[data-anim="a"].go > i.dk, #s-palette2 .page[data-anim="a"].go > .vt { transition: none !important; }
-#s-palette2 .page[data-anim="b"].go > i.dk, #s-palette2 .page[data-anim="b"].go > .vt { transition: none !important; }
-#s-palette2 .page[data-anim="c"].go > i.dk, #s-palette2 .page[data-anim="c"].go > .vt { transition: none !important; }
-#s-palette2 .page[data-anim="d"].go > i.dk, #s-palette2 .page[data-anim="d"].go > .vt { transition: none !important; }
-#s-palette2 .page[data-anim="e"].go > i.dk, #s-palette2 .page[data-anim="e"].go > .vt { transition: none !important; }
-#s-palette2 .page[data-anim="f"].go > i.dk, #s-palette2 .page[data-anim="f"].go > .vt { transition: none !important; }
-#s-palette2 .page[data-anim="a"].go > i.dk { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both; }
-#s-palette2 .page[data-anim="a"].go > .vt { animation: pa-label .7s var(--ease) calc(var(--i, 0) * 110ms + 450ms) both; }
-#s-palette2 .page[data-anim="b"].go > i.dk { animation: pb-wipe .9s cubic-bezier(.6,.05,.2,1) calc(var(--i, 0) * 120ms) both; }
-#s-palette2 .page[data-anim="b"].go > i.dk:nth-of-type(even) { animation-name: pb-wipe-up; }
-#s-palette2 .page[data-anim="b"].go > .vt { animation: pa-label .7s var(--ease) calc(var(--i, 0) * 120ms + 700ms) both; }
-#s-palette2 .page[data-anim="c"].go > i.dk { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pc-drift 18s ease-in-out 1.6s infinite alternate; }
-#s-palette2 .page[data-anim="c"].go > i.dk:nth-of-type(even) { animation-direction: normal, alternate-reverse; }
-#s-palette2 .page[data-anim="c"].go > .vt { animation: pa-label .7s var(--ease) calc(var(--i, 0) * 110ms + 450ms) both; }
-#s-palette2 .page[data-anim="d"].go > .vt { animation: pa-label .7s var(--ease) calc(var(--i, 0) * 110ms + 450ms) both; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(1) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 1.8s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(2) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 3.0s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(3) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 4.2s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(4) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 5.4s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(5) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 6.6s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(6) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 7.8s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(7) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 9.0s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(8) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 10.2s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(9) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 11.4s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(10) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 12.6s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(11) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 13.8s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(12) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 15.0s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(13) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 16.2s infinite; }
-#s-palette2 .page[data-anim="d"].go > i.dk:nth-of-type(14) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 17.4s infinite; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(1) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 450ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(2) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 1080ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(3) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 180ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(4) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 810ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(5) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 0ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(6) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 630ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(7) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 1170ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(8) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 1370ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(9) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 2000ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(10) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 1640ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(11) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 1190ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(12) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 720ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(13) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 990ms both; }
-#s-palette2 .page[data-anim="e"].go > i.dk:nth-of-type(14) { animation: pe-drop .95s cubic-bezier(.3,1.3,.5,1) 360ms both; }
-#s-palette2 .page[data-anim="e"].go > .vt { animation: pa-label .7s var(--ease) calc(var(--i, 0) * 90ms + 1500ms) both; }
-#s-palette2 .page[data-anim="f"].go > i.dk { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both; }
-#s-palette2 .page[data-anim="f"].go > .vt { animation: pa-label .7s var(--ease) calc(var(--i, 0) * 110ms + 450ms) both; }
-#s-palette2 .page[data-anim="f"]::after { content: ""; position: absolute; left: 0; top: 19%; width: 100%; height: 52%; z-index: 3; pointer-events: none; background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.65) 50%, transparent 62%); mix-blend-mode: soft-light; transform: translateX(-130%); animation: pf-sweep 6s ease-in-out 3s infinite; }
+#s-palette2 .page.go > i.dk, #s-palette2 .page.go > .vt { transition: none !important; }
+#s-palette2 .page.go > .vt { animation: pa-label .7s var(--ease) calc(var(--i, 0) * 110ms + 450ms) both; }
+#s-palette2 .page.go > i.dk:nth-of-type(1) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 1.8s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(2) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 3.0s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(3) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 4.2s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(4) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 5.4s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(5) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 6.6s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(6) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 7.8s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(7) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 9.0s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(8) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 10.2s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(9) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 11.4s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(10) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 12.6s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(11) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 13.8s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(12) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 15.0s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(13) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 16.2s infinite; }
+#s-palette2 .page.go > i.dk:nth-of-type(14) { animation: pa-in .9s var(--ease) calc(var(--i, 0) * 110ms) both, pd-spot 16.8s linear 17.4s infinite; }
 }
 </style>
 <style data-slide="s-esg">
@@ -8214,7 +8178,6 @@ ACKO.slide("s-palette2", ({ $, plain, reveal }) => {
   const onKey = (e) => { if (e.key === "Escape") { const sc = document.getElementById("s-palette2"); if (sc && $(".mat-pop.open", sc)) { e.stopPropagation(); set(sc, false); } } };
   return {
     enter(_, sc) {
-      { const q = new URLSearchParams(location.search); let a = q.get("anim") || ""; try { if (q.get("anim")) sessionStorage.setItem("palAnim", a); else a = sessionStorage.getItem("palAnim") || ""; } catch (e) {} const pg = $(".page", sc); if (/^[a-f]$/.test(a)) pg.setAttribute("data-anim", a); else pg.removeAttribute("data-anim"); }
       plain(); reveal($(".page", sc), 60);
       set(sc, false);
       const b = $(".mat-btn", sc);
