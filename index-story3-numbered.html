@@ -220,6 +220,22 @@
 #s-pitch .pp-shell > :not(.plate) { transition: opacity 1.2s var(--ease); }
 #s-pitch .page.pp-site .pp-shell .plate { fill: #9b7ee2 !important; stroke: #5222d0 !important; transition: none !important; }
 #s-pitch .page.pp-site .pp-shell > :not(.plate) { opacity: 0 !important; transition: none !important; }
+/* type variation (22 Nov, Ritika: "variation in colour and height of the texts"): the joining words quiet and black, the phrases big and purple */
+#s-pitch .pp-head small { font-size: calc(var(--pt) * 8); font-weight: 700; color: var(--purple); opacity: .8; }
+#s-pitch .pp-h { font-size: calc(var(--pt) * 22); font-weight: 400; color: #111; line-height: 1.12; }
+#s-pitch .pp-h b { font-size: 1.5em; font-weight: 800; color: var(--purple); line-height: 1.05; }
+#s-pitch .pp-stats > div { border-top: 2px solid #d9d0f5; }
+#s-pitch .pp-stats > div:nth-child(4) { border-top: 4px solid var(--purple); }
+#s-pitch .pp-stats b { display: flex; align-items: flex-end; height: calc(var(--pt) * 32); line-height: 1; font-weight: 700; color: #111; }
+#s-pitch .pp-stats > div:nth-child(1) b, #s-pitch .pp-stats > div:nth-child(5) b { font-size: calc(var(--pt) * 26); }
+#s-pitch .pp-stats > div:nth-child(2) b { font-size: calc(var(--pt) * 22); font-weight: 600; color: var(--purple); }
+#s-pitch .pp-stats > div:nth-child(3) b { font-size: calc(var(--pt) * 22); font-weight: 600; color: #3c9a5a; }
+#s-pitch .pp-stats > div:nth-child(4) b { font-size: calc(var(--pt) * 34); font-weight: 800; color: var(--purple); }
+#s-pitch .pp-stats b small { font-size: .4em; font-weight: 500; margin-left: .25em; margin-bottom: .35em; color: #777; }
+#s-pitch .pp-stats > div > span { color: #555; }
+#s-pitch .pp-hand { font-size: calc(var(--pt) * 15); color: var(--purple-2); }
+/* the floor outline alone: no cores, stairs, lifts or columns inside the boundary (22 Nov, Ritika: "the core inside boundary seems wrong") */
+#s-pitch .pp-shell :is(.core, .stair, .stair-h, .lift, .lift-x, .col, .cut) { display: none; }
 </style>
 <style data-slide="s-strategy">
 /* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
@@ -1963,7 +1979,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 </section>
 
 <section class="scene" id="s-pitch" data-part="p5" data-title="One floor, two football pitches" data-steps="1" data-mins="0.6"
-  data-notes="The bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end, and 34 m across, glass to glass: exactly half a pitch wide. About 651 people on one plate, a three-minute walk from one end to the other. A long, thin floor: so how do you make it feel like one team? That shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
+  data-notes="The bare floor, core and shell, drawn to scale on football pitches (105 × 68 m), its long edge on their touchline. It is 245 m end to end, longer than two pitches laid end to end, and 34 m across, glass to glass: exactly half a pitch wide. About 651 people on one plate, a walk of five minutes or more from one end to the other. A long, thin floor: so how do you make it feel like one team? That shape is what the plan has to answer. → Bridge: And what we found on it: the due diligence.">
   <div class="page">
     <div class="pp-head rv" style="left:3.4%;top:9%;width:62%">
       <small style="--i:0">ACKO · Regalium, Koramangala</small>
@@ -1980,12 +1996,12 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       </g>
       <text class="pp-lab" text-anchor="middle">TWO FOOTBALL PITCHES · 210 m</text>
     </svg>
-    <div class="pp-stats" style="left:3.4%;top:85%;width:66%">
+    <div class="pp-stats" style="left:3.4%;top:82.6%;width:66%">
       <div><b><span data-count="245">0</span><small>m</small></b><span>end to end</span></div>
       <div><b>34<small>m</small></b><span>wide, glass to glass</span></div>
       <div><b>½</b><span>a pitch’s width</span></div>
       <div><b><span data-count="651">0</span></b><span>people, on one plate</span></div>
-      <div><b><span data-count="3">0</span><small>min</small></b><span>to walk end to end</span></div>
+      <div><b><span data-count="5">0</span><span>+</span><small>min</small></b><span>to walk end to end</span></div>
     </div>
     <p class="pp-hand hand" style="left:72%;top:85.5%;width:25.5%">a long, thin floor: so how do you make it feel like one team?</p>
   </div>
