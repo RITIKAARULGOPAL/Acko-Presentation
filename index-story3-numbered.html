@@ -1794,7 +1794,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <section class="scene" id="s-overview" data-part="p3" data-title="Agenda" data-steps="2" data-mins="0.3"
   data-notes="The agenda: five sections ahead. 01 Concept Framework: establishing the overarching design vision. 02 Design Development: translating the concept into a spatial solution. 03 Design Expression: materiality, visualisation and spatial experience. 04 Integrated Performance: technical performance and added value. 05 Project Review: revisiting previous discussions and establishing alignment. Beat 2: 01 Concept Framework lit, establishing the overarching design vision. → Bridge: The concept first. 01 · Concept Framework.">
-  <div class="page">
+  <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li class="cur" style="--i:3"><i></i><b>01</b><span>Concept Framework</span><small class="ds">Establishing the overarching design vision</small></li>
@@ -1919,7 +1919,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <section class="scene" id="s-div-2" data-part="p5" data-title="02 · Design Development" data-steps="1" data-mins="0.3"
   data-notes="Section 02 of 05: Design Development, translating the concept into a spatial solution.">
-  <div class="page">
+  <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span><small class="ds">Establishing the overarching design vision</small></li>
@@ -2373,7 +2373,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <section class="scene" id="s-div-3" data-part="p6" data-title="03 · Design Expression" data-steps="1" data-mins="0.3"
   data-notes="Section 03 of 05: Design Expression, materiality, visualisation and spatial experience.">
-  <div class="page">
+  <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span><small class="ds">Establishing the overarching design vision</small></li>
@@ -2549,7 +2549,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <section class="scene" id="s-div-4" data-part="p7" data-title="04 · Integrated Performance" data-steps="1" data-mins="0.3"
   data-notes="Section 04 of 05: Integrated Performance, technical performance and added value.">
-  <div class="page">
+  <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span><small class="ds">Establishing the overarching design vision</small></li>
@@ -2767,7 +2767,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 
 <section class="scene" id="s-div-5" data-part="p8" data-title="05 · Project Review" data-steps="1" data-mins="0.3"
   data-notes="Section 05 of 05: Project Review, revisiting previous discussions and establishing alignment.">
-  <div class="page">
+  <div class="page" data-look="a" data-conn="1">
     <div class="st-k rv" style="left:8%;top:21%;width:60%"><small style="--i:0">Agenda</small></div>
     <ol class="ap-steps rv" style="left:8%;top:35%;width:84%">
       <li style="--i:3"><i></i><b>01</b><span>Concept Framework</span><small class="ds">Establishing the overarching design vision</small></li>
@@ -8080,6 +8080,7 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 </script>
 <script>ACKO.start();</script>
 <style id="agenda-looks">
+/* agenda + section starters: giant numeral, chevron connectors (23 Nov, Ritika picked A + chevron) */
 /* agenda + section starter: five looks (22 Nov, Ritika: "different design options; text in black and purple accent"); ?look=a..e */
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .hero { position: absolute; opacity: 0; pointer-events: none; transition: opacity .8s var(--ease), transform .8s var(--ease); }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ds { display: none; }
@@ -8093,7 +8094,6 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look] .ap-steps li::before { border-top-color: var(--purple) !important; opacity: .35 !important; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page.lit[data-look] .ap-steps li:not(.cur) { opacity: .28 !important; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page.lit .hero { opacity: 1; }
-
 /* A · giant numeral */
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="a"] .hero { left: 8%; top: 24%; width: 84%; transform: translateY(calc(var(--pt) * 8)); }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="a"].lit .hero { transform: none; }
@@ -8105,133 +8105,26 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="a"].lit .ap-steps li > span { font-size: calc(var(--pt) * 8) !important; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="a"].lit .ap-steps li.cur b, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="a"].lit .ap-steps li.cur > span { opacity: 0 !important; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="a"] .ap-steps b { font-size: calc(var(--pt) * 26) !important; }
-
-/* B · rail list */
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .ap-steps { display: flex !important; flex-direction: column !important; left: 8% !important; top: 28% !important; width: 38% !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .ap-steps li { padding: calc(var(--pt) * 7) 0 calc(var(--pt) * 7) calc(var(--pt) * 12) !important; flex-direction: row !important; align-items: baseline !important; gap: calc(var(--pt) * 12) !important; border-bottom: 1px solid #e5e0f5 !important; border-left: calc(var(--pt) * 3) solid transparent !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .ap-steps li::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .ap-steps li::after, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .ap-steps i { display: none !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .ap-steps b { font-size: calc(var(--pt) * 17) !important; min-width: 2.2em !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .ap-steps li > span { font-size: calc(var(--pt) * 15) !important; white-space: normal !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"].lit .ap-steps li.cur { border-left-color: var(--purple) !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"].lit .ap-steps li.cur > span { font-weight: 800 !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .hero { left: 54%; top: 28%; width: 38%; transform: translateX(calc(var(--pt) * 10)); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"].lit .hero { transform: none; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .hero b { font-size: calc(var(--pt) * 84); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .hero h3 { font-size: calc(var(--pt) * 28); margin-top: calc(var(--pt) * 6); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="b"] .hero p { font-size: calc(var(--pt) * 22); margin-top: calc(var(--pt) * 10); }
-
-/* C · purple panel */
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"]::before { content: ""; position: absolute; left: 0; top: 11%; width: 40%; height: 78%; background: linear-gradient(160deg, #35189a, #5222d0); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .st-k { left: 5% !important; top: 18% !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .st-k small { color: #fff; font-size: calc(var(--pt) * 15); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .hero { left: 5%; top: 34%; width: 31%; transform: translateY(calc(var(--pt) * 8)); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"].lit .hero { transform: none; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .hero b { font-size: calc(var(--pt) * 78); color: #fff; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .hero h3 { font-size: calc(var(--pt) * 24); margin-top: calc(var(--pt) * 6); color: #fff; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .hero p { font-size: calc(var(--pt) * 18); margin-top: calc(var(--pt) * 10); color: #cdbfff; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .ap-steps { display: flex !important; flex-direction: column !important; left: 48% !important; top: 22% !important; width: 44% !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .ap-steps li { padding: calc(var(--pt) * 9) 0 !important; flex-direction: row !important; align-items: baseline !important; gap: calc(var(--pt) * 14) !important; border-top: 1px solid #e5e0f5 !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .ap-steps li::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .ap-steps li::after, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .ap-steps i { display: none !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .ap-steps b { font-size: calc(var(--pt) * 20) !important; min-width: 2em !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"] .ap-steps li > span { font-size: calc(var(--pt) * 15) !important; white-space: normal !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="c"].lit .ap-steps li.cur > span { font-weight: 800 !important; text-decoration: underline !important; text-decoration-color: var(--purple) !important; text-underline-offset: .25em !important; text-decoration-thickness: 2px !important; }
-
-/* D · editorial rows */
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ap-steps { display: flex !important; flex-direction: column !important; left: 8% !important; top: 28% !important; width: 84% !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ap-steps li { padding: calc(var(--pt) * 10) 0 !important; flex-direction: row !important; align-items: baseline !important; gap: calc(var(--pt) * 20) !important; border-top: 1px solid #e5e0f5 !important; transition: opacity .7s var(--ease) !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ap-steps li::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ap-steps li::after, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ap-steps i { display: none !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ap-steps b { font-size: calc(var(--pt) * 26) !important; min-width: 1.8em !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ap-steps li > span { font-size: calc(var(--pt) * 20) !important; white-space: normal !important; min-width: 11em !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .ds { display: block; margin-left: auto; font-size: calc(var(--pt) * 10); color: #777; text-align: right; max-width: 22em; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"].lit .ap-steps li.cur { border-top: 2px solid var(--purple) !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"].lit .ap-steps li.cur > span { font-weight: 800 !important; font-size: calc(var(--pt) * 26) !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"].lit .ap-steps li.cur .ds { color: #111 !important; }
-
-/* E · refined timeline: the current layout, black names + purple accent */
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"] .st-line p { color: var(--purple); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"] .st-line { display: block; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"] .ap-steps b { font-size: calc(var(--pt) * 24) !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"].lit .ap-steps li.cur b { font-size: calc(var(--pt) * 30) !important; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"].lit .ap-steps li.cur > span { font-weight: 800 !important; color: #111 !important; }
-
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="d"] .hero, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-look="e"] .hero, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page:not([data-look]) .hero { display: none !important; }
-
 /* connectors between the stage dots (22 Nov, Ritika: "the arrow and line seems a bit off"): ?conn=1..5, centred on the dots */
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li { z-index: 1; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li::after { content: none !important; display: none !important; }
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps::after { content: none; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="1"] .ap-steps li:not(:last-child)::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="2"] .ap-steps li:not(:last-child)::before, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="4"] .ap-steps li:not(:last-child)::before {
-  content: "" !important; display: block !important; position: absolute; border: 0 !important; opacity: 1 !important;
-  top: calc(var(--pt) * 6.5 - .75px); left: calc(var(--pt) * 13 + var(--pt) * 9); right: calc(var(--pt) * 9); height: 1.5px; background: rgba(82, 34, 208, .3);
-}
 :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="1"] .ap-steps li:not(:last-child)::after {
   content: "" !important; display: block !important; position: absolute; left: calc(50% + var(--pt) * 6.5); top: calc(var(--pt) * 6.5); width: calc(var(--pt) * 4.2); height: calc(var(--pt) * 4.2);
   border-top: 1.6px solid var(--purple); border-right: 1.6px solid var(--purple); transform: translate(-65%, -50%) rotate(45deg); background: none;
 }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="2"] .ap-steps li:not(:last-child)::before { height: 0; background: none; border-top: 2px dotted rgba(82, 34, 208, .55) !important; top: calc(var(--pt) * 6.5 - 1px); right: calc(var(--pt) * 9 + var(--pt) * 6); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="2"] .ap-steps li:not(:last-child)::after {
-  content: "" !important; display: block !important; position: absolute; top: calc(var(--pt) * 6.5); left: calc(100% - var(--pt) * 9 - var(--pt) * 5.5); width: 0; height: 0; transform: translateY(-50%);
-  border-left: calc(var(--pt) * 5.5) solid var(--purple); border-top: calc(var(--pt) * 3.4) solid transparent; border-bottom: calc(var(--pt) * 3.4) solid transparent;
-}
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"] .ap-steps::after, :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="5"] .ap-steps::after { content: ""; position: absolute; z-index: 0; left: calc(var(--pt) * 6.5); top: calc(var(--pt) * 6.5 - .75px); height: 1.5px; background: rgba(82, 34, 208, .22); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"] .ap-steps::after { width: 80%; }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"] .ap-steps::before { content: ""; position: absolute; z-index: 0; left: calc(var(--pt) * 6.5); top: calc(var(--pt) * 6.5 - 1px); height: 2px; background: var(--purple); width: 0; transition: width .9s var(--ease); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="3"].lit .ap-steps::before { width: calc((var(--cur, 1) - 1) * 20%); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="4"] .ap-steps li:not(:last-child)::before { height: 1px; top: calc(var(--pt) * 6.5 - .5px); background: rgba(82, 34, 208, .5); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="5"] .ap-steps::after { width: calc(94% - var(--pt) * 6.5); background: rgba(82, 34, 208, .35); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="5"] .ap-steps::before { content: ""; position: absolute; z-index: 0; left: calc(94% - var(--pt) * 1); top: calc(var(--pt) * 6.5); width: 0; height: 0; transform: translateY(-50%);
-  border-left: calc(var(--pt) * 6) solid var(--purple); border-top: calc(var(--pt) * 3.6) solid transparent; border-bottom: calc(var(--pt) * 3.6) solid transparent; }
-
 #s-overview .page { --cur: 1; }
 #s-div-2 .page { --cur: 2; }
 #s-div-3 .page { --cur: 3; }
 #s-div-4 .page { --cur: 4; }
 #s-div-5 .page { --cur: 5; }
 
-/* connectors, set 2 (?conn=6..10) */
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="6"] .ap-steps li:not(:last-child)::before {
-  content: "" !important; display: block !important; position: absolute; border: 0 !important; opacity: 1 !important;
-  top: calc(var(--pt) * 6.5 - var(--pt) * 1.6); left: calc(var(--pt) * 13 + var(--pt) * 9); right: calc(var(--pt) * 9); height: calc(var(--pt) * 3.2); border-radius: 99px; background: rgba(82, 34, 208, .32);
-}
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="7"] .ap-steps li:not(:last-child)::before {
-  content: "" !important; display: block !important; position: absolute; border: 0 !important; opacity: 1 !important;
-  top: calc(var(--pt) * 6.5 - 1px); left: calc(var(--pt) * 13 + var(--pt) * 9); right: calc(var(--pt) * 9 + var(--pt) * 6); height: 2px;
-  background: repeating-linear-gradient(90deg, var(--purple) 0 6px, transparent 6px 11px); background-size: 11px 2px; animation: conn-march 1.1s linear infinite;
-}
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="7"] .ap-steps li:not(:last-child)::after {
-  content: "" !important; display: block !important; position: absolute; top: calc(var(--pt) * 6.5); left: calc(100% - var(--pt) * 9 - var(--pt) * 5.5); width: 0; height: 0; transform: translateY(-50%);
-  border-left: calc(var(--pt) * 5.5) solid var(--purple); border-top: calc(var(--pt) * 3.4) solid transparent; border-bottom: calc(var(--pt) * 3.4) solid transparent;
-}
-@keyframes conn-march { to { background-position: 11px 0; } }
-@media (prefers-reduced-motion: reduce) { :is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="7"] .ap-steps li::before { animation: none !important; } }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="8"] .ap-steps li:not(:last-child)::before {
-  content: "" !important; display: block !important; position: absolute; opacity: 1 !important; box-sizing: border-box;
-  top: calc(0px - var(--pt) * 14); left: calc(var(--pt) * 13 / 2); right: calc(0px - var(--pt) * 13 / 2 + var(--pt) * 0); height: calc(var(--pt) * 14); border: 2px solid var(--purple) !important; border-bottom: 0 !important;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: none;
-}
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="8"] .ap-steps li:not(:last-child)::after {
-  content: "" !important; display: block !important; position: absolute; top: calc(0px - var(--pt) * 4.5); left: calc(100% + var(--pt) * 13 / 2 - var(--pt) * 3.2); width: 0; height: 0;
-  border-top: calc(var(--pt) * 4.5) solid var(--purple); border-left: calc(var(--pt) * 3.2) solid transparent; border-right: calc(var(--pt) * 3.2) solid transparent;
-}
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="9"] .ap-steps li:not(:last-child)::after {
-  content: "\2192" !important; display: block !important; position: absolute; left: calc(50% + var(--pt) * 6.5); top: calc(var(--pt) * 6.5); transform: translate(-50%, -54%);
-  font-family: var(--body); font-size: calc(var(--pt) * 11); font-weight: 200; line-height: 1; color: #111; width: auto; height: auto; border: 0;
-}
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="10"] .ap-steps::after { content: ""; position: absolute; z-index: 0; left: 0; top: calc(var(--pt) * 6.5 - var(--pt) * 2.5); height: calc(var(--pt) * 5); width: calc(80% + var(--pt) * 13); border-radius: 99px; background: rgba(82, 34, 208, .14); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="10"] .ap-steps::before { content: ""; position: absolute; z-index: 0; left: 0; top: calc(var(--pt) * 6.5 - var(--pt) * 2.5); height: calc(var(--pt) * 5); border-radius: 99px; background: var(--purple); width: calc(var(--pt) * 13); transition: width .9s var(--ease); }
-:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page[data-conn="10"].lit .ap-steps::before { width: calc(var(--pt) * 13 + (var(--cur, 1) - 1) * 20%); }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li:not(:last-child)::before { content: "" !important; display: block !important; position: absolute; border: 0 !important; opacity: 1 !important; top: calc(var(--pt) * 6.5 - .75px); left: calc(var(--pt) * 13 + var(--pt) * 9); right: calc(var(--pt) * 9); height: 1.5px; background: rgba(82, 34, 208, .3); }
+/* equal spacing between the texts: the four leading items share the free width equally, so every gap (end of a text to the start of the next) is the same */
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps { display: flex !important; }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li { flex: 1 1 auto; }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li:last-child { flex: 0 0 auto; }
+:is(#s-overview,#s-div-2,#s-div-3,#s-div-4,#s-div-5) .page .ap-steps li > span { white-space: nowrap !important; }
 </style>
-<script>
-/* ?look=a..e and ?conn=1..5 pick the agenda / section-starter look and its connectors (kept for the session so the dividers follow) */
-(function () {
-  var q = new URLSearchParams(location.search), l = "", c = "";
-  try { l = q.get("look") || sessionStorage.getItem("agendaLook") || ""; if (q.get("look")) sessionStorage.setItem("agendaLook", l); } catch (e) {}
-  try { c = q.get("conn") || sessionStorage.getItem("agendaConn") || ""; if (q.get("conn")) sessionStorage.setItem("agendaConn", c); } catch (e) {}
-  if (!/^([1-9]|10)$/.test(c)) c = "1";
-  function apply() { document.querySelectorAll("#s-overview .page, #s-div-2 .page, #s-div-3 .page, #s-div-4 .page, #s-div-5 .page").forEach(function (p) { if (/^[a-e]$/.test(l)) p.setAttribute("data-look", l); p.setAttribute("data-conn", c); }); }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply); else apply();
-  window.addEventListener("load", apply);
-})();
-</script>
 </body>
 </html>
