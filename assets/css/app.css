@@ -507,3 +507,13 @@ body.wk-idle, body.wk-idle * { cursor: none !important; }
 .walk .wk-nav { width: max-content; min-width: calc(var(--pt) * 58); }
 .walk .wk-nav:hover { max-height: none; overflow: visible; }
 .walk .wk-nav button { padding-top: 0; padding-bottom: 0; line-height: 1.5; }
+
+/* the quiet chapter marker over the first render of a group (Option 01, Option 02, common renders) */
+#wk-open { position: fixed; left: var(--pl); top: var(--ptop); width: var(--pw); height: var(--ph); z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 4); padding-bottom: calc(var(--ph) * .08); color: #fff; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 46%, rgba(10,6,30,.34), rgba(10,6,30,0) 62%); }
+#wk-open b { font-size: calc(var(--pt) * 15); font-weight: 300; letter-spacing: .32em; text-transform: uppercase; text-indent: .32em; text-shadow: 0 2px 18px rgba(0,0,0,.35); }
+#wk-open i { display: block; width: calc(var(--pt) * 26); height: 1px; background: rgba(255,255,255,.75); }
+#wk-open span { font-size: calc(var(--pt) * 7); letter-spacing: .08em; color: rgba(236,228,255,.92); text-shadow: 0 1px 10px rgba(0,0,0,.4); }
+#wk-open.on { animation: wk-open 3.6s ease both; }
+@keyframes wk-open { 0% { opacity: 0; transform: translateY(6px); } 20% { opacity: 1; transform: none; } 72% { opacity: 1; } 100% { opacity: 0; } }
+body.wk-full #wk-open { display: none; }
+@media (prefers-reduced-motion: reduce) { #wk-open.on { animation: none; opacity: 1; } }

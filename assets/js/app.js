@@ -714,6 +714,19 @@
     on() { if (WKI.on_) return WKI.wake(); WKI.on_ = true; WKI.ev.forEach((e) => document.addEventListener(e, WKI.wake, true)); WKI.wake(); },
     off() { WKI.on_ = false; clearTimeout(WKI.t); document.body.classList.remove("wk-idle"); WKI.ev.forEach((e) => document.removeEventListener(e, WKI.wake, true)); },
   };
+  // a quiet chapter marker over the first render of Option 01, Option 02 and the common renders (data-walk "open": {t, s})
+  const WKO = {
+    el: null, t1: 0, off: () => WKO.hide(),
+    show(o) {
+      WKO.hide(); if (!o) return;
+      if (!WKO.el) { const e = document.createElement("div"); e.id = "wk-open"; e.innerHTML = "<b></b><i></i><span></span>"; document.body.appendChild(e); WKO.el = e; }
+      const e = WKO.el; $("b", e).textContent = o.t; $("span", e).textContent = o.s || "";
+      e.classList.remove("on"); void e.offsetWidth; e.classList.add("on");
+      WKO.t1 = setTimeout(WKO.hide, 3600);
+      setTimeout(() => { if (WKO.el && WKO.el.classList.contains("on")) ["keydown", "pointerdown"].forEach((ev) => document.addEventListener(ev, WKO.off, { once: true, capture: true })); }, 400);
+    },
+    hide() { clearTimeout(WKO.t1); if (WKO.el) WKO.el.classList.remove("on"); ["keydown", "pointerdown"].forEach((ev) => document.removeEventListener(ev, WKO.off, true)); },
+  };
   function walkHook(sc) {
     let s = {};
     try { s = JSON.parse(sc.dataset.walk || "{}"); } catch (e) { console.error(`${sc.id}: data-walk is not valid JSON`, e); }
@@ -734,12 +747,12 @@
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
         $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["OP 01", "OP 02"]).map((t) => `<span>${t}</span>`).join("") : "";
         $("#wk-kick").textContent = `${s.kick || (SECT.names && SECT.names[sc.dataset.part]) || "Visual Direction"} · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
-        WKI.on();
+        WKI.on(); WKO.show(s.open);
         AUD.play();
       },
       step(k) { if (s.r[k - 1]) walkShow(s, k); },
       leave() {
-        WKI.off(); setPan(false); document.body.classList.remove("in-walk");
+        WKI.off(); WKO.hide(); setPan(false); document.body.classList.remove("in-walk");
         setTimeout(() => { if (!isWalk(scenes[state.idx])) { AUD.stop(); setFull(false); } }, 0);
       },
     };
