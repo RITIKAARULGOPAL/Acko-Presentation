@@ -6211,7 +6211,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
         const A = free, cells = astar(Q[Q.length - 1], goal, A);
         if (!cells) { Q.push(goal); window.ACKO_WALK_WARN = (window.ACKO_WALK_WARN || 0) + 1; continue; }
         const pts = pull(cells, A).map(([i, j]) => [GX + i * CELL, GY + j * CELL]);
-        const sm = rounded(pts, 700); Q.push(...(clearPath(sm, A) ? sm : pts).slice(1));
+        Q.push(...pts.slice(1));                                                  // straight from point to point, no rounding (Ritika, 22 Nov)
       }
       return Q;
     }
