@@ -649,22 +649,47 @@
   let kpOn = true;
   $("#wk-kp").onclick = () => { kpOn = !kpOn; $("#wk-kp").classList.toggle("on", kpOn); document.body.classList.toggle("kp-off", !kpOn); };
   // the keyplan: the deck's keyplan image, framed around its camera mark (a little wider than the deck's crop)
-  function keyplan(slideNo) {
-    let k = (window.ACKO_KP || {})[slideNo]; const box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner), cam = $(".wk-cam", inner);
-    const nocam = !k;       // no camera position in the deck for this render: the whole floor plan, no arrow, until one is added to data/keyplans.js
+  function keyplan(slideNo, others) {
+    const KPD = window.ACKO_KP || {};
+    let k = KPD[slideNo]; const box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner), cam = $(".wk-cam:not(.alt)", inner);
+    const nocam = !k;       // no camera position for this render: the whole floor plan, no arrow, until one is added to data/keyplans.js
     if (nocam) k = { img: "kp-119", x: 50, y: 50, rot: 0, view: [0, 0, 100, 100] };
     box.style.display = ""; cam.style.display = nocam ? "none" : "";
+    // the other views of this space, on the same plan: a second, fainter arrow each, and the card is framed around them all
+    const alts = nocam ? [] : (others || []).map((o) => KPD[o]).filter((o) => o && o.img === k.img);
+    $$(".wk-cam.alt", inner).forEach((e) => e.remove());
+    const view = alts.reduce((v, o) => [Math.min(v[0], o.view[0]), Math.min(v[1], o.view[1]), Math.max(v[2], o.view[2]), Math.max(v[3], o.view[3])], k.view.slice());
+    const altEls = alts.map((o) => { const e = cam.cloneNode(true); e.classList.add("alt"); e.style.display = ""; inner.appendChild(e); return [e, o]; });
+    inner._k = k;
     const place = () => {
       const W = box.clientWidth, Hh = box.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
       if (!W || !iw) return;
-      const vw = ((k.view[2] - k.view[0]) / 100) * iw, vh = ((k.view[3] - k.view[1]) / 100) * ih;
+      const vw = ((view[2] - view[0]) / 100) * iw, vh = ((view[3] - view[1]) / 100) * ih;
       const f = nocam ? 1 : 1.5, s = Math.min(W / (vw * f), Hh / (vh * f)), w = iw * s, h = ih * s;
       const cx = (k.x / 100) * w, cy = (k.y / 100) * h;
-      const tx = clamp(W / 2 - cx, W - w, 0), ty = clamp(Hh / 2 - cy, Hh - h, 0);
+      const mx = ((view[0] + view[2]) / 200) * w, my = ((view[1] + view[3]) / 200) * h;      // centre of the framed area
+      const tx = clamp(W / 2 - (alts.length ? mx : cx), W - w, 0), ty = clamp(Hh / 2 - (alts.length ? my : cy), Hh - h, 0);
       inner.style.width = w + "px"; inner.style.transform = `translate(${tx}px, ${ty}px)`;
       cam.style.left = cx + "px"; cam.style.top = cy + "px"; cam.style.setProperty("--rot", k.rot + "deg");
+      altEls.forEach(([e, o]) => { e.style.left = (o.x / 100) * w + "px"; e.style.top = (o.y / 100) * h + "px"; e.style.setProperty("--rot", o.rot + "deg"); });
     };
     if (img.dataset.key !== k.img) { img.dataset.key = k.img; img.onload = place; img.src = asset("assets/img/" + k.img + ".webp"); } else place();
+  }
+  // ?kpedit=1: press on the keyplan card where the camera stands and drag the way it looks; the numbers print on the card and in the console
+  if (/[?&]kpedit=1/.test(location.search)) {
+    const card = $("#wk-kpimg"), lab = document.createElement("div");
+    lab.style.cssText = "position:absolute;left:0;right:0;bottom:0;padding:2px 4px;background:rgba(0,0,0,.7);color:#fff;font:10px monospace;z-index:5";
+    card.appendChild(lab); card.style.pointerEvents = "auto"; card.style.cursor = "crosshair";
+    const pt = (e) => { const r = $(".wk-kp-in", card).getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100]; };
+    let p0 = null;
+    card.addEventListener("pointerdown", (e) => { e.stopPropagation(); card.setPointerCapture(e.pointerId); p0 = pt(e); });
+    card.addEventListener("pointermove", (e) => {
+      if (!p0) return; const p1 = pt(e), r = $(".wk-kp-in", card).getBoundingClientRect(), ar = r.width / r.height;
+      const rot = Math.round((Math.atan2(-(p1[0] - p0[0]) * ar, (p1[1] - p0[1])) * 180) / Math.PI * 10) / 10, cam = $(".wk-cam:not(.alt)", card);
+      cam.style.display = ""; cam.style.left = (p0[0] / 100) * r.width + "px"; cam.style.top = (p0[1] / 100) * r.height + "px"; cam.style.setProperty("--rot", rot + "deg");
+      lab.textContent = `x ${p0[0].toFixed(2)}  y ${p0[1].toFixed(2)}  rot ${rot}  (${$("img", card).dataset.key})`; console.log(lab.textContent);
+    });
+    card.addEventListener("pointerup", () => { p0 = null; });
   }
   function walkShow(s, k) {
     const key = s.r[k - 1];
@@ -672,7 +697,7 @@
     if (!AR[key]) { const im = new Image(); im.onload = () => { AR[key] = im.naturalWidth / im.naturalHeight; $$(".cover", f).forEach((c) => (c.dataset.ar = AR[key])); layoutCovers(); }; im.src = PHOTO.src(key); }
     world("photo"); shade("photo");
     $$("#wk-opt span").forEach((b, i) => b.classList.toggle("on", i === k - 1));
-    keyplan((s.kp || [])[k - 1]);
+    keyplan((s.kp || [])[k - 1], s.kp2 || []);
     if (AUD.want && AUD.el.paused) AUD.play();
   }
   // the page rests with the cursor: after 2.5 s without a move, press or key everything but the render fades (body.wk-idle); any move brings it back

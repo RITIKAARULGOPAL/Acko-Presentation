@@ -495,3 +495,8 @@ body.wk-idle, body.wk-idle * { cursor: none !important; }
 .walk .wk-nav:hover button.on { background: rgba(10,6,30,.62); padding-left: calc(var(--pt) * 3); padding-right: calc(var(--pt) * 3); margin-top: calc(var(--pt) * 1); }
 .walk .wk-nav:hover button:first-child { border-radius: calc(var(--pt) * 2) calc(var(--pt) * 2) 0 0; padding-top: calc(var(--pt) * 3); }
 .walk .wk-nav:hover { max-height: 46vh; overflow-y: auto; scrollbar-width: thin; }
+
+/* the other views of the same space: a smaller, fainter arrow, no pulse */
+.wk-cam.alt { opacity: .5; }
+.wk-cam.alt svg { transform: rotate(var(--rot, 0deg)) scale(.8); }
+.wk-cam.alt::after { display: none; }
