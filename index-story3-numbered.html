@@ -2588,6 +2588,56 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 #s-start-choice .sc-ord .ar { color: var(--purple); font-size: calc(var(--pt) * 14); }
 #s-start-choice .sc-ord .why { margin-left: auto; margin-right: calc(var(--pt) * 8); font-size: calc(var(--pt) * 8.5); color: #666; }
 #s-start-choice .sc-ord .go { font-size: calc(var(--pt) * 9.5); font-weight: 700; color: var(--purple); }
+
+/* variations on the film tile + render strip (design D) */
+#s-start-choice .dv-x { display: none; position: absolute; }
+#s-start-choice .sc-v-d .sc-tile, #s-start-choice .sc-v-d .sc-strip, #s-start-choice .sc-v-d .sc-b { transition: left .5s var(--ease), top .5s var(--ease), width .5s var(--ease), height .5s var(--ease); }
+/* V1 big film */
+#s-start-choice .page[data-dv="1"] .sc-tile { left: 8%; top: 26%; width: 54%; height: 52%; }
+#s-start-choice .page[data-dv="1"] .sc-strip { left: 64%; top: 26%; width: 28%; height: 34%; }
+#s-start-choice .page[data-dv="1"] .sc-v-d .sc-b { top: 82%; }
+#s-start-choice .page[data-dv="1"] .sc-v-d .sc-b.r { left: 64%; }
+/* V2 vertical strip */
+#s-start-choice .page[data-dv="2"] .sc-tile { left: 8%; top: 26%; width: 64%; height: 56%; }
+#s-start-choice .page[data-dv="2"] .sc-strip { left: 74%; top: 26%; width: 18%; height: 56%; grid-template-columns: 1fr; grid-template-rows: repeat(6, 1fr); }
+#s-start-choice .page[data-dv="2"] .sc-v-d .sc-b { top: 86%; }
+#s-start-choice .page[data-dv="2"] .sc-v-d .sc-b.r { left: 27%; }
+/* V3 fanned stack */
+#s-start-choice .page[data-dv="3"] .sc-tile { left: 8%; top: 28%; width: 30%; height: 46%; }
+#s-start-choice .page[data-dv="3"] .sc-strip { display: block; left: 42%; top: 24%; width: 50%; height: 56%; }
+#s-start-choice .page[data-dv="3"] .sc-strip button { position: absolute; width: 28%; height: 66%; box-shadow: 0 10px 26px rgba(30,20,70,.3); border: 3px solid #fff; filter: none; }
+#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(1) { left: 0; top: 18%; transform: rotate(-6deg); }
+#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(2) { left: 14%; top: 4%; transform: rotate(3deg); }
+#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(3) { left: 28%; top: 22%; transform: rotate(-3deg); }
+#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(4) { left: 42%; top: 2%; transform: rotate(5deg); }
+#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(5) { left: 56%; top: 20%; transform: rotate(-4deg); }
+#s-start-choice .page[data-dv="3"] .sc-strip button:nth-child(6) { left: 71%; top: 6%; transform: rotate(4deg); }
+#s-start-choice .page[data-dv="3"] .sc-strip button:hover { transform: rotate(0) scale(1.1); z-index: 9; }
+/* V4 dark stage */
+#s-start-choice .page[data-dv="4"] { background: radial-gradient(120% 120% at 20% 10%, #3a1a98, #160a46 70%); }
+#s-start-choice .page[data-dv="4"] .sc-v-d .sc-q { color: #fff; }
+#s-start-choice .page[data-dv="4"] .sc-v-d .sc-q b, #s-start-choice .page[data-dv="4"] .sc-v-d .sc-k { color: #cbbdf4; }
+#s-start-choice .page[data-dv="4"] .sc-v-d .sc-b.f { background: #fff; color: var(--purple); border-color: #fff; }
+#s-start-choice .page[data-dv="4"] .sc-v-d .sc-b.r { color: #fff; border-color: #fff; }
+#s-start-choice .page[data-dv="4"] .sc-tile, #s-start-choice .page[data-dv="4"] .sc-strip button { box-shadow: 0 14px 34px rgba(0,0,0,.35); }
+/* V5 labelled halves */
+#s-start-choice .page[data-dv="5"] .sc-tile { left: 8%; top: 31%; width: 38%; height: 44%; }
+#s-start-choice .page[data-dv="5"] .sc-strip { left: 54%; top: 31%; width: 38%; height: 44%; }
+#s-start-choice .page[data-dv="5"] .sc-v-d .sc-b { top: 82%; }
+#s-start-choice .page[data-dv="5"] .sc-v-d .sc-b.r { left: 54%; }
+#s-start-choice .page[data-dv="5"] .dv-cap { display: block; top: 25%; font-size: calc(var(--pt) * 8.5); font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--purple); }
+#s-start-choice .page[data-dv="5"] .dv-cap.l { left: 8%; }
+#s-start-choice .page[data-dv="5"] .dv-cap.r { left: 54%; }
+#s-start-choice .page[data-dv="5"] .dv-div { display: block; left: 50%; top: 25%; width: 2px; height: 58%; background: #e3dcf7; }
+/* V6 hover-led */
+#s-start-choice .page[data-dv="6"] .sc-v-d .sc-q { font-size: calc(var(--pt) * 22); }
+#s-start-choice .page[data-dv="6"] .sc-tile { left: 8%; top: 24%; width: 38%; height: 58%; }
+#s-start-choice .page[data-dv="6"] .sc-strip { left: 48%; top: 24%; width: 44%; height: 58%; }
+#s-start-choice .page[data-dv="6"] .sc-v-d .sc-b { display: none; }
+#s-start-choice .page[data-dv="6"] .sc-tile::after, #s-start-choice .page[data-dv="6"] .sc-strip::after { position: absolute; z-index: 3; left: calc(var(--pt) * 6); bottom: calc(var(--pt) * 6); padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #fff; color: var(--purple); font-size: calc(var(--pt) * 9); font-weight: 700; opacity: .0; transform: translateY(6px); transition: opacity .3s var(--ease), transform .3s var(--ease); pointer-events: none; }
+#s-start-choice .page[data-dv="6"] .sc-tile::after { content: "Start with the film"; }
+#s-start-choice .page[data-dv="6"] .sc-strip::after { content: "Start with the renders"; }
+#s-start-choice .page[data-dv="6"] .sc-tile:hover::after, #s-start-choice .page[data-dv="6"] .sc-strip:hover::after { opacity: 1; transform: none; }
 </style>
 <section class="scene" id="s-start-choice" data-part="p6" data-title="Walkthrough or renders?" data-steps="1" data-mins="0.3"
   data-notes="Shall we start with the walkthrough film, or with the renders? Either way we see both: the film is the whole campus in motion, the renders are every space, one by one. → Bridge: Your call.">
@@ -2613,6 +2663,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <h2 class="sc-q">Film first, or <b>space by space?</b></h2>
       <button type="button" class="sc-tile" data-pick="film" style="background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span></button>
       <div class="sc-strip"><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-reception-op1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-cafe1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-deck.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-garden.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-collab.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-zen.webp)"></button></div>
+      <span class="dv-x dv-cap l">The film</span><span class="dv-x dv-cap r">The spaces</span><i class="dv-x dv-div"></i>
       <button type="button" class="sc-b f" data-pick="film">Start with the film</button>
       <button type="button" class="sc-b r" data-pick="renders">Start with the renders</button>
     </div>
@@ -8305,7 +8356,7 @@ ACKO.slide("s-start-choice", ({ $, $$, plain, reveal, go, sceneIx }) => {
       window.__wtOrder = "";
       const pg = $(".page", sc), q = new URLSearchParams(location.search); let c = q.get("choice") || "";
       try { if (q.get("choice")) sessionStorage.setItem("wtChoice", c); else c = sessionStorage.getItem("wtChoice") || ""; } catch (e) {}
-      pg.setAttribute("data-choice", /^[a-e]$/.test(c) ? c : "a");
+      pg.setAttribute("data-choice", /^[a-e]$/.test(c) ? c : "a"); { let d = q.get("dv") || ""; try { if (q.get("dv")) sessionStorage.setItem("wtDv", d); else d = sessionStorage.getItem("wtDv") || ""; } catch (e) {} if (/^[1-6]$/.test(d)) pg.setAttribute("data-dv", d); else pg.removeAttribute("data-dv"); }
       plain(); reveal(pg, 60);
       if (!sc.dataset.on) { sc.dataset.on = 1; sc.addEventListener("click", (e) => { const b = e.target.closest("[data-pick]"); if (!b) return; e.stopPropagation(); e.preventDefault(); b.blur(); pick(b.dataset.pick); }); ["mousedown", "pointerdown", "dblclick"].forEach((t) => sc.addEventListener(t, (e) => { if (e.target.closest("[data-pick]")) e.stopPropagation(); })); }
     },
