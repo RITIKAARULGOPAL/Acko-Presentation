@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Film tile + render strip · variations</title>
+<style>
+  :root { --purple: #5222d0; --ink: #111; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, "Segoe UI", sans-serif; color: var(--ink); background: #f3f0fb; }
+  header { padding: 14px 20px 10px; }
+  h1 { margin: 0 0 4px; font-size: 18px; }
+  p { margin: 0; color: #555; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 20px; }
+  button { font: inherit; padding: 8px 14px; border: 1px solid #cfc6ea; border-radius: 8px; background: #fff; cursor: pointer; }
+  button[aria-pressed="true"] { background: var(--purple); color: #fff; border-color: var(--purple); }
+  .desc { padding: 4px 20px 10px; min-height: 28px; }
+  .frame { position: relative; margin: 0 20px 20px; aspect-ratio: 16 / 9; max-height: calc(100vh - 230px); background: #fff; border: 1px solid #cfc6ea; border-radius: 10px; overflow: hidden; }
+  iframe { width: 100%; height: 100%; border: 0; }
+  .note { position: absolute; right: 12px; top: 10px; font-size: 12px; background: #fffc; padding: 2px 8px; border-radius: 6px; }
+  a { color: var(--purple); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Film tile + render strip: six variations</h1>
+  <p>Same slide and routing as the base; only the look changes. The deck takes about 40 s to start here.</p>
+</header>
+<div class="row" id="opts"></div>
+<div class="desc" id="desc"></div>
+<div class="frame"><iframe id="f" title="slide"></iframe><span class="note" id="note"></span></div>
+<script>
+const OPTS = {
+  0: ["Base", "As it is: play tile left, six thumbnails right, two pill buttons below."],
+  1: ["1 · Big film", "The film tile takes most of the width; a small 3 by 2 strip of renders on the right; each button sits under its own picture."],
+  2: ["2 · Vertical strip", "Wide film tile with the six renders as one tall column on the right edge."],
+  3: ["3 · Fanned stack", "A smaller film tile; the renders fan out like a handful of photos, and the one you hover straightens and lifts."],
+  4: ["4 · Dark stage", "Deep purple ground, white headline, inverted buttons; pictures unchanged."],
+  5: ["5 · Labelled halves", "A thin divider; THE FILM on the left, THE SPACES on the right, each with its own button."],
+  6: ["6 · Hover-led", "No buttons: the tile and the strip are the buttons, and a Start chip appears on hover."]
+};
+const q = new URLSearchParams(location.search);
+let o = OPTS[q.get("dv")] ? q.get("dv") : "0";
+function render() {
+  const host = document.getElementById("opts"); host.innerHTML = "";
+  for (const k in OPTS) { const b = document.createElement("button"); b.textContent = OPTS[k][0]; b.setAttribute("aria-pressed", k === o); b.onclick = () => { o = k; render(); }; host.appendChild(b); }
+  document.getElementById("desc").textContent = OPTS[o][1];
+  const url = "index-story3.html?choice=d&dv=" + (o === "0" ? "x" : o) + "&v=" + Date.now() + "#s-start-choice/1";
+  document.getElementById("f").src = url;
+  document.getElementById("note").innerHTML = '<a href="' + url + '" target="_blank">open full size</a>';
+  history.replaceState(null, "", "?dv=" + o);
+}
+render();
+</script>
+</body>
+</html>
