@@ -501,5 +501,3 @@ body.wk-idle, body.wk-idle * { cursor: none !important; }
 .wk-cam.alt svg { transform: rotate(var(--rot, 0deg)) scale(.8); }
 .wk-cam.alt::after { display: none; }
 
-/* the keyplan card a little larger so her green view arrow reads */
-.walk .wk-kp { width: calc(var(--pw) * .2); }

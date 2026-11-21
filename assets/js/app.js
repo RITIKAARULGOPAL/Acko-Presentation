@@ -649,13 +649,7 @@
   let kpOn = true;
   $("#wk-kp").onclick = () => { kpOn = !kpOn; $("#wk-kp").classList.toggle("on", kpOn); document.body.classList.toggle("kp-off", !kpOn); };
   // the keyplan: the deck's keyplan image, framed around its camera mark (a little wider than the deck's crop)
-  function keyplan(slideNo, others, imgName) {
-    if (imgName) {      // her own marked keyplan picture for this render (the camera and its view angle are drawn on it): shown as it is
-      const box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner);
-      box.style.display = ""; $$(".wk-cam", inner).forEach((e) => (e.style.display = "none"));
-      img.onload = null; img.dataset.key = imgName; inner.style.width = "100%"; inner.style.transform = "none"; img.src = asset("assets/img/" + imgName + ".webp");
-      return;
-    }
+  function keyplan(slideNo, others) {
     $$(".wk-cam:not(.alt)", $("#wk-kpimg")).forEach((e) => (e.style.display = ""));
     const KPD = window.ACKO_KP || {};
     let k = KPD[slideNo]; const box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner), cam = $(".wk-cam:not(.alt)", inner);
@@ -704,7 +698,7 @@
     if (!AR[key]) { const im = new Image(); im.onload = () => { AR[key] = im.naturalWidth / im.naturalHeight; $$(".cover", f).forEach((c) => (c.dataset.ar = AR[key])); layoutCovers(); }; im.src = PHOTO.src(key); }
     world("photo"); shade("photo");
     $$("#wk-opt span").forEach((b, i) => b.classList.toggle("on", i === k - 1));
-    keyplan((s.kp || [])[k - 1], s.kp2 || [], s.kpimg);
+    keyplan((s.kp || [])[k - 1], s.kp2 || []);
     if (AUD.want && AUD.el.paused) AUD.play();
   }
   // the page rests with the cursor: after 2.5 s without a move, press or key everything but the render fades (body.wk-idle); any move brings it back
