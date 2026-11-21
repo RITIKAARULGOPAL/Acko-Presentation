@@ -2522,126 +2522,105 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <style data-slide="s-start-choice">
 #s-start-choice .page { background: #fff; }
 #s-start-choice .sc-v { display: none; position: absolute; inset: 0; }
-#s-start-choice .page[data-choice="a"] .sc-v-a, #s-start-choice .page[data-choice="b"] .sc-v-b, #s-start-choice .page[data-choice="c"] .sc-v-c, #s-start-choice .page[data-choice="d"] .sc-v-d, #s-start-choice .page[data-choice="e"] .sc-v-e, #s-start-choice .page[data-choice="f"] .sc-v-f, #s-start-choice .page[data-choice="g"] .sc-v-g, #s-start-choice .page[data-choice="h"] .sc-v-h { display: block; }
+#s-start-choice .page[data-choice="a"] .sc-v-a, #s-start-choice .page[data-choice="b"] .sc-v-b, #s-start-choice .page[data-choice="c"] .sc-v-c, #s-start-choice .page[data-choice="d"] .sc-v-d, #s-start-choice .page[data-choice="e"] .sc-v-e { display: block; }
 #s-start-choice button { font-family: var(--body); cursor: pointer; border: 0; background: none; padding: 0; text-align: left; color: inherit; }
 #s-start-choice button:focus { outline: none; }
 #s-start-choice .sc-q { position: absolute; margin: 0; font-weight: 400; color: #111; line-height: 1.1; letter-spacing: -.01em; }
 #s-start-choice .sc-q b { font-weight: 800; color: var(--purple); }
-/* A · two doors */
-#s-start-choice .sc-v-a .sc-q { left: 0; width: 100%; top: 9%; text-align: center; font-size: calc(var(--pt) * 28); }
-#s-start-choice .sc-door { position: absolute; top: 26%; width: 20%; height: 58%; border-radius: calc(var(--pt) * 22) calc(var(--pt) * 22) calc(var(--pt) * 2) calc(var(--pt) * 2); overflow: hidden; background: linear-gradient(170deg, #8d70ec, #2a0f78); box-shadow: 0 14px 34px rgba(40,28,80,.2); transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
-#s-start-choice .sc-door::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 18%, rgba(255,255,255,.22), transparent 60%); transition: opacity .5s var(--ease); }
-#s-start-choice .sc-door:hover { transform: translateY(-8px); box-shadow: 0 24px 50px rgba(82,34,208,.35); }
-#s-start-choice .sc-door:hover::after { opacity: .55; }
-#s-start-choice .sc-door span { position: absolute; z-index: 2; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 9); color: #fff; font-size: calc(var(--pt) * 17); font-weight: 800; }
-#s-start-choice .sc-door .ic { width: calc(var(--pt) * 34); height: calc(var(--pt) * 34); }
-/* B · left or right */
-#s-start-choice .sc-v-b .sc-q { left: 0; width: 100%; top: 14%; text-align: center; font-size: calc(var(--pt) * 28); z-index: 3; color: #fff; }
-#s-start-choice .sc-v-b .sc-q b { color: #fff; }
-#s-start-choice .sc-side { position: absolute; top: 0; height: 100%; width: 50%; transition: width .6s var(--ease); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--pt) * 6); color: #fff; font-size: calc(var(--pt) * 60); font-weight: 200; line-height: 1; }
-#s-start-choice .sc-side em { font-style: normal; font-size: calc(var(--pt) * 22); font-weight: 800; letter-spacing: -.01em; }
-#s-start-choice .sc-side .ic { width: calc(var(--pt) * 26); height: calc(var(--pt) * 26); margin-bottom: calc(var(--pt) * 4); }
-#s-start-choice .sc-side.l { left: 0; background: linear-gradient(135deg, #2a0f78, #5222d0); }
-#s-start-choice .sc-side.r { right: 0; background: linear-gradient(225deg, #cbbdf4, #8d70ec); }
+#s-start-choice .sc-k { position: absolute; font-size: calc(var(--pt) * 7.5); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); }
+#s-start-choice .sc-glyph { width: calc(var(--pt) * 22); height: calc(var(--pt) * 22); border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center; }
+#s-start-choice .sc-glyph svg { width: 42%; height: 42%; fill: var(--purple); margin-left: 6%; }
+/* A · two cards */
+#s-start-choice .sc-v-a .sc-q { left: 8%; top: 12%; width: 84%; font-size: calc(var(--pt) * 30); }
+#s-start-choice .sc-v-a .sc-k { left: 8%; top: 7.5%; }
+#s-start-choice .sc-card { position: absolute; top: 32%; width: 40%; height: 52%; border-radius: calc(var(--pt) * 6); overflow: hidden; background-size: cover; background-position: center; box-shadow: 0 10px 30px rgba(40,28,80,.16); transition: transform .4s var(--ease), box-shadow .4s var(--ease); }
+#s-start-choice .sc-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(40,28,80,.26); }
+#s-start-choice .sc-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,6,30,.05) 30%, rgba(10,6,30,.78)); }
+#s-start-choice .sc-card .sc-glyph { position: absolute; left: 6%; top: 8%; }
+#s-start-choice .sc-card .sc-t { position: absolute; left: 6%; bottom: 20%; right: 6%; color: #fff; font-size: calc(var(--pt) * 20); font-weight: 800; line-height: 1.05; }
+#s-start-choice .sc-card .sc-s { position: absolute; left: 6%; bottom: 10%; right: 6%; color: rgba(255,255,255,.88); font-size: calc(var(--pt) * 9); }
+#s-start-choice .sc-card .sc-chip { position: absolute; right: 6%; top: 8%; color: #fff; font-size: calc(var(--pt) * 7); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; border: 1px solid rgba(255,255,255,.7); border-radius: 99px; padding: calc(var(--pt) * 1.6) calc(var(--pt) * 5); }
+/* B · split */
+#s-start-choice .sc-half { position: absolute; top: 0; height: 100%; width: 50%; overflow: hidden; background-size: cover; background-position: center; transition: width .6s var(--ease); }
+#s-start-choice .sc-half.l { left: 0; } #s-start-choice .sc-half.r { right: 0; }
 #s-start-choice .sc-v-b:has(.l:hover) .l, #s-start-choice .sc-v-b:has(.r:hover) .r { width: 58%; }
 #s-start-choice .sc-v-b:has(.l:hover) .r, #s-start-choice .sc-v-b:has(.r:hover) .l { width: 42%; }
-/* C · pick a number */
-#s-start-choice .sc-v-c .sc-q { left: 0; width: 100%; top: 16%; text-align: center; font-size: calc(var(--pt) * 32); }
-#s-start-choice .sc-num { position: absolute; top: 36%; width: calc(var(--pt) * 62); height: calc(var(--pt) * 62); border-radius: 50%; border: 3px solid var(--purple); color: var(--purple); display: grid; place-items: center; background: #fff; transition: background .35s var(--ease), color .35s var(--ease), transform .35s var(--ease); }
-#s-start-choice .sc-num .ic { width: calc(var(--pt) * 28); height: calc(var(--pt) * 28); }
-#s-start-choice .sc-num span { position: absolute; left: 50%; top: 112%; transform: translateX(-50%); white-space: nowrap; color: #111; font-size: calc(var(--pt) * 17); font-weight: 800; transition: color .35s var(--ease); }
-#s-start-choice .sc-num:hover span { color: var(--purple); }
-#s-start-choice .sc-num:hover { background: var(--purple); color: #fff; transform: scale(1.06); }
-/* D · face-down cards */
-#s-start-choice .sc-v-d .sc-q { left: 0; width: 100%; top: 10%; text-align: center; font-size: calc(var(--pt) * 28); }
-#s-start-choice .sc-card { position: absolute; top: 26%; width: 20%; height: 52%; perspective: 900px; }
-#s-start-choice .sc-card i { position: absolute; inset: 0; border-radius: calc(var(--pt) * 5); background: radial-gradient(circle at 30% 20%, #8d70ec, #3a1aa8 70%); box-shadow: 0 14px 34px rgba(40,28,80,.3); display: grid; place-items: center; color: rgba(255,255,255,.9); font-style: normal; font-size: calc(var(--pt) * 46); font-weight: 200; transition: transform .6s var(--ease); background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 2px, transparent 2px 10px), radial-gradient(circle at 30% 20%, #8d70ec, #3a1aa8 70%); }
-#s-start-choice .sc-card span { position: absolute; left: 0; right: 0; top: 104%; text-align: center; color: #111; font-size: calc(var(--pt) * 18); font-weight: 800; }
-#s-start-choice .sc-card:hover i { transform: rotateZ(-2deg) translateY(-8px); }
-#s-start-choice .sc-card.flip i { transform: rotateY(180deg); background: #fff; color: transparent; }
-/* E · fork in the path */
-#s-start-choice .sc-v-e .sc-q { left: 8%; top: 9%; width: 84%; font-size: calc(var(--pt) * 28); }
-#s-start-choice .sc-v-e svg { position: absolute; left: 6%; top: 24%; width: 88%; height: 62%; overflow: visible; }
-#s-start-choice .sc-v-e .pth { fill: none; stroke: #cbbdf4; stroke-width: 4; stroke-linecap: round; transition: stroke .4s var(--ease); }
-#s-start-choice .sc-v-e .fk:hover .pth { stroke: var(--purple); }
-#s-start-choice .sc-v-e .dot { fill: #fff; stroke: var(--purple); stroke-width: 4; transition: fill .3s var(--ease), r .3s var(--ease); }
-#s-start-choice .sc-v-e .fk:hover .dot { fill: var(--purple); }
-#s-start-choice .sc-v-e .fk { cursor: pointer; }
-#s-start-choice .sc-v-e text { font-family: var(--body); font-weight: 800; font-size: 40px; fill: #111; text-anchor: end; transition: fill .3s var(--ease); }
-#s-start-choice .sc-v-e .fk:hover text { fill: var(--purple); }
-#s-start-choice .sc-v-e .arr { fill: none; stroke: var(--purple); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
-/* F · A | B switch */
-#s-start-choice .sc-v-f .sc-q { left: 0; width: 100%; top: 20%; text-align: center; font-size: calc(var(--pt) * 30); }
-#s-start-choice .sc-sw { position: absolute; left: 50%; top: 46%; transform: translateX(-50%); width: 52%; height: 20%; border-radius: 99px; background: #f1edfb; border: 2px solid #d9d0f5; }
-#s-start-choice .sc-sw .kn { position: absolute; top: 8%; left: 3%; width: 46%; height: 84%; border-radius: 99px; background: var(--purple); transition: left .5s var(--ease), background .3s var(--ease); box-shadow: 0 6px 16px rgba(82,34,208,.4); }
-#s-start-choice .sc-sw.r .kn { left: 51%; }
-#s-start-choice .sc-sw button { position: absolute; top: 0; height: 100%; width: 50%; display: grid; place-items: center; font-size: calc(var(--pt) * 20); font-weight: 800; z-index: 2; color: var(--purple); transition: color .3s var(--ease); }
-#s-start-choice .sc-sw button.l { left: 0; } #s-start-choice .sc-sw button.r { right: 0; }
-#s-start-choice .sc-sw:not(.r) button.l, #s-start-choice .sc-sw.r button.r { color: #fff; }
-/* G · typographic */
-#s-start-choice .sc-v-g .sc-q { left: 8%; top: 12%; width: 84%; font-size: calc(var(--pt) * 22); color: #777; }
-#s-start-choice .sc-way { position: absolute; left: 8%; font-size: calc(var(--pt) * 56); font-weight: 800; line-height: 1; letter-spacing: -.02em; color: #111; background: linear-gradient(var(--purple), var(--purple)) no-repeat 0 100% / 0 6px; padding-bottom: .1em; transition: background-size .6s var(--ease), color .4s var(--ease); }
-#s-start-choice .sc-way:hover { background-size: 100% 6px; color: var(--purple); }
-/* H · frosted frames */
-#s-start-choice .sc-v-h .sc-q { left: 0; width: 100%; top: 9%; text-align: center; font-size: calc(var(--pt) * 28); }
-#s-start-choice .sc-fr { position: absolute; top: 27%; width: 34%; height: 56%; border-radius: calc(var(--pt) * 6); overflow: hidden; box-shadow: 0 14px 34px rgba(40,28,80,.22); transition: transform .8s var(--ease); }
-#s-start-choice .sc-fr::before { content: ""; position: absolute; inset: 0; backdrop-filter: blur(22px) saturate(1.1); -webkit-backdrop-filter: blur(22px) saturate(1.1); background: rgba(255,255,255,.45); transition: opacity .7s var(--ease); }
-#s-start-choice .sc-fr:hover { transform: scale(1.03); }
-#s-start-choice .sc-fr:hover::before { opacity: .55; }
-#s-start-choice .sc-fr .ic { position: absolute; z-index: 2; left: 50%; top: 30%; transform: translateX(-50%); color: #3a1aa8; width: calc(var(--pt) * 34); height: calc(var(--pt) * 34); }
-#s-start-choice .sc-fr .lb { position: absolute; z-index: 2; left: 0; right: 0; top: 54%; text-align: center; color: #1d1640; font-size: calc(var(--pt) * 22); }
-#s-start-choice .sc-fr span { position: absolute; z-index: 2; left: 0; right: 0; bottom: 9%; text-align: center; color: #3a1aa8; font-size: calc(var(--pt) * 9); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
-#s-start-choice .sc-fr.go { transform: scale(1.25); }
-#s-start-choice .sc-fr.go::before { opacity: 0; }
-#s-start-choice .ic { display: block; width: calc(var(--pt) * 22); height: calc(var(--pt) * 22); }
-#s-start-choice .lb { font-weight: 800; letter-spacing: -.01em; }
-@media (prefers-reduced-motion: reduce) { #s-start-choice * { transition: none !important; } }
+#s-start-choice .sc-half::before { content: ""; position: absolute; inset: 0; background: rgba(10,6,30,.55); transition: background .4s var(--ease); }
+#s-start-choice .sc-half.r::before { background: rgba(255,255,255,.35); }
+#s-start-choice .sc-half:hover::before { background: rgba(10,6,30,.35); }
+#s-start-choice .sc-half.r:hover::before { background: rgba(255,255,255,.15); }
+#s-start-choice .sc-half .sc-t { position: absolute; left: 10%; bottom: 24%; font-size: calc(var(--pt) * 34); font-weight: 800; line-height: 1; color: #fff; }
+#s-start-choice .sc-half.r .sc-t { color: #111; }
+#s-start-choice .sc-half .sc-s { position: absolute; left: 10%; bottom: 17%; font-size: calc(var(--pt) * 10); color: rgba(255,255,255,.9); }
+#s-start-choice .sc-half.r .sc-s { color: #111; }
+#s-start-choice .sc-half .sc-glyph { position: absolute; left: 10%; bottom: 35%; }
+#s-start-choice .sc-v-b .sc-or { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 3; width: calc(var(--pt) * 22); height: calc(var(--pt) * 22); border-radius: 50%; background: #fff; color: var(--purple); display: grid; place-items: center; font-weight: 800; font-size: calc(var(--pt) * 8); letter-spacing: .1em; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+/* C · question and pills */
+#s-start-choice .sc-v-c .sc-q { left: 8%; top: 30%; width: 84%; font-size: calc(var(--pt) * 36); }
+#s-start-choice .sc-v-c .sc-k { left: 8%; top: 24%; }
+#s-start-choice .sc-pills { position: absolute; left: 8%; top: 56%; display: flex; gap: 4%; }
+#s-start-choice .sc-pill { display: block; font-size: calc(var(--pt) * 12); font-weight: 700; padding: calc(var(--pt) * 5) calc(var(--pt) * 14); border-radius: 99px; border: 2px solid var(--purple); white-space: nowrap; transition: background .3s var(--ease), color .3s var(--ease), transform .3s var(--ease); }
+#s-start-choice .sc-pill:hover { transform: translateY(-3px); }
+#s-start-choice .sc-pill.f { background: var(--purple); color: #fff; }
+#s-start-choice .sc-pill.r { background: #fff; color: var(--purple); }
+#s-start-choice .sc-pill.r:hover { background: #f3effd; }
+#s-start-choice .sc-cap { display: block; margin: calc(var(--pt) * 5) 0 0 calc(var(--pt) * 7); font-size: calc(var(--pt) * 8.5); color: #666; }
+/* D · film tile and strip */
+#s-start-choice .sc-v-d .sc-q { left: 8%; top: 9%; width: 84%; font-size: calc(var(--pt) * 28); }
+#s-start-choice .sc-v-d .sc-k { left: 8%; top: 5%; }
+#s-start-choice .sc-tile { position: absolute; left: 8%; top: 28%; width: 34%; height: 46%; border-radius: calc(var(--pt) * 5); overflow: hidden; background-size: cover; background-position: center; transition: transform .4s var(--ease); }
+#s-start-choice .sc-tile:hover { transform: scale(1.02); }
+#s-start-choice .sc-tile::before { content: ""; position: absolute; inset: 0; background: rgba(10,6,30,.35); }
+#s-start-choice .sc-tile .sc-glyph { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: calc(var(--pt) * 28); height: calc(var(--pt) * 28); }
+#s-start-choice .sc-strip { position: absolute; left: 44%; top: 28%; width: 48%; height: 46%; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: calc(var(--pt) * 2.5); }
+#s-start-choice .sc-strip button { border-radius: calc(var(--pt) * 3); background-size: cover; background-position: center; transition: transform .35s var(--ease), filter .35s var(--ease); filter: saturate(.9); }
+#s-start-choice .sc-strip button:hover { transform: scale(1.04); filter: none; }
+#s-start-choice .sc-v-d .sc-b { position: absolute; top: 80%; font-size: calc(var(--pt) * 10.5); font-weight: 700; padding: calc(var(--pt) * 4) calc(var(--pt) * 11); border-radius: 99px; border: 2px solid var(--purple); }
+#s-start-choice .sc-v-d .sc-b.f { left: 8%; background: var(--purple); color: #fff; }
+#s-start-choice .sc-v-d .sc-b.r { left: 26%; color: var(--purple); }
+/* E · order chips */
+#s-start-choice .sc-v-e .sc-q { left: 8%; top: 12%; width: 84%; font-size: calc(var(--pt) * 28); }
+#s-start-choice .sc-v-e .sc-k { left: 8%; top: 7.5%; }
+#s-start-choice .sc-ord { position: absolute; left: 8%; width: 84%; height: 20%; border: 1.5px solid #d9d0f5; border-radius: calc(var(--pt) * 5); display: flex; align-items: center; gap: calc(var(--pt) * 6); padding: 0 calc(var(--pt) * 10); transition: border-color .3s var(--ease), background .3s var(--ease); }
+#s-start-choice .sc-ord:hover { border-color: var(--purple); background: #faf8ff; }
+#s-start-choice .sc-ord .ch { font-size: calc(var(--pt) * 13); font-weight: 800; color: #111; padding: calc(var(--pt) * 3) calc(var(--pt) * 9); border-radius: 99px; background: #f1edfb; }
+#s-start-choice .sc-ord .ch.p { background: var(--purple); color: #fff; }
+#s-start-choice .sc-ord .ar { color: var(--purple); font-size: calc(var(--pt) * 14); }
+#s-start-choice .sc-ord .why { margin-left: auto; margin-right: calc(var(--pt) * 8); font-size: calc(var(--pt) * 8.5); color: #666; }
+#s-start-choice .sc-ord .go { font-size: calc(var(--pt) * 9.5); font-weight: 700; color: var(--purple); }
 </style>
-<section class="scene" id="s-start-choice" data-part="p6" data-title="Which way in?" data-steps="1" data-mins="0.3"
-  data-notes="Walkthrough first, or renders first? Ask the room which way they would like to go in; either way we see both. → Bridge: Your call.">
+<section class="scene" id="s-start-choice" data-part="p6" data-title="Walkthrough or renders?" data-steps="1" data-mins="0.3"
+  data-notes="Shall we start with the walkthrough film, or with the renders? Either way we see both: the film is the whole campus in motion, the renders are every space, one by one. → Bridge: Your call.">
   <div class="page rv" data-choice="a">
     <div class="sc-v sc-v-a">
-      <h2 class="sc-q">Which way <b>in?</b></h2>
-      <button type="button" class="sc-door" data-pick="film" style="left:29%"><span><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 54 C8 40 26 46 26 34 C26 22 12 26 16 16" stroke-dasharray="1 7"/><path d="M44 8 a10 10 0 0 1 10 10 c0 8-10 20-10 20 s-10-12-10-20 a10 10 0 0 1 10-10z"/><circle cx="44" cy="18" r="3.4"/></svg>Walkthrough</span></button>
-      <button type="button" class="sc-door" data-pick="renders" style="left:51%"><span><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="4"/><circle cx="44" cy="25" r="5"/><path d="M8 46 L24 30 L36 42 L44 35 L56 47"/></svg>Renders</span></button>
+      <span class="sc-k">Visual direction</span>
+      <h2 class="sc-q">Where shall we <b>start?</b></h2>
+      <button type="button" class="sc-card" data-pick="film" style="left:8%;background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span><span class="sc-chip">Film</span><span class="sc-t">The walkthrough</span><span class="sc-s">A walk through the Loop, arrival to the last room.</span></button>
+      <button type="button" class="sc-card" data-pick="renders" style="left:52%;background-image:url(assets/img/r3-reception-op1.webp)"><span class="sc-chip">17 spaces</span><span class="sc-t">The renders</span><span class="sc-s">Every space, one by one, with its light and its mood.</span></button>
     </div>
     <div class="sc-v sc-v-b">
-      <h2 class="sc-q">Left, <b>or right?</b></h2>
-      <button type="button" class="sc-side l" data-pick="film"><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 54 C8 40 26 46 26 34 C26 22 12 26 16 16" stroke-dasharray="1 7"/><path d="M44 8 a10 10 0 0 1 10 10 c0 8-10 20-10 20 s-10-12-10-20 a10 10 0 0 1 10-10z"/><circle cx="44" cy="18" r="3.4"/></svg><span>←</span><em>Walkthrough</em></button>
-      <button type="button" class="sc-side r" data-pick="renders"><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="4"/><circle cx="44" cy="25" r="5"/><path d="M8 46 L24 30 L36 42 L44 35 L56 47"/></svg><span>→</span><em>Renders</em></button>
+      <button type="button" class="sc-half l" data-pick="film" style="background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span><span class="sc-t">Walk<br>through it</span><span class="sc-s">The campus in motion</span></button>
+      <button type="button" class="sc-half r" data-pick="renders" style="background-image:url(assets/img/r3-reception-op1.webp)"><span class="sc-t">See it<br>still</span><span class="sc-s">Every space, one by one</span></button>
+      <span class="sc-or">OR</span>
     </div>
     <div class="sc-v sc-v-c">
-      <h2 class="sc-q">Which one <b>first?</b></h2>
-      <button type="button" class="sc-num" data-pick="film" style="left:33%"><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 54 C8 40 26 46 26 34 C26 22 12 26 16 16" stroke-dasharray="1 7"/><path d="M44 8 a10 10 0 0 1 10 10 c0 8-10 20-10 20 s-10-12-10-20 a10 10 0 0 1 10-10z"/><circle cx="44" cy="18" r="3.4"/></svg><span>Walkthrough</span></button>
-      <button type="button" class="sc-num" data-pick="renders" style="left:58%"><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="4"/><circle cx="44" cy="25" r="5"/><path d="M8 46 L24 30 L36 42 L44 35 L56 47"/></svg><span>Renders</span></button>
+      <span class="sc-k">Visual direction</span>
+      <h2 class="sc-q">Walk through it, <b>or look at it first?</b></h2>
+      <div class="sc-pills"><div class="sc-pc"><button type="button" class="sc-pill f" data-pick="film">Start with the walkthrough</button><span class="sc-cap">The campus in motion</span></div><div class="sc-pc"><button type="button" class="sc-pill r" data-pick="renders">Start with the renders</button><span class="sc-cap">Every space, one by one</span></div></div>
     </div>
     <div class="sc-v sc-v-d">
-      <h2 class="sc-q">Pick a <b>card.</b></h2>
-      <button type="button" class="sc-card" data-pick="film" style="left:29%"><i>?</i><span>Walkthrough</span></button>
-      <button type="button" class="sc-card" data-pick="renders" style="left:51%"><i>?</i><span>Renders</span></button>
+      <span class="sc-k">Visual direction</span>
+      <h2 class="sc-q">Film first, or <b>space by space?</b></h2>
+      <button type="button" class="sc-tile" data-pick="film" style="background-image:url(assets/img/r3-collab.webp)"><span class="sc-glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg></span></button>
+      <div class="sc-strip"><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-reception-op1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-cafe1.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-deck.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-garden.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-collab.webp)"></button><button type="button" data-pick="renders" style="background-image:url(assets/img/r3-zen.webp)"></button></div>
+      <button type="button" class="sc-b f" data-pick="film">Start with the film</button>
+      <button type="button" class="sc-b r" data-pick="renders">Start with the renders</button>
     </div>
     <div class="sc-v sc-v-e">
-      <h2 class="sc-q">Which way <b>in?</b></h2>
-      <svg viewBox="0 0 1000 420" aria-hidden="true">
-        <path class="pth" d="M0 210 H300" />
-        <g class="fk" data-pick="film"><path class="pth" d="M300 210 C460 210 480 90 700 90 H900" /><text x="900" y="50">Walkthrough</text><circle class="dot" cx="920" cy="90" r="22" /><path class="arr" d="M912 90 H928 M921 82 L929 90 L921 98" style="stroke:#fff;mix-blend-mode:normal" /></g>
-        <g class="fk" data-pick="renders"><path class="pth" d="M300 210 C460 210 480 330 700 330 H900" /><text x="900" y="290">Renders</text><circle class="dot" cx="920" cy="330" r="22" /><path class="arr" d="M912 330 H928 M921 322 L929 330 L921 338" style="stroke:#fff" /></g>
-        <circle cx="300" cy="210" r="9" fill="#5222d0" />
-      </svg>
-    </div>
-    <div class="sc-v sc-v-f">
-      <h2 class="sc-q">Which <b>first?</b></h2>
-      <div class="sc-sw"><span class="kn"></span><button type="button" class="l" data-pick="film">Walkthrough</button><button type="button" class="r" data-pick="renders">Renders</button></div>
-    </div>
-    <div class="sc-v sc-v-g">
-      <h2 class="sc-q">Where to, first?</h2>
-      <button type="button" class="sc-way" data-pick="film" style="top:30%">Walkthrough</button>
-      <button type="button" class="sc-way" data-pick="renders" style="top:55%">Renders</button>
-    </div>
-    <div class="sc-v sc-v-h">
-      <h2 class="sc-q">Open <b>one.</b></h2>
-      <button type="button" class="sc-fr" data-pick="film" style="left:13%;background:linear-gradient(160deg,#e7defb,#a98cf0)"><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 54 C8 40 26 46 26 34 C26 22 12 26 16 16" stroke-dasharray="1 7"/><path d="M44 8 a10 10 0 0 1 10 10 c0 8-10 20-10 20 s-10-12-10-20 a10 10 0 0 1 10-10z"/><circle cx="44" cy="18" r="3.4"/></svg><b class="lb">Walkthrough</b><span>Tap to open</span></button>
-      <button type="button" class="sc-fr" data-pick="renders" style="left:53%;background:linear-gradient(200deg,#f1ecfd,#bfa8f5)"><svg class="ic" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="12" width="48" height="40" rx="4"/><circle cx="44" cy="25" r="5"/><path d="M8 46 L24 30 L36 42 L44 35 L56 47"/></svg><b class="lb">Renders</b><span>Tap to open</span></button>
+      <span class="sc-k">Visual direction</span>
+      <h2 class="sc-q">Which order <b>suits the room?</b></h2>
+      <button type="button" class="sc-ord" data-pick="film" style="top:34%"><span class="ch p">Walkthrough</span><span class="ar">→</span><span class="ch">Renders</span><span class="why">Set the scene in motion, then look closely</span><span class="go">Choose this</span></button>
+      <button type="button" class="sc-ord" data-pick="renders" style="top:60%"><span class="ch p">Renders</span><span class="ar">→</span><span class="ch">Walkthrough</span><span class="why">Look closely first, then walk it all</span><span class="go">Choose this</span></button>
     </div>
   </div>
 </section>
@@ -8283,9 +8262,9 @@ ACKO.slide("s-start-choice", ({ $, $$, plain, reveal, go, sceneIx }) => {
       window.__wtOrder = "";
       const pg = $(".page", sc), q = new URLSearchParams(location.search); let c = q.get("choice") || "";
       try { if (q.get("choice")) sessionStorage.setItem("wtChoice", c); else c = sessionStorage.getItem("wtChoice") || ""; } catch (e) {}
-      pg.setAttribute("data-choice", /^[a-h]$/.test(c) ? c : "a");
+      pg.setAttribute("data-choice", /^[a-e]$/.test(c) ? c : "a");
       plain(); reveal(pg, 60);
-      if (!sc.dataset.on) { sc.dataset.on = 1; sc.addEventListener("click", (e) => { const b = e.target.closest("[data-pick]"); if (!b) return; e.stopPropagation(); e.preventDefault(); b.blur(); const k = b.dataset.pick, ch = pg.dataset.choice; if (matchMedia("(prefers-reduced-motion: reduce)").matches) return pick(k); if (ch === "d") { b.classList.add("flip"); return setTimeout(() => pick(k), 650); } if (ch === "f") { const sw = b.closest(".sc-sw"); sw.classList.toggle("r", k === "renders"); return setTimeout(() => pick(k), 550); } if (ch === "h") { b.classList.add("go"); return setTimeout(() => pick(k), 700); } pick(k); }); ["mousedown", "pointerdown", "dblclick"].forEach((t) => sc.addEventListener(t, (e) => { if (e.target.closest("[data-pick]")) e.stopPropagation(); })); }
+      if (!sc.dataset.on) { sc.dataset.on = 1; sc.addEventListener("click", (e) => { const b = e.target.closest("[data-pick]"); if (!b) return; e.stopPropagation(); e.preventDefault(); b.blur(); pick(b.dataset.pick); }); ["mousedown", "pointerdown", "dblclick"].forEach((t) => sc.addEventListener(t, (e) => { if (e.target.closest("[data-pick]")) e.stopPropagation(); })); }
     },
   };
 });
