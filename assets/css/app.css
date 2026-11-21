@@ -452,3 +452,30 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 /* the walk's renders: the camera pushes in slowly from the whole picture, centred */
 .cover[data-fit].kb { animation: kbfit 26s cubic-bezier(.25, .1, .25, 1) forwards; transform-origin: 50% 50%; }
 @keyframes kbfit { from { transform: scale(1); } to { transform: scale(1.07); } }
+
+/* ---------- the walk, calmer (22 Nov): one margin on the right, the name block as a small grid, the space list folded away; everything
+   but the render fades when the cursor rests ---------- */
+.walk { --wkR: calc(var(--pl) + var(--pw) * .04); }
+.walk .walk-ctl { right: var(--wkR); }
+.walk .wk-kp { right: var(--wkR); top: calc(var(--ptop) + var(--ph) * .033 + var(--pt) * 16); width: calc(var(--pw) * .15); opacity: .92; }
+.walk .wk-kp:hover { opacity: 1; }
+.walk .wk-name { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 10px; row-gap: 6px; width: min(30vw, 460px); }
+.walk .wk-name > * { grid-column: 1 / -1; }
+.walk .wk-name .wk-kick { grid-column: 1; grid-row: 1; font-size: calc(var(--pt) * 5.8); }
+.walk .wk-name .wk-opt { grid-column: 2; grid-row: 1; justify-self: start; }
+.walk .wk-name .wk-opt span { padding: 1px 8px; border-radius: 99px; }
+.walk .wk-name .wk-opt span + span { border-left: 1px solid rgba(255,255,255,.45); margin-left: 4px; }
+.walk .wk-name h2 { font-size: calc(var(--pt) * 19); }
+.walk .wk-name .wk-q { font-size: calc(var(--pt) * 8); }
+.walk .wk-name .wk-p { font-size: calc(var(--pt) * 6.8); color: rgba(255,255,255,.78); max-width: 90%; }
+.walk .wk-nav { right: var(--wkR); }
+.walk .wk-nav button:not(.on) { display: none; }
+.walk .wk-nav button.on::after { content: "  \25B4"; font-size: .8em; opacity: .7; }
+.walk .wk-nav:hover { padding: calc(var(--pt) * 3) calc(var(--pt) * 4); margin-right: calc(var(--pt) * -4); border-radius: calc(var(--pt) * 2); background: rgba(10,6,30,.62); backdrop-filter: blur(6px); }
+.walk .wk-nav:hover button:not(.on) { display: block; }
+.walk .wk-nav:hover button.on::after { content: ""; }
+.walk .wk-name, .walk .wk-nav, .walk .wk-kp, .walk .walk-ctl { transition: opacity .6s var(--ease); }
+body.wk-idle :is(.topbar, .hint, .lockup, .progress, #shade) { opacity: 0 !important; pointer-events: none; }
+body.wk-idle .walk :is(.wk-kp, .wk-name, .wk-nav, .walk-ctl) { opacity: 0 !important; pointer-events: none; }
+body.wk-idle, body.wk-idle * { cursor: none !important; }
+@media (prefers-reduced-motion: reduce) { .walk .wk-name, .walk .wk-nav, .walk .wk-kp, .walk .walk-ctl { transition: none; } }

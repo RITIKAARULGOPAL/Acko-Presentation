@@ -674,6 +674,16 @@
     keyplan((s.kp || [])[k - 1]);
     if (AUD.want && AUD.el.paused) AUD.play();
   }
+  // the page rests with the cursor: after 2.5 s without a move, press or key everything but the render fades (body.wk-idle); any move brings it back
+  const WKI = {
+    t: 0, on_: false, ev: ["mousemove", "pointerdown", "keydown", "touchstart", "wheel"],
+    wake: () => {
+      document.body.classList.remove("wk-idle"); clearTimeout(WKI.t);
+      WKI.t = setTimeout(() => { if (!document.querySelector(".walk-ctl:hover, .wk-nav:hover, .wk-kp:hover")) document.body.classList.add("wk-idle"); else WKI.wake(); }, 2500);
+    },
+    on() { if (WKI.on_) return WKI.wake(); WKI.on_ = true; WKI.ev.forEach((e) => document.addEventListener(e, WKI.wake, true)); WKI.wake(); },
+    off() { WKI.on_ = false; clearTimeout(WKI.t); document.body.classList.remove("wk-idle"); WKI.ev.forEach((e) => document.removeEventListener(e, WKI.wake, true)); },
+  };
   function walkHook(sc) {
     let s = {};
     try { s = JSON.parse(sc.dataset.walk || "{}"); } catch (e) { console.error(`${sc.id}: data-walk is not valid JSON`, e); }
@@ -688,12 +698,13 @@
         $("#wk-n").innerHTML = `${s.n || sc.dataset.title}<small>${s.sub || ""}</small>`;
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
         $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["OP 01", "OP 02"]).map((t) => `<span>${t}</span>`).join("") : "";
-        $("#wk-kick").textContent = `${(SECT.names && SECT.names[sc.dataset.part]) || "Visual Direction"} · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
+        $("#wk-kick").textContent = `${s.kick || (SECT.names && SECT.names[sc.dataset.part]) || "Visual Direction"} · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
+        WKI.on();
         AUD.play();
       },
       step(k) { if (s.r[k - 1]) walkShow(s, k); },
       leave() {
-        setPan(false); document.body.classList.remove("in-walk");
+        WKI.off(); setPan(false); document.body.classList.remove("in-walk");
         setTimeout(() => { if (!isWalk(scenes[state.idx])) { AUD.stop(); setFull(false); } }, 0);
       },
     };
