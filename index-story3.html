@@ -251,6 +251,15 @@
 #s-pitch .pp-stats > div:nth-child(4) b { font-size: calc(var(--pt) * 21) !important; }
 #s-pitch .pp-stats > div > span { font-size: calc(var(--pt) * 6.6) !important; }
 #s-pitch .pp-hand { font-size: calc(var(--pt) * 17) !important; line-height: 1.15; }
+/* the order of arrival (22 Nov, Ritika): the floor layout, then the pitches, then the words */
+#s-pitch .pp-pitches, #s-pitch .pp-len, #s-pitch .pp-lab { transition: opacity 1s var(--ease); }
+#s-pitch .pp-h, #s-pitch .pp-hand { transition: opacity .9s var(--ease), transform .9s var(--ease); }
+#s-pitch .pp-stats > div { transition: opacity .8s var(--ease), transform .8s var(--ease); }
+#s-pitch .pp-stats > div:nth-child(2) { transition-delay: .12s; } #s-pitch .pp-stats > div:nth-child(3) { transition-delay: .24s; }
+#s-pitch .pp-stats > div:nth-child(4) { transition-delay: .36s; } #s-pitch .pp-stats > div:nth-child(5) { transition-delay: .48s; }
+#s-pitch .pp-hand { transition-delay: .7s; }
+#s-pitch .page.pp-wait-p :is(.pp-pitches, .pp-len, .pp-lab) { opacity: 0; }
+#s-pitch .page.pp-wait-t :is(.pp-h, .pp-hand, .pp-stats > div) { opacity: 0; transform: translateY(8px); }
 </style>
 <style data-slide="s-strategy">
 /* ---------- campus strategy (slide 13): the floor built up in the renders' layers, live (assets/js/axo-layers.js) ---------- */
@@ -4288,8 +4297,11 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
   }
   // one slide, no second beat (22 Nov, Ritika: "merge these 2 slides"): the numbers count up lengthwise, then the view eases to the width by itself
   function settle(sc) {
-    $$(".pp-stats [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), 300 + i * 120));
-    later(() => { if (document.body.dataset.scene === sc.id) go(sc, 1); }, 2000);
+    const pg = $(".page", sc);
+    pg.classList.remove("pp-wait-p");                                         // the pitches (and the 245 m line) fade in under the layout
+    later(() => pg.classList.remove("pp-wait-t"), reduced ? 0 : 1100);        // then the words
+    $$(".pp-stats [data-count]", sc).forEach((e, i) => later(() => countUp(e, 1400), (reduced ? 0 : 1300) + i * 120));
+    later(() => { if (document.body.dataset.scene === sc.id) go(sc, 1); }, reduced ? 2000 : 3400);
   }
   // from Due Diligence: the floor laid on the plan's plate (its place on the Layout), gliding to its place here; then the rest
   function glide(sc, k) {
@@ -4326,10 +4338,12 @@ ACKO.slide("s-pitch", ({ $, $$, plain, reveal, countUp, later, reduced }) => {
       const fromSite = !reduced && !!window.ACKO_MORPH && document.body.classList.contains("si-left");
       if (!fromSite) plain();
       if (!G) build(sc);
+      { const pg = $(".page", sc); pg.classList.remove("pp-wait-p", "pp-wait-t"); if (!reduced) pg.classList.add("pp-wait-p", "pp-wait-t"); }
       sc._fresh = true; sc._from = !reduced && window.ACKO_MORPH ? ACKO_MORPH.take("s-site-dd") : null; sc._site = fromSite && !sc._from;
       if (sc._site) { const site = document.getElementById("s-site"); if (site && site._into) site._into(); else sc._site = false; }
     },
     step(k, sc) {
+      if (k >= 2) $(".page", sc).classList.remove("pp-wait-p", "pp-wait-t");
       if (sc._fresh && sc._site) { sc._fresh = false; sc._site = false; return fromSiteGlide(sc, k); }
       if (sc._fresh && sc._from) { sc._fresh = false; return glide(sc, k); }
       if (sc._fresh) {                                           // entered on a beat: that state at once; the numbers count up
