@@ -23,22 +23,22 @@
 </head>
 <body>
 <header>
-  <h1>Which way in? Eight blind-choice designs for the question slide</h1>
-  <p>The slide never says what the two choices are. The first / left / top choice goes one way, the second / right / bottom the other (only your speaker notes say which). Each design works; the deck takes about 40 s to start here.</p>
+  <h1>Which way in? Eight designs for the question slide</h1>
+  <p>Each design names the two ways in, Walkthrough and Renders, with words and a simple line icon, and shows no film or render imagery. Each design works; the deck takes about 40 s to start here.</p>
 </header>
 <div class="row" id="opts"></div>
 <div class="desc" id="desc"></div>
 <div class="frame"><iframe id="f" title="slide"></iframe><span class="note" id="note"></span></div>
 <script>
 const OPTS = {
-  a: ["A · Two doors", "Two tall door-shaped panels, each a frosted, purple-tinted glimpse of a space, numbered 1 and 2."],
-  b: ["B · Left or right", "Split screen of two colour fields with big arrows; the hovered side widens."],
-  c: ["C · Pick a number", "Two large circles, 1 and 2, on white."],
-  d: ["D · Face-down cards", "Two purple cards with a question mark; the chosen one flips before the deck moves on."],
-  e: ["E · A fork in the path", "A line that splits in two; each path end lights up on hover."],
-  f: ["F · A | B switch", "A big two-state switch; the knob slides to the side you pick."],
-  g: ["G · This way / that way", "Huge black words with a purple underline sweeping in on hover; no imagery."],
-  h: ["H · Frosted frames", "Two frosted-glass frames marked “Tap to open”; the chosen one clears and zooms."]
+  a: ["A · Two doors", "Two tall purple doors, each with an icon and its word."],
+  b: ["B · Left or right", "Split screen of two colour fields: icon, big arrow and word on each side; the hovered side widens."],
+  c: ["C · Pick a number", "Two large circles holding the icons, the words beneath."],
+  d: ["D · Face-down cards", "Two face-down purple cards, words printed under each; the chosen one flips."],
+  e: ["E · A fork in the path", "A line that splits in two; each path end carries its word and lights up on hover."],
+  f: ["F · A | B switch", "A big two-state switch, Walkthrough | Renders; the knob slides to the side you pick."],
+  g: ["G · This way / that way", "Two huge black words with a purple underline sweeping in on hover; no imagery."],
+  h: ["H · Frosted frames", "Two frosted-glass frames with icon, word and Tap to open; the chosen one clears and zooms."]
 };
 const q = new URLSearchParams(location.search);
 let o = OPTS[q.get("choice")] ? q.get("choice") : "a";
