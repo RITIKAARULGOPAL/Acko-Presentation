@@ -2515,7 +2515,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
     <div class="vt" style="--i:1;left:1.88%;top:2.79%;font-family:var(--body);font-size:calc(var(--pt) * 12.00);line-height:1.000;color:#5222d0;font-weight:700;white-space:nowrap">Value Addition</div>
     <div class="vt" style="--i:5;left:53.93%;top:69.72%;font-family:var(--hand);font-size:calc(var(--pt) * 18.00);line-height:1.000;color:#000000;font-weight:400;white-space:nowrap">Material Intelligence matter…</div>
     </div>
-    <button type="button" class="mat-btn" tabindex="-1" aria-pressed="false">Material strategy →</button>
+    <button type="button" class="mat-btn" tabindex="-1" aria-pressed="false">Material strategy</button>
   </div>
 </section>
 
@@ -8174,7 +8174,7 @@ ACKO.slide("s-site", ({ $, $$, later, reveal, countUp, world, shade, reduced }) 
 <script data-slide="s-palette2">
 /* the Material strategy button: the kit of parts lays over the palette; click again, Esc, or leaving closes it */
 ACKO.slide("s-palette2", ({ $, plain, reveal }) => {
-  const set = (sc, on) => { const p = $(".mat-pop", sc), b = $(".mat-btn", sc); if (!p || !b) return; p.classList.toggle("open", on); b.textContent = on ? "\u2190 The campus palette" : "Material strategy \u2192"; b.setAttribute("aria-pressed", on ? "true" : "false"); };
+  const set = (sc, on) => { const p = $(".mat-pop", sc), b = $(".mat-btn", sc); if (!p || !b) return; p.classList.toggle("open", on); b.textContent = on ? "Back to the palette" : "Material strategy"; b.setAttribute("aria-pressed", on ? "true" : "false"); };
   const onKey = (e) => { if (e.key === "Escape") { const sc = document.getElementById("s-palette2"); if (sc && $(".mat-pop.open", sc)) { e.stopPropagation(); set(sc, false); } } };
   return {
     enter(_, sc) {
