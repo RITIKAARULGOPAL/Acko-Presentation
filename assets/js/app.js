@@ -668,7 +668,7 @@
       const W = box.clientWidth, Hh = box.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
       if (!W || !iw) return;
       const vw = ((view[2] - view[0]) / 100) * iw, vh = ((view[3] - view[1]) / 100) * ih;
-      const f = nocam ? 1 : 1.5, s = Math.min(W / (vw * f), Hh / (vh * f)), w = iw * s, h = ih * s;
+      const f = nocam ? 1 : 0.75, s = Math.min(W / (vw * f), Hh / (vh * f)), w = iw * s, h = ih * s;
       const cx = (k.x / 100) * w, cy = (k.y / 100) * h;
       const mx = ((view[0] + view[2]) / 200) * w, my = ((view[1] + view[3]) / 200) * h;      // centre of the framed area
       const tx = clamp(W / 2 - (alts.length ? mx : cx), W - w, 0), ty = clamp(Hh / 2 - (alts.length ? my : cy), Hh - h, 0);
