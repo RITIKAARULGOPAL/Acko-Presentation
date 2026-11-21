@@ -772,6 +772,8 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-wayday .wd-day button { border-top-color: rgba(82,34,208,.18); }
 #s-wayday .wd-day button.on, #s-wayday .wd-day button.done { border-top-color: transparent; }
 #s-wayday .wd-ph { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--purple); pointer-events: none; }
+#s-wayday .wd-now.wd-end :is(.t, b) { display: none; }   /* after the day: the whole floor and one line, no clock */
+#s-wayday .wd-now.wd-end q:not(:empty)::before, #s-wayday .wd-now.wd-end q:not(:empty)::after { content: none; }
 </style>
 <style data-slide="s-engage">
 /* ---------- Acker's engagement points (deck 46): the PPT collage as a lens, one group lit per beat, then all ---------- */
@@ -2412,9 +2414,9 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   </div>
 </section>
 
-<section class="scene" id="s-wayday" data-part="p5" data-title="A day in ACKO" data-steps="7" data-mins="1.5"
-  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Wellness,Board Room"
-  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Wellness: a pause on the terrace garden, they thought of me too. 17:00 Board Room: the review, my big moment. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day.">
+<section class="scene" id="s-wayday" data-part="p5" data-title="A day in ACKO" data-steps="8" data-mins="1.7"
+  data-beats="Arrival,Work,Meeting Rooms,Collab,Café,Wellness,Board Room,The whole floor"
+  data-notes="A day in ACKO on the SketchUp model (acko2A_model, in its own colours under a soft sun): the Loop’s seven stops by the clock, walked by one Acker, a purple figure of a cone and a sphere at his real size (1.7 m); the path he has walked is drawn behind him as the Loop’s ribbon. 09:00 Arrival: through the lift lobby to Reception, I feel welcomed. 09:30 Work: at their desks in the neighbourhood, these are my folks. 11:00 Meeting Rooms: a team review, my impact. 12:00 Collab: a huddle, worth the commute. 13:00 Café: lunch together, hey, we finally meet. 15:00 Wellness: a pause on the terrace garden, they thought of me too. 17:00 Board Room: the review, my big moment. The camera goes with his walk and settles on each beat as he stops. Whole floor shows the whole campus and the whole of his path; the strip along the bottom jumps to any part of the day. Drag to pan, right-drag (or Shift-drag) to turn it all the way round, scroll to zoom; a double-click (or Reset view) goes back to the day. 8 After the day: the whole floor again, his whole path on it: all the neighbourhoods are self-sustaining.">
   <div class="page">
     <div class="wd-gl ui"></div>
     <div class="wd-veil"></div>
@@ -6186,11 +6188,21 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     return { theta: v.theta, phi: v.phi, half: h, t: [p.x + off.x, 0.8 + off.y, p.z + off.z] }; };
   const wrap = (a) => a - 2 * Math.PI * Math.round(a / (2 * Math.PI));              // the short way round
   const mix = (a, b, k) => ({ theta: a.theta + wrap(b.theta - a.theta) * k, phi: a.phi + (b.phi - a.phi) * k, half: a.half + (b.half - a.half) * k, t: a.t.map((v, i) => v + (b.t[i] - v) * k) });
+  // the whole floor is the Detailed axonometric's own frame (22 Nov, Ritika: "match the detailed axo's zoom and position to the whole floor axo"): the same camera,
+  // that slide's FIT (the concept axo's size) on the layers model, carried into this model as the hand-over does
+  const FIT14 = [0.0134, 0.0028, 0.8385, 0.9852], SHRINK = 0.95, AT = [1606 / 1920, 10.8 / 1080], FIT_D = FIT14.map((v, i) => AT[i % 2] + SHRINK * (v - AT[i % 2]));
+  function detailHome(asp) {
+    try {
+      const AL = window.AxoLayers && window.AxoLayers.available() ? window.AxoLayers.get() : null; if (!AL || M.CX === undefined) return null;
+      const st = window.AxoLayers.frame(AL, VIEW, FIT_D, asp), dx = (185842 + AL.CX - M.CX) / 1000, dz = (-182802 + AL.CY - M.CY) / 1000;
+      return { theta: st.theta, phi: st.phi, half: st.half, t: [st.t[0] + dx, st.t[1], st.t[2] + dz] };
+    } catch (e) { return null; }
+  }
   function sizeUp() {
     const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return false;           // a hidden pane: wait for a real size
     const pr = R.getPixelRatio();
     if (R.domElement.width !== Math.floor(w * pr) || R.domElement.height !== Math.floor(h * pr) || !S.home) {
-      R.setSize(w, h, false); S.asp = w / h; S.home = window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
+      R.setSize(w, h, false); S.asp = w / h; S.home = detailHome(S.asp) || window.AxoModel.frame(M, VIEW, -1e9, 1e9, FIT, S.asp);
     }
     if (!S.view || !isFinite(S.view.half)) S.view = S.home;
     if (S.hand) handOver();
@@ -6301,6 +6313,18 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     }, { passive: false });
     host.addEventListener("dblclick", () => user(false));
   }
+  // after the day (22 Nov, Ritika): the whole floor, the whole path, and what it adds up to
+  function finale() {
+    S.beat = BEATS.length - 1; walkTo(S.beat);
+    const now = $(".wd-now", sc), day = $(".wd-day", sc), ph = $(".wd-ph", day);
+    $("q", now).textContent = "All the neighbourhoods are self-sustaining."; $("span", now).textContent = "The whole floor, one Loop.";
+    now.classList.add("wd-end"); now.classList.remove("wd-sw"); void now.offsetWidth; now.classList.add("wd-sw");
+    $$("button", day).forEach((el) => { el.classList.remove("on"); el.classList.add("done"); });
+    if (ph) { ph.style.transition = reduced ? "none" : "width 1300ms cubic-bezier(.2,.7,.2,1)"; ph.style.width = "100%"; }
+    S.clockT = mins(BEATS[BEATS.length - 1].t);
+    if (MODEL.focus) MODEL.focus(null);
+    whole(true);
+  }
   function whole(on) {
     user(false); S.follow = !on; sc.classList.toggle("wd-whole", on);
     $(".wd-play", sc).classList.toggle("on", !on); $(".wd-all", sc).classList.toggle("on", on);
@@ -6315,7 +6339,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
       if (R.domElement.parentNode !== host) host.appendChild(R.domElement);
       M.reset(); M.scene.add(group);
       if (SKP) window.AxoSkp.look("sketchup");
-      S.fresh = true; whole(false);
+      S.fresh = true; whole(false); $(".wd-now", sc).classList.remove("wd-end");
       const H = window.ACKO_AXO_HAND; window.ACKO_AXO_HAND = null;
       S.hand = H && !reduced && performance.now() - H.t < 6000 ? H : null;
       if (!S.hand) document.body.classList.remove("ax-hand");
@@ -6328,6 +6352,8 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
     step(k, s) {
       if (!S.built || sc.classList.contains("wd-fallback")) return;
       if (!S.follow) whole(false); else user(false);
+      if (k > BEATS.length) { finale(); S.jump = false; S.fresh = false; loop(); return; }
+      $(".wd-now", sc).classList.remove("wd-end");
       S.beat = Math.max(0, Math.min(BEATS.length - 1, k - 1)); setNow(S.beat); walkTo(S.beat);
       S.jump = false; S.fresh = false; loop();                       // entering (from either side) moves to that part of the day, as a step does (28 Oct)
     },
