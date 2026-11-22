@@ -642,7 +642,7 @@
     });
   }
 
-  /* ======================= the walk: every space, OP 01 then OP 02 =======================
+  /* ======================= the walk: every space, Lucid then Assured =======================
      One slide per space (class "walk"); its configuration is its own data-walk attribute:
        {"n": name, "sub": subtitle, "q": the Loop's words, "p": a line, "r": [render per beat], "kp": [deck slide of each keyplan], "tags": [...]}.
      The render fills the window with a slow drift; the name block, the words, the OP tag and the keyplan (the deck's plan with its
@@ -771,7 +771,7 @@
     on() { if (WKI.on_) return WKI.wake(); WKI.on_ = true; WKI.ev.forEach((e) => document.addEventListener(e, WKI.wake, true)); WKI.wake(); },
     off() { WKI.on_ = false; clearTimeout(WKI.t); document.body.classList.remove("wk-idle"); WKI.ev.forEach((e) => document.removeEventListener(e, WKI.wake, true)); },
   };
-  // a quiet chapter marker over the first render of Option 01, Option 02 and the common renders (data-walk "open": {t, s})
+  // a quiet chapter marker over the first render of Lucid, Assured and the common renders (data-walk "open": {t, s})
   const WKO = {
     el: null, t1: 0, off: () => WKO.hide(),
     show(o) {
@@ -802,7 +802,7 @@
           $$("#wk-nav button").forEach((b) => b.classList.toggle("on", b.dataset.to === sc.id)); }
         $("#wk-n").innerHTML = `${s.n || sc.dataset.title}<small>${s.sub || ""}</small>`;
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
-        $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["OP 01", "OP 02"]).map((t) => `<span>${t}</span>`).join("") : "";
+        $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["Lucid", "Assured"]).map((t) => `<span>${t}</span>`).join("") : "";
         $("#wk-kick").textContent = `${s.kick || (SECT.names && SECT.names[sc.dataset.part]) || "Visual Direction"} · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
         WKI.on(); WKO.show(s.open);
         AUD.play();
