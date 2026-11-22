@@ -1536,15 +1536,15 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #s-site-dd .dd-nbc.on, #s-site-dd .dd-nbc.on * { pointer-events: auto !important; }
 #s-site-dd .dd-nbc-scrim { position: absolute; inset: 0; background: rgba(255, 255, 255, .86); }
 #s-site-dd .dd-nbc-card { position: absolute; left: 4%; right: 4%; top: 8%; bottom: 7%; box-sizing: border-box; overflow: auto; background: #fff; border: 1px solid #e3dcf6; border-radius: calc(var(--pt) * 4);
-  box-shadow: 0 12px 44px rgba(40, 20, 100, .12); padding: calc(var(--pt) * 7) calc(var(--pt) * 10) calc(var(--pt) * 8); color: #111; }
+  box-shadow: 0 12px 44px rgba(40, 20, 100, .12); padding: calc(var(--pt) * 7) calc(var(--pt) * 10) calc(var(--pt) * 8); color: #111; display: flex; flex-direction: column; }
 #s-site-dd .dd-nbc-h { display: flex; align-items: center; padding-bottom: calc(var(--pt) * 3); }
-#s-site-dd .dd-nbc-h b { font-size: calc(var(--pt) * 11); font-weight: 600; color: var(--purple); }
+#s-site-dd .dd-nbc-h b { font-size: calc(var(--pt) * 12); font-weight: 800; color: var(--purple); }
 #s-site-dd .dd-nbc-x { margin-left: auto; width: calc(var(--pt) * 11); height: calc(var(--pt) * 11); border: 1px solid #d9d9d9; background: #fff; color: #111; cursor: pointer; font-size: calc(var(--pt) * 6.4); padding: 0; }
 #s-site-dd .dd-nbc-x:hover { background: rgba(82, 34, 208, .1); color: var(--purple); }
 #s-site-dd .dd-nbc-far { margin: 0 0 calc(var(--pt) * 9); font-size: calc(var(--pt) * 10); color: var(--purple-2); }
 #s-site-dd .dd-nbc-far b { color: var(--plum); font-weight: 700; }
-#s-site-dd .dd-nbc-cols { display: grid; grid-template-columns: 1.55fr 1fr; gap: calc(var(--pt) * 9); align-items: start; }
-#s-site-dd .dd-nbc h4 { margin: 0 0 calc(var(--pt) * 4); font-size: calc(var(--pt) * 9.4); font-weight: 700; color: #111; }
+#s-site-dd .dd-nbc-cols { display: grid; grid-template-columns: 1.55fr 1fr; gap: calc(var(--pt) * 9); align-items: start; margin: auto 0; padding-top: calc(var(--pt) * 4); }   /* centred in the space under the fire-escape line */
+#s-site-dd .dd-nbc h4 { margin: 0 0 calc(var(--pt) * 4); font-size: calc(var(--pt) * 9.8); font-weight: 800; color: #111; }
 #s-site-dd .dd-nbc h4 small { font-weight: 500; font-size: .85em; }
 #s-site-dd .dd-nbc-t { display: grid; grid-template-columns: 1fr auto; gap: calc(var(--pt) * 6); align-items: center; }
 #s-site-dd .dd-nbc table { border-collapse: collapse; width: 100%; font-size: calc(var(--pt) * 7.8); text-align: center; }
