@@ -581,7 +581,9 @@
     const matOf = (k) => mats[k] || (mats[k] = reg(focusable(k === "glass"
       ? new T.MeshLambertMaterial({ color: 0xffffff, vertexColors: true, flatShading: true, transparent: true, opacity: 0.35, depthWrite: false, side: T.DoubleSide })
       : new T.MeshLambertMaterial({ color: 0xffffff, vertexColors: true, flatShading: true, side: T.DoubleSide,
-          polygonOffset: k === "floor" || k === "slab" || k === "grass", polygonOffsetFactor: 1, polygonOffsetUnits: 2 }), k), k, true));
+          // 22 Nov, Ritika: "floor of collab is flickering": slab, floor and grass sat on one plane with the same offset, so the winner flipped with the view (banding);
+          // now each has its own: the slab furthest back, the floor over it, the grass over the floor
+          polygonOffset: k === "floor" || k === "slab" || k === "grass", polygonOffsetFactor: k === "slab" ? 3 : k === "floor" ? 2 : 1, polygonOffsetUnits: k === "slab" ? 6 : k === "floor" ? 4 : 2 }), k), k, true));
     // a part's geometry: int16 positions over its box, RGB per vertex, indices; UVs box-mapped in metres (for the looks' textures)
     function geometry(p) {
       const q = new Int16Array(bytes(p.p)), pos = new Float32Array(q.length);
