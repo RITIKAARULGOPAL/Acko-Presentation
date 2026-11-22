@@ -803,6 +803,9 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-wayday .wd-ph { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--purple); pointer-events: none; }
 #s-wayday .wd-now.wd-end :is(.t, b) { display: none; }   /* after the day: the whole floor and one line, no clock */
 #s-wayday .wd-now.wd-end q:not(:empty)::before, #s-wayday .wd-now.wd-end q:not(:empty)::after { content: none; }
+#s-wayday .wd-title { top: 3.6%; max-width: none; }   /* 22 Nov, Ritika: the heading bigger and prominent */
+#s-wayday .wd-title h1 { font-size: calc(var(--pt) * 20); font-weight: 700; font-style: normal; color: var(--purple-2); letter-spacing: -.01em; white-space: nowrap; }
+#s-wayday .wd-now { top: 15.5%; }
 </style>
 <style data-slide="s-engage">
 /* ---------- Acker's engagement points (deck 46): the PPT collage as a lens, one group lit per beat, then all ---------- */
