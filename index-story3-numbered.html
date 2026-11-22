@@ -1519,6 +1519,10 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #s-site-dd .dd-heatkey span { position: relative; display: block; height: calc(var(--pt) * 4); border-radius: 99px; background: linear-gradient(90deg, rgba(255,106,0,.12), #ff6a00 55%, #e0331c); }
 #s-site-dd .dd-heatkey i { position: absolute; top: calc(var(--pt) * -1.2); width: calc(var(--pt) * 2); height: calc(var(--pt) * 6.4); margin-left: calc(var(--pt) * -1); border-radius: 2px; background: #2b2440; transition: left .25s linear; }
 #s-site-dd .dd-heatkey em { display: flex; justify-content: space-between; font-style: normal; margin-top: calc(var(--pt) * 2); color: #a8794a; }
+#s-site-dd .dd-heatkey .v { float: right; font-weight: 700; color: #b8400c; font-variant-numeric: tabular-nums; }
+#s-site-dd .dd-heatkey .c { display: block; width: 100%; height: calc(var(--pt) * 14); margin-bottom: calc(var(--pt) * 2); overflow: visible; }
+#s-site-dd .dd-heatkey .c path { fill: none; stroke: #e0662a; stroke-width: 1.2; vector-effect: non-scaling-stroke; opacity: .75; }
+#s-site-dd .dd-heatkey .c circle { fill: #2b2440; }
 </style>
 <style data-slide="s-axo-detail">
 
@@ -2112,7 +2116,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <g class="heat" filter="url(#dd-heat)"></g>
       <g class="wall"></g>
       <g class="sunm"><g class="orn"></g><circle class="sun" r="1000"/></g></g></svg>
-    <div class="dd-heatkey" aria-hidden="true"><b>Sun heat on the west façade</b><span><i></i></span><em><u style="text-decoration:none">low</u><u style="text-decoration:none">high</u></em></div>
+    <div class="dd-heatkey" aria-hidden="true"><b>Sun heat on the west façade <u class="v" style="text-decoration:none"></u></b><svg class="c" viewBox="0 0 100 26" preserveAspectRatio="none"><path/><circle r="2.2" cx="0" cy="24"/></svg><span><i></i></span><em><u style="text-decoration:none">low</u><u style="text-decoration:none">high</u></em></div>
     <div class="ly-top"></div>
     <div class="hdr"><span>02. Design development · Site due diligence</span></div>
     <!-- the bottom band: white under the pills and the layer panels, so a plan zoomed in stays above it -->
@@ -7411,23 +7415,37 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   function sunWallsDraw(sc, f) {                                    // each wall glows by its strength
     const g = $(".dd-sun .wall", sc), W = sunWalls();
     if (g.childElementCount !== W.length * 2) g.innerHTML = W.map((w) => `<line class="g" x1="${w.a[0]}" y1="${w.a[1]}" x2="${w.b[0]}" y2="${w.b[1]}" stroke-opacity="0"/><line class="w" x1="${w.a[0]}" y1="${w.a[1]}" x2="${w.b[0]}" y2="${w.b[1]}" stroke-opacity="0"/>`).join("");
-    W.forEach((w, i) => { const v = Math.sqrt(sunStrength(f, w)), gl = g.children[i * 2], wl = g.children[i * 2 + 1];
+    W.forEach((w, i) => { const v = Math.sqrt(Math.min(1, sunI(f, w) / I_MAX)), gl = g.children[i * 2], wl = g.children[i * 2 + 1];
       gl.setAttribute("stroke-width", (3 + 15 * v).toFixed(1)); gl.setAttribute("stroke-opacity", Math.min(.7, v * 0.6).toFixed(2));
       wl.setAttribute("stroke-width", (2.5 + 5.5 * v).toFixed(1)); wl.setAttribute("stroke-opacity", v < 0.02 ? 0 : (0.35 + 0.65 * v).toFixed(2)); });
   }
   // the west façade's heat (22 Nov, Ritika: "show intensity of sun in west side"): a soft band inside each west-facing wall, wider and redder as the low sun
   // comes square on to it (peaks mid to late afternoon), with a live marker on its key
-  const sunHeat = (f, seg) => { if (f.alt < 1) return 0; const d = sunDir(f); return Math.max(0, seg.n[0] * d[0] + seg.n[1] * d[1]) * Math.pow(Math.sin((f.alt * Math.PI) / 180), 0.6); };
+  // one physical model for every wall, the west band and the key (22 Nov, Ritika: "intensity and sun path animation are not match, make it realistic"): the clear-sky
+  // direct beam on a vertical wall, I = DNI(alt) x cos(alt) x max(0, n . s), W/m2; DNI from the Meinel air-mass law, so the sun loses strength as it sinks to the horizon
+  const I_MAX = 700;                                               // about the most a vertical wall gets
+  const sunI = (f, seg) => { if (f.alt < 2) return 0; const al = (f.alt * Math.PI) / 180, am = 1 / Math.sin(al), dni = 1050 * Math.pow(0.7, Math.pow(am, 0.678)), d = sunDir(f);
+    return dni * Math.cos(al) * Math.max(0, seg.n[0] * d[0] + seg.n[1] * d[1]); };
+  function westCurve(sc) {                                         // the west façade's strongest wall over the day, from the same frames, once per day type
+    if (SUN.hk === SUN.day) return; SUN.hk = SUN.day;
+    const fr = window.ACKO_FLOOR.sun[SUN.day].frames, W = sunWalls().filter((w) => w.west), n = fr.length;
+    const pts = fr.map((f, i) => { const I = Math.max(0, ...W.map((w) => sunI(f, w))); return (i / (n - 1) * 100).toFixed(1) + " " + (24 - 22 * Math.min(1, I / I_MAX)).toFixed(1); });
+    const p = $(".dd-heatkey .c path", sc); if (p) p.setAttribute("d", "M" + pts.join("L"));
+  }
   function sunHeatDraw(sc, f) {
     const g = $(".dd-sun .heat", sc), W = sunWalls().filter((w) => w.west); if (!g) return;
     if (g.childElementCount !== W.length) g.innerHTML = W.map(() => `<line stroke-linecap="butt"/>`).join("");
     let top = 0;
-    W.forEach((w, i) => { const v = Math.min(1, sunHeat(f, w) * 1.6), el = g.children[i]; top = Math.max(top, v);
-      const wd = 1500 + 7000 * v, o = wd / 2;                      // the band lies inside the façade: its centre half a width in along -n
+    W.forEach((w, i) => { const I = sunI(f, w), v = Math.min(1, I / I_MAX), el = g.children[i]; top = Math.max(top, I);
+      const wd = 1200 + 5800 * v, o = wd / 2;                      // the band lies inside the façade: its centre half a width in along -n
       el.setAttribute("x1", (w.a[0] - w.n[0] * o).toFixed(0)); el.setAttribute("y1", (w.a[1] - w.n[1] * o).toFixed(0));
       el.setAttribute("x2", (w.b[0] - w.n[0] * o).toFixed(0)); el.setAttribute("y2", (w.b[1] - w.n[1] * o).toFixed(0));
-      el.setAttribute("stroke-width", wd.toFixed(0)); el.setAttribute("stroke", v > 0.55 ? "#e0331c" : "#ff6a00"); el.setAttribute("stroke-opacity", v < 0.02 ? 0 : (0.15 + 0.6 * v).toFixed(2)); });
-    const k = $(".dd-heatkey i", sc); if (k) k.style.left = (top * 100).toFixed(0) + "%";
+      el.setAttribute("stroke-width", wd.toFixed(0)); el.setAttribute("stroke", v > 0.62 ? "#e0331c" : v > 0.3 ? "#ff6a00" : "#ffb347"); el.setAttribute("stroke-opacity", v < 0.02 ? 0 : (0.12 + 0.6 * v).toFixed(2)); });
+    westCurve(sc);
+    const k = $(".dd-heatkey i", sc); if (k) k.style.left = (Math.min(1, top / I_MAX) * 100).toFixed(0) + "%";
+    const t = $(".dd-heatkey .v", sc); if (t) t.textContent = Math.round(top / 10) * 10 + " W/m²";
+    const n = window.ACKO_FLOOR.sun[SUN.day].frames.length, dot = $(".dd-heatkey .c circle", sc);
+    if (dot) { dot.setAttribute("cx", (SUN.u / (n - 1) * 100).toFixed(1)); dot.setAttribute("cy", (24 - 22 * Math.min(1, top / I_MAX)).toFixed(1)); }
   }
   const compass = (az) => ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"][Math.round((((az % 360) + 360) % 360) / 45) % 8];
   // the curve through the day's points as cubic segments (Catmull-Rom): the line is drawn on it and the sun travels along it
@@ -7483,6 +7501,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     $(".dd-clock small", sc).textContent = st.alt < 1 ? `${D.label} · the sun setting in the ${compass(st.az)}` : `${D.label} · the sun ${Math.round(st.alt)}° up, in the ${compass(st.az)}`;
   }
   function sunStop() { SUN.t.forEach(clearTimeout); SUN.t = []; cancelAnimationFrame(SUN.flow); }
+  // playback is even in clock time (22 Nov): the orb, the clock and the heat run together
   function sunPlay(sc, wait) {                                     // the sun flows along the line, 07:00 to 18:30, over about ten seconds
     sunStop(); sunArc(sc); SUN.pi = -1;
     $$(".dd-days button", sc).forEach((b) => b.classList.toggle("on", +b.dataset.d === SUN.day));
@@ -7490,8 +7509,8 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     const N = window.ACKO_FLOOR.sun[SUN.day].frames.length;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return sunMove(sc, sunState(N - 1));
     sunMove(sc, sunState(0));
-    const t0 = performance.now() + (wait || 0), DUR = 10000;
-    const tick = (now) => { if (!sc.classList.contains("dd-on")) return; const k = Math.max(0, Math.min(1, (now - t0) / DUR)); sunMove(sc, sunState(sunU(0.85 * k + 0.15 * k * k * (3 - 2 * k)))); if (k < 1) SUN.flow = requestAnimationFrame(tick); };
+    const t0 = performance.now() + (wait || 0), DUR = 12000;
+    const tick = (now) => { if (!sc.classList.contains("dd-on")) return; const k = Math.max(0, Math.min(1, (now - t0) / DUR)); sunMove(sc, sunState((N - 1) * (0.9 * k + 0.1 * k * k * (3 - 2 * k)))); if (k < 1) SUN.flow = requestAnimationFrame(tick); };
     SUN.flow = requestAnimationFrame(tick);
   }
   function sunFollow(sc) {                                // the drawing on the plan's current view (plan mm → page px)
