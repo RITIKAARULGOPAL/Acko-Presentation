@@ -812,6 +812,8 @@ body.ax-hand #s-wayday .wd-veil, body.ax-hand #s-wayday .wd-title, body.ax-hand 
 #s-wayday .wd-now { top: 17.2%; }
 #s-wayday .wd-now q { font-family: var(--hand); font-size: calc(var(--pt) * 17); font-weight: 400; line-height: 1.1; }   /* 22 Nov, Ritika: handwriting */
 #s-wayday .wd-now span { font-family: var(--hand); font-size: calc(var(--pt) * 10); color: #111; }
+#s-wayday .wd-now.wd-end { width: 34%; }
+#s-wayday .wd-now.wd-end span { line-height: 1.2; margin-top: calc(var(--pt) * 3); }
 </style>
 <style data-slide="s-engage">
 /* ---------- Acker's engagement points (deck 46): the PPT collage as a lens, one group lit per beat, then all ---------- */
@@ -6494,7 +6496,7 @@ ACKO.slide("s-wayday", ({ $, $$, plain, asset, reduced, go, sceneIx, plan }) => 
   function finale() {
     S.beat = BEATS.length - 1; walkTo(S.beat);
     const now = $(".wd-now", sc), day = $(".wd-day", sc); let ph = $(".wd-ph", day); if (!ph) { ph = document.createElement("i"); ph.className = "wd-ph"; day.appendChild(ph); }
-    $("q", now).textContent = "All the neighbourhoods are self-sustaining."; $("span", now).textContent = "The whole floor, one Loop.";
+    $("q", now).textContent = "All the neighbourhoods are self-sustaining."; $("span", now).textContent = "Each neighbourhood has its own desks, meeting rooms, phone booths and wellness spaces, so every team can live a full day in its own home. The Loop ties all six into one campus.";
     now.classList.add("wd-end"); now.classList.remove("wd-sw"); void now.offsetWidth; now.classList.add("wd-sw");
     $$("button", day).forEach((el) => { el.classList.remove("on"); el.classList.add("done"); });
     if (ph) { ph.style.transition = reduced ? "none" : "width 1300ms cubic-bezier(.2,.7,.2,1)"; ph.style.width = "100%"; }
