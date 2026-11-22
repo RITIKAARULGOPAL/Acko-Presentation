@@ -802,7 +802,7 @@
           $$("#wk-nav button").forEach((b) => b.classList.toggle("on", b.dataset.to === sc.id)); }
         $("#wk-n").innerHTML = `${s.n || sc.dataset.title}<small>${s.sub || ""}</small>`;
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
-        $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["Lucid", "Assured"]).map((t) => `<span>${t}</span>`).join("") : "";
+        $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["Option 01 - Lucid", "Option 02 - Assured"]).map((t) => `<span>${t}</span>`).join("") : "";
         $("#wk-kick").textContent = `${s.kick || (SECT.names && SECT.names[sc.dataset.part]) || "Visual Direction"} · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
         WKI.on(); WKO.show(s.open);
         AUD.play();

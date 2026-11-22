@@ -478,11 +478,11 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .walk .walk-ctl { right: var(--wkR); }
 .walk .wk-kp { right: var(--wkR); top: calc(var(--ptop) + var(--ph) * .033 + var(--pt) * 16); width: calc(var(--pw) * .15); opacity: .92; }
 .walk .wk-kp:hover { opacity: 1; }
-.walk .wk-name { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 10px; row-gap: 6px; width: min(30vw, 460px); }
+.walk .wk-name { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 10px; row-gap: 6px; width: min(40vw, 700px); }   /* wide enough for the kicker and the "Option 01 - Lucid" tag on one line */
 .walk .wk-name > * { grid-column: 1 / -1; }
 .walk .wk-name .wk-kick { grid-column: 1; grid-row: 1; font-size: calc(var(--pt) * 5.8); }
 .walk .wk-name .wk-opt { grid-column: 2; grid-row: 1; justify-self: start; }
-.walk .wk-name .wk-opt span { padding: 1px 8px; border-radius: 99px; }
+.walk .wk-name .wk-opt span { padding: 1px 8px; border-radius: 99px; white-space: nowrap; }   /* "Option 01 - Lucid" stays on one line */
 .walk .wk-name .wk-opt span + span { border-left: 1px solid rgba(255,255,255,.45); margin-left: 4px; }
 .walk .wk-name h2 { font-size: calc(var(--pt) * 19); }
 .walk .wk-name .wk-q { font-size: calc(var(--pt) * 8); }
