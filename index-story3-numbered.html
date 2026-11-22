@@ -6011,7 +6011,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
         later(() => sc.classList.remove("ly-arrive"), 3700);
         later(() => document.body.classList.remove("ly-arrive", "si-into"), 4400);
       } else build(sc);
-      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 6, 3, 4].indexOf(g) + 1); } }));
+      $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-site-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 6, 3, 4].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
       // 22 Nov, Ritika: the normal cursor stays; the laser only when L is pressed (no automatic laser over the canvas)
       $$("button", tools).forEach((b) => (b.onclick = () => {
