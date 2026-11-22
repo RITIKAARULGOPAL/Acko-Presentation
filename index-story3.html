@@ -7716,12 +7716,18 @@ ACKO.slide("s-axo-detail", ({ $, $$, reduced, plain, reveal, cue, plan, later, a
     for (const z of S.zl) if (z.dept) z.d.classList.toggle("click", live);
     // the neighbourhoods: drop in one by one, 01 to 06; the atriums and terraces after; they stay for the configuring; they lift
     // away as the colour comes
-    M.zones.forEach((v, i) => {
+    const ORD = { HOME: 0, DRIVE: 1, TRAVEL: 2, HEALTH: 3, LIFE: 4, AUTO: 5 };      // 22 Nov, Ritika: "maintain order, drop 1-6": the numbers drop in 01 (west) to 06 (east)
+    M.zones.forEach((v, i0) => {
+      const i = ORD[v.userData.zone && v.userData.zone.key] !== undefined ? ORD[v.userData.zone.key] : i0;
       let y = 0, f = 0;
       if (k === 2) { const e = win(t, 0.15 + 0.32 * i, 0.95 + 0.32 * i); y = 14 * (1 - e); f = e; }
       if (k === 3) f = 1;
       if (k === 4) { const e = win(t, 0, 0.7); y = 10 * e; f = 1 - e; }   // beat 4 is conceptual massing: the hand-drawn neighbourhood masses fall back under the Loop, their numbers gone
-      v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (SK && v.userData.mats[2]) v.userData.mats[2][0].opacity = f;     // the mass at 55%, its number solid if (v.userData.num) v.userData.num.visible = k !== 4;
+      v.position.y = y; M.fade(v, f * (SK ? 0.55 : 1)); if (SK && v.userData.mats[2]) v.userData.mats[2][0].opacity = f;     // the mass at 55%, its number solid
+      if (k === 4 && SK && v.userData.num) {        // the Loop: the masses fall back, the numbers 01 to 06 stay on the floor to the end
+        const num = v.userData.num; if (v.userData.numY === undefined) v.userData.numY = num.position.y;
+        v.visible = true; num.position.y = v.userData.numY - y; v.userData.mats[2][0].opacity = 1;
+      } else if (v.userData.num && v.userData.numY !== undefined) v.userData.num.position.y = v.userData.numY;
     });
     M.atrium.concat(M.terrace, M.cafe || []).forEach((v) => {
       let f = 0;
