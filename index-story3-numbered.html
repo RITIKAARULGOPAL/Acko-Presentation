@@ -7502,14 +7502,14 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   }
   function sunStop() { SUN.t.forEach(clearTimeout); SUN.t = []; cancelAnimationFrame(SUN.flow); }
   // playback is even in clock time (22 Nov): the orb, the clock and the heat run together
-  function sunPlay(sc, wait) {                                     // the sun flows along the line, 07:00 to 18:30, over about ten seconds
+  function sunPlay(sc, wait) {                                     // the sun flows along the line, 07:00 to 18:30, over about twenty seconds
     sunStop(); sunArc(sc); SUN.pi = -1;
     $$(".dd-days button", sc).forEach((b) => b.classList.toggle("on", +b.dataset.d === SUN.day));
     $(".dd-sun .orn", sc).innerHTML = ORN;
     const N = window.ACKO_FLOOR.sun[SUN.day].frames.length;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return sunMove(sc, sunState(N - 1));
     sunMove(sc, sunState(0));
-    const t0 = performance.now() + (wait || 0), DUR = 12000;
+    const t0 = performance.now() + (wait || 0), DUR = 20000;
     const tick = (now) => { if (!sc.classList.contains("dd-on")) return; const k = Math.max(0, Math.min(1, (now - t0) / DUR)); sunMove(sc, sunState((N - 1) * (0.9 * k + 0.1 * k * k * (3 - 2 * k)))); if (k < 1) SUN.flow = requestAnimationFrame(tick); };
     SUN.flow = requestAnimationFrame(tick);
   }
