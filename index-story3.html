@@ -1512,6 +1512,13 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #world-plan.bare .pl-dd [data-k="ahu"] { fill: #2f6fe0; stroke: #1c4fb0; }
 #world-plan.bare .pl-dd [data-k="slab"] { fill: url(#dd-hatch); fill-opacity: .7; stroke: #3a9a46; stroke-width: 2; stroke-dasharray: none; }
 #s-site-dd .hdr { left: 2.2%; right: auto; top: 3.3%; text-align: left; white-space: nowrap; }   /* 22 Nov: as the Concept framework slides */
+#s-site-dd .dd-sun .heat { mix-blend-mode: multiply; }
+#s-site-dd .dd-heatkey { position: absolute; left: 2.4%; top: 19.2%; width: calc(var(--pt) * 118); font-size: calc(var(--pt) * 6.4); color: #8a4a12; opacity: 0; transition: opacity .6s var(--ease); pointer-events: none; z-index: 6; }
+#s-site-dd.dd-on .dd-heatkey { opacity: 1; }
+#s-site-dd .dd-heatkey b { display: block; font-weight: 600; margin-bottom: calc(var(--pt) * 2); }
+#s-site-dd .dd-heatkey span { position: relative; display: block; height: calc(var(--pt) * 4); border-radius: 99px; background: linear-gradient(90deg, rgba(255,106,0,.12), #ff6a00 55%, #e0331c); }
+#s-site-dd .dd-heatkey i { position: absolute; top: calc(var(--pt) * -1.2); width: calc(var(--pt) * 2); height: calc(var(--pt) * 6.4); margin-left: calc(var(--pt) * -1); border-radius: 2px; background: #2b2440; transition: left .25s linear; }
+#s-site-dd .dd-heatkey em { display: flex; justify-content: space-between; font-style: normal; margin-top: calc(var(--pt) * 2); color: #a8794a; }
 </style>
 <style data-slide="s-axo-detail">
 
@@ -2101,8 +2108,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <defs><linearGradient id="dd-sun-grad" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f7c948"/><stop offset=".5" stop-color="#e8500c"/><stop offset="1" stop-color="#f7c948"/></linearGradient><radialGradient id="dd-orb"><stop offset="0" stop-color="#ffd24a" stop-opacity=".95"/><stop offset=".35" stop-color="#ffb21f" stop-opacity=".55"/><stop offset="1" stop-color="#ffb21f" stop-opacity="0"/></radialGradient></defs>
       <path class="arc"/><g class="ticks"></g>
       <g class="lit" transform="matrix(50 0 0 50 8842 12775)"><g class="a"></g><g class="b"></g></g>
+      <filter id="dd-heat" x="-10%" y="-10%" width="120%" height="120%" filterUnits="objectBoundingBox"><feGaussianBlur stdDeviation="700"/></filter>
+      <g class="heat" filter="url(#dd-heat)"></g>
       <g class="wall"></g>
       <g class="sunm"><g class="orn"></g><circle class="sun" r="1000"/></g></g></svg>
+    <div class="dd-heatkey" aria-hidden="true"><b>Sun heat on the west façade</b><span><i></i></span><em><u style="text-decoration:none">low</u><u style="text-decoration:none">high</u></em></div>
     <div class="ly-top"></div>
     <div class="hdr"><span>02. Design development · Site due diligence</span></div>
     <!-- the bottom band: white under the pills and the layer panels, so a plan zoomed in stays above it -->
@@ -7345,11 +7355,12 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   function sunWalls() {
     if (SUN.walls) return SUN.walls;
     const plate = window.ACKO_FLOOR.plate.map((q) => [q[0] * 50 + 8842, q[1] * 50 + 12775]), segs = [];
+    const wx0 = Math.min(...plate.map((q) => q[0])), wx1 = Math.max(...plate.map((q) => q[0]));   // the west façade: the facing-west walls in the plan's western fifth
     (DD_GLAZE.match(/M[^M]+/g) || []).forEach((m) => { const P = m.slice(1).split("L").map((q) => q.trim().split(/\s+/).map(Number));
       for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy); if (len < 400) continue;
         let n = [dy / len, -dx / len]; const mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
         if (inPoly([mid[0] + n[0] * 700, mid[1] + n[1] * 700], plate)) n = [-n[0], -n[1]];          // the side that faces away from the floor
-        segs.push({ a, b, n, mid, len }); } });
+        segs.push({ a, b, n, mid, len, west: n[0] < -0.25 && mid[0] < wx0 + 0.2 * (wx1 - wx0) }); } });
     return (SUN.walls = segs);
   }
   const sunDir = (f) => { const b = ((f.az - GRID) * Math.PI) / 180; return [Math.sin(b), -Math.cos(b)]; };   // toward the sun, in the plan's frame
@@ -7360,6 +7371,20 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     W.forEach((w, i) => { const v = Math.sqrt(sunStrength(f, w)), gl = g.children[i * 2], wl = g.children[i * 2 + 1];
       gl.setAttribute("stroke-width", (3 + 15 * v).toFixed(1)); gl.setAttribute("stroke-opacity", Math.min(.7, v * 0.6).toFixed(2));
       wl.setAttribute("stroke-width", (2.5 + 5.5 * v).toFixed(1)); wl.setAttribute("stroke-opacity", v < 0.02 ? 0 : (0.35 + 0.65 * v).toFixed(2)); });
+  }
+  // the west façade's heat (22 Nov, Ritika: "show intensity of sun in west side"): a soft band inside each west-facing wall, wider and redder as the low sun
+  // comes square on to it (peaks mid to late afternoon), with a live marker on its key
+  const sunHeat = (f, seg) => { if (f.alt < 1) return 0; const d = sunDir(f); return Math.max(0, seg.n[0] * d[0] + seg.n[1] * d[1]) * Math.pow(Math.sin((f.alt * Math.PI) / 180), 0.6); };
+  function sunHeatDraw(sc, f) {
+    const g = $(".dd-sun .heat", sc), W = sunWalls().filter((w) => w.west); if (!g) return;
+    if (g.childElementCount !== W.length) g.innerHTML = W.map(() => `<line stroke-linecap="butt"/>`).join("");
+    let top = 0;
+    W.forEach((w, i) => { const v = Math.min(1, sunHeat(f, w) * 1.6), el = g.children[i]; top = Math.max(top, v);
+      const wd = 1500 + 7000 * v, o = wd / 2;                      // the band lies inside the façade: its centre half a width in along -n
+      el.setAttribute("x1", (w.a[0] - w.n[0] * o).toFixed(0)); el.setAttribute("y1", (w.a[1] - w.n[1] * o).toFixed(0));
+      el.setAttribute("x2", (w.b[0] - w.n[0] * o).toFixed(0)); el.setAttribute("y2", (w.b[1] - w.n[1] * o).toFixed(0));
+      el.setAttribute("stroke-width", wd.toFixed(0)); el.setAttribute("stroke", v > 0.55 ? "#e0331c" : "#ff6a00"); el.setAttribute("stroke-opacity", v < 0.02 ? 0 : (0.15 + 0.6 * v).toFixed(2)); });
+    const k = $(".dd-heatkey i", sc); if (k) k.style.left = (top * 100).toFixed(0) + "%";
   }
   const compass = (az) => ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"][Math.round((((az % 360) + 360) % 360) / 45) % 8];
   // the curve through the day's points as cubic segments (Catmull-Rom): the line is drawn on it and the sun travels along it
@@ -7403,7 +7428,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   }
   function sunMove(sc, st) {
     const D = window.ACKO_FLOOR.sun[SUN.day], f = { az: st.az, alt: st.alt }; SUN.u = st.u;
-    sunWallsDraw(sc, f);
+    sunWallsDraw(sc, f); sunHeatDraw(sc, f);
     if (st.near !== SUN.pi) {                                      // the sunlit patches: the nearest half hour's, cross-fading
       SUN.pi = st.near; const on = $(".dd-sun .lit g.on", sc), off = on && on.classList.contains("a") ? $(".dd-sun .lit .b", sc) : $(".dd-sun .lit .a", sc);
       off.innerHTML = D.frames[st.near].p.map((d) => `<path d="${d}"/>`).join(""); off.classList.add("on"); if (on) on.classList.remove("on");
