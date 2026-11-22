@@ -705,6 +705,37 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && document.body.classList.contains("wk-full")) { setFull(false); e.stopImmediatePropagation(); } }, true);
   let kpOn = true;
   $("#wk-kp").onclick = () => { kpOn = !kpOn; $("#wk-kp").classList.toggle("on", kpOn); document.body.classList.toggle("kp-off", !kpOn); };
+  // the keyplan is a button: it opens the Layout's Spaces beat, and a button there comes back to this render
+  {
+    const card = $("#wk-kpimg");
+    if (card && sceneIx("s-layout-sp") >= 0 && !/[?&]kpedit=1/.test(location.search)) {
+      card.setAttribute("role", "button"); card.tabIndex = 0; card.classList.add("kp-link");
+      card.setAttribute("aria-label", "See this space on the Layout plan"); card.title = "See this space on the Layout plan";
+      const cap = document.createElement("span"); cap.className = "wk-kp-cap"; cap.textContent = "Open on the Layout"; card.appendChild(cap);
+      const open = () => {
+        const id = document.body.dataset.scene, sc = scenes.find((x) => x.id === id);
+        if (!sc || !sc.classList.contains("walk")) return;
+        let nm = ""; try { nm = JSON.parse(sc.dataset.walk || "{}").n || ""; } catch (e) { /* the name falls back to the slide's title */ }
+        window.ACKO_WALK_BACK = { id, name: nm || sc.dataset.title };
+        go(sceneIx("s-layout-sp"), 1);
+      };
+      card.addEventListener("click", (e) => { e.stopPropagation(); open(); });
+      card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); open(); } });
+    }
+    // the way back: shown while the Layout is open and a render sent us there; any other slide opening clears it
+    const back = document.createElement("button"); back.type = "button"; back.className = "wk-back"; back.id = "wk-back"; document.body.appendChild(back);
+    const sync = () => {
+      const b = window.ACKO_WALK_BACK, now = document.body.dataset.scene;
+      if (b && now === "s-layout-sp") { back.textContent = "\u2190 Back to " + b.name; back.classList.add("on"); }
+      else { back.classList.remove("on"); if (now !== "s-layout-sp") window.ACKO_WALK_BACK = null; }
+    };
+    new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ["data-scene"] });
+    back.onclick = () => {
+      const b = window.ACKO_WALK_BACK; if (!b) return;
+      window.ACKO_WALK_RETURN = true; window.ACKO_WALK_BACK = null; back.classList.remove("on");
+      go(sceneIx(b.id), 1);
+    };
+  }
   // the keyplan: the current Layout drawing (the spaces' colour fills from PLAN_DXF under the plan's own line work, assets/img/plan-dxf-48.webp),
   // framed around the render's room, with the maroon camera mark; marks and views are in plan mm (data/keyplans.js)
   const KPP = { x0: 7500, y0: 12500, w: 249000, h: 38250 };
@@ -824,7 +855,8 @@
         $("#wk-q").textContent = s.q || ""; $("#wk-p").textContent = s.p || "";
         $("#wk-opt").innerHTML = s.r.length > 1 || s.tags ? (s.tags || ["Option 01 - Lucid", "Option 02 - Assured"]).map((t) => `<span>${t}</span>`).join("") : "";
         $("#wk-kick").textContent = `${s.kick || (SECT.names && SECT.names[sc.dataset.part]) || "Visual Direction"} · ${String(at + 1).padStart(2, "0")} / ${String(deck.length).padStart(2, "0")}`;
-        WKI.on(); WKO.show(s.open);
+        const ret = window.ACKO_WALK_RETURN; window.ACKO_WALK_RETURN = false;       // back from the Layout: no chapter marker again
+        WKI.on(); WKO.show(ret ? null : s.open);
         AUD.play();
       },
       step(k) { if (s.r[k - 1]) walkShow(s, k); },

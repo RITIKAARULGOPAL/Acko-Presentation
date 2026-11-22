@@ -276,6 +276,15 @@ body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
 .wk-kp-in { position: absolute; transform-origin: 0 0; aspect-ratio: 249000 / 38250; }
 .wk-kp-in img, .wk-kp-in svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; max-width: none; }   /* the plan: space fills (svg) under the line work (img) */
 .wk-kp-in img { filter: url(#kp-bold); }   /* heavier line weight: alpha gain from the filter built in keyplan() */
+/* the keyplan opens the Layout (Spaces); on the Layout a button comes back to the render */
+.wk-kp.kp-link { cursor: pointer; }
+.wk-kp.kp-link:hover, .wk-kp.kp-link:focus-visible { outline: 2px solid var(--purple); opacity: 1; }
+.wk-kp-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; padding: 3px 6px; background: rgba(82,34,208,.92); color: #fff; font: 600 calc(var(--pt) * 6.4) var(--body); letter-spacing: .02em; text-align: center; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.wk-kp.kp-link:hover .wk-kp-cap, .wk-kp.kp-link:focus-visible .wk-kp-cap { opacity: 1; }
+.wk-back { position: fixed; z-index: 30; left: calc(var(--pl) + var(--pw) * .018); top: calc(var(--ptop) + var(--ph) * .1); display: inline-flex; align-items: center; padding: calc(var(--pt) * 4.2) calc(var(--pt) * 9.5); border: 0; border-radius: 99px; background: var(--purple); color: #fff; font: 600 calc(var(--pt) * 8) var(--body); white-space: nowrap; cursor: pointer; box-shadow: 0 4px 14px rgba(82,34,208,.28); pointer-events: auto; visibility: hidden; opacity: 0; transition: opacity .4s var(--ease) .25s, visibility 0s linear .65s; }
+.wk-back.on { visibility: visible; opacity: 1; transition: opacity .4s var(--ease) .25s, visibility 0s; }
+.wk-back:hover { background: var(--purple-2); }
+@media (prefers-reduced-motion: reduce) { .wk-back, .wk-back.on, .wk-kp-cap { transition: none; } }
 .wk-cam { position: absolute; width: 0; height: 0; }
 .wk-cam svg { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; overflow: visible; transform: rotate(var(--rot, 0deg)); }
 .wk-cam path { fill: none; stroke: var(--maroon); stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; }
