@@ -5995,15 +5995,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
       } else build(sc);
       $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-layout-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 6, 3, 4].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
-      // 22 Nov, Ritika: the laser cursor by default over the layout (the canvas between the header band and the foot band, not over the tools, pills, panels
-      // or north point); L still toggles it by hand. As on the due-diligence slide.
-      if (!sc._laser) { const cur = document.getElementById("cur"); let auto = false;
-        sc._laser = (e) => { const top = sc.querySelector(".ly-top").getBoundingClientRect().bottom, bot = sc.querySelector(".ly-bot").getBoundingClientRect().top;
-          const inBox = (q) => { const r = sc.querySelector(q); if (!r) return false; const b = r.getBoundingClientRect(); return e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom; };
-          const on = !!(e.target.closest && !e.target.closest(".ui, .ly-tools, .ly-pills, .ly-north, .sp3-fold, .ly-fo, button") && !inBox(".ly-tools") && !inBox(".ly-north") && e.clientY > top && e.clientY < bot);
-          if (on && !cur.classList.contains("laser")) { cur.classList.add("laser"); auto = true; } else if (!on && auto) { cur.classList.remove("laser"); auto = false; } };
-        sc._laserOff = () => { if (auto) cur.classList.remove("laser"); auto = false; }; }
-      document.removeEventListener("mousemove", sc._laser, true); document.addEventListener("mousemove", sc._laser, true);
+      // 22 Nov, Ritika: the normal cursor stays; the laser only when L is pressed (no automatic laser over the canvas)
       $$("button", tools).forEach((b) => (b.onclick = () => {
         const t = b.dataset.t; b.blur();
         if (t === "dist" || t === "area") measure(sc, t);
@@ -7535,13 +7527,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
       } else { build(sc); ddShell(true); }   // the bare shell (10 Nov)
       $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-site-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 6, 3, 4].indexOf(g) + 1); } }));
       tools = tools || $(".ly-tools", sc);
-      if (!sc._laser) { const cur = document.getElementById("cur"); let auto = false;   // the laser only over the canvas, between the header band and the foot band (L still works by hand)
-        sc._laser = (e) => { const top = sc.querySelector(".ly-top").getBoundingClientRect().bottom, bot = sc.querySelector(".ly-bot").getBoundingClientRect().top;
-          const inBox = (q) => { const r = sc.querySelector(q).getBoundingClientRect(); return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom; };
-          const on = !!(e.target.closest && !e.target.closest(".ui, .ly-tools, .ly-pills, .dd-sunp, button") && !inBox(".dd-sunp") && !inBox(".ly-tools") && e.clientY > top && e.clientY < bot);
-          if (on && !cur.classList.contains("laser")) { cur.classList.add("laser"); auto = true; } else if (!on && auto) { cur.classList.remove("laser"); auto = false; } };
-        sc._laserOff = () => { if (auto) cur.classList.remove("laser"); auto = false; }; }
-      document.removeEventListener("mousemove", sc._laser, true); document.addEventListener("mousemove", sc._laser, true);
+      // 22 Nov, Ritika: the normal cursor stays; the laser only when L is pressed (no automatic laser over the canvas)
       $$("button", tools).forEach((b) => (b.onclick = () => {
         const t = b.dataset.t; b.blur();
         if (t === "in") zoomBy(0.7); else if (t === "out") zoomBy(1 / 0.7);
