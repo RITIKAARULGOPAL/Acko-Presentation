@@ -75,6 +75,17 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 .tm-list button:hover { background: var(--accent-soft); }
 .tm-list button[data-state="past"] { color: var(--ink); }
 .tm-list button[data-state="now"], .tm-list button[data-state="now"] b { color: var(--accent); }
+/* the sections list: each section folds out its slides (22 Nov, Ritika) */
+.tm-list { width: 290px; max-height: calc(100vh - 96px); overflow-y: auto; }
+.tm-sec { display: flex; flex-wrap: wrap; align-items: stretch; }
+.tm-sec .tm-row { flex: 1 1 0; min-width: 0; }
+.tm-list .tm-tog { flex: none; width: 30px; justify-content: center; padding: 8px 0; color: var(--mute); }
+.tm-tog svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s var(--ease); }
+.tm-sec.open .tm-tog svg { transform: rotate(180deg); }
+.tm-sub { display: none; flex: 0 0 100%; flex-direction: column; padding: 0 0 6px 38px; }
+.tm-sec.open .tm-sub { display: flex; }
+.tm-list .tm-s { padding: 5px 10px; font-size: 12px; color: var(--mute); }
+.tm-list .tm-s.on { color: var(--accent); font-weight: 600; }
 .hint { position: fixed; left: var(--gutter); bottom: calc(var(--ptop) + var(--ph) * .022); z-index: 40; font-family: var(--body); font-size: calc(var(--pt) * 5); letter-spacing: .12em; text-transform: uppercase; color: var(--soft); pointer-events: none; transition: color .5s; }
 .lockup { position: fixed; right: calc(var(--pl) + var(--pw) * .018); bottom: calc(var(--ptop) + var(--ph) * .018); z-index: 40; display: flex; align-items: center; gap: calc(var(--pt) * 4); }
 .lockup img { height: calc(var(--pt) * 7.5); width: auto; }
