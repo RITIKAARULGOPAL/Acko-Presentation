@@ -1524,6 +1524,41 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #s-site-dd .dd-heatkey .c path { fill: none; stroke: #e0662a; stroke-width: 1.2; vector-effect: non-scaling-stroke; opacity: .75; }
 #s-site-dd .dd-heatkey .c circle { fill: #2b2440; }
 #s-site-dd .dd-clock small { white-space: nowrap; }
+/* the pills stand above every overlay on this slide; the closed occupancy card (invisible) can never take a press */
+#s-site-dd .ly-pills { z-index: 30; }
+#s-site-dd .ly-fo:not(.on), #s-site-dd .ly-fo:not(.on) * { pointer-events: none !important; }
+#s-site-dd .nbc-pill { border-style: dashed; }
+#s-site-dd .nbc-pill svg { width: 1.05em; height: 1.05em; fill: none; stroke: currentColor; stroke-width: 1.4; }
+/* NBC calculations: the sheet over the slide */
+#s-site-dd .dd-nbc { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 40; opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility 0s linear .35s; }
+#s-site-dd .dd-nbc.on { opacity: 1; visibility: visible; transition: opacity .4s var(--ease), visibility 0s; }
+#s-site-dd .dd-nbc, #s-site-dd .dd-nbc * { pointer-events: none !important; }
+#s-site-dd .dd-nbc.on, #s-site-dd .dd-nbc.on * { pointer-events: auto !important; }
+#s-site-dd .dd-nbc-scrim { position: absolute; inset: 0; background: rgba(255, 255, 255, .86); }
+#s-site-dd .dd-nbc-card { position: absolute; left: 4%; right: 4%; top: 8%; bottom: 7%; box-sizing: border-box; overflow: auto; background: #fff; border: 1px solid #e3dcf6; border-radius: calc(var(--pt) * 4);
+  box-shadow: 0 12px 44px rgba(40, 20, 100, .12); padding: calc(var(--pt) * 7) calc(var(--pt) * 10) calc(var(--pt) * 8); color: #111; }
+#s-site-dd .dd-nbc-h { display: flex; align-items: center; padding-bottom: calc(var(--pt) * 3); }
+#s-site-dd .dd-nbc-h b { font-size: calc(var(--pt) * 11); font-weight: 600; color: var(--purple); }
+#s-site-dd .dd-nbc-x { margin-left: auto; width: calc(var(--pt) * 11); height: calc(var(--pt) * 11); border: 1px solid #d9d9d9; background: #fff; color: #111; cursor: pointer; font-size: calc(var(--pt) * 6.4); padding: 0; }
+#s-site-dd .dd-nbc-x:hover { background: rgba(82, 34, 208, .1); color: var(--purple); }
+#s-site-dd .dd-nbc-far { margin: 0 0 calc(var(--pt) * 9); font-size: calc(var(--pt) * 10); color: var(--purple-2); }
+#s-site-dd .dd-nbc-far b { color: var(--plum); font-weight: 700; }
+#s-site-dd .dd-nbc-cols { display: grid; grid-template-columns: 1.55fr 1fr; gap: calc(var(--pt) * 9); align-items: start; }
+#s-site-dd .dd-nbc h4 { margin: 0 0 calc(var(--pt) * 4); font-size: calc(var(--pt) * 9.4); font-weight: 700; color: #111; }
+#s-site-dd .dd-nbc h4 small { font-weight: 500; font-size: .85em; }
+#s-site-dd .dd-nbc-t { display: grid; grid-template-columns: 1fr auto; gap: calc(var(--pt) * 6); align-items: center; }
+#s-site-dd .dd-nbc table { border-collapse: collapse; width: 100%; font-size: calc(var(--pt) * 7.8); text-align: center; }
+#s-site-dd .dd-nbc th, #s-site-dd .dd-nbc td { border: 1px solid #b9b2d6; padding: calc(var(--pt) * 3.2) calc(var(--pt) * 3.6); font-weight: 400; }
+#s-site-dd .dd-nbc thead th { background: #ddd6f5; }
+#s-site-dd .dd-nbc td.g { color: #3c9a5a; font-weight: 700; }
+#s-site-dd .dd-nbc td small { font-size: .92em; display: block; line-height: 1.25; }
+#s-site-dd .dd-nbc-norms { font-size: calc(var(--pt) * 7.6); text-align: right; color: #333; line-height: 1.5; min-width: calc(var(--pt) * 62); }
+#s-site-dd .dd-nbc-norms p { margin: 0 0 calc(var(--pt) * 6); }
+#s-site-dd .dd-nbc-norms b { font-weight: 500; }
+#s-site-dd .dd-nbc-box { border: 1px dashed #c9c9c9; background: #f7f7f7; padding: calc(var(--pt) * 8); font-size: calc(var(--pt) * 8.2); line-height: 1.7; }
+#s-site-dd .dd-nbc-box div { display: flex; justify-content: space-between; gap: calc(var(--pt) * 4); }
+#s-site-dd .dd-nbc-box div b { font-weight: 500; white-space: nowrap; }
+#s-site-dd .dd-nbc-box p { margin: calc(var(--pt) * 10) 0 0; font-size: calc(var(--pt) * 8.6); }
 </style>
 <style data-slide="s-axo-detail">
 
@@ -2130,6 +2165,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <button type="button" data-go="2"><small>03</small>Neighbourhoods</button>
       <button type="button" data-go="6"><small>04</small>Acoustics</button>
       <button type="button" data-go="3"><small>05</small>Biophilia</button>
+      <button type="button" class="nbc-pill" data-nbc><svg viewBox="0 0 16 16"><rect x="3" y="1.8" width="10" height="12.4" rx="1.6"/><path d="M5.2 5h5.6M5.4 8h1M7.5 8h1M9.6 8h1M5.4 10.6h1M7.5 10.6h1M9.6 10.6h1"/></svg>NBC calculations</button>
     </nav>
     <!-- the plan's tools, one button group top right beside the ACKO symbol -->
     <div class="ly-tools ui">
@@ -2245,6 +2281,50 @@ body.si-into #vmap .vm-plate { opacity: .22; }
       <div class="ly-fo-card">
         <div class="ly-fo-h"><b>Occupancy</b><span class="ly-fo-sum"></span><button type="button" class="ly-fo-x" title="Close" aria-label="Close the occupancy chart">✕</button></div>
         <div class="ly-fo-cols"><div class="ly-fo-l"></div><div class="ly-fo-r"></div></div>
+      </div>
+    </div>
+    <!-- NBC calculations (22 Nov, Ritika): the sheet, as real text; the staff total 651 as the deck has it, the other figures as the sheet gives them -->
+    <div class="dd-nbc" aria-hidden="true">
+      <div class="dd-nbc-scrim"></div>
+      <div class="dd-nbc-card" role="dialog" aria-label="NBC calculations">
+        <div class="dd-nbc-h"><b>NBC calculations</b><button type="button" class="dd-nbc-x" title="Close" aria-label="Close the NBC calculations">✕</button></div>
+        <p class="dd-nbc-far">The farthest point within the space to the nearest fire escape staircase measures <b>60 meters.</b></p>
+        <div class="dd-nbc-cols">
+          <div>
+            <h4>NBC Plumbing fixture calculation <small>(As per Business standards)</small></h4>
+            <div class="dd-nbc-t">
+              <table>
+                <thead>
+                  <tr><th colspan="3"></th><th colspan="2">Req. as per National Building Code</th><th colspan="2">As per proposed layout</th></tr>
+                  <tr><th>S. No.</th><th></th><th>TOTAL</th><th>M</th><th>F</th><th>M</th><th>F</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td rowspan="2">1</td><td rowspan="2">NO. OF STAFF</td><td rowspan="2">651</td><td>-</td><td>-</td><td>180</td><td>120</td></tr>
+                  <tr><td>60.00%</td><td>40.00%</td><td>60.00%</td><td>40.00%</td></tr>
+                  <tr><td>2</td><td>WC</td><td></td><td>16</td><td>18</td><td class="g">19</td><td class="g">18</td></tr>
+                  <tr><td>3</td><td>WASHBASINS</td><td></td><td>16</td><td>11</td><td class="g">16</td><td class="g">13</td></tr>
+                  <tr><td>4</td><td>URINALS<small>3 for 46-70</small><small>4 for 71-100</small><small>add@ 3% for 101-200</small><small>add@ 2.5% for over 200)</small></td><td></td><td>12</td><td>N/A</td><td class="g">14</td><td>N/A</td></tr>
+                </tbody>
+              </table>
+              <div class="dd-nbc-norms">
+                <p><b>Male</b> (as per norms)<br>WC - 1:25<br>Washbasin - 1:25</p>
+                <p><b>Female</b> (as per norms)<br>WC - 1:15<br>Washbasin - 1:25</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4>Floor Occupancy</h4>
+            <div class="dd-nbc-box">
+              <div><span>Fire Door - Opening Width -</span><b>1500mm</b></div>
+              <div><span>Fire Door - Exit Capacity - 1500/6.5 =</span><b>230 nos.</b></div>
+              <div><span>Staircase Width -</span><b>2100 mm</b></div>
+              <div><span>Staircase Exit Capacity - 2100/10 =</span><b>210 nos.</b></div>
+              <div><span>Exit System Capacity (in vicinity) -</span><b>5 nos.</b></div>
+              <div><span>TOTAL EXIT CAPACITY - 210*5 =</span><b>1050 nos.</b></div>
+              <p>As per NBC guidelines and above calculation, the exit system capacity for each floor is 1050.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -7590,6 +7670,21 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
         later(() => document.body.classList.remove("ly-arrive", "si-into"), 4400);
       } else { build(sc); ddShell(true); }   // the bare shell (10 Nov)
       $$("[data-go]", sc).forEach((b) => (b.onclick = () => { b.blur(); { const g = +b.dataset.go; if (g === 7) go(sceneIx("s-site-dd"), 1); else go(sceneIx("s-layout-sp"), [1, 2, 6, 3, 4].indexOf(g) + 1); } }));
+      // NBC calculations (22 Nov, Ritika): a pill that opens the NBC sheet over the slide; Esc, the x or a click outside closes it
+      const nbc = $(".dd-nbc", sc), nbcSet = (on) => { nbc.classList.toggle("on", on); const p = $(".nbc-pill", sc); if (p) p.classList.toggle("on", on); };
+      sc._nbcSet = nbcSet;
+      $(".nbc-pill", sc).onclick = (e) => { e.stopPropagation(); nbcSet(!nbc.classList.contains("on")); };
+      $(".dd-nbc-x", sc).onclick = () => nbcSet(false); $(".dd-nbc-scrim", sc).onclick = () => nbcSet(false);
+      // a safety net for the pills (22 Nov, Ritika: "unable to click onto these buttons"): if a press lands on a pill's own rectangle but something else received it, the pill still gets it
+      document.removeEventListener("pointerdown", sc._net, true);
+      sc._net = (e) => {
+        if (document.body.dataset.scene !== "s-site-dd" || nbc.classList.contains("on") || $(".ly-fo", sc).classList.contains("on") || sc.classList.contains("ly-arrive")) return;
+        const t = e.target; if (t && t.closest && t.closest(".ly-pills")) return;
+        if (getComputedStyle($(".ly-pills", sc)).opacity < 0.5) return;
+        for (const b of $$(".ly-pills button", sc)) { const r = b.getBoundingClientRect();
+          if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) { e.stopPropagation(); e.preventDefault(); if (b.onclick) b.onclick(e); return; } }
+      };
+      document.addEventListener("pointerdown", sc._net, true);
       tools = tools || $(".ly-tools", sc);
       // 22 Nov, Ritika: the normal cursor stays; the laser only when L is pressed (no automatic laser over the canvas)
       $$("button", tools).forEach((b) => (b.onclick = () => {
@@ -7607,7 +7702,8 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
       sc._keys = (e) => {          // M / A: measure; Esc: the chart, then the measurement, then an open neighbourhood
         if (e.target.closest && e.target.closest("input, textarea")) return;
         if (e.key !== "Escape") return;
-        if ($(".ly-fo", sc).classList.contains("on")) occ(sc, false);
+        if (sc._nbcSet && $(".dd-nbc", sc).classList.contains("on")) sc._nbcSet(false);
+        else if ($(".ly-fo", sc).classList.contains("on")) occ(sc, false);
         else if (L && L.measure.esc()) { if (!L.measure.mode) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
         else if (zone) closeZone(sc); else return;
         e.stopImmediatePropagation(); e.preventDefault();
@@ -7652,7 +7748,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
       beat = 0; zone = null; arriving = false; document.body.classList.remove("ly-nbdim", "ly-nb-dis");
       if (sc && sc._laser) { document.removeEventListener("mousemove", sc._laser, true); sc._laserOff(); }
       document.body.classList.remove("ly-arrive", "si-into"); if (sc) sc.classList.remove("ly-arrive");
-      if (sc) { occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
+      if (sc) { if (sc._nbcSet) sc._nbcSet(false); document.removeEventListener("pointerdown", sc._net, true); occ(sc, false); $('.ly-p[data-p="2"]', sc).classList.remove("zoned"); document.removeEventListener("keydown", sc._keys, true);
         $(".lt-read", sc).textContent = ""; if (tools) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
       plan.planOff(); if (sc) { sunDD(sc, false); coHide(sc); }
       ddShell(false);                                   // the fit-out back for the slides after
