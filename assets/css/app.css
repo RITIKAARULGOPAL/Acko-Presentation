@@ -273,8 +273,8 @@ body.wk-full #wk-full { border-left: 0; }
 /* the keyplan, top right under the buttons: the deck's plan crop with its maroon camera mark */
 .walk .wk-kp { position: fixed; top: calc(var(--ptop) + var(--ph) * .1); right: calc(var(--pl) + var(--pw) * .018); z-index: 3; width: calc(var(--pw) * .19); aspect-ratio: 16 / 10; background: #fff; border: 1px solid rgba(255,255,255,.5); overflow: hidden; transition: opacity .5s; }
 body.kp-off .walk .wk-kp { opacity: 0; pointer-events: none; }
-.wk-kp-in { position: absolute; transform-origin: 0 0; }
-.wk-kp-in img { display: block; width: 100%; height: auto; max-width: none; }
+.wk-kp-in { position: absolute; transform-origin: 0 0; aspect-ratio: 249000 / 38250; }
+.wk-kp-in img, .wk-kp-in svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; max-width: none; }   /* the plan: space fills (svg) under the line work (img) */
 .wk-cam { position: absolute; width: 0; height: 0; }
 .wk-cam svg { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; overflow: visible; transform: rotate(var(--rot, 0deg)); }
 .wk-cam path { fill: none; stroke: var(--maroon); stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; }

@@ -705,50 +705,63 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && document.body.classList.contains("wk-full")) { setFull(false); e.stopImmediatePropagation(); } }, true);
   let kpOn = true;
   $("#wk-kp").onclick = () => { kpOn = !kpOn; $("#wk-kp").classList.toggle("on", kpOn); document.body.classList.toggle("kp-off", !kpOn); };
-  // the keyplan: the deck's keyplan image, framed around its camera mark (a little wider than the deck's crop)
-  function keyplan(slideNo, others) {
-    $$(".wk-cam:not(.alt)", $("#wk-kpimg")).forEach((e) => (e.style.display = ""));
+  // the keyplan: the current Layout drawing (the spaces' colour fills from PLAN_DXF under the plan's own line work, assets/img/plan-dxf-48.webp),
+  // framed around the render's room, with the maroon camera mark; marks and views are in plan mm (data/keyplans.js)
+  const KPP = { x0: 7500, y0: 12500, w: 249000, h: 38250 };
+  function keyplan(key, others) {
     const KPD = window.ACKO_KP || {};
-    let k = KPD[slideNo]; const box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner), cam = $(".wk-cam:not(.alt)", inner);
-    const nocam = !k;       // no camera position for this render: the whole floor plan, no arrow, until one is added to data/keyplans.js
-    if (nocam) k = { img: "kp-119", x: 50, y: 50, rot: 0, view: [0, 0, 100, 100] };
-    box.style.display = ""; cam.style.display = nocam ? "none" : "";
-    // the other views of this space, on the same plan: a second, fainter arrow each, and the card is framed around them all
-    let alts = nocam ? [] : (others || []).map((o) => KPD[o]).filter((o) => o && o.img === k.img);
-    // keep the card zoomed in: only frame the other views too when they sit near this one
-    alts = alts.filter((o) => o.x >= k.view[0] && o.x <= k.view[2] && o.y >= k.view[1] && o.y <= k.view[3]);
+    const box = $("#wk-kpimg"), inner = $(".wk-kp-in", box), img = $("img", inner), cam = $(".wk-cam:not(.alt)", inner);
+    const k = KPD[key];
+    if (!k) { box.style.display = "none"; return; }       // no camera for this render: no card
+    box.style.display = "";
+    if (!inner._built) {                                   // the plan is built once: one filled shape per space, then the line work over it
+      inner._built = true;
+      const NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
+      svg.setAttribute("viewBox", `${KPP.x0} ${KPP.y0} ${KPP.w} ${KPP.h}`); svg.setAttribute("preserveAspectRatio", "none"); svg.setAttribute("aria-hidden", "true");
+      ((window.PLAN_DXF && window.PLAN_DXF.spaces) || []).forEach((sp) => sp.d.split(/(?=M)/).forEach((d) => {
+        const p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("fill", sp.colour); svg.appendChild(p);
+      }));
+      inner.insertBefore(svg, inner.firstChild);
+      img.onload = () => inner._place && inner._place();
+      img.src = asset("assets/img/plan-dxf-48.webp");
+      window.addEventListener("resize", () => inner._place && inner._place());
+    }
+    // the other views of this space, on the same plan: a second, fainter arrow each, and the card is framed around them too when they sit in this view
     $$(".wk-cam.alt", inner).forEach((e) => e.remove());
-    const view = alts.reduce((v, o) => [Math.min(v[0], o.view[0]), Math.min(v[1], o.view[1]), Math.max(v[2], o.view[2]), Math.max(v[3], o.view[3])], k.view.slice());
+    const alts = (others || []).map((o) => KPD[o]).filter((o) => o && o.x >= k.view[0] && o.x <= k.view[2] && o.y >= k.view[1] && o.y <= k.view[3]);
     const altEls = alts.map((o) => { const e = cam.cloneNode(true); e.classList.add("alt"); e.style.display = ""; inner.appendChild(e); return [e, o]; });
-    view[0] = Math.min(view[0], k.x - 1.5); view[1] = Math.min(view[1], k.y - 1.5); view[2] = Math.max(view[2], k.x + 1.5); view[3] = Math.max(view[3], k.y + 1.5);
+    const M = 1500, view = k.view.slice();                 // a margin round the room, and the cameras inside it
+    [k].concat(alts).forEach((o) => { view[0] = Math.min(view[0], o.x - M); view[1] = Math.min(view[1], o.y - M); view[2] = Math.max(view[2], o.x + M); view[3] = Math.max(view[3], o.y + M); });
+    view[0] -= M; view[1] -= M; view[2] += M; view[3] += M;
+    const minW = 10000, minH = 6250;                       // a small room still shows its neighbours, so the labels stay readable
+    if (view[2] - view[0] < minW) { const c = (view[0] + view[2]) / 2; view[0] = c - minW / 2; view[2] = c + minW / 2; }
+    if (view[3] - view[1] < minH) { const c = (view[1] + view[3]) / 2; view[1] = c - minH / 2; view[3] = c + minH / 2; }
     inner._k = k;
-    const place = () => {
-      const W = box.clientWidth, Hh = box.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
-      if (!W || !iw) return;
-      const vw = ((view[2] - view[0]) / 100) * iw, vh = ((view[3] - view[1]) / 100) * ih;
-      const f = 1, s = Math.min(W / (vw * f), Hh / (vh * f)), w = iw * s, h = ih * s;
-      const cx = (k.x / 100) * w, cy = (k.y / 100) * h;
-      const mx = ((view[0] + view[2]) / 200) * w, my = ((view[1] + view[3]) / 200) * h;      // centre of the framed area
-      const tx = clamp(W / 2 - (nocam ? cx : mx), W - w, 0), ty = clamp(Hh / 2 - (nocam ? cy : my), Hh - h, 0);
+    inner._place = () => {
+      const W = box.clientWidth, Hh = box.clientHeight;
+      if (!W || !Hh) return;
+      const s = Math.min(W / (view[2] - view[0]), Hh / (view[3] - view[1])), w = KPP.w * s, h = KPP.h * s;     // px per mm
+      const px = (X) => (X - KPP.x0) * s, py = (Y) => (Y - KPP.y0) * s;
+      const tx = clamp(W / 2 - px((view[0] + view[2]) / 2), W - w, 0), ty = clamp(Hh / 2 - py((view[1] + view[3]) / 2), Hh - h, 0);
       inner.style.width = w + "px"; inner.style.transform = `translate(${tx}px, ${ty}px)`;
-      cam.style.left = cx + "px"; cam.style.top = cy + "px"; cam.style.setProperty("--rot", k.rot + "deg");
-      altEls.forEach(([e, o]) => { e.style.left = (o.x / 100) * w + "px"; e.style.top = (o.y / 100) * h + "px"; e.style.setProperty("--rot", o.rot + "deg"); });
+      cam.style.left = px(k.x) + "px"; cam.style.top = py(k.y) + "px"; cam.style.setProperty("--rot", k.rot + "deg");
+      altEls.forEach(([e, o]) => { e.style.left = px(o.x) + "px"; e.style.top = py(o.y) + "px"; e.style.setProperty("--rot", o.rot + "deg"); });
     };
-    if (img.dataset.key !== k.img) { img.dataset.key = k.img; img.onload = place; img.src = asset("assets/img/" + k.img + ".webp"); } else place();
+    inner._place();
   }
-  // ?kpedit=1: press on the keyplan card where the camera stands and drag the way it looks; the numbers print on the card and in the console
+  // ?kpedit=1: press on the keyplan card where the camera stands and drag the way it looks; the numbers (plan mm) print on the card and in the console
   if (/[?&]kpedit=1/.test(location.search)) {
     const card = $("#wk-kpimg"), lab = document.createElement("div");
     lab.style.cssText = "position:absolute;left:0;right:0;bottom:0;padding:2px 4px;background:rgba(0,0,0,.7);color:#fff;font:10px monospace;z-index:5";
     card.appendChild(lab); card.style.pointerEvents = "auto"; card.style.cursor = "crosshair";
-    const pt = (e) => { const r = $(".wk-kp-in", card).getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100]; };
+    const pt = (e) => { const r = $(".wk-kp-in", card).getBoundingClientRect(); return [KPP.x0 + ((e.clientX - r.left) / r.width) * KPP.w, KPP.y0 + ((e.clientY - r.top) / r.height) * KPP.h]; };
     let p0 = null;
     card.addEventListener("pointerdown", (e) => { e.stopPropagation(); card.setPointerCapture(e.pointerId); p0 = pt(e); });
     card.addEventListener("pointermove", (e) => {
-      if (!p0) return; const p1 = pt(e), r = $(".wk-kp-in", card).getBoundingClientRect(), ar = r.width / r.height;
-      const rot = Math.round((Math.atan2(-(p1[0] - p0[0]) * ar, (p1[1] - p0[1])) * 180) / Math.PI * 10) / 10, cam = $(".wk-cam:not(.alt)", card);
-      cam.style.display = ""; cam.style.left = (p0[0] / 100) * r.width + "px"; cam.style.top = (p0[1] / 100) * r.height + "px"; cam.style.setProperty("--rot", rot + "deg");
-      lab.textContent = `x ${p0[0].toFixed(2)}  y ${p0[1].toFixed(2)}  rot ${rot}  (${$("img", card).dataset.key})`; console.log(lab.textContent);
+      if (!p0) return; const p1 = pt(e), r = $(".wk-kp-in", card).getBoundingClientRect(), s = r.width / KPP.w;
+      const rot = Math.round((Math.atan2(p1[0] - p0[0], -(p1[1] - p0[1])) * 180) / Math.PI * 10) / 10, cam = $(".wk-cam:not(.alt)", card);
+      cam.style.display = ""; cam.style.left = (p0[0] - KPP.x0) * s + "px"; cam.style.top = (p0[1] - KPP.y0) * s + "px"; cam.style.setProperty("--rot", rot + "deg");
+      lab.textContent = `x ${Math.round(p0[0])}  y ${Math.round(p0[1])}  rot ${rot}  (plan mm)`; console.log(lab.textContent);
     });
     card.addEventListener("pointerup", () => { p0 = null; });
   }
