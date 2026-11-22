@@ -716,6 +716,13 @@
     box.style.display = "";
     if (!inner._built) {                                   // the plan is built once: one filled shape per space, then the line work over it
       inner._built = true;
+      // the line work is a very large image shown at a fraction of its size, so its hairlines average out to a faint grey: raise their opacity (alpha gain) so they read solid
+      if (!document.getElementById("kp-bold")) {
+        const f = document.createElement("div");
+        f.style.cssText = "position:absolute;width:0;height:0;overflow:hidden";
+        f.innerHTML = '<svg width="0" height="0" aria-hidden="true"><filter id="kp-bold" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncA type="linear" slope="3.2"/></feComponentTransfer></filter></svg>';
+        document.body.appendChild(f);
+      }
       const NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
       svg.setAttribute("viewBox", `${KPP.x0} ${KPP.y0} ${KPP.w} ${KPP.h}`); svg.setAttribute("preserveAspectRatio", "none"); svg.setAttribute("aria-hidden", "true");
       ((window.PLAN_DXF && window.PLAN_DXF.spaces) || []).forEach((sp) => sp.d.split(/(?=M)/).forEach((d) => {
