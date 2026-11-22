@@ -729,6 +729,12 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .ly-tools, #s-site-dd .ly-tools { overflow: visible; }
 #s-layout-sp .ly-tools button:first-child, #s-site-dd .ly-tools button:first-child { border-radius: calc(var(--pt) * 3) 0 0 calc(var(--pt) * 3); }
 #s-layout-sp .ly-tools button:last-child, #s-site-dd .ly-tools button:last-child { border-radius: 0 calc(var(--pt) * 3) calc(var(--pt) * 3) 0; }
+#s-layout-sp .nbe-col { justify-content: space-between; }   /* 22 Nov, Ritika: no kicker, no area; heading at the top; the blocks spaced equally */
+#s-layout-sp .nbe-col :is(.nbe-k, .nbe-s) { display: none; }
+#s-layout-sp .nbe-col .nbe-n { order: 1; margin: 0; }
+#s-layout-sp .nbe-col .nbe-kp { order: 2; margin: 0; }
+#s-layout-sp .nbe-col .nbe-chips { order: 3; margin: 0; }
+#s-layout-sp .nbe-col .nbe-cnt { order: 4; margin-top: 0; }
 </style>
 <style data-slide="s-wayday">
 /* ---------- a day in ACKO: the campus in use, on the live axo (the shared model) ---------- */
