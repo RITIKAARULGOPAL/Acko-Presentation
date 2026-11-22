@@ -154,7 +154,7 @@
     const esc = (t) => String(t == null ? "" : t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     $("#tm-list").innerHTML = "" +
       tp.map(([p, nm, num], k) => {      // a page may give each section its own number
-        const subs = scenes.map((s, i) => [s, i]).filter(([s]) => s.dataset.part === p), on = OPEN.has(p);
+        const subs = scenes.map((s, i) => [s, i]).filter(([s]) => s.dataset.part === p && !/^s-div-/.test(s.id) && !s.hasAttribute("data-nolist")), on = OPEN.has(p);   // no section openers or title slides in the list (22 Nov)
         return `<div class="tm-sec${on ? " open" : ""}" data-sec="${p}"><button type="button" class="tm-row" data-part="${p}"><b>${num != null ? num : n > 1 ? String(k + 1).padStart(2, "0") : ""}</b>${nm}</button>` +
           (subs.length ? `<button type="button" class="tm-tog" aria-expanded="${on}" aria-label="Show the slides of ${esc(nm)}"><svg viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3"/></svg></button>` +
             `<div class="tm-sub">${subs.map(([s, i]) => `<button type="button" class="tm-s" data-i="${i}">${esc(s.dataset.title)}</button>`).join("")}</div>` : "") + `</div>`;
@@ -166,7 +166,8 @@
     }));
     $$("#topic-mark .tm-tog").forEach((el) => (el.onclick = (e) => {
       e.stopPropagation(); const sec = el.parentNode, p = sec.dataset.sec, on = !sec.classList.contains("open");
-      sec.classList.toggle("open", on); el.setAttribute("aria-expanded", on ? "true" : "false"); if (on) OPEN.add(p); else OPEN.delete(p);
+      $$("#topic-mark .tm-sec").forEach((q) => { const t = q.querySelector(".tm-tog"), me = q === sec && on; q.classList.toggle("open", me); if (t) t.setAttribute("aria-expanded", me ? "true" : "false"); });   // one open at a time
+      OPEN.clear(); if (on) OPEN.add(p);
     }));
     $$("#topic-mark .tm-s").forEach((el) => (el.onclick = (e) => { e.stopPropagation(); if (document.activeElement) document.activeElement.blur(); go(+el.dataset.i, 1); }));
     topicMark.track = track;
@@ -176,8 +177,8 @@
     const order = (TOPICS[state.track] || TOPICS.main).map(([p]) => p), now = order.indexOf(sc.dataset.part);
     $$("#topic-mark [data-part]").forEach((el) => { const k = order.indexOf(el.dataset.part); el.dataset.state = k < now ? "past" : k === now ? "now" : "next"; });
     if (topicMark.lastPart !== sc.dataset.part) {          // moving into a section opens it
-      topicMark.lastPart = sc.dataset.part; (topicMark.open || (topicMark.open = new Set())).add(sc.dataset.part);
-      const sec = $(`#topic-mark .tm-sec[data-sec="${sc.dataset.part}"]`); if (sec) { sec.classList.add("open"); const t = sec.querySelector(".tm-tog"); if (t) t.setAttribute("aria-expanded", "true"); }
+      topicMark.lastPart = sc.dataset.part; const op = topicMark.open || (topicMark.open = new Set()); op.clear(); op.add(sc.dataset.part);
+      $$("#topic-mark .tm-sec").forEach((q) => { const me = q.dataset.sec === sc.dataset.part, t = q.querySelector(".tm-tog"); q.classList.toggle("open", me); if (t) t.setAttribute("aria-expanded", me ? "true" : "false"); });
     }
     $$("#topic-mark .tm-s").forEach((el) => el.classList.toggle("on", +el.dataset.i === state.idx));
   }
