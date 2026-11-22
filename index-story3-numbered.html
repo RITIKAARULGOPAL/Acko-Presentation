@@ -1523,6 +1523,7 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #s-site-dd .dd-heatkey .c { display: block; width: 100%; height: calc(var(--pt) * 14); margin-bottom: calc(var(--pt) * 2); overflow: visible; }
 #s-site-dd .dd-heatkey .c path { fill: none; stroke: #e0662a; stroke-width: 1.2; vector-effect: non-scaling-stroke; opacity: .75; }
 #s-site-dd .dd-heatkey .c circle { fill: #2b2440; }
+#s-site-dd .dd-clock small { white-space: nowrap; }
 </style>
 <style data-slide="s-axo-detail">
 
@@ -7506,8 +7507,23 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   }
   function sunStop() { SUN.t.forEach(clearTimeout); SUN.t = []; cancelAnimationFrame(SUN.flow); }
   // playback is even in clock time (22 Nov): the orb, the clock and the heat run together
+  // the clock's text column keeps one width (22 Nov, Ritika: "northpoint keeps moving when the clock is running"): the widest label of all three days, measured once in
+  // the panel's own font, so the panel, and the north point at its end, never move as the text changes
+  function clockWidth(sc) {
+    const small = $(".dd-clock small", sc); if (!small || sc._cw) return;
+    const m = small.cloneNode(false); m.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;left:0;top:0;min-width:0;width:auto";
+    small.parentNode.appendChild(m); let w = 0;
+    window.ACKO_FLOOR.sun.forEach((D) => D.frames.forEach((f) => { m.textContent = f.alt < 1 ? `${D.label} · the sun setting in the ${compass(f.az)}` : `${D.label} · the sun ${Math.round(f.alt)}° up, in the ${compass(f.az)}`; w = Math.max(w, m.getBoundingClientRect().width); }));
+    m.remove(); const fs = parseFloat(getComputedStyle(small).fontSize);
+    if (w > 0 && fs > 0) small.style.minWidth = (w / fs + 0.3).toFixed(2) + "em";
+    const b = $(".dd-clock > b", sc);                              // the time's digits differ in width too: the widest hh:mm of the day (07:00 to 18:30), as a minimum
+    if (b) { const mb = b.cloneNode(false); mb.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;left:0;top:0;min-width:0;width:auto"; b.parentNode.appendChild(mb); let bw = 0;
+      for (let h = 7; h <= 18; h++) for (let q = 0; q < 60; q++) { mb.textContent = String(h).padStart(2, "0") + ":" + String(q).padStart(2, "0"); bw = Math.max(bw, mb.getBoundingClientRect().width); }
+      mb.remove(); const bf = parseFloat(getComputedStyle(b).fontSize); if (bw > 0 && bf > 0) { b.style.minWidth = (bw / bf + 0.04).toFixed(3) + "em"; sc._cw = 1; } }
+  }
   function sunPlay(sc, wait) {                                     // the sun flows along the line, 07:00 to 18:30, over about twenty seconds
-    sunStop(); sunArc(sc); SUN.pi = -1;
+    sunStop(); sunArc(sc); SUN.pi = -1; clockWidth(sc);
+    if (document.fonts && document.fonts.status !== "loaded" && !sc._cwf) { sc._cwf = 1; document.fonts.ready.then(() => { sc._cw = 0; clockWidth(sc); }); }   // measured again once the web font is in: its digits are wider than the fallback's
     $$(".dd-days button", sc).forEach((b) => b.classList.toggle("on", +b.dataset.d === SUN.day));
     $(".dd-sun .orn", sc).innerHTML = ORN;
     const N = window.ACKO_FLOOR.sun[SUN.day].frames.length;
