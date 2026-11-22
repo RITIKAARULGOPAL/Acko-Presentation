@@ -3574,6 +3574,10 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 <script src="assets/vendor/three.min.js"></script>
 <script src="data/keyplans.js?v=1"></script>
 <script src="data/plan-dxf.js?v=1"></script>
+<script>/* 22 Nov, Ritika: "the neighbourhood numbering should be uniform throughout the presentation" (the strategy slide is right: 01 at the west end to 06 at the east). The plan export numbers
+   them the other way (01 Auto at the east end), so, once, before anything reads it: new number = 7 - old, the zones listed in the new order. Each area keeps its id, title and colour. */
+(function () { var P = window.PLAN_DXF; if (!P || !P.zones || P.zones.flipped) return;
+  P.zones.forEach(function (q) { q.n = ("0" + (7 - parseInt(q.n, 10))).slice(-2); }); P.zones.sort(function (a, b) { return a.n < b.n ? -1 : 1; }); P.zones.flipped = 1; })();</script>
 <script src="data/plan-base.js?v=1"></script>
 <script src="assets/js/plan-canvas.js?v=62"></script>
 <script src="data/axo-dxf.js?v=1"></script>
@@ -3665,7 +3669,7 @@ window.ACKO_FLOW = window.ACKO_FLOW || {
 .scene.fl-in .page > .st-3d, .scene.fl-out .page > .st-3d, .scene.fl-fade .page > .st-3d { opacity: 1 !important; transition: none !important; }
 </style>
 <script>window.ACKO_SECTIONS = {"names": {"cover": "Project Vision", "p2": "Design Drivers", "p3": "Overview", "p4": "01 · Concept Framework", "p5": "02 · Design Development", "p6": "03 · Design Expression", "p7": "04 · Integrated Performance", "close": "Thank you", "A": "Appendix · Kit of parts"}, "main": [["cover", "Project Vision", ""], ["p2", "Design Drivers", ""], ["p3", "Overview", ""], ["p4", "Concept Framework", ""], ["p5", "Design Development", ""], ["p6", "Design Expression", ""], ["p7", "Integrated Performance", ""], ["close", "Thank you", ""]]}; window.ACKO_SP3 = true;</script>
-<script src="assets/js/app.js?v=62"></script>
+<script src="assets/js/app.js?v=63"></script>
 <script data-slide="s-cover">
 /* the cover (deck slide 1): the facts come up over the stairs */
 ACKO.slide("s-cover", ({ $, plain, reveal }) => ({
@@ -5656,7 +5660,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
   // colour (the seat tested against the zones' outlines), deepened to show on the plan. Drawn on a canvas over the plan through the
   // plan's own view (so a zoom keeps them on their desks); once per visit, on Spaces
   const PPL = { raf: 0, P: null, t0: 0, on: false };
-  const DEEP = { "01": "#2f8fb0", "02": "#7a5cc9", "03": "#46589f", "04": "#a5605f", "05": "#8c8e2e", "06": "#c0577f" };
+  const DEEP = { "06": "#2f8fb0", "05": "#7a5cc9", "04": "#46589f", "03": "#a5605f", "02": "#8c8e2e", "01": "#c0577f" };   // by the area, as it was before the numbers ran west to east
   function pplBuild() {
     if (PPL.P) return PPL.P;
     const LP = window.ACKO_LOOP, D = plan.data; if (!LP || !L || !L.seats || !D) return null;

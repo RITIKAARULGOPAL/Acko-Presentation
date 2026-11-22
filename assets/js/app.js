@@ -359,7 +359,7 @@
   const NB_COL = { "01": "#B45F06", "02": "#274E13", "03": "#45818E", "04": "#4A86E8", "05": "#9900FF", "06": "#FF00FF" };
   // a neighbourhood's colour as Campus strategy builds it (data/axo-layers.js), by its number (the same in both); filled as the
   // axo reads, 03 lighter than its 0.78 there (the plan's linework darkens it), its outline the same colour, solid
-  const nbAxo = (z) => ((window.AXO_LAYERS && window.AXO_LAYERS.zones) || []).find((q) => q.n === z.n);
+  const nbAxo = (z) => ((window.AXO_LAYERS && window.AXO_LAYERS.zones) || []).find((q) => q.key === String(z.title || "").toUpperCase());   // by the area (its number was flipped west to east, 22 Nov)
   const nbFill = (z) => { const a = nbAxo(z); return a ? a.colour : NB_COL[z.n] || "#888"; };
   const nbLine = nbFill;
   let HOVER = true;                                   // the Hover pill's state, deck-wide (planHover)
@@ -385,7 +385,7 @@
     // the paper's colour over the fills (the later "below" layers go under the earlier ones: this one sits over dx-nbfill)
     const AX = window.AXO_DXF, at = (u, q) => (u[1] * q[0] + u[3] * q[1] + u[5]).toFixed(0) + " " + (u[2] * q[0] + u[4] * q[1] + u[6]).toFixed(0);
     DP.ph.addLayer("dx-furn", AX ? `<path d="${AX.uses.map((u) => (AX.blocks[u[0]] || []).map(([, r]) => "M" + r.map((q) => at(u, q)).join("L") + "Z").join("")).join("")}"/>` : "", { below: true });
-    DP.ph.addLayer("dx-nbfill", P.zones.map((z) => `<path d="${z.zone}" style="fill:${nbFill(z)};fill-opacity:${z.n === "03" ? 0.55 : 0.62}"/>`).join(""), { below: true });
+    DP.ph.addLayer("dx-nbfill", P.zones.map((z) => `<path d="${z.zone}" style="fill:${nbFill(z)};fill-opacity:${z.title === "Health" ? 0.55 : 0.62}"/>`).join(""), { below: true });
     const O = P.overlays, tri = (x, y) => `M${x - 900} ${y - 600}L${x + 900} ${y - 600}L${x} ${y + 900}Z`;
     // the floor outside the contract (the hotel band, its cores), dulled under a veil of the page's white, over the plan's drawing
     DP.ph.addLayer("dx-nic", (O.nic || []).map((d) => `<path d="${d}"/>`).join(""));
