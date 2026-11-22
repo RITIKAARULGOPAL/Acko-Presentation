@@ -810,6 +810,7 @@
     // external glazing toned down (Ritika: "tone down the external glazing glass"): the pale pane glass of the deck's own axo
     // (AxoModel's façade: #dfe9ef at 16%)
     let DGEO = null;
+    let M_ARR = null;
     if (FIT) {
       const B = FT.pieces(FIT.pieces), SEE_K = { glass: 0.35, pane: 0.16 }; DGEO = {};
       const own = (kind) => mats[kind + "28"] || (mats[kind + "28"] = reg(focusable(new T.MeshLambertMaterial(SEE_K[kind]
@@ -863,6 +864,26 @@
       if (shadowDue) { r.shadowMap.needsUpdate = true; shadowDue = false; }
     };
     M = { scene, groups: G, X, Z, CX, CY, slab: A.slab, source: D.source, areas: areasP };   // (areas: where the furniture is the plan's)
+    // Reception 2's arrival doors (22 Nov, Ritika: "show Reception 2 arrival doors"): a double glass door across the lift lobby's threshold into the east reception (plan mm: y 29 930,
+    // centred on Arrival 2 at x 172 318), full height, a pane and rails on each leaf, jambs and a head; hinged at the jambs, standing open about 100 degrees into the reception.
+    // M.arrivalDoors.open(a): 0 shut, 1 open
+    {
+      const g = new T.Group(), pane = new T.MeshLambertMaterial({ color: 0x5f4e6b, transparent: true, opacity: 0.35, depthWrite: false, side: T.DoubleSide }), fr = new T.MeshLambertMaterial({ color: 0x4a4d52 });
+      const H = 2.4, LW = 0.9, JX = 0.93, leaves = [];
+      const box = (parent, w, h, d, px, py, pz, m) => { const o = new T.Mesh(new T.BoxGeometry(w, h, d), m); o.position.set(px, py, pz); parent.add(o); return o; };
+      for (const sg of [-1, 1]) {                                   // sg -1: the west leaf, hinged at the west jamb; 1: the east
+        const piv = new T.Group(); piv.position.set(sg * JX, 0, 0);
+        const cx = -sg * LW / 2;                                    // the leaf runs from its hinge toward the middle
+        box(piv, LW, H - 0.1, 0.012, cx, H / 2, 0, pane); box(piv, LW, 0.05, 0.05, cx, 0.025, 0, fr); box(piv, LW, 0.05, 0.05, cx, H - 0.075, 0, fr); box(piv, 0.05, H - 0.05, 0.05, -sg * LW, H / 2, 0, fr);
+        const pull = box(piv, 0.025, 0.6, 0.025, -sg * (LW - 0.1), 1.05, 0.03, new T.MeshLambertMaterial({ color: 0xc9c9c9 })); pull.visible = true;
+        g.add(piv); leaves.push([piv, sg]);
+        box(g, 0.06, H, 0.12, sg * (JX + 0.03), H / 2, 0, fr);      // the jamb
+      }
+      box(g, 2 * JX + 0.12, 0.06, 0.12, 0, H + 0.03, 0, fr);        // the head
+      g.position.set(X(172318), 0, Z(29930)); scene.add(g);
+      const open = (a) => { for (const [piv, sg] of leaves) piv.rotation.y = sg * a * 1.75; };
+      open(1); M_ARR = { group: g, open };
+    }
     // the doors: M.doors (world metres, the leaf's length) and M.doorOpen(i, a, nx, nz): door i open a (0 shut to 1 folded back against the wall, 170 degrees), its leaf turned about a jamb
     // to swing toward (nx, nz) (the room side); the leaf and its pulls are rewritten in their buffers, a = 0 puts them back as built (22 Nov, Ritika: "the door can open and he can enter")
     if (FT && DGEO && DGEO.glass && DGEO.mullion) {
@@ -878,6 +899,7 @@
         shadowDue = true;
       };
     }
+    M.arrivalDoors = M_ARR;
     M.reset = () => { for (const k in G) { G[k].visible = true; G[k].scale.set(1, 1, 1); } shadowDue = true; };
     window.AxoModel.looks.apply(REG, LOOK);
     return M;
