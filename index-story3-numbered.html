@@ -2573,6 +2573,21 @@ body.si-into #vmap .vm-plate { opacity: .22; }
 #s-start-choice .sc-b.r { left: 67%; background: #fff; color: var(--purple); }
 #s-start-choice .sc-b.r:hover { background: #f3effd; }
 @media (prefers-reduced-motion: reduce) { #s-start-choice * { transition: none !important; } }
+/* 22 Nov, Ritika: "make the slide sleeker": lighter type, one clean line of pictures at the same height, smaller thin capsules */
+#s-start-choice .sc-k { left: 8%; top: 7%; font-size: calc(var(--pt) * 6); letter-spacing: .24em; font-weight: 600; opacity: .8; }
+#s-start-choice .sc-q { left: 8%; top: 11.5%; font-size: calc(var(--pt) * 22); font-weight: 300; letter-spacing: -.015em; }
+#s-start-choice .sc-q b { font-weight: 600; }
+#s-start-choice .sc-tile { top: 30%; height: 42%; border-radius: calc(var(--pt) * 3); box-shadow: 0 8px 22px rgba(30,20,70,.16); }
+#s-start-choice .sc-tile::before { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); background: rgba(10,6,30,.22); }
+#s-start-choice .sc-tile .sc-glyph { width: calc(var(--pt) * 20); height: calc(var(--pt) * 20); box-shadow: 0 4px 14px rgba(20,10,60,.25); }
+#s-start-choice .sc-strip { top: 30%; height: 42%; width: 50%; }
+#s-start-choice .sc-strip button { top: 0 !important; height: 100%; width: 20%; transform: none !important; border: 2px solid #fff; border-radius: calc(var(--pt) * 2.4); box-shadow: 0 8px 20px rgba(30,20,70,.22); }
+#s-start-choice .sc-strip button:nth-child(1) { left: 0; } #s-start-choice .sc-strip button:nth-child(2) { left: 16%; } #s-start-choice .sc-strip button:nth-child(3) { left: 32%; }
+#s-start-choice .sc-strip button:nth-child(4) { left: 48%; } #s-start-choice .sc-strip button:nth-child(5) { left: 64%; } #s-start-choice .sc-strip button:nth-child(6) { left: 80%; }
+#s-start-choice .sc-strip button::before { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
+#s-start-choice .sc-strip button:hover { transform: translateY(-4%) !important; z-index: 9; }
+#s-start-choice .sc-b { top: 79%; height: calc(var(--pt) * 14); padding: 0 calc(var(--pt) * 9); font-size: calc(var(--pt) * 7.2); font-weight: 600; letter-spacing: .02em; border-width: 1.5px; }
+#s-start-choice .sc-b.f { left: 23%; } #s-start-choice .sc-b.r { left: 67%; }
 </style>
 <section class="scene" id="s-start-choice" data-part="p6" data-title="Walkthrough or renders?" data-steps="1" data-mins="0.3"
   data-notes="Shall we start with the walkthrough film, or with the renders? Either way we see both: the film is the whole campus in motion, the renders are every space, one by one. → Bridge: Your call.">
