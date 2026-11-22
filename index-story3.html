@@ -735,6 +735,11 @@ body[data-scene="s-layout-sp"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; } 
 #s-layout-sp .nbe-col .nbe-kp { order: 2; margin: 0; }
 #s-layout-sp .nbe-col .nbe-chips { order: 3; margin: 0; }
 #s-layout-sp .nbe-col .nbe-cnt { order: 4; margin-top: 0; }
+#s-layout-sp.nb-sheet .ly-pills { display: none !important; }   /* 22 Nov, Ritika: no beat tabs on the neighbourhood sheet */
+#s-layout-sp .nbe-col { justify-content: flex-start; }                 /* the chips sit right under the key plan; the free space is split equally above and below that pair */
+#s-layout-sp .nbe-col .nbe-kp { margin-top: auto; }
+#s-layout-sp .nbe-col .nbe-chips { margin-top: calc(var(--pt) * 3); }
+#s-layout-sp .nbe-col .nbe-cnt { margin-top: auto; }
 </style>
 <style data-slide="s-wayday">
 /* ---------- a day in ACKO: the campus in use, on the live axo (the shared model) ---------- */
