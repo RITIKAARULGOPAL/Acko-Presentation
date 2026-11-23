@@ -1410,6 +1410,11 @@ body[data-scene="s-site-dd"]:not(.ly-nb-dis) .dx-arrival path { opacity: 0; }   
 #s-site-dd .dd i { display: block; flex: none; width: calc(var(--pt) * 13); height: calc(var(--pt) * 8.5); border-radius: calc(var(--pt) * 1.5); border: 1.5px solid; }
 #s-site-dd .dd b { font-size: calc(var(--pt) * 6.8); white-space: nowrap; font-weight: 500; line-height: 1.25; color: var(--ink); }
 #s-site-dd .dd .gl { height: 0; border: 0; border-top: 2.5px solid #3fc1ea; border-radius: 0; }
+/* 23 Nov, Ritika: "add egress legend here": with Fire egress on, its paths' legend joins the others, as on the Layout (solid: under 50 m, dashed: 50-60 m) */
+#s-site-dd .dds .dd-eg { display: none; }
+#s-site-dd.eg-on .dds .dd-eg { display: inline-flex; }
+#s-site-dd .dd i.eg-s, #s-site-dd .dd i.eg-d { height: 0; border: 0; border-top: 2.6px solid #1c64b4; border-radius: 0; }
+#s-site-dd .dd i.eg-d { border-top-style: dashed; }
 #s-site-dd .dd .en { width: 0; height: 0; margin-left: calc(var(--pt) * -1); border: 0; border-left: calc(var(--pt) * 3.6) solid transparent; border-right: calc(var(--pt) * 3.6) solid transparent; border-top: calc(var(--pt) * 6.4) solid #c40000; border-radius: 0; background: none; }
 /* the floor's occupancy chart, centred over a white backdrop (Occupancy in the tools; ✕, Esc or a click outside closes it) */
 #s-site-dd .ly-fo { left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility 0s linear .35s; z-index: 5; }
@@ -7320,7 +7325,8 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
       ["slab", "Strengthen slab", "#3a9a46", "repeating-linear-gradient(45deg, #3a9a46 0 2px, transparent 2px 9px)"], ["lift", "Lift lobbies", "#f09a1a", "#f09a1a"],
       ["oos", "Out of scope", "#8a8a8a", "rgba(143,143,143,.4);border-style:dashed"]];
     $(".dds", sc).innerHTML = DD.map(([k, name, c, f]) => `<div class="dd" data-k="${k}"><i style="border-color:${c};background:${f};"></i><b>${name}</b></div>`).join("") +
-      '<div class="dd"><i class="gl"></i><i class="en"></i><b>External glazing and entry</b></div>'.replace('class="dd"', 'class="dd" data-co="glaze"');
+      '<div class="dd"><i class="gl"></i><i class="en"></i><b>External glazing and entry</b></div>'.replace('class="dd"', 'class="dd" data-co="glaze"') +
+      '<div class="dd dd-eg"><i class="eg-s"></i><b>Egress path, under 50 m</b></div><div class="dd dd-eg"><i class="eg-d"></i><b>Egress path, 50–60 m</b></div>';
     $$(".dd[data-k]", sc).forEach((el) => { const k = el.dataset.k;
       el.onmouseenter = () => { if (L) L.ddHi(k); coShow(sc, DD_DXF.filter((o) => o.k === k).map((o) => ({ k, at: zoneTop(o) }))); };
       el.onmouseleave = () => { if (L) L.ddHi(null); coHide(sc); }; });
@@ -7698,7 +7704,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
         else if (t === "reset") plan.planReset();
         else if (t === "hover") b.classList.toggle("on", plan.planHover());
         else if (t === "sun") { sunOn = !sunOn; b.classList.toggle("on", sunOn); sunDD(sc, sunOn); }
-        else if (t === "eg") { egOn = !egOn; b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
+        else if (t === "eg") { egOn = !egOn; sc.classList.toggle("eg-on", egOn); b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
       }));
       $('[data-t="hover"]', tools).classList.toggle("on", plan.hoverOn);
       $(".ly-fo-scrim", sc).onclick = () => occ(sc, false); $(".ly-fo-x", sc).onclick = () => occ(sc, false);
@@ -7721,7 +7727,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
       const layer = k === 1 ? "spaces" : k === 2 ? "nb" : k <= 5 ? "bio" : k === 6 ? "ac" : "dd", panel = String(k <= 2 ? k : k <= 5 ? 3 : k);
       plan.planOn(sc, { rooms: true, fill: k <= 2, entry: true, view: home(), ms: was ? 700 : 0 });
       // the egress follows its button alone, off to begin with (30 Oct), on every beat
-      if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
+      sc.classList.toggle("eg-on", egOn); if (tools) $('[data-t="eg"]', tools).classList.toggle("on", egOn);
       $(".bio-p", sc).classList.toggle("eg", egOn);
       plan.planNb(k === 2); plan.planEgress(egOn);
       if (k === 2) nbPick(sc, "homo");                   // nb cards: Homogeneity picked whenever the beat opens
