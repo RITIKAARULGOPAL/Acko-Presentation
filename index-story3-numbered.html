@@ -2279,10 +2279,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
           <tr class="z5"><td>Nap Room</td><td>1</td><td class="up" data-count="2">2</td></tr>
           <tr class="z5"><td>Medical Room</td><td>1</td><td data-count="1">1</td></tr>
           <tr class="z5"><td>Prayer Room</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z6"><td rowspan="4">Services</td><td>UPS / Electrical</td><td>1</td><td>1</td></tr>
+          <tr class="z6"><td rowspan="5">Services</td><td>UPS / Electrical</td><td>1</td><td>1</td></tr>
           <tr class="z6"><td>Battery</td><td>1</td><td>1</td></tr>
           <tr class="z6"><td>Hub Room</td><td>2</td><td>2</td></tr>
           <tr class="z6"><td>Server Room</td><td>1</td><td>1</td></tr>
+          <tr class="z6"><td>BMS Room</td><td>–</td><td class="na">–</td></tr>
         </tbody>
       </table>
     </template>
@@ -2528,10 +2529,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
           <tr class="z5"><td>Nap Room</td><td>1</td><td class="up" data-count="2">2</td></tr>
           <tr class="z5"><td>Medical Room</td><td>1</td><td data-count="1">1</td></tr>
           <tr class="z5"><td>Prayer Room</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z6"><td rowspan="4">Services</td><td>UPS / Electrical</td><td>1</td><td>1</td></tr>
+          <tr class="z6"><td rowspan="5">Services</td><td>UPS / Electrical</td><td>1</td><td>1</td></tr>
           <tr class="z6"><td>Battery</td><td>1</td><td>1</td></tr>
           <tr class="z6"><td>Hub Room</td><td>2</td><td>2</td></tr>
           <tr class="z6"><td>Server Room</td><td>1</td><td>1</td></tr>
+          <tr class="z6"><td>BMS Room</td><td>–</td><td class="na">–</td></tr>
         </tbody>
       </table>
     </template>
@@ -3653,6 +3655,7 @@ body.si-into #vmap .vm-plate { opacity: .22; }
   P.spaces.forEach(function (s) {
     if (/^2 PAX\b/i.test(s.name) || (s.name === "Quick sprint" && s.m2 < 4)) s.name = "Focus Room 2 PAX";
     else if (s.name === "Quick Sprint 10 PAX - 07") { s.name = "Collaboration Huddle 10 PAX - 07"; s.type = "Collaboration huddle"; s.colour = "#C2BFBB"; }
+    else if (s.name === "Server, UPS & battery") s.name = "BMS Room";          // 23 Nov, Ritika: "the selected space is bms room" (it was the type's generic name, and so matched the UPS, Battery and Server rows too)
   });
   (P.zones || []).forEach(function (z) {
     var o = z.occ || [], i = o.findIndex(function (r) { return /^Quick Sprint Room - 10 pax/i.test(r[1]); }); if (i < 0) return;
@@ -5707,7 +5710,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     [/^Hatchery/, (n, t) => t === "The Hatchery"], [/^Studio/, (n, t) => t === "Studio"], [/^Phone booth/, (n, t) => t === "Phone booth"], [/^Training/, (n, t) => t === "Training room"],
     [/^Cafeteria/, (n, t) => t === "Cafeteria"], [/^Mother/, (n, t) => t === "Mother's room"], [/^Zen/, (n, t) => t === "Zen room"], [/^Nap/, (n, t) => t === "Nap room"],
     [/^Medical/, (n, t) => t === "Medical room"], [/^Prayer/, (n, t) => t === "Prayer room"], [/^UPS/, (n) => /UPS|Electrical/i.test(n)], [/^Battery/, (n) => /Battery/i.test(n)],
-    [/^Hub Room/, (n, t) => t === "Hub room"], [/^Server/, (n) => /Server/i.test(n)]];
+    [/^Hub Room/, (n, t) => t === "Hub room"], [/^Server/, (n) => /Server/i.test(n)], [/^BMS/, (n) => /^BMS\b/i.test(n)]];
   let OCC = [], sel = -1;
   function pickRow(sc, i) {
     sel = sel === i ? -1 : i;
@@ -5751,7 +5754,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     const rows = $$("tbody tr", src).map((tr) => {
       const td = $$("td", tr); if (td.length === 4) grp = td.shift().textContent.trim();
       const [a, q, v] = td, req = q.textContent.trim(), asked = !/^[–—-]$/.test(req);
-      const st = v.classList.contains("short") ? "dn" : v.classList.contains("up") ? (asked ? "up" : "x") : "ok";
+      const st = v.classList.contains("na") ? "" : v.classList.contains("short") ? "dn" : v.classList.contains("up") ? (asked ? "up" : "x") : "ok";
       const area = a.textContent.trim(), m = MATCH.find(([re]) => re.test(area));
       return { grp, area, req: q.innerHTML.trim(), val: v.innerHTML.trim(), st, n: parseInt(v.textContent, 10) || 0, ws: /^Workstations/i.test(area),
         spaces: m ? plan.data.spaces.filter((s) => m[1](s.name, s.type)) : [] };
@@ -7425,7 +7428,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     [/^Hatchery/, (n, t) => t === "The Hatchery"], [/^Studio/, (n, t) => t === "Studio"], [/^Phone booth/, (n, t) => t === "Phone booth"], [/^Training/, (n, t) => t === "Training room"],
     [/^Cafeteria/, (n, t) => t === "Cafeteria"], [/^Mother/, (n, t) => t === "Mother's room"], [/^Zen/, (n, t) => t === "Zen room"], [/^Nap/, (n, t) => t === "Nap room"],
     [/^Medical/, (n, t) => t === "Medical room"], [/^Prayer/, (n, t) => t === "Prayer room"], [/^UPS/, (n) => /UPS|Electrical/i.test(n)], [/^Battery/, (n) => /Battery/i.test(n)],
-    [/^Hub Room/, (n, t) => t === "Hub room"], [/^Server/, (n) => /Server/i.test(n)]];
+    [/^Hub Room/, (n, t) => t === "Hub room"], [/^Server/, (n) => /Server/i.test(n)], [/^BMS/, (n) => /^BMS\b/i.test(n)]];
   let OCC = [], sel = -1;
   function pickRow(sc, i) {
     sel = sel === i ? -1 : i;
@@ -7450,7 +7453,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
     const rows = $$("tbody tr", src).map((tr) => {
       const td = $$("td", tr); if (td.length === 4) grp = td.shift().textContent.trim();
       const [a, q, v] = td, req = q.textContent.trim(), asked = !/^[–—-]$/.test(req);
-      const st = v.classList.contains("short") ? "dn" : v.classList.contains("up") ? (asked ? "up" : "x") : "ok";
+      const st = v.classList.contains("na") ? "" : v.classList.contains("short") ? "dn" : v.classList.contains("up") ? (asked ? "up" : "x") : "ok";
       const area = a.textContent.trim(), m = MATCH.find(([re]) => re.test(area));
       return { grp, area, req: q.innerHTML.trim(), val: v.innerHTML.trim(), st, n: parseInt(v.textContent, 10) || 0, ws: /^Workstations/i.test(area),
         spaces: m ? plan.data.spaces.filter((s) => m[1](s.name, s.type)) : [] };
