@@ -2254,11 +2254,11 @@ body.si-into #vmap .vm-plate { opacity: .22; }
           <tr class="z3"><td>Focus room - 2 pax</td><td>20</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Visitor Hub</td><td>5</td><td data-count="5">5</td></tr>
           <tr class="z3"><td>Dealer Room - 4 pax</td><td>1</td><td data-count="1">1</td></tr>
-          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="2">2</td></tr>
+          <tr class="z3"><td>Quick Sprint Room - 3 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 4 pax</td><td>25</td><td class="short" data-count="16">16</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 6 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
           <tr class="z3"><td>Quick Sprint Room - 8 pax</td><td>–</td><td class="up" data-count="1">1</td></tr>
-          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="13">13</td></tr>
+          <tr class="z3"><td>Collaboration huddles - 10–12 pax</td><td>18</td><td class="short" data-count="14">14</td></tr>
           <tr class="z3"><td>Departmental Room - 18–20 pax</td><td>8</td><td class="short" data-count="6">6</td></tr>
           <tr class="z3"><td>Hatchery - 08 pax</td><td>1</td><td class="up">1 <small>(12 pax)</small></td></tr>
           <tr class="z3"><td>Studio</td><td>1</td><td data-count="1">1</td></tr>
@@ -3660,6 +3660,20 @@ body.si-into #vmap .vm-plate { opacity: .22; }
    them the other way (01 Auto at the east end), so, once, before anything reads it: new number = 7 - old, the zones listed in the new order. Each area keeps its id, title and colour. */
 (function () { var P = window.PLAN_DXF; if (!P || !P.zones || P.zones.flipped) return;
   P.zones.forEach(function (q) { q.n = ("0" + (7 - parseInt(q.n, 10))).slice(-2); }); P.zones.sort(function (a, b) { return a.n < b.n ? -1 : 1; }); P.zones.flipped = 1; })();</script>
+<script>/* 23 Nov, Ritika (the Occupancy chart on the Layout): the 2 pax rooms should hover as "Focus room 2 pax" (their count of 16 is right) and the marked "Quick Sprint 10 PAX - 07" as a
+   Collaboration huddle 10-12 pax, counted with them (14). The plan export names them otherwise, so, once, before anything reads it: the 2 PAX rooms (14 named, and the two unnamed quick sprints of under 4 m2)
+   are "Focus Room 2 PAX"; Quick Sprint 10 PAX - 07 is a Collaboration huddle, and in zone 02's occupancy the "Quick Sprint Room - 10 pax" row joins the huddles. The label printed on the drawing is part of its picture and stays. */
+(function () { var P = window.PLAN_DXF; if (!P || !P.spaces || P.focusFixed) return; P.focusFixed = 1;
+  P.spaces.forEach(function (s) {
+    if (/^2 PAX\b/i.test(s.name) || (s.name === "Quick sprint" && s.m2 < 4)) s.name = "Focus Room 2 PAX";
+    else if (s.name === "Quick Sprint 10 PAX - 07") { s.name = "Collaboration Huddle 10 PAX - 07"; s.type = "Collaboration huddle"; s.colour = "#C2BFBB"; }
+  });
+  (P.zones || []).forEach(function (z) {
+    var o = z.occ || [], i = o.findIndex(function (r) { return /^Quick Sprint Room - 10 pax/i.test(r[1]); }); if (i < 0) return;
+    var h = o.find(function (r) { return /^Collaboration huddles/i.test(r[1]); });
+    if (h) { h[2] += o[i][2]; o.splice(i, 1); } else { o[i][1] = "Collaboration huddles - 10-12 pax"; }
+  });
+})();</script>
 <script src="data/plan-base.js?v=1"></script>
 <script src="assets/js/plan-canvas.js?v=62"></script>
 <script src="data/axo-dxf.js?v=1"></script>
@@ -5653,7 +5667,7 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
   }
   // each row's spaces on the plan (by the space's name, or its type): the chart and the plan pick each other out
   const MATCH = [[/^Reception|^Waiting/, (n, t) => t === "Reception"], [/^Workstations/, (n, t) => t === "Workhall"], [/^Executive/, (n, t) => t === "Executive corner cabin"],
-    [/^Board/, (n, t) => t === "Boardroom"], [/^Focus/, (n) => /^2 PAX\b/i.test(n)], [/^Visitor/, (n, t) => t === "Visitor hub"], [/^Dealer/, (n, t) => t === "Dealer room"],
+    [/^Board/, (n, t) => t === "Boardroom"], [/^Focus/, (n) => /^(Focus Room )?2 PAX\b/i.test(n)], [/^Visitor/, (n, t) => t === "Visitor hub"], [/^Dealer/, (n, t) => t === "Dealer room"],
     [/Sprint Room - 3/, (n) => /Sprint 3 PAX/i.test(n)], [/Sprint Room - 4/, (n) => /Sprint 4 PAX/i.test(n)], [/Sprint Room - 6/, (n) => /Sprint 6 PAX/i.test(n)],
     [/Sprint Room - 8/, (n) => /Sprint 8 PAX/i.test(n)], [/^Collaboration/, (n, t) => t === "Collaboration huddle"], [/^Departmental/, (n, t) => t === "Departmental room"],
     [/^Hatchery/, (n, t) => t === "The Hatchery"], [/^Studio/, (n, t) => t === "Studio"], [/^Phone booth/, (n, t) => t === "Phone booth"], [/^Training/, (n, t) => t === "Training room"],
@@ -5717,12 +5731,15 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
     $(".ly-fo-sum", sc).innerHTML = `<b>${n((r) => r.ws)}</b> workstations · <b>${n((r) => r.grp === "Meeting room" && !/Phone booth/i.test(r.area))}</b> meeting rooms · <b>${n((r) => /Phone booth/i.test(r.area))}</b> phone booths`;
     $$(".ly-fo tr[data-i]", sc).forEach((tr) => (tr.onclick = () => pickRow(sc, +tr.dataset.i)));
   }
-  const occ = (sc, on) => {
+  // 23 Nov, Ritika: a space picked in the chart stays picked on the plan after the chart is closed (keep), until a click on the plan or Esc
+  function clearSel(sc) { if (sel >= 0) pickRow(sc, sel); plan.onPlanClick(null); if (beat === 2 && !$(".ly-fo", sc).classList.contains("on")) nbDim(); }
+  const occ = (sc, on, keep) => {
     if (on) floorChart(sc);
     $(".ly-fo", sc).classList.toggle("on", on); if (tools) $('[data-t="occ"]', tools).classList.toggle("on", on);
-    if (!on && sel >= 0) pickRow(sc, sel);
-    if (!on && beat === 2) nbDim();                                            // nb cards: the plan's dimming back once the chart closes
-    plan.onPlanClick(on ? (pt) => planPick(sc, pt) : null);           // the plan stays as it is beside the chart
+    const held = !on && keep && sel >= 0;                                      // closed by the viewer with a space picked: it stays picked
+    if (!on && sel >= 0 && !held) pickRow(sc, sel);
+    if (!on && beat === 2 && !held) nbDim();                                   // nb cards: the plan's dimming back once the chart closes
+    plan.onPlanClick(on ? (pt) => planPick(sc, pt) : held ? () => { clearSel(sc); return !(L && L.measure.mode); } : null);           // the plan stays as it is beside the chart
   };
   // ---- the tools ----
   function measure(sc, m) {
@@ -6060,10 +6077,10 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
         else if (t === "reset") plan.planReset();
         else if (t === "hover") b.classList.toggle("on", plan.planHover());
         else if (t === "eg") { egOn = !egOn; sc.classList.toggle("eg-on", egOn); b.classList.toggle("on", egOn); plan.planEgress(egOn); $(".bio-p", sc).classList.toggle("eg", egOn); band(sc); }
-        else if (t === "occ") occ(sc, !$(".ly-fo", sc).classList.contains("on"));
+        else if (t === "occ") occ(sc, !$(".ly-fo", sc).classList.contains("on"), true);
       }));
       $('[data-t="hover"]', tools).classList.toggle("on", plan.hoverOn);
-      $(".ly-fo-scrim", sc).onclick = () => occ(sc, false); $(".ly-fo-x", sc).onclick = () => occ(sc, false);
+      $(".ly-fo-scrim", sc).onclick = () => occ(sc, false, true); $(".ly-fo-x", sc).onclick = () => occ(sc, false, true);
       plan.onZoneClick((z) => { if (beat === 2) nbOpen(sc, z.n); });
       $(".sp2-back", sc).onclick = (e) => { e.stopPropagation(); nbClose(sc); }; $(".sp2-next", sc).onclick = (e) => { e.stopPropagation(); nbStep(sc, 1); };
       document.removeEventListener("keydown", sc._keys, true);
@@ -6075,7 +6092,8 @@ ACKO.slide("s-layout-sp", ({ $, $$, later, go, sceneIx, plan, asset, world, cue,
         if (e.key === "m" || e.key === "M") { measure(sc, "dist"); e.stopImmediatePropagation(); return; }
         if (e.key === "a" || e.key === "A") { measure(sc, "area"); e.stopImmediatePropagation(); return; }
         if (e.key !== "Escape") return;
-        if ($(".ly-fo", sc).classList.contains("on")) occ(sc, false);
+        if ($(".ly-fo", sc).classList.contains("on")) occ(sc, false, true);
+        else if (sel >= 0) clearSel(sc);
         else if (L && L.measure.esc()) { if (!L.measure.mode) $$('[data-t="dist"], [data-t="area"]', tools).forEach((b) => b.classList.remove("on")); }
         else if (zone) closeZone(sc); else return;
         e.stopImmediatePropagation(); e.preventDefault();
@@ -7366,7 +7384,7 @@ ACKO.slide("s-site-dd", ({ $, $$, later, go, sceneIx, plan, asset, world, inPoly
   }
   // each row's spaces on the plan (by the space's name, or its type): the chart and the plan pick each other out
   const MATCH = [[/^Reception|^Waiting/, (n, t) => t === "Reception"], [/^Workstations/, (n, t) => t === "Workhall"], [/^Executive/, (n, t) => t === "Executive corner cabin"],
-    [/^Board/, (n, t) => t === "Boardroom"], [/^Focus/, (n) => /^2 PAX\b/i.test(n)], [/^Visitor/, (n, t) => t === "Visitor hub"], [/^Dealer/, (n, t) => t === "Dealer room"],
+    [/^Board/, (n, t) => t === "Boardroom"], [/^Focus/, (n) => /^(Focus Room )?2 PAX\b/i.test(n)], [/^Visitor/, (n, t) => t === "Visitor hub"], [/^Dealer/, (n, t) => t === "Dealer room"],
     [/Sprint Room - 3/, (n) => /Sprint 3 PAX/i.test(n)], [/Sprint Room - 4/, (n) => /Sprint 4 PAX/i.test(n)], [/Sprint Room - 6/, (n) => /Sprint 6 PAX/i.test(n)],
     [/Sprint Room - 8/, (n) => /Sprint 8 PAX/i.test(n)], [/^Collaboration/, (n, t) => t === "Collaboration huddle"], [/^Departmental/, (n, t) => t === "Departmental room"],
     [/^Hatchery/, (n, t) => t === "The Hatchery"], [/^Studio/, (n, t) => t === "Studio"], [/^Phone booth/, (n, t) => t === "Phone booth"], [/^Training/, (n, t) => t === "Training room"],
